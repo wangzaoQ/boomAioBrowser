@@ -4,10 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.base.BaseFragment
+import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.BrowserFragmentMainBinding
 import com.boom.aiobrowser.databinding.BrowserFragmentStartBinding
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
+import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
+import com.boom.base.adapter4.QuickAdapterHelper
+import com.boom.base.adapter4.loadState.trailing.TrailingLoadStateAdapter
 import com.google.android.material.appbar.AppBarLayout
 
 class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
@@ -43,15 +47,39 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     }
 
     val newsAdapter by lazy {
-
+        NewsMainAdapter()
     }
 
     override fun setShowView() {
         fBinding.apply {
             rv.apply {
                 layoutManager = LinearLayoutManager(rootActivity,LinearLayoutManager.VERTICAL,false)
+                var helper = QuickAdapterHelper.Builder(newsAdapter)
+                    .setTrailingLoadStateAdapter(object :
+                        TrailingLoadStateAdapter.OnTrailingListener {
+                        override fun onLoad() {
+
+                        }
+
+                        override fun onFailRetry() {
+
+                        }
+
+                        override fun isAllowLoading(): Boolean {
+                            return !fBinding.refreshLayout.isRefreshing
+                        }
+                    }).build()
+
+                // 设置预加载，请调用以下方法
+                // helper.trailingLoadStateAdapter?.preloadSize = 1
+                adapter = helper.adapter
             }
         }
+        var list = mutableListOf<NewsData>()
+        for (i in 0 until 10){
+            list.add(NewsData())
+        }
+        newsAdapter.submitList(list)
     }
 
     override fun getBinding(

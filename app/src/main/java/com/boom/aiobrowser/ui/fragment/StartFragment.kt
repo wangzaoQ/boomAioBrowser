@@ -42,15 +42,19 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         fBinding.btnCheck.setOnCheckedChangeListener { compoundButton, b ->
             fBinding.btnBrowser.isEnabled = fBinding.btnCheck.isChecked
         }
-    }
-
-    fun updateUI(intent: Intent){
         if (CacheManager.isFirstStart){
             fBinding.rlStart.visibility = View.VISIBLE
             fBinding.llLoadingRoot.visibility = View.GONE
         }else{
             toMain("非首次")
         }
+    }
+
+    var dataIntent :Intent?=null
+
+
+    fun updateUI(intent: Intent){
+        dataIntent = intent
     }
 
     override fun getBinding(

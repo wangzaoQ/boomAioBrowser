@@ -9,4 +9,5 @@
     <string name="app_private">Privacy Policy</string>
     <string name="app_terms_of_service">Terms of Service</string>
     <string name="app_search_hint">Search Or Type URL</string>
+    <string name="app_news">News</string>
 </resources>

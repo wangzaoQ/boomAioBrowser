@@ -16,10 +16,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         FragmentManager()
     }
 
-    val startFragment by lazy {
-//        (supportFragmentManager.findFragmentById(R.id.fragmentStart) as StartFragment)
-        StartFragment()
-    }
+    var startFragment :StartFragment?=null
 
 
     val mainFragment by lazy {
@@ -34,7 +31,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
 
     override fun setShowView() {
-        startFragment.apply {
+        startFragment = StartFragment()
+        startFragment?.apply {
 //            fManager.showFragment(supportFragmentManager,this)
             fManager.addFragmentTag(supportFragmentManager,this,R.id.fragmentStart,"StartFragment")
             updateUI(intent)

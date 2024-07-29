@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="app_text_bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="app_text_normal">
+    </style>
+</resources>

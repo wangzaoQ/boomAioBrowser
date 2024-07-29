@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Aio Browser</string>
+
+    <string name="app_start">Start</string>
+    <string name="app_loading">Safe Loading In Progress...</string>
+    <string name="app_welcome_to">Welcome To</string>
+    <string name="app_aio">Aio</string>
+    <string name="app_browser">Browser</string>
+    <string name="app_private">Privacy Policy</string>
+    <string name="app_terms_of_service">Terms of Service</string>
+    <string name="app_search_hint">Search Or Type URL</string>
+</resources>

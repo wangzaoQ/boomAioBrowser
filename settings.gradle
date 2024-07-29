@@ -19,3 +19,4 @@ dependencyResolutionManagement {
 rootProject.name = "Aio Browser"
 include ':app'
 include ':adapter'
+include ':pop'

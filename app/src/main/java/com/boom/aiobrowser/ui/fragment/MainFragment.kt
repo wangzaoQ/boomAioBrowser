@@ -74,6 +74,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 // helper.trailingLoadStateAdapter?.preloadSize = 1
                 adapter = helper.adapter
             }
+            refreshLayout.setOnRefreshListener {
+
+            }
         }
         var list = mutableListOf<NewsData>()
         for (i in 0 until 10){

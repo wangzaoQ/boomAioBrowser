@@ -1,6 +1,8 @@
 package com.boom.aiobrowser
 
 import android.app.Application
+import com.boom.aiobrowser.data.JumpData
+import com.boom.aiobrowser.tools.event.ProtectedUnPeekLiveData
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -12,6 +14,9 @@ class APP: Application() {
     companion object{
         lateinit var instance:APP
         val isDebug = BuildConfig.DEBUG
+
+        val jumpLiveData  by lazy { ProtectedUnPeekLiveData<JumpData>() }
+
     }
 
     override fun onCreate() {

@@ -43,6 +43,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/topIv">
 
                         <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/ivSearchEngine"
                             android:layout_width="34dp"
                             android:layout_height="34dp"
                             android:layout_centerVertical="true"
@@ -60,12 +61,108 @@
                     </RelativeLayout>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/llRoot"
                         android:layout_width="match_parent"
                         android:layout_height="87dp"
                         android:layout_marginHorizontal="13dp"
                         android:layout_marginTop="13dp"
                         android:background="@drawable/shape_other_bg"
-                        app:layout_constraintTop_toBottomOf="@+id/rlSearch"></androidx.appcompat.widget.LinearLayoutCompat>
+                        app:layout_constraintTop_toBottomOf="@+id/rlSearch">
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            >
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                app:srcCompat="@mipmap/ic_ytb"
+                                ></androidx.appcompat.widget.AppCompatImageView>
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/app_ytb"
+                                android:textColor="#80000000"
+                                android:layout_marginTop="5dp"
+                                android:textSize="11sp"
+                                style="@style/app_text_bold"
+                                ></androidx.appcompat.widget.AppCompatTextView>
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            >
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                app:srcCompat="@mipmap/ic_fb"
+                                ></androidx.appcompat.widget.AppCompatImageView>
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/app_fb"
+                                android:textColor="#80000000"
+                                android:layout_marginTop="5dp"
+                                android:textSize="11sp"
+                                style="@style/app_text_bold"
+                                ></androidx.appcompat.widget.AppCompatTextView>
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            >
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                app:srcCompat="@mipmap/ic_instagram"
+                                ></androidx.appcompat.widget.AppCompatImageView>
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/app_instagram"
+                                android:textColor="#80000000"
+                                android:layout_marginTop="5dp"
+                                android:textSize="11sp"
+                                style="@style/app_text_bold"
+                                ></androidx.appcompat.widget.AppCompatTextView>
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            >
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                app:srcCompat="@mipmap/ic_tt"
+                                ></androidx.appcompat.widget.AppCompatImageView>
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/app_tt"
+                                android:textColor="#80000000"
+                                android:layout_marginTop="5dp"
+                                android:textSize="11sp"
+                                style="@style/app_text_bold"
+                                ></androidx.appcompat.widget.AppCompatTextView>
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.appcompat.widget.Toolbar

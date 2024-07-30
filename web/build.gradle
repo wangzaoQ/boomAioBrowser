@@ -1,0 +1,43 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdk 34
+
+
+    defaultConfig {
+        minSdkVersion 23
+        targetSdkVersion 34
+        namespace 'com.boom.agentweb'
+        versionCode 3
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+//    repositories {
+//        flatDir {
+//            dirs 'libs', 'providedLibs'
+//        }
+//    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+//   defaultPublishConfig "debug"
+}
+
+dependencies {
+    compileOnly fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+//    compileOnly 'com.github.Justson:Downloader:v5.0.4-androidx'
+    compileOnly 'com.google.android.material:material:1.12.0'
+
+}

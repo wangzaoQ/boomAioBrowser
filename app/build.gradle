@@ -132,5 +132,6 @@ dependencies {
 //    implementation "io.github.cymchad:BaseRecyclerViewAdapterHelper4:4.1.4"
     implementation 'androidx.navigation:navigation-fragment:2.3.0'
     implementation 'androidx.navigation:navigation-ui:2.3.0'
+    implementation("androidx.webkit:webkit:1.9.0")
 
 }

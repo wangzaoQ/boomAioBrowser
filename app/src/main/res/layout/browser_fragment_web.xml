@@ -3,12 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <WebView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="web"
-        android:gravity="center"
-        android:textSize="20sp"
-        ></androidx.appcompat.widget.AppCompatTextView>
-
+        android:layout_height="match_parent"></WebView>
 </androidx.constraintlayout.widget.ConstraintLayout>

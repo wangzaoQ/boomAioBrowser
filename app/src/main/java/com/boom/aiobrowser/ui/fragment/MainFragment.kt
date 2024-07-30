@@ -49,13 +49,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 }
             }
         })
-        fBinding.ivSearchEngine.setOnClickListener {
-            var searchPop = SearchPop(rootActivity){
-                CacheManager.engineType = it
-                updateEngine(it)
-            }
-            searchPop.createPop(rootActivity,fBinding.ivSearchEngine)
-        }
         for (i in 0 until fBinding.llRoot.childCount){
             fBinding.llRoot.getChildAt(i).setOnClickListener {
                 var title = ""
@@ -72,22 +65,41 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 })
             }
         }
+        fBinding.topSearch.toolBarSearch.setOneClick {
+            fBinding.rlSearch.performClick()
+        }
+        fBinding.rlSearch.setOneClick {
 
+        }
+        fBinding.topSearch.ivToolbarSearch.setOneClick {
+            fBinding.ivSearchEngine.performClick()
+        }
+        fBinding.ivSearchEngine.setOnClickListener {
+            var searchPop = SearchPop(rootActivity){
+                CacheManager.engineType = it
+                updateEngine(it)
+            }
+            searchPop.createPop(rootActivity,fBinding.ivSearchEngine)
+        }
     }
 
     private fun updateEngine(type: Int) {
         when (type) {
             0->{
                 fBinding.ivSearchEngine.setImageResource(R.mipmap.ic_search_gg)
+                fBinding.topSearch.ivToolbarSearch.setImageResource(R.mipmap.ic_search_gg)
             }
             1->{
                 fBinding.ivSearchEngine.setImageResource(R.mipmap.ic_search_bing)
+                fBinding.topSearch.ivToolbarSearch.setImageResource(R.mipmap.ic_search_bing)
             }
             2->{
                 fBinding.ivSearchEngine.setImageResource(R.mipmap.ic_search_yahoo)
+                fBinding.topSearch.ivToolbarSearch.setImageResource(R.mipmap.ic_search_yahoo)
             }
             3->{
                 fBinding.ivSearchEngine.setImageResource(R.mipmap.ic_search_perplexity)
+                fBinding.topSearch.ivToolbarSearch.setImageResource(R.mipmap.ic_search_perplexity)
             }
         }
     }

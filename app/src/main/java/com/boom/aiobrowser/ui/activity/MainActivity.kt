@@ -8,6 +8,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.FragmentManager
 import com.boom.aiobrowser.ui.fragment.MainFragment
 import com.boom.aiobrowser.ui.fragment.StartFragment
@@ -22,10 +23,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
     var startFragment :StartFragment?=null
 
-
-    val mainFragment by lazy {
-        MainFragment()
-    }
     override fun getBinding(inflater: LayoutInflater): BrowserActivityMainBinding {
         return BrowserActivityMainBinding.inflate(layoutInflater)
     }
@@ -37,6 +34,17 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         APP.jumpLiveData.observe(this){
             // 通过Action进行导航，跳转到secondFragment
             navController?.navigate(R.id.fragmentWeb)
+        }
+        for (i in 0 until acBinding.llControl.childCount){
+            acBinding.llControl.getChildAt(i).setOnClickListener {
+                when(i){
+                    0->{}
+                    1->{}
+                    2->{}
+                    3->{}
+                    4->{}
+                }
+            }
         }
     }
 
@@ -61,6 +69,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 //                fManager.addFragmentTag(supportFragmentManager,mainFragment,R.id.fragmentMainFl,"MainFragment")
 //            }
 //        }, 500)
+        acBinding.tvTabCount.text = "${CacheManager.tabDataList.size}"
     }
 
     fun hideStart() {

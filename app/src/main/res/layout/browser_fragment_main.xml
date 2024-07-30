@@ -178,6 +178,7 @@
                     android:background="@drawable/shape_84r_white"
                     app:layout_collapseMode="pin">
                     <include
+                        android:id="@+id/topSearch"
                         layout="@layout/layout_top"
                         ></include>
 

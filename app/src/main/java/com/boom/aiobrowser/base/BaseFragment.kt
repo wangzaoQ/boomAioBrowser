@@ -60,7 +60,7 @@ abstract class BaseFragment<V : ViewBinding> :Fragment(){
             showView = fBinding.root
         }
 
-        return fBinding.root
+        return showView
     }
 
 

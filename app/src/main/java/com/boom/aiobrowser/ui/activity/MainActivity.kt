@@ -1,6 +1,8 @@
 package com.boom.aiobrowser.ui.activity
 
 import android.view.LayoutInflater
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
@@ -26,16 +28,25 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         return BrowserActivityMainBinding.inflate(layoutInflater)
     }
 
-    override fun setListener() {
+  var navController :NavController?=null
 
+
+    override fun setListener() {
+        APP.jumpLiveData.observe(this){
+            // 通过Action进行导航，跳转到secondFragment
+            acBinding.root.postDelayed(Runnable {
+                navController?.navigate(R.id.fragmentWeb)
+            },3000)
+        }
     }
 
     override fun setShowView() {
+        navController = Navigation.findNavController(this@MainActivity,R.id.fragment_view)
         startFragment = StartFragment()
         startFragment?.apply {
 //            fManager.showFragment(supportFragmentManager,this)
-            fManager.addFragmentTag(supportFragmentManager,this,R.id.fragmentStart,"StartFragment")
             updateUI(intent)
+            fManager.addFragmentTag(supportFragmentManager,this,R.id.fragmentStart,"StartFragment")
         }
 //        acBinding.root.postDelayed({
 //            var count = 0
@@ -53,7 +64,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
 
     fun hideStart() {
-        fManager.replaceFragment(supportFragmentManager, mainFragment,R.id.fragmentStart)
+        fManager.hideFragment(supportFragmentManager, startFragment!!)
     }
 
 }

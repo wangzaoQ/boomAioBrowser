@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.ui.activity
 
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -7,10 +8,11 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
-import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.FragmentManager
 import com.boom.aiobrowser.ui.fragment.MainFragment
 import com.boom.aiobrowser.ui.fragment.StartFragment
+import com.boom.aiobrowser.ui.fragment.WebFragment
+import java.lang.ref.WeakReference
 
 class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
@@ -34,9 +36,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     override fun setListener() {
         APP.jumpLiveData.observe(this){
             // 通过Action进行导航，跳转到secondFragment
-            acBinding.root.postDelayed(Runnable {
-                navController?.navigate(R.id.fragmentWeb)
-            },3000)
+            navController?.navigate(R.id.fragmentWeb)
         }
     }
 
@@ -65,6 +65,20 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
     fun hideStart() {
         fManager.hideFragment(supportFragmentManager, startFragment!!)
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        var mMainNavFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_view);
+//再获取当前的Fragment
+        var currentFragmentInstance = mMainNavFragment?.getChildFragmentManager()?.getPrimaryNavigationFragment();
+        if (currentFragmentInstance != null && currentFragmentInstance is WebFragment) {
+            return if (currentFragmentInstance.goBack(keyCode, event)) {
+                true
+            } else {
+                super.onKeyDown(keyCode, event)
+            }
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
 }

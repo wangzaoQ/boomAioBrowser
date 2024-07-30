@@ -38,6 +38,8 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+
+import com.boom.agentweb.R;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.core.app.AppOpsManagerCompat;
 import androidx.core.content.ContextCompat;
@@ -500,6 +502,7 @@ public class AgentWebUtils {
 
 	}
 
+	@SuppressLint("Range")
 	private static String getRealPathBelowVersion(Context context, Uri uri) {
 		String filePath = null;
 		LogUtils.i(TAG, "method -> getRealPathBelowVersion " + uri + "   path:" + uri.getPath() + "    getAuthority:" + uri.getAuthority());

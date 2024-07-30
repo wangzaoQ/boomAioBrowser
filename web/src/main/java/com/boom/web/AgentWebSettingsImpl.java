@@ -37,9 +37,9 @@ public class AgentWebSettingsImpl extends AbsAgentWebSettings {
 
     @Override
     public WebListenerManager setDownloader(WebView webView, DownloadListener downloadListener) {
-        if (downloadListener == null) {
-            downloadListener = DefaultDownloadImpl.create(mAgentWeb.getActivity(), webView, mAgentWeb.getPermissionInterceptor());
-        }
+//        if (downloadListener == null) {
+//            downloadListener = DefaultDownloadImpl.create(mAgentWeb.getActivity(), webView, mAgentWeb.getPermissionInterceptor());
+//        }
         return super.setDownloader(webView, downloadListener);
     }
 

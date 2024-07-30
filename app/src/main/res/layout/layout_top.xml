@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="37dp"
+    >
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="13dp"
+        app:srcCompat="@mipmap/ic_search_gg"></androidx.appcompat.widget.AppCompatImageView>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        style="@style/app_text_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="54dp"
+        android:textSize="14sp"
+        android:text="@string/app_search_hint"
+        android:textColor="#80000000"></androidx.appcompat.widget.AppCompatTextView>
+
+</RelativeLayout>

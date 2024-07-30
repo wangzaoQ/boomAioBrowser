@@ -1,13 +1,15 @@
 package com.boom.aiobrowser.ui.fragment
 
-import android.content.Context
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.boom.aiobrowser.base.BaseFragment
+import com.boom.aiobrowser.base.BaseWebFragment
 import com.boom.aiobrowser.databinding.BrowserFragmentWebBinding
 
-class WebFragment:BaseFragment<BrowserFragmentWebBinding>() {
+
+class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
+    override fun getInsertParent(): ViewGroup {
+        return fBinding.fl
+    }
 
 
     override fun startLoadData() {
@@ -18,6 +20,7 @@ class WebFragment:BaseFragment<BrowserFragmentWebBinding>() {
     }
 
     override fun setShowView() {
+        initWeb()
     }
 
     override fun getBinding(

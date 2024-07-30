@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.boom.aiobrowser"
-        minSdk 23
+        minSdk 24
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -100,6 +100,7 @@ android {
 dependencies {
     implementation project(':adapter')
     implementation project(':pop')
+    implementation project(':web')
     implementation 'androidx.core:core-ktx:1.13.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1'

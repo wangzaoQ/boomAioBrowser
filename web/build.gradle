@@ -5,7 +5,7 @@ android {
 
 
     defaultConfig {
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 34
         namespace 'com.boom.agentweb'
         versionCode 3
@@ -37,7 +37,8 @@ dependencies {
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-//    compileOnly 'com.github.Justson:Downloader:v5.0.4-androidx'
+    compileOnly 'com.github.Justson:Downloader:v5.0.4-androidx'
     compileOnly 'com.google.android.material:material:1.12.0'
+    compileOnly("androidx.webkit:webkit:1.9.0")
 
 }

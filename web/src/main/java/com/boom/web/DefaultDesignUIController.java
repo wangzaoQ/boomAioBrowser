@@ -16,6 +16,7 @@
 
 package com.boom.web;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -32,6 +33,7 @@ import android.webkit.JsResult;
 import android.webkit.WebView;
 import android.widget.TextView;
 
+import com.boom.agentweb.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -137,7 +139,7 @@ public class DefaultDesignUIController extends DefaultUIController {
             }
 
             @Override
-            public void onBindViewHolder(BottomSheetHolder bottomSheetHolder, final int i) {
+            public void onBindViewHolder(BottomSheetHolder bottomSheetHolder, @SuppressLint("RecyclerView") final int i) {
                 TypedValue outValue = new TypedValue();
                 mActivity.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
                 bottomSheetHolder.mTextView.setBackgroundResource(outValue.resourceId);

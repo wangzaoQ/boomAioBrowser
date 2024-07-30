@@ -44,6 +44,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
+import com.boom.agentweb.R;
+
 
 /**
  * @author cenxiaozhong

@@ -117,8 +117,8 @@ public abstract class AbsAgentWebSettings implements IAgentWebSettings, WebListe
         mWebSettings.setDatabasePath(dir);
         mWebSettings.setUserAgentString(getWebSettings()
                 .getUserAgentString()
-                .concat(USERAGENT_AGENTWEB)
-                .concat(USERAGENT_UC)
+//                .concat(USERAGENT_AGENTWEB)
+//                .concat(USERAGENT_UC)
         );
         LogUtils.i(TAG, "UserAgentString : " + mWebSettings.getUserAgentString());
     }

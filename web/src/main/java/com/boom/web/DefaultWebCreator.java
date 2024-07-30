@@ -30,6 +30,8 @@ import android.widget.FrameLayout;
 
 import static com.boom.web.AgentWebConfig.WEBVIEW_DEFAULT_TYPE;
 
+import com.boom.agentweb.R;
+
 /**
  * @author cenxiaozhong
  * @since 1.0.0

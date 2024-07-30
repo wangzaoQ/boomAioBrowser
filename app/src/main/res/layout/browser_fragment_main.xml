@@ -168,35 +168,18 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/mainToolBar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:alpha="0"
+                    android:layout_height="37dp"
                     app:contentInsetLeft="0dp"
                     app:contentInsetStart="0dp"
+                    android:contentInsetStart="0dp"
+                    android:contentInsetLeft="0dp"
+                    android:layout_marginHorizontal="13dp"
+                    android:alpha="0"
+                    android:background="@drawable/shape_84r_white"
                     app:layout_collapseMode="pin">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="54dp"
-                        android:layout_marginHorizontal="13dp"
-                        android:background="@drawable/shape_84r_white"
-                        app:layout_constraintTop_toBottomOf="@+id/topIv">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="34dp"
-                            android:layout_height="34dp"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="13dp"
-                            app:srcCompat="@mipmap/ic_search_gg"></androidx.appcompat.widget.AppCompatImageView>
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/app_text_bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="54dp"
-                            android:text="@string/app_search_hint"
-                            android:textColor="#80000000"></androidx.appcompat.widget.AppCompatTextView>
-                    </RelativeLayout>
+                    <include
+                        layout="@layout/layout_top"
+                        ></include>
 
                 </androidx.appcompat.widget.Toolbar>
 

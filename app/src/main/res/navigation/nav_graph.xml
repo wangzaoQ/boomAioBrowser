@@ -5,6 +5,14 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/fragmentMain"
     >
+
+    <fragment
+        android:id="@+id/fragmentTemp"
+        android:name="com.boom.aiobrowser.ui.fragment.TempFragment"
+        android:label="MainFragment"
+        tools:layout="@layout/browser_fragment_temp">
+    </fragment>
+
     <fragment
         android:id="@+id/fragmentWeb"
         android:name="com.boom.aiobrowser.ui.fragment.WebFragment"

@@ -16,6 +16,8 @@ class APP: Application() {
         val isDebug = BuildConfig.DEBUG
 
         val jumpLiveData  by lazy { ProtectedUnPeekLiveData<JumpData>() }
+        val engineLiveData  by lazy { ProtectedUnPeekLiveData<Int>() }
+
 
     }
 

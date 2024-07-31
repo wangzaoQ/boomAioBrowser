@@ -2,6 +2,7 @@ package com.boom.aiobrowser.ui.fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
@@ -13,6 +14,7 @@ import com.boom.aiobrowser.databinding.BrowserFragmentStartBinding
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.ui.SearchConfig
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.SearchPop
 import com.boom.base.adapter4.QuickAdapterHelper
@@ -21,7 +23,9 @@ import com.google.android.material.appbar.AppBarLayout
 
 class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     override fun startLoadData() {
-
+        APP.engineLiveData.observe(this){
+            updateEngine(it)
+        }
     }
 
     override fun setListener() {
@@ -69,35 +73,41 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             fBinding.rlSearch.performClick()
         }
         fBinding.rlSearch.setOneClick {
-
+            fBinding.mainAppBar.setExpanded(false,true)
         }
         fBinding.topSearch.ivToolbarSearch.setOneClick {
-            fBinding.ivSearchEngine.performClick()
+            showPop(fBinding.topSearch.ivToolbarSearch)
         }
         fBinding.ivSearchEngine.setOnClickListener {
-            var searchPop = SearchPop(rootActivity){
-                CacheManager.engineType = it
-                updateEngine(it)
-            }
-            searchPop.createPop(rootActivity,fBinding.ivSearchEngine)
+            showPop(fBinding.ivSearchEngine)
         }
     }
 
-    private fun updateEngine(type: Int) {
+    private fun showPop(view: AppCompatImageView) {
+        var searchPop = SearchPop(rootActivity){
+            updateEngine(it)
+        }
+        searchPop.createPop(rootActivity,view)
+    }
+
+    private fun updateEngine(type: Int,update:Boolean = true) {
+        if (update){
+            CacheManager.engineType = type
+        }
         when (type) {
-            0->{
+            SearchConfig.SEARCH_ENGINE_GOOGLE->{
                 fBinding.ivSearchEngine.setImageResource(R.mipmap.ic_search_gg)
                 fBinding.topSearch.ivToolbarSearch.setImageResource(R.mipmap.ic_search_gg)
             }
-            1->{
+            SearchConfig.SEARCH_ENGINE_BING->{
                 fBinding.ivSearchEngine.setImageResource(R.mipmap.ic_search_bing)
                 fBinding.topSearch.ivToolbarSearch.setImageResource(R.mipmap.ic_search_bing)
             }
-            2->{
+            SearchConfig.SEARCH_ENGINE_YAHOO->{
                 fBinding.ivSearchEngine.setImageResource(R.mipmap.ic_search_yahoo)
                 fBinding.topSearch.ivToolbarSearch.setImageResource(R.mipmap.ic_search_yahoo)
             }
-            3->{
+            SearchConfig.SEARCH_ENGINE_PERPLEXITY->{
                 fBinding.ivSearchEngine.setImageResource(R.mipmap.ic_search_perplexity)
                 fBinding.topSearch.ivToolbarSearch.setImageResource(R.mipmap.ic_search_perplexity)
             }
@@ -141,7 +151,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             list.add(NewsData())
         }
         newsAdapter.submitList(list)
-        updateEngine(CacheManager.engineType)
+        updateEngine(CacheManager.engineType,false)
     }
 
     override fun getBinding(

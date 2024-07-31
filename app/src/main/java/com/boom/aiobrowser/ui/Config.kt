@@ -11,3 +11,7 @@ object JumpConfig{
     const val JUMP_WEB="JUMP_WEB"
     const val JUMP_SEARCH="JUMP_SEARCH"
 }
+
+object ParamsConfig{
+    const val JSON_PARAMS="JSON_PARAMS"
+}

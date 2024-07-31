@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.ui.activity
 
+import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import androidx.navigation.NavController
@@ -8,8 +9,12 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
+import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.FragmentManager
+import com.boom.aiobrowser.tools.toJson
+import com.boom.aiobrowser.ui.JumpConfig
+import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.fragment.MainFragment
 import com.boom.aiobrowser.ui.fragment.StartFragment
 import com.boom.aiobrowser.ui.fragment.WebFragment
@@ -33,7 +38,20 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     override fun setListener() {
         APP.jumpLiveData.observe(this){
             // 通过Action进行导航，跳转到secondFragment
-            navController?.navigate(R.id.fragmentWeb)
+            when (it.jumpType) {
+                JumpConfig.JUMP_WEB -> {
+                    navController?.navigate(R.id.fragmentWeb, Bundle().apply {
+                        putString(ParamsConfig.JSON_PARAMS, toJson(it))
+                    })
+                }
+                JumpConfig.JUMP_SEARCH -> {
+                    navController?.navigate(R.id.fragmentSearch, Bundle().apply {
+                        putString(ParamsConfig.JSON_PARAMS, toJson(it))
+                    })
+                }
+                else -> {}
+            }
+
         }
         for (i in 0 until acBinding.llControl.childCount){
             acBinding.llControl.getChildAt(i).setOnClickListener {
@@ -82,11 +100,14 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         var currentFragmentInstance = mMainNavFragment?.getChildFragmentManager()?.getPrimaryNavigationFragment();
         if (currentFragmentInstance != null && currentFragmentInstance is WebFragment) {
             return if (currentFragmentInstance.goBack(keyCode, event)) {
+                AppLogs.dLog(acTAG,"返回 fragment goBack")
                 true
             } else {
+                AppLogs.dLog(acTAG,"返回 fragment super.onKeyDown")
                 super.onKeyDown(keyCode, event)
             }
         }
+        AppLogs.dLog(acTAG,"返回 activity super.onKeyDown")
         return super.onKeyDown(keyCode, event)
     }
 

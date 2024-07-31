@@ -19,4 +19,5 @@
     <string name="app_fb">Facebook</string>
     <string name="app_instagram">Instagram</string>
     <string name="app_tt">Tiktok</string>
+    <string name="app_search">Search</string>
 </resources>

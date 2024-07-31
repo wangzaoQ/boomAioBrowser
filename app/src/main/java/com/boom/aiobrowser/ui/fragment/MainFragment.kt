@@ -77,6 +77,11 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         }
         fBinding.rlSearch.setOneClick {
             fBinding.mainAppBar.setExpanded(false,true)
+            fBinding.rlSearch.postDelayed(Runnable {
+                APP.jumpLiveData.postValue(JumpData().apply {
+                    jumpType = JumpConfig.JUMP_SEARCH
+                })
+            },200)
         }
         fBinding.ivSearchEngine.setOnClickListener {
             SearchPop.showPop(WeakReference(rootActivity),fBinding.ivSearchEngine)

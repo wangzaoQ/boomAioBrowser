@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class BaseDataModel :ViewModel(), LifecycleObserver {
+open class BaseDataModel :ViewModel(), LifecycleObserver {
 
     val errorHandler: ((Throwable) -> Unit).() -> CoroutineExceptionHandler = {
         CoroutineExceptionHandler { _, throwable -> this(throwable) }

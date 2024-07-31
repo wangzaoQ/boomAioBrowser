@@ -18,9 +18,15 @@
         android:name="com.boom.aiobrowser.ui.fragment.WebFragment"
         android:label="WebFragment"
         tools:layout="@layout/browser_fragment_web">
-<!--        <action-->
-<!--            android:id="@+id/action_fragment_web"-->
-<!--            />-->
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentSearch"
+        android:name="com.boom.aiobrowser.ui.fragment.SearchFragment"
+        android:label="SearchFragment"
+        tools:layout="@layout/browser_fragment_search">
+
     </fragment>
     <fragment
         android:id="@+id/fragmentMain"

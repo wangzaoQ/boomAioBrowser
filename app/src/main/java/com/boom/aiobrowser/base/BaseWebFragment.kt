@@ -158,6 +158,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                     fragmentTAG,
                     "  page mUrl:" + url + "  used time:" + (overTime - startTime!!)
                 )
+                loadWebFinished()
             }
         }
     }
@@ -189,11 +190,16 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
     }
 
 
-    fun getUrl(): String {
+    open fun getUrl(): String {
         var url = "https://www.youtube.com"
 
 //		return "http://ggzy.sqzwfw.gov.cn/WebBuilderDS/WebbuilderMIS/attach/downloadZtbAttach.jspx?attachGuid=af982055-3d76-4b00-b5ab-36dee1f90b11&appUrlFlag=sqztb&siteGuid=7eb5f7f1-9041-43ad-8e13-8fcb82ea831a";
         return url
+    }
+
+
+    open fun loadWebFinished(){
+
     }
 
 

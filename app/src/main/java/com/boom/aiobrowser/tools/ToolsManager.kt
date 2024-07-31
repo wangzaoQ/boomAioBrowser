@@ -149,9 +149,10 @@ fun encryptECB(message: String, key: String?): String? {
     return null
 }
 
-fun Job.jobCancel() {
+fun Job?.jobCancel() {
     runCatching {
-        if (this != null || this.isCancelled.not()) {
+        if (this == null)return
+        if (this.isCancelled.not()) {
             this.cancel()
         }
     }.onFailure {

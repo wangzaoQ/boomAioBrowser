@@ -1,8 +1,6 @@
 package com.boom.aiobrowser.data
 
-class JumpData {
-    var jumpType = ""
-    var jumpTitle = ""
-    var jumpUrl = ""
+class RecentSearchData {
+    var content:String=""
     var createTime = System.currentTimeMillis()
 }

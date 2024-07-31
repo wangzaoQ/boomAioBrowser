@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="34dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:clickable="true"
+    android:background="@drawable/shape_ripple_item"
+    >
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        app:srcCompat="@mipmap/ic_recent"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="13dp"
+        ></androidx.appcompat.widget.AppCompatImageView>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvRecent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textColor="#80000000"
+        android:textSize="14sp"
+        android:layout_marginStart="54dp"
+        android:layout_marginEnd="47dp"
+        android:layout_centerVertical="true"
+        tools:text="facebook"
+        ></androidx.appcompat.widget.AppCompatTextView>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivDelete"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:srcCompat="@mipmap/ic_recent"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="13dp"
+        android:layout_alignParentEnd="true"
+        ></androidx.appcompat.widget.AppCompatImageView>
+</RelativeLayout>

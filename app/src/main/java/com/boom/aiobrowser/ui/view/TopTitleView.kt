@@ -53,8 +53,6 @@ class TopTitleView : FrameLayout {
         }
     }
 
-    var changeJob: Job? = null
-
     fun updateTopView(
         type: Int,
         searchRecent: (content: String) -> Unit = {},
@@ -83,12 +81,8 @@ class TopTitleView : FrameLayout {
                 }
 
                 override fun afterTextChanged(p0: Editable?) {
-                    var activity = binding.ivToolbarSearch.context as BaseActivity<*>
-                    changeJob.jobCancel()
-                    changeJob = activity.addLaunch(success = {
-                        delay(1000)
-                        searchRecent.invoke(binding.etToolBarSearch.text.toString().trim())
-                    }, failBack = {}, Dispatchers.IO)
+                    var content = binding.etToolBarSearch.text.toString().trim()
+                    searchRecent.invoke(content)
                 }
             })
             binding.etToolBarSearch.postDelayed({

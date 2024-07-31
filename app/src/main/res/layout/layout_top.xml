@@ -34,7 +34,7 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvToolbarSearch"
             style="@style/app_text_bold"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="@string/app_search_hint"

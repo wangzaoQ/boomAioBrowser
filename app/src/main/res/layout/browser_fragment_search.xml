@@ -1,27 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
-    >
+    android:background="@color/white">
+
     <com.boom.aiobrowser.ui.view.TopTitleView
         android:id="@+id/topRoot"
         android:layout_width="match_parent"
         android:layout_height="37dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="50dp"
         android:layout_marginHorizontal="13dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/shape_top_search"
         android:orientation="vertical"
-        ></com.boom.aiobrowser.ui.view.TopTitleView>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></com.boom.aiobrowser.ui.view.TopTitleView>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#0A000000"
-        app:layout_constraintTop_toBottomOf="@+id/topRoot"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="7dp"
-        ></View>
+        android:background="#0A000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topRoot"></View>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topRoot"
+        android:layout_marginTop="7dp"
+        android:orientation="vertical"
+        >
+        <RelativeLayout
+            android:id="@+id/rlRecentRoot"
+            android:layout_width="match_parent"
+            android:layout_height="37dp"
+            android:paddingStart="13dp"
+            android:visibility="gone"
+            >
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_recent_search"
+                android:textColor="#FF000000"
+                style="@style/app_text_bold"
+                android:layout_centerVertical="true"
+                android:textSize="14sp"
+                ></androidx.appcompat.widget.AppCompatTextView>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvClear"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="13dp"
+                android:paddingEnd="13dp"
+                android:layout_alignParentEnd="true"
+                android:textSize="14sp"
+                android:textColor="#FFFF3B30"
+                android:text="@string/app_clear_all"
+                android:gravity="center"
+                ></androidx.appcompat.widget.AppCompatTextView>
+        </RelativeLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ></androidx.recyclerview.widget.RecyclerView>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llViewMore"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#0A000000"
+              ></View>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/app_view_more"
+                android:textColor="#4D000000"
+                android:textSize="15sp"
+                style="@style/app_text_bold"
+                android:layout_gravity="center"
+                android:gravity="center"
+                ></androidx.appcompat.widget.AppCompatTextView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

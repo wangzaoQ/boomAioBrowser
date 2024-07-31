@@ -20,4 +20,7 @@
     <string name="app_instagram">Instagram</string>
     <string name="app_tt">Tiktok</string>
     <string name="app_search">Search</string>
+    <string name="app_view_more">View More</string>
+    <string name="app_recent_search">Recent Searches</string>
+    <string name="app_clear_all">Clear All</string>
 </resources>

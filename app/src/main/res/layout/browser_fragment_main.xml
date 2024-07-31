@@ -187,10 +187,11 @@
                 app:contentInsetStart="0dp"
                 app:layout_collapseMode="pin">
 
-                <include
+                <com.boom.aiobrowser.ui.view.TopTitleView
                     android:id="@+id/topSearch"
-                    layout="@layout/layout_top"></include>
-
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    ></com.boom.aiobrowser.ui.view.TopTitleView>
             </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>

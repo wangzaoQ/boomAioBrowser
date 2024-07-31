@@ -6,3 +6,8 @@ object SearchConfig{
     const val SEARCH_ENGINE_PERPLEXITY = 3
 
 }
+
+object JumpConfig{
+    const val JUMP_WEB="JUMP_WEB"
+    const val JUMP_SEARCH="JUMP_SEARCH"
+}

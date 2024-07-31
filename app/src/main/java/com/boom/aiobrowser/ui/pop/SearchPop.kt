@@ -6,8 +6,10 @@ import android.graphics.Color
 import android.view.Gravity
 import android.view.View
 import android.view.animation.Animation
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.SizeUtils.dp2px
+import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserPopSearchBinding
@@ -17,9 +19,17 @@ import com.boom.base.adapter4.loadState.trailing.TrailingLoadStateAdapter
 import pop.basepopup.BasePopupWindow
 import pop.util.animation.AnimationHelper
 import pop.util.animation.TranslationConfig
+import java.lang.ref.WeakReference
 
-class SearchPop(context: Context,var clickBack: (position:Int) -> Unit) : BasePopupWindow(context) {
+class SearchPop(context: Context) : BasePopupWindow(context) {
 
+    companion object{
+        fun showPop(reference:WeakReference<BaseActivity<*>>,view: AppCompatImageView) {
+            var activity: BaseActivity<*>? = reference.get() ?: return
+            var searchPop = SearchPop(activity!!)
+            searchPop.createPop(activity,view)
+        }
+    }
     init {
         setContentView(R.layout.browser_pop_search)
     }
@@ -46,7 +56,7 @@ class SearchPop(context: Context,var clickBack: (position:Int) -> Unit) : BasePo
         popBinding?.rvSearch?.apply {
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,false)
             var searchAdapter = SearchEngineAdapter(){
-                clickBack.invoke(it)
+                APP.engineLiveData.postValue(it)
                 dismiss()
             }
             var helper = QuickAdapterHelper.Builder(searchAdapter)

@@ -6,6 +6,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.NewsData
@@ -14,21 +15,25 @@ import com.boom.aiobrowser.databinding.BrowserFragmentStartBinding
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.SearchConfig
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.SearchPop
 import com.boom.base.adapter4.QuickAdapterHelper
 import com.boom.base.adapter4.loadState.trailing.TrailingLoadStateAdapter
 import com.google.android.material.appbar.AppBarLayout
+import java.lang.ref.WeakReference
 
 class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     override fun startLoadData() {
-        APP.engineLiveData.observe(this){
-            updateEngine(it)
-        }
+
     }
 
     override fun setListener() {
+        APP.engineLiveData.observe(this){
+            updateEngine(it)
+            fBinding.topSearch.updateEngine(it)
+        }
         fBinding.mainAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
                 val absVerticalOffset = Math.abs(verticalOffset) //AppBarLayout竖直方向偏移距离px
@@ -64,52 +69,33 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                     }
                 }
                 APP.jumpLiveData.postValue(JumpData().apply {
+                    jumpType = JumpConfig.JUMP_WEB
                     jumpTitle = title
                     jumpUrl = url
                 })
             }
         }
-        fBinding.topSearch.toolBarSearch.setOneClick {
-            fBinding.rlSearch.performClick()
-        }
         fBinding.rlSearch.setOneClick {
             fBinding.mainAppBar.setExpanded(false,true)
         }
-        fBinding.topSearch.ivToolbarSearch.setOneClick {
-            showPop(fBinding.topSearch.ivToolbarSearch)
-        }
         fBinding.ivSearchEngine.setOnClickListener {
-            showPop(fBinding.ivSearchEngine)
+            SearchPop.showPop(WeakReference(rootActivity),fBinding.ivSearchEngine)
         }
     }
 
-    private fun showPop(view: AppCompatImageView) {
-        var searchPop = SearchPop(rootActivity){
-            updateEngine(it)
-        }
-        searchPop.createPop(rootActivity,view)
-    }
-
-    private fun updateEngine(type: Int,update:Boolean = true) {
-        if (update){
-            CacheManager.engineType = type
-        }
+    private fun updateEngine(type: Int) {
         when (type) {
             SearchConfig.SEARCH_ENGINE_GOOGLE->{
                 fBinding.ivSearchEngine.setImageResource(R.mipmap.ic_search_gg)
-                fBinding.topSearch.ivToolbarSearch.setImageResource(R.mipmap.ic_search_gg)
             }
             SearchConfig.SEARCH_ENGINE_BING->{
                 fBinding.ivSearchEngine.setImageResource(R.mipmap.ic_search_bing)
-                fBinding.topSearch.ivToolbarSearch.setImageResource(R.mipmap.ic_search_bing)
             }
             SearchConfig.SEARCH_ENGINE_YAHOO->{
                 fBinding.ivSearchEngine.setImageResource(R.mipmap.ic_search_yahoo)
-                fBinding.topSearch.ivToolbarSearch.setImageResource(R.mipmap.ic_search_yahoo)
             }
             SearchConfig.SEARCH_ENGINE_PERPLEXITY->{
                 fBinding.ivSearchEngine.setImageResource(R.mipmap.ic_search_perplexity)
-                fBinding.topSearch.ivToolbarSearch.setImageResource(R.mipmap.ic_search_perplexity)
             }
         }
     }
@@ -151,7 +137,8 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             list.add(NewsData())
         }
         newsAdapter.submitList(list)
-        updateEngine(CacheManager.engineType,false)
+        updateEngine(CacheManager.engineType)
+        fBinding.topSearch.updateEngine(CacheManager.engineType)
     }
 
     override fun getBinding(
@@ -159,5 +146,10 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         container: ViewGroup?
     ): BrowserFragmentMainBinding {
         return BrowserFragmentMainBinding.inflate(layoutInflater)
+    }
+
+    override fun onDestroy() {
+        APP.engineLiveData.removeObservers(this)
+        super.onDestroy()
     }
 }

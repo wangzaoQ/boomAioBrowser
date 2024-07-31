@@ -159,6 +159,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                     "  page mUrl:" + url + "  used time:" + (overTime - startTime!!)
                 )
                 loadWebFinished()
+                timer.remove(url)
             }
         }
     }

@@ -8,6 +8,7 @@ import com.boom.aiobrowser.base.BaseWebFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.BrowserFragmentWebBinding
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.ui.ParamsConfig
 
@@ -60,7 +61,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         fBinding.refreshLayout.isEnabled = false
         fBinding.flTop.setData(jumpData)
         jumpData?.apply {
-            CacheManager.updateCurrentJumpData(this)
+            JumpDataManager.updateCurrentJumpData(this,"webFragment 存储jumpData")
         }
     }
 

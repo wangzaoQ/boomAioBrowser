@@ -16,6 +16,7 @@ import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.LayoutTopBinding
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.SearchConfig
@@ -45,7 +46,7 @@ class TopTitleView : FrameLayout {
             )
         }
         binding.toolBarSearch.setOnClickListener {
-            APP.jumpLiveData.postValue(CacheManager.getCurrentJumpData(updateData = jumpData).apply {
+            APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(updateData = jumpData,tag ="TopTitleView 点击搜索").apply {
                 jumpType = JumpConfig.JUMP_SEARCH
             })
         }

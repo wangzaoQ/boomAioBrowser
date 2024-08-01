@@ -1,0 +1,109 @@
+package com.boom.aiobrowser.tools
+
+import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.R
+import com.boom.aiobrowser.data.JumpData
+import com.boom.aiobrowser.ui.JumpConfig
+
+object JumpDataManager {
+
+    val TAG = "JumpDataManager"
+    fun updateCurrentJumpData(currentData: JumpData,tag:String){
+        AppLogs.dLog(TAG, "updateCurrentJumpData $tag")
+        var list = getBrowserTabList(CacheManager.browserStatus,tag)
+        var index = -1
+        for (i in 0 until list.size){
+            if (list.get(i).isCurrent){
+                index = i
+                break
+            }
+        }
+        if (index == -1)return
+        var data = list.get(index)
+        data.updateData(currentData)
+        saveBrowserTabList(CacheManager.browserStatus,list,tag)
+    }
+
+    fun resetSelectedByStatus(updateData: JumpData,resetSelectedByStatus:Int,tag: String){
+        var list = getBrowserTabList(resetSelectedByStatus,tag)
+        list.forEach {
+            it.isCurrent = false
+            if (it.dataId == updateData.dataId){
+                it.isCurrent = true
+            }
+        }
+        saveBrowserTabList(resetSelectedByStatus,list,tag)
+    }
+
+    fun getCurrentJumpData(isReset:Boolean = false,updateTime:Boolean = false,updateData: JumpData?=null,tag:String): JumpData {
+        AppLogs.dLog(TAG, "getCurrentJumpData $tag")
+        var list = getBrowserTabList(CacheManager.browserStatus,tag)
+        var index = -1
+        for (i in 0 until list.size){
+            if (list.get(i).isCurrent){
+                index = i
+                break
+            }
+        }
+        if (index == -1){
+            return JumpData().apply {
+                JumpConfig.JUMP_NONE
+            }
+        }
+        var data = list.get(index)
+        if (isReset){
+            data.jumpTitle = APP.instance.getString(R.string.app_home)
+            data.jumpUrl = ""
+            data.jumpType = JumpConfig.JUMP_HOME
+        }
+        if (updateData!=null){
+            data.updateData(updateData)
+        }
+        if (updateTime){
+            data.updateTime = System.currentTimeMillis()
+        }
+        return data
+    }
+
+
+
+    fun getBrowserTabList(browserStatus:Int,tag:String):MutableList<JumpData>{
+        AppLogs.dLog(TAG, "getBrowserTabList $tag")
+        if (browserStatus == 0){
+            return CacheManager.tabDataListNormal
+        }else{
+            return CacheManager.tabDataListPrivate
+        }
+    }
+
+    fun saveBrowserTabList(status:Int,dataList:MutableList<JumpData>,tag:String){
+        AppLogs.dLog(TAG, "saveBrowserTabList $tag  status:${status}")
+        if (status == 0){
+            CacheManager.tabDataListNormal = dataList
+        }else{
+            CacheManager.tabDataListPrivate = dataList
+        }
+    }
+
+    fun addBrowserTab(data:JumpData,status:Int,restSelected:Boolean = false,tag:String){
+        AppLogs.dLog(TAG, "addBrowserTab $tag")
+        var listNormal = CacheManager.tabDataListNormal
+        var listPrivate = CacheManager.tabDataListPrivate
+        if (restSelected){
+            listNormal.forEach {
+                it.isCurrent = false
+            }
+            listPrivate.forEach {
+                it.isCurrent = false
+            }
+        }
+        if (status == 0){
+            listNormal.add(data)
+            CacheManager.tabDataListNormal = listNormal
+        }else{
+            listPrivate.add(data)
+            CacheManager.tabDataListPrivate = listPrivate
+        }
+    }
+
+}

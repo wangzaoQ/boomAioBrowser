@@ -13,6 +13,7 @@ import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.FragmentManager
+import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
@@ -28,6 +29,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     val fManager by lazy {
         FragmentManager()
     }
+
 
     var startFragment :StartFragment?=null
 
@@ -94,7 +96,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             tabPop.createPop()
             tabPop.setOnDismissListener(object :OnDismissListener(){
                 override fun onDismiss() {
-
+                    updateTabCount()
                 }
             })
         }
@@ -129,7 +131,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        var mMainNavFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_view);
+        var mMainNavFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_view)
 //再获取当前的Fragment
         var currentFragmentInstance = mMainNavFragment?.getChildFragmentManager()?.getPrimaryNavigationFragment();
         if (currentFragmentInstance != null && currentFragmentInstance is WebFragment) {
@@ -146,7 +148,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
 
     fun updateTabCount() {
-        acBinding.tvTabCount.text = "${CacheManager.getBrowserTabList().size}"
+        acBinding.tvTabCount.text = "${JumpDataManager.getBrowserTabList(CacheManager.browserStatus,tag ="MainActivity 更新tab 数量").size}"
     }
 
 }

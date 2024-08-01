@@ -27,38 +27,6 @@ object CacheManager {
             mmkv.encode(KV_FIRST_START, value)
         }
 
-
-    fun getBrowserTabList():MutableList<JumpData>{
-        if (browserStatus == 0){
-            return tabDataListNormal
-        }else{
-            return tabDataListPrivate
-        }
-    }
-
-    fun saveBrowserTabList(dataList:MutableList<JumpData>){
-        if (browserStatus == 0){
-            tabDataListNormal = dataList
-        }else{
-            tabDataListPrivate = dataList
-        }
-    }
-
-    fun addBrowserTab(data:JumpData,restSelected:Boolean = false){
-        var list = getBrowserTabList()
-        if (restSelected){
-            list.forEach {
-                it.isCurrent = false
-            }
-        }
-        if (browserStatus == 0){
-            list.add(data)
-            tabDataListNormal = list
-        }else{
-            tabDataListPrivate = list
-        }
-    }
-
     // 0 normal 1 private
     var browserStatus: Int
         get() {
@@ -77,44 +45,6 @@ object CacheManager {
             mmkv.encode(KV_ENGINE_TYPE, value)
         }
 
-    fun updateCurrentJumpData(currentData: JumpData){
-        var list = getBrowserTabList()
-        var index = -1
-        for (i in 0 until list.size){
-            if (list.get(i).isCurrent){
-                index = i
-                break
-            }
-        }
-        var data = list.get(index)
-        data.updateData(currentData)
-        saveBrowserTabList(list)
-    }
-
-    fun getCurrentJumpData(isReset:Boolean = false,updateTime:Boolean = false,updateData: JumpData?=null):JumpData{
-        var list = getBrowserTabList()
-        var index = -1
-        for (i in 0 until list.size){
-            if (list.get(i).isCurrent){
-                index = i
-                break
-            }
-        }
-        var data = list.get(index)
-        if (isReset){
-            data.jumpTitle = APP.instance.getString(R.string.app_home)
-            data.jumpUrl = ""
-        }
-        if (updateData!=null){
-            data.jumpTitle = APP.instance.getString(R.string.app_home)
-            data.jumpUrl = ""
-            data.jumpType = updateData.jumpType
-        }
-        if (updateTime){
-            data.updateTime = System.currentTimeMillis()
-        }
-        return data
-    }
 
     // 网页tab数据 normal
     var tabDataListNormal:MutableList<JumpData>

@@ -15,6 +15,7 @@ import com.boom.aiobrowser.databinding.BrowserFragmentTempBinding
 import com.boom.aiobrowser.model.SearchViewModel
 import com.boom.aiobrowser.net.SearchNet
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.ui.JumpConfig
@@ -90,7 +91,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
 //            viewModel.searchResult(it)
             var url = SearchNet.getSearchUrl(it)
 
-            var jumpData = CacheManager.getCurrentJumpData(updateTime = true).apply {
+            var jumpData = JumpDataManager.getCurrentJumpData(updateTime = true,tag = "searchFragment 搜索").apply {
                 jumpType = JumpConfig.JUMP_WEB
                 jumpTitle = it
                 jumpUrl = url
@@ -117,7 +118,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
             searchAdapter.setOnDebouncedItemClick{adapter, view, position ->
                 var data = searchAdapter.items.get(position)
                 CacheManager.saveRecentSearchData(data)
-                CacheManager.getCurrentJumpData(updateTime = true, updateData = data)
+//                CacheManager.getCurrentJumpData(updateTime = true, updateData = data)
                 APP.jumpLiveData.postValue(data)
             }
         }

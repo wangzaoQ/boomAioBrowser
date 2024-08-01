@@ -15,6 +15,7 @@ import com.boom.aiobrowser.databinding.BrowserFragmentMainBinding
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.SearchConfig
 import com.boom.aiobrowser.ui.activity.MainActivity
@@ -34,6 +35,8 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     }
 
     var absVerticalOffset = 0
+
+    var firstLoad = true
 
     override fun setListener() {
         APP.engineLiveData.observe(this){
@@ -74,7 +77,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                         url = "https://www.youtube.com/"
                     }
                 }
-                APP.jumpLiveData.postValue(CacheManager.getCurrentJumpData(updateTime = true).apply {
+                APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(updateTime = true,tag = "mainFragment 点击热们功能").apply {
                     jumpType = JumpConfig.JUMP_WEB
                     jumpTitle = title
                     jumpUrl = url
@@ -82,12 +85,25 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             }
         }
         fBinding.rlSearch.setOneClick {
-            APP.jumpLiveData.postValue(CacheManager.getCurrentJumpData(isReset = true,updateTime = true).apply {
+            APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(isReset = true,updateTime = true,tag = "mainFragment 点击搜索").apply {
                 jumpType = JumpConfig.JUMP_SEARCH
             })
         }
         fBinding.ivSearchEngine.setOnClickListener {
             SearchPop.showPop(WeakReference(rootActivity),fBinding.ivSearchEngine)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (firstLoad){
+            firstLoad = false
+            var jumpData = JumpDataManager.getCurrentJumpData(tag = "MainFragment onResume 首次")
+            if (jumpData.jumpType == JumpConfig.JUMP_WEB){
+                APP.jumpLiveData.postValue(jumpData)
+            }
+        }else{
+            JumpDataManager.updateCurrentJumpData(JumpDataManager.getCurrentJumpData(isReset = true,tag = "MainFragment onResume 非首次"),"MainFragment onResume 更新 jumpData")
         }
     }
 

@@ -72,6 +72,7 @@ abstract class BaseFragment<V : ViewBinding> :Fragment(){
         }
         isLoad = false
         timeStay = System.currentTimeMillis()
+        AppLogs.dLog(fragmentTAG,"onResume")
     }
 
     override fun onPause() {
@@ -80,6 +81,7 @@ abstract class BaseFragment<V : ViewBinding> :Fragment(){
         var time = (System.currentTimeMillis()-timeStay)/1000
         timeCallBack?.invoke(time)
         timeStay = 0
+        AppLogs.dLog(fragmentTAG,"onPause")
     }
 
     fun View.setOneClick(action: suspend (View) -> Unit) {

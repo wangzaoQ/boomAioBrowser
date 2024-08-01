@@ -1,17 +1,17 @@
 package com.boom.aiobrowser.ui.fragment
 
+import android.R.attr.duration
+import android.animation.LayoutTransition
+import android.animation.ObjectAnimator
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
-import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.BrowserFragmentMainBinding
-import com.boom.aiobrowser.databinding.BrowserFragmentStartBinding
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
@@ -24,10 +24,13 @@ import com.boom.base.adapter4.loadState.trailing.TrailingLoadStateAdapter
 import com.google.android.material.appbar.AppBarLayout
 import java.lang.ref.WeakReference
 
+
 class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     override fun startLoadData() {
 
     }
+
+    var absVerticalOffset = 0
 
     override fun setListener() {
         APP.engineLiveData.observe(this){
@@ -36,7 +39,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         }
         fBinding.mainAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
-                val absVerticalOffset = Math.abs(verticalOffset) //AppBarLayout竖直方向偏移距离px
+                absVerticalOffset = Math.abs(verticalOffset) //AppBarLayout竖直方向偏移距离px
                 val totalScrollRange = appBarLayout!!.totalScrollRange //AppBarLayout总的距离px
                 var offset = BigDecimalUtils.mul(BigDecimalUtils.div(255.toDouble(), totalScrollRange.toDouble(),1),absVerticalOffset.toDouble()).toInt()
 //                var offset = absVerticalOffset / 2
@@ -76,12 +79,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             }
         }
         fBinding.rlSearch.setOneClick {
-            fBinding.mainAppBar.setExpanded(false,true)
-            fBinding.rlSearch.postDelayed(Runnable {
-                APP.jumpLiveData.postValue(JumpData().apply {
-                    jumpType = JumpConfig.JUMP_SEARCH
-                })
-            },200)
+            APP.jumpLiveData.postValue(JumpData().apply {
+                jumpType = JumpConfig.JUMP_SEARCH
+            })
         }
         fBinding.ivSearchEngine.setOnClickListener {
             SearchPop.showPop(WeakReference(rootActivity),fBinding.ivSearchEngine)

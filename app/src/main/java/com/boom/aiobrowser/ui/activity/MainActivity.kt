@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
@@ -40,14 +41,24 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             // 通过Action进行导航，跳转到secondFragment
             when (it.jumpType) {
                 JumpConfig.JUMP_WEB -> {
+                    val navOptions = NavOptions.Builder()
+                        .setEnterAnim(R.anim.in_alpha)
+                        .setExitAnim(R.anim.out_alpha)
+                        .build()
+
                     navController?.navigate(R.id.fragmentWeb, Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
-                    })
+                    },navOptions)
                 }
                 JumpConfig.JUMP_SEARCH -> {
+                    val navOptions = NavOptions.Builder()
+                        .setEnterAnim(R.anim.in_alpha)
+                        .setExitAnim(R.anim.out_alpha)
+                        .build()
+
                     navController?.navigate(R.id.fragmentSearch, Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
-                    })
+                    },navOptions)
                 }
                 else -> {}
             }

@@ -49,7 +49,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         var search = when (CacheManager.engineType) {
             else -> { "Google"}
         }
-        var unit = getString(R.string.app_search)
+        var unit = rootActivity.getString(R.string.app_search)
        return " - $search $unit"
     }
 

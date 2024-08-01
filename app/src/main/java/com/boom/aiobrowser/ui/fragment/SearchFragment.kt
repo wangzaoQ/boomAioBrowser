@@ -63,6 +63,10 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
             isShowMoreData = true
             startLoadData()
         }
+        fBinding.tvClear.setOneClick {
+            CacheManager.recentSearchDataList = mutableListOf()
+            startLoadData()
+        }
     }
 
     val searchAdapter by lazy {

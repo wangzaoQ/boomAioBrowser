@@ -19,6 +19,8 @@ import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.fragment.MainFragment
 import com.boom.aiobrowser.ui.fragment.StartFragment
 import com.boom.aiobrowser.ui.fragment.WebFragment
+import com.boom.aiobrowser.ui.pop.TabPop
+import pop.basepopup.BasePopupWindow.OnDismissListener
 import java.lang.ref.WeakReference
 
 class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
@@ -60,6 +62,18 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
                     },navOptions)
                 }
+                JumpConfig.JUMP_HOME ->{
+                    val navOptions = NavOptions.Builder()
+                        .setEnterAnim(R.anim.in_alpha)
+                        .setExitAnim(R.anim.out_alpha)
+                        .setPopUpTo(R.id.fragmentMain, true) // 将目标Fragment从Back Stack中移除
+                        .build()
+
+                    navController?.navigate(R.id.fragmentMain, Bundle().apply {
+                        putString(ParamsConfig.JSON_PARAMS, toJson(it))
+                    },navOptions)
+
+                }
                 else -> {}
             }
 
@@ -74,6 +88,15 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     4->{}
                 }
             }
+        }
+        acBinding.tvTabCount.setOnClickListener {
+            var tabPop = TabPop(this@MainActivity)
+            tabPop.createPop()
+            tabPop.setOnDismissListener(object :OnDismissListener(){
+                override fun onDismiss() {
+
+                }
+            })
         }
     }
 
@@ -98,7 +121,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 //                fManager.addFragmentTag(supportFragmentManager,mainFragment,R.id.fragmentMainFl,"MainFragment")
 //            }
 //        }, 500)
-        acBinding.tvTabCount.text = "${CacheManager.tabDataList.size}"
+        updateTabCount()
     }
 
     fun hideStart() {
@@ -120,6 +143,10 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }
         AppLogs.dLog(acTAG,"返回 activity super.onKeyDown")
         return super.onKeyDown(keyCode, event)
+    }
+
+    fun updateTabCount() {
+        acBinding.tvTabCount.text = "${CacheManager.getBrowserTabList().size}"
     }
 
 }

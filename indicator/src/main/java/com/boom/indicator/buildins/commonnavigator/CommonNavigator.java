@@ -9,11 +9,11 @@ import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
+import com.boom.indicator.R;
 import com.boom.indicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
 import com.boom.indicator.buildins.commonnavigator.abs.IPagerIndicator;
 import com.boom.indicator.buildins.commonnavigator.model.PositionData;
 import com.boom.indicator.NavigatorHelper;
-import net.lucode.hackware.magicindicator.R;
 import com.boom.indicator.ScrollState;
 import com.boom.indicator.abs.IPagerNavigator;
 import com.boom.indicator.buildins.commonnavigator.abs.IMeasurablePagerTitleView;

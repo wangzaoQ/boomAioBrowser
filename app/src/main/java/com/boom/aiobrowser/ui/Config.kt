@@ -8,6 +8,7 @@ object SearchConfig{
 }
 
 object JumpConfig{
+    const val JUMP_HOME="JUMP_HOME"
     const val JUMP_WEB="JUMP_WEB"
     const val JUMP_SEARCH="JUMP_SEARCH"
 }

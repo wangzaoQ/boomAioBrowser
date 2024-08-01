@@ -21,7 +21,6 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     }
 
     override fun startLoadData() {
-
     }
 
     override fun setListener() {
@@ -60,6 +59,9 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         fBinding.flTop.binding.tvToolbarSearch.text = jumpData?.jumpUrl
         fBinding.refreshLayout.isEnabled = false
         fBinding.flTop.setData(jumpData)
+        jumpData?.apply {
+            CacheManager.updateCurrentJumpData(this)
+        }
     }
 
     override fun getUrl(): String {

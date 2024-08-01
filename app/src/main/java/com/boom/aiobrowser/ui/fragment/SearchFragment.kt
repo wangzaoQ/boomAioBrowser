@@ -52,7 +52,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
             }
             searchAdapter.submitList(dataList)
         }else{
-            fBinding.topRoot.visibility = View.GONE
+            fBinding.rlRecentRoot.visibility = View.GONE
         }
     }
 
@@ -89,7 +89,8 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
         }, searchResult = {
 //            viewModel.searchResult(it)
             var url = SearchNet.getSearchUrl(it)
-            var jumpData = JumpData().apply {
+
+            var jumpData = CacheManager.getCurrentJumpData(updateTime = true).apply {
                 jumpType = JumpConfig.JUMP_WEB
                 jumpTitle = it
                 jumpUrl = url
@@ -116,6 +117,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
             searchAdapter.setOnDebouncedItemClick{adapter, view, position ->
                 var data = searchAdapter.items.get(position)
                 CacheManager.saveRecentSearchData(data)
+                CacheManager.getCurrentJumpData(updateTime = true, updateData = data)
                 APP.jumpLiveData.postValue(data)
             }
         }

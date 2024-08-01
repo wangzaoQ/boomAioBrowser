@@ -1,4 +1,5 @@
 package com.boom.aiobrowser.data
 
-class TabData {
+class TabData : BaseData() {
+
 }

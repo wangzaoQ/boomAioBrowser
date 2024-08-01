@@ -17,6 +17,7 @@ import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.SearchConfig
+import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.SearchPop
 import com.boom.base.adapter4.QuickAdapterHelper
@@ -27,7 +28,9 @@ import java.lang.ref.WeakReference
 
 class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     override fun startLoadData() {
-
+        if (rootActivity is MainActivity){
+            (rootActivity as MainActivity).updateTabCount()
+        }
     }
 
     var absVerticalOffset = 0
@@ -71,7 +74,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                         url = "https://www.youtube.com/"
                     }
                 }
-                APP.jumpLiveData.postValue(JumpData().apply {
+                APP.jumpLiveData.postValue(CacheManager.getCurrentJumpData(updateTime = true).apply {
                     jumpType = JumpConfig.JUMP_WEB
                     jumpTitle = title
                     jumpUrl = url
@@ -79,7 +82,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             }
         }
         fBinding.rlSearch.setOneClick {
-            APP.jumpLiveData.postValue(JumpData().apply {
+            APP.jumpLiveData.postValue(CacheManager.getCurrentJumpData(isReset = true,updateTime = true).apply {
                 jumpType = JumpConfig.JUMP_SEARCH
             })
         }

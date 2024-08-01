@@ -6,7 +6,7 @@
     <string name="app_welcome_to">Welcome To</string>
     <string name="app_aio">Aio</string>
     <string name="app_browser">Browser</string>
-    <string name="app_private">Privacy Policy</string>
+    <string name="app_private_policy">Privacy Policy</string>
     <string name="app_terms_of_service">Terms of Service</string>
     <string name="app_search_hint">Search Or Type URL</string>
     <string name="app_news">News</string>
@@ -23,4 +23,9 @@
     <string name="app_view_more">View More</string>
     <string name="app_recent_search">Recent Searches</string>
     <string name="app_clear_all">Clear All</string>
+    <string name="app_normal">Normal</string>
+    <string name="app_private">Private</string>
+    <string name="app_home">Home</string>
+    <string name="app_private_search">Searching Privately</string>
+    <string name="app_private_search2">When you use InPrivate tabs, your search data isn\'t saved on your device after you\'re done. Temporary data is also deleted from your device after InPrivate tabs are closed, or the app is restarted.</string>
 </resources>

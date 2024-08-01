@@ -6,17 +6,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:clickable="true"
     android:background="@drawable/shape_ripple_item"
+    android:layout_marginTop="13dp"
     >
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="27dp"
         android:layout_height="27dp"
-        app:srcCompat="@mipmap/ic_recent"
+        app:srcCompat="@mipmap/ic_tab"
         android:layout_centerVertical="true"
         android:layout_marginStart="13dp"
         ></androidx.appcompat.widget.AppCompatImageView>
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvRecent"
+        android:id="@+id/tvTab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="true"

@@ -45,10 +45,8 @@ class TopTitleView : FrameLayout {
             )
         }
         binding.toolBarSearch.setOnClickListener {
-            APP.jumpLiveData.postValue(JumpData().apply {
+            APP.jumpLiveData.postValue(CacheManager.getCurrentJumpData(updateData = jumpData).apply {
                 jumpType = JumpConfig.JUMP_SEARCH
-                jumpTitle = jumpData?.jumpTitle?:""
-                jumpUrl = jumpData?.jumpUrl?:""
             })
         }
     }

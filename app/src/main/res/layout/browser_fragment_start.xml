@@ -92,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:text="@string/app_private"
+                android:text="@string/app_private_policy"
                 android:textSize="11sp"
                 android:textColor="#FF007AFF"
                 style="@style/app_text_bold"

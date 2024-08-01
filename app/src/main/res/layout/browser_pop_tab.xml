@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rvSearch"
-    android:layout_width="168dp"
+    android:id="@+id/rlTabRoot"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/shape_search_engine_bg"
-    android:paddingTop="6.5dp"
-    android:paddingBottom="6.5dp"
     >
 
-</androidx.recyclerview.widget.RecyclerView>
+</RelativeLayout>

@@ -1,0 +1,22 @@
+apply plugin: 'com.android.library'
+
+android {
+  compileSdk 34
+
+  defaultConfig {
+    minSdkVersion 24
+    targetSdkVersion 34
+    namespace 'com.boom.indicator'
+    versionCode 3
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled true
+    }
+  }
+}
+
+dependencies {
+  compileOnly 'androidx.viewpager:viewpager:1.0.0'
+}

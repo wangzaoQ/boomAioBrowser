@@ -61,7 +61,7 @@ fun decryptNet(bytes: ByteArray?): ByteArray? {
     if (bytes == null) {
         return null
     }
-    val key = 41
+    val key = 88
     for (i in bytes.indices) {
         bytes[i] = (bytes[i].toInt() xor key).toByte()
     }

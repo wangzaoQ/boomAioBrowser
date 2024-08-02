@@ -70,6 +70,15 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
         return mAgentWeb!!.handleKeyEvent(keyCode, event)
     }
 
+    fun goBack(){
+        var webView = mAgentWeb?.webCreator?.webView
+        if (webView!= null && webView.canGoBack()) {
+            webView.goBack()
+        }else{
+            rootActivity.onBackPressed()
+        }
+    }
+
     /**
      * @return IAgentWebSettings
      */

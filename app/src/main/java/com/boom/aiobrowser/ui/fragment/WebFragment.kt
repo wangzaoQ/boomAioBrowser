@@ -60,9 +60,19 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         fBinding.flTop.binding.tvToolbarSearch.text = jumpData?.jumpUrl
         fBinding.refreshLayout.isEnabled = false
         fBinding.flTop.setData(jumpData)
-        jumpData?.apply {
-            JumpDataManager.updateCurrentJumpData(this,"webFragment 存储jumpData")
-        }
+        rootActivity.addLaunch(success = {
+            jumpData?.apply {
+                JumpDataManager.updateCurrentJumpData(this,"webFragment 存储jumpData")
+                var lastJumpData = CacheManager.lastJumpData
+                if (lastJumpData==null ||  lastJumpData.dataId != jumpData?.dataId){
+                    CacheManager.lastJumpData = jumpData
+                }else{
+                    CacheManager.lastJumpData = null
+                }
+
+            }
+        }, failBack = {})
+
     }
 
     override fun getUrl(): String {

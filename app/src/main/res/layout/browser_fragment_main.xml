@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@mipmap/bg_main">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -33,10 +34,11 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@mipmap/bg_aio"></androidx.appcompat.widget.AppCompatImageView>
 
-                <RelativeLayout
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/rlSearch"
                     android:layout_width="match_parent"
                     android:layout_height="54dp"
+                    android:orientation="horizontal"
                     android:layout_marginHorizontal="13dp"
                     android:layout_marginTop="32dp"
                     android:background="@drawable/shape_84r_white"
@@ -46,6 +48,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginStart="13dp">
 
                         <androidx.appcompat.widget.AppCompatImageView
@@ -61,15 +64,27 @@
                             app:srcCompat="@mipmap/ic_engine_arrow"></androidx.appcompat.widget.AppCompatImageView>
                     </FrameLayout>
 
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivPrivate"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@mipmap/ic_private"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginEnd="3dp"
+                        android:visibility="gone"
+                        tools:visibility ="visible"
+                        ></androidx.appcompat.widget.AppCompatImageView>
                     <androidx.appcompat.widget.AppCompatTextView
                         style="@style/app_text_bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_centerVertical="true"
-                        android:layout_marginStart="54dp"
+                        android:layout_marginStart="3dp"
                         android:text="@string/app_search_hint"
                         android:textColor="#80000000"></androidx.appcompat.widget.AppCompatTextView>
-                </RelativeLayout>
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/llRoot"
@@ -209,7 +224,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="50dp"
             android:background="@drawable/shape_news_rv"></androidx.recyclerview.widget.RecyclerView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

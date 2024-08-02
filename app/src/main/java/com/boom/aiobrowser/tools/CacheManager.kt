@@ -1,22 +1,36 @@
 package com.boom.aiobrowser.tools
 
+import android.provider.Settings
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.JumpData
+import com.boom.aiobrowser.data.LocationData
+import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.RecentSearchData
 import com.boom.aiobrowser.data.TabData
+import com.boom.aiobrowser.net.NetRequest
 import com.boom.aiobrowser.ui.JumpConfig
 import com.tencent.mmkv.MMKV
+import java.util.UUID
 
 object CacheManager {
+
+    const val TAG = "CacheManager"
+
     val mmkv = MMKV.mmkvWithID("${BuildConfig.APPLICATION_ID}kv", MMKV.MULTI_PROCESS_MODE)
     const val KV_FIRST_START = "KV_FIRST_START"
+    const val KV_FIRST_SHOW_CLEAR = "KV_FIRST_SHOW_CLEAR"
     const val KV_ENGINE_TYPE = "KV_ENGINE_TYPE"
     const val KV_TAB_DATA_NORMAL = "KV_TAB_DATA_NORMAL"
     const val KV_TAB_DATA_PRIVATE = "KV_TAB_DATA_PRIVATE"
+    const val KV_NEWS_LIST = "KV_NEWS_LIST"
     const val KV_BROWSER_STATUS = "KV_BROWSER_STATUS"
     const val KV_RECENT_SEARCH_DATA = "KV_RECENT_SEARCH_DATA"
+    const val KV_LAST_JUMP_DATA = "KV_LAST_JUMP_DATA"
+    const val KV_LOCATION_DATA = "KV_LOCATION_DATA"
+    const val KV_PHONE_ID = "KV_PHONE_ID"
+    const val KV_NEWS_SAVE_TIME = "KV_NEWS_SAVE_TIME"
 
     // 是否首次打开start
     var isFirstStart: Boolean
@@ -25,6 +39,15 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_FIRST_START, value)
+        }
+
+    // 是否首次展示清理数据tips
+    var isFirstShowClear: Boolean
+        get() {
+            return mmkv.decodeBool(KV_FIRST_SHOW_CLEAR, true)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_SHOW_CLEAR, value)
         }
 
     // 0 normal 1 private
@@ -45,6 +68,21 @@ object CacheManager {
             mmkv.encode(KV_ENGINE_TYPE, value)
         }
 
+    var lastJumpData:JumpData?
+        get() {
+            return getBeanByGson(mmkv.decodeString(KV_LAST_JUMP_DATA,""),JumpData::class.java)
+        }
+        set(value) {
+            mmkv.encode(KV_LAST_JUMP_DATA, toJson(value))
+        }
+
+    var locationData:LocationData?
+        get() {
+            return getBeanByGson(mmkv.decodeString(KV_LOCATION_DATA,""),LocationData::class.java)
+        }
+        set(value) {
+            mmkv.encode(KV_LOCATION_DATA, toJson(value))
+        }
 
     // 网页tab数据 normal
     var tabDataListNormal:MutableList<JumpData>
@@ -74,6 +112,22 @@ object CacheManager {
             mmkv.encode(KV_TAB_DATA_PRIVATE, toJson(value))
         }
 
+    var newsSaveTime :Long
+        get() {
+            return mmkv.decodeLong(KV_NEWS_SAVE_TIME, 0)
+        }
+        set(value) {
+            mmkv.encode(KV_NEWS_SAVE_TIME, value)
+        }
+    var newsList:MutableList<NewsData>
+        get() {
+
+            return getListByGson(mmkv.decodeString(KV_NEWS_LIST),NewsData::class.java) ?: mutableListOf()
+        }
+        set(value) {
+            mmkv.encode(KV_NEWS_LIST, toJson(value))
+        }
+
     fun saveRecentSearchData(data: JumpData){
         var list = recentSearchDataList
         var index = -1
@@ -97,4 +151,37 @@ object CacheManager {
         set(value) {
             mmkv.encode(KV_RECENT_SEARCH_DATA, toJson(value))
         }
+
+
+    fun getID():String{
+        var phoneId = mmkv.decodeString(KV_PHONE_ID,"")?:""
+        if (phoneId.isNullOrEmpty().not()){
+            AppLogs.dLog(TAG,"ANDROID_ID:${phoneId}")
+            return phoneId
+        }
+        val id = Settings.Secure.getString(
+            APP.instance.contentResolver,
+            Settings.Secure.ANDROID_ID
+        )
+        AppLogs.dLog(TAG,"ANDROID_ID:${id}")
+        phoneId = if ("9774d56d682e549c" == id ||"0000000000000000" == id) "" else id
+        if (phoneId.isNullOrEmpty().not()) {
+            mmkv.encode(KV_PHONE_ID, phoneId)
+            return phoneId
+        }
+        phoneId = UUID.randomUUID().toString().replace("-", "")
+        AppLogs.dLog(KV_PHONE_ID,"UUID:${phoneId}")
+        if (phoneId.isNullOrEmpty().not()){
+            mmkv.encode(KV_PHONE_ID, phoneId)
+        }
+        return phoneId
+    }
+
+    fun saveSession(key:String,value:String){
+        mmkv.encode("${key}_${NetRequest.keyTag}",value)
+    }
+
+    fun getSession(key:String):String{
+        return mmkv.decodeString("${key}_${NetRequest.keyTag}","")?:""
+    }
 }

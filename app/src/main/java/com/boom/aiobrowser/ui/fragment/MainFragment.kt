@@ -3,8 +3,13 @@ package com.boom.aiobrowser.ui.fragment
 import android.R.attr.duration
 import android.animation.LayoutTransition
 import android.animation.ObjectAnimator
+import android.app.Activity
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
@@ -12,6 +17,7 @@ import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.BrowserFragmentMainBinding
+import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
@@ -22,12 +28,19 @@ import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.SearchPop
 import com.boom.base.adapter4.QuickAdapterHelper
+import com.boom.base.adapter4.loadState.LoadState
 import com.boom.base.adapter4.loadState.trailing.TrailingLoadStateAdapter
+import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import com.google.android.material.appbar.AppBarLayout
 import java.lang.ref.WeakReference
 
 
 class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
+
+    private val viewModel by lazy {
+        rootActivity.viewModels<NewsViewModel>()
+    }
+
     override fun startLoadData() {
         if (rootActivity is MainActivity){
             (rootActivity as MainActivity).updateTabCount()
@@ -37,6 +50,8 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     var absVerticalOffset = 0
 
     var firstLoad = true
+
+    var page = 1
 
     override fun setListener() {
         APP.engineLiveData.observe(this){
@@ -92,6 +107,16 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         fBinding.ivSearchEngine.setOnClickListener {
             SearchPop.showPop(WeakReference(rootActivity),fBinding.ivSearchEngine)
         }
+        viewModel.value.newsLiveData.observe(rootActivity){
+            if (page == 1){
+                newsAdapter.submitList(it)
+                fBinding.rv.scrollToPosition(0)
+            }else{
+                newsAdapter.addAll(it)
+            }
+            adapterHelper.trailingLoadState = LoadState.NotLoading(false)
+            fBinding.refreshLayout.isRefreshing = false
+        }
     }
 
     override fun onResume() {
@@ -104,6 +129,10 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             }
         }else{
             JumpDataManager.updateCurrentJumpData(JumpDataManager.getCurrentJumpData(isReset = true,tag = "MainFragment onResume 非首次"),"MainFragment onResume 更新 jumpData")
+        }
+
+        if (rootActivity is MainActivity){
+            (rootActivity as MainActivity).updateBottom(false)
         }
     }
 
@@ -125,44 +154,66 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     }
 
     val newsAdapter by lazy {
-        NewsMainAdapter()
+        NewsMainAdapter(this)
     }
+    val adapterHelper  by lazy {
+        QuickAdapterHelper.Builder(newsAdapter)
+            .setTrailingLoadStateAdapter(object :
+                TrailingLoadStateAdapter.OnTrailingListener {
+                override fun onLoad() {
+                    AppLogs.dLog(fragmentTAG,"加载更多")
+                    page++
+                    loadData()
+                }
 
+                override fun onFailRetry() {
+
+                }
+
+                override fun isAllowLoading(): Boolean {
+                    return true
+                }
+
+            }).build()
+    }
     override fun setShowView() {
         fBinding.apply {
+            adapterHelper.trailingLoadState = LoadState.NotLoading(false)
             rv.apply {
                 layoutManager = LinearLayoutManager(rootActivity,LinearLayoutManager.VERTICAL,false)
-                var helper = QuickAdapterHelper.Builder(newsAdapter)
-                    .setTrailingLoadStateAdapter(object :
-                        TrailingLoadStateAdapter.OnTrailingListener {
-                        override fun onLoad() {
-
-                        }
-
-                        override fun onFailRetry() {
-
-                        }
-
-                        override fun isAllowLoading(): Boolean {
-                            return !fBinding.refreshLayout.isRefreshing
-                        }
-                    }).build()
-
                 // 设置预加载，请调用以下方法
-                // helper.trailingLoadStateAdapter?.preloadSize = 1
-                adapter = helper.adapter
+//                 helper.trailingLoadStateAdapter?.preloadSize = 1
+                adapter = adapterHelper.adapter
+                newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
+                    var data = newsAdapter.items.get(position)
+                    var jumpData = JumpDataManager.getCurrentJumpData(tag="点击新闻item")
+                    jumpData.apply {
+                        jumpUrl= data.uweek?:""
+                        jumpType = JumpConfig.JUMP_WEB
+                        jumpTitle = data.tconsi?:""
+                    }
+                    APP.jumpLiveData.postValue(jumpData)
+                }
             }
             refreshLayout.setOnRefreshListener {
-
+                page = 1
+                adapterHelper.trailingLoadState = LoadState.None
+                loadData()
             }
         }
-        var list = mutableListOf<NewsData>()
-        for (i in 0 until 10){
-            list.add(NewsData())
-        }
-        newsAdapter.submitList(list)
         updateEngine(CacheManager.engineType)
         fBinding.topSearch.updateEngine(CacheManager.engineType)
+        if (CacheManager.browserStatus == 0){
+            fBinding.ivPrivate.visibility = View.GONE
+        }else{
+            fBinding.ivPrivate.visibility = View.VISIBLE
+        }
+    }
+
+    private fun loadData() {
+        if (rootActivity is MainActivity){
+            (rootActivity as MainActivity).loadNews()
+        }
     }
 
     override fun getBinding(

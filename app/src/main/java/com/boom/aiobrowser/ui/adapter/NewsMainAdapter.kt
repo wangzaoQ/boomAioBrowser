@@ -11,12 +11,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.recyclerview.widget.RecyclerView
+import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.BrowserFragmentMainBinding
 import com.boom.aiobrowser.databinding.BrowserItemMainNewsBinding
+import com.boom.aiobrowser.tools.GlideManager
 import com.boom.base.adapter4.BaseQuickAdapter
 
-class NewsMainAdapter : BaseQuickAdapter<NewsData, NewsMainAdapter.VH>() {
+class NewsMainAdapter(var fragmet :BaseFragment<*>) : BaseQuickAdapter<NewsData, NewsMainAdapter.VH>() {
     class VH(
         parent: ViewGroup,
         val viewBinding: BrowserItemMainNewsBinding = BrowserItemMainNewsBinding.inflate(
@@ -29,9 +31,25 @@ class NewsMainAdapter : BaseQuickAdapter<NewsData, NewsMainAdapter.VH>() {
     }
 
     override fun onBindViewHolder(holder: VH, position: Int, item: NewsData?) {
+        if (item == null)return
         holder.viewBinding.apply {
-            tvNewsTitle.text = "title seq123"
-            tvNewsContent.text = "content 12313"
+            if (position == 0){
+                tvTempNews.visibility = View.VISIBLE
+            }else{
+                tvTempNews.visibility = View.GONE
+            }
+            if (item.iassum.isNullOrEmpty()){
+                ivImg.visibility = View.GONE
+                tvNewsContent.visibility = View.VISIBLE
+                tvNewsContent.text = item.sissue
+            }else{
+                ivImg.visibility = View.VISIBLE
+                tvNewsContent.visibility = View.GONE
+                GlideManager.loadImg(fragmet,ivImg,item.iassum)
+            }
+            tvNewsTitle.text = item.tconsi
+            GlideManager.loadImg(fragmet,ivSource,item.sschem)
+            tvSourceName.text = "${item.sfindi}"
         }
     }
 

@@ -8,6 +8,26 @@ import com.boom.aiobrowser.ui.JumpConfig
 object JumpDataManager {
 
     val TAG = "JumpDataManager"
+
+    fun clearAllTab(){
+        CacheManager.tabDataListNormal = mutableListOf()
+        CacheManager.tabDataListPrivate = mutableListOf()
+        CacheManager.browserStatus = 0
+        var data = addTab(CacheManager.browserStatus,"清理所有数据后添加")
+        APP.jumpLiveData.postValue(data)
+    }
+
+     fun addTab(browserStatus:Int,tag:String): JumpData{
+         AppLogs.dLog(TAG, "addTab $tag")
+         var data = JumpData().apply {
+            jumpType = JumpConfig.JUMP_HOME
+            jumpTitle = APP.instance.getString(R.string.app_home)
+            isCurrent = true
+        }
+        addBrowserTab(data,browserStatus,true,tag = "tabPop 增加tab")
+        return data
+    }
+
     fun updateCurrentJumpData(currentData: JumpData,tag:String){
         AppLogs.dLog(TAG, "updateCurrentJumpData $tag")
         var list = getBrowserTabList(CacheManager.browserStatus,tag)

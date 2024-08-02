@@ -21,7 +21,7 @@
         android:id="@+id/fragmentStart"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/llControl"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -34,6 +34,7 @@
         android:background="#FFF5F5F6"
         app:layout_constraintBottom_toTopOf="@+id/llControl"
         ></View>
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/llControl"
         android:layout_width="match_parent"
@@ -41,22 +42,27 @@
         android:orientation="horizontal"
         android:paddingTop="13dp"
         android:paddingBottom="13dp"
+        android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/white"
         >
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivLeft"
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="33dp"
-            app:srcCompat="@mipmap/ic_normal_back_1"
+            app:srcCompat="@drawable/selector_back_bg"
             ></androidx.appcompat.widget.AppCompatImageView>
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivRight"
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="33dp"
-            app:srcCompat="@mipmap/ic_normal_next2"
+            app:srcCompat="@drawable/selector_next_bg"
             ></androidx.appcompat.widget.AppCompatImageView>
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivClear"
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="33dp"
@@ -87,4 +93,28 @@
             app:srcCompat="@mipmap/ic_setting"
             ></androidx.appcompat.widget.AppCompatImageView>
     </androidx.appcompat.widget.LinearLayoutCompat>
+    <TextView
+        android:id="@+id/tvClearData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@mipmap/bg_clear_tips"
+        app:layout_constraintBottom_toTopOf="@+id/llControl"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:paddingBottom="10dp"
+        android:gravity="center"
+        android:text="@string/app_clear_data"
+        ></TextView>
+
+    <ImageView
+        android:id="@+id/ivClearAnimal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerInside"
+        app:lottie_autoPlay="false"
+        app:lottie_fileName="test.json"
+        app:lottie_loop="true"
+        ></ImageView>
 </androidx.constraintlayout.widget.ConstraintLayout>

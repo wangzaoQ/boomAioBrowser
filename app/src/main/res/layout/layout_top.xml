@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolBarSearch"
     android:layout_width="match_parent"
     android:layout_height="37dp">
 
     <FrameLayout
+        android:id="@+id/leftEngine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -26,29 +28,49 @@
 
     </FrameLayout>
 
-    <RelativeLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="54dp">
-
+        android:orientation="horizontal"
+        android:layout_toEndOf="@+id/leftEngine"
+        >
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivPrivate"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/ic_private"
+            android:layout_gravity="center"
+            android:layout_marginStart="3dp"
+            android:visibility="gone"
+            tools:visibility ="visible"
+            android:layout_marginEnd="3dp"
+            ></androidx.appcompat.widget.AppCompatImageView>
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvToolbarSearch"
             style="@style/app_text_bold"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="@string/app_search_hint"
             android:textColor="#80000000"
             android:layout_toStartOf="@+id/llSearch"
+            android:layout_gravity="center_vertical"
             android:layout_marginEnd="7dp"
+            android:layout_marginStart="3dp"
             android:singleLine="true"
             android:ellipsize="end"
             android:textSize="14sp"></androidx.appcompat.widget.AppCompatTextView>
 
+
+
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etToolBarSearch"
+            android:layout_marginStart="3dp"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             android:background="@null"
             android:hint="@string/app_search_hint"
             android:textColor="#000000"
@@ -62,7 +84,7 @@
             android:focusableInTouchMode="true"
             android:layout_toStartOf="@+id/llSearch"
             android:layout_marginEnd="7dp"
-            android:visibility="gone"></androidx.appcompat.widget.AppCompatEditText>
+            ></androidx.appcompat.widget.AppCompatEditText>
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/llSearch"
             android:layout_width="wrap_content"
@@ -71,7 +93,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="7dp"
-            android:visibility="gone"
+            android:layout_gravity="center_vertical"
             >
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivProtect"
@@ -88,5 +110,5 @@
                 app:srcCompat="@mipmap/ic_web_refresh"
                 ></androidx.appcompat.widget.AppCompatImageView>
         </androidx.appcompat.widget.LinearLayoutCompat>
-    </RelativeLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </RelativeLayout>

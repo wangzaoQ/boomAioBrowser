@@ -103,7 +103,7 @@ class TabPop(context: Context) : BasePopupWindow(context) {
                         if (browserStatus == 0){
                             JumpDataManager.saveBrowserTabList(browserStatus,tabAdapter.items as MutableList<JumpData>,tag = "tabPop 删除item时更新")
                             CacheManager.browserStatus = browserStatus
-                            APP.jumpLiveData.postValue(addTab())
+                            APP.jumpLiveData.postValue(JumpDataManager.addTab(browserStatus,"删除所有item后自动添加"))
                             dismiss()
                         }else{
                             JumpDataManager.saveBrowserTabList(browserStatus,tabAdapter.items as MutableList<JumpData>,tag = "tabPop 删除item时更新")
@@ -139,7 +139,7 @@ class TabPop(context: Context) : BasePopupWindow(context) {
         }
         popBinding!!.ivAdd.setOnClickListener {
             addOrSelected = true
-            APP.jumpLiveData.postValue(addTab())
+            APP.jumpLiveData.postValue(JumpDataManager.addTab(browserStatus,"点击添加按钮"))
             dismiss()
         }
         showPopupWindow()
@@ -154,15 +154,7 @@ class TabPop(context: Context) : BasePopupWindow(context) {
         }
     }
 
-    private fun addTab(): JumpData{
-        var data = JumpData().apply {
-            jumpType = JumpConfig.JUMP_HOME
-            jumpTitle = context.getString(R.string.app_home)
-            isCurrent = true
-        }
-        JumpDataManager.addBrowserTab(data,browserStatus,true,tag = "tabPop 增加tab")
-        return data
-    }
+
 
     private fun loadPrivateData() {
         var list = JumpDataManager.getBrowserTabList(browserStatus,tag = "tabPop loadPrivateData 获取tabList")

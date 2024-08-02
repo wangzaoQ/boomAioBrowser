@@ -28,4 +28,5 @@
     <string name="app_home">Home</string>
     <string name="app_private_search">Searching Privately</string>
     <string name="app_private_search2">When you use InPrivate tabs, your search data isn\'t saved on your device after you\'re done. Temporary data is also deleted from your device after InPrivate tabs are closed, or the app is restarted.</string>
+    <string name="app_clear_data">Clear Data</string>
 </resources>

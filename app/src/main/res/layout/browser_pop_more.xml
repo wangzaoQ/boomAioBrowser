@@ -29,6 +29,7 @@
             android:id="@+id/ivDelete"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_marginEnd="13dp"
             app:srcCompat="@mipmap/ic_gray_delete"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"

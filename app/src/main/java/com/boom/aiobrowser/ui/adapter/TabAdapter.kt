@@ -32,7 +32,8 @@ class TabAdapter : BaseQuickAdapter<JumpData, TabAdapter.VH>(), DragAndSwipeData
                 item.jumpUrl
             }
             tvTab.text = content
-            tvTab.setTextColor(ContextCompat.getColor(context,if (item.isCurrent) R.color.purple_200 else R.color.black))
+            tvTab.setTextColor(ContextCompat.getColor(context,if (item.isCurrent) R.color.black else R.color.gray))
+            ivTab.setImageResource(if (item.isCurrent) R.mipmap.ic_tab2 else R.mipmap.ic_tab)
         }
     }
 

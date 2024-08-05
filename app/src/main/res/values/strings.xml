@@ -34,4 +34,10 @@
     <string name="app_new_tab">New Tab</string>
     <string name="app_history">History</string>
     <string name="app_about">About</string>
+    <string name="app_default_browser_title">Make AioBrowser Your Default Browser</string>
+<!--    <string name="app_default_browser_content">Block Ads And Protect Your Privacy Data Every Time You Browse When You Make xxx your default browser</string>-->
+    <string name="app_open_setting">Open Settings</string>
+    <string name="app_click_on_default_browser">Click On Default Browser</string>
+    <string name="app_select_browse">Select BrowseNow</string>
+    <string name="app_select_default_browser">Set As Default Browser</string>
 </resources>

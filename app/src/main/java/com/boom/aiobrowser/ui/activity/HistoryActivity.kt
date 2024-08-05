@@ -25,6 +25,7 @@ class HistoryActivity: BaseActivity<BrowserActivityHistoryBinding>() {
         }
         acBinding.ivDelete.setOneClick {
             CacheManager.historyDataList = mutableListOf()
+            historyAdapter.submitList(mutableListOf())
         }
     }
 

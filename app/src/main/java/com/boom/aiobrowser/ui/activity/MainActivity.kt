@@ -19,6 +19,7 @@ import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
 import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.model.SearchViewModel
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.BrowserManager
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.FragmentManager
 import com.boom.aiobrowser.tools.JumpDataManager
@@ -27,6 +28,7 @@ import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.fragment.StartFragment
 import com.boom.aiobrowser.ui.fragment.WebFragment
+import com.boom.aiobrowser.ui.pop.DefaultPop
 import com.boom.aiobrowser.ui.pop.MorePop
 import com.boom.aiobrowser.ui.pop.TabPop
 import com.bumptech.glide.Glide
@@ -117,10 +119,12 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 //                .into(acBinding.ivClearAnimal)
         }
         acBinding.ivMore.setOnClickListener {
-            var morePop = MorePop(this@MainActivity)
-            morePop.createPop()
+            morePop = MorePop(this@MainActivity)
+            morePop?.createPop()
         }
     }
+
+    var morePop : MorePop?=null
 
     fun showTabPop() {
         var tabPop = TabPop(this@MainActivity)
@@ -130,6 +134,11 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 updateTabCount()
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        morePop?.updateUI()
     }
 
     fun clearData(){
@@ -201,6 +210,21 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     fun hideStart() {
         fManager.hideFragment(supportFragmentManager, startFragment!!)
         acBinding.llControl.visibility = View.VISIBLE
+        if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault){
+            CacheManager.isFirstShowBrowserDefault = false
+            var pop = DefaultPop(this@MainActivity)
+            pop.setOnDismissListener(object :OnDismissListener(){
+                override fun onDismiss() {
+                    showTips()
+                }
+            })
+            pop.createPop()
+        }else{
+            showTips()
+        }
+    }
+
+    private fun showTips() {
         if (CacheManager.isFirstShowClear){
             CacheManager.isFirstShowClear = false
             acBinding.root.postDelayed({

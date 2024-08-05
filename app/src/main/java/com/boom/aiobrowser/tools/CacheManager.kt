@@ -21,6 +21,7 @@ object CacheManager {
     val mmkv = MMKV.mmkvWithID("${BuildConfig.APPLICATION_ID}kv", MMKV.MULTI_PROCESS_MODE)
     const val KV_FIRST_START = "KV_FIRST_START"
     const val KV_FIRST_SHOW_CLEAR = "KV_FIRST_SHOW_CLEAR"
+    const val KV_FIRST_SHOW_BROWSER_DEFAULT = "KV_FIRST_SHOW_BROWSER_DEFAULT"
     const val KV_ENGINE_TYPE = "KV_ENGINE_TYPE"
     const val KV_TAB_DATA_NORMAL = "KV_TAB_DATA_NORMAL"
     const val KV_TAB_DATA_PRIVATE = "KV_TAB_DATA_PRIVATE"
@@ -49,6 +50,15 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_FIRST_SHOW_CLEAR, value)
+        }
+
+
+    var isFirstShowBrowserDefault: Boolean
+        get() {
+            return mmkv.decodeBool(KV_FIRST_SHOW_BROWSER_DEFAULT, true)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_SHOW_BROWSER_DEFAULT, value)
         }
 
     // 0 normal 1 private

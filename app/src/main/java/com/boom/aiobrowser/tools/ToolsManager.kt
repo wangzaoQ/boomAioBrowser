@@ -1,5 +1,9 @@
 package com.boom.aiobrowser.tools
 
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
@@ -8,10 +12,6 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import kotlinx.coroutines.Job
 import java.util.Base64
-import java.util.Locale
-import java.util.UUID
-import java.util.Vector
-import java.util.regex.Pattern
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
@@ -160,17 +160,8 @@ fun Job?.jobCancel() {
     }
 }
 
-fun MutableList<String>.getTopic(): String {
-    var builder = StringBuilder()
-    forEach {
-        builder.append(it).append(",")
-    }
-    var topic = builder.toString()
-    if (topic.isNullOrEmpty().not()) {
-        topic = topic.substring(0, topic.length - 1)
-    }
-    return topic
-}
+
+
 
 
 

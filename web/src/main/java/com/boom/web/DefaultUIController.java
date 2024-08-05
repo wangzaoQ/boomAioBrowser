@@ -44,7 +44,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
-import com.boom.agentweb.R;
+import com.boom.web.R;
 
 
 /**
@@ -85,9 +85,9 @@ public class DefaultUIController extends AbsAgentWebUIController {
 		if (mAskOpenOtherAppDialog == null) {
 			mAskOpenOtherAppDialog = new AlertDialog
 					.Builder(mActivity)
-					.setMessage(mResources.getString(R.string.agentweb_leave_app_and_go_other_page,
+					.setMessage(mResources.getString(R.string.web_leave_app_and_go_other_page,
 							AgentWebUtils.getApplicationName(mActivity)))
-					.setTitle(mResources.getString(R.string.agentweb_tips))
+					.setTitle(mResources.getString(R.string.web_tips))
 					.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -96,7 +96,7 @@ public class DefaultUIController extends AbsAgentWebUIController {
 							}
 						}
 					})//
-					.setPositiveButton(mResources.getString(R.string.agentweb_leave), new DialogInterface.OnClickListener() {
+					.setPositiveButton(mResources.getString(R.string.web_leave), new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							if (callback != null) {
@@ -136,9 +136,9 @@ public class DefaultUIController extends AbsAgentWebUIController {
 		}
 		AlertDialog mAlertDialog = null;
 		mAlertDialog = new AlertDialog.Builder(mActivity)
-				.setTitle(mResources.getString(R.string.agentweb_tips))
-				.setMessage(mResources.getString(R.string.agentweb_honeycomblow))
-				.setNegativeButton(mResources.getString(R.string.agentweb_download), new DialogInterface.OnClickListener() {
+				.setTitle(mResources.getString(R.string.web_tips))
+				.setMessage(mResources.getString(R.string.web_honeycomblow))
+				.setNegativeButton(mResources.getString(R.string.web_download), new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						if (dialog != null) {
@@ -149,7 +149,7 @@ public class DefaultUIController extends AbsAgentWebUIController {
 						}
 					}
 				})//
-				.setPositiveButton(mResources.getString(R.string.agentweb_cancel), new DialogInterface.OnClickListener() {
+				.setPositiveButton(mResources.getString(R.string.web_cancel), new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 
@@ -373,24 +373,24 @@ public class DefaultUIController extends AbsAgentWebUIController {
 		String sslErrorMessage;
 		switch (error.getPrimaryError()) {
 			case SslError.SSL_UNTRUSTED:
-				sslErrorMessage = mActivity.getString(R.string.agentweb_message_show_ssl_untrusted);
+				sslErrorMessage = mActivity.getString(R.string.web_message_show_ssl_untrusted);
 				break;
 			case SslError.SSL_EXPIRED:
-				sslErrorMessage = mActivity.getString(R.string.agentweb_message_show_ssl_expired);
+				sslErrorMessage = mActivity.getString(R.string.web_message_show_ssl_expired);
 				break;
 			case SslError.SSL_IDMISMATCH:
-				sslErrorMessage = mActivity.getString(R.string.agentweb_message_show_ssl_hostname_mismatch);
+				sslErrorMessage = mActivity.getString(R.string.web_message_show_ssl_hostname_mismatch);
 				break;
 			case SslError.SSL_NOTYETVALID:
-				sslErrorMessage = mActivity.getString(R.string.agentweb_message_show_ssl_not_yet_valid);
+				sslErrorMessage = mActivity.getString(R.string.web_message_show_ssl_not_yet_valid);
 				break;
 			default:
-				sslErrorMessage = mActivity.getString(R.string.agentweb_message_show_ssl_error);
+				sslErrorMessage = mActivity.getString(R.string.web_message_show_ssl_error);
 		}
-		sslErrorMessage += mActivity.getString(R.string.agentweb_message_show_continue);
-		alertDialog.setTitle(mActivity.getString(R.string.agentweb_title_ssl_error));
+		sslErrorMessage += mActivity.getString(R.string.web_message_show_continue);
+		alertDialog.setTitle(mActivity.getString(R.string.web_title_ssl_error));
 		alertDialog.setMessage(sslErrorMessage);
-		alertDialog.setPositiveButton(R.string.agentweb_continue, new DialogInterface.OnClickListener() {
+		alertDialog.setPositiveButton(R.string.web_continue, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// Ignore SSL certificate errors
@@ -398,7 +398,7 @@ public class DefaultUIController extends AbsAgentWebUIController {
 			}
 		});
 
-		alertDialog.setNegativeButton(R.string.agentweb_cancel, new DialogInterface.OnClickListener() {
+		alertDialog.setNegativeButton(R.string.web_cancel, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				handler.cancel();

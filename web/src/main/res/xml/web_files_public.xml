@@ -2,6 +2,6 @@
 <paths>
 
     <external-cache-path
-        name="agenweb_files"
-        path="agentweb-cache"/>
+        name="web_files"
+        path="web-cache"/>
 </paths>

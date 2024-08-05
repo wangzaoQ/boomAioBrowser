@@ -170,7 +170,7 @@
 //                if (null != mAgentWebUIController.get()) {
 //                    mAgentWebUIController.get().onShowMessage(
 //                            mActivityWeakReference.get()
-//                                    .getString(R.string.agentweb_download_task_has_been_exist), "preDownload");
+//                                    .getString(R.string.web_download_task_has_been_exist), "preDownload");
 //                }
 //                return;
 //            }

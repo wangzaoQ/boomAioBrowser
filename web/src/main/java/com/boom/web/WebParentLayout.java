@@ -31,7 +31,7 @@ import android.view.ViewStub;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 
-import com.boom.agentweb.R;
+import com.boom.web.R;
 
 /**
  * @author cenxiaozhong

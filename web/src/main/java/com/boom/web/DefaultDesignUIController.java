@@ -33,7 +33,7 @@ import android.webkit.JsResult;
 import android.webkit.WebView;
 import android.widget.TextView;
 
-import com.boom.agentweb.R;
+import com.boom.web.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 

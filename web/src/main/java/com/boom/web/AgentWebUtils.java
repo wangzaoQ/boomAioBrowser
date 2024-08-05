@@ -39,7 +39,7 @@ import android.provider.MediaStore;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 
-import com.boom.agentweb.R;
+import com.boom.web.R;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.core.app.AppOpsManagerCompat;
 import androidx.core.content.ContextCompat;

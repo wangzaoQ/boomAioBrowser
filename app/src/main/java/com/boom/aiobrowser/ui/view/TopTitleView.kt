@@ -89,10 +89,11 @@ class TopTitleView : FrameLayout {
                 KeyboardUtils.showSoftInput(binding.etToolBarSearch)
             },0)
         }else if (type == 2){
+            //webFragment
             binding.tvToolbarSearch.visibility = View.VISIBLE
             binding.etToolBarSearch.visibility = View.GONE
-            binding.llSearch.visibility = View.VISIBLE
-            binding.llSearch.setOnClickListener {
+            binding.ivRefresh.visibility = View.VISIBLE
+            binding.ivRefresh.setOnClickListener {
                 searchRefresh.invoke()
             }
         }

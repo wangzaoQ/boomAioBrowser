@@ -58,6 +58,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             updateEngine(it)
             fBinding.topSearch.updateEngine(it)
         }
+        fBinding.topSearch.binding.ivRefresh.visibility = View.GONE
         fBinding.mainAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
                 absVerticalOffset = Math.abs(verticalOffset) //AppBarLayout竖直方向偏移距离px
@@ -87,9 +88,21 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 var title = ""
                 var url = ""
                 when(i){
-                    else->{
+                    0 ->{
                         title = getString(R.string.app_ytb)
                         url = "https://www.youtube.com/"
+                    }
+                    1 ->{
+                        title = getString(R.string.app_fb)
+                        url = "https://www.facebook.com/"
+                    }
+                    2 ->{
+                        title = getString(R.string.app_instagram)
+                        url = "https://www.instagram.com/"
+                    }
+                    3 ->{
+                        title = getString(R.string.app_tt)
+                        url = "https://www.tiktok.com/"
                     }
                 }
                 APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "mainFragment 点击热们功能").apply {

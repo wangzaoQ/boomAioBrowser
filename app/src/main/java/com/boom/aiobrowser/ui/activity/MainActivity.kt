@@ -96,17 +96,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 else -> {}
             }
         }
-        for (i in 0 until acBinding.llControl.childCount){
-            acBinding.llControl.getChildAt(i).setOnClickListener {
-                when(i){
-                    0->{}
-                    1->{}
-                    2->{}
-                    3->{}
-                    4->{}
-                }
-            }
-        }
         acBinding.tvTabCount.setOnClickListener {
             showTabPop()
         }

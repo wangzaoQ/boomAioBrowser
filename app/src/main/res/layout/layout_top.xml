@@ -108,6 +108,7 @@
                 android:layout_width="27dp"
                 android:layout_height="27dp"
                 app:srcCompat="@mipmap/ic_web_refresh"
+                android:visibility="gone"
                 ></androidx.appcompat.widget.AppCompatImageView>
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>

@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.ui.fragment
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R

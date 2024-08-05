@@ -63,7 +63,7 @@ public class WebParentLayout extends FrameLayout implements Provider<AbsAgentWeb
 		if (!(context instanceof Activity)) {
 			throw new IllegalArgumentException("WebParentLayout context must be activity or activity sub class .");
 		}
-		this.mErrorLayoutRes = R.layout.agentweb_error_page;
+		this.mErrorLayoutRes = R.layout.web_error_page;
 	}
 
 	void bindController(AbsAgentWebUIController agentWebUIController) {
@@ -156,7 +156,7 @@ public class WebParentLayout extends FrameLayout implements Provider<AbsAgentWeb
 		}
 		this.mErrorLayoutRes = resLayout;
 		if (this.mErrorLayoutRes <= 0) {
-			this.mErrorLayoutRes = R.layout.agentweb_error_page;
+			this.mErrorLayoutRes = R.layout.web_error_page;
 		}
 	}
 

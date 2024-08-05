@@ -55,6 +55,12 @@
         <activity android:name=".ui.activity.HistoryActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             ></activity>
+        <activity android:name=".ui.activity.AboutActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            ></activity>
+        <activity android:name=".ui.activity.WebActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            ></activity>
     </application>
 
 

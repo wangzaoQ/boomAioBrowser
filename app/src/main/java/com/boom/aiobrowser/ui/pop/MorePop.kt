@@ -15,6 +15,7 @@ import com.boom.aiobrowser.databinding.BrowserPopMoreBinding
 import com.boom.aiobrowser.databinding.BrowserPopSearchBinding
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.ui.activity.AboutActivity
 import com.boom.aiobrowser.ui.activity.HistoryActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.base.adapter4.QuickAdapterHelper
@@ -60,7 +61,12 @@ class MorePop(context: Context) : BasePopupWindow(context) {
                 }
                 dismiss()
             }
-
+            llAbout.setOnClickListener {
+                if (context is BaseActivity<*>){
+                    (context as MainActivity).startActivity(Intent(context,AboutActivity::class.java))
+                }
+                dismiss()
+            }
         }
         showPopupWindow()
     }

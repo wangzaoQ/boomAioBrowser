@@ -45,6 +45,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
         var dataList = mutableListOf<JumpData>()
         if (searchist.isNotEmpty()){
             fBinding.rlRecentRoot.visibility = View.VISIBLE
+            fBinding.rv.visibility = View.VISIBLE
             if (searchist.size>5 && isShowMoreData.not()){
                 dataList = searchist.subList(0,5)
                 fBinding.llViewMore.visibility = View.VISIBLE
@@ -54,6 +55,8 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
             searchAdapter.submitList(dataList)
         }else{
             fBinding.rlRecentRoot.visibility = View.GONE
+            fBinding.rv.visibility = View.GONE
+            fBinding.llViewMore.visibility = View.GONE
         }
     }
 
@@ -114,6 +117,10 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
             // 添加子 view 的点击事件(去除点击抖动的扩展方法)
             searchAdapter.addOnDebouncedChildClick(R.id.ivDelete) { adapter, view, position ->
                 searchAdapter.removeAt(position)
+                var list = CacheManager.recentSearchDataList
+                list.removeAt(position)
+                CacheManager.recentSearchDataList = list
+                startLoadData()
             }
             searchAdapter.setOnDebouncedItemClick{adapter, view, position ->
                 var data = searchAdapter.items.get(position)

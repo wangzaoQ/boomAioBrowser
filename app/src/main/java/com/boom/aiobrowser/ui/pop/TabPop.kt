@@ -140,6 +140,7 @@ class TabPop(context: Context) : BasePopupWindow(context) {
         popBinding!!.ivAdd.setOnClickListener {
             addOrSelected = true
             APP.jumpLiveData.postValue(JumpDataManager.addTab(browserStatus,"点击添加按钮"))
+            CacheManager.browserStatus = browserStatus
             dismiss()
         }
         showPopupWindow()

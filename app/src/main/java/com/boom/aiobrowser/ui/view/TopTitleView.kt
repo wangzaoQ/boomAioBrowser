@@ -97,6 +97,11 @@ class TopTitleView : FrameLayout {
                 searchRefresh.invoke()
             }
         }
+        if (CacheManager.browserStatus == 1){
+            binding.ivPrivate.visibility = View.VISIBLE
+        }else{
+            binding.ivPrivate.visibility = View.GONE
+        }
     }
 
     fun updateEngine(type: Int, update: Boolean = true) {

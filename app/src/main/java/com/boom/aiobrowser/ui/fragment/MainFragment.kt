@@ -184,12 +184,13 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 }
 
                 override fun isAllowLoading(): Boolean {
-                    return true
+                    return fBinding.refreshLayout.isRefreshing.not()
                 }
 
             }).build()
     }
     override fun setShowView() {
+        fBinding.refreshLayout.isRefreshing = true
         fBinding.apply {
             adapterHelper.trailingLoadState = LoadState.NotLoading(false)
             rv.apply {
@@ -218,8 +219,10 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         fBinding.topSearch.updateEngine(CacheManager.engineType)
         if (CacheManager.browserStatus == 0){
             fBinding.ivPrivate.visibility = View.GONE
+            fBinding.topSearch.binding.ivPrivate.visibility = View.GONE
         }else{
             fBinding.ivPrivate.visibility = View.VISIBLE
+            fBinding.topSearch.binding.ivPrivate.visibility = View.VISIBLE
         }
     }
 

@@ -202,7 +202,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         fManager.hideFragment(supportFragmentManager, startFragment!!)
         acBinding.llControl.visibility = View.VISIBLE
         if (CacheManager.isFirstShowClear){
-//            CacheManager.isFirstShowClear = false
+            CacheManager.isFirstShowClear = false
             acBinding.root.postDelayed({
                 acBinding.tvClearData.visibility = View.VISIBLE
                 val scaleXAnimator = ObjectAnimator.ofFloat(acBinding.tvClearData, "scaleX", 1.0f, 1.2f,1.0f)
@@ -213,7 +213,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 set.start()
                 acBinding.root.postDelayed({
                     acBinding.tvClearData.visibility = View.GONE
-                },1000)
+                },2000)
             },1000)
         }else{
             acBinding.tvClearData.visibility = View.GONE

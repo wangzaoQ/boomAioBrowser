@@ -70,12 +70,14 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                 }else{
                     CacheManager.lastJumpData = null
                 }
-                var list = CacheManager.historyDataList
-                this.apply {
-                    updateTime = System.currentTimeMillis()
+                if(CacheManager.browserStatus == 0){
+                    var list = CacheManager.historyDataList
+                    this.apply {
+                        updateTime = System.currentTimeMillis()
+                    }
+                    list.add(0,this)
+                    CacheManager.historyDataList = list
                 }
-                list.add(0,this)
-                CacheManager.historyDataList = list
             }
         }, failBack = {})
 

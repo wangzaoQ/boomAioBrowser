@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@mipmap/ic_normal_next2" android:state_enabled="true" />
-    <item android:drawable="@mipmap/ic_normal_back_1" android:state_enabled="false" />
+    <item android:drawable="@mipmap/ic_normal_next1" android:state_enabled="true" />
+    <item android:drawable="@mipmap/ic_normal_next2" android:state_enabled="false" />
 
 </selector>

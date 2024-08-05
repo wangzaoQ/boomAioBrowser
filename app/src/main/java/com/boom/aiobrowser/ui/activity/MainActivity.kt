@@ -27,6 +27,7 @@ import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.fragment.StartFragment
 import com.boom.aiobrowser.ui.fragment.WebFragment
+import com.boom.aiobrowser.ui.pop.MorePop
 import com.boom.aiobrowser.ui.pop.TabPop
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
@@ -107,15 +108,10 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             }
         }
         acBinding.tvTabCount.setOnClickListener {
-            var tabPop = TabPop(this@MainActivity)
-            tabPop.createPop()
-            tabPop.setOnDismissListener(object :OnDismissListener(){
-                override fun onDismiss() {
-                    updateTabCount()
-                }
-            })
+            showTabPop()
         }
         acBinding.ivClear.setOnClickListener {
+            clearData()
 //            acBinding.ivClearAnimal.run {
 //                setAnimation("test.json")
 //                playAnimation()
@@ -131,6 +127,24 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 //                .diskCacheStrategy(DiskCacheStrategy.NONE)
 //                .into(acBinding.ivClearAnimal)
         }
+        acBinding.ivMore.setOnClickListener {
+            var morePop = MorePop(this@MainActivity)
+            morePop.createPop()
+        }
+    }
+
+    fun showTabPop() {
+        var tabPop = TabPop(this@MainActivity)
+        tabPop.createPop()
+        tabPop.setOnDismissListener(object :OnDismissListener(){
+            override fun onDismiss() {
+                updateTabCount()
+            }
+        })
+    }
+
+    fun clearData(){
+
     }
 
     fun loadNews(){
@@ -197,17 +211,20 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
     fun hideStart() {
         fManager.hideFragment(supportFragmentManager, startFragment!!)
-//        acBinding.llControl.visibility = View.VISIBLE
+        acBinding.llControl.visibility = View.VISIBLE
         if (CacheManager.isFirstShowClear){
-            acBinding.tvClearData.visibility = View.VISIBLE
-            val scaleXAnimator = ObjectAnimator.ofFloat(acBinding.tvClearData, "scaleX", 1.0f, 1.2f,1.0f)
-            val scaleYAnimator = ObjectAnimator.ofFloat(acBinding.tvClearData, "scaleY", 1.0f, 1.2f,1.0f)
-            val set = AnimatorSet()
-            set.play(scaleXAnimator).with(scaleYAnimator)
-            set.setDuration(1000)
-            set.start()
+//            CacheManager.isFirstShowClear = false
             acBinding.root.postDelayed({
-                acBinding.tvClearData.visibility = View.GONE
+                acBinding.tvClearData.visibility = View.VISIBLE
+                val scaleXAnimator = ObjectAnimator.ofFloat(acBinding.tvClearData, "scaleX", 1.0f, 1.2f,1.0f)
+                val scaleYAnimator = ObjectAnimator.ofFloat(acBinding.tvClearData, "scaleY", 1.0f, 1.2f,1.0f)
+                val set = AnimatorSet()
+                set.play(scaleXAnimator).with(scaleYAnimator)
+                set.setDuration(1000)
+                set.start()
+                acBinding.root.postDelayed({
+                    acBinding.tvClearData.visibility = View.GONE
+                },1000)
             },1000)
         }else{
             acBinding.tvClearData.visibility = View.GONE

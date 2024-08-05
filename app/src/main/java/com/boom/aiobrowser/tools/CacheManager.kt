@@ -31,6 +31,7 @@ object CacheManager {
     const val KV_LOCATION_DATA = "KV_LOCATION_DATA"
     const val KV_PHONE_ID = "KV_PHONE_ID"
     const val KV_NEWS_SAVE_TIME = "KV_NEWS_SAVE_TIME"
+    const val KV_HISTORY_DATA = "KV_HISTORY_DATA"
 
     // 是否首次打开start
     var isFirstStart: Boolean
@@ -152,6 +153,13 @@ object CacheManager {
             mmkv.encode(KV_RECENT_SEARCH_DATA, toJson(value))
         }
 
+    var historyDataList :MutableList<JumpData>
+        get() {
+            return getListByGson(mmkv.decodeString(KV_HISTORY_DATA),JumpData::class.java) ?: mutableListOf()
+        }
+        set(value) {
+            mmkv.encode(KV_HISTORY_DATA, toJson(value))
+        }
 
     fun getID():String{
         var phoneId = mmkv.decodeString(KV_PHONE_ID,"")?:""

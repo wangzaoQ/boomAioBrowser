@@ -52,6 +52,9 @@
                 <data android:scheme="newsnowappnew" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.HistoryActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            ></activity>
     </application>
 
 

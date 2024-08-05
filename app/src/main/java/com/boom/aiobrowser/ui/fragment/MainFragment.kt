@@ -92,7 +92,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                         url = "https://www.youtube.com/"
                     }
                 }
-                APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(updateTime = true,tag = "mainFragment 点击热们功能").apply {
+                APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "mainFragment 点击热们功能").apply {
                     jumpType = JumpConfig.JUMP_WEB
                     jumpTitle = title
                     jumpUrl = url
@@ -100,7 +100,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             }
         }
         fBinding.rlSearch.setOneClick {
-            APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(isReset = true,updateTime = true,tag = "mainFragment 点击搜索").apply {
+            APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(isReset = true,tag = "mainFragment 点击搜索").apply {
                 jumpType = JumpConfig.JUMP_SEARCH
             })
         }

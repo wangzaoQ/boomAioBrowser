@@ -91,7 +91,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
 //            viewModel.searchResult(it)
             var url = SearchNet.getSearchUrl(it)
 
-            var jumpData = JumpDataManager.getCurrentJumpData(updateTime = true,tag = "searchFragment 搜索").apply {
+            var jumpData = JumpDataManager.getCurrentJumpData(tag = "searchFragment 搜索").apply {
                 jumpType = JumpConfig.JUMP_WEB
                 jumpTitle = it
                 jumpUrl = url

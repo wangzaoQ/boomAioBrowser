@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="25dp"
+    android:layout_marginBottom="7dp"
+    android:gravity="center_vertical"
+    android:paddingHorizontal="13dp"
+    android:background="@drawable/shape_ripple_item"
+    android:clickable="true"
+    android:orientation="horizontal">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTime"
+        android:layout_width="67dp"
+        android:layout_height="wrap_content"
+        android:textColor="#80000000"
+        android:textSize="14sp"></androidx.appcompat.widget.AppCompatTextView>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTitle"
+        style="@style/app_text_bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        tools:text="Facebook"></androidx.appcompat.widget.AppCompatTextView>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

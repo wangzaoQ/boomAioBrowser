@@ -204,4 +204,12 @@ object CacheManager {
     fun getSession(key:String):String{
         return mmkv.decodeString("${key}_${NetRequest.keyTag}","")?:""
     }
+
+    fun clearAll() {
+        historyDataList = mutableListOf()
+        recentSearchDataList = mutableListOf()
+        tabDataListNormal = mutableListOf()
+        tabDataListPrivate = mutableListOf()
+        browserStatus = 0
+    }
 }

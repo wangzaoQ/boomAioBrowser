@@ -42,7 +42,7 @@ class MorePop(context: Context) : BasePopupWindow(context) {
             }
             llClearData.setOnClickListener {
                 if (context is MainActivity){
-                    (context as MainActivity).showTabPop()
+                    (context as MainActivity).clearData()
                 }
                 dismiss()
             }

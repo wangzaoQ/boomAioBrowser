@@ -167,7 +167,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
 
     fun clearData(){
-
+        CacheManager.clearAll()
+        APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag="清理数据后获取当前item"))
     }
 
     fun loadNews(){
@@ -227,7 +228,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 //                fManager.addFragmentTag(supportFragmentManager,mainFragment,R.id.fragmentMainFl,"MainFragment")
 //            }
 //        }, 500)
-        updateTabCount()
         loadNews()
     }
 

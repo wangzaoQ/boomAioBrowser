@@ -42,9 +42,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     }
 
     override fun startLoadData() {
-        if (rootActivity is MainActivity){
-            (rootActivity as MainActivity).updateTabCount()
-        }
+
     }
 
     var absVerticalOffset = 0
@@ -145,7 +143,10 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         }
 
         if (rootActivity is MainActivity){
-            (rootActivity as MainActivity).updateBottom(false,true, jumpData = JumpDataManager.getCurrentJumpData(tag="MainFragment onResume updateBottom"))
+            (rootActivity as MainActivity).apply {
+                updateBottom(false,true, jumpData = JumpDataManager.getCurrentJumpData(tag="MainFragment onResume updateBottom"))
+                updateTabCount()
+            }
         }
         APP.bottomLiveData.postValue(JumpConfig.JUMP_HOME)
     }

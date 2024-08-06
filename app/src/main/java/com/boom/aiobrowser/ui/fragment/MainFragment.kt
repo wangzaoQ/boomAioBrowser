@@ -112,10 +112,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             }
         }
         fBinding.rlSearch.setOneClick {
-            EngineGuidePop(rootActivity).createPop(fBinding.ivSearchEngine)
-//            APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(isReset = true,tag = "mainFragment 点击搜索").apply {
-//                jumpType = JumpConfig.JUMP_SEARCH
-//            })
+            APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(isReset = true,tag = "mainFragment 点击搜索").apply {
+                jumpType = JumpConfig.JUMP_SEARCH
+            })
         }
         fBinding.ivSearchEngine.setOnClickListener {
             SearchPop.showPop(WeakReference(rootActivity),fBinding.ivSearchEngine)
@@ -134,19 +133,25 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 
     override fun onResume() {
         super.onResume()
+        var jumpData:JumpData
         if (firstLoad){
             firstLoad = false
-            var jumpData = JumpDataManager.getCurrentJumpData(tag = "MainFragment onResume 首次")
+            jumpData = JumpDataManager.getCurrentJumpData(tag = "MainFragment onResume 首次")
             if (jumpData.jumpType == JumpConfig.JUMP_WEB){
                 APP.jumpLiveData.postValue(jumpData)
             }
         }else{
-            JumpDataManager.updateCurrentJumpData(JumpDataManager.getCurrentJumpData(isReset = true,tag = "MainFragment onResume 非首次"),"MainFragment onResume 更新 jumpData")
+            jumpData = JumpDataManager.getCurrentJumpData(isReset = true,tag = "MainFragment onResume 非首次")
+            JumpDataManager.updateCurrentJumpData(jumpData,"MainFragment onResume 更新 jumpData")
+            if (CacheManager.engineGuideFirst){
+                CacheManager.engineGuideFirst = false
+                EngineGuidePop(rootActivity).createPop(fBinding.ivSearchEngine)
+            }
         }
 
         if (rootActivity is MainActivity){
             (rootActivity as MainActivity).apply {
-                updateBottom(false,true, jumpData = JumpDataManager.getCurrentJumpData(tag="MainFragment onResume updateBottom"))
+                updateBottom(false,true, jumpData = jumpData)
                 updateTabCount()
             }
         }

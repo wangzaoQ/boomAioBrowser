@@ -212,6 +212,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
 
     override fun setShowView() {
+        if (CacheManager.browserStatus == 1){
+            CacheManager.browserStatus = 0
+        }
         navController = Navigation.findNavController(this@MainActivity,R.id.fragment_view)
         startFragment = StartFragment()
         startFragment?.apply {
@@ -239,7 +242,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         fManager.hideFragment(supportFragmentManager, startFragment!!)
         acBinding.llControl.visibility = View.VISIBLE
         if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault){
-//            CacheManager.isFirstShowBrowserDefault = false
+            CacheManager.isFirstShowBrowserDefault = false
             var pop = DefaultPop(this@MainActivity)
             pop.setOnDismissListener(object :OnDismissListener(){
                 override fun onDismiss() {
@@ -261,7 +264,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 val scaleYAnimator = ObjectAnimator.ofFloat(acBinding.tvClearData, "scaleY", 1.0f, 1.2f,1.0f)
                 val set = AnimatorSet()
                 set.play(scaleXAnimator).with(scaleYAnimator)
-                set.setDuration(1000)
+                set.setDuration(1500)
                 set.start()
                 set.addListener(object : Animator.AnimatorListener {
                     override fun onAnimationStart(p0: Animator) {

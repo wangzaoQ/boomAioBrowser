@@ -20,6 +20,7 @@ object CacheManager {
 
     val mmkv = MMKV.mmkvWithID("${BuildConfig.APPLICATION_ID}kv", MMKV.MULTI_PROCESS_MODE)
     const val KV_FIRST_START = "KV_FIRST_START"
+    const val KV_ENGINE_GUIDE_FIRST = "KV_ENGINE_GUIDE_FIRST"
     const val KV_FIRST_SHOW_CLEAR = "KV_FIRST_SHOW_CLEAR"
     const val KV_FIRST_SHOW_BROWSER_DEFAULT = "KV_FIRST_SHOW_BROWSER_DEFAULT"
     const val KV_ENGINE_TYPE = "KV_ENGINE_TYPE"
@@ -41,6 +42,14 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_FIRST_START, value)
+        }
+
+    var engineGuideFirst: Boolean
+        get() {
+            return mmkv.decodeBool(KV_ENGINE_GUIDE_FIRST, true)
+        }
+        set(value) {
+            mmkv.encode(KV_ENGINE_GUIDE_FIRST, value)
         }
 
     // 是否首次展示清理数据tips

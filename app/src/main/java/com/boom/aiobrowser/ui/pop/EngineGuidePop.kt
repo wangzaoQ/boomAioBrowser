@@ -45,11 +45,11 @@ class EngineGuidePop(context: Context) : BasePopupWindow(context) {
         setOffsetX(SizeUtils.dp2px(-19f))
         setOffsetY(SizeUtils.dp2px(-2f))
         showPopupWindow(view)
-        val scaleXAnimator = ObjectAnimator.ofFloat(defaultBinding!!.root, "scaleX", 1.0f, 1.2f,1.0f)
-        val scaleYAnimator = ObjectAnimator.ofFloat(defaultBinding!!.root, "scaleY", 1.0f, 1.2f,1.0f)
+        val scaleXAnimator = ObjectAnimator.ofFloat(defaultBinding!!.root, "scaleX", 1.0f, 1.1f,1.0f)
+        val scaleYAnimator = ObjectAnimator.ofFloat(defaultBinding!!.root, "scaleY", 1.0f, 1.1f,1.0f)
         val set = AnimatorSet()
         set.play(scaleXAnimator).with(scaleYAnimator)
-        set.setDuration(1000)
+        set.setDuration(1500)
         set.start()
         set.addListener(object :AnimatorListener{
             override fun onAnimationStart(p0: Animator) {

@@ -51,6 +51,11 @@ class TabPop(context: Context) : BasePopupWindow(context) {
 
 
     fun createPop(){
+        popBinding?.rlTabRoot?.addScrollBack {
+            if (it>200){
+                dismiss()
+            }
+        }
         browserStatus = CacheManager.browserStatus
 //        setPopupGravityMode(GravityMode.RELATIVE_TO_ANCHOR, GravityMode.RELATIVE_TO_ANCHOR)
 //        setPopupGravity(Gravity.TOP)

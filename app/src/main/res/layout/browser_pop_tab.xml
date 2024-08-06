@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<com.boom.aiobrowser.ui.view.BottomRootView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rlTabRoot"
     android:layout_width="match_parent"
@@ -84,4 +84,4 @@
         android:layout_marginBottom="7dp"
         ></ImageView>
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+</com.boom.aiobrowser.ui.view.BottomRootView>

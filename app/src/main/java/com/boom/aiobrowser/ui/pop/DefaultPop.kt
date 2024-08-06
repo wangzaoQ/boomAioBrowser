@@ -24,6 +24,11 @@ class DefaultPop(context: Context) : BasePopupWindow(context){
     }
 
     fun createPop(){
+        defaultBinding?.rlTabRoot?.addScrollBack {
+            if (it>200){
+                dismiss()
+            }
+        }
         defaultBinding?.apply {
             btnConfirm.setOnClickListener {
                 BrowserManager.setDefaultBrowser(context,BuildConfig.APPLICATION_ID)

@@ -22,6 +22,7 @@ import com.boom.web.PermissionInterceptor
 import com.boom.web.WebChromeClient
 import com.boom.web.WebViewClient
 import com.google.gson.Gson
+import java.util.LinkedList
 
 abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
     var mAgentWeb :AgentWeb?=null
@@ -150,6 +151,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                 fragmentTAG,
                 "mUrl:" + url + " onPageStarted  target:" + getUrl()
             )
+            loadWebOnPageStared(url)
             timer[url] = System.currentTimeMillis()
 //            if (url == getUrl()) {
 //                pageNavigator(View.GONE)
@@ -172,6 +174,9 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             }
         }
     }
+    var linkedUrlList= LinkedList<String>()
+
+    abstract fun loadWebOnPageStared(url: String)
 
     protected var mPermissionInterceptor: PermissionInterceptor = object : PermissionInterceptor {
         /**

@@ -1,7 +1,6 @@
 package com.boom.aiobrowser.ui.fragment
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
@@ -13,14 +12,65 @@ import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
+import com.boom.aiobrowser.ui.activity.MainActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
     var jumpData:JumpData?=null
 
+
     override fun getInsertParent(): ViewGroup {
         return fBinding.fl
+    }
+
+    override fun loadWebOnPageStared(url: String) {
+        rootActivity.addLaunch(success = {
+            if (linkedUrlList.contains(url)){
+                jumpData?.apply {
+                    jumpUrl = url
+                    //之前加载过
+                    var index = linkedUrlList.indexOf(url)
+                    if (index == linkedUrlList.size-1){
+                        //是最后一个
+                        lastJumpData = null
+                    }else{
+                        if (lastJumpData == null){
+                            lastJumpData = jumpData
+                        }
+                        lastJumpData?.jumpUrl = linkedUrlList.get(index+1)
+                    }
+                    JumpDataManager.updateCurrentJumpData(this,"webFragment 存储jumpData")
+                }
+            }else{
+                //没加载过
+                jumpData?.apply {
+                    jumpUrl = url
+                    if (lastJumpData == null || lastJumpData?.jumpUrl != jumpData?.jumpUrl){
+                        lastJumpData = jumpData
+                    }
+                    JumpDataManager.updateCurrentJumpData(this,"webFragment 存储jumpData")
+                }
+                linkedUrlList.add(url)
+            }
+            if(CacheManager.browserStatus == 0){
+                var list = CacheManager.historyDataList
+                jumpData?.apply {
+                    updateTime = System.currentTimeMillis()
+                    list.add(0,this)
+                    CacheManager.historyDataList = list
+                }
+            }
+            withContext(Dispatchers.Main){
+                if (rootActivity is MainActivity){
+                    (rootActivity as MainActivity).apply {
+                        updateBottom(true,true, jumpData = jumpData)
+                    }
+                }
+            }
+        }, failBack = {})
     }
 
     override fun startLoadData() {
@@ -45,6 +95,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         super.loadWebFinished()
         fBinding.flTop.binding.tvToolbarSearch.text = "${jumpData?.jumpTitle} ${getSearchTitle()}"
         fBinding.refreshLayout.isRefreshing = false
+        var key = mAgentWeb?.webCreator?.webView?.url?:""
     }
 
     fun getSearchTitle():String{
@@ -55,6 +106,10 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
        return " - $search $unit"
     }
 
+    /**
+     * 进入
+     */
+
     override fun setShowView() {
         jumpData = getBeanByGson(arguments?.getString(ParamsConfig.JSON_PARAMS)?:"",JumpData::class.java)
         initWeb()
@@ -62,22 +117,22 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         fBinding.flTop.binding.tvToolbarSearch.text = jumpData?.jumpUrl
         fBinding.refreshLayout.isEnabled = false
         fBinding.flTop.setData(jumpData)
-        rootActivity.addLaunch(success = {
-            jumpData?.apply {
-                if (lastJumpData == null || lastJumpData?.jumpUrl != jumpData?.jumpUrl){
-                    lastJumpData = jumpData
-                }
-                JumpDataManager.updateCurrentJumpData(this,"webFragment 存储jumpData")
-                if(CacheManager.browserStatus == 0){
-                    var list = CacheManager.historyDataList
-                    this.apply {
-                        updateTime = System.currentTimeMillis()
-                    }
-                    list.add(0,this)
-                    CacheManager.historyDataList = list
-                }
-            }
-        }, failBack = {})
+//        rootActivity.addLaunch(success = {
+//            jumpData?.apply {
+//                if (lastJumpData == null || lastJumpData?.jumpUrl != jumpData?.jumpUrl){
+//                    lastJumpData = jumpData
+//                }
+//                JumpDataManager.updateCurrentJumpData(this,"webFragment 存储jumpData")
+//                if(CacheManager.browserStatus == 0){
+//                    var list = CacheManager.historyDataList
+//                    this.apply {
+//                        updateTime = System.currentTimeMillis()
+//                    }
+//                    list.add(0,this)
+//                    CacheManager.historyDataList = list
+//                }
+//            }
+//        }, failBack = {})
         APP.bottomLiveData.postValue(JumpConfig.JUMP_WEB)
     }
 

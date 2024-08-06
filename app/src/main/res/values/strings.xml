@@ -40,4 +40,6 @@
     <string name="app_click_on_default_browser">Click On Default Browser</string>
     <string name="app_select_browse">Select BrowseNow</string>
     <string name="app_select_default_browser">Set As Default Browser</string>
+    <string name="app_set_search_engine">Set Search Engine</string>
+    <string name="app_clear_data_content">Clear All Tabs And Data ?</string>
 </resources>

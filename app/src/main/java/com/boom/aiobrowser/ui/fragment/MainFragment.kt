@@ -26,6 +26,7 @@ import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.SearchConfig
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
+import com.boom.aiobrowser.ui.pop.EngineGuidePop
 import com.boom.aiobrowser.ui.pop.SearchPop
 import com.boom.base.adapter4.QuickAdapterHelper
 import com.boom.base.adapter4.loadState.LoadState
@@ -111,9 +112,10 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             }
         }
         fBinding.rlSearch.setOneClick {
-            APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(isReset = true,tag = "mainFragment 点击搜索").apply {
-                jumpType = JumpConfig.JUMP_SEARCH
-            })
+            EngineGuidePop(rootActivity).createPop(fBinding.ivSearchEngine)
+//            APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(isReset = true,tag = "mainFragment 点击搜索").apply {
+//                jumpType = JumpConfig.JUMP_SEARCH
+//            })
         }
         fBinding.ivSearchEngine.setOnClickListener {
             SearchPop.showPop(WeakReference(rootActivity),fBinding.ivSearchEngine)

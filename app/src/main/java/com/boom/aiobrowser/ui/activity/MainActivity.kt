@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.ui.activity
 
+import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.os.Bundle
@@ -28,6 +29,7 @@ import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.fragment.StartFragment
 import com.boom.aiobrowser.ui.fragment.WebFragment
+import com.boom.aiobrowser.ui.pop.ClearPop
 import com.boom.aiobrowser.ui.pop.DefaultPop
 import com.boom.aiobrowser.ui.pop.MorePop
 import com.boom.aiobrowser.ui.pop.TabPop
@@ -67,7 +69,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                         .setEnterAnim(R.anim.in_alpha)
                         .setExitAnim(R.anim.out_alpha)
                         .build()
-
+                    it.lastJumpData = null
                     navController?.navigate(R.id.fragmentWeb, Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
                     },navOptions)
@@ -167,8 +169,10 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
 
     fun clearData(){
-        CacheManager.clearAll()
-        APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag="清理数据后获取当前item"))
+        ClearPop(this).createPop {
+            CacheManager.clearAll()
+            APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag="清理数据后获取当前item"))
+        }
     }
 
     fun loadNews(){
@@ -259,9 +263,22 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 set.play(scaleXAnimator).with(scaleYAnimator)
                 set.setDuration(1000)
                 set.start()
-                acBinding.root.postDelayed({
-                    acBinding.tvClearData.visibility = View.GONE
-                },2000)
+                set.addListener(object : Animator.AnimatorListener {
+                    override fun onAnimationStart(p0: Animator) {
+
+                    }
+
+                    override fun onAnimationEnd(p0: Animator) {
+                        acBinding.tvClearData.visibility = View.GONE
+                    }
+
+                    override fun onAnimationCancel(p0: Animator) {
+                    }
+
+                    override fun onAnimationRepeat(p0: Animator) {
+                    }
+
+                })
             },1000)
         }else{
             acBinding.tvClearData.visibility = View.GONE

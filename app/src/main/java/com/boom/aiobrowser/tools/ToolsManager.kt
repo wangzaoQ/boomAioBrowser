@@ -1,17 +1,13 @@
 package com.boom.aiobrowser.tools
 
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.pm.ResolveInfo
-import android.net.Uri
 import android.os.Build
-import android.provider.Settings
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import kotlinx.coroutines.Job
 import java.util.Base64
+import java.util.Locale
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
@@ -159,6 +155,13 @@ fun Job?.jobCancel() {
         AppLogs.eLog("JobCancel", it.stackTraceToString())
     }
 }
+
+
+fun getCurrentCountryCode(): String {
+    val locale = Locale.getDefault()
+    return locale.country // 返回国家缩写，例如 "US" 表示美国，"CN" 表示中国
+}
+
 
 
 

@@ -16,25 +16,32 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        }
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        setProperty("archivesBaseName", "AioBrowser_${new Date().format("yyyy_MMdd_HHmm_ss", TimeZone.getDefault())}-v${versionName}-${defaultConfig.applicationId}")
+
     }
 
 
 
     signingConfigs {
-//        debug {
-//            v2SigningEnabled true
-//            storeFile file("test_news_now")
-//            storePassword "1234567"
-//            keyAlias "test_news_now"
-//            keyPassword "1234567"
-//        }
-//
-//        release {
-//            storeFile file("test_news_now")
-//            storePassword "1234567"
-//            keyAlias "test_news_now"
-//            keyPassword "1234567"
-//        }
+        debug {
+            v2SigningEnabled true
+            storeFile file("test_aio")
+            storePassword "1234567"
+            keyAlias "test_aio"
+            keyPassword "1234567"
+        }
+
+        release {
+            storeFile file("test_aio")
+            storePassword "1234567"
+            keyAlias "test_aio"
+            keyPassword "1234567"
+        }
 
     }
 
@@ -42,7 +49,7 @@ android {
         release {
             debuggable false
             minifyEnabled true
-//            signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
             shrinkResources true
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -52,10 +59,10 @@ android {
         debug {
             debuggable true
             minifyEnabled false
-//            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
 //            shrinkResources true
 //            zipAlignEnabled true
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 

@@ -79,13 +79,15 @@ object CacheManager {
             mmkv.encode(KV_ENGINE_TYPE, value)
         }
 
-    var lastJumpData:JumpData?
-        get() {
-            return getBeanByGson(mmkv.decodeString(KV_LAST_JUMP_DATA,""),JumpData::class.java)
-        }
-        set(value) {
-            mmkv.encode(KV_LAST_JUMP_DATA, toJson(value))
-        }
+//
+//    fun getLastJumpData(id:Long):JumpData?{
+//        if (id == 0L)return null
+//        return getBeanByGson(mmkv.decodeString("${id}_${KV_LAST_JUMP_DATA}",""),JumpData::class.java)
+//    }
+//
+//    fun saveLastJumpData(id:Long,data:JumpData?){
+//        mmkv.encode("${id}_${KV_LAST_JUMP_DATA}", toJson(data))
+//    }
 
     var locationData:LocationData?
         get() {

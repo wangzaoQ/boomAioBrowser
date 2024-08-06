@@ -64,13 +64,10 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         fBinding.flTop.setData(jumpData)
         rootActivity.addLaunch(success = {
             jumpData?.apply {
-                JumpDataManager.updateCurrentJumpData(this,"webFragment 存储jumpData")
-                var lastJumpData = CacheManager.lastJumpData
-                if (lastJumpData==null ||  lastJumpData.dataId != jumpData?.dataId){
-                    CacheManager.lastJumpData = jumpData
-                }else{
-                    CacheManager.lastJumpData = null
+                if (lastJumpData == null || lastJumpData?.jumpUrl != jumpData?.jumpUrl){
+                    lastJumpData = jumpData
                 }
+                JumpDataManager.updateCurrentJumpData(this,"webFragment 存储jumpData")
                 if(CacheManager.browserStatus == 0){
                     var list = CacheManager.historyDataList
                     this.apply {
@@ -86,7 +83,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
     override fun onResume() {
         super.onResume()
-        APP.bottomLiveData.postValue(JumpConfig.JUMP_HOME)
+        APP.bottomLiveData.postValue(JumpConfig.JUMP_WEB)
     }
 
     override fun getUrl(): String {

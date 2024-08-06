@@ -145,7 +145,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         }
 
         if (rootActivity is MainActivity){
-            (rootActivity as MainActivity).updateBottom(false)
+            (rootActivity as MainActivity).updateBottom(false,true, jumpData = JumpDataManager.getCurrentJumpData(tag="MainFragment onResume updateBottom"))
         }
         APP.bottomLiveData.postValue(JumpConfig.JUMP_HOME)
     }

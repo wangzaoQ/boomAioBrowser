@@ -37,6 +37,8 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
     var jumpData:JumpData?=null
 
     override fun startLoadData() {
+        var status = CacheManager.browserStatus
+        if (status == 1)return
         var title = fBinding.topRoot.binding.etToolBarSearch.text.toString().trim()
         if (title.isNotEmpty()){
             fBinding.rlRecentRoot.visibility = View.GONE
@@ -71,6 +73,9 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
             CacheManager.recentSearchDataList = mutableListOf()
             startLoadData()
         }
+        APP.engineLiveData.observe(this){
+            fBinding.topRoot.updateEngine(it)
+        }
     }
 
     val searchAdapter by lazy {
@@ -99,8 +104,10 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 jumpTitle = it
                 jumpUrl = url
             }
-            CacheManager.saveRecentSearchData(jumpData)
             APP.jumpLiveData.postValue(jumpData)
+            if (CacheManager.browserStatus == 0){
+                CacheManager.saveRecentSearchData(jumpData)
+            }
         })
         fBinding.topRoot.updateEngine(CacheManager.engineType)
 
@@ -132,6 +139,11 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 APP.bottomLiveData.postValue(JumpConfig.JUMP_SEARCH)
             },0)
         }
+    }
+
+    override fun onDestroy() {
+        APP.engineLiveData.removeObservers(this)
+        super.onDestroy()
     }
 
     override fun getBinding(

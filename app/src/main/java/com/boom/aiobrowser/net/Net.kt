@@ -8,6 +8,7 @@ import com.boom.aiobrowser.net.intercept.HttpLoggingInterceptorNew
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.decryptNet
+import com.boom.aiobrowser.tools.getCurrentCountryCode
 import com.google.gson.GsonBuilder
 import okhttp3.*
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -49,7 +50,7 @@ object Net {
                     var newRequestBuilder = chain.request().newBuilder()
                     newRequestBuilder.header("X-Phate", BuildConfig.APPLICATION_ID)
                         .header("X-Dtroub-Icup", CacheManager.getID())
-                        .header("X-Cwar", "US")
+                        .header("X-Cwar", getCurrentCountryCode())
                     return chain.proceed(newRequestBuilder.build())
                 }
             })

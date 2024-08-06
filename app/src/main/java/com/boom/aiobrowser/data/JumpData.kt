@@ -5,6 +5,9 @@ class JumpData : BaseData() {
         this.jumpType = currentData.jumpType
         this.jumpTitle = currentData.jumpTitle
         this.jumpUrl = currentData.jumpUrl
+        this.lastJumpData = currentData.lastJumpData
     }
+
+    var lastJumpData:JumpData?=null
 
 }

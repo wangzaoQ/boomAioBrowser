@@ -14,6 +14,9 @@ object SearchNet {
     }
 
     fun getSearchUrl(content:String):String{
+        if (content.indexOf(".com")>=0){
+            return "https://${content}"
+        }
         var url = when (CacheManager.engineType) {
             1->{
                 "https://www.bing.com/search?q=${content}"

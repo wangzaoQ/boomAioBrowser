@@ -71,7 +71,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     navController?.navigate(R.id.fragmentWeb, Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
                     },navOptions)
-                    updateBottom(true,it)
+                    updateBottom(true,false,it)
                 }
                 JumpConfig.JUMP_SEARCH -> {
                     val navOptions = NavOptions.Builder()
@@ -82,7 +82,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     navController?.navigate(R.id.fragmentSearch, Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
                     },navOptions)
-                    updateBottom(true,it)
+                    updateBottom(true,false,it)
                 }
                 JumpConfig.JUMP_HOME ->{
                     val navOptions = NavOptions.Builder()
@@ -94,7 +94,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     navController?.navigate(R.id.fragmentMain, Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
                     },navOptions)
-                    updateBottom(false)
+                    updateBottom(false,true,it)
                 }
                 else -> {}
             }
@@ -146,7 +146,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
 
     private fun updateBottomClick(type:String) {
-        if (type== JumpConfig.JUMP_SEARCH){
+        if (type== JumpConfig.JUMP_SEARCH || type == JumpConfig.JUMP_WEB){
             acBinding.ivClear.setOneClick {
                 var data = JumpDataManager.getCurrentJumpData(tag = "updateBottomClick")
                 data.apply {
@@ -174,24 +174,20 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         viewModel.getNewsData()
     }
 
-    fun updateBottom(showBack:Boolean,jumpData:JumpData?=null) {
+    fun updateBottom(showBack:Boolean,showNext:Boolean,jumpData:JumpData?=null) {
         acBinding.apply {
-            var lastJumpData = CacheManager.lastJumpData
-            if (jumpData!=null){
-                if (jumpData.dataId == lastJumpData?.dataId){
-                    CacheManager.lastJumpData = null
+            if(showNext){
+                if (jumpData?.lastJumpData == null){
+                    ivRight.isEnabled = false
+                }else{
+                    ivRight.isEnabled = true
+                    ivRight.setOneClick {
+                        APP.jumpLiveData.postValue(jumpData?.lastJumpData)
+                    }
                 }
-            }
-            if (CacheManager.lastJumpData == null){
-                ivRight.isEnabled = false
             }else{
-
-                ivRight.isEnabled = true
-                ivRight.setOneClick {
-                    APP.jumpLiveData.postValue(lastJumpData)
-                }
+                ivRight.isEnabled = false
             }
-
             if (showBack){
                 ivLeft.setOneClick {
                     var mMainNavFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_view)
@@ -239,7 +235,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         fManager.hideFragment(supportFragmentManager, startFragment!!)
         acBinding.llControl.visibility = View.VISIBLE
         if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault){
-            CacheManager.isFirstShowBrowserDefault = false
+//            CacheManager.isFirstShowBrowserDefault = false
             var pop = DefaultPop(this@MainActivity)
             pop.setOnDismissListener(object :OnDismissListener(){
                 override fun onDismiss() {

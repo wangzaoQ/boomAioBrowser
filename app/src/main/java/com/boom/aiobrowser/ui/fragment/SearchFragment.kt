@@ -128,6 +128,9 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
 //                CacheManager.getCurrentJumpData(updateTime = true, updateData = data)
                 APP.jumpLiveData.postValue(data)
             }
+            postDelayed({
+                APP.bottomLiveData.postValue(JumpConfig.JUMP_SEARCH)
+            },0)
         }
     }
 

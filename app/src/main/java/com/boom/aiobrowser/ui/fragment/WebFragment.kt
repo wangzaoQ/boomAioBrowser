@@ -11,6 +11,7 @@ import com.boom.aiobrowser.databinding.BrowserFragmentWebBinding
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.getBeanByGson
+import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
 
 
@@ -80,7 +81,12 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                 }
             }
         }, failBack = {})
+        APP.bottomLiveData.postValue(JumpConfig.JUMP_WEB)
+    }
 
+    override fun onResume() {
+        super.onResume()
+        APP.bottomLiveData.postValue(JumpConfig.JUMP_HOME)
     }
 
     override fun getUrl(): String {

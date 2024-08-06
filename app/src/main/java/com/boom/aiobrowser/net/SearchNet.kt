@@ -15,6 +15,15 @@ object SearchNet {
 
     fun getSearchUrl(content:String):String{
         var url = when (CacheManager.engineType) {
+            1->{
+                "https://www.bing.com/search?q=${content}"
+            }
+            2->{
+                "https://search.yahoo.com/search?q=${content}"
+            }
+            3->{
+                "https://www.perplexity.ai/search?q=${content}"
+            }
             else -> {
                 "https://www.google.com/search?q=${content}"
             }

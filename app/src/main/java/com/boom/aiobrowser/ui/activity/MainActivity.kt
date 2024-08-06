@@ -82,6 +82,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     navController?.navigate(R.id.fragmentSearch, Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
                     },navOptions)
+                    updateBottom(true,it)
                 }
                 JumpConfig.JUMP_HOME ->{
                     val navOptions = NavOptions.Builder()
@@ -98,11 +99,14 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 else -> {}
             }
         }
+        APP.bottomLiveData.observe(this){
+            updateBottomClick(it)
+        }
         acBinding.tvTabCount.setOnClickListener {
             showTabPop()
         }
-        acBinding.ivClear.setOnClickListener {
-            clearData()
+//        acBinding.ivClear.setOnClickListener {
+
 //            acBinding.ivClearAnimal.run {
 //                setAnimation("test.json")
 //                playAnimation()
@@ -117,7 +121,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 //                .skipMemoryCache(true)
 //                .diskCacheStrategy(DiskCacheStrategy.NONE)
 //                .into(acBinding.ivClearAnimal)
-        }
+//        }
         acBinding.ivMore.setOnClickListener {
             morePop = MorePop(this@MainActivity)
             morePop?.createPop()
@@ -139,6 +143,27 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     override fun onResume() {
         super.onResume()
         morePop?.updateUI()
+    }
+
+    private fun updateBottomClick(type:String) {
+        if (type== JumpConfig.JUMP_SEARCH){
+            acBinding.ivClear.setOneClick {
+                var data = JumpDataManager.getCurrentJumpData(tag = "updateBottomClick")
+                data.apply {
+                    jumpTitle = APP.instance.getString(R.string.app_home)
+                    jumpType = JumpConfig.JUMP_HOME
+                    isCurrent = true
+                }
+                JumpDataManager.updateCurrentJumpData(data,tag = "updateBottomClick")
+                APP.jumpLiveData.postValue(data)
+            }
+            acBinding.ivClear.setImageResource(R.mipmap.ic_home)
+        }else {
+            acBinding.ivClear.setOneClick {
+                clearData()
+            }
+            acBinding.ivClear.setImageResource(R.mipmap.ic_web_clear)
+        }
     }
 
     fun clearData(){
@@ -173,6 +198,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     var currentFragmentInstance = mMainNavFragment?.getChildFragmentManager()?.getPrimaryNavigationFragment();
                     if (currentFragmentInstance != null && currentFragmentInstance is WebFragment) {
                         currentFragmentInstance.goBack()
+                    }else{
+                        onBackPressed()
                     }
                 }
                 ivLeft.isEnabled = true
@@ -180,6 +207,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 ivLeft.isEnabled = false
             }
         }
+//        updateBottomClick()
     }
 
     override fun setShowView() {

@@ -147,6 +147,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         if (rootActivity is MainActivity){
             (rootActivity as MainActivity).updateBottom(false)
         }
+        APP.bottomLiveData.postValue(JumpConfig.JUMP_HOME)
     }
 
     private fun updateEngine(type: Int) {
@@ -224,6 +225,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             fBinding.ivPrivate.visibility = View.VISIBLE
             fBinding.topSearch.binding.ivPrivate.visibility = View.VISIBLE
         }
+//        APP.bottomLiveData.postValue(0)
     }
 
     private fun loadData() {
@@ -241,6 +243,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 
     override fun onDestroy() {
         APP.engineLiveData.removeObservers(this)
+        APP.bottomLiveData.removeObservers(this)
         super.onDestroy()
     }
 }

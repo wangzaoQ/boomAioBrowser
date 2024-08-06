@@ -16,6 +16,7 @@ import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.BrowserFragmentMainBinding
 import com.boom.aiobrowser.databinding.BrowserItemMainNewsBinding
 import com.boom.aiobrowser.tools.GlideManager
+import com.boom.aiobrowser.tools.TimeManager
 import com.boom.base.adapter4.BaseQuickAdapter
 
 class NewsMainAdapter(var fragmet :BaseFragment<*>) : BaseQuickAdapter<NewsData, NewsMainAdapter.VH>() {
@@ -33,11 +34,6 @@ class NewsMainAdapter(var fragmet :BaseFragment<*>) : BaseQuickAdapter<NewsData,
     override fun onBindViewHolder(holder: VH, position: Int, item: NewsData?) {
         if (item == null)return
         holder.viewBinding.apply {
-            if (position == 0){
-                tvTempNews.visibility = View.VISIBLE
-            }else{
-                tvTempNews.visibility = View.GONE
-            }
             if (item.iassum.isNullOrEmpty()){
                 ivImg.visibility = View.GONE
                 tvNewsContent.visibility = View.VISIBLE
@@ -50,6 +46,7 @@ class NewsMainAdapter(var fragmet :BaseFragment<*>) : BaseQuickAdapter<NewsData,
             tvNewsTitle.text = item.tconsi
             GlideManager.loadImg(fragmet,ivSource,item.sschem)
             tvSourceName.text = "${item.sfindi}"
+            tvNewsTime.text = TimeManager.getNewsTime(item.pphilo?:0)
         }
     }
 

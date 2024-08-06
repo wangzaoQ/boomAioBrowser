@@ -30,4 +30,5 @@ class NewsData {
     var sissue:String?=""
     var sfindi:String?=""
     var sschem:String?=""
+    var pphilo:Long?=0
 }

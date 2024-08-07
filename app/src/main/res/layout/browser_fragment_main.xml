@@ -77,7 +77,7 @@
                         ></androidx.appcompat.widget.AppCompatImageView>
                     <androidx.appcompat.widget.AppCompatTextView
                         style="@style/app_text_bold"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_centerVertical="true"

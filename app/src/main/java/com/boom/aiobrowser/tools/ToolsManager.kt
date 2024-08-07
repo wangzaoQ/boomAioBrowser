@@ -1,5 +1,7 @@
 package com.boom.aiobrowser.tools
 
+import android.app.ActivityManager
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
@@ -162,6 +164,16 @@ fun getCurrentCountryCode(): String {
     return locale.country // 返回国家缩写，例如 "US" 表示美国，"CN" 表示中国
 }
 
+
+fun isOtherPkg(context: Context): Boolean {
+    runCatching {
+        val pid = android.os.Process.myPid()
+        val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val processName = manager.runningAppProcesses.find { it.pid == pid }?.processName ?: ""
+        return context.packageName != processName
+    }
+    return false
+}
 
 
 

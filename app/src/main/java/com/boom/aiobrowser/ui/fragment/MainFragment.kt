@@ -203,7 +203,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             }).build()
     }
     override fun setShowView() {
-        fBinding.refreshLayout.isRefreshing = true
         fBinding.apply {
             adapterHelper.trailingLoadState = LoadState.NotLoading(false)
             rv.apply {
@@ -223,6 +222,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 }
             }
             refreshLayout.setOnRefreshListener {
+                fBinding.refreshLayout.isRefreshing = true
                 page = 1
                 adapterHelper.trailingLoadState = LoadState.None
                 loadData()

@@ -1,0 +1,31 @@
+<resources>
+<!--    泰-->
+    <string name="web_download_task_has_been_exist">งานนี้มีอยู่แล้ว กรุณาอย่าคลิกซ้ำเพื่อดาวน์โหลด!</string>
+    <string name="web_tips">หมายเหตุ</string>
+    <string name="web_honeycomblow">Wi-Fi ถูกตัดการเชื่อมต่อ ต้องการดำเนินการดาวน์โหลดผ่านเครือข่ายข้อมูลมือถือหรือไม่?</string>
+    <string name="web_download">ดาวน์โหลด</string>
+    <string name="web_cancel">ยกเลิก</string>
+    <string name="web_download_fail">ดาวน์โหลดล้มเหลว!</string>
+    <string name="web_current_downloading_progress">กำลังดาวน์โหลด: %s</string>
+    <string name="web_current_downloaded_length">ดาวน์โหลดแล้ว: %s</string>
+    <string name="web_trickter">คุณมีการแจ้งเตือนใหม่</string>
+    <string name="web_file_download">ดาวน์โหลด</string>
+    <string name="web_click_open">แตะเพื่อดำเนินการต่อ</string>
+    <string name="web_coming_soon_download">ไฟล์จะพร้อมให้ดาวน์โหลดในเร็วๆ นี้</string>
+    <string name="web_camera">กล้อง</string>
+    <string name="web_file_chooser">ไฟล์</string>
+    <string name="web_loading">กำลังโหลด...</string>
+    <string name="web_leave_app_and_go_other_page">ออกจาก %s และเปิดแอปพลิเคชันอื่น?</string>
+    <string name="web_leave">ออก</string>
+    <string name="web_max_file_length_limit">ไฟล์ที่เลือกไม่สามารถมีขนาดใหญ่กว่า %s MB</string>
+    <string name="web_default_page_error">ข้อผิดพลาด~</string>
+    <string name="web_message_show_ssl_untrusted">หน่วยงานออกใบรับรองไม่เชื่อถือได้.</string>
+    <string name="web_message_show_ssl_expired">ใบรับรองหมดอายุแล้ว.</string>
+    <string name="web_message_show_ssl_hostname_mismatch">ชื่อโฮสต์ของใบรับรองไม่ตรงกัน.</string>
+    <string name="web_message_show_ssl_not_yet_valid">ใบรับรองยังไม่สามารถใช้ได้.</string>
+    <string name="web_message_show_ssl_error">ข้อผิดพลาดของใบรับรอง SSL.</string>
+    <string name="web_message_show_continue">คุณต้องการดำเนินการต่อหรือไม่?</string>
+    <string name="web_title_ssl_error">ข้อผิดพลาดของใบรับรอง SSL</string>
+    <string name="web_continue">ดำเนินการต่อ</string>
+
+</resources>

@@ -1,0 +1,32 @@
+<resources>
+<!--德-->
+    <string name="web_download_task_has_been_exist">Die Aufgabe existiert bereits, bitte nicht erneut klicken, um herunterzuladen!</string>
+    <string name="web_tips">Hinweis</string>
+    <string name="web_honeycomblow">WLAN getrennt. Fortfahren mit dem Herunterladen über das mobile Datennetz?</string>
+    <string name="web_download">Herunterladen</string>
+    <string name="web_cancel">Abbrechen</string>
+    <string name="web_download_fail">Download fehlgeschlagen!</string>
+    <string name="web_current_downloading_progress">Wird heruntergeladen: %s</string>
+    <string name="web_current_downloaded_length">Heruntergeladen: %s</string>
+    <string name="web_trickter">Sie haben eine neue Benachrichtigung</string>
+    <string name="web_file_download">Herunterladen</string>
+    <string name="web_click_open">Zum Fortfahren tippen</string>
+    <string name="web_coming_soon_download">Datei wird bald heruntergeladen</string>
+    <string name="web_camera">Kamera</string>
+    <string name="web_file_chooser">Dateien</string>
+    <string name="web_loading">Wird geladen...</string>
+    <string name="web_leave_app_and_go_other_page">verlassen %s und eine andere App öffnen?</string>
+    <string name="web_leave">Verlassen</string>
+    <string name="web_max_file_length_limit">Die ausgewählte Datei darf nicht größer als %s MB sein</string>
+    <string name="web_default_page_error">Fehler~</string>
+    <string name="web_message_show_ssl_untrusted">Die Zertifizierungsstelle ist nicht vertrauenswürdig.</string>
+    <string name="web_message_show_ssl_expired">Das Zertifikat ist abgelaufen.</string>
+    <string name="web_message_show_ssl_hostname_mismatch">Der Zertifikat-Hostname stimmt nicht überein.</string>
+    <string name="web_message_show_ssl_not_yet_valid">Das Zertifikat ist noch nicht gültig.</string>
+    <string name="web_message_show_ssl_error">SSL-Zertifikatfehler.</string>
+    <string name="web_message_show_continue">Möchten Sie trotzdem fortfahren?</string>
+    <string name="web_title_ssl_error">SSL-Zertifikatfehler</string>
+    <string name="web_continue">Fortfahren</string>
+
+
+</resources>

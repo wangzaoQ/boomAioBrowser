@@ -1,0 +1,30 @@
+<resources>
+    <string name="web_download_task_has_been_exist">Tugas sudah ada, jangan klik lagi untuk mengunduh!</string>
+    <string name="web_tips">Catatan</string>
+    <string name="web_honeycomblow">Wi-Fi terputus. Lanjutkan unduhan melalui jaringan data seluler?</string>
+    <string name="web_download">Unduh</string>
+    <string name="web_cancel">Batal</string>
+    <string name="web_download_fail">Unduhan gagal!</string>
+    <string name="web_current_downloading_progress">Mengunduh: %s</string>
+    <string name="web_current_downloaded_length">Terunduh: %s</string>
+    <string name="web_trickter">Anda memiliki pemberitahuan baru</string>
+    <string name="web_file_download">Unduh</string>
+    <string name="web_click_open">Ketuk untuk melanjutkan</string>
+    <string name="web_coming_soon_download">Akan segera tersedia untuk mengunduh file</string>
+    <string name="web_camera">Kamera</string>
+    <string name="web_file_chooser">File</string>
+    <string name="web_loading">Memuat...</string>
+    <string name="web_leave_app_and_go_other_page">meninggalkan %s dan membuka aplikasi lain?</string>
+    <string name="web_leave">Keluar</string>
+    <string name="web_max_file_length_limit">File yang dipilih tidak boleh lebih dari %s MB</string>
+    <string name="web_default_page_error">kesalahan~</string>
+    <string name="web_message_show_ssl_untrusted">Otoritas sertifikat tidak dipercaya.</string>
+    <string name="web_message_show_ssl_expired">Sertifikat telah kedaluwarsa.</string>
+    <string name="web_message_show_ssl_hostname_mismatch">Nama host sertifikat tidak cocok.</string>
+    <string name="web_message_show_ssl_not_yet_valid">Sertifikat belum berlaku.</string>
+    <string name="web_message_show_ssl_error">Kesalahan sertifikat SSL.</string>
+    <string name="web_message_show_continue">Apakah Anda ingin melanjutkan?</string>
+    <string name="web_title_ssl_error">Kesalahan Sertifikat SSL</string>
+    <string name="web_continue">Lanjutkan</string>
+
+</resources>

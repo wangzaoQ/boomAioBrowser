@@ -1,0 +1,30 @@
+<resources>
+    <string name="web_download_task_has_been_exist">A tarefa já existe, não clique novamente para baixar!</string>
+    <string name="web_tips">Nota</string>
+    <string name="web_honeycomblow">Wi-Fi desconectado. Continuar o download através da rede de dados móveis?</string>
+    <string name="web_download">Baixar</string>
+    <string name="web_cancel">Cancelar</string>
+    <string name="web_download_fail">Falha no download!</string>
+    <string name="web_current_downloading_progress">Baixando: %s</string>
+    <string name="web_current_downloaded_length">Baixado: %s</string>
+    <string name="web_trickter">Você tem uma nova notificação</string>
+    <string name="web_file_download">Baixar</string>
+    <string name="web_click_open">Toque para continuar</string>
+    <string name="web_coming_soon_download">Em breve disponível para baixar o arquivo</string>
+    <string name="web_camera">Câmera</string>
+    <string name="web_file_chooser">Arquivos</string>
+    <string name="web_loading">Carregando...</string>
+    <string name="web_leave_app_and_go_other_page">sair de %s e abrir outro aplicativo?</string>
+    <string name="web_leave">Sair</string>
+    <string name="web_max_file_length_limit">O arquivo selecionado não pode ser maior que %s MB</string>
+    <string name="web_default_page_error">erro~</string>
+    <string name="web_message_show_ssl_untrusted">A autoridade certificadora não é confiável.</string>
+    <string name="web_message_show_ssl_expired">O certificado expirou.</string>
+    <string name="web_message_show_ssl_hostname_mismatch">O nome do host do certificado não corresponde.</string>
+    <string name="web_message_show_ssl_not_yet_valid">O certificado ainda não é válido.</string>
+    <string name="web_message_show_ssl_error">Erro no certificado SSL.</string>
+    <string name="web_message_show_continue">Deseja continuar mesmo assim?</string>
+    <string name="web_title_ssl_error">Erro no certificado SSL</string>
+    <string name="web_continue">Continuar</string>
+
+</resources>

@@ -1,0 +1,31 @@
+<resources>
+<!--意大利-->
+    <string name="web_download_task_has_been_exist">Il compito esiste già, non fare clic di nuovo per scaricare!</string>
+    <string name="web_tips">Nota</string>
+    <string name="web_honeycomblow">Wi-Fi disconnesso. Continuare il download tramite rete dati mobile?</string>
+    <string name="web_download">Scarica</string>
+    <string name="web_cancel">Annulla</string>
+    <string name="web_download_fail">Download fallito!</string>
+    <string name="web_current_downloading_progress">In download: %s</string>
+    <string name="web_current_downloaded_length">Scaricato: %s</string>
+    <string name="web_trickter">Hai una nuova notifica</string>
+    <string name="web_file_download">Scarica</string>
+    <string name="web_click_open">Tocca per continuare</string>
+    <string name="web_coming_soon_download">Presto disponibile per scaricare il file</string>
+    <string name="web_camera">Fotocamera</string>
+    <string name="web_file_chooser">File</string>
+    <string name="web_loading">Caricamento...</string>
+    <string name="web_leave_app_and_go_other_page">uscire da %s e aprire un'altra app?</string>
+    <string name="web_leave">Esci</string>
+    <string name="web_max_file_length_limit">Il file selezionato non può essere più grande di %s MB</string>
+    <string name="web_default_page_error">errore~</string>
+    <string name="web_message_show_ssl_untrusted">L'autorità di certificazione non è affidabile.</string>
+    <string name="web_message_show_ssl_expired">Il certificato è scaduto.</string>
+    <string name="web_message_show_ssl_hostname_mismatch">Il nome host del certificato non corrisponde.</string>
+    <string name="web_message_show_ssl_not_yet_valid">Il certificato non è ancora valido.</string>
+    <string name="web_message_show_ssl_error">Errore del certificato SSL.</string>
+    <string name="web_message_show_continue">Vuoi continuare comunque?</string>
+    <string name="web_title_ssl_error">Errore del certificato SSL</string>
+    <string name="web_continue">Continua</string>
+
+</resources>

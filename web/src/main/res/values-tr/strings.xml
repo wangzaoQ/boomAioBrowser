@@ -1,0 +1,31 @@
+<resources>
+<!--土耳其-->
+    <string name="web_download_task_has_been_exist">Görev zaten mevcut, tekrar indirmek için tıklamayın!</string>
+    <string name="web_tips">Not</string>
+    <string name="web_honeycomblow">Wi-Fi bağlantısı kesildi. İndirmeyi mobil veri ağı üzerinden devam ettirmek ister misiniz?</string>
+    <string name="web_download">İndir</string>
+    <string name="web_cancel">İptal</string>
+    <string name="web_download_fail">İndirme başarısız!</string>
+    <string name="web_current_downloading_progress">İndiriliyor: %s</string>
+    <string name="web_current_downloaded_length">İndirilen: %s</string>
+    <string name="web_trickter">Yeni bir bildiriminiz var</string>
+    <string name="web_file_download">İndir</string>
+    <string name="web_click_open">Devam etmek için dokunun</string>
+    <string name="web_coming_soon_download">Dosya yakında indirilebilir olacak</string>
+    <string name="web_camera">Kamera</string>
+    <string name="web_file_chooser">Dosyalar</string>
+    <string name="web_loading">Yükleniyor...</string>
+    <string name="web_leave_app_and_go_other_page">%s'den çıkıp başka bir uygulama mı açmak istiyorsunuz?</string>
+    <string name="web_leave">Çık</string>
+    <string name="web_max_file_length_limit">Seçilen dosya %s MB'den büyük olamaz</string>
+    <string name="web_default_page_error">hata~</string>
+    <string name="web_message_show_ssl_untrusted">Sertifika otoritesi güvenilir değil.</string>
+    <string name="web_message_show_ssl_expired">Sertifika süresi dolmuş.</string>
+    <string name="web_message_show_ssl_hostname_mismatch">Sertifika ana bilgisayar adı uyuşmuyor.</string>
+    <string name="web_message_show_ssl_not_yet_valid">Sertifika henüz geçerli değil.</string>
+    <string name="web_message_show_ssl_error">SSL Sertifika hatası.</string>
+    <string name="web_message_show_continue">Yine de devam etmek ister misiniz?</string>
+    <string name="web_title_ssl_error">SSL Sertifika Hatası</string>
+    <string name="web_continue">Devam et</string>
+
+</resources>

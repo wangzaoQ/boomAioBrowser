@@ -1,0 +1,31 @@
+<resources>
+<!--俄语-->
+    <string name="web_download_task_has_been_exist">Задача уже существует, не кликайте снова для загрузки!</string>
+    <string name="web_tips">Примечание</string>
+    <string name="web_honeycomblow">Wi-Fi отключен. Продолжить загрузку через мобильные данные?</string>
+    <string name="web_download">Скачать</string>
+    <string name="web_cancel">Отменить</string>
+    <string name="web_download_fail">Ошибка загрузки!</string>
+    <string name="web_current_downloading_progress">Загрузка: %s</string>
+    <string name="web_current_downloaded_length">Скачано: %s</string>
+    <string name="web_trickter">У вас новое уведомление</string>
+    <string name="web_file_download">Скачать</string>
+    <string name="web_click_open">Нажмите, чтобы продолжить</string>
+    <string name="web_coming_soon_download">Скоро будет доступна загрузка файла</string>
+    <string name="web_camera">Камера</string>
+    <string name="web_file_chooser">Файлы</string>
+    <string name="web_loading">Загрузка...</string>
+    <string name="web_leave_app_and_go_other_page">выйти из %s и открыть другое приложение?</string>
+    <string name="web_leave">Выйти</string>
+    <string name="web_max_file_length_limit">Выбранный файл не может быть больше %s МБ</string>
+    <string name="web_default_page_error">ошибка~</string>
+    <string name="web_message_show_ssl_untrusted">Сертификационный центр не является надежным.</string>
+    <string name="web_message_show_ssl_expired">Сертификат истек.</string>
+    <string name="web_message_show_ssl_hostname_mismatch">Имя хоста сертификата не совпадает.</string>
+    <string name="web_message_show_ssl_not_yet_valid">Сертификат еще недействителен.</string>
+    <string name="web_message_show_ssl_error">Ошибка сертификата SSL.</string>
+    <string name="web_message_show_continue">Хотите продолжить?</string>
+    <string name="web_title_ssl_error">Ошибка сертификата SSL</string>
+    <string name="web_continue">Продолжить</string>
+
+</resources>

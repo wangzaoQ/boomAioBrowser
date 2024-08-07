@@ -1,0 +1,30 @@
+<resources>
+    <string name="web_download_task_has_been_exist">タスクは既に存在します。再度クリックしてダウンロードしないでください！</string>
+    <string name="web_tips">注意</string>
+    <string name="web_honeycomblow">Wi-Fiが切断されました。モバイルデータネットワークでダウンロードを続けますか？</string>
+    <string name="web_download">ダウンロード</string>
+    <string name="web_cancel">キャンセル</string>
+    <string name="web_download_fail">ダウンロードに失敗しました！</string>
+    <string name="web_current_downloading_progress">ダウンロード中: %s</string>
+    <string name="web_current_downloaded_length">ダウンロード済み: %s</string>
+    <string name="web_trickter">新しい通知があります</string>
+    <string name="web_file_download">ダウンロード</string>
+    <string name="web_click_open">タップして続行</string>
+    <string name="web_coming_soon_download">ファイルをダウンロードできるようになります</string>
+    <string name="web_camera">カメラ</string>
+    <string name="web_file_chooser">ファイル</string>
+    <string name="web_loading">読み込み中...</string>
+    <string name="web_leave_app_and_go_other_page">%sを離れて別のアプリを開きますか？</string>
+    <string name="web_leave">離れる</string>
+    <string name="web_max_file_length_limit">選択したファイルは %s MB を超えてはいけません</string>
+    <string name="web_default_page_error">エラー~</string>
+    <string name="web_message_show_ssl_untrusted">証明書の認証機関が信頼できません。</string>
+    <string name="web_message_show_ssl_expired">証明書が期限切れです。</string>
+    <string name="web_message_show_ssl_hostname_mismatch">証明書のホスト名が一致しません。</string>
+    <string name="web_message_show_ssl_not_yet_valid">証明書がまだ有効ではありません。</string>
+    <string name="web_message_show_ssl_error">SSL証明書のエラー。</string>
+    <string name="web_message_show_continue">それでも続行しますか？</string>
+    <string name="web_title_ssl_error">SSL証明書エラー</string>
+    <string name="web_continue">続行</string>
+
+</resources>

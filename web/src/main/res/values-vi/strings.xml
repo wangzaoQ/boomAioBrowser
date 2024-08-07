@@ -1,0 +1,31 @@
+<resources>
+<!--越南-->
+    <string name="web_download_task_has_been_exist">Nhiệm vụ đã tồn tại, đừng nhấp lại để tải xuống!</string>
+    <string name="web_tips">Ghi chú</string>
+    <string name="web_honeycomblow">Wi-Fi bị ngắt kết nối. Bạn có muốn tiếp tục tải xuống qua mạng dữ liệu di động không?</string>
+    <string name="web_download">Tải xuống</string>
+    <string name="web_cancel">Hủy</string>
+    <string name="web_download_fail">Tải xuống thất bại!</string>
+    <string name="web_current_downloading_progress">Đang tải: %s</string>
+    <string name="web_current_downloaded_length">Đã tải: %s</string>
+    <string name="web_trickter">Bạn có một thông báo mới</string>
+    <string name="web_file_download">Tải xuống</string>
+    <string name="web_click_open">Chạm để tiếp tục</string>
+    <string name="web_coming_soon_download">Sắp có sẵn để tải xuống tệp</string>
+    <string name="web_camera">Máy ảnh</string>
+    <string name="web_file_chooser">Tệp</string>
+    <string name="web_loading">Đang tải...</string>
+    <string name="web_leave_app_and_go_other_page">Rời khỏi %s và mở ứng dụng khác?</string>
+    <string name="web_leave">Rời khỏi</string>
+    <string name="web_max_file_length_limit">Tệp đã chọn không được lớn hơn %s MB</string>
+    <string name="web_default_page_error">lỗi~</string>
+    <string name="web_message_show_ssl_untrusted">Cơ quan cấp chứng chỉ không đáng tin cậy.</string>
+    <string name="web_message_show_ssl_expired">Chứng chỉ đã hết hạn.</string>
+    <string name="web_message_show_ssl_hostname_mismatch">Tên máy chủ của chứng chỉ không khớp.</string>
+    <string name="web_message_show_ssl_not_yet_valid">Chứng chỉ chưa hợp lệ.</string>
+    <string name="web_message_show_ssl_error">Lỗi chứng chỉ SSL.</string>
+    <string name="web_message_show_continue">Bạn có muốn tiếp tục không?</string>
+    <string name="web_title_ssl_error">Lỗi chứng chỉ SSL</string>
+    <string name="web_continue">Tiếp tục</string>
+
+</resources>

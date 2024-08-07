@@ -70,11 +70,10 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                         .setEnterAnim(R.anim.in_alpha)
                         .setExitAnim(R.anim.out_alpha)
                         .build()
-                    it.lastJumpData = null
                     navController?.navigate(R.id.fragmentWeb, Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
                     },navOptions)
-                    updateBottom(true,true,it)
+                    updateBottom(true,true,it, tag = "JumpConfig.JUMP_WEB")
                 }
                 JumpConfig.JUMP_SEARCH -> {
                     val navOptions = NavOptions.Builder()
@@ -85,7 +84,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     navController?.navigate(R.id.fragmentSearch, Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
                     },navOptions)
-                    updateBottom(true,false,it)
+                    updateBottom(true,false,it,tag = "JumpConfig.JUMP_SEARCH")
                 }
                 JumpConfig.JUMP_HOME ->{
                     val navOptions = NavOptions.Builder()
@@ -97,7 +96,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     navController?.navigate(R.id.fragmentMain, Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
                     },navOptions)
-                    updateBottom(false,true,it)
+                    updateBottom(false,true,it,tag = "JumpConfig.JUMP_HOME")
                 }
                 else -> {}
             }
@@ -180,7 +179,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         viewModel.getNewsData()
     }
 
-    fun updateBottom(showBack:Boolean,showNext:Boolean,jumpData:JumpData?=null) {
+    fun updateBottom(showBack:Boolean,showNext:Boolean,jumpData:JumpData?=null,tag:String) {
+        AppLogs.dLog(acTAG,"updateBottom:${tag}")
         acBinding.apply {
             if(showNext){
                 if (jumpData?.lastJumpData == null){

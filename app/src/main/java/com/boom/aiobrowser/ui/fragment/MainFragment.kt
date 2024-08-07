@@ -155,7 +155,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 
         if (rootActivity is MainActivity){
             (rootActivity as MainActivity).apply {
-                updateBottom(false,true, jumpData = jumpData)
+                updateBottom(false,true, jumpData = jumpData,tag="mainFragment onResume")
                 updateTabCount()
             }
         }

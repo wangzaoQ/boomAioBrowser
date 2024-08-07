@@ -47,7 +47,10 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                         lastJumpData = null
                     }else{
                         if (lastJumpData == null){
-                            lastJumpData = jumpData
+                            lastJumpData = JumpData().apply {
+                                updateData(jumpData!!)
+                                jumpType = JumpConfig.JUMP_WEB
+                            }
                         }
                         showNext = true
                         AppLogs.dLog(fragmentTAG,"之前加载过 index:${index}")
@@ -60,7 +63,10 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                 jumpData?.apply {
                     jumpUrl = url
                     if (lastJumpData == null || lastJumpData?.jumpUrl != jumpData?.jumpUrl){
-                        lastJumpData = jumpData
+                        lastJumpData = JumpData().apply {
+                            updateData(jumpData!!)
+                            jumpType = JumpConfig.JUMP_WEB
+                        }
                     }
                     showNext = false
                     AppLogs.dLog(fragmentTAG,"之前未加载过")
@@ -79,7 +85,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
             withContext(Dispatchers.Main){
                 if (rootActivity is MainActivity){
                     (rootActivity as MainActivity).apply {
-                        updateBottom(true,showNext, jumpData = jumpData)
+                        updateBottom(true,showNext, jumpData = jumpData,"webView loadWebOnPageStared")
                     }
                 }
             }
@@ -167,6 +173,12 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
     override fun onDestroy() {
         APP.engineLiveData.removeObservers(this)
+//        jumpData?.apply {
+//            if (lastJumpData != null){
+//                lastJumpData?.jumpUrl = mAgentWeb?.webCreator?.webView?.url?:""
+//                JumpDataManager.updateCurrentJumpData(this,"webFragment onDestroy")
+//            }
+//        }
         super.onDestroy()
     }
 }

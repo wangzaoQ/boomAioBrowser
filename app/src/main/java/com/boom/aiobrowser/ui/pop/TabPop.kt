@@ -108,7 +108,8 @@ class TabPop(context: Context) : BasePopupWindow(context) {
                         if (browserStatus == 0){
                             JumpDataManager.saveBrowserTabList(browserStatus,tabAdapter.items as MutableList<JumpData>,tag = "tabPop 删除item时更新")
                             CacheManager.browserStatus = browserStatus
-                            APP.jumpLiveData.postValue(JumpDataManager.addTab(browserStatus,"删除所有item后自动添加"))
+                            var list= JumpDataManager.getBrowserTabList(0,tag = "tabPop 删除item时")
+                            APP.jumpLiveData.postValue(list.get(0))
                             dismiss()
                         }else{
                             JumpDataManager.saveBrowserTabList(browserStatus,tabAdapter.items as MutableList<JumpData>,tag = "tabPop 删除item时更新")
@@ -247,6 +248,7 @@ class TabPop(context: Context) : BasePopupWindow(context) {
                 var normalList = CacheManager.tabDataListNormal
                 if (intoBrowserId!=normalList.get(normalList.size-1).dataId){
                     //如果最后一个数据发生变化
+                    CacheManager.browserStatus = 0
                     APP.jumpLiveData.postValue(normalList.get(normalList.size-1))
                 }
             }

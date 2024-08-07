@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.view.KeyEvent
 import android.view.ViewGroup
+import android.webkit.CookieManager
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -13,6 +14,7 @@ import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.viewbinding.ViewBinding
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.toJson
 import com.boom.web.AbsAgentWebSettings
 import com.boom.web.AgentWeb
@@ -22,7 +24,6 @@ import com.boom.web.PermissionInterceptor
 import com.boom.web.WebChromeClient
 import com.boom.web.WebViewClient
 import com.google.gson.Gson
-import java.util.LinkedList
 
 abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
     var mAgentWeb :AgentWeb?=null
@@ -57,11 +58,18 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             .ready() //设置 WebSettings。
             .go(getUrl()) //WebView载入该url地址的页面并显示。
 
-
         AgentWebConfig.debug()
 
         // AgentWeb 没有把WebView的功能全面覆盖 ，所以某些设置 AgentWeb 没有提供 ， 请从WebView方面入手设置。
         mAgentWeb!!.getWebCreator().getWebView().setOverScrollMode(WebView.OVER_SCROLL_NEVER)
+        if (CacheManager.browserStatus == 1){
+            runCatching {
+                // 禁止记录cookie
+                CookieManager.getInstance().setAcceptCookie(true)
+                CookieManager.getInstance().removeSessionCookie()
+                mAgentWeb!!.getWebCreator().getWebView().settings.setSaveFormData(false)
+            }
+        }
     }
 
     abstract fun getInsertParent(): ViewGroup

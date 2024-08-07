@@ -129,6 +129,10 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             adapterHelper.trailingLoadState = LoadState.NotLoading(false)
             fBinding.refreshLayout.isRefreshing = false
         }
+        viewModel.value.failLiveData.observe(rootActivity){
+            adapterHelper.trailingLoadState = LoadState.NotLoading(false)
+            fBinding.refreshLayout.isRefreshing = false
+        }
     }
 
     override fun onResume() {

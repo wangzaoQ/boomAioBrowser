@@ -1,0 +1,44 @@
+<resources>
+<!--    泰-->
+
+    <string name="app_start">เริ่มต้น</string>
+    <string name="app_loading">กำลังโหลดอย่างปลอดภัย...</string>
+    <string name="app_welcome_to">ยินดีต้อนรับสู่</string>
+    <string name="app_aio">Aio</string>
+    <string name="app_browser">เบราว์เซอร์</string>
+    <string name="app_private_policy">นโยบายความเป็นส่วนตัว</string>
+    <string name="app_terms_of_service">ข้อกำหนดในการให้บริการ</string>
+    <string name="app_search_hint">ค้นหาหรือพิมพ์ URL</string>
+    <string name="app_news">ข่าว</string>
+
+    <string name="app_google">Google</string>
+    <string name="app_bing">Bing</string>
+    <string name="app_yahoo">Yahoo</string>
+    <string name="app_perplexity">ความสับสน</string>
+    <string name="app_ytb">YouTube</string>
+    <string name="app_fb">Facebook</string>
+    <string name="app_instagram">Instagram</string>
+    <string name="app_tt">Tiktok</string>
+    <string name="app_search">ค้นหา</string>
+    <string name="app_view_more">ดูเพิ่มเติม</string>
+    <string name="app_recent_search">การค้นหาล่าสุด</string>
+    <string name="app_clear_all">ลบทั้งหมด</string>
+    <string name="app_normal">ปกติ</string>
+    <string name="app_private">ส่วนตัว</string>
+    <string name="app_home">หน้าแรก</string>
+    <string name="app_private_search">ค้นหาแบบส่วนตัว</string>
+    <string name="app_private_search2">เมื่อคุณใช้แท็บ InPrivate ข้อมูลการค้นหาของคุณจะไม่ถูกบันทึกในอุปกรณ์ของคุณหลังจากที่คุณเสร็จสิ้น ข้อมูลชั่วคราวจะถูกลบจากอุปกรณ์ของคุณหลังจากปิดแท็บ InPrivate หรือรีสตาร์ทแอป</string>
+    <string name="app_clear_data">ลบข้อมูล</string>
+    <string name="app_more">เพิ่มเติม</string>
+    <string name="app_set_as_default_browser">ตั้งเป็นเบราว์เซอร์เริ่มต้น</string>
+    <string name="app_new_tab">แท็บใหม่</string>
+    <string name="app_history">ประวัติ</string>
+    <string name="app_about">เกี่ยวกับ</string>
+    <string name="app_default_browser_title">ทำให้ AioBrowser เป็นเบราว์เซอร์เริ่มต้นของคุณ</string>
+    <string name="app_open_setting">เปิดการตั้งค่า</string>
+    <string name="app_click_on_default_browser">คลิกที่เบราว์เซอร์เริ่มต้น</string>
+    <string name="app_select_browse">เลือก AioBrowser</string>
+    <string name="app_select_default_browser">ตั้งเป็นเบราว์เซอร์เริ่มต้น</string>
+    <string name="app_set_search_engine">ตั้งค่าเครื่องมือค้นหา</string>
+    <string name="app_clear_data_content">ลบแท็บและข้อมูลทั้งหมด?</string>
+</resources>

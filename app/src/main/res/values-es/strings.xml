@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_start">Iniciar</string>
+    <string name="app_loading">Cargando de forma segura...</string>
+    <string name="app_welcome_to">Bienvenido a</string>
+    <string name="app_aio">Aio</string>
+    <string name="app_browser">Navegador</string>
+    <string name="app_private_policy">Política de Privacidad</string>
+    <string name="app_terms_of_service">Términos de Servicio</string>
+    <string name="app_search_hint">Buscar o Escribir URL</string>
+    <string name="app_news">Noticias</string>
+
+    <string name="app_google">Google</string>
+    <string name="app_bing">Bing</string>
+    <string name="app_yahoo">Yahoo</string>
+    <string name="app_perplexity">Perplexity</string>
+    <string name="app_ytb">YouTube</string>
+    <string name="app_fb">Facebook</string>
+    <string name="app_instagram">Instagram</string>
+    <string name="app_tt">Tiktok</string>
+    <string name="app_search">Buscar</string>
+    <string name="app_view_more">Ver Más</string>
+    <string name="app_recent_search">Búsquedas Recientes</string>
+    <string name="app_clear_all">Borrar Todo</string>
+    <string name="app_normal">Normal</string>
+    <string name="app_private">Privado</string>
+    <string name="app_home">Inicio</string>
+    <string name="app_private_search">Buscando Privadamente</string>
+    <string name="app_private_search2">Cuando usas pestañas InPrivate, tus datos de búsqueda no se guardan en tu dispositivo después de que terminas. Los datos temporales también se eliminan de tu dispositivo después de que se cierran las pestañas InPrivate o se reinicia la aplicación.</string>
+    <string name="app_clear_data">Borrar Datos</string>
+    <string name="app_more">Más</string>
+    <string name="app_set_as_default_browser">Establecer Como Navegador Predeterminado</string>
+    <string name="app_new_tab">Nueva Pestaña</string>
+    <string name="app_history">Historial</string>
+    <string name="app_about">Acerca de</string>
+    <string name="app_default_browser_title">Haz de AioBrowser tu Navegador Predeterminado</string>
+    <string name="app_open_setting">Abrir Configuración</string>
+    <string name="app_click_on_default_browser">Hacer Clic en Navegador Predeterminado</string>
+    <string name="app_select_browse">Seleccionar AioBrowser</string>
+    <string name="app_select_default_browser">Establecer Como Navegador Predeterminado</string>
+    <string name="app_set_search_engine">Establecer Motor de Búsqueda</string>
+    <string name="app_clear_data_content">¿Borrar Todas las Pestañas y Datos?</string>
+</resources>

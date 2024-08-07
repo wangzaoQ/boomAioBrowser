@@ -1,0 +1,44 @@
+<resources>
+<!--德-->
+
+    <string name="app_start">Start</string>
+    <string name="app_loading">Sicheres Laden im Gange...</string>
+    <string name="app_welcome_to">Willkommen bei</string>
+    <string name="app_aio">Aio</string>
+    <string name="app_browser">Browser</string>
+    <string name="app_private_policy">Datenschutzrichtlinie</string>
+    <string name="app_terms_of_service">Nutzungsbedingungen</string>
+    <string name="app_search_hint">Suche oder URL eingeben</string>
+    <string name="app_news">Nachrichten</string>
+
+    <string name="app_google">Google</string>
+    <string name="app_bing">Bing</string>
+    <string name="app_yahoo">Yahoo</string>
+    <string name="app_perplexity">Perplexity</string>
+    <string name="app_ytb">YouTube</string>
+    <string name="app_fb">Facebook</string>
+    <string name="app_instagram">Instagram</string>
+    <string name="app_tt">Tiktok</string>
+    <string name="app_search">Suche</string>
+    <string name="app_view_more">Mehr anzeigen</string>
+    <string name="app_recent_search">Letzte Suchen</string>
+    <string name="app_clear_all">Alles löschen</string>
+    <string name="app_normal">Normal</string>
+    <string name="app_private">Privat</string>
+    <string name="app_home">Startseite</string>
+    <string name="app_private_search">Privat suchen</string>
+    <string name="app_private_search2">Wenn du InPrivate-Tabs verwendest, werden deine Suchdaten nach Abschluss nicht auf deinem Gerät gespeichert. Temporäre Daten werden auch von deinem Gerät gelöscht, nachdem InPrivate-Tabs geschlossen oder die App neu gestartet wurde.</string>
+    <string name="app_clear_data">Daten löschen</string>
+    <string name="app_more">Mehr</string>
+    <string name="app_set_as_default_browser">Als Standard-Browser festlegen</string>
+    <string name="app_new_tab">Neuer Tab</string>
+    <string name="app_history">Verlauf</string>
+    <string name="app_about">Über</string>
+    <string name="app_default_browser_title">Mache AioBrowser zu deinem Standard-Browser</string>
+    <string name="app_open_setting">Einstellungen öffnen</string>
+    <string name="app_click_on_default_browser">Auf Standard-Browser klicken</string>
+    <string name="app_select_browse">AioBrowser auswählen</string>
+    <string name="app_select_default_browser">Als Standard-Browser festlegen</string>
+    <string name="app_set_search_engine">Suchmaschine festlegen</string>
+    <string name="app_clear_data_content">Alle Tabs und Daten löschen?</string>
+</resources>

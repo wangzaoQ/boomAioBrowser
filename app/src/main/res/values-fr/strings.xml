@@ -1,0 +1,43 @@
+<resources>
+<!--    法-->
+    <string name="app_start">Démarrer</string>
+    <string name="app_loading">Chargement sécurisé en cours...</string>
+    <string name="app_welcome_to">Bienvenue à</string>
+    <string name="app_aio">Aio</string>
+    <string name="app_browser">Navigateur</string>
+    <string name="app_private_policy">Politique de confidentialité</string>
+    <string name="app_terms_of_service">Conditions d\'utilisation</string>
+    <string name="app_search_hint">Rechercher ou taper l\'URL</string>
+    <string name="app_news">Actualités</string>
+
+    <string name="app_google">Google</string>
+    <string name="app_bing">Bing</string>
+    <string name="app_yahoo">Yahoo</string>
+    <string name="app_perplexity">Perplexité</string>
+    <string name="app_ytb">YouTube</string>
+    <string name="app_fb">Facebook</string>
+    <string name="app_instagram">Instagram</string>
+    <string name="app_tt">Tiktok</string>
+    <string name="app_search">Rechercher</string>
+    <string name="app_view_more">Voir plus</string>
+    <string name="app_recent_search">Recherches récentes</string>
+    <string name="app_clear_all">Tout effacer</string>
+    <string name="app_normal">Normal</string>
+    <string name="app_private">Privé</string>
+    <string name="app_home">Accueil</string>
+    <string name="app_private_search">Recherche privée</string>
+    <string name="app_private_search2">Lorsque vous utilisez les onglets InPrivate, vos données de recherche ne sont pas enregistrées sur votre appareil une fois que vous avez terminé. Les données temporaires sont également supprimées de votre appareil après la fermeture des onglets InPrivate ou après le redémarrage de l\'application.</string>
+    <string name="app_clear_data">Effacer les données</string>
+    <string name="app_more">Plus</string>
+    <string name="app_set_as_default_browser">Définir comme navigateur par défaut</string>
+    <string name="app_new_tab">Nouvel onglet</string>
+    <string name="app_history">Historique</string>
+    <string name="app_about">À propos</string>
+    <string name="app_default_browser_title">Définir AioBrowser comme votre navigateur par défaut</string>
+    <string name="app_open_setting">Ouvrir les paramètres</string>
+    <string name="app_click_on_default_browser">Cliquez sur Navigateur par défaut</string>
+    <string name="app_select_browse">Sélectionner AioBrowser</string>
+    <string name="app_select_default_browser">Définir comme navigateur par défaut</string>
+    <string name="app_set_search_engine">Définir le moteur de recherche</string>
+    <string name="app_clear_data_content">Effacer tous les onglets et les données ?</string>
+</resources>

@@ -1,0 +1,44 @@
+<resources>
+<!--意大利-->
+
+    <string name="app_start">Avvia</string>
+    <string name="app_loading">Caricamento sicuro in corso...</string>
+    <string name="app_welcome_to">Benvenuto a</string>
+    <string name="app_aio">Aio</string>
+    <string name="app_browser">Browser</string>
+    <string name="app_private_policy">Politica sulla privacy</string>
+    <string name="app_terms_of_service">Termini di servizio</string>
+    <string name="app_search_hint">Cerca o digita l\'URL</string>
+    <string name="app_news">Notizie</string>
+
+    <string name="app_google">Google</string>
+    <string name="app_bing">Bing</string>
+    <string name="app_yahoo">Yahoo</string>
+    <string name="app_perplexity">Perplexity</string>
+    <string name="app_ytb">YouTube</string>
+    <string name="app_fb">Facebook</string>
+    <string name="app_instagram">Instagram</string>
+    <string name="app_tt">Tiktok</string>
+    <string name="app_search">Cerca</string>
+    <string name="app_view_more">Vedi di più</string>
+    <string name="app_recent_search">Ricerche recenti</string>
+    <string name="app_clear_all">Cancella tutto</string>
+    <string name="app_normal">Normale</string>
+    <string name="app_private">Privato</string>
+    <string name="app_home">Home</string>
+    <string name="app_private_search">Ricerca privata</string>
+    <string name="app_private_search2">Quando usi le schede InPrivate, i tuoi dati di ricerca non vengono salvati sul dispositivo una volta terminato. I dati temporanei vengono eliminati dal dispositivo dopo che le schede InPrivate sono state chiuse o l\'app è stata riavviata.</string>
+    <string name="app_clear_data">Cancella dati</string>
+    <string name="app_more">Di più</string>
+    <string name="app_set_as_default_browser">Imposta come browser predefinito</string>
+    <string name="app_new_tab">Nuova scheda</string>
+    <string name="app_history">Cronologia</string>
+    <string name="app_about">Informazioni</string>
+    <string name="app_default_browser_title">Rendi AioBrowser il tuo browser predefinito</string>
+    <string name="app_open_setting">Apri impostazioni</string>
+    <string name="app_click_on_default_browser">Clicca su Browser predefinito</string>
+    <string name="app_select_browse">Seleziona AioBrowser</string>
+    <string name="app_select_default_browser">Imposta come browser predefinito</string>
+    <string name="app_set_search_engine">Imposta motore di ricerca</string>
+    <string name="app_clear_data_content">Cancellare tutte le schede e i dati?</string>
+</resources>

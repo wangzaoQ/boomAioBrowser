@@ -86,7 +86,9 @@ class NewsViewModel : BaseDataModel() {
                     put("sessionKey", "forYou")
                 }) { NetController.getNewsList(map) }.data?: mutableListOf()
                 newsLiveData.postValue(list)
-            }, failBack = {}, 1)
+            }, failBack = {
+
+            }, 1)
         }
     }
 }

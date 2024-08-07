@@ -33,6 +33,8 @@ open class BaseDataModel :ViewModel(), LifecycleObserver {
                 }
             }
         }.onFailure {
+            failLiveData.postValue("BaseDataModelError")
+            failBack.invoke(it)
             AppLogs.eLog(TAG,it.stackTraceToString())
         }
     }

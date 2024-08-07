@@ -174,7 +174,6 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             }
         }
     }
-    var linkedUrlList= LinkedList<String>()
 
     abstract fun loadWebOnPageStared(url: String)
 

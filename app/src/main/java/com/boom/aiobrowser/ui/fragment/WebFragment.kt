@@ -3,10 +3,12 @@ package com.boom.aiobrowser.ui.fragment
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.APP.Companion.linkedUrlList
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseWebFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.BrowserFragmentWebBinding
+import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.getBeanByGson
@@ -27,6 +29,11 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     }
 
     override fun loadWebOnPageStared(url: String) {
+        addLast(url)
+    }
+
+    private fun addLast(url: String) {
+        var showNext = false
         rootActivity.addLaunch(success = {
             if (linkedUrlList.contains(url)){
                 jumpData?.apply {
@@ -34,12 +41,16 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                     //之前加载过
                     var index = linkedUrlList.indexOf(url)
                     if (index == linkedUrlList.size-1){
+                        AppLogs.dLog(fragmentTAG,"之前加载过但是是最后一个")
+                        showNext = false
                         //是最后一个
                         lastJumpData = null
                     }else{
                         if (lastJumpData == null){
                             lastJumpData = jumpData
                         }
+                        showNext = true
+                        AppLogs.dLog(fragmentTAG,"之前加载过 index:${index}")
                         lastJumpData?.jumpUrl = linkedUrlList.get(index+1)
                     }
                     JumpDataManager.updateCurrentJumpData(this,"webFragment 存储jumpData")
@@ -51,6 +62,8 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                     if (lastJumpData == null || lastJumpData?.jumpUrl != jumpData?.jumpUrl){
                         lastJumpData = jumpData
                     }
+                    showNext = false
+                    AppLogs.dLog(fragmentTAG,"之前未加载过")
                     JumpDataManager.updateCurrentJumpData(this,"webFragment 存储jumpData")
                 }
                 linkedUrlList.add(url)
@@ -66,7 +79,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
             withContext(Dispatchers.Main){
                 if (rootActivity is MainActivity){
                     (rootActivity as MainActivity).apply {
-                        updateBottom(true,true, jumpData = jumpData)
+                        updateBottom(true,showNext, jumpData = jumpData)
                     }
                 }
             }

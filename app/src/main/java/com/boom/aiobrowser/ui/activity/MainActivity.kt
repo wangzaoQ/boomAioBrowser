@@ -65,6 +65,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             // 通过Action进行导航，跳转到secondFragment
             when (it.jumpType) {
                 JumpConfig.JUMP_WEB -> {
+                    APP.linkedUrlList.clear()
                     val navOptions = NavOptions.Builder()
                         .setEnterAnim(R.anim.in_alpha)
                         .setExitAnim(R.anim.out_alpha)
@@ -73,7 +74,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     navController?.navigate(R.id.fragmentWeb, Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
                     },navOptions)
-                    updateBottom(true,false,it)
+                    updateBottom(true,true,it)
                 }
                 JumpConfig.JUMP_SEARCH -> {
                     val navOptions = NavOptions.Builder()

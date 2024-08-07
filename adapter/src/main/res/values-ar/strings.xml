@@ -1,0 +1,8 @@
+<resources>
+<!--阿拉伯-->
+    <string name="brvah_loading">جار التحميل...</string>
+    <string name="brvah_load_failed">فشل التحميل، انقر لإعادة المحاولة</string>
+    <string name="brvah_load_end">لا توجد بيانات إضافية</string>
+    <string name="brvah_load_complete">انقر لتحميل المزيد</string>
+
+</resources>

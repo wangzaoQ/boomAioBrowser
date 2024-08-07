@@ -1,0 +1,8 @@
+<resources>
+<!--    法-->
+    <string name="brvah_loading">Chargement en cours...</string>
+    <string name="brvah_load_failed">Échec du chargement, cliquez pour réessayer</string>
+    <string name="brvah_load_end">Plus de données</string>
+    <string name="brvah_load_complete">Cliquez pour charger plus</string>
+
+</resources>

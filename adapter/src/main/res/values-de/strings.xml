@@ -1,0 +1,8 @@
+<resources>
+<!--德-->
+    <string name="brvah_loading">Wird geladen...</string>
+    <string name="brvah_load_failed">Laden fehlgeschlagen, bitte erneut versuchen</string>
+    <string name="brvah_load_end">Keine weiteren Daten</string>
+    <string name="brvah_load_complete">Klicken, um mehr zu laden</string>
+
+</resources>

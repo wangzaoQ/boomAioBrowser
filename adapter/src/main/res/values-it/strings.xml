@@ -1,0 +1,8 @@
+<resources>
+<!--意大利-->
+    <string name="brvah_loading">Caricamento...</string>
+    <string name="brvah_load_failed">Caricamento fallito, clicca per riprovare</string>
+    <string name="brvah_load_end">Nessun altro dato</string>
+    <string name="brvah_load_complete">Clicca per caricare di più</string>
+
+</resources>

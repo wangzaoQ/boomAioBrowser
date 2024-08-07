@@ -1,0 +1,8 @@
+<resources>
+<!--俄语-->
+    <string name="brvah_loading">Загрузка...</string>
+    <string name="brvah_load_failed">Ошибка загрузки, нажмите для повторной попытки</string>
+    <string name="brvah_load_end">Данных больше нет</string>
+    <string name="brvah_load_complete">Нажмите, чтобы загрузить больше</string>
+
+</resources>

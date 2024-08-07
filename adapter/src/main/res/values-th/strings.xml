@@ -1,0 +1,8 @@
+<resources>
+<!--    泰-->
+、<string name="brvah_loading">กำลังโหลด...</string>
+    <string name="brvah_load_failed">โหลดไม่สำเร็จ คลิกเพื่อลองใหม่</string>
+    <string name="brvah_load_end">ไม่มีข้อมูลเพิ่มเติม</string>
+    <string name="brvah_load_complete">คลิกเพื่อโหลดเพิ่มเติม</string>
+
+</resources>

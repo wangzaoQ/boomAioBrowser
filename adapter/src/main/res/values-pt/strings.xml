@@ -1,0 +1,7 @@
+<resources>
+    <string name="brvah_loading">Carregando...</string>
+    <string name="brvah_load_failed">Falha ao carregar, clique para tentar novamente</string>
+    <string name="brvah_load_end">Não há mais dados</string>
+    <string name="brvah_load_complete">Clique para carregar mais</string>
+
+</resources>

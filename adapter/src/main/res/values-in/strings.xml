@@ -1,0 +1,7 @@
+<resources>
+    <string name="brvah_loading">Memuat...</string>
+    <string name="brvah_load_failed">Gagal memuat, klik untuk coba lagi</string>
+    <string name="brvah_load_end">Tidak ada data lagi</string>
+    <string name="brvah_load_complete">Klik untuk memuat lebih banyak</string>
+
+</resources>

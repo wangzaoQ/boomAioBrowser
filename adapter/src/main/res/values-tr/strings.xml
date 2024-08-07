@@ -1,0 +1,8 @@
+<resources>
+<!--土耳其-->
+    <string name="brvah_loading">Yükleniyor...</string>
+    <string name="brvah_load_failed">Yükleme başarısız, tekrar denemek için tıklayın</string>
+    <string name="brvah_load_end">Başka veri yok</string>
+    <string name="brvah_load_complete">Daha fazla yüklemek için tıklayın</string>
+
+</resources>

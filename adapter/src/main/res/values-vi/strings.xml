@@ -1,0 +1,8 @@
+<resources>
+<!--越南-->
+    <string name="brvah_loading">Đang tải...</string>
+    <string name="brvah_load_failed">Tải thất bại, bấm để thử lại</string>
+    <string name="brvah_load_end">Không còn dữ liệu</string>
+    <string name="brvah_load_complete">Bấm để tải thêm</string>
+
+</resources>

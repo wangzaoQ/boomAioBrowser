@@ -369,42 +369,43 @@ public class DefaultUIController extends AbsAgentWebUIController {
 
 	@Override
 	public void onShowSslCertificateErrorDialog(final WebView view, final SslErrorHandler handler, final SslError error) {
-		AlertDialog.Builder alertDialog = new AlertDialog.Builder(mActivity);
-		String sslErrorMessage;
-		switch (error.getPrimaryError()) {
-			case SslError.SSL_UNTRUSTED:
-				sslErrorMessage = mActivity.getString(R.string.web_message_show_ssl_untrusted);
-				break;
-			case SslError.SSL_EXPIRED:
-				sslErrorMessage = mActivity.getString(R.string.web_message_show_ssl_expired);
-				break;
-			case SslError.SSL_IDMISMATCH:
-				sslErrorMessage = mActivity.getString(R.string.web_message_show_ssl_hostname_mismatch);
-				break;
-			case SslError.SSL_NOTYETVALID:
-				sslErrorMessage = mActivity.getString(R.string.web_message_show_ssl_not_yet_valid);
-				break;
-			default:
-				sslErrorMessage = mActivity.getString(R.string.web_message_show_ssl_error);
-		}
-		sslErrorMessage += mActivity.getString(R.string.web_message_show_continue);
-		alertDialog.setTitle(mActivity.getString(R.string.web_title_ssl_error));
-		alertDialog.setMessage(sslErrorMessage);
-		alertDialog.setPositiveButton(R.string.web_continue, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// Ignore SSL certificate errors
-				handler.proceed();
-			}
-		});
-
-		alertDialog.setNegativeButton(R.string.web_cancel, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				handler.cancel();
-			}
-		});
-		alertDialog.show();
+		handler.proceed();
+//		AlertDialog.Builder alertDialog = new AlertDialog.Builder(mActivity);
+//		String sslErrorMessage;
+//		switch (error.getPrimaryError()) {
+//			case SslError.SSL_UNTRUSTED:
+//				sslErrorMessage = mActivity.getString(R.string.web_message_show_ssl_untrusted);
+//				break;
+//			case SslError.SSL_EXPIRED:
+//				sslErrorMessage = mActivity.getString(R.string.web_message_show_ssl_expired);
+//				break;
+//			case SslError.SSL_IDMISMATCH:
+//				sslErrorMessage = mActivity.getString(R.string.web_message_show_ssl_hostname_mismatch);
+//				break;
+//			case SslError.SSL_NOTYETVALID:
+//				sslErrorMessage = mActivity.getString(R.string.web_message_show_ssl_not_yet_valid);
+//				break;
+//			default:
+//				sslErrorMessage = mActivity.getString(R.string.web_message_show_ssl_error);
+//		}
+//		sslErrorMessage += mActivity.getString(R.string.web_message_show_continue);
+//		alertDialog.setTitle(mActivity.getString(R.string.web_title_ssl_error));
+//		alertDialog.setMessage(sslErrorMessage);
+//		alertDialog.setPositiveButton(R.string.web_continue, new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface dialog, int which) {
+//				// Ignore SSL certificate errors
+//				handler.proceed();
+//			}
+//		});
+//
+//		alertDialog.setNegativeButton(R.string.web_cancel, new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface dialog, int which) {
+//				handler.cancel();
+//			}
+//		});
+//		alertDialog.show();
 
 
 	}

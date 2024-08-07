@@ -15,9 +15,9 @@
     <string name="web_camera">Kamera</string>
     <string name="web_file_chooser">Dosyalar</string>
     <string name="web_loading">Yükleniyor...</string>
-    <string name="web_leave_app_and_go_other_page">%s'den çıkıp başka bir uygulama mı açmak istiyorsunuz?</string>
+    <string name="web_leave_app_and_go_other_page">%s\'den çıkıp başka bir uygulama mı açmak istiyorsunuz?</string>
     <string name="web_leave">Çık</string>
-    <string name="web_max_file_length_limit">Seçilen dosya %s MB'den büyük olamaz</string>
+    <string name="web_max_file_length_limit">Seçilen dosya %s MB\'den büyük olamaz</string>
     <string name="web_default_page_error">hata~</string>
     <string name="web_message_show_ssl_untrusted">Sertifika otoritesi güvenilir değil.</string>
     <string name="web_message_show_ssl_expired">Sertifika süresi dolmuş.</string>

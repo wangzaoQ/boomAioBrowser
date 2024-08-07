@@ -19,10 +19,10 @@
     <string name="web_leave">Quitter</string>
     <string name="web_max_file_length_limit">Le fichier sélectionné ne peut pas dépasser %s Mo</string>
     <string name="web_default_page_error">erreur~</string>
-    <string name="web_message_show_ssl_untrusted">L'autorité de certification n'est pas digne de confiance.</string>
+    <string name="web_message_show_ssl_untrusted">L\'autorité de certification n\'est pas digne de confiance.</string>
     <string name="web_message_show_ssl_expired">Le certificat a expiré.</string>
-    <string name="web_message_show_ssl_hostname_mismatch">Le nom d'hôte du certificat ne correspond pas.</string>
-    <string name="web_message_show_ssl_not_yet_valid">Le certificat n'est pas encore valide.</string>
+    <string name="web_message_show_ssl_hostname_mismatch">Le nom d\'hôte du certificat ne correspond pas.</string>
+    <string name="web_message_show_ssl_not_yet_valid">Le certificat n\'est pas encore valide.</string>
     <string name="web_message_show_ssl_error">Erreur de certificat SSL.</string>
     <string name="web_message_show_continue">Voulez-vous quand même continuer ?</string>
     <string name="web_title_ssl_error">Erreur de certificat SSL</string>

@@ -265,7 +265,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 val scaleYAnimator = ObjectAnimator.ofFloat(acBinding.tvClearData, "scaleY", 1.0f, 1.2f,1.0f)
                 val set = AnimatorSet()
                 set.play(scaleXAnimator).with(scaleYAnimator)
-                set.setDuration(1500)
+                set.setDuration(3000)
                 set.start()
                 set.addListener(object : Animator.AnimatorListener {
                     override fun onAnimationStart(p0: Animator) {

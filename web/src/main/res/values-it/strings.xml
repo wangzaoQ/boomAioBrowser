@@ -15,11 +15,11 @@
     <string name="web_camera">Fotocamera</string>
     <string name="web_file_chooser">File</string>
     <string name="web_loading">Caricamento...</string>
-    <string name="web_leave_app_and_go_other_page">uscire da %s e aprire un'altra app?</string>
+    <string name="web_leave_app_and_go_other_page">uscire da %s e aprire un\'altra app?</string>
     <string name="web_leave">Esci</string>
     <string name="web_max_file_length_limit">Il file selezionato non può essere più grande di %s MB</string>
     <string name="web_default_page_error">errore~</string>
-    <string name="web_message_show_ssl_untrusted">L'autorità di certificazione non è affidabile.</string>
+    <string name="web_message_show_ssl_untrusted">L\'autorità di certificazione non è affidabile.</string>
     <string name="web_message_show_ssl_expired">Il certificato è scaduto.</string>
     <string name="web_message_show_ssl_hostname_mismatch">Il nome host del certificato non corrisponde.</string>
     <string name="web_message_show_ssl_not_yet_valid">Il certificato non è ancora valido.</string>

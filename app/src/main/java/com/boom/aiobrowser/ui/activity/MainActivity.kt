@@ -220,6 +220,14 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         startFragment = StartFragment()
         startFragment?.apply {
 //            fManager.showFragment(supportFragmentManager,this)
+            intent.data?.apply {
+                if (this.toString().isNotEmpty()){
+                    var data = JumpDataManager.getCurrentJumpData(tag = "MainActivity setShowView")
+                    data.jumpType = JumpConfig.JUMP_WEB
+                    data.jumpUrl = this.toString()
+                    JumpDataManager.updateCurrentJumpData(data,tag = "MainActivity setShowView")
+                }
+            }
             updateUI(intent)
             fManager.addFragmentTag(supportFragmentManager,this,R.id.fragmentStart,"StartFragment")
         }

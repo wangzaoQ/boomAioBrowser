@@ -270,8 +270,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             CacheManager.isFirstShowClear = false
             acBinding.root.postDelayed({
                 acBinding.tvClearData.visibility = View.VISIBLE
-                val scaleXAnimator = ObjectAnimator.ofFloat(acBinding.tvClearData, "scaleX", 1.0f, 1.2f,1.0f)
-                val scaleYAnimator = ObjectAnimator.ofFloat(acBinding.tvClearData, "scaleY", 1.0f, 1.2f,1.0f)
+                val scaleXAnimator = ObjectAnimator.ofFloat(acBinding.tvClearData, "scaleX", 1.0f, 1.1f,1.0f)
+                val scaleYAnimator = ObjectAnimator.ofFloat(acBinding.tvClearData, "scaleY", 1.0f, 1.1f,1.0f)
                 val set = AnimatorSet()
                 set.play(scaleXAnimator).with(scaleYAnimator)
                 set.setDuration(3000)
@@ -292,7 +292,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     }
 
                 })
-            },1000)
+            },0)
         }else{
             acBinding.tvClearData.visibility = View.GONE
         }

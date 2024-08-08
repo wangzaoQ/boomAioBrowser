@@ -42,10 +42,10 @@ class NewsMainAdapter(var fragmet :BaseFragment<*>) : BaseQuickAdapter<NewsData,
             }else{
                 ivImg.visibility = View.VISIBLE
                 tvNewsContent.visibility = View.GONE
-                GlideManager.loadImg(fragmet,ivImg,item.iassum)
+                GlideManager.loadImg(fragmet,ivImg,item.iassum,loadId = R.mipmap.bg_news_default ,R.mipmap.bg_news_default)
             }
             tvNewsTitle.text = item.tconsi
-            GlideManager.loadImg(fragmet,ivSource,item.sschem, loadId = R.mipmap.bg_news_default ,R.mipmap.bg_news_default)
+            GlideManager.loadImg(fragmet,ivSource,item.sschem)
             tvSourceName.text = "${item.sfindi}"
             tvNewsTime.text = TimeManager.getNewsTime(item.pphilo?:0)
         }

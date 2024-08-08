@@ -23,8 +23,8 @@ object GlideManager {
             if (errorId!=0){
                 builder.error(errorId!!)
             }
-            builder.transition(DrawableTransitionOptions().crossFade()).into(iv)
-//            builder.into(iv)
+//            builder.transition(DrawableTransitionOptions().crossFade()).into(iv)
+            builder.into(iv)
         }.onFailure {
             AppLogs.eLog("GlideManager","loadImg2   :${it.stackTraceToString()}")
         }

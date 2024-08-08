@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.recyclerview.widget.RecyclerView
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.BrowserFragmentMainBinding
@@ -44,7 +45,7 @@ class NewsMainAdapter(var fragmet :BaseFragment<*>) : BaseQuickAdapter<NewsData,
                 GlideManager.loadImg(fragmet,ivImg,item.iassum)
             }
             tvNewsTitle.text = item.tconsi
-            GlideManager.loadImg(fragmet,ivSource,item.sschem)
+            GlideManager.loadImg(fragmet,ivSource,item.sschem, loadId = R.mipmap.bg_news_default ,R.mipmap.bg_news_default)
             tvSourceName.text = "${item.sfindi}"
             tvNewsTime.text = TimeManager.getNewsTime(item.pphilo?:0)
         }

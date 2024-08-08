@@ -151,6 +151,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 CacheManager.engineGuideFirst = false
                 EngineGuidePop(rootActivity).createPop(fBinding.ivSearchEngine)
             }
+            if (fBinding.refreshLayout.isRefreshing == true){
+                fBinding.refreshLayout.isRefreshing = false
+            }
         }
 
         if (rootActivity is MainActivity){
@@ -160,9 +163,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             }
         }
         APP.bottomLiveData.postValue(JumpConfig.JUMP_HOME)
-        if (fBinding.refreshLayout.isRefreshing == true){
-            fBinding.refreshLayout.isRefreshing = false
-        }
+
     }
 
     private fun updateEngine(type: Int) {

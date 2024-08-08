@@ -8,7 +8,6 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
@@ -18,7 +17,6 @@ import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
 import com.boom.aiobrowser.model.NewsViewModel
-import com.boom.aiobrowser.model.SearchViewModel
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BrowserManager
 import com.boom.aiobrowser.tools.CacheManager
@@ -33,12 +31,7 @@ import com.boom.aiobrowser.ui.pop.ClearPop
 import com.boom.aiobrowser.ui.pop.DefaultPop
 import com.boom.aiobrowser.ui.pop.MorePop
 import com.boom.aiobrowser.ui.pop.TabPop
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DecodeFormat
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import pop.basepopup.BasePopupWindow.OnDismissListener
-import java.lang.ref.WeakReference
 
 class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
@@ -73,7 +66,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     navController?.navigate(R.id.fragmentWeb, Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
                     },navOptions)
-                    updateBottom(true,true,it, tag = "JumpConfig.JUMP_WEB")
+                    updateBottom(true,false,it, tag = "JumpConfig.JUMP_WEB")
                 }
                 JumpConfig.JUMP_SEARCH -> {
                     val navOptions = NavOptions.Builder()
@@ -183,12 +176,15 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         AppLogs.dLog(acTAG,"updateBottom:${tag}")
         acBinding.apply {
             if(showNext){
-                if (jumpData?.lastJumpData == null){
+                if (jumpData?.nextJumpUrl.isNullOrEmpty()){
                     ivRight.isEnabled = false
                 }else{
                     ivRight.isEnabled = true
                     ivRight.setOneClick {
-                        APP.jumpLiveData.postValue(jumpData?.lastJumpData)
+                        jumpData?.jumpUrl = jumpData?.nextJumpUrl?:""
+                        jumpData?.nextJumpUrl = ""
+                        jumpData?.jumpType = JumpConfig.JUMP_WEB
+                        APP.jumpLiveData.postValue(jumpData)
                     }
                 }
             }else{

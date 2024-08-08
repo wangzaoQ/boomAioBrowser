@@ -5,9 +5,11 @@ class JumpData : BaseData() {
         this.jumpType = currentData.jumpType
         this.jumpTitle = currentData.jumpTitle
         this.jumpUrl = currentData.jumpUrl
-        this.lastJumpData = currentData.lastJumpData
+        this.nextJumpUrl = currentData.nextJumpUrl
+        this.nextJumpType = currentData.nextJumpType
     }
 
-    var lastJumpData:JumpData?=null
+    var nextJumpUrl:String?=""
+    var nextJumpType:String?=""
 
 }

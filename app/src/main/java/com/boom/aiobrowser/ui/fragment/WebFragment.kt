@@ -44,17 +44,12 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                         AppLogs.dLog(fragmentTAG,"之前加载过但是是最后一个")
                         showNext = false
                         //是最后一个
-                        lastJumpData = null
+                        nextJumpUrl = ""
                     }else{
-                        if (lastJumpData == null){
-                            lastJumpData = JumpData().apply {
-                                updateData(jumpData!!)
-                                jumpType = JumpConfig.JUMP_WEB
-                            }
-                        }
                         showNext = true
                         AppLogs.dLog(fragmentTAG,"之前加载过 index:${index}")
-                        lastJumpData?.jumpUrl = linkedUrlList.get(index+1)
+                        nextJumpUrl = linkedUrlList.get(index+1)
+                        nextJumpType = JumpConfig.JUMP_WEB
                     }
                     JumpDataManager.updateCurrentJumpData(this,"webFragment 存储jumpData")
                 }
@@ -62,12 +57,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                 //没加载过
                 jumpData?.apply {
                     jumpUrl = url
-                    if (lastJumpData == null || lastJumpData?.jumpUrl != jumpData?.jumpUrl){
-                        lastJumpData = JumpData().apply {
-                            updateData(jumpData!!)
-                            jumpType = JumpConfig.JUMP_WEB
-                        }
-                    }
+                    nextJumpUrl = url
                     showNext = false
                     AppLogs.dLog(fragmentTAG,"之前未加载过")
                     JumpDataManager.updateCurrentJumpData(this,"webFragment 存储jumpData")

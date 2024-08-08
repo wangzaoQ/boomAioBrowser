@@ -160,6 +160,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             }
         }
         APP.bottomLiveData.postValue(JumpConfig.JUMP_HOME)
+        if (fBinding.refreshLayout.isRefreshing == true){
+            fBinding.refreshLayout.isRefreshing = false
+        }
     }
 
     private fun updateEngine(type: Int) {
@@ -202,7 +205,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 
             }).build()
     }
+
     override fun setShowView() {
+        fBinding.refreshLayout.isRefreshing = true
         fBinding.apply {
             adapterHelper.trailingLoadState = LoadState.NotLoading(false)
             rv.apply {
@@ -217,6 +222,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                         jumpUrl= data.uweek?:""
                         jumpType = JumpConfig.JUMP_WEB
                         jumpTitle = data.tconsi?:""
+                        isJumpClick = true
                     }
                     APP.jumpLiveData.postValue(jumpData)
                 }

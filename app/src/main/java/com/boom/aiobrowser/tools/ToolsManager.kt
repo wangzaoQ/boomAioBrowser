@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import kotlinx.coroutines.Job
 import java.util.Base64
+import java.util.LinkedList
 import java.util.Locale
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
@@ -23,6 +24,23 @@ val gson: Gson by lazy {
 fun <T> getListByGson(json: String?, cls: Class<T>?): MutableList<T>? {
     runCatching {
         val mList = ArrayList<T>()
+        val array = JsonParser().parse(json).asJsonArray
+        if (array != null && array.size() > 0) {
+            for (elem in array) {
+                mList.add(gson.fromJson(elem, cls))
+            }
+        }
+        return mList
+    }.onFailure {
+        AppLogs.eLog("gson", it.stackTraceToString())
+    }
+    return null
+}
+
+/** 将Json数据解析成相应的映射对象列表  */
+fun <T> getLinkedListByGson(json: String?, cls: Class<T>?): LinkedList<T>? {
+    runCatching {
+        val mList = LinkedList<T>()
         val array = JsonParser().parse(json).asJsonArray
         if (array != null && array.size() > 0) {
             for (elem in array) {

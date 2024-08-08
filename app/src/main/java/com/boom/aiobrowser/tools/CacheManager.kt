@@ -12,6 +12,7 @@ import com.boom.aiobrowser.data.TabData
 import com.boom.aiobrowser.net.NetRequest
 import com.boom.aiobrowser.ui.JumpConfig
 import com.tencent.mmkv.MMKV
+import java.util.LinkedList
 import java.util.UUID
 
 object CacheManager {
@@ -34,6 +35,7 @@ object CacheManager {
     const val KV_PHONE_ID = "KV_PHONE_ID"
     const val KV_NEWS_SAVE_TIME = "KV_NEWS_SAVE_TIME"
     const val KV_HISTORY_DATA = "KV_HISTORY_DATA"
+    const val KV_URL_LIST = "KV_URL_LIST"
 
     // 是否首次打开start
     var isFirstStart: Boolean
@@ -213,6 +215,14 @@ object CacheManager {
     fun getSession(key:String):String{
         return mmkv.decodeString("${key}_${NetRequest.keyTag}","")?:""
     }
+
+    var linkedUrlList :LinkedList<String>
+        get() {
+            return getLinkedListByGson(mmkv.decodeString(KV_URL_LIST),String::class.java) ?: LinkedList<String>()
+        }
+        set(value) {
+            mmkv.encode(KV_URL_LIST, toJson(value))
+        }
 
     fun clearAll() {
         historyDataList = mutableListOf()

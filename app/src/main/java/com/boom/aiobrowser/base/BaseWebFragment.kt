@@ -28,6 +28,8 @@ import com.google.gson.Gson
 abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
     var mAgentWeb :AgentWeb?=null
 
+    var back: () -> Unit = {}
+
     fun initWeb(){
         mAgentWeb = AgentWeb.with(this) //
             .setAgentWebParent(
@@ -76,10 +78,12 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
 
     fun goBack(keyCode:Int , event: KeyEvent?):Boolean {
+        back.invoke()
         return mAgentWeb!!.handleKeyEvent(keyCode, event)
     }
 
     fun goBack(){
+        back.invoke()
         var webView = mAgentWeb?.webCreator?.webView
         if (webView!= null && webView.canGoBack()) {
             webView.goBack()
@@ -104,7 +108,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
     protected var webChromeClient : WebChromeClient = object : WebChromeClient() {
         override fun onProgressChanged(view:WebView,  newProgress:Int) {
             super.onProgressChanged(view, newProgress)
-            AppLogs.dLog(fragmentTAG, "onProgressChanged:$newProgress  view:$view")
+//            AppLogs.dLog(fragmentTAG, "onProgressChanged:$newProgress  view:$view")
         }
     }
 

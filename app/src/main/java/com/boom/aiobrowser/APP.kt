@@ -25,8 +25,6 @@ class APP: Application() {
         val jumpLiveData  by lazy { ProtectedUnPeekLiveData<JumpData>() }
         val engineLiveData  by lazy { ProtectedUnPeekLiveData<Int>() }
         val bottomLiveData  by lazy { ProtectedUnPeekLiveData<String>() }
-        var linkedUrlList= LinkedList<String>()
-
 
     }
 

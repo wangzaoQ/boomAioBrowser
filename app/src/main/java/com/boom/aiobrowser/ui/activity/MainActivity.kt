@@ -32,6 +32,7 @@ import com.boom.aiobrowser.ui.pop.DefaultPop
 import com.boom.aiobrowser.ui.pop.MorePop
 import com.boom.aiobrowser.ui.pop.TabPop
 import pop.basepopup.BasePopupWindow.OnDismissListener
+import java.util.LinkedList
 
 class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
@@ -58,11 +59,15 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             // 通过Action进行导航，跳转到secondFragment
             when (it.jumpType) {
                 JumpConfig.JUMP_WEB -> {
-                    APP.linkedUrlList.clear()
+                    if (it.isJumpClick){
+                        it.isJumpClick = false
+                        CacheManager.linkedUrlList = LinkedList()
+                    }
                     val navOptions = NavOptions.Builder()
                         .setEnterAnim(R.anim.in_alpha)
                         .setExitAnim(R.anim.out_alpha)
                         .build()
+
                     navController?.navigate(R.id.fragmentWeb, Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
                     },navOptions)

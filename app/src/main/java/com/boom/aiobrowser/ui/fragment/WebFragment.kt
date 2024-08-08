@@ -3,7 +3,6 @@ package com.boom.aiobrowser.ui.fragment
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.boom.aiobrowser.APP
-import com.boom.aiobrowser.APP.Companion.linkedUrlList
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseWebFragment
 import com.boom.aiobrowser.data.JumpData
@@ -35,6 +34,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     private fun addLast(url: String) {
         var showNext = false
         rootActivity.addLaunch(success = {
+            var linkedUrlList = CacheManager.linkedUrlList
             if (linkedUrlList.contains(url)){
                 jumpData?.apply {
                     jumpUrl = url
@@ -63,6 +63,14 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                     JumpDataManager.updateCurrentJumpData(this,"webFragment 存储jumpData")
                 }
                 linkedUrlList.add(url)
+                CacheManager.linkedUrlList = linkedUrlList
+            }
+            withContext(Dispatchers.Main){
+                if (rootActivity is MainActivity){
+                    (rootActivity as MainActivity).apply {
+                        updateBottom(true,showNext, jumpData = jumpData,"webView loadWebOnPageStared")
+                    }
+                }
             }
             if(CacheManager.browserStatus == 0){
                 var list = CacheManager.historyDataList
@@ -70,13 +78,6 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                     updateTime = System.currentTimeMillis()
                     list.add(0,this)
                     CacheManager.historyDataList = list
-                }
-            }
-            withContext(Dispatchers.Main){
-                if (rootActivity is MainActivity){
-                    (rootActivity as MainActivity).apply {
-                        updateBottom(true,showNext, jumpData = jumpData,"webView loadWebOnPageStared")
-                    }
                 }
             }
         }, failBack = {})
@@ -143,6 +144,19 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 //            }
 //        }, failBack = {})
         APP.bottomLiveData.postValue(JumpConfig.JUMP_WEB)
+
+        back = {
+            jumpData?.apply {
+                nextJumpType = JumpConfig.JUMP_WEB
+                nextJumpUrl = mAgentWeb?.webCreator?.webView?.url
+                JumpDataManager.updateCurrentJumpData(this,tag="webFragment goBack")
+                if (rootActivity is MainActivity){
+                    (rootActivity as MainActivity).apply {
+                        updateBottom(true,true, jumpData = jumpData,"webView goBack")
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -163,12 +177,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
     override fun onDestroy() {
         APP.engineLiveData.removeObservers(this)
-//        jumpData?.apply {
-//            if (lastJumpData != null){
-//                lastJumpData?.jumpUrl = mAgentWeb?.webCreator?.webView?.url?:""
-//                JumpDataManager.updateCurrentJumpData(this,"webFragment onDestroy")
-//            }
-//        }
+
         super.onDestroy()
     }
 }

@@ -12,4 +12,6 @@ class JumpData : BaseData() {
     var nextJumpUrl:String?=""
     var nextJumpType:String?=""
 
+    var isJumpClick = false
+
 }

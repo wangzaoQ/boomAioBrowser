@@ -1,7 +1,6 @@
 package com.boom.aiobrowser.net
 
 import com.boom.aiobrowser.APP
-import com.boom.aiobrowser.net.intercept.HttpLoggingInterceptorNew
 import com.boom.aiobrowser.tools.CacheManager
 import okhttp3.OkHttpClient
 import java.net.Proxy
@@ -38,22 +37,12 @@ object SearchNet {
     var TAG = "SearchNet:"
 
     private fun getOkhttp(): OkHttpClient {
-        //TODO:master not commit
-        val loggingInterceptor =
-            HttpLoggingInterceptorNew(TAG)
-        //log打印级别，决定了log显示的详细程度
-        loggingInterceptor.setPrintLevel(HttpLoggingInterceptorNew.Level.BODY)
-        //log颜色级别，决定了log在控制台显示的颜色
-        loggingInterceptor.setColorLevel(Level.INFO)
         val builder =  OkHttpClient.Builder()
             .apply {
                 if (APP.isDebug.not()) { // 非测试环境
                     proxy(Proxy.NO_PROXY) // 禁止抓包
                 }
             }
-        if (APP.isDebug){
-            builder.addInterceptor(loggingInterceptor)
-        }
         return builder.build()
     }
 }

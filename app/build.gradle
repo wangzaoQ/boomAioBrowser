@@ -11,11 +11,11 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.boom.aiobrowser"
+        applicationId "com.fast.safe.browser"
         minSdk 24
         targetSdk 34
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -30,20 +30,20 @@ android {
 
 
     signingConfigs {
-        debug {
-            v2SigningEnabled true
-            storeFile file("test_aio")
-            storePassword "1234567"
-            keyAlias "test_aio"
-            keyPassword "1234567"
-        }
-
-        release {
-            storeFile file("test_aio")
-            storePassword "1234567"
-            keyAlias "test_aio"
-            keyPassword "1234567"
-        }
+//        debug {
+//            v2SigningEnabled true
+//            storeFile file("test_aio")
+//            storePassword "1234567"
+//            keyAlias "test_aio"
+//            keyPassword "1234567"
+//        }
+//
+//        release {
+//            storeFile file("test_aio")
+//            storePassword "1234567"
+//            keyAlias "test_aio"
+//            keyPassword "1234567"
+//        }
 
     }
 
@@ -51,7 +51,7 @@ android {
         release {
             debuggable false
             minifyEnabled true
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
             shrinkResources true
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -61,7 +61,7 @@ android {
         debug {
             debuggable true
             minifyEnabled false
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
 //            shrinkResources true
 //            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.util.Base64
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
-import com.boom.aiobrowser.net.intercept.HttpLoggingInterceptorNew
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.decryptNet
@@ -19,7 +18,6 @@ import java.util.Locale
 import java.util.logging.Level
 
 object Net {
-//    const val rootUrl = "https://test.safebrowsernews.com"
     const val rootUrl = "https://prod.safebrowsernews.com"
 
     operator fun <T> invoke(cls: Class<T>): T = retrofit.create(cls)
@@ -29,14 +27,6 @@ object Net {
 
 
     private fun getNetHttp(): OkHttpClient {
-
-        //TODO:master not commit
-        val loggingInterceptor =
-            HttpLoggingInterceptorNew(TAG)
-        //log打印级别，决定了log显示的详细程度
-        loggingInterceptor.setPrintLevel(HttpLoggingInterceptorNew.Level.BODY)
-        //log颜色级别，决定了log在控制台显示的颜色
-        loggingInterceptor.setColorLevel(Level.INFO)
         val builder = OkHttpClient.Builder()
             .apply {
                 if (APP.isDebug.not()) { // 非测试环境
@@ -49,9 +39,7 @@ object Net {
                 override fun intercept(chain: Interceptor.Chain): Response {
                     var language = Locale.getDefault().language
                     var newRequestBuilder = chain.request().newBuilder()
-                    newRequestBuilder
-//                        .header("X-Phate", BuildConfig.APPLICATION_ID)
-                        .header("X-Phate", "com.fast.safe.browser")
+                    newRequestBuilder.header("X-Phate", BuildConfig.APPLICATION_ID)
                         .header("X-Dtroub-Icup", CacheManager.getID())
                         .header("X-Cwar", getCurrentCountryCode())
                     return chain.proceed(newRequestBuilder.build())
@@ -81,11 +69,8 @@ object Net {
                     return response.newBuilder().body(byteArr.toResponseBody(contentType)).build()
                 }
             })
-        if (APP.isDebug) {
-            builder.addInterceptor(loggingInterceptor)
-        }
         var build = builder.build()
-        build.dispatcher.maxRequestsPerHost = 10
+//        build.dispatcher.maxRequestsPerHost = 10
         return build
     }
 

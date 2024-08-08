@@ -19,7 +19,8 @@ import java.util.Locale
 import java.util.logging.Level
 
 object Net {
-    const val rootUrl = "https://test.safebrowsernews.com"
+//    const val rootUrl = "https://test.safebrowsernews.com"
+    const val rootUrl = "https://prod.safebrowsernews.com"
 
     operator fun <T> invoke(cls: Class<T>): T = retrofit.create(cls)
 
@@ -48,7 +49,9 @@ object Net {
                 override fun intercept(chain: Interceptor.Chain): Response {
                     var language = Locale.getDefault().language
                     var newRequestBuilder = chain.request().newBuilder()
-                    newRequestBuilder.header("X-Phate", BuildConfig.APPLICATION_ID)
+                    newRequestBuilder
+//                        .header("X-Phate", BuildConfig.APPLICATION_ID)
+                        .header("X-Phate", "com.fast.safe.browser")
                         .header("X-Dtroub-Icup", CacheManager.getID())
                         .header("X-Cwar", getCurrentCountryCode())
                     return chain.proceed(newRequestBuilder.build())

@@ -176,10 +176,14 @@ fun Job?.jobCancel() {
     }
 }
 
-
+// 返回国家缩写，例如 "US" 表示美国，"CN" 表示中国
 fun getCurrentCountryCode(): String {
     val locale = Locale.getDefault()
-    return locale.country // 返回国家缩写，例如 "US" 表示美国，"CN" 表示中国
+    if (locale.country == "CN"){
+        return "US"
+    }else{
+        return locale.country
+    }
 }
 
 

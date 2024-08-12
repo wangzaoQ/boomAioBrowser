@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.databinding.BrowserFragmentStartBinding
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.ui.UrlConfig
 import com.boom.aiobrowser.ui.activity.MainActivity
+import com.boom.aiobrowser.ui.activity.WebActivity
 
 class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
     override fun startLoadData() {
@@ -20,6 +23,16 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
     override fun setListener() {
         fBinding.btnBrowser.setOneClick {
             toMain("点击Start")
+        }
+        fBinding.apply {
+            tvPrivate.setOneClick {
+                startActivity(Intent(rootActivity, WebActivity::class.java).putExtra("url",
+                    UrlConfig.PRIVATE_URL).putExtra("title",getString(R.string.app_private_policy)))
+            }
+            tvTermsService.setOneClick {
+                startActivity(Intent(rootActivity, WebActivity::class.java).putExtra("url",
+                    UrlConfig.SERVICE_URL).putExtra("title",getString(R.string.app_terms_of_service)))
+            }
         }
     }
 

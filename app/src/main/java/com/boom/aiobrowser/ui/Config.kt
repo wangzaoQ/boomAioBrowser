@@ -17,3 +17,8 @@ object JumpConfig{
 object ParamsConfig{
     const val JSON_PARAMS="JSON_PARAMS"
 }
+
+object UrlConfig{
+    const val PRIVATE_URL = "https://sites.google.com/view/aiobrowser-privacy-policy/home"
+    const val SERVICE_URL = "https://sites.google.com/view/aio-browser-service/home"
+}

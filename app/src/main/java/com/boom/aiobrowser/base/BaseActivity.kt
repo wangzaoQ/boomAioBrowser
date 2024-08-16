@@ -180,14 +180,13 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
         }
     }
 
-    fun addLaunch(success: suspend CoroutineScope.() -> Unit, failBack: suspend CoroutineScope.() -> Unit?, dispatcher: CoroutineDispatcher?=Dispatchers.IO) :Job{
+    fun addLaunch(success: suspend CoroutineScope.() -> Unit, failBack: suspend CoroutineScope.(errorContent: String) -> Unit?, dispatcher: CoroutineDispatcher?=Dispatchers.IO) :Job{
         return newsScope.launch(dispatcher?:Dispatchers.IO) {
             runCatching {
                 success()
             }.onFailure {
-                AppLogs.eLog(acTAG,it.stackTraceToString())
                 withContext(Dispatchers.Main){
-                    failBack()
+                    failBack(it.stackTraceToString())
                 }
             }
         }

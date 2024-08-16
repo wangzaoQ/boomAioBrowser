@@ -6,12 +6,15 @@
     app:startDestination="@id/fragmentMain"
     >
 
-    <fragment
-        android:id="@+id/fragmentTemp"
-        android:name="com.boom.aiobrowser.ui.fragment.TempFragment"
-        android:label="MainFragment"
-        tools:layout="@layout/browser_fragment_temp">
-    </fragment>
+<!--    <fragment-->
+<!--        android:id="@+id/fragmentTemp"-->
+<!--        android:name="com.boom.aiobrowser.ui.fragment.TempFragment"-->
+<!--        android:label="MainFragment"-->
+<!--        tools:layout="@layout/browser_fragment_temp">-->
+<!--        <action-->
+<!--            android:id="@+id/action_fragment_Temp"-->
+<!--            app:destination="@id/fragmentMain" />-->
+<!--    </fragment>-->
 
     <fragment
         android:id="@+id/fragmentWeb"

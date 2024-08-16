@@ -246,6 +246,21 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 //            }
 //        }, 500)
         loadNews()
+//        acBinding.root.postDelayed({
+//            var count = 0
+//            for ( i in 0 until APP.instance.lifecycleApp.stack.size){
+//                var activity = APP.instance.lifecycleApp.stack.get(i)
+//                if (activity is BaseActivity<*>){
+//                    count++
+//                }
+//            }
+//            AppLogs.dLog(APP.instance.TAG,"当前MainActivity count:${count}")
+//            if (count == 1){
+//                APP.jumpLiveData.postValue(JumpData().apply {
+//                    jumpType = JumpConfig.JUMP_MAIN
+//                })
+//            }
+//        },500)
     }
 
     fun hideStart() {

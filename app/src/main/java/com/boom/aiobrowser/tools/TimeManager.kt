@@ -3,6 +3,7 @@ package com.boom.aiobrowser.tools
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 
 object TimeManager {
 
@@ -21,6 +22,11 @@ object TimeManager {
         "Nov",
         "Dec",
     )
+
+    fun getADTime():String {
+        val tmpDate = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date(System.currentTimeMillis())).toString()
+        return "$tmpDate"
+    }
 
     fun getTimeHD(time:Long): String {
         return SimpleDateFormat("HH:mm").format(Date(time))

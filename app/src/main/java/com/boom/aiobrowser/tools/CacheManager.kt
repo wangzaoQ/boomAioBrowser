@@ -36,6 +36,11 @@ object CacheManager {
     const val KV_NEWS_SAVE_TIME = "KV_NEWS_SAVE_TIME"
     const val KV_HISTORY_DATA = "KV_HISTORY_DATA"
     const val KV_URL_LIST = "KV_URL_LIST"
+    const val KV_SAVE_DAY = "KV_SAVE_DAY"
+    const val KV_CLICK_EVERY_DAY = "KV_CLICK_EVERY_DAY"
+    const val KV_SHOW_EVERY_DAY = "KV_SHOW_EVERY_DAY"
+    const val KV_LAST_LAUNCH_TIME = "KV_LAST_LAUNCH_TIME"
+//    const val KV_FIRST_OPEN_APP = "KV_FIRST_OPEN_APP"
 
     // 是否首次打开start
     var isFirstStart: Boolean
@@ -88,6 +93,38 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_ENGINE_TYPE, value)
+        }
+
+    // 不一样就清除部分数据
+    var saveDay: String
+        get() {
+            return mmkv.decodeString(KV_SAVE_DAY)?:""
+        }
+        set(value) {
+            mmkv.encode(KV_SAVE_DAY, value)
+        }
+
+    var clickEveryDay: Int
+        get() {
+            return mmkv.decodeInt(KV_CLICK_EVERY_DAY)
+        }
+        set(value) {
+            mmkv.encode(KV_CLICK_EVERY_DAY, value)
+        }
+    var showEveryDay: Int
+        get() {
+            return mmkv.decodeInt(KV_SHOW_EVERY_DAY)
+        }
+        set(value) {
+            mmkv.encode(KV_SHOW_EVERY_DAY, value)
+        }
+
+    var launchLastTime: Long
+        get() {
+            return mmkv.decodeLong(KV_LAST_LAUNCH_TIME)
+        }
+        set(value) {
+            mmkv.encode(KV_LAST_LAUNCH_TIME, value)
         }
 
 //
@@ -183,6 +220,14 @@ object CacheManager {
         set(value) {
             mmkv.encode(KV_HISTORY_DATA, toJson(value))
         }
+//
+//    var firstOpenApp:Boolean
+//        get(){
+//            return mmkv.decodeBool(KV_FIRST_OPEN_APP, true)
+//        }
+//        set(value) {
+//            mmkv.encode(KV_FIRST_OPEN_APP,value)
+//        }
 
     fun getID():String{
         var phoneId = mmkv.decodeString(KV_PHONE_ID,"")?:""

@@ -4,8 +4,11 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.data.ADResultData
 import com.boom.aiobrowser.data.AioADData
 import com.boom.aiobrowser.data.AioRequestData
+import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.CacheManager.launchLastTime
+import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.appDataReset
 import com.google.android.gms.ads.MobileAds
 
@@ -125,6 +128,37 @@ object AioADDataManager {
     }
 
 
+
+    fun adAllowShowOpen():Boolean{
+        appDataReset()
+        var allow=true
+        var content=""
+        var launchMiddle = (System.currentTimeMillis()-launchLastTime)/1000
+        if (launchMiddle<FirebaseConfig.AD_CD_ALL){
+            allow = false
+            content = "间隔时间没到 ${(FirebaseConfig.AD_CD_ALL-launchMiddle)} seconds"
+        }
+        if (adFilter1()){
+            allow = false
+            content = "adShowMax"
+        }
+        if (allow.not()){
+            AppLogs.dLog(TAG,"开屏检测未通过:${content}")
+        }
+        return allow
+    }
+
+    fun setADDismissTime() {
+        if (APP.instance.lifecycleApp.isBackstage){
+            AppLogs.dLog(AioADDataManager.TAG,"app 在后台 广告销毁不计时")
+            return
+        }
+        if (APP.instance.lifecycleApp.adScreenType == 0){
+            CacheManager.launchLastTime = System.currentTimeMillis()
+            AppLogs.dLog(AioADDataManager.TAG,"setLaunchLastTime:${TimeManager.getADTime()}")
+        }
+        APP.instance.lifecycleApp.adScreenType = -1
+    }
 
     fun addShowNumber(tag:String) {
         CacheManager.showEveryDay = (CacheManager.showEveryDay+1)

@@ -39,6 +39,7 @@ object CacheManager {
     const val KV_SAVE_DAY = "KV_SAVE_DAY"
     const val KV_CLICK_EVERY_DAY = "KV_CLICK_EVERY_DAY"
     const val KV_SHOW_EVERY_DAY = "KV_SHOW_EVERY_DAY"
+    const val KV_LAST_LAUNCH_TIME = "KV_LAST_LAUNCH_TIME"
 //    const val KV_FIRST_OPEN_APP = "KV_FIRST_OPEN_APP"
 
     // 是否首次打开start
@@ -116,6 +117,14 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_SHOW_EVERY_DAY, value)
+        }
+
+    var launchLastTime: Long
+        get() {
+            return mmkv.decodeLong(KV_LAST_LAUNCH_TIME)
+        }
+        set(value) {
+            mmkv.encode(KV_LAST_LAUNCH_TIME, value)
         }
 
 //

@@ -63,6 +63,10 @@ object FirebaseManager {
     private fun initFirebaseConfig(tag: String) {
         AppLogs.dLog(APP.instance.TAG,"tag:${tag}")
         getADConfig()
+        runCatching {
+            FirebaseConfig.AD_CD_ALL = firebaseRemoteConfig?.getString("aobws_cd")?.toInt()?:if (APP.isDebug)10 else 60
+        }
+
     }
 
     fun getADConfig() {

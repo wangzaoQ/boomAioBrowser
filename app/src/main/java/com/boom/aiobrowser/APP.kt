@@ -13,12 +13,13 @@ import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.LinkedList
 
 class APP: Application() {
     var lifecycleApp = BrowserLifeCycle()
 
     var TAG = "AIO_APP"
+    // 如果为false 证明当前有正在进行的 启动页 这时不再额外启动
+    var allowShowStart = true
 
     companion object{
         lateinit var instance:APP

@@ -1,9 +1,13 @@
 package com.boom.aiobrowser.ad
 
+import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.ad.AioADDataManager.addADClick
+import com.boom.aiobrowser.ad.AioADDataManager.setADDismissTime
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.ADResultData
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.TimeManager
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.appopen.AppOpenAd
@@ -96,12 +100,16 @@ class AioADShowManager(
         if (adEnum == ADEnum.LAUNCH) {
             loadComplete(type = AioADDataManager.AD_SHOW_TYPE_SUCCESS, tag)
         }
+        setADDismissTime()
     }
 
     private fun adShowFullScreen(adResultData: ADResultData, adEnum: ADEnum, tag: String) {
         AppLogs.dLog(AioADDataManager.TAG, "tag:${tag} 位置:${adEnum.adName}")
         AioADDataManager.addShowNumber(tag)
         AioADDataManager.preloadAD(adEnum)
+        if (adEnum == ADEnum.LAUNCH){
+            APP.instance.lifecycleApp.adScreenType = 0
+        }
     }
 
     private fun loadComplete(type: String, tag: String) {

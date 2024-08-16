@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
+import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADDataManager
@@ -60,6 +61,8 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
     }
 
     private fun adLoadComplete(loadStatus:String) {
+        AppLogs.dLog(fragmentTAG,"adLoadComplete 广告展示状态:${loadStatus}")
+        APP.instance.allowShowStart = true
         cancelPb()
         if (isAdded.not())return
         if (rootActivity is MainActivity){
@@ -127,6 +130,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
 
     fun updateUI(intent: Intent){
         dataIntent = intent
+        APP.instance.allowShowStart = false
     }
 
     override fun getBinding(

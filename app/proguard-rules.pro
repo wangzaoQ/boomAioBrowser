@@ -34,11 +34,11 @@
 
 #
 ## 指定外部模糊字典 proguard-chinese.txt 改为混淆文件名，下同
-#-obfuscationdictionary proguard-nownews.txt
+-obfuscationdictionary proguard-aiobrowser.txt
 ## 指定class模糊字典
-#-classobfuscationdictionary proguard-nownews.txt
+-classobfuscationdictionary proguard-aiobrowser.txt
 ## 指定package模糊字典
-#-packageobfuscationdictionary proguard-nownews.txt
+-packageobfuscationdictionary proguard-aiobrowser.txt
 
 
 # 混淆时不实用大小写混合，混合后的类名为小写

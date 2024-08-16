@@ -51,7 +51,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         fBinding.llLoadingRoot.visibility = View.VISIBLE
         fBinding.rlStart.visibility = View.GONE
         startPb(0, 100, 10000, update = {
-            if (AioADDataManager.getLaunchData() == null) {
+            if (AioADDataManager.getLaunchData() == null && AioADDataManager.adAllowShowOpen() ) {
                 fBinding.progress.progress = it
             } else {
                 showEnd()

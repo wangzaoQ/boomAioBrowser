@@ -3,7 +3,9 @@ package com.boom.aiobrowser
 import android.app.Application
 import android.os.Build
 import android.webkit.WebView
+import com.boom.aiobrowser.ad.AioADDataManager.initAD
 import com.boom.aiobrowser.data.JumpData
+import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.event.ProtectedUnPeekLiveData
 import com.boom.aiobrowser.tools.isOtherPkg
@@ -16,7 +18,7 @@ import java.util.LinkedList
 class APP: Application() {
     var lifecycleApp = BrowserLifeCycle()
 
-    var TAG = "APP"
+    var TAG = "AIO_APP"
 
     companion object{
         lateinit var instance:APP
@@ -57,6 +59,8 @@ class APP: Application() {
             //1. mmkv
             runCatching {
                 MMKV.initialize(this@APP)
+                initFirebase()
+                initAD()
             }
         }
     }

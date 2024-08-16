@@ -4,11 +4,14 @@ import android.app.ActivityManager
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.boom.aiobrowser.APP
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import kotlinx.coroutines.Job
+import java.text.SimpleDateFormat
 import java.util.Base64
+import java.util.Date
 import java.util.LinkedList
 import java.util.Locale
 import javax.crypto.Cipher
@@ -197,6 +200,16 @@ fun isOtherPkg(context: Context): Boolean {
     return false
 }
 
+
+fun appDataReset(){
+    var todayDate = CacheManager.saveDay
+    val tmpDate = SimpleDateFormat("yyyyMMdd").format(Date(System.currentTimeMillis())).toString()
+    if (todayDate != tmpDate) {
+        AppLogs.dLog(APP.instance.TAG,"每日数据重置")
+        CacheManager.clickEveryDay = 0
+        CacheManager.showEveryDay = 0
+    }
+}
 
 
 

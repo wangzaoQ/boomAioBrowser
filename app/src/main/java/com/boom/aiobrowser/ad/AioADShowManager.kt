@@ -106,7 +106,7 @@ class AioADShowManager(
     private fun adShowFullScreen(adResultData: ADResultData, adEnum: ADEnum, tag: String) {
         AppLogs.dLog(AioADDataManager.TAG, "tag:${tag} 位置:${adEnum.adName}")
         AioADDataManager.addShowNumber(tag)
-        AioADDataManager.preloadAD(adEnum)
+        AioADDataManager.preloadAD(adEnum,"广告展示时")
         if (adEnum == ADEnum.LAUNCH){
             APP.instance.lifecycleApp.adScreenType = 0
         }

@@ -96,6 +96,7 @@ object AioADDataManager {
     fun preloadAD(enum: ADEnum, tag: String = "") {
         AppLogs.dLog(TAG, "预加载位置:${tag} 加载类型:${enum.adName}")
         if (adFilter1()) return
+        if (getCacheAD(enum) !=null)return
         loadAD(enum)
     }
 
@@ -108,8 +109,9 @@ object AioADDataManager {
     private fun load(adEnum: ADEnum, list: MutableList<AioRequestData>) {
         val data = list.removeFirstOrNull()
         if (data != null) {
+            AppLogs.dLog(TAG, "开始加载 ${adEnum}:-id:${data?.ktygzdzn}-sort:${data?.npxotusg}")
             adEnum.adLoadStatus = LOAD_STATUS_LOADING
-            AppLogs.dLog(TAG, "${adEnum}:-id:${data.ktygzdzn}-sort:${data.npxotusg}")
+            AppLogs.dLog(TAG, "加载成功 ${adEnum}:-id:${data.ktygzdzn}-sort:${data.npxotusg}")
             AioADLoader(data, successCallBack = {
                 AppLogs.dLog(
                     TAG,
@@ -136,7 +138,7 @@ object AioADDataManager {
         var launchMiddle = (System.currentTimeMillis()-launchLastTime)/1000
         if (launchMiddle<FirebaseConfig.AD_CD_ALL){
             allow = false
-            content = "间隔时间没到 ${(FirebaseConfig.AD_CD_ALL-launchMiddle)} seconds"
+            content = "间隔时间还差 ${(FirebaseConfig.AD_CD_ALL-launchMiddle)} seconds"
         }
         if (adFilter1()){
             allow = false

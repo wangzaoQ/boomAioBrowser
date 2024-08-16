@@ -15,8 +15,8 @@ android {
         applicationId "com.fast.safe.browser"
         minSdk 24
         targetSdk 34
-        versionCode 1
-        versionName "1.0.0"
+        versionCode 3
+        versionName "1.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -190,7 +190,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation("com.google.firebase:firebase-config-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
-//    implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
 //    implementation 'com.google.firebase:firebase-messaging-ktx:23.3.1'
 //    implementation 'com.google.firebase:firebase-messaging-directboot:20.2.0'
 //    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'

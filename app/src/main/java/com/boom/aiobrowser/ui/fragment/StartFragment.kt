@@ -12,9 +12,11 @@ import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseFragment
+import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.BrowserFragmentStartBinding
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.UrlConfig
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.WebActivity
@@ -65,9 +67,22 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         APP.instance.allowShowStart = true
         cancelPb()
         if (isAdded.not())return
-        if (rootActivity is MainActivity){
-            (rootActivity as MainActivity).hideStart()
-            CacheManager.isFirstStart = false
+        var count = 0
+        for ( i in 0 until APP.instance.lifecycleApp.stack.size){
+            var activity = APP.instance.lifecycleApp.stack.get(i)
+            if (activity is MainActivity){
+                count++
+            }
+        }
+        if (count>1){
+            AppLogs.dLog(APP.instance.TAG,"启动页 关闭")
+            (rootActivity as MainActivity).finish()
+        }else{
+            (rootActivity as MainActivity).apply {
+                (rootActivity as MainActivity).hideStart()
+                CacheManager.isFirstStart = false
+                AppLogs.dLog(APP.instance.TAG,"启动页 隐藏")
+            }
         }
     }
 

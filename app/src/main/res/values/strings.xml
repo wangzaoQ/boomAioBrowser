@@ -41,4 +41,7 @@
     <string name="app_select_default_browser">Set As Default Browser</string>
     <string name="app_set_search_engine">Set Search Engine</string>
     <string name="app_clear_data_content">Clear All Tabs And Data ?</string>
+
+    <string name="app_clean">Clean</string>
+    <string name="app_scanning">Scanning....</string>
 </resources>

@@ -4,6 +4,7 @@ import android.R.attr.duration
 import android.animation.LayoutTransition
 import android.animation.ObjectAnimator
 import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,7 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.SearchConfig
+import com.boom.aiobrowser.ui.activity.CleanScanActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.EngineGuidePop
@@ -116,8 +118,11 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 jumpType = JumpConfig.JUMP_SEARCH
             })
         }
-        fBinding.ivSearchEngine.setOnClickListener {
+        fBinding.ivSearchEngine.setOneClick {
             SearchPop.showPop(WeakReference(rootActivity),fBinding.ivSearchEngine)
+        }
+        fBinding.rlClean.setOneClick {
+            rootActivity.startActivity(Intent(rootActivity,CleanScanActivity::class.java))
         }
         viewModel.value.newsLiveData.observe(rootActivity){
             if (page == 1){

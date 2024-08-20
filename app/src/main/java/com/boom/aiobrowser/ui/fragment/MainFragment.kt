@@ -69,6 +69,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         fBinding.mainAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
                 absVerticalOffset = Math.abs(verticalOffset) //AppBarLayout竖直方向偏移距离px
+                if (absVerticalOffset == 0)return
                 val totalScrollRange = appBarLayout!!.totalScrollRange //AppBarLayout总的距离px
                 var offset = BigDecimalUtils.mul(BigDecimalUtils.div(255.toDouble(), totalScrollRange.toDouble(),1),absVerticalOffset.toDouble()).toInt()
 //                var offset = absVerticalOffset / 2

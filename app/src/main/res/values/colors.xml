@@ -14,4 +14,5 @@
     <color name="gray">#80000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="tran">#00000000</color>
+    <color name="bg_scan_complete">#FFD24836</color>
 </resources>

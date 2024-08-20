@@ -48,4 +48,6 @@
     <string name="app_clean_apk">Obsolete APK Files</string>
     <string name="app_clean_ad">AD Files</string>
     <string name="app_clean_residual">Residual Files</string>
+    <string name="app_selected">Selected</string>
+    <string name="app_scan_complete">Select The Folder You Want To Clean</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.ScanData
 import com.boom.aiobrowser.databinding.CleanItemScanChildBinding
+import com.boom.aiobrowser.tools.formatSize
 import com.boom.aiobrowser.tools.rotateAnim
 
 class ScanItemView : LinearLayout {
@@ -25,10 +26,21 @@ class ScanItemView : LinearLayout {
             }else{
                 isAnimation = false
                 ivEnd.clearAnimation()
-                if (item.itemChecked){
+                if (item.itemChecked && item.childList.isNotEmpty()){
                     ivEnd.setImageResource(R.mipmap.ic_scan_item_checked)
                 }else{
                     ivEnd.setImageResource(R.mipmap.ic_scan_item_unchecked)
+                }
+                if (item.childList.isNullOrEmpty()){
+                    tvSize.text = ""
+                }else{
+                    var allLength = 0L
+                    item.childList.forEach {
+                        if (it.itemChecked){
+                            allLength+=it.fileSize
+                        }
+                    }
+                    tvSize.text = allLength.formatSize()
                 }
             }
         }

@@ -7,6 +7,7 @@ import com.boom.aiobrowser.ad.AioADDataManager.initAD
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.event.ProtectedUnPeekLiveData
 import com.boom.aiobrowser.tools.isOtherPkg
 import com.tencent.mmkv.MMKV
@@ -20,6 +21,7 @@ class APP: Application() {
     var TAG = "AIO_APP"
     // 如果为false 证明当前有正在进行的 启动页 这时不再额外启动
     var allowShowStart = true
+    var isGoOther = false
 
     companion object{
         lateinit var instance:APP
@@ -62,6 +64,7 @@ class APP: Application() {
                 MMKV.initialize(this@APP)
                 initFirebase()
                 initAD()
+                CleanConfig.initCleanConfig()
             }
         }
     }

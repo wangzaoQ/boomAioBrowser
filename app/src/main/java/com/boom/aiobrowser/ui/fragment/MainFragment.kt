@@ -1,28 +1,22 @@
 package com.boom.aiobrowser.ui.fragment
 
-import android.R.attr.duration
-import android.animation.LayoutTransition
-import android.animation.ObjectAnimator
-import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
-import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.BrowserFragmentMainBinding
 import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.tools.StoragePermissionManager
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.SearchConfig
 import com.boom.aiobrowser.ui.activity.CleanScanActivity
@@ -42,6 +36,18 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 
     private val viewModel by lazy {
         rootActivity.viewModels<NewsViewModel>()
+    }
+
+    val permissionManager by lazy {
+        StoragePermissionManager(WeakReference(rootActivity), onGranted = {
+            rootActivity.startActivity(Intent(rootActivity,CleanScanActivity::class.java))
+        }, onDenied = {
+            toSetting()
+        })
+    }
+
+    private fun toSetting() {
+        permissionManager.toOtherSetting()
     }
 
     override fun startLoadData() {
@@ -122,7 +128,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             SearchPop.showPop(WeakReference(rootActivity),fBinding.ivSearchEngine)
         }
         fBinding.rlClean.setOneClick {
-            rootActivity.startActivity(Intent(rootActivity,CleanScanActivity::class.java))
+            permissionManager.requestStoragePermission()
         }
         viewModel.value.newsLiveData.observe(rootActivity){
             if (page == 1){

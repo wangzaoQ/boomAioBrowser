@@ -1,4 +1,7 @@
 package com.boom.aiobrowser.ui
+
+import android.os.Build
+
 object SearchConfig{
     const val SEARCH_ENGINE_GOOGLE = 0
     const val SEARCH_ENGINE_BING = 1
@@ -22,4 +25,17 @@ object ParamsConfig{
 object UrlConfig{
     const val PRIVATE_URL = "https://sites.google.com/view/aiobrowser-privacy-policy/home"
     const val SERVICE_URL = "https://sites.google.com/view/aio-browser-service/home"
+}
+
+
+fun isAndroid12(): Boolean {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+}
+
+fun isAndroid11(): Boolean {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+}
+
+fun isAndroid8(): Boolean {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 }

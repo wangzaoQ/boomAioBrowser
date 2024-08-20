@@ -30,30 +30,38 @@
                     app:layout_collapseMode="pin"
                     android:layout_marginTop="80dp"
                     >
+                    <FrameLayout
+                        android:id="@+id/flProgress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
                     <com.boom.aiobrowser.ui.view.CircleProgressView
                         android:id="@+id/cpv"
                         android:layout_width="221dp"
-                        android:layout_centerInParent="true"
+                        android:layout_centerHorizontal="true"
                         app:cpvShowTick="false"
                         app:cpvProgressColor="#FF30F3FF"
                         app:cpvProgress="50"
                         app:cpvShowLabel="false"
                         app:cpvStrokeWidth="24dp"
+                        android:layout_gravity="center"
                         app:cpvNormalColor="#FF4947B6"
                         android:layout_height="wrap_content"/>
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:layout_centerHorizontal="true"
                         android:gravity="center_horizontal"
                         >
                         <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvSize"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             tools:text="70%"
                             android:textColor="@color/white"
-                            android:textSize="47sp"
+                            android:textSize="30sp"
                             android:textStyle="bold"
                             ></androidx.appcompat.widget.AppCompatTextView>
                         <androidx.appcompat.widget.AppCompatTextView
@@ -65,6 +73,23 @@
                             android:layout_marginTop="-5dp"
                             ></androidx.appcompat.widget.AppCompatTextView>
                     </androidx.appcompat.widget.LinearLayoutCompat>
+                    </FrameLayout>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvPath"
+                        android:layout_width="match_parent"
+                        android:layout_height="27dp"
+                        android:background="@drawable/shape_bg_clean_path"
+                        android:layout_marginHorizontal="27dp"
+                        android:layout_below="@+id/flProgress"
+                        android:layout_marginTop="22dp"
+                        tools:text="storage：desk/mastergo/mastergo/"
+                        android:gravity="center"
+                        android:paddingHorizontal="13dp"
+                        android:ellipsize="middle"
+                        android:singleLine="true"
+                        android:textSize="11sp"
+                        android:textColor="#B3FFFFFF"
+                        ></androidx.appcompat.widget.AppCompatTextView>
                 </RelativeLayout>
 
                 <androidx.appcompat.widget.Toolbar

@@ -32,4 +32,11 @@
         <attr name="cpvLabelPaddingBottom" format="dimension"/>
 
     </declare-styleable>
+
+<!--    <declare-styleable name="ScanItemStyle">-->
+<!--        <attr name="itemIcon" format="reference" />-->
+<!--        <attr name="itemTitle" format="string" />-->
+<!--        <attr name="itemTitleId" format="reference" />-->
+<!--    </declare-styleable>-->
+
 </resources>

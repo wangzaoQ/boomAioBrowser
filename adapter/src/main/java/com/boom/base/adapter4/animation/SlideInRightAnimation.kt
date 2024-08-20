@@ -10,7 +10,7 @@ import android.view.animation.DecelerateInterpolator
  * An animation to let items slide in from the right.(Using a DecelerateInterpolator with 1.8 factor.) Default duration is 400ms.
  */
 class SlideInRightAnimation @JvmOverloads constructor(
-    private val duration: Long = 400L,
+    private val duration: Long = 800L,
 ) : ItemAnimator {
     private val interpolator = DecelerateInterpolator(1.8f)
 

@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.FilesData
@@ -24,6 +23,48 @@ class ScanAdapter(var updateBack:()-> Unit) : BaseQuickAdapter<ScanData, ScanAda
         return VH(parent)
     }
 
+
+    override fun onBindViewHolder(holder: VH, position: Int, item: ScanData?, payloads: List<Any>) {
+        super.onBindViewHolder(holder, position, item, payloads)
+        if (payloads.isEmpty()){
+            this.onBindViewHolder(holder, position)
+        }else{
+            if (item == null)return
+            val payload = payloads[0].toString()
+            if (payload == "updateSelected"){
+                holder.viewBinding.apply {
+                    scanItem.updateScanData(item)
+                    updateRv(rvChild,item)
+                }
+            }else if (payload == "updateExpend"){
+                if (item.childList.isNullOrEmpty() || item.itemExpend.not()){
+                    holder.viewBinding.rvChild.visibility = View.GONE
+                }else{
+                    holder.viewBinding.rvChild.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    private fun updateRv(rvChild: RecyclerView, item: ScanData) {
+        var childAdapter = ScanChildAdapter()
+        rvChild.apply {
+            layoutManager = CustomLinearLayoutManager(context)
+            // 设置预加载，请调用以下方法
+            adapter = childAdapter
+            setNestedScrollingEnabled(false)
+            childAdapter.setOnDebouncedItemClick{adapter, view, position ->
+                var data: FilesData? = childAdapter.getItem(position)
+                if (data == null)return@setOnDebouncedItemClick
+                data.itemChecked = data.itemChecked.not()
+                childAdapter.notifyItemChanged(position,"updateSelected")
+                updateBack.invoke()
+            }
+            childAdapter.submitList(item.childList)
+        }
+        rvChild.setTag(R.id.rvChild,item.childList)
+    }
+
     override fun onBindViewHolder(holder: ScanAdapter.VH, position: Int, item: ScanData?) {
         if (item == null)return
         holder.viewBinding.apply {
@@ -33,23 +74,8 @@ class ScanAdapter(var updateBack:()-> Unit) : BaseQuickAdapter<ScanData, ScanAda
             }else{
                 rvChild.visibility = View.VISIBLE
                 var tag = rvChild.getTag(R.id.rvChild)as?MutableList<FilesData>
-                var childAdapter = ScanChildAdapter()
                 if (tag != item.childList){
-                    rvChild.apply {
-                        layoutManager = CustomLinearLayoutManager(context)
-                        // 设置预加载，请调用以下方法
-                        adapter = childAdapter
-                        setNestedScrollingEnabled(false)
-                        childAdapter.setOnDebouncedItemClick{adapter, view, position ->
-                            var data: FilesData? = childAdapter.getItem(position)
-                            if (data == null)return@setOnDebouncedItemClick
-                            data.itemChecked = data.itemChecked.not()
-                            childAdapter.notifyItemChanged(position)
-                            updateBack.invoke()
-                        }
-                        childAdapter.submitList(item.childList)
-                    }
-                    rvChild.setTag(R.id.rvChild,item.childList)
+                    updateRv(rvChild,item)
                 }
             }
         }

@@ -36,9 +36,34 @@ class ScanItemView : LinearLayout {
                 }else{
                     var allLength = 0L
                     item.childList.forEach {
-                        if (it.itemChecked){
-                            allLength+=it.fileSize
-                        }
+                        allLength+=it.fileSize
+                    }
+                    tvSize.text = allLength.formatSize()
+                }
+            }
+        }
+    }
+
+    fun updateScanData(item: ScanData) {
+        binding.apply {
+            if (item.isLoading){
+                isAnimation = true
+                ivEnd.setImageResource(item.imgId)
+                ivEnd.animation = 2000L.rotateAnim()
+            }else{
+                isAnimation = false
+                ivEnd.clearAnimation()
+                if (item.itemChecked && item.childList.isNotEmpty()){
+                    ivEnd.setImageResource(R.mipmap.ic_scan_item_checked)
+                }else{
+                    ivEnd.setImageResource(R.mipmap.ic_scan_item_unchecked)
+                }
+                if (item.childList.isNullOrEmpty()){
+                    tvSize.text = ""
+                }else{
+                    var allLength = 0L
+                    item.childList.forEach {
+                        allLength+=it.fileSize
                     }
                     tvSize.text = allLength.formatSize()
                 }

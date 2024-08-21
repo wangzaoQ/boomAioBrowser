@@ -52,7 +52,8 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
         acBinding.mainAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
                 absVerticalOffset = Math.abs(verticalOffset) //AppBarLayout竖直方向偏移距离px
-                val totalScrollRange = appBarLayout!!.totalScrollRange //AppBarLayout总的距离px
+//                val totalScrollRange = appBarLayout!!.totalScrollRange //AppBarLayout总的距离px
+                val totalScrollRange = dp2px(187f)
                 if (absVerticalOffset == 0)return
                 var offset = BigDecimalUtils.mul(BigDecimalUtils.div(255.toDouble(), totalScrollRange.toDouble(),1),absVerticalOffset.toDouble()).toInt()
 //                var offset = absVerticalOffset / 2
@@ -74,6 +75,9 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                 }
             }
         })
+        acBinding.ivBack.setOneClick {
+            finish()
+        }
     }
 
     val scanAdapter by lazy {
@@ -111,7 +115,7 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                         return@setOnDebouncedItemClick
                     }
                     data.itemExpend = data.itemExpend.not()
-                    scanAdapter.notifyItemChanged(position)
+                    scanAdapter.notifyItemChanged(position,"updateExpend")
                 }
                 scanAdapter.addOnDebouncedChildClick(R.id.ivEnd) { adapter, view, position ->
                     var data = scanAdapter.getItem(position)
@@ -122,7 +126,8 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                     data.childList.forEach {
                         it.itemChecked = data.itemChecked
                     }
-                    scanAdapter.notifyItemChanged(position)
+                    scanAdapter.notifyItemChanged(position,"updateSelected")
+                    updateSelectedSize()
                 }
             }
         }

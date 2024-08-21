@@ -24,6 +24,27 @@ class ScanChildAdapter : BaseQuickAdapter<FilesData, ScanChildAdapter.VH>() {
         return VH(parent)
     }
 
+
+    override fun onBindViewHolder(
+        holder: VH,
+        position: Int,
+        item: FilesData?,
+        payloads: List<Any>
+    ) {
+        super.onBindViewHolder(holder, position, item, payloads)
+        if (payloads.isEmpty()){
+            this.onBindViewHolder(holder, position)
+        }else{
+            if (item == null)return
+            val payload = payloads[0].toString()
+            if (payload == "updateSelected"){
+                holder.viewBinding.apply {
+                    ivEnd.setImageResource(if (item.itemChecked) R.mipmap.ic_scan_item_checked else R.mipmap.ic_scan_item_unchecked)
+                }
+            }
+        }
+    }
+
     override fun onBindViewHolder(holder: VH, position: Int, item: FilesData?) {
         if (item == null)return
         holder.viewBinding.apply {

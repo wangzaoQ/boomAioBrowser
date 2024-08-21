@@ -92,6 +92,9 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
             scanAdapter.items.forEach {
                 it.childList.forEach {
                     if(it.itemChecked){
+                        it.tempList?.forEach {
+                            allLength+=it.fileSize
+                        }
                         allLength+=it.fileSize
                     }
                 }

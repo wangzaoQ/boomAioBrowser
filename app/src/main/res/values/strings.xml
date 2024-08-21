@@ -43,6 +43,8 @@
     <string name="app_clear_data_content">Clear All Tabs And Data ?</string>
 
     <string name="app_clean">Clean</string>
+    <string name="app_log">Log</string>
+    <string name="app_temp">Temp</string>
     <string name="app_scanning">Scanning....</string>
     <string name="app_clean_junk_files">Junk Files</string>
     <string name="app_clean_apk">Obsolete APK Files</string>

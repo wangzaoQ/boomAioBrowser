@@ -17,7 +17,7 @@ class ScanItemView : LinearLayout {
 
     fun setScanData(item: ScanData) {
         binding.apply {
-            ivTag.setImageResource(item.imgId)
+            setImg(item)
             tvName.text = item.title
             if (item.isLoading){
                 isAnimation = true
@@ -36,12 +36,19 @@ class ScanItemView : LinearLayout {
                 }else{
                     var allLength = 0L
                     item.childList.forEach {
+                        it.tempList?.forEach {
+                            allLength+=it.fileSize
+                        }
                         allLength+=it.fileSize
                     }
                     tvSize.text = allLength.formatSize()
                 }
             }
         }
+    }
+
+    private fun setImg(item: ScanData) {
+        binding.ivTag.setImageResource(item.imgId)
     }
 
     fun updateScanData(item: ScanData) {
@@ -63,6 +70,9 @@ class ScanItemView : LinearLayout {
                 }else{
                     var allLength = 0L
                     item.childList.forEach {
+                        it.tempList?.forEach {
+                            allLength+=it.fileSize
+                        }
                         allLength+=it.fileSize
                     }
                     tvSize.text = allLength.formatSize()

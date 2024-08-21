@@ -34,7 +34,7 @@ class ScanAdapter(var updateBack:()-> Unit) : BaseQuickAdapter<ScanData, ScanAda
             if (payload == "updateSelected"){
                 holder.viewBinding.apply {
                     scanItem.updateScanData(item)
-                    updateRv(rvChild,item)
+                    updateRv(rvChild,item,position)
                 }
             }else if (payload == "updateExpend"){
                 if (item.childList.isNullOrEmpty() || item.itemExpend.not()){
@@ -42,12 +42,18 @@ class ScanAdapter(var updateBack:()-> Unit) : BaseQuickAdapter<ScanData, ScanAda
                 }else{
                     holder.viewBinding.rvChild.visibility = View.VISIBLE
                 }
+            }else if (payload == "updateCheck"){
+                if (item.itemChecked){
+                    holder.viewBinding.scanItem.binding.ivEnd.setImageResource(R.mipmap.ic_scan_item_checked)
+                }else{
+                    holder.viewBinding.scanItem.binding.ivEnd.setImageResource(R.mipmap.ic_scan_item_unchecked)
+                }
             }
         }
     }
 
-    private fun updateRv(rvChild: RecyclerView, item: ScanData) {
-        var childAdapter = ScanChildAdapter()
+    private fun updateRv(rvChild: RecyclerView, item: ScanData, parentPosition: Int) {
+        var childAdapter = ScanChildAdapter(item.type)
         rvChild.apply {
             layoutManager = CustomLinearLayoutManager(context)
             // 设置预加载，请调用以下方法
@@ -57,6 +63,18 @@ class ScanAdapter(var updateBack:()-> Unit) : BaseQuickAdapter<ScanData, ScanAda
                 var data: FilesData? = childAdapter.getItem(position)
                 if (data == null)return@setOnDebouncedItemClick
                 data.itemChecked = data.itemChecked.not()
+                var allCheck = true
+                for (i in 0 until item.childList.size){
+                    var data = item.childList.get(i)
+                    if (data.itemChecked.not()){
+                        allCheck = false
+                        break
+                    }
+                }
+                if (item.itemChecked != allCheck){
+                    item.itemChecked = allCheck
+                    notifyItemChanged(parentPosition,"updateCheck")
+                }
                 childAdapter.notifyItemChanged(position,"updateSelected")
                 updateBack.invoke()
             }
@@ -75,7 +93,7 @@ class ScanAdapter(var updateBack:()-> Unit) : BaseQuickAdapter<ScanData, ScanAda
                 rvChild.visibility = View.VISIBLE
                 var tag = rvChild.getTag(R.id.rvChild)as?MutableList<FilesData>
                 if (tag != item.childList){
-                    updateRv(rvChild,item)
+                    updateRv(rvChild, item, position)
                 }
             }
         }

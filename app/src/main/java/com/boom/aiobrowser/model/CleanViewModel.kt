@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.boom.aiobrowser.data.FilesData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.clean.CleanConfig.adFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.downloadApks
 import com.boom.aiobrowser.tools.clean.CleanConfig.filters
@@ -11,8 +12,10 @@ import com.boom.aiobrowser.tools.clean.CleanConfig.junkFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.residualFiles
 import com.boom.aiobrowser.tools.clean.FileFilter.isADFile
 import com.boom.aiobrowser.tools.clean.FileFilter.isDownloadApks
-import com.boom.aiobrowser.tools.clean.FileFilter.isJunkFile
+import com.boom.aiobrowser.tools.clean.FileFilter.isLogCatFile
+import com.boom.aiobrowser.tools.clean.FileFilter.isLogFile
 import com.boom.aiobrowser.tools.clean.FileFilter.isResidual
+import com.boom.aiobrowser.tools.clean.FileFilter.isTmpFile
 import com.boom.aiobrowser.tools.clean.Scan1
 import com.boom.aiobrowser.tools.formatSize
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -29,6 +32,7 @@ class CleanViewModel : BaseDataModel() {
      * 扫描内存
      */
     fun startScan(parentDir: File, onScanPath: (file: File) -> Unit = {}, onComplete: () -> Unit = {}) {
+        CleanConfig.clearAll()
         loadData(loadBack={
             Scan1(parentDir, onProgress = {
                 detailMemoryFile(it,onScanPath)
@@ -52,10 +56,10 @@ class CleanViewModel : BaseDataModel() {
                 AppLogs.dLog(TAG,"file 为文件夹 cache:${"cache" == fileName.lowercase()}")
             }
 
-            val filtersIterator = filters.iterator()
-            while (filtersIterator.hasNext()){
-                val filterItem = filtersIterator.next()
-                if (filePath.lowercase().matches(filterItem.toRegex())){
+//            val filtersIterator = filters.iterator()
+//            while (filtersIterator.hasNext()){
+//                val filterItem = filtersIterator.next()
+//                if (filePath.lowercase().matches(filterItem.toRegex())){
                     if (isResidual(file)) {
                         kotlinx.coroutines.internal.synchronized(residualFiles) {
                             residualFiles.add(FilesData().apply {
@@ -74,9 +78,18 @@ class CleanViewModel : BaseDataModel() {
                             })
                         }
                         return true
-                    }else if (isJunkFile(file)){
+                    }else if (isLogFile(file) || isLogCatFile(file)){
                         kotlinx.coroutines.internal.synchronized(junkFiles) {
-                            junkFiles.add(FilesData().apply {
+                            junkFiles.get(0).tempList?.add(FilesData().apply {
+                                this.fileName = fileName
+                                this.filePath = filePath
+                                this.fileSize = fileSize
+                            })
+                        }
+                        return true
+                    }else if (isTmpFile(file)){
+                        kotlinx.coroutines.internal.synchronized(junkFiles) {
+                            junkFiles.get(1).tempList?.add(FilesData().apply {
                                 this.fileName = fileName
                                 this.filePath = filePath
                                 this.fileSize = fileSize
@@ -91,9 +104,10 @@ class CleanViewModel : BaseDataModel() {
                                 this.fileSize = fileSize
                             })
                         }
+                        return true
                     }
-                }
-            }
+//                }
+//            }
 
         } catch (e: Exception) {
             return false
@@ -103,8 +117,8 @@ class CleanViewModel : BaseDataModel() {
 
     private fun detailMemoryFile(file: File?,onScanPath: (file: File) -> Unit = {}) {
         if (null == file) return
+        currentPathLiveData.postValue(file.absolutePath)
         if (filter(file)){
-            currentPathLiveData.postValue(file.absolutePath)
             allFiles.add(file)
             allFilesLength+=file.length()
             currentSizeLiveData.postValue(allFilesLength.formatSize())

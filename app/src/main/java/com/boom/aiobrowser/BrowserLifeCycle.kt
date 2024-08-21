@@ -86,7 +86,7 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
     override fun onActivityStopped(activity: Activity) {
         count--
         AppLogs.dLog(APP.instance.TAG, "onActivityStopped() activity=" + activity + "count:"+count)
-        if (0 >= count) {
+        if (0 >= count && APP.instance.isGoOther.not()) {
             AioADDataManager.setADDismissTime()
             cancelJob?.cancel()
             cancelJob = CoroutineScope(Dispatchers.IO).launch{

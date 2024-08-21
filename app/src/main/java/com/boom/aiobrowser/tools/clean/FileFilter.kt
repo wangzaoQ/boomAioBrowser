@@ -2,6 +2,7 @@ package com.boom.aiobrowser.tools.clean
 
 import com.boom.aiobrowser.tools.clean.CleanConfig.appInstalledPkgList
 import java.io.File
+import java.util.Locale
 
 object FileFilter {
 
@@ -18,9 +19,6 @@ object FileFilter {
         return file.isFile && file.absolutePath.endsWith(".apk", true)
     }
 
-    fun isJunkFile(file: File): Boolean {
-        return isLogFile(file) || isTmpFile(file)
-    }
 
     fun isADFile(file: File): Boolean {
         if (file.isFile && "ad" == file.parentFile?.name){
@@ -30,8 +28,15 @@ object FileFilter {
     }
 
     fun isLogFile(file: File): Boolean = file.absolutePath.endsWith(".log", true)
+    fun isTxtFile(file: File): Boolean = file.absolutePath.endsWith(".txt", true)
+    fun isLogCatFile(file: File): Boolean = file.absolutePath.endsWith(".logcat", true)
 
     fun isTmpFile(file: File): Boolean = file.absolutePath.endsWith(".tmp", true)
+    fun isTemporaryFile(file: File): Boolean {
+        val fileName = file.name.lowercase(Locale.getDefault())
+        return fileName.endsWith(".tmp") || fileName.endsWith(".temp") || fileName.endsWith(".swp") ||
+                fileName.endsWith("~") || fileName.endsWith(".bak")
+    }
 
 
     fun isInstalled(fileName: String): Boolean = appInstalledPkgList.contains(fileName)

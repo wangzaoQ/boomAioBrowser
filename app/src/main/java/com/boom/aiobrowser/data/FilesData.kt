@@ -8,4 +8,6 @@ class FilesData {
     var itemChecked = false
     var fileSize = 0L
     var imgId = R.mipmap.ic_file
+
+    var tempList:MutableList<FilesData>?=null
 }

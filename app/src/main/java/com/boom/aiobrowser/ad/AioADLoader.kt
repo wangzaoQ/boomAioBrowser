@@ -6,6 +6,10 @@ import com.boom.aiobrowser.data.AioRequestData
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.appopen.AppOpenAd
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AioADLoader(
     val requestBean: AioRequestData,
@@ -22,29 +26,31 @@ class AioADLoader(
     }
 
     private fun openAD() {
-        val build = AdRequest.Builder().build()
-        var startTime = System.currentTimeMillis()
-        AppOpenAd.load(APP.instance,
-            requestBean.ktygzdzn,
-            build,
-            object : AppOpenAd.AppOpenAdLoadCallback() {
-                override fun onAdLoaded(appOpenAd: AppOpenAd) {
-                    successCallBack(ADResultData().apply {
-                        adRequestData = requestBean
-                        adAny = appOpenAd
-                        adType = requestBean.pxdtzgho
-                        adRequestTime = (System.currentTimeMillis() - startTime) / 1000
-                    })
+        CoroutineScope(Dispatchers.IO).launch{
+            val build = AdRequest.Builder().build()
+            withContext(Dispatchers.Main){
+                var startTime = System.currentTimeMillis()
+                AppOpenAd.load(APP.instance,
+                    requestBean.ktygzdzn,
+                    build,
+                    object : AppOpenAd.AppOpenAdLoadCallback() {
+                        override fun onAdLoaded(appOpenAd: AppOpenAd) {
+                            successCallBack(ADResultData().apply {
+                                adRequestData = requestBean
+                                adAny = appOpenAd
+                                adType = requestBean.pxdtzgho
+                                adRequestTime = (System.currentTimeMillis() - startTime) / 1000
+                            })
 //                    appOpenAd.setOnPaidEventListener {
 //                        FirebaseAnalysis.go(it, appOpenAd, requestBean, adEnum)
 //                    }
-                }
+                        }
 
-                override fun onAdFailedToLoad(error: LoadAdError) {
-                    loadFailed(error.message, failedCallBack)
-                }
-            })
+                        override fun onAdFailedToLoad(error: LoadAdError) {
+                            loadFailed(error.message, failedCallBack)
+                        }
+                    })
+            }
+        }
     }
-
-
 }

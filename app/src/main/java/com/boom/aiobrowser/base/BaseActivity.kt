@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.viewbinding.ViewBinding
 import com.blankj.utilcode.util.KeyboardUtils
+import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.tools.AppLogs
 import com.fast.newsnow.view.statusbar.StatusBarHelper
@@ -45,6 +46,7 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        APP.instance.isGoOther = false
         status = true
         stayTime = System.currentTimeMillis()
     }

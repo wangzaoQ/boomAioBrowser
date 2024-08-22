@@ -21,7 +21,7 @@ class ScanItemView : LinearLayout {
             tvName.text = item.title
             if (item.isLoading){
                 isAnimation = true
-                ivEnd.setImageResource(item.imgId)
+                ivEnd.setImageResource(R.mipmap.ic_scan_progress2)
                 ivEnd.animation = 2000L.rotateAnim()
             }else{
                 isAnimation = false
@@ -55,7 +55,7 @@ class ScanItemView : LinearLayout {
         binding.apply {
             if (item.isLoading){
                 isAnimation = true
-                ivEnd.setImageResource(item.imgId)
+                ivEnd.setImageResource(R.mipmap.ic_scan_progress2)
                 ivEnd.animation = 2000L.rotateAnim()
             }else{
                 isAnimation = false

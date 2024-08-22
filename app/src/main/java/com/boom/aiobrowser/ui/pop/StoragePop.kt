@@ -21,7 +21,16 @@ class StoragePop(context: Context) : BasePopupWindow(context) {
         defaultBinding = BrowserPopStorageBinding.bind(contentView)
     }
 
-    fun createPop(activity: BaseActivity<*>){
-
+    fun createPop(callBack: (type:Int) -> Unit){
+        defaultBinding?.apply {
+            tvCancel.setOnClickListener {
+                dismiss()
+            }
+            tvConfirm.setOnClickListener {
+                callBack.invoke(0)
+                dismiss()
+            }
+        }
+        showPopupWindow()
     }
 }

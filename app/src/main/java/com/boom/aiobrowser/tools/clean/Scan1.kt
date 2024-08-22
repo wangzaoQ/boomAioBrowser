@@ -41,13 +41,15 @@ class Scan1(var parentDirectory: File,var onProgress: (file:File) -> Unit,var on
         val files = mutableListOf<File>()
         dir.listFiles()?.forEach { file ->
             if (file.isDirectory) {
-                deferredResults.add(async {
-                    scanDirectory(file)
-                })
+//                deferredResults.add(async {
+//                    scanDirectory(file)
+//                })
+                scanDirectory(file)
             } else {
                 AppLogs.dLog(TAG,"扫描出的文件:${file.absolutePath}")
-                Logger.writeLog(APP.instance,"扫描出的文件:${file.absolutePath}")
+//                Logger.writeLog(APP.instance,"扫描出的文件:${file.absolutePath}")
                 files.add(file)
+                delay(1)
                 onProgress.invoke(file)
             }
         }

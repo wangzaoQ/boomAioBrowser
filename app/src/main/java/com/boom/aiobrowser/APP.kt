@@ -7,6 +7,7 @@ import com.boom.aiobrowser.ad.AioADDataManager.initAD
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.CleanDataManager.z
 import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.event.ProtectedUnPeekLiveData
 import com.boom.aiobrowser.tools.isOtherPkg
@@ -42,6 +43,11 @@ class APP: Application() {
         if (isOtherPkg(this)) return
         registerActivityLifecycleCallbacks(lifecycleApp)
         initOtherSdk()
+//        AppLogs.dLog(TAG,"test:${z("l2DWQm4YwLbZFALHwaIojw==")}")
+//        AppLogs.dLog(TAG,"test:${z("DNfI+dH+oZBelg9WhrUsmQ==")}")
+//        AppLogs.dLog(TAG,"test:${z("9QaXiXZwoRpLXuXGp4Sphg==")}")
+//        AppLogs.dLog(TAG,"test:${z("0Hv3t6TxAeH94Cxqm127vjwKjbgOqD38txypA4YdaOWCxD80AW4K1mvU//VRD9NE")}")
+
     }
 
     private fun configWebViewCacheDirWithAndroidP() {

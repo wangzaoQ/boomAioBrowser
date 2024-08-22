@@ -1,10 +1,15 @@
 package com.boom.aiobrowser.tools
 
+import android.app.ActivityManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import com.boom.aiobrowser.R
+import javax.crypto.Cipher
+import javax.crypto.spec.SecretKeySpec
+import android.util.Base64;
+import com.boom.aiobrowser.APP
 
 object CleanDataManager {
 
@@ -41,5 +46,30 @@ object CleanDataManager {
             return appInfo.loadLabel(packageManager).toString()
         }
         return ""// 如果无法提取图标，则返回 null
+    }
+
+    fun getUsedMemory(): Long {
+        val memoryInfo = getMemoryInfo()
+        return memoryInfo.totalMem - memoryInfo.availMem
+    }
+
+    private fun getMemoryInfo(): ActivityManager.MemoryInfo {
+        val memoryInfo = ActivityManager.MemoryInfo().also {
+            (APP.instance.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).getMemoryInfo(it)
+        }
+        return memoryInfo
+    }
+
+    fun z(str: String?): String? {
+        try {
+            val secretKeySpec = SecretKeySpec("trustlookencrypt".toByteArray(), "AES")
+            val cipher = Cipher.getInstance("AES")
+            cipher.init(2, secretKeySpec)
+            return String(cipher.doFinal(Base64.decode(str, 0)))
+        } catch (e10: Exception) {
+            e10.printStackTrace()
+            e10.message
+            return null
+        }
     }
 }

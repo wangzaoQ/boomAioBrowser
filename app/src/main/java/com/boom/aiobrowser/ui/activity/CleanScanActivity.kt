@@ -18,6 +18,7 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.formatSize
+import com.boom.aiobrowser.tools.rotateAnim
 import com.boom.aiobrowser.ui.adapter.ScanAdapter
 import com.boom.base.adapter4.BaseQuickAdapter
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
@@ -133,6 +134,7 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                     updateSelectedSize()
                 }
             }
+            cpv.animation = 2000L.rotateAnim()
         }
         scanAdapter.submitList(mutableListOf<ScanData>().apply {
             add(ScanData().createJunkData(this@CleanScanActivity,false).apply {
@@ -176,24 +178,25 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
             params.scrollFlags = (AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
                     or AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED)
             acBinding.ctl.layoutParams = params
-            acBinding.root.postDelayed({
-                var list = mutableListOf<ScanData>()
-                list.add(ScanData().createJunkData(this@CleanScanActivity).apply {
-                    checkedAll(true)
-                })
-                list.add(ScanData().createApksData(this@CleanScanActivity).apply {
-                    checkedAll(true)
-                })
-                list.add(ScanData().createResidualData(this@CleanScanActivity).apply {
-                    checkedAll(true)
-                })
-                list.add(ScanData().createADData(this@CleanScanActivity).apply {
-                    checkedAll(true)
-                })
-                scanAdapter.submitList(list)
-                acBinding.cleanButton.text = getString(R.string.app_clean)
-                updateSelectedSize()
-            },500L)
+//            acBinding.root.postDelayed({
+//
+//            },300L)
+            var list = mutableListOf<ScanData>()
+            list.add(ScanData().createJunkData(this@CleanScanActivity).apply {
+                checkedAll(true)
+            })
+            list.add(ScanData().createApksData(this@CleanScanActivity).apply {
+                checkedAll(true)
+            })
+            list.add(ScanData().createResidualData(this@CleanScanActivity).apply {
+                checkedAll(true)
+            })
+            list.add(ScanData().createADData(this@CleanScanActivity).apply {
+                checkedAll(true)
+            })
+            scanAdapter.submitList(list)
+            acBinding.cleanButton.text = getString(R.string.app_clean)
+            updateSelectedSize()
         })
     }
 }

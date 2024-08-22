@@ -66,6 +66,7 @@ class ScanChildAdapter(var type:Int) : BaseQuickAdapter<FilesData, ScanChildAdap
                 item.tempList?.forEach {
                     allLength+=it.fileSize
                 }
+                tvSize.text = allLength.formatSize()
             }
             ivEnd.setImageResource(if (item.itemChecked) R.mipmap.ic_scan_item_checked else R.mipmap.ic_scan_item_unchecked)
         }

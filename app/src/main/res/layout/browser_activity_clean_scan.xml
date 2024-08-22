@@ -35,22 +35,40 @@
                     android:layout_marginTop="80dp"
                     android:paddingBottom="20dp"
                     >
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvPath"
+                        android:layout_width="match_parent"
+                        android:layout_height="27dp"
+                        android:background="@drawable/shape_bg_clean_path"
+                        android:layout_marginHorizontal="27dp"
+                        android:layout_alignParentBottom="true"
+                        tools:text="storage：desk/mastergo/mastergo/"
+                        android:gravity="center"
+                        android:paddingHorizontal="13dp"
+                        android:ellipsize="middle"
+                        android:singleLine="true"
+                        android:textSize="11sp"
+                        android:textColor="#B3FFFFFF"
+                        ></androidx.appcompat.widget.AppCompatTextView>
                     <FrameLayout
                         android:id="@+id/flProgress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
                         >
-                    <com.boom.aiobrowser.ui.view.CircleProgressView
-                        android:id="@+id/cpv"
-                        android:layout_width="221dp"
-                        android:layout_centerHorizontal="true"
-                        app:cpvShowTick="false"
-                        app:cpvProgressColor="#FF30F3FF"
-                        app:cpvShowLabel="false"
-                        app:cpvStrokeWidth="24dp"
-                        android:layout_gravity="center"
-                        app:cpvNormalColor="#FF4947B6"
-                        android:layout_height="wrap_content"/>
+                        <com.boom.aiobrowser.ui.view.CircleProgressView
+                            android:id="@+id/cpv"
+                            android:layout_width="221dp"
+                            android:layout_centerHorizontal="true"
+                            app:cpvShowTick="false"
+                            app:cpvProgressColor="#FF30F3FF"
+                            app:cpvShowLabel="false"
+                            app:cpvStrokeWidth="24dp"
+                            app:cpvProgress="60"
+                            android:layout_gravity="center"
+                            app:cpvNormalColor="#5755D9"
+                            android:layout_height="wrap_content"/>
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -105,21 +123,6 @@
                             android:textSize="11sp"
                             ></androidx.appcompat.widget.AppCompatTextView>
                     </androidx.appcompat.widget.LinearLayoutCompat>
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvPath"
-                        android:layout_width="match_parent"
-                        android:layout_height="27dp"
-                        android:background="@drawable/shape_bg_clean_path"
-                        android:layout_marginHorizontal="27dp"
-                        android:layout_alignParentBottom="true"
-                        tools:text="storage：desk/mastergo/mastergo/"
-                        android:gravity="center"
-                        android:paddingHorizontal="13dp"
-                        android:ellipsize="middle"
-                        android:singleLine="true"
-                        android:textSize="11sp"
-                        android:textColor="#B3FFFFFF"
-                        ></androidx.appcompat.widget.AppCompatTextView>
                 </RelativeLayout>
 
                 <androidx.appcompat.widget.Toolbar

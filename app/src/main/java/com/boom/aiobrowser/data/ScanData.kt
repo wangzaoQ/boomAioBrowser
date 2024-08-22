@@ -39,7 +39,7 @@ class ScanData {
     }
     fun createResidualData(context:Context,addChild:Boolean=true):ScanData{
         type = CleanConfig.DATA_TYPE_RESIDUAL
-        imgId = R.mipmap.ic_junk_files
+        imgId = R.mipmap.ic_residual
         title = context.getString(R.string.app_clean_residual)
         if (addChild){
             childList = residualFiles
@@ -48,7 +48,7 @@ class ScanData {
     }
     fun createADData(context:Context,addChild:Boolean=true):ScanData{
         type = CleanConfig.DATA_TYPE_AD
-        imgId = R.mipmap.ic_apks
+        imgId = R.mipmap.ic_scan_ad
         title = context.getString(R.string.app_clean_ad)
         if (addChild){
             childList = adFiles

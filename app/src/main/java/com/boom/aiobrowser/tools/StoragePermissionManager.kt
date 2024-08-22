@@ -5,6 +5,7 @@ import android.content.Context
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.ui.isAndroid11
+import com.boom.aiobrowser.ui.pop.StoragePop
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
@@ -24,7 +25,11 @@ class StoragePermissionManager(
 
     fun requestStoragePermission() {
         activity?.getPermission(onRequestTips = {
-            activity?.getManageAllFilesPermission()
+            StoragePop(activity!!).createPop{
+                if (it == 1){
+                    activity?.getManageAllFilesPermission()
+                }
+            }
         })
     }
 

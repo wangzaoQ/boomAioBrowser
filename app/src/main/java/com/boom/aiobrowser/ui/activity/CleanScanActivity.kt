@@ -176,27 +176,27 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
             animator.start()
             val params = acBinding.ctl.getLayoutParams() as AppBarLayout.LayoutParams
             params.scrollFlags = (AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-                    or AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED)
+                    or AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED or AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP)
             acBinding.ctl.layoutParams = params
-//            acBinding.root.postDelayed({
-//
-//            },300L)
-            var list = mutableListOf<ScanData>()
-            list.add(ScanData().createJunkData(this@CleanScanActivity).apply {
-                checkedAll(true)
-            })
-            list.add(ScanData().createApksData(this@CleanScanActivity).apply {
-                checkedAll(true)
-            })
-            list.add(ScanData().createResidualData(this@CleanScanActivity).apply {
-                checkedAll(true)
-            })
-            list.add(ScanData().createADData(this@CleanScanActivity).apply {
-                checkedAll(true)
-            })
-            scanAdapter.submitList(list)
-            acBinding.cleanButton.text = getString(R.string.app_clean)
-            updateSelectedSize()
+            acBinding.root.postDelayed({
+                var list = mutableListOf<ScanData>()
+                list.add(ScanData().createJunkData(this@CleanScanActivity).apply {
+                    checkedAll(true)
+                })
+                list.add(ScanData().createApksData(this@CleanScanActivity).apply {
+                    checkedAll(true)
+                })
+                list.add(ScanData().createResidualData(this@CleanScanActivity).apply {
+                    checkedAll(true)
+                })
+                list.add(ScanData().createADData(this@CleanScanActivity).apply {
+                    checkedAll(true)
+                })
+                scanAdapter.submitList(list)
+                acBinding.cleanButton.text = getString(R.string.app_clean)
+                updateSelectedSize()
+            },600L)
+
         })
     }
 }

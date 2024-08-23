@@ -1,4 +1,4 @@
-package com.boom.aiobrowser.ui.activity
+package com.boom.aiobrowser.ui.activity.clean
 
 import android.view.LayoutInflater
 import androidx.activity.viewModels
@@ -68,7 +68,9 @@ class ProcessActivity : BaseActivity<CleanActivityProcessBinding>() {
         acBinding.cleanButton.setOneClick {
             addLaunch(success = {
                 CleanToolsManager.cleanBackgroundProcess()
-            }, failBack = {},Dispatchers.IO)
+            }, failBack = {
+                AppLogs.eLog(acTAG,it)
+            },Dispatchers.IO)
         }
     }
 

@@ -1,4 +1,4 @@
-package com.boom.aiobrowser.ui.activity
+package com.boom.aiobrowser.ui.activity.clean
 
 import android.animation.ValueAnimator
 import android.os.Environment

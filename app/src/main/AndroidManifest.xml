@@ -78,10 +78,10 @@
         <activity android:name=".ui.activity.WebActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             ></activity>
-        <activity android:name=".ui.activity.CleanScanActivity"
+        <activity android:name=".ui.activity.clean.CleanScanActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             ></activity>
-        <activity android:name=".ui.activity.ProcessActivity"
+        <activity android:name=".ui.activity.clean.ProcessActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             ></activity>
     </application>

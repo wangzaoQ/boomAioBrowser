@@ -19,9 +19,9 @@ import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.StoragePermissionManager
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.SearchConfig
-import com.boom.aiobrowser.ui.activity.CleanScanActivity
+import com.boom.aiobrowser.ui.activity.clean.CleanScanActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
-import com.boom.aiobrowser.ui.activity.ProcessActivity
+import com.boom.aiobrowser.ui.activity.clean.ProcessActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.EngineGuidePop
 import com.boom.aiobrowser.ui.pop.SearchPop
@@ -41,7 +41,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 
     val permissionManager by lazy {
         StoragePermissionManager(WeakReference(rootActivity), onGranted = {
-            rootActivity.startActivity(Intent(rootActivity,CleanScanActivity::class.java))
+            rootActivity.startActivity(Intent(rootActivity, CleanScanActivity::class.java))
         }, onDenied = {
             toSetting()
         })
@@ -133,7 +133,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             permissionManager.requestStoragePermission()
         }
         fBinding.rlProcess.setOneClick {
-            startActivity(Intent(rootActivity,ProcessActivity::class.java))
+            startActivity(Intent(rootActivity, ProcessActivity::class.java))
         }
 
         viewModel.value.newsLiveData.observe(rootActivity){

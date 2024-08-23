@@ -84,6 +84,15 @@
         <activity android:name=".ui.activity.clean.ProcessActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             ></activity>
+        <activity android:name=".ui.activity.clean.load.CompleteLoadActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            ></activity>
+        <activity android:name=".ui.activity.clean.load.CompleteActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            ></activity>
+        <activity android:name=".ui.activity.clean.load.CleanLoadActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            ></activity>
     </application>
 
 

@@ -13,6 +13,7 @@ import com.boom.aiobrowser.tools.clean.CleanToolsManager
 import com.boom.aiobrowser.tools.clean.CleanToolsManager.getUsedMemoryPercent
 import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.tools.clean.toAppDetails
+import com.boom.aiobrowser.ui.activity.clean.load.CompleteLoadActivity
 import com.boom.aiobrowser.ui.adapter.ProcessAdapter
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
@@ -29,6 +30,10 @@ class ProcessActivity : BaseActivity<CleanActivityProcessBinding>() {
     }
     var absVerticalOffset = 0
 
+    var firstNum = 0
+    var endNum = 0
+    var firstInit = true
+
     override fun setListener() {
         acBinding.ivBack.setOneClick {
             finish()
@@ -36,6 +41,12 @@ class ProcessActivity : BaseActivity<CleanActivityProcessBinding>() {
         viewModel.processListLiveData.observe(this){
             acBinding.refreshLayout.isRefreshing = false
             processAdapter.submitList(it)
+            if (firstInit){
+                firstInit = false
+                firstNum = it.size
+            }else{
+                endNum = it.size
+            }
         }
         acBinding.mainAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
@@ -71,6 +82,7 @@ class ProcessActivity : BaseActivity<CleanActivityProcessBinding>() {
             }, failBack = {
                 AppLogs.eLog(acTAG,it)
             },Dispatchers.IO)
+            CompleteLoadActivity.startCompleteLoadActivity(this@ProcessActivity,(firstNum-endNum).toLong(),1)
         }
     }
 

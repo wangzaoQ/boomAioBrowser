@@ -61,4 +61,10 @@
     <string name="app_finish">Finish</string>
     <string name="app_stop">Stop</string>
     <string name="app_process">Process</string>
+    <string name="app_process_title">Stopped %s Apps Running In The Background</string>
+    <string name="app_clean_title">Cleaned Up %s</string>
+    <string name="app_process_content">View Apps Running In The Background！</string>
+    <string name="app_clean_content">Scan And Clean The Junk On Your Phone</string>
+    <string name="app_scan">Scan</string>
+    <string name="app_clean_load_content">Cleaning Your Device, Please Hold On...</string>
 </resources>

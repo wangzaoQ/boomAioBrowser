@@ -18,6 +18,7 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.tools.rotateAnim
+import com.boom.aiobrowser.ui.activity.clean.load.CleanLoadActivity
 import com.boom.aiobrowser.ui.adapter.ScanAdapter
 import com.boom.base.adapter4.BaseQuickAdapter
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
@@ -102,6 +103,9 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
             withContext(Dispatchers.Main){
                 acBinding.tvTitle.text = allLength.formatSize()
                 acBinding.tvSelectedSize.text = allLength.formatSize()
+                acBinding.cleanButton.setOneClick {
+                    CleanLoadActivity.startCleanLoadActivity(this@CleanScanActivity,allLength)
+                }
             }
         }, failBack = {},Dispatchers.IO)
     }

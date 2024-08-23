@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#5755D9">
+
+    <FrameLayout
+        android:layout_width="134dp"
+        android:layout_height="134dp"
+        android:background="@mipmap/ic_clean_load"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="270dp"
+        >
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivClean"
+            android:layout_width="59dp"
+            android:layout_height="59dp"
+            android:layout_gravity="center_horizontal|bottom"
+            app:srcCompat="@mipmap/ic_scan_clean"
+            android:layout_marginBottom="19dp"
+            ></androidx.appcompat.widget.AppCompatImageView>
+    </FrameLayout>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvMemory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        tools:text="260 mB"
+        android:gravity="center"
+        android:textSize="47sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="145dp"
+        android:layout_alignParentBottom="true"
+        ></androidx.appcompat.widget.AppCompatTextView>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_clean_load_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:textSize="11sp"
+        android:textColor="#80FFFFFF"
+        android:layout_marginBottom="133dp"
+        ></androidx.appcompat.widget.AppCompatTextView>
+</RelativeLayout>

@@ -4,12 +4,10 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.AppCompatTextView
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.ScanData
 import com.boom.aiobrowser.databinding.CleanItemScanChildBinding
-import com.boom.aiobrowser.tools.formatSize
+import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.tools.rotateAnim
 
 class ScanItemView : LinearLayout {

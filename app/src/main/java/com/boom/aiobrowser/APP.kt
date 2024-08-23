@@ -7,7 +7,6 @@ import com.boom.aiobrowser.ad.AioADDataManager.initAD
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
 import com.boom.aiobrowser.tools.AppLogs
-import com.boom.aiobrowser.tools.CleanDataManager.z
 import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.event.ProtectedUnPeekLiveData
 import com.boom.aiobrowser.tools.isOtherPkg

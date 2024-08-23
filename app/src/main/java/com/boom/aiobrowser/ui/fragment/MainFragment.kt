@@ -21,6 +21,7 @@ import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.SearchConfig
 import com.boom.aiobrowser.ui.activity.CleanScanActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
+import com.boom.aiobrowser.ui.activity.ProcessActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.EngineGuidePop
 import com.boom.aiobrowser.ui.pop.SearchPop
@@ -131,6 +132,10 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         fBinding.rlClean.setOneClick {
             permissionManager.requestStoragePermission()
         }
+        fBinding.rlProcess.setOneClick {
+            startActivity(Intent(rootActivity,ProcessActivity::class.java))
+        }
+
         viewModel.value.newsLiveData.observe(rootActivity){
             if (page == 1){
                 newsAdapter.submitList(it)

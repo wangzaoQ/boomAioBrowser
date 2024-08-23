@@ -1,4 +1,4 @@
-package com.boom.aiobrowser.tools
+package com.boom.aiobrowser.tools.clean
 
 import kotlin.math.log10
 
@@ -14,3 +14,5 @@ fun Long.formatSize(): String {
 }
 
 fun String.getRegexForFile(): String = ".+${this.replace(".", "\\.")}$".lowercase()
+fun String.hasConstants(list: MutableList<String>) = list.any { contains(it, true) }
+

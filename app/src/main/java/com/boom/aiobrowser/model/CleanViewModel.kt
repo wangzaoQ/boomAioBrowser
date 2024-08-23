@@ -2,12 +2,10 @@ package com.boom.aiobrowser.model
 
 import androidx.lifecycle.MutableLiveData
 import com.boom.aiobrowser.data.FilesData
-import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.clean.CleanConfig.adFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.downloadApks
-import com.boom.aiobrowser.tools.clean.CleanConfig.filters
 import com.boom.aiobrowser.tools.clean.CleanConfig.junkFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.residualFiles
 import com.boom.aiobrowser.tools.clean.FileFilter.isADFile
@@ -17,7 +15,7 @@ import com.boom.aiobrowser.tools.clean.FileFilter.isLogFile
 import com.boom.aiobrowser.tools.clean.FileFilter.isResidual
 import com.boom.aiobrowser.tools.clean.FileFilter.isTmpFile
 import com.boom.aiobrowser.tools.clean.Scan1
-import com.boom.aiobrowser.tools.formatSize
+import com.boom.aiobrowser.tools.clean.formatSize
 import kotlinx.coroutines.InternalCoroutinesApi
 import java.io.File
 

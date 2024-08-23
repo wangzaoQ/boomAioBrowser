@@ -56,4 +56,9 @@
     <string name="app_allow_storage_access_content">To use this feature, please go to your phone settings and enable storage permission </string>
     <string name="app_deny">Deny</string>
     <string name="app_allow">Allow</string>
+    <string name="app_ram_used">RAM Used</string>
+    <string name="app_process_app_title">Running Background Apps</string>
+    <string name="app_finish">Finish</string>
+    <string name="app_stop">Stop</string>
+    <string name="app_process">Process</string>
 </resources>

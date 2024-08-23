@@ -3,9 +3,9 @@ package com.boom.aiobrowser.tools.clean
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.data.AppInfo
 import com.boom.aiobrowser.data.FilesData
 import com.boom.aiobrowser.tools.AppLogs
-import com.boom.aiobrowser.tools.getRegexForFile
 
 object CleanConfig {
     //垃圾文件
@@ -18,6 +18,10 @@ object CleanConfig {
     val appInstalledPkgList = mutableListOf<String>()
 
     val filters = mutableListOf<String>()
+
+    val runAPPExtension by lazy { mutableListOf("xiaomi","miui","huawei","${BuildConfig.APPLICATION_ID}") }
+    val runningAppInfo = mutableListOf<AppInfo>()
+
 
     const val DATA_TYPE_JUNK = 0
     const val DATA_TYPE_APK = 1

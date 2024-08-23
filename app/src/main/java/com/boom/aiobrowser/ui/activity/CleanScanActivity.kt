@@ -16,8 +16,7 @@ import com.boom.aiobrowser.databinding.BrowserActivityCleanScanBinding
 import com.boom.aiobrowser.model.CleanViewModel
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
-import com.boom.aiobrowser.tools.CacheManager
-import com.boom.aiobrowser.tools.formatSize
+import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.tools.rotateAnim
 import com.boom.aiobrowser.ui.adapter.ScanAdapter
 import com.boom.base.adapter4.BaseQuickAdapter

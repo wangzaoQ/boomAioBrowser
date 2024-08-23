@@ -99,6 +99,8 @@
                     <RelativeLayout
                         android:id="@+id/rlClean"
                         android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="7dp"
                         android:layout_height="47dp"
                         android:background="@drawable/shape_bg_home_clean"
                         >
@@ -112,6 +114,30 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/app_clean"
+                            android:layout_marginStart="47dp"
+                            android:layout_centerVertical="true"
+                            android:textColor="#80000000"
+                            android:textStyle="bold"
+                            ></androidx.appcompat.widget.AppCompatTextView>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/rlProcess"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginStart="7dp"
+                        android:layout_height="47dp"
+                        android:background="@drawable/shape_bg_home_clean"
+                        >
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:layout_marginStart="7dp"
+                            android:layout_centerVertical="true"
+                            ></androidx.appcompat.widget.AppCompatImageView>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/app_process"
                             android:layout_marginStart="47dp"
                             android:layout_centerVertical="true"
                             android:textColor="#80000000"

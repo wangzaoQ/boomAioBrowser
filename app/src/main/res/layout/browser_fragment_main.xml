@@ -104,12 +104,21 @@
                         android:layout_height="47dp"
                         android:background="@drawable/shape_bg_home_clean"
                         >
-                        <androidx.appcompat.widget.AppCompatImageView
+                        <FrameLayout
                             android:layout_width="34dp"
                             android:layout_height="34dp"
                             android:layout_marginStart="7dp"
                             android:layout_centerVertical="true"
-                            ></androidx.appcompat.widget.AppCompatImageView>
+                            android:background="@drawable/shape_oval_clean"
+                            >
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                app:srcCompat="@mipmap/ic_scan_clean"
+                                android:layout_gravity="center"
+                                android:tint="@color/white"
+                                ></androidx.appcompat.widget.AppCompatImageView>
+                        </FrameLayout>
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -119,6 +128,14 @@
                             android:textColor="#80000000"
                             android:textStyle="bold"
                             ></androidx.appcompat.widget.AppCompatTextView>
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            app:srcCompat="@mipmap/ic_clean_arrow"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="7dp"
+                            ></androidx.appcompat.widget.AppCompatImageView>
                     </RelativeLayout>
                     <RelativeLayout
                         android:id="@+id/rlProcess"
@@ -126,14 +143,23 @@
                         android:layout_weight="1"
                         android:layout_marginStart="7dp"
                         android:layout_height="47dp"
-                        android:background="@drawable/shape_bg_home_clean"
+                        android:background="@drawable/shape_bg_home_process"
                         >
-                        <androidx.appcompat.widget.AppCompatImageView
+                        <FrameLayout
                             android:layout_width="34dp"
                             android:layout_height="34dp"
                             android:layout_marginStart="7dp"
                             android:layout_centerVertical="true"
-                            ></androidx.appcompat.widget.AppCompatImageView>
+                            android:background="@drawable/shape_oval_process"
+                            >
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                app:srcCompat="@mipmap/ic_scan_clean"
+                                android:layout_gravity="center"
+                                android:tint="@color/white"
+                                ></androidx.appcompat.widget.AppCompatImageView>
+                        </FrameLayout>
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -143,6 +169,15 @@
                             android:textColor="#80000000"
                             android:textStyle="bold"
                             ></androidx.appcompat.widget.AppCompatTextView>
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            app:srcCompat="@mipmap/ic_clean_arrow"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="7dp"
+                            ></androidx.appcompat.widget.AppCompatImageView>
                     </RelativeLayout>
                 </androidx.appcompat.widget.LinearLayoutCompat>
                 <androidx.appcompat.widget.LinearLayoutCompat

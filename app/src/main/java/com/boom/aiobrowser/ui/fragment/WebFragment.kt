@@ -13,7 +13,7 @@ import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
-import com.boom.aiobrowser.ui.activity.MainActivity
+import com.boom.aiobrowser.ui.activity.WebDetailsActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -66,8 +66,8 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                 CacheManager.linkedUrlList = linkedUrlList
             }
             withContext(Dispatchers.Main){
-                if (rootActivity is MainActivity){
-                    (rootActivity as MainActivity).apply {
+                if (rootActivity is WebDetailsActivity){
+                    (rootActivity as WebDetailsActivity).apply {
                         updateBottom(true,showNext, jumpData = jumpData,"webView loadWebOnPageStared")
                     }
                 }
@@ -116,42 +116,20 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
        return " - $search $unit"
     }
 
-    /**
-     * 进入
-     */
-
-    override fun setShowView() {
-        jumpData = getBeanByGson(arguments?.getString(ParamsConfig.JSON_PARAMS)?:"",JumpData::class.java)
+    open fun updateData(data:JumpData?){
+        jumpData = data
         initWeb()
         fBinding.flTop.updateEngine(CacheManager.engineType)
         fBinding.flTop.binding.tvToolbarSearch.text = jumpData?.jumpUrl
         fBinding.refreshLayout.isEnabled = false
         fBinding.flTop.setData(jumpData)
-//        rootActivity.addLaunch(success = {
-//            jumpData?.apply {
-//                if (lastJumpData == null || lastJumpData?.jumpUrl != jumpData?.jumpUrl){
-//                    lastJumpData = jumpData
-//                }
-//                JumpDataManager.updateCurrentJumpData(this,"webFragment 存储jumpData")
-//                if(CacheManager.browserStatus == 0){
-//                    var list = CacheManager.historyDataList
-//                    this.apply {
-//                        updateTime = System.currentTimeMillis()
-//                    }
-//                    list.add(0,this)
-//                    CacheManager.historyDataList = list
-//                }
-//            }
-//        }, failBack = {})
-        APP.bottomLiveData.postValue(JumpConfig.JUMP_WEB)
-
         back = {
             jumpData?.apply {
                 nextJumpType = JumpConfig.JUMP_WEB
                 nextJumpUrl = mAgentWeb?.webCreator?.webView?.url
                 JumpDataManager.updateCurrentJumpData(this,tag="webFragment goBack")
-                if (rootActivity is MainActivity){
-                    (rootActivity as MainActivity).apply {
+                if (rootActivity is WebDetailsActivity){
+                    (rootActivity as WebDetailsActivity).apply {
                         updateBottom(true,true, jumpData = jumpData,"webView goBack")
                     }
                 }
@@ -159,9 +137,17 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         }
     }
 
+
+    /**
+     * 进入
+     */
+
+    override fun setShowView() {
+
+    }
+
     override fun onResume() {
         super.onResume()
-        APP.bottomLiveData.postValue(JumpConfig.JUMP_WEB)
     }
 
     override fun getUrl(): String {

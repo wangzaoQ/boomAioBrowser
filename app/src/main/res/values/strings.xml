@@ -79,4 +79,7 @@
     <string name="app_music">Music</string>
     <string name="app_zip">ZIP</string>
     <string name="app_documents">Documents</string>
+    <string name="app_files">Files</string>
+    <string name="app_tabs">Tabs</string>
+    <string name="app_me">Me</string>
 </resources>

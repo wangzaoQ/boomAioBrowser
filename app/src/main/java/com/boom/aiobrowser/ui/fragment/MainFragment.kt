@@ -160,6 +160,8 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             jumpData = JumpDataManager.getCurrentJumpData(tag = "MainFragment onResume 首次")
             if (jumpData.jumpType == JumpConfig.JUMP_WEB){
                 APP.jumpLiveData.postValue(jumpData)
+            }else{
+
             }
         }else{
             jumpData = JumpDataManager.getCurrentJumpData(isReset = true,tag = "MainFragment onResume 非首次")
@@ -171,16 +173,17 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             if (fBinding.refreshLayout.isRefreshing == true){
                 fBinding.refreshLayout.isRefreshing = false
             }
-        }
-
-        if (rootActivity is MainActivity){
-            (rootActivity as MainActivity).apply {
-                updateBottom(false,true, jumpData = jumpData,tag="mainFragment onResume")
-                updateTabCount()
+            if (jumpData.jumpType != JumpConfig.JUMP_HOME ){
+                APP.bottomLiveData.postValue(JumpConfig.JUMP_HOME)
+            }else{
+                if (rootActivity is MainActivity){
+                (rootActivity as MainActivity).apply {
+//                    acBinding.llWebControl.visibility = View.GONE
+                    acBinding.llMainControl.visibility = View.VISIBLE
+                }
+            }
             }
         }
-        APP.bottomLiveData.postValue(JumpConfig.JUMP_HOME)
-
     }
 
     private fun updateEngine(type: Int) {

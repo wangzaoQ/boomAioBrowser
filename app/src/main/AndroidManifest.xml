@@ -93,6 +93,15 @@
         <activity android:name=".ui.activity.clean.load.CleanLoadActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             ></activity>
+        <activity android:name=".ui.activity.WebDetailsActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:hardwareAccelerated="true"
+            ></activity>
+        <activity android:name=".ui.activity.SearchActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            ></activity>
     </application>
 
 

@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.ui.fragment
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.jobCancel
+import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
@@ -35,6 +37,16 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
     private val viewModel by viewModels<SearchViewModel>()
 
     var jumpData:JumpData?=null
+
+    companion object{
+        fun newInstance(jsonData: String): SearchFragment{
+            val args = Bundle()
+            args.putString(ParamsConfig.JSON_PARAMS, jsonData)
+            val fragment = SearchFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
     override fun startLoadData() {
         var status = CacheManager.browserStatus

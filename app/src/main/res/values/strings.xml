@@ -67,4 +67,16 @@
     <string name="app_clean_content">Scan And Clean The Junk On Your Phone</string>
     <string name="app_scan">Scan</string>
     <string name="app_clean_load_content">Cleaning Your Device, Please Hold On...</string>
+    <string name="app_my_files">My Files</string>
+    <string name="app_file_manager">File Manager</string>
+    <string name="app_recent_file">Recent Files</string>
+    <string name="app_enable_storage">Enable Storage Permissions</string>
+    <string name="app_downloads">Downloads</string>
+    <string name="app_large_file">Large Files</string>
+    <string name="app_images">Images</string>
+    <string name="app_videos">Videos</string>
+    <string name="app_apks">APKS</string>
+    <string name="app_music">Music</string>
+    <string name="app_zip">ZIP</string>
+    <string name="app_documents">Documents</string>
 </resources>

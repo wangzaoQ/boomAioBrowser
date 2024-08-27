@@ -1,9 +1,15 @@
 package com.boom.aiobrowser.tools.clean
 
+import android.app.Activity
 import android.app.ActivityManager
+import android.app.usage.StorageStatsManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
+import android.os.Build
+import android.os.Environment
+import android.os.StatFs
+import android.os.storage.StorageManager
 import androidx.core.content.ContextCompat
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.APP
@@ -79,16 +85,49 @@ object CleanToolsManager {
         }
     }
 
-//    fun z(str: String?): String? {
-//        try {
-//            val secretKeySpec = SecretKeySpec("trustlookencrypt".toByteArray(), "AES")
-//            val cipher = Cipher.getInstance("AES")
-//            cipher.init(2, secretKeySpec)
-//            return String(cipher.doFinal(Base64.decode(str, 0)))
-//        } catch (e10: Exception) {
-//            e10.printStackTrace()
-//            e10.message
-//            return null
-//        }
-//    }
+
+
+    fun getTotalStorage(context: Context): Long {
+        runCatching {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val storageStatsManager = context.getSystemService(Context.STORAGE_STATS_SERVICE) as StorageStatsManager
+                return storageStatsManager.getTotalBytes(StorageManager.UUID_DEFAULT)
+            } else return getTotalStorage()
+        }.onFailure {
+            return getTotalStorage()
+        }
+        return 0L
+    }
+
+    fun getUsedStorage(context: Context): Long {
+        runCatching {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val storageStatsManager = context.getSystemService(Context.STORAGE_STATS_SERVICE) as StorageStatsManager
+                return storageStatsManager.getTotalBytes(StorageManager.UUID_DEFAULT) - storageStatsManager.getFreeBytes(
+                    StorageManager.UUID_DEFAULT)
+            } else return getUsedStorage()
+        }.onFailure {
+            return getUsedStorage()
+        }
+        return 0L
+    }
+
+    private fun getTotalStorage(): Long {
+        try {
+            val stat = StatFs(Environment.getExternalStorageDirectory().path)
+            val blockSize = stat.blockSizeLong
+            val totalBlocks = stat.blockCountLong
+            return totalBlocks * blockSize
+        }catch (e:Exception){
+            return 0L
+        }
+    }
+    private fun getUsedStorage(): Long {
+        val stat = StatFs(Environment.getExternalStorageDirectory().path)
+        val blockSize = stat.blockSizeLong
+        val totalBlocks = stat.blockCountLong
+        val availableBlocks = stat.availableBlocksLong
+        return (totalBlocks - availableBlocks) * blockSize
+    }
+
 }

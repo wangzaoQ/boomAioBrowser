@@ -141,7 +141,7 @@ object JumpDataManager {
     ) {
         startActivity(getIntent<T>(flags, extra))
         if (showAnimal != false){
-        overridePendingTransition(R.anim.in_alpha, R.anim.out_alpha)
+            overridePendingTransition(R.anim.in_alpha, R.anim.out_alpha)
         }
     }
 

@@ -2,9 +2,8 @@ package com.boom.aiobrowser.data
 
 import com.boom.aiobrowser.R
 
-class FileManageData {
+class FileManageData() {
     var manageName = ""
-    var manageType = 0
     var type = FILE_TYPE_DOWNLOADS
 
     companion object{
@@ -16,6 +15,12 @@ class FileManageData {
         var FILE_TYPE_MUSIC = 5
         var FILE_TYPE_ZIP = 6
         var FILE_TYPE_DOCUMENTS = 7
+
+        fun createManageData(type:Int):FileManageData{
+            return FileManageData().apply {
+                this.type = type
+            }
+        }
     }
 
     fun getImage():Int{

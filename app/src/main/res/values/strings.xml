@@ -82,4 +82,9 @@
     <string name="app_files">Files</string>
     <string name="app_tabs">Tabs</string>
     <string name="app_me">Me</string>
+    <string name="app_clean_tips">"Trash To Be Cleaned "</string>
+    <string name="app_no_app">No App Found</string>
+    <string name="app_share_with">Share with</string>
+    <string name="app_file_no_support">The file does not support the operation</string>
+
 </resources>

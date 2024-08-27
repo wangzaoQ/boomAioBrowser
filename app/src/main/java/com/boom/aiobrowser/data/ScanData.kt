@@ -4,7 +4,7 @@ import android.content.Context
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.clean.CleanConfig.adFiles
-import com.boom.aiobrowser.tools.clean.CleanConfig.downloadApks
+import com.boom.aiobrowser.tools.clean.CleanConfig.apkFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.junkFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.residualFiles
 
@@ -33,7 +33,7 @@ class ScanData {
         imgId = R.mipmap.ic_apks
         title = context.getString(R.string.app_clean_apk)
         if (addChild){
-            childList = downloadApks
+            childList = apkFiles
         }
         return this
     }

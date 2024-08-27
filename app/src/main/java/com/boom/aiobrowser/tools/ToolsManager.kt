@@ -1,14 +1,28 @@
 package com.boom.aiobrowser.tools
 
+import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
+import android.content.Intent
+import android.database.Cursor
+import android.net.Uri
 import android.os.Build
+import android.provider.MediaStore
 import androidx.annotation.RequiresApi
+import androidx.core.content.FileProvider
+import com.blankj.utilcode.util.FileUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.BuildConfig
+import com.boom.aiobrowser.R
+import com.boom.aiobrowser.tools.clean.FileFilter.isAudio
+import com.boom.aiobrowser.tools.clean.FileFilter.isImage
+import com.boom.aiobrowser.tools.clean.FileFilter.isVideo
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import kotlinx.coroutines.Job
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Base64
 import java.util.Date
@@ -211,6 +225,86 @@ fun appDataReset(){
         CacheManager.saveDay = tmpDate
     }
 }
+
+
+fun Activity.shareUseIntent(path: String) {
+    val newUri = getFinalUriFromPath(path) ?: Uri.parse(path)
+    Intent(Intent.ACTION_SEND).apply {
+        putExtra(Intent.EXTRA_STREAM, newUri)
+        type = getMimeTypeFromUri(newUri)
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        runCatching {
+            if (resolveActivity(packageManager) != null) {
+                startActivity(Intent.createChooser(this@apply, getString(R.string.app_share_with)))
+            } else ToastUtils.showShort(getString(R.string.app_no_app))
+        }.onFailure {
+            AppLogs.eLog("shareUseIntent",it.stackTraceToString())
+            ToastUtils.showShort(R.string.app_file_no_support)
+        }
+    }
+}
+
+fun Context.getFinalUriFromPath(path: String): Uri? {
+    return try {
+        getPublicUri(path, BuildConfig.APPLICATION_ID)
+    } catch (e: Exception) {
+        null
+    }
+}
+
+
+
+fun Context.getPublicUri(path: String, applicationId: String): Uri? {
+    val uri = Uri.parse(path)
+    return if (uri.scheme == "content") uri
+    else {
+        val newPath = if (uri.toString().startsWith("/")) uri.toString() else uri.path
+        if (newPath.isNullOrEmpty()) return null
+        getFilePublicUri(File(newPath), applicationId)
+    }
+}
+
+fun Context.getFilePublicUri(file: File, applicationId: String): Uri? {
+    var uri = getMediaContentUri(file)
+    if (uri == null) uri = FileProvider.getUriForFile(this, "$applicationId.provider", file)
+    return uri
+}
+
+
+fun Context.getMediaContentUri(file: File): Uri? {
+    var extension = FileUtils.getFileExtension(file.name)
+    val uri = when {
+        extension.isImage() -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        extension.isVideo() -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+        extension.isAudio() -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+        else -> MediaStore.Files.getContentUri("external")
+    }
+    return getMediaContent(file.path, uri)
+}
+
+fun Context.getMediaContent(path: String, uri: Uri): Uri? {
+    val projection = arrayOf(MediaStore.Images.Media._ID)
+    val selection = MediaStore.Images.Media.DATA + "= ?"
+    val selectionArgs = arrayOf(path)
+    var cursor: Cursor? = null
+    try {
+        cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
+        if (cursor?.moveToFirst() == true) {
+            return Uri.withAppendedPath(uri, cursor.getIntValue(MediaStore.MediaColumns.DISPLAY_NAME).toString())
+        }
+    } catch (_: Exception) {
+
+    } finally {
+        cursor?.close()
+    }
+    return null
+}
+
+fun Cursor.getIntValue(key: String) = getInt(getColumnIndexOrThrow(key))
+fun Context.getMimeTypeFromUri(uri: Uri): String {
+    return contentResolver.getType(uri) ?: "*/*"
+}
+
 
 
 

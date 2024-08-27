@@ -24,16 +24,15 @@ class Scan1(var parentDirectory: File,var onProgress: (file:File) -> Unit,var on
         scanTime = System.currentTimeMillis()
         AppLogs.dLog(TAG,"开始扫描")
         val files = scanDirectory(parentDirectory)
-        withContext(Dispatchers.Main){
+        withContext(Dispatchers.IO){
             AppLogs.dLog(TAG,"扫描耗时:${(System.currentTimeMillis()-scanTime)}")
-            var middleTime = System.currentTimeMillis()-scanTime
-            if (middleTime<5000){
-                delay(5000-middleTime)
-            }
+//            var middleTime = System.currentTimeMillis()-scanTime
+//            if (middleTime<5000){
+//                delay(5000-middleTime)
+//            }
             scanComplete(files)
         }
     }
-
 
     suspend fun scanDirectory(dir: File): MutableList<File> = coroutineScope {
         val deferredResults = mutableListOf<Deferred<MutableList<File>>>()
@@ -41,15 +40,15 @@ class Scan1(var parentDirectory: File,var onProgress: (file:File) -> Unit,var on
         val files = mutableListOf<File>()
         dir.listFiles()?.forEach { file ->
             if (file.isDirectory) {
-//                deferredResults.add(async {
-//                    scanDirectory(file)
-//                })
-                scanDirectory(file)
+                deferredResults.add(async {
+                    scanDirectory(file)
+                })
+//                scanDirectory(file)
             } else {
-                AppLogs.dLog(TAG,"扫描出的文件:${file.absolutePath}")
+                AppLogs.dLog(TAG,"扫描出的文件:${file.absolutePath} 当前现场:${Thread.currentThread()}")
 //                Logger.writeLog(APP.instance,"扫描出的文件:${file.absolutePath}")
                 files.add(file)
-                delay(1)
+//                delay(1)
                 onProgress.invoke(file)
             }
         }

@@ -35,9 +35,18 @@
         android:layout_height="wrap_content"
         android:background="@drawable/shape_f2_17r"
         android:layout_marginTop="13dp"
+        android:layout_marginHorizontal="13dp"
         >
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="13dp"
+            android:layout_alignTop="@+id/llClean"
+            android:layout_alignBottom="@+id/llClean"
+            app:srcCompat="@mipmap/ic_memory"
+            ></androidx.appcompat.widget.AppCompatImageView>
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvMemoryInfo"
+            android:id="@+id/tvStorageInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/llClean"
@@ -53,8 +62,9 @@
             ></androidx.appcompat.widget.AppCompatTextView>
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/llClean"
-            android:layout_width="101dp"
+            android:layout_width="wrap_content"
             android:layout_height="34dp"
+            android:paddingHorizontal="14dp"
             android:background="@drawable/shape_84r_5755d9"
             android:orientation="horizontal"
             android:gravity="center"
@@ -62,12 +72,19 @@
             android:layout_marginEnd="13dp"
             android:layout_marginTop="13dp"
             >
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:srcCompat="@mipmap/ic_file_clean"
+                ></androidx.appcompat.widget.AppCompatImageView>
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:text="@string/app_clean"
                 android:textSize="17sp"
+                android:textStyle="bold"
+                android:layout_marginStart="3dp"
                 ></androidx.appcompat.widget.AppCompatTextView>
         </androidx.appcompat.widget.LinearLayoutCompat>
         <RelativeLayout
@@ -89,6 +106,17 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:progress="50" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvStorage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="133"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="7dp"
+                android:textColor="@color/black"
+                android:textSize="11sp"
+                android:layout_centerVertical="true"
+                ></androidx.appcompat.widget.AppCompatTextView>
         </RelativeLayout>
     </RelativeLayout>
     <RelativeLayout
@@ -105,17 +133,75 @@
             android:layout_width="wrap_content"
             android:layout_height="27dp"
             android:gravity="center_vertical"
+            android:layout_alignTop="@+id/llCleanTipsRoot"
+            android:layout_alignBottom="@+id/llCleanTipsRoot"
             android:layout_marginStart="13dp"
-            android:layout_marginTop="13dp"
             android:text="@string/app_file_manager"
             android:textSize="15sp"
             android:textColor="@color/black"
             ></androidx.appcompat.widget.AppCompatTextView>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llCleanTipsRoot"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:orientation="horizontal"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="13dp"
+            android:background="@drawable/shape_bg_clean_tips"
+            android:gravity="center_vertical"
+            android:paddingStart="13dp"
+            >
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvMemory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFF44C28"
+                android:textSize="9sp"
+                android:layout_marginEnd="3dp"
+                tools:text="123"
+                ></androidx.appcompat.widget.AppCompatTextView>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="9sp"
+                android:text="@string/app_clean_tips"
+                android:layout_marginEnd="7dp"
+                ></androidx.appcompat.widget.AppCompatTextView>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llCleanTips"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:background="@drawable/shape_84r_5755d9"
+                android:orientation="horizontal"
+                android:paddingHorizontal="5dp"
+                android:gravity="center"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="13dp"
+                >
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    app:srcCompat="@mipmap/ic_file_clean"
+                    ></androidx.appcompat.widget.AppCompatImageView>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:text="@string/app_clean"
+                    android:textSize="8sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="3dp"
+                    ></androidx.appcompat.widget.AppCompatTextView>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvManager"
+            android:paddingBottom="12dp"
             ></androidx.recyclerview.widget.RecyclerView>
     </RelativeLayout>
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -150,7 +236,15 @@
                 android:layout_marginStart="13dp"
                 android:layout_centerVertical="true"
                 ></androidx.appcompat.widget.AppCompatImageView>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                app:srcCompat="@mipmap/ic_permission_tips"
+                android:layout_marginStart="33dp"
+                android:layout_marginTop="7dp"
+                ></androidx.appcompat.widget.AppCompatImageView>
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvPermission"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/app_enable_storage"

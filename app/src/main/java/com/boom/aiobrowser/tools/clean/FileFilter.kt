@@ -1,6 +1,12 @@
 package com.boom.aiobrowser.tools.clean
 
+import android.os.Environment
 import com.boom.aiobrowser.tools.clean.CleanConfig.appInstalledPkgList
+import com.boom.aiobrowser.tools.clean.CleanConfig.audioExtension
+import com.boom.aiobrowser.tools.clean.CleanConfig.docExtension
+import com.boom.aiobrowser.tools.clean.CleanConfig.imgExtension
+import com.boom.aiobrowser.tools.clean.CleanConfig.videoExtension
+import com.boom.aiobrowser.tools.clean.CleanConfig.zipExtension
 import java.io.File
 import java.util.Locale
 
@@ -15,10 +21,9 @@ object FileFilter {
                 && !isInstalled(file.name)
     }
 
-    fun isDownloadApks(file: File): Boolean {
+    fun isApks(file: File): Boolean {
         return file.isFile && file.absolutePath.endsWith(".apk", true)
     }
-
 
     fun isADFile(file: File): Boolean {
         if (file.isFile && "ad" == file.parentFile?.name){
@@ -38,7 +43,50 @@ object FileFilter {
                 fileName.endsWith("~") || fileName.endsWith(".bak")
     }
 
+    fun isLargeFile(file: File): Boolean {
+        if (file.isFile && file.length()>5*1024*1024){
+            return true
+        }
+        return false
+    }
 
+    fun isImagesFile(file: File): Boolean {
+        if (file.absolutePath.isImage()){
+            return true
+        }
+        return false
+    }
+
+    fun isVideoFile(file: File): Boolean {
+        if (file.absolutePath.isVideo()){
+            return true
+        }
+        return false
+    }
+    fun isAudioFile(file: File): Boolean {
+        if (file.absolutePath.isAudio()){
+            return true
+        }
+        return false
+    }
+    fun isZipFile(file: File): Boolean {
+        if (file.absolutePath.isZip()){
+            return true
+        }
+        return false
+    }
+    fun isDocFile(file: File): Boolean {
+        if (file.absolutePath.isDoc()){
+            return true
+        }
+        return false
+    }
     fun isInstalled(fileName: String): Boolean = appInstalledPkgList.contains(fileName)
 
+
+    fun String.isImage() = imgExtension.any { endsWith(it, true) }
+    fun String.isVideo() = videoExtension.any { endsWith(it, true) }
+    fun String.isAudio() = audioExtension.any { endsWith(it, true) }
+    fun String.isDoc() = docExtension.any { endsWith(it, true) }
+    fun String.isZip() = zipExtension.any { endsWith(it, true) }
 }

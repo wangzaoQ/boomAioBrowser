@@ -21,8 +21,10 @@ class FileManageAdapter: BaseQuickAdapter<FileManageData, FileManageAdapter.VH>(
     }
 
     override fun onBindViewHolder(holder: FileManageAdapter.VH, position: Int, item: FileManageData?) {
+        if (item == null)return
         holder.viewBinding.apply {
-
+            ivImg.setImageResource(item.getImage())
+            tvContent.text = context.getString(item.getContent())
         }
     }
 

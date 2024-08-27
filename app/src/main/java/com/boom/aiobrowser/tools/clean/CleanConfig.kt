@@ -11,16 +11,28 @@ object CleanConfig {
     //垃圾文件
     var junkFiles: MutableList<FilesData> = mutableListOf()
     //    volatile
-    var downloadApks: MutableList<FilesData> = mutableListOf()
+    var apkFiles: MutableList<FilesData> = mutableListOf()
        //残留文件
     var residualFiles: MutableList<FilesData> = mutableListOf()
     var adFiles: MutableList<FilesData> = mutableListOf()
     val appInstalledPkgList = mutableListOf<String>()
 
-    val filters = mutableListOf<String>()
-
     val runAPPExtension by lazy { mutableListOf("xiaomi","miui","huawei","${BuildConfig.APPLICATION_ID}") }
+    val imgExtension by lazy { mutableListOf("jpg", "png", "jpeg", "bmp", "webp", "heic", "heif", "gif") }
+    val videoExtension by lazy { mutableListOf("mp4", "mkv", "flv", "webm", "avi", "3gp", "mov", "m4v", "3gpp") }
+    val audioExtension by lazy { mutableListOf("mp3", "wav", "wma", "ogg", "m4a", "opus", "flac", "aac", "mid") }
+    val docExtension by lazy { mutableListOf("txt", "rtf", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "pptm") }
+    val zipExtension by lazy { mutableListOf("zip") }
+
     val runningAppInfo = mutableListOf<AppInfo>()
+
+    var largeFiles: MutableList<FilesData> = mutableListOf()
+    var imageFiles: MutableList<FilesData> = mutableListOf()
+    var videoFiles: MutableList<FilesData> = mutableListOf()
+    var audioFiles: MutableList<FilesData> = mutableListOf()
+    var zipFiles: MutableList<FilesData> = mutableListOf()
+    var documentsFiles: MutableList<FilesData> = mutableListOf()
+
 
 
     const val DATA_TYPE_JUNK = 0
@@ -33,49 +45,7 @@ object CleanConfig {
         return ""
     }
 
-    val genericFilterFolders: Array<String>
-        get() = arrayOf(
-            "Logs",
-            "logs",
-            "temp",
-            "Temporary",
-            "temporary"
-        )
-
-    val aggressiveFilterFolders: Array<String>
-        get() = arrayOf(
-            "supersonicads",
-            "cache",
-            "Analytics",
-            "MiPushLog",
-            "thumbnails?",
-            "mobvista",
-            "UnityAdsVideoCache",
-            "LOST.DIR",
-            ".Trash",
-            "desktop.ini",
-            "leakcanary",
-            ".DS_Store",
-            ".spotlight-V100",
-            "fseventsd",
-            "Bugreport",
-            "bugreports",
-            ".cache",
-            "debug_log",
-            "splashad",
-        )
-
     fun initCleanConfig(){
-        runCatching {
-            filters.clear()
-            val folders = mutableListOf<String>().apply {
-                addAll(genericFilterFolders)
-                addAll(aggressiveFilterFolders)
-            }
-            filters.add(".apk".getRegexForFile())
-        }.onFailure {
-            AppLogs.eLog(APP.instance.TAG,it.stackTraceToString())
-        }
         initAppInstalledPkgList()
     }
 
@@ -93,7 +63,16 @@ object CleanConfig {
         }
     }
 
-    fun clearAll(){
+    fun clearFileConfig(){
+        largeFiles.clear()
+        imageFiles.clear()
+        videoFiles.clear()
+        audioFiles.clear()
+        zipFiles.clear()
+        documentsFiles.clear()
+    }
+
+    fun clearCleanConfig(){
         junkFiles.clear()
         junkFiles.add(FilesData().apply {
             fileName = APP.instance.getString(R.string.app_log)
@@ -105,7 +84,7 @@ object CleanConfig {
             imgId = R.mipmap.ic_clean_temp
             tempList = mutableListOf()
         })
-        downloadApks.clear()
+        apkFiles.clear()
         residualFiles.clear()
         adFiles.clear()
     }

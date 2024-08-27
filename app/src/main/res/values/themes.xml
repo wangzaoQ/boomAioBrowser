@@ -25,4 +25,8 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">13dp</item>
     </style>
+    <style name="style_RoundStyle_8r">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8.4dp</item>
+    </style>
 </resources>

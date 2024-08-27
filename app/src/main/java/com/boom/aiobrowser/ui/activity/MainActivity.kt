@@ -4,19 +4,25 @@ import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.os.Environment
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentPagerAdapter
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
+import androidx.viewpager.widget.ViewPager
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
+import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
+import com.boom.aiobrowser.model.CleanViewModel
 import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BrowserManager
@@ -27,6 +33,8 @@ import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
+import com.boom.aiobrowser.ui.fragment.FileManageFragment
+import com.boom.aiobrowser.ui.fragment.MainFragment
 import com.boom.aiobrowser.ui.fragment.StartFragment
 import com.boom.aiobrowser.ui.fragment.WebFragment
 import com.boom.aiobrowser.ui.pop.ClearPop
@@ -55,6 +63,21 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
   var navController :NavController?=null
 
+    val mainFragment by lazy {
+        MainFragment()
+    }
+
+    val fileFragment by lazy {
+        FileManageFragment()
+    }
+
+
+    val fragments :MutableList<BaseFragment<*>> by lazy {
+        mutableListOf<BaseFragment<*>>().apply {
+            add(mainFragment)
+            add(fileFragment)
+        }
+    }
 
     override fun setListener() {
         APP.jumpLiveData.observe(this){
@@ -94,26 +117,28 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 //                    updateBottom(true,false,it,tag = "JumpConfig.JUMP_SEARCH")
                 }
                 JumpConfig.JUMP_HOME ->{
-                    val navOptions = NavOptions.Builder()
-                        .setEnterAnim(R.anim.in_alpha)
-                        .setExitAnim(R.anim.out_alpha)
-                        .setPopUpTo(R.id.fragmentFile, true) // 将目标Fragment从Back Stack中移除
-                        .build()
-
-                    navController?.navigate(R.id.fragmentMain, Bundle().apply {
-                        putString(ParamsConfig.JSON_PARAMS, toJson(it))
-                    },navOptions)
+//                    val navOptions = NavOptions.Builder()
+//                        .setEnterAnim(R.anim.in_alpha)
+//                        .setExitAnim(R.anim.out_alpha)
+//                        .setPopUpTo(R.id.fragmentFile, true) // 将目标Fragment从Back Stack中移除
+//                        .build()
+//
+//                    navController?.navigate(R.id.fragmentMain, Bundle().apply {
+//                        putString(ParamsConfig.JSON_PARAMS, toJson(it))
+//                    },navOptions)
+                    acBinding.vpRoot.setCurrentItem(0)
                 }
                 JumpConfig.JUMP_FILE ->{
-                    val navOptions = NavOptions.Builder()
-                        .setEnterAnim(R.anim.in_alpha)
-                        .setExitAnim(R.anim.out_alpha)
-                        .setPopUpTo(R.id.fragmentMain, true) // 将目标Fragment从Back Stack中移除
-                        .build()
-
-                    navController?.navigate(R.id.fragmentFile, Bundle().apply {
-                        putString(ParamsConfig.JSON_PARAMS, toJson(it))
-                    },navOptions)
+//                    val navOptions = NavOptions.Builder()
+//                        .setEnterAnim(R.anim.in_alpha)
+//                        .setExitAnim(R.anim.out_alpha)
+//                        .setPopUpTo(R.id.fragmentMain, true) // 将目标Fragment从Back Stack中移除
+//                        .build()
+//
+//                    navController?.navigate(R.id.fragmentFile, Bundle().apply {
+//                        putString(ParamsConfig.JSON_PARAMS, toJson(it))
+//                    },navOptions)
+                    acBinding.vpRoot.setCurrentItem(1)
                     acBinding.llMainControl.visibility = View.VISIBLE
                 }
                 else -> {}
@@ -185,18 +210,53 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     override fun onResume() {
         super.onResume()
         morePop?.updateUI()
+//        cleanViewModel.startScan(Environment.getExternalStorageDirectory())
     }
 
     fun loadNews(){
         viewModel.getNewsData()
     }
 
+    private fun setVp() {
+        acBinding.vpRoot.apply {
+            offscreenPageLimit = fragments.size
+            adapter = object : FragmentPagerAdapter(
+                supportFragmentManager,
+                BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+            ) {
+                override fun getItem(position: Int): Fragment {
+                    return fragments[position]
+                }
+
+                override fun getCount(): Int {
+                    return fragments.size
+                }
+            }
+            addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int
+                ) {
+                }
+
+                override fun onPageSelected(position: Int) {
+                    updateUI(position)
+                }
+
+                override fun onPageScrollStateChanged(state: Int) {
+                }
+            })
+        }
+    }
+
+
 
     override fun setShowView() {
         if (CacheManager.browserStatus == 1){
             CacheManager.browserStatus = 0
         }
-        navController = Navigation.findNavController(this@MainActivity,R.id.fragment_view)
+        setVp()
         startFragment = StartFragment()
         startFragment?.apply {
 //            fManager.showFragment(supportFragmentManager,this)
@@ -244,6 +304,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
     fun hideStart() {
         fManager.hideFragment(supportFragmentManager, startFragment!!)
+        acBinding.llMainControl.visibility = View.VISIBLE
         if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault){
             CacheManager.isFirstShowBrowserDefault = false
             var pop = DefaultPop(this@MainActivity)
@@ -290,25 +351,22 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             acBinding.tvClearData.visibility = View.GONE
         }
     }
-
-
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        var mMainNavFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_view)
-//再获取当前的Fragment
-        var currentFragmentInstance = mMainNavFragment?.getChildFragmentManager()?.getPrimaryNavigationFragment();
-        if (currentFragmentInstance != null && currentFragmentInstance is WebFragment) {
-            return if (currentFragmentInstance.goBack(keyCode, event)) {
-                AppLogs.dLog(acTAG,"返回 fragment goBack")
-                true
-            } else {
-                AppLogs.dLog(acTAG,"返回 fragment super.onKeyDown")
-                super.onKeyDown(keyCode, event)
-            }
-        }
-        AppLogs.dLog(acTAG,"返回 activity super.onKeyDown")
-        return super.onKeyDown(keyCode, event)
-    }
-
-
+//    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+//
+//        var mMainNavFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_view)
+////再获取当前的Fragment
+//        var currentFragmentInstance = mMainNavFragment?.getChildFragmentManager()?.getPrimaryNavigationFragment();
+//        if (currentFragmentInstance != null && currentFragmentInstance is WebFragment) {
+//            return if (currentFragmentInstance.goBack(keyCode, event)) {
+//                AppLogs.dLog(acTAG,"返回 fragment goBack")
+//                true
+//            } else {
+//                AppLogs.dLog(acTAG,"返回 fragment super.onKeyDown")
+//                super.onKeyDown(keyCode, event)
+//            }
+//        }
+//        AppLogs.dLog(acTAG,"返回 activity super.onKeyDown")
+//        return super.onKeyDown(keyCode, event)
+//    }
 
 }

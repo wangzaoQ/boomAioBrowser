@@ -11,6 +11,7 @@ import com.boom.aiobrowser.databinding.CleanActivityCompleteBinding
 import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.activity.clean.CleanScanActivity
@@ -108,12 +109,12 @@ class CompleteActivity: BaseActivity<CleanActivityCompleteBinding>() {
         acBinding.apply {
             if (fromType == 1){
                 //process
-                tvContent.text = getString(R.string.app_clean_title,num)
+                tvContent.text = getString(R.string.app_clean_title,"$num")
                 ivContent.setImageResource(R.mipmap.ic_scan_clean)
                 tvJumpTitle.text = getString(R.string.app_clean)
                 tvJumpContent.text = getString(R.string.app_clean_content)
                 rlToJump.setOneClick {
-                    startActivity(Intent(this@CompleteActivity, CleanScanActivity::class.java))
+                    jumpActivity<CleanScanActivity>()
                 }
             }else{
                 tvContent.text = getString(R.string.app_process_title,num.formatSize())
@@ -121,7 +122,7 @@ class CompleteActivity: BaseActivity<CleanActivityCompleteBinding>() {
                 tvJumpTitle.text = getString(R.string.app_process)
                 tvJumpContent.text = getString(R.string.app_process_content)
                 rlToJump.setOneClick {
-                    startActivity(Intent(this@CompleteActivity, ProcessActivity::class.java))
+                    jumpActivity<ProcessActivity>()
                 }
             }
 

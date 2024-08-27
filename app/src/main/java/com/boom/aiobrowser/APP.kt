@@ -23,6 +23,8 @@ class APP: Application() {
     var allowShowStart = true
     var isGoOther = false
 
+    var cleanComplete = false
+
     companion object{
         lateinit var instance:APP
         val isDebug = BuildConfig.DEBUG
@@ -30,6 +32,7 @@ class APP: Application() {
         val jumpLiveData  by lazy { ProtectedUnPeekLiveData<JumpData>() }
         val engineLiveData  by lazy { ProtectedUnPeekLiveData<Int>() }
         val bottomLiveData  by lazy { ProtectedUnPeekLiveData<String>() }
+        val deleteLiveData  by lazy { ProtectedUnPeekLiveData<HashMap<Int,Int>>() }
 
     }
 

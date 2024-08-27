@@ -9,7 +9,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 
 object GlideManager {
 
-    fun loadImg(fragment: Fragment?, iv: ImageView, url: Any?, loadId:Int?=0, errorId:Int?=0, width: Int=0, height: Int=0) {
+    fun loadImg(fragment: Fragment?=null, iv: ImageView, url: Any?, loadId:Int?=0, errorId:Int?=0, width: Int=0, height: Int=0) {
         runCatching {
             if (url == null)return
             val builder =if (fragment !=null) Glide.with(fragment).load(url) else Glide.with(iv).load(url)

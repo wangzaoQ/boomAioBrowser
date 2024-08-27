@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import kotlin.math.abs
 
 object TimeManager {
 
@@ -30,6 +31,11 @@ object TimeManager {
 
     fun getTimeHD(time:Long): String {
         return SimpleDateFormat("HH:mm").format(Date(time))
+    }
+
+
+    fun getLogTime(time:Long?): String {
+        return SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date(time?:System.currentTimeMillis()))
     }
 
     fun getHistoryDay(time:Long): String {
@@ -66,6 +72,18 @@ object TimeManager {
             }
             else -> {""}
         }
+    }
+
+
+    fun isWithin30Days(timestamp1: Long, timestamp2: Long): Boolean {
+        // 计算两个时间戳的差值（毫秒）
+        val differenceInMillis = abs((timestamp1 - timestamp2).toDouble()).toLong()
+
+        // 将差值转换为天数
+        val differenceInDays = differenceInMillis / (1000 * 60 * 60 * 24)
+
+        // 检查是否小于30天
+        return differenceInDays < 30
     }
 
 }

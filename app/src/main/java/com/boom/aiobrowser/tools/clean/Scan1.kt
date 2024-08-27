@@ -4,6 +4,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.base.ScanInterface
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.Logger
+import com.boom.aiobrowser.tools.TimeManager
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -45,7 +46,7 @@ class Scan1(var parentDirectory: File,var onProgress: (file:File) -> Unit,var on
                 })
 //                scanDirectory(file)
             } else {
-                AppLogs.dLog(TAG,"扫描出的文件:${file.absolutePath} 当前现场:${Thread.currentThread()}")
+                AppLogs.dLog(TAG,"扫描出的文件:${file.absolutePath} 当前线程:${Thread.currentThread()}")
 //                Logger.writeLog(APP.instance,"扫描出的文件:${file.absolutePath}")
                 files.add(file)
 //                delay(1)

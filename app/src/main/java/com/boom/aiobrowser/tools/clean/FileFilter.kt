@@ -89,4 +89,7 @@ object FileFilter {
     fun String.isAudio() = audioExtension.any { endsWith(it, true) }
     fun String.isDoc() = docExtension.any { endsWith(it, true) }
     fun String.isZip() = zipExtension.any { endsWith(it, true) }
+    fun String.isApk(): Boolean {
+        return endsWith("apk", true)
+    }
 }

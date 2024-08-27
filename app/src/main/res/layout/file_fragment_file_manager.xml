@@ -213,6 +213,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginHorizontal="13dp"
         app:layout_constraintTop_toBottomOf="@+id/rlFileManagerRoot"
+        android:paddingBottom="13dp"
         >
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
@@ -220,14 +221,14 @@
             android:text="@string/app_recent_file"
             android:layout_marginStart="13dp"
             android:layout_marginTop="6dp"
+            android:layout_marginBottom="13dp"
             ></androidx.appcompat.widget.AppCompatTextView>
         <RelativeLayout
+            android:id="@+id/rlSetting"
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:layout_marginHorizontal="13dp"
             android:background="@drawable/shape_17r_white"
-            android:layout_marginTop="13dp"
-            android:layout_marginBottom="13dp"
             >
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="27dp"
@@ -262,6 +263,11 @@
                 android:layout_marginEnd="13dp"
                 ></androidx.appcompat.widget.AppCompatImageView>
         </RelativeLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRecent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ></androidx.recyclerview.widget.RecyclerView>
        
     </androidx.appcompat.widget.LinearLayoutCompat>
 

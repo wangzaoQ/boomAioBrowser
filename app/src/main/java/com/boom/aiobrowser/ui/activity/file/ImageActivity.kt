@@ -62,7 +62,7 @@ class ImageActivity : BaseActivity<FileActivityImagesBinding>() {
     fun getDataList(){
         if (type == FileManageData.FILE_TYPE_IMAGES){
             if (APP.instance.cleanComplete.not()){
-                viewModel.completeListLiveData.observe(this){
+                APP.scanCompleteLiveData.observe(this){
                     photoAdapter.submitList(imageFiles)
                 }
             }else{
@@ -70,7 +70,7 @@ class ImageActivity : BaseActivity<FileActivityImagesBinding>() {
             }
         }else if (type == FileManageData.FILE_TYPE_VIDEOS){
             if (APP.instance.cleanComplete.not()){
-                viewModel.completeListLiveData.observe(this){
+                APP.scanCompleteLiveData.observe(this){
                     photoAdapter.submitList(videoFiles)
                 }
             }else{
@@ -81,6 +81,7 @@ class ImageActivity : BaseActivity<FileActivityImagesBinding>() {
 
     override fun onDestroy() {
         APP.deleteLiveData.removeObservers(this)
+        APP.scanCompleteLiveData.removeObservers(this)
         super.onDestroy()
     }
 }

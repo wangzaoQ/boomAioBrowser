@@ -18,9 +18,12 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.tools.clean.FileFilter.isAudio
 import com.boom.aiobrowser.tools.clean.FileFilter.isImage
 import com.boom.aiobrowser.tools.clean.FileFilter.isVideo
+import com.boom.aiobrowser.ui.isAndroid11
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
+import com.hjq.permissions.Permission
+import com.hjq.permissions.XXPermissions
 import kotlinx.coroutines.Job
 import java.io.File
 import java.text.SimpleDateFormat
@@ -305,6 +308,19 @@ fun Context.getMimeTypeFromUri(uri: Uri): String {
     return contentResolver.getType(uri) ?: "*/*"
 }
 
+
+fun Context.isStoragePermissionGranted(): Boolean {
+    return XXPermissions.isGranted(this, Permission.Group.STORAGE)
+}
+
+fun Context.isManageAllFilesGranted(): Boolean {
+    return XXPermissions.isGranted(this, Permission.MANAGE_EXTERNAL_STORAGE)
+}
+
+fun Context.isStorageGranted(): Boolean {
+    return if (isAndroid11()) isManageAllFilesGranted()
+    else isStoragePermissionGranted()
+}
 
 
 

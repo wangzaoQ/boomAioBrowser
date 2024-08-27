@@ -33,6 +33,7 @@ class APP: Application() {
         val engineLiveData  by lazy { ProtectedUnPeekLiveData<Int>() }
         val bottomLiveData  by lazy { ProtectedUnPeekLiveData<String>() }
         val deleteLiveData  by lazy { ProtectedUnPeekLiveData<HashMap<Int,Int>>() }
+        val scanCompleteLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
 
     }
 

@@ -26,6 +26,7 @@ object CleanConfig {
 
     val runningAppInfo = mutableListOf<AppInfo>()
 
+    var downloadFiles: MutableList<FilesData> = mutableListOf()
     var largeFiles: MutableList<FilesData> = mutableListOf()
     var imageFiles: MutableList<FilesData> = mutableListOf()
     var videoFiles: MutableList<FilesData> = mutableListOf()

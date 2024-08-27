@@ -1,55 +1,94 @@
 package com.boom.aiobrowser.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.FileManageData
+import com.boom.aiobrowser.data.FilesData
 import com.boom.aiobrowser.databinding.FileFragmentFileManagerBinding
 import com.boom.aiobrowser.model.CleanViewModel
 import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.StoragePermissionManager
 import com.boom.aiobrowser.tools.clean.CleanToolsManager.getTotalStorage
 import com.boom.aiobrowser.tools.clean.CleanToolsManager.getUsedStorage
 import com.boom.aiobrowser.tools.clean.formatSize
+import com.boom.aiobrowser.tools.isStorageGranted
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.activity.clean.CleanScanActivity
+import com.boom.aiobrowser.ui.activity.file.FileManageListActivity
 import com.boom.aiobrowser.ui.activity.file.ImageActivity
 import com.boom.aiobrowser.ui.adapter.FileManageAdapter
+import com.boom.aiobrowser.ui.adapter.FileRecentAdapter
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.base.adapter4.QuickAdapterHelper
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.lang.ref.WeakReference
 
 class FileManageFragment : BaseFragment<FileFragmentFileManagerBinding>() {
 
     val fileManageAdapter by lazy {
         FileManageAdapter()
     }
+
+    val fileRecentAdapter by lazy {
+        FileRecentAdapter()
+    }
+
     private val cleanViewModel by viewModels<CleanViewModel>()
 
     val dataList by lazy {
         mutableListOf<FileManageData>()
     }
 
+    var recentList = mutableListOf<FilesData>()
+
     override fun startLoadData() {
-        cleanViewModel.startScan(Environment.getExternalStorageDirectory())
+        if (rootActivity.isStorageGranted()){
+            cleanViewModel.startScan(Environment.getExternalStorageDirectory())
+            fBinding.rlSetting.visibility = View.GONE
+            fBinding.rvRecent.visibility = View.VISIBLE
+        }else{
+            fBinding.rlSetting.visibility = View.VISIBLE
+            fBinding.rvRecent.visibility = View.GONE
+        }
     }
+
 
     override fun setListener() {
         fBinding.llClean.setOneClick {
             rootActivity.jumpActivity<CleanScanActivity>()
         }
-        fileManageAdapter.setOnDebouncedItemClick{adapter, view, position ->
-            var data = fileManageAdapter.items.get(position)
+        fBinding.rlSetting.setOneClick {
+            var permissionManager = StoragePermissionManager(WeakReference(rootActivity), onGranted = {
+            }, onDenied = {
+            })
+            permissionManager.requestStoragePermission()
+        }
+        cleanViewModel.recentListLiveData.observe(this){
+            recentList.clear()
+            recentList.addAll(it)
+            var list = mutableListOf<FilesData>()
+            if (recentList.size>=4){
+                list = recentList.subList(0,4)
+                list.add(FilesData().apply {
+                    fileName = getString(R.string.app_more_recent,"${recentList.size}")
+                })
+                fileRecentAdapter.submitList(list)
+            }
         }
     }
 
@@ -57,7 +96,11 @@ class FileManageFragment : BaseFragment<FileFragmentFileManagerBinding>() {
         fBinding.apply {
             rv.apply {
                 layoutManager = GridLayoutManager(rootActivity, 4)
-                rv.adapter = QuickAdapterHelper.Builder(fileManageAdapter).build().adapter
+                adapter = QuickAdapterHelper.Builder(fileManageAdapter).build().adapter
+            }
+            rvRecent.apply {
+                layoutManager = GridLayoutManager(rootActivity, 5)
+                adapter = QuickAdapterHelper.Builder(fileRecentAdapter).build().adapter
             }
         }
         rootActivity.addLaunch(success = {
@@ -80,12 +123,18 @@ class FileManageFragment : BaseFragment<FileFragmentFileManagerBinding>() {
                     tvStorage.text = useStorage.formatSize()
                 }
                 fileManageAdapter.setOnDebouncedItemClick { adapter, view, position ->
-                    var data = fileManageAdapter.items.get(position)
-                    if (data.type == FileManageData.FILE_TYPE_IMAGES || data.type == FileManageData.FILE_TYPE_VIDEOS){
-                        rootActivity.jumpActivity<ImageActivity>(Bundle().apply {
-                            putInt("fromType",data.type)
-                        })
-                    }
+                    var permissionManager = StoragePermissionManager(WeakReference(rootActivity), onGranted = {
+                        var data = fileManageAdapter.items.get(position)
+                        if (data.type == FileManageData.FILE_TYPE_IMAGES || data.type == FileManageData.FILE_TYPE_VIDEOS){
+                            rootActivity.jumpActivity<ImageActivity>(Bundle().apply {
+                                putInt("fromType",data.type)
+                            })
+                        }else{
+                            FileManageListActivity.startActivity(rootActivity,data.type)
+                        }
+                    }, onDenied = {
+                    })
+                    permissionManager.requestStoragePermission()
                 }
                 fileManageAdapter.submitList(dataList)
             }

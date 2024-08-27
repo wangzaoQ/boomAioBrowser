@@ -43,18 +43,6 @@ class StoragePermissionManager(
         }
     }
 
-    fun Context.isStoragePermissionGranted(): Boolean {
-        return XXPermissions.isGranted(this, Permission.Group.STORAGE)
-    }
-
-    fun Context.isManageAllFilesGranted(): Boolean {
-        return XXPermissions.isGranted(this, Permission.MANAGE_EXTERNAL_STORAGE)
-    }
-
-    fun Context.isStorageGranted(): Boolean {
-        return if (isAndroid11()) isManageAllFilesGranted()
-        else isStoragePermissionGranted()
-    }
 
     fun Context.getPermission(onRequestTips: () -> Unit = {}) {
         if (isAndroid11()) {

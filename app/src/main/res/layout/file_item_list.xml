@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="47dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginHorizontal="13dp"
+    android:layout_marginTop="13dp"
+    >
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivImg"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        ></androidx.appcompat.widget.AppCompatImageView>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="13dp"
+        android:layout_toEndOf="@+id/ivImg"
+        >
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Files name.txt"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:singleLine="true"
+            android:ellipsize="end"
+            ></androidx.appcompat.widget.AppCompatTextView>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="3.14 kb"
+            android:textSize="11sp"
+            android:textColor="#80000000"
+            android:singleLine="true"
+            android:ellipsize="end"
+            ></androidx.appcompat.widget.AppCompatTextView>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</RelativeLayout>

@@ -2,9 +2,12 @@ package com.boom.aiobrowser.model
 
 import android.os.Environment
 import androidx.lifecycle.MutableLiveData
+import com.blankj.utilcode.util.FileUtils
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.FilesData
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.clean.CleanConfig.adFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.apkFiles
@@ -37,9 +40,11 @@ class CleanViewModel : BaseDataModel() {
     var currentPathLiveData = MutableLiveData<String>()
     var currentSizeLiveData = MutableLiveData<String>()
     var downloadListLiveData = MutableLiveData<FilesData>()
-    var completeListLiveData = MutableLiveData<Int>()
 
-    var allFiles = mutableListOf<File>()
+
+    var recentListLiveData = MutableLiveData<MutableList<FilesData>>()
+
+    var allFiles = mutableListOf<FilesData>()
     var allFilesLength = 0L
 
     /**
@@ -50,6 +55,7 @@ class CleanViewModel : BaseDataModel() {
         onScanPath: (file: File) -> Unit = {},
         onComplete: () -> Unit = {}
     ) {
+        allFiles.clear()
         CleanConfig.clearCleanConfig()
         CleanConfig.clearFileConfig()
         loadData(loadBack = {
@@ -58,7 +64,21 @@ class CleanViewModel : BaseDataModel() {
             }, onComplete = {
                 onComplete.invoke()
                 APP.instance.cleanComplete = true
-                completeListLiveData.postValue(0)
+                APP.scanCompleteLiveData.postValue(0)
+                var start = System.currentTimeMillis()
+                AppLogs.eLog(TAG,"排序开始")
+                allFiles.sortBy { it.fileTime }
+                var recentList = mutableListOf<FilesData>()
+                for (i in 0 until recentList.size){
+                    var data = recentList.get(i)
+                    if (TimeManager.isWithin30Days(System.currentTimeMillis(),data.fileTime)){
+                        recentList.add(data)
+                    }else{
+                        break
+                    }
+                }
+                recentListLiveData.postValue(recentList)
+                AppLogs.eLog(TAG,"排序结束时间 :${System.currentTimeMillis()-start}")
             }).scanStart()
         }, failBack = {}, 1)
     }
@@ -73,11 +93,7 @@ class CleanViewModel : BaseDataModel() {
                 val fileName = file.name
                 val filePath = file.absolutePath
                 val fileSize = file.length()
-                fileList.add(FilesData().apply {
-                    this.fileName = fileName
-                    this.filePath = filePath
-                    this.fileSize = fileSize
-                })
+                fileList.add(FilesData.createDefault(file))
             }, onComplete = {
                 onComplete.invoke(fileList)
             }).scanStart()
@@ -100,17 +116,11 @@ class CleanViewModel : BaseDataModel() {
             AppLogs.dLog(TAG, "file 错误")
             return false
         }
-        val fileName = file.name
-        val filePath = file.absolutePath
-        val fileSize = file.length()
+
         if (isLargeFile(file)){
             runCatching {
                 synchronized(largeFiles) {
-                    largeFiles.add(FilesData().apply {
-                        this.fileName = fileName
-                        this.filePath = filePath
-                        this.fileSize = fileSize
-                    })
+                    largeFiles.add(FilesData.createDefault(file))
                 }
                 return true
             }.onFailure {
@@ -120,11 +130,7 @@ class CleanViewModel : BaseDataModel() {
         if (isImagesFile(file)){
             runCatching {
                 synchronized(imageFiles) {
-                    imageFiles.add(FilesData().apply {
-                        this.fileName = fileName
-                        this.filePath = filePath
-                        this.fileSize = fileSize
-                    })
+                    imageFiles.add(FilesData.createDefault(file))
                 }
                 return true
             }.onFailure {
@@ -133,11 +139,7 @@ class CleanViewModel : BaseDataModel() {
         }else if (isVideoFile(file)){
             runCatching {
                 synchronized(videoFiles) {
-                    videoFiles.add(FilesData().apply {
-                        this.fileName = fileName
-                        this.filePath = filePath
-                        this.fileSize = fileSize
-                    })
+                    videoFiles.add(FilesData.createDefault(file))
                 }
                 return true
             }.onFailure {
@@ -146,11 +148,7 @@ class CleanViewModel : BaseDataModel() {
         }else if (isAudioFile(file)){
             runCatching {
                 synchronized(audioFiles) {
-                    audioFiles.add(FilesData().apply {
-                        this.fileName = fileName
-                        this.filePath = filePath
-                        this.fileSize = fileSize
-                    })
+                    audioFiles.add(FilesData.createDefault(file))
                 }
                 return true
             }.onFailure {
@@ -159,11 +157,7 @@ class CleanViewModel : BaseDataModel() {
         }else if (isZipFile(file)){
             runCatching {
                 synchronized(zipFiles) {
-                    zipFiles.add(FilesData().apply {
-                        this.fileName = fileName
-                        this.filePath = filePath
-                        this.fileSize = fileSize
-                    })
+                    zipFiles.add(FilesData.createDefault(file))
                 }
                 return true
             }.onFailure {
@@ -171,13 +165,7 @@ class CleanViewModel : BaseDataModel() {
             }
         }else if (isDocFile(file)){
             runCatching {
-                synchronized(documentsFiles) {
-                    documentsFiles.add(FilesData().apply {
-                        this.fileName = fileName
-                        this.filePath = filePath
-                        this.fileSize = fileSize
-                    })
-                }
+                synchronized(documentsFiles) { FilesData.createDefault(file) }
                 return true
             }.onFailure {
                 AppLogs.eLog(TAG,"isDocFile:${it.stackTraceToString()}")
@@ -202,11 +190,9 @@ class CleanViewModel : BaseDataModel() {
         if (isResidual(file)) {
             runCatching {
                 synchronized(residualFiles) {
-                    residualFiles.add(FilesData().apply {
-                        this.fileName = fileName
-                        this.filePath = filePath
-                        this.fileSize = fileSize
-                    })
+                    var data = FilesData.createDefault(file)
+                    residualFiles.add(data)
+                    allFiles.add(data)
                 }
                 return true
             }.onFailure {
@@ -215,11 +201,9 @@ class CleanViewModel : BaseDataModel() {
         } else if (isApks(file)) {
             runCatching {
                 synchronized(apkFiles) {
-                    apkFiles.add(FilesData().apply {
-                        this.fileName = fileName
-                        this.filePath = filePath
-                        this.fileSize = fileSize
-                    })
+                    var data = FilesData.createDefault(file)
+                    apkFiles.add(data)
+                    allFiles.add(data)
                 }
             }.onFailure {
                 AppLogs.eLog(TAG,"isDownloadApks:${it.stackTraceToString()}")
@@ -229,11 +213,9 @@ class CleanViewModel : BaseDataModel() {
         } else if (isLogFile(file) || isLogCatFile(file)) {
             runCatching {
                 synchronized(junkFiles) {
-                    junkFiles.get(0).tempList?.add(FilesData().apply {
-                        this.fileName = fileName
-                        this.filePath = filePath
-                        this.fileSize = fileSize
-                    })
+                    var data = FilesData.createDefault(file)
+                    junkFiles.get(0).tempList?.add(data)
+                    allFiles.add(data)
                 }
             }.onFailure {
                 AppLogs.eLog(TAG,"isLogFile:${it.stackTraceToString()}")
@@ -242,11 +224,9 @@ class CleanViewModel : BaseDataModel() {
         } else if (isTmpFile(file)) {
             runCatching {
                 synchronized(junkFiles) {
-                    junkFiles.get(1).tempList?.add(FilesData().apply {
-                        this.fileName = fileName
-                        this.filePath = filePath
-                        this.fileSize = fileSize
-                    })
+                    var data = FilesData.createDefault(file)
+                    junkFiles.get(1).tempList?.add(data)
+                    allFiles.add(data)
                 }
             }.onFailure {
                 AppLogs.eLog(TAG,"isTmpFile:${it.stackTraceToString()}")
@@ -255,11 +235,9 @@ class CleanViewModel : BaseDataModel() {
         } else if (isADFile(file)) {
             runCatching {
                 synchronized(adFiles) {
-                    adFiles.add(FilesData().apply {
-                        this.fileName = fileName
-                        this.filePath = filePath
-                        this.fileSize = fileSize
-                    })
+                    var data = FilesData.createDefault(file)
+                    adFiles.add(data)
+                    allFiles.add(data)
                 }
             }.onFailure {
                 AppLogs.eLog(TAG,"isADFile:${it.stackTraceToString()}")
@@ -274,7 +252,6 @@ class CleanViewModel : BaseDataModel() {
         currentPathLiveData.postValue(file.absolutePath)
         filter2(file)
         if (filter(file)) {
-            allFiles.add(file)
             allFilesLength += file.length()
             currentSizeLiveData.postValue(allFilesLength.formatSize())
         }

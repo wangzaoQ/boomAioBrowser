@@ -33,6 +33,7 @@ object CleanConfig {
     var audioFiles: MutableList<FilesData> = mutableListOf()
     var zipFiles: MutableList<FilesData> = mutableListOf()
     var documentsFiles: MutableList<FilesData> = mutableListOf()
+    var recentFiles = mutableListOf<FilesData>()
 
 
 
@@ -71,6 +72,8 @@ object CleanConfig {
         audioFiles.clear()
         zipFiles.clear()
         documentsFiles.clear()
+
+        recentFiles.clear()
     }
 
     fun clearCleanConfig(){

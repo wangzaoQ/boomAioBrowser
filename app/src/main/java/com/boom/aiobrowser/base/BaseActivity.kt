@@ -118,10 +118,14 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
 
     }
 
+    var needAnimal = false
+
     override fun finish() {
         super.finish()
-        // 设置结束动画
-        overridePendingTransition(R.anim.in_alpha, R.anim.out_alpha)
+        if (needAnimal){
+            // 设置结束动画
+            overridePendingTransition(R.anim.in_alpha, R.anim.out_alpha)
+        }
     }
 
 

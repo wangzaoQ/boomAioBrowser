@@ -11,6 +11,7 @@ import com.boom.aiobrowser.data.FileManageData
 import com.boom.aiobrowser.databinding.FileActivityImagesBinding
 import com.boom.aiobrowser.databinding.FileActivityListManageBinding
 import com.boom.aiobrowser.model.CleanViewModel
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.clean.CleanConfig.apkFiles
@@ -19,10 +20,14 @@ import com.boom.aiobrowser.tools.clean.CleanConfig.documentsFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.downloadFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.imageFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.largeFiles
+import com.boom.aiobrowser.tools.clean.CleanConfig.recentFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.videoFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.zipFiles
+import com.boom.aiobrowser.tools.clean.clickFile
 import com.boom.aiobrowser.ui.adapter.FileListAdapter
+import com.boom.aiobrowser.ui.pop.FileEditorPop
 import com.boom.base.adapter4.QuickAdapterHelper
+import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
 
 class FileManageListActivity : BaseActivity<FileActivityListManageBinding>() {
@@ -43,6 +48,15 @@ class FileManageListActivity : BaseActivity<FileActivityListManageBinding>() {
 
     override fun setListener() {
         acBinding.ivBack.setOneClick { finish() }
+        APP.deleteLiveData2.observe(this){
+            for (i in 0 until fileListAdapter.items.size){
+                var data = fileListAdapter.items.get(i)
+                if (data.filePath == it){
+                    fileListAdapter.remove(data)
+                    break
+                }
+            }
+        }
     }
 
     val fileListAdapter by lazy {
@@ -67,7 +81,16 @@ class FileManageListActivity : BaseActivity<FileActivityListManageBinding>() {
                 )
                 adapter = adapterHelper.adapter
                 fileListAdapter.setOnDebouncedItemClick { adapter, view, position ->
+                    var data = adapter.getItem(position)
+                    if (data == null)return@setOnDebouncedItemClick
+                    clickFile(this@FileManageListActivity,data!!)
+                }
+                fileListAdapter.addOnDebouncedChildClick(R.id.ivMore) { adapter, view, position ->
+                    var data = adapter.getItem(position)
+                    if (data == null)return@addOnDebouncedChildClick
+                    FileEditorPop(this@FileManageListActivity).createPop(data) {
 
+                    }
                 }
             }
         }
@@ -100,6 +123,10 @@ class FileManageListActivity : BaseActivity<FileActivityListManageBinding>() {
                 acBinding.tvTitle.text = getString(R.string.app_documents)
                 fileListAdapter.submitList(documentsFiles)
             }
+            FileManageData.FILE_TYPE_OTHER->{
+                acBinding.tvTitle.text = getString(R.string.app_recently)
+                fileListAdapter.submitList(recentFiles)
+            }
             else -> {}
         }
     }
@@ -116,6 +143,7 @@ class FileManageListActivity : BaseActivity<FileActivityListManageBinding>() {
 
     override fun onDestroy() {
         APP.scanCompleteLiveData.removeObservers(this)
+        APP.deleteLiveData2.removeObservers(this)
         super.onDestroy()
     }
 }

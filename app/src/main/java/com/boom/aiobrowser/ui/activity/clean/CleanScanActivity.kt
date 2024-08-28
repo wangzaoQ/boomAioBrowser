@@ -162,44 +162,45 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
         viewModel.startScan(Environment.getExternalStorageDirectory(), onScanPath = {
 
         }, onComplete = {
-            acBinding.ctl.setBackgroundColor(ContextCompat.getColor(this@CleanScanActivity,R.color.bg_scan_complete))
-            acBinding.flProgress.visibility = View.GONE
-            acBinding.llComplete.visibility = View.VISIBLE
-            acBinding.tvPath.text = getString(R.string.app_scan_complete)
-            acBinding.tvPath.setBackgroundDrawable(ContextCompat.getDrawable(this@CleanScanActivity,R.drawable.shape_bg_clean_path2))
-            var animator = ValueAnimator.ofInt(acBinding.mainCl.height, dp2px(187f))
-            animator.duration = 500L
-            animator.addUpdateListener { valueAnimator -> // 获取当前动画的高度值
-                val animatedValue = valueAnimator.animatedValue as Int
-                // 设置 View 的新高度
-                var params = acBinding.mainCl.layoutParams as FrameLayout.LayoutParams
-                params.height = animatedValue
-                acBinding.mainCl.layoutParams = params
-            }
-            animator.start()
-            val params = acBinding.ctl.getLayoutParams() as AppBarLayout.LayoutParams
-            params.scrollFlags = (AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-                    or AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED or AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP)
-            acBinding.ctl.layoutParams = params
-            acBinding.root.postDelayed({
-                var list = mutableListOf<ScanData>()
-                list.add(ScanData().createJunkData(this@CleanScanActivity).apply {
-                    checkedAll(true)
-                })
-                list.add(ScanData().createApksData(this@CleanScanActivity).apply {
-                    checkedAll(true)
-                })
-                list.add(ScanData().createResidualData(this@CleanScanActivity).apply {
-                    checkedAll(true)
-                })
-                list.add(ScanData().createADData(this@CleanScanActivity).apply {
-                    checkedAll(true)
-                })
-                scanAdapter.submitList(list)
-                acBinding.cleanButton.text = getString(R.string.app_clean)
-                updateSelectedSize()
-            },600L)
-
-        })
+            addLaunch(success = {
+                acBinding.ctl.setBackgroundColor(ContextCompat.getColor(this@CleanScanActivity,R.color.bg_scan_complete))
+                acBinding.flProgress.visibility = View.GONE
+                acBinding.llComplete.visibility = View.VISIBLE
+                acBinding.tvPath.text = getString(R.string.app_scan_complete)
+                acBinding.tvPath.setBackgroundDrawable(ContextCompat.getDrawable(this@CleanScanActivity,R.drawable.shape_bg_clean_path2))
+                var animator = ValueAnimator.ofInt(acBinding.mainCl.height, dp2px(187f))
+                animator.duration = 500L
+                animator.addUpdateListener { valueAnimator -> // 获取当前动画的高度值
+                    val animatedValue = valueAnimator.animatedValue as Int
+                    // 设置 View 的新高度
+                    var params = acBinding.mainCl.layoutParams as FrameLayout.LayoutParams
+                    params.height = animatedValue
+                    acBinding.mainCl.layoutParams = params
+                }
+                animator.start()
+                val params = acBinding.ctl.getLayoutParams() as AppBarLayout.LayoutParams
+                params.scrollFlags = (AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+                        or AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED or AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP)
+                acBinding.ctl.layoutParams = params
+                acBinding.root.postDelayed({
+                    var list = mutableListOf<ScanData>()
+                    list.add(ScanData().createJunkData(this@CleanScanActivity).apply {
+                        checkedAll(true)
+                    })
+                    list.add(ScanData().createApksData(this@CleanScanActivity).apply {
+                        checkedAll(true)
+                    })
+                    list.add(ScanData().createResidualData(this@CleanScanActivity).apply {
+                        checkedAll(true)
+                    })
+                    list.add(ScanData().createADData(this@CleanScanActivity).apply {
+                        checkedAll(true)
+                    })
+                    scanAdapter.submitList(list)
+                    acBinding.cleanButton.text = getString(R.string.app_clean)
+                    updateSelectedSize()
+                },600L)
+            }, failBack = {},Dispatchers.Main)
+        },5000L)
     }
 }

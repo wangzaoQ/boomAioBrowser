@@ -16,6 +16,7 @@ import com.boom.aiobrowser.tools.clean.CleanConfig.documentsFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.imageFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.junkFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.largeFiles
+import com.boom.aiobrowser.tools.clean.CleanConfig.recentFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.residualFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.videoFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.zipFiles
@@ -53,13 +54,14 @@ class CleanViewModel : BaseDataModel() {
     fun startScan(
         parentDir: File,
         onScanPath: (file: File) -> Unit = {},
-        onComplete: () -> Unit = {}
+        onComplete: () -> Unit = {},
+        waitTime:Long = 0
     ) {
         allFiles.clear()
         CleanConfig.clearCleanConfig()
         CleanConfig.clearFileConfig()
         loadData(loadBack = {
-            Scan1(parentDir, onProgress = {
+            Scan1(parentDir,waitTime, onProgress = {
                 detailMemoryFile(it, onScanPath)
             }, onComplete = {
                 onComplete.invoke()
@@ -69,10 +71,11 @@ class CleanViewModel : BaseDataModel() {
                 AppLogs.eLog(TAG,"排序开始")
                 allFiles.sortBy { it.fileTime }
                 var recentList = mutableListOf<FilesData>()
-                for (i in 0 until recentList.size){
-                    var data = recentList.get(i)
+                for (i in 0 until allFiles.size){
+                    var data = allFiles.get(i)
                     if (TimeManager.isWithin30Days(System.currentTimeMillis(),data.fileTime)){
                         recentList.add(data)
+                        recentFiles.add(data)
                     }else{
                         break
                     }
@@ -80,15 +83,16 @@ class CleanViewModel : BaseDataModel() {
                 recentListLiveData.postValue(recentList)
                 AppLogs.eLog(TAG,"排序结束时间 :${System.currentTimeMillis()-start}")
             }).scanStart()
-        }, failBack = {}, 1)
+        }, failBack = {}, 1,)
     }
 
     fun startScanDownload(
-        onComplete: (list:MutableList<FilesData>) -> Unit = {}
+        onComplete: (list:MutableList<FilesData>) -> Unit = {},
+        waitTime:Long = 0
     ){
         var fileList = mutableListOf<FilesData>()
         loadData(loadBack = {
-            Scan1(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), onProgress = {
+            Scan1(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),waitTime, onProgress = {
                 var file = isRealFile(it) ?: return@Scan1
                 val fileName = file.name
                 val filePath = file.absolutePath

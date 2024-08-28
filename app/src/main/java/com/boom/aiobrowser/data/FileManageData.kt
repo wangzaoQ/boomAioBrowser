@@ -15,6 +15,7 @@ class FileManageData() {
         var FILE_TYPE_MUSIC = 5
         var FILE_TYPE_ZIP = 6
         var FILE_TYPE_DOCUMENTS = 7
+        var FILE_TYPE_OTHER = 8
 
         fun createManageData(type:Int):FileManageData{
             return FileManageData().apply {

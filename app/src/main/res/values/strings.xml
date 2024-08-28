@@ -84,8 +84,12 @@
     <string name="app_me">Me</string>
     <string name="app_clean_tips">"Trash To Be Cleaned "</string>
     <string name="app_no_app">No App Found</string>
+    <string name="app_recently">Recently</string>
     <string name="app_share_with">Share with</string>
     <string name="app_more_recent">+%s more</string>
     <string name="app_file_no_support">The file does not support the operation</string>
+    <string name="app_file_can_not_open">file can not open\n</string>
+    <string name="app_share">Share</string>
+    <string name="app_delete">Delete</string>
 
 </resources>

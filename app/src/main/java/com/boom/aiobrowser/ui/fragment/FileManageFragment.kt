@@ -14,6 +14,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.FileManageData
+import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_OTHER
 import com.boom.aiobrowser.data.FilesData
 import com.boom.aiobrowser.databinding.FileFragmentFileManagerBinding
 import com.boom.aiobrowser.model.CleanViewModel
@@ -54,7 +55,6 @@ class FileManageFragment : BaseFragment<FileFragmentFileManagerBinding>() {
         mutableListOf<FileManageData>()
     }
 
-    var recentList = mutableListOf<FilesData>()
 
     override fun startLoadData() {
         if (rootActivity.isStorageGranted()){
@@ -79,15 +79,21 @@ class FileManageFragment : BaseFragment<FileFragmentFileManagerBinding>() {
             permissionManager.requestStoragePermission()
         }
         cleanViewModel.recentListLiveData.observe(this){
-            recentList.clear()
-            recentList.addAll(it)
             var list = mutableListOf<FilesData>()
-            if (recentList.size>=4){
-                list = recentList.subList(0,4)
+            if (it.size>=4){
+                list = it.subList(0,4)
                 list.add(FilesData().apply {
-                    fileName = getString(R.string.app_more_recent,"${recentList.size}")
+                    fileName = getString(R.string.app_more_recent,"${it.size}")
                 })
                 fileRecentAdapter.submitList(list)
+            }
+        }
+        fileRecentAdapter.setOnDebouncedItemClick { adapter, view, position ->
+            var data = fileRecentAdapter.getItem(position)
+            if (position == 4){
+                FileManageListActivity.startActivity(rootActivity,FILE_TYPE_OTHER)
+            }else{
+
             }
         }
     }

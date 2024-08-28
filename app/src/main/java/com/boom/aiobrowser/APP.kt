@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.Build
 import android.webkit.WebView
 import com.boom.aiobrowser.ad.AioADDataManager.initAD
+import com.boom.aiobrowser.data.FilesData
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
 import com.boom.aiobrowser.tools.AppLogs
@@ -33,6 +34,7 @@ class APP: Application() {
         val engineLiveData  by lazy { ProtectedUnPeekLiveData<Int>() }
         val bottomLiveData  by lazy { ProtectedUnPeekLiveData<String>() }
         val deleteLiveData  by lazy { ProtectedUnPeekLiveData<HashMap<Int,Int>>() }
+        val deleteLiveData2  by lazy { ProtectedUnPeekLiveData<String>() }
         val scanCompleteLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
 
     }

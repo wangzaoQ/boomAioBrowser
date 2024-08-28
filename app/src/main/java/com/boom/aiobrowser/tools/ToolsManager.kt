@@ -15,6 +15,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.tools.clean.FileFilter.isApk
 import com.boom.aiobrowser.tools.clean.FileFilter.isAudio
 import com.boom.aiobrowser.tools.clean.FileFilter.isImage
 import com.boom.aiobrowser.tools.clean.FileFilter.isVideo
@@ -229,6 +230,24 @@ fun appDataReset(){
     }
 }
 
+fun Activity.openFile(path: String, isForceChoose: Boolean = false) {
+    if (path.isApk()) {
+        ToastUtils.showShort(getString(R.string.app_file_can_not_open))
+        return
+    }
+    val newUri = getFinalUriFromPath(path) ?: Uri.parse(path)
+    Intent(Intent.ACTION_VIEW).apply {
+        setDataAndType(newUri, getMimeTypeFromUri(newUri))
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        runCatching {
+            if (resolveActivity(packageManager) != null) {
+                if (isForceChoose) startActivity(Intent.createChooser(this@apply, "Open with")) else startActivity(this@apply)
+            } else ToastUtils.showShort(getString(R.string.app_file_can_not_open))
+        }.onFailure {
+            ToastUtils.showShort(it.message ?: "")
+        }
+    }
+}
 
 fun Activity.shareUseIntent(path: String) {
     val newUri = getFinalUriFromPath(path) ?: Uri.parse(path)

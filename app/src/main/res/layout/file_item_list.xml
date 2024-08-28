@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="47dp"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginHorizontal="13dp"
-    android:layout_marginTop="13dp"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginStart="13dp"
+    android:layout_marginTop="13dp">
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivImg"
         android:layout_width="40dp"
@@ -19,6 +19,7 @@
         android:layout_centerVertical="true"
         android:layout_marginStart="13dp"
         android:layout_toEndOf="@+id/ivImg"
+        android:layout_toStartOf="@+id/ivMore"
         >
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvName"
@@ -41,4 +42,13 @@
             android:ellipsize="end"
             ></androidx.appcompat.widget.AppCompatTextView>
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivMore"
+        android:layout_width="46dp"
+        android:layout_height="match_parent"
+        android:padding="13dp"
+        app:srcCompat="@mipmap/ic_file_more"
+        android:layout_alignParentEnd="true"
+        ></androidx.appcompat.widget.AppCompatImageView>
 </RelativeLayout>

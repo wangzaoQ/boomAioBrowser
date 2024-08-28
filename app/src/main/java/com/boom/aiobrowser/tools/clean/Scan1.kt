@@ -13,7 +13,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class Scan1(var parentDirectory: File,var onProgress: (file:File) -> Unit,var onComplete: () -> Unit = {}) :ScanInterface {
+class Scan1(var parentDirectory: File,var waitTime:Long,var onProgress: (file:File) -> Unit,var onComplete: () -> Unit = {}) :ScanInterface {
     var TAG = "Scan1"
     var scanTime = 0L
 
@@ -25,14 +25,13 @@ class Scan1(var parentDirectory: File,var onProgress: (file:File) -> Unit,var on
         scanTime = System.currentTimeMillis()
         AppLogs.dLog(TAG,"开始扫描")
         val files = scanDirectory(parentDirectory)
-        withContext(Dispatchers.IO){
-            AppLogs.dLog(TAG,"扫描耗时:${(System.currentTimeMillis()-scanTime)}")
-//            var middleTime = System.currentTimeMillis()-scanTime
-//            if (middleTime<5000){
-//                delay(5000-middleTime)
-//            }
-            scanComplete(files)
+        AppLogs.dLog(TAG,"扫描耗时:${(System.currentTimeMillis()-scanTime)}")
+        var middleTime = System.currentTimeMillis()-scanTime
+        if (middleTime<waitTime){
+            delay(waitTime-middleTime)
         }
+
+        scanComplete(files)
     }
 
     suspend fun scanDirectory(dir: File): MutableList<File> = coroutineScope {

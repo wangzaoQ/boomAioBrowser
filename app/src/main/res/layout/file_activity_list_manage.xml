@@ -21,7 +21,6 @@
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_images"
             android:layout_centerInParent="true"
             style="@style/app_text_bold"
             android:textSize="15sp"

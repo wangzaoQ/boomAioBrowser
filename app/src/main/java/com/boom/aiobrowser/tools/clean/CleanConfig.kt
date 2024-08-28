@@ -23,6 +23,7 @@ object CleanConfig {
     val audioExtension by lazy { mutableListOf("mp3", "wav", "wma", "ogg", "m4a", "opus", "flac", "aac", "mid") }
     val docExtension by lazy { mutableListOf("txt", "rtf", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "pptm") }
     val zipExtension by lazy { mutableListOf("zip") }
+    val apkExtension by lazy { mutableListOf("apk","apks") }
 
     val runningAppInfo = mutableListOf<AppInfo>()
 

@@ -83,7 +83,7 @@ object TimeManager {
         val differenceInDays = differenceInMillis / (1000 * 60 * 60 * 24)
 
         // 检查是否小于30天
-        return differenceInDays < 365
+        return differenceInDays < 30
     }
 
 }

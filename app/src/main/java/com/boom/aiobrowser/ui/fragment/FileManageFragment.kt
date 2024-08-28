@@ -24,6 +24,7 @@ import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.StoragePermissionManager
 import com.boom.aiobrowser.tools.clean.CleanToolsManager.getTotalStorage
 import com.boom.aiobrowser.tools.clean.CleanToolsManager.getUsedStorage
+import com.boom.aiobrowser.tools.clean.clickFile
 import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.tools.isStorageGranted
 import com.boom.aiobrowser.ui.JumpConfig
@@ -70,7 +71,18 @@ class FileManageFragment : BaseFragment<FileFragmentFileManagerBinding>() {
 
     override fun setListener() {
         fBinding.llClean.setOneClick {
-            rootActivity.jumpActivity<CleanScanActivity>()
+            var permissionManager = StoragePermissionManager(WeakReference(rootActivity), onGranted = {
+                rootActivity.jumpActivity<CleanScanActivity>()
+            }, onDenied = {
+            })
+            permissionManager.requestStoragePermission()
+        }
+        fBinding.llCleanTipsRoot.setOneClick {
+            var permissionManager = StoragePermissionManager(WeakReference(rootActivity), onGranted = {
+                rootActivity.jumpActivity<CleanScanActivity>()
+            }, onDenied = {
+            })
+            permissionManager.requestStoragePermission()
         }
         fBinding.rlSetting.setOneClick {
             var permissionManager = StoragePermissionManager(WeakReference(rootActivity), onGranted = {
@@ -90,11 +102,15 @@ class FileManageFragment : BaseFragment<FileFragmentFileManagerBinding>() {
         }
         fileRecentAdapter.setOnDebouncedItemClick { adapter, view, position ->
             var data = fileRecentAdapter.getItem(position)
+            if (data == null)return@setOnDebouncedItemClick
             if (position == 4){
                 FileManageListActivity.startActivity(rootActivity,FILE_TYPE_OTHER)
             }else{
-
+                clickFile(rootActivity,data)
             }
+        }
+        APP.scanCompleteLiveData.observe(this){
+            fBinding.tvMemory.text = cleanViewModel.allFilesLength.formatSize()
         }
     }
 

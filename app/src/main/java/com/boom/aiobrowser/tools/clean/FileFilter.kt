@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.tools.clean
 
 import android.os.Environment
+import com.boom.aiobrowser.tools.clean.CleanConfig.apkExtension
 import com.boom.aiobrowser.tools.clean.CleanConfig.appInstalledPkgList
 import com.boom.aiobrowser.tools.clean.CleanConfig.audioExtension
 import com.boom.aiobrowser.tools.clean.CleanConfig.docExtension
@@ -90,6 +91,6 @@ object FileFilter {
     fun String.isDoc() = docExtension.any { endsWith(it, true) }
     fun String.isZip() = zipExtension.any { endsWith(it, true) }
     fun String.isApk(): Boolean {
-        return endsWith("apk", true)
+        return apkExtension.any { endsWith(it, true) }
     }
 }

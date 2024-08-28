@@ -29,6 +29,7 @@ import com.boom.aiobrowser.ui.pop.FileEditorPop
 import com.boom.base.adapter4.QuickAdapterHelper
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
+import kotlinx.coroutines.Dispatchers
 
 class FileManageListActivity : BaseActivity<FileActivityListManageBinding>() {
 
@@ -99,10 +100,6 @@ class FileManageListActivity : BaseActivity<FileActivityListManageBinding>() {
 
     private fun updateList() {
         when (fromType) {
-            FileManageData.FILE_TYPE_DOWNLOADS-> {
-                acBinding.tvTitle.text = getString(R.string.app_downloads)
-                fileListAdapter.submitList(downloadFiles)
-            }
             FileManageData.FILE_TYPE_LARGE_FILE-> {
                 acBinding.tvTitle.text = getString(R.string.app_large_file)
                 fileListAdapter.submitList(largeFiles)
@@ -132,12 +129,21 @@ class FileManageListActivity : BaseActivity<FileActivityListManageBinding>() {
     }
 
     fun getDataList(){
-        if (APP.instance.cleanComplete.not()){
-            APP.scanCompleteLiveData.observe(this){
-                updateList()
+        if (fromType == FileManageData.FILE_TYPE_DOWNLOADS){
+            acBinding.tvTitle.text = getString(R.string.app_downloads)
+            viewModel.startScanDownload(){
+                addLaunch(success = {
+                    fileListAdapter.submitList(it)
+                }, failBack = {},Dispatchers.Main)
             }
         }else{
-            updateList()
+            if (APP.instance.cleanComplete.not()){
+                APP.scanCompleteLiveData.observe(this){
+                    updateList()
+                }
+            }else{
+                updateList()
+            }
         }
     }
 

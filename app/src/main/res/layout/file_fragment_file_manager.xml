@@ -150,6 +150,7 @@
             android:background="@drawable/shape_bg_clean_tips"
             android:gravity="center_vertical"
             android:paddingStart="13dp"
+            android:layout_marginEnd="13dp"
             >
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvMemory"
@@ -177,7 +178,7 @@
                 android:paddingHorizontal="5dp"
                 android:gravity="center"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="13dp"
+                android:layout_marginEnd="3dp"
                 >
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="14dp"

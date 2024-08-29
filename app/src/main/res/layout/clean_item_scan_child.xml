@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_toStartOf="@+id/ivEnd"
         android:layout_centerVertical="true"
-        android:textColor="#FF007AFF"
+        android:textColor="#FFFF3B30"
         android:textSize="15sp"
         tools:text="41k"
         android:layout_marginEnd="13dp"

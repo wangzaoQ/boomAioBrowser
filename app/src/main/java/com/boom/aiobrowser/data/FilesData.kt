@@ -2,18 +2,23 @@ package com.boom.aiobrowser.data
 
 import android.os.Build
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.tools.clean.CleanConfig.DATA_TYPE_JUNK
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.attribute.BasicFileAttributes
 
-class FilesData {
+class FilesData :ViewItem(){
 
     var fileName = ""
     var filePath = ""
     var itemChecked = false
     var fileSize = 0L
     var fileTime = 0L
-    var imgId = R.mipmap.ic_file
+    var imgId :Any = R.mipmap.ic_file
+
+    var scanType = -1
+
+    override var dataType=1
 
     var tempList:MutableList<FilesData>?=null
 
@@ -27,6 +32,7 @@ class FilesData {
                 this.filePath = filePath
                 this.fileSize = fileSize
                 this.fileTime = getFileCreationTime(file)?:0L
+                this.dataType = 1
             }
         }
 

@@ -8,6 +8,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.FilesData
 import com.boom.aiobrowser.databinding.CleanItemFilesBinding
+import com.boom.aiobrowser.tools.GlideManager
 import com.boom.aiobrowser.tools.clean.CleanToolsManager
 import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.clean.formatSize
@@ -52,7 +53,7 @@ class ScanChildAdapter(var type:Int) : BaseQuickAdapter<FilesData, ScanChildAdap
                 ivTag.setImageDrawable(CleanToolsManager.getApkIcon(APP.instance,item.filePath))
                 tvName.text = if (label.isNullOrEmpty()) item.fileName else label
             }else{
-                ivTag.setImageResource(item.imgId)
+                GlideManager.loadImg(iv = ivTag,url = item.imgId)
                 tvName.text = item.fileName
             }
             if (item.tempList.isNullOrEmpty()){

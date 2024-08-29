@@ -5,10 +5,11 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.clean.CleanConfig.adFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.apkFiles
+import com.boom.aiobrowser.tools.clean.CleanConfig.cacheFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.junkFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.residualFiles
 
-class ScanData {
+class ScanData : ViewItem() {
 
     var type = CleanConfig.DATA_TYPE_JUNK
     var imgId = 0
@@ -16,15 +17,16 @@ class ScanData {
     var itemChecked = false
     var itemExpend = true
     var itemSize = ""
-    var childList = mutableListOf<FilesData>()
     var isLoading = false
+
+    var allLength = 0L
 
     fun createJunkData(context:Context,addChild:Boolean=true):ScanData{
         type = CleanConfig.DATA_TYPE_JUNK
         imgId = R.mipmap.ic_junk_files
         title = context.getString(R.string.app_clean_junk_files)
-        if (addChild){
-            childList = junkFiles
+        junkFiles.forEach {
+            allLength+=it.fileSize
         }
         return this
     }
@@ -32,8 +34,17 @@ class ScanData {
         type = CleanConfig.DATA_TYPE_APK
         imgId = R.mipmap.ic_apks
         title = context.getString(R.string.app_clean_apk)
-        if (addChild){
-            childList = apkFiles
+        apkFiles.forEach {
+            allLength+=it.fileSize
+        }
+        return this
+    }
+    fun createCacheData(context:Context,addChild:Boolean=true):ScanData{
+        type = CleanConfig.DATA_TYPE_CACHE
+        imgId = R.mipmap.ic_cache_junk
+        title = context.getString(R.string.app_clean_cache)
+        cacheFiles.forEach {
+            allLength+=it.fileSize
         }
         return this
     }
@@ -41,8 +52,8 @@ class ScanData {
         type = CleanConfig.DATA_TYPE_RESIDUAL
         imgId = R.mipmap.ic_residual
         title = context.getString(R.string.app_clean_residual)
-        if (addChild){
-            childList = residualFiles
+        residualFiles.forEach {
+            allLength+=it.fileSize
         }
         return this
     }
@@ -50,8 +61,8 @@ class ScanData {
         type = CleanConfig.DATA_TYPE_AD
         imgId = R.mipmap.ic_scan_ad
         title = context.getString(R.string.app_clean_ad)
-        if (addChild){
-            childList = adFiles
+        adFiles.forEach {
+            allLength+=it.fileSize
         }
         return this
     }
@@ -59,8 +70,6 @@ class ScanData {
     fun checkedAll(check:Boolean){
         isLoading = false
         itemChecked = check
-        childList.forEach {
-            it.itemChecked = check
-        }
+
     }
 }

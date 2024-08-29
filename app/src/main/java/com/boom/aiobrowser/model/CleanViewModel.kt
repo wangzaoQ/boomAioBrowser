@@ -12,6 +12,7 @@ import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.clean.CleanConfig.adFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.apkFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.audioFiles
+import com.boom.aiobrowser.tools.clean.CleanConfig.cacheFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.documentsFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.downloadFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.imageFiles
@@ -21,6 +22,7 @@ import com.boom.aiobrowser.tools.clean.CleanConfig.recentFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.residualFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.videoFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.zipFiles
+import com.boom.aiobrowser.tools.clean.CleanToolsManager.getCacheSize
 import com.boom.aiobrowser.tools.clean.FileFilter.isADFile
 import com.boom.aiobrowser.tools.clean.FileFilter.isApk
 import com.boom.aiobrowser.tools.clean.FileFilter.isApks
@@ -40,8 +42,10 @@ import com.boom.aiobrowser.tools.clean.FileFilter.isZip
 import com.boom.aiobrowser.tools.clean.FileFilter.isZipFile
 import com.boom.aiobrowser.tools.clean.Scan1
 import com.boom.aiobrowser.tools.clean.formatSize
+import com.boom.aiobrowser.ui.isAndroid12
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.io.File
 
@@ -57,6 +61,22 @@ class CleanViewModel : BaseDataModel() {
 
     /**
      * 扫描内存
+     */
+    fun startScanCache(
+        onComplete: () -> Unit = {},
+        onScanPath: (size:Long) -> Unit = {}
+    ) {
+        loadData(loadBack = {
+            delay(100)
+            if (isAndroid12()){
+                cacheFiles = getCacheSize(onScanPath)
+                onComplete.invoke()
+            }
+        }, failBack = {},1)
+    }
+
+    /**
+     * 扫描数据
      */
     fun startScan(
         parentDir: File,

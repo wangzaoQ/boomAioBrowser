@@ -15,6 +15,7 @@ object CleanConfig {
        //残留文件
     var residualFiles: MutableList<FilesData> = mutableListOf()
     var adFiles: MutableList<FilesData> = mutableListOf()
+    var cacheFiles: MutableList<FilesData> = mutableListOf()
     val appInstalledPkgList = mutableListOf<String>()
 
     val runAPPExtension by lazy { mutableListOf("xiaomi","miui","huawei","${BuildConfig.APPLICATION_ID}") }
@@ -42,6 +43,7 @@ object CleanConfig {
     const val DATA_TYPE_APK = 1
     const val DATA_TYPE_RESIDUAL = 2
     const val DATA_TYPE_AD = 3
+    const val DATA_TYPE_CACHE = 4
 
 
     fun getAllFiles():String{

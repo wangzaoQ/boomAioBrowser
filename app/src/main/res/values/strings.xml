@@ -50,6 +50,7 @@
     <string name="app_clean_apk">Obsolete APK Files</string>
     <string name="app_clean_ad">AD Files</string>
     <string name="app_clean_residual">Residual Files</string>
+    <string name="app_clean_cache">Cache Files</string>
     <string name="app_selected">Selected</string>
     <string name="app_scan_complete">Select The Folder You Want To Clean</string>
     <string name="app_allow_storage_access">Allow Storage Access</string>
@@ -91,5 +92,6 @@
     <string name="app_file_can_not_open">file can not open\n</string>
     <string name="app_share">Share</string>
     <string name="app_delete">Delete</string>
+    <string name="app_cache_permission_tips">Grant Permissions To Clean Up Trash.</string>
 
 </resources>

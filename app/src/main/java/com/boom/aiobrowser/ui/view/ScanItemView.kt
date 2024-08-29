@@ -24,23 +24,12 @@ class ScanItemView : LinearLayout {
             }else{
                 isAnimation = false
                 ivEnd.clearAnimation()
-                if (item.itemChecked && item.childList.isNotEmpty()){
+                if (item.itemChecked){
                     ivEnd.setImageResource(R.mipmap.ic_scan_item_checked)
                 }else{
                     ivEnd.setImageResource(R.mipmap.ic_scan_item_unchecked)
                 }
-                if (item.childList.isNullOrEmpty()){
-                    tvSize.text = ""
-                }else{
-                    var allLength = 0L
-                    item.childList.forEach {
-                        it.tempList?.forEach {
-                            allLength+=it.fileSize
-                        }
-                        allLength+=it.fileSize
-                    }
-                    tvSize.text = allLength.formatSize()
-                }
+                tvSize.text = item.allLength.formatSize()
             }
         }
     }
@@ -58,23 +47,12 @@ class ScanItemView : LinearLayout {
             }else{
                 isAnimation = false
                 ivEnd.clearAnimation()
-                if (item.itemChecked && item.childList.isNotEmpty()){
+                if (item.itemChecked){
                     ivEnd.setImageResource(R.mipmap.ic_scan_item_checked)
                 }else{
                     ivEnd.setImageResource(R.mipmap.ic_scan_item_unchecked)
                 }
-                if (item.childList.isNullOrEmpty()){
-                    tvSize.text = ""
-                }else{
-                    var allLength = 0L
-                    item.childList.forEach {
-                        it.tempList?.forEach {
-                            allLength+=it.fileSize
-                        }
-                        allLength+=it.fileSize
-                    }
-                    tvSize.text = allLength.formatSize()
-                }
+                tvSize.text = item.allLength.formatSize()
             }
         }
     }

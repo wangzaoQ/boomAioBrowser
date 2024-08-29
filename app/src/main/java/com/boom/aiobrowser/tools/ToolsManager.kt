@@ -20,6 +20,7 @@ import com.boom.aiobrowser.tools.clean.FileFilter.isAudio
 import com.boom.aiobrowser.tools.clean.FileFilter.isImage
 import com.boom.aiobrowser.tools.clean.FileFilter.isVideo
 import com.boom.aiobrowser.ui.isAndroid11
+import com.boom.aiobrowser.ui.isAndroid12
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
@@ -339,6 +340,16 @@ fun Context.isManageAllFilesGranted(): Boolean {
 fun Context.isStorageGranted(): Boolean {
     return if (isAndroid11()) isManageAllFilesGranted()
     else isStoragePermissionGranted()
+}
+
+fun Context.isCacheGranted():Boolean{
+    return if (isAndroid12()){
+        XXPermissions.isGranted(this, Permission.PACKAGE_USAGE_STATS)
+    }else if (isAndroid11()){
+        false
+    }else{
+        true
+    }
 }
 
 

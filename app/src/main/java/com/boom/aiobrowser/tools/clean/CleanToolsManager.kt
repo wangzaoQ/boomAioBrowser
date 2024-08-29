@@ -1,6 +1,5 @@
 package com.boom.aiobrowser.tools.clean
 
-import android.app.Activity
 import android.app.ActivityManager
 import android.app.usage.StorageStatsManager
 import android.content.Context
@@ -8,12 +7,18 @@ import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Environment
+import android.os.Process.myUserHandle
 import android.os.StatFs
 import android.os.storage.StorageManager
 import androidx.core.content.ContextCompat
-import com.boom.aiobrowser.R
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.R
+import com.boom.aiobrowser.data.FilesData
 import com.boom.aiobrowser.tools.clean.CleanConfig.runningAppInfo
+import com.boom.aiobrowser.tools.clean.FileFilter.isInstalled
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 
 object CleanToolsManager {
 
@@ -128,6 +133,34 @@ object CleanToolsManager {
         val totalBlocks = stat.blockCountLong
         val availableBlocks = stat.availableBlocksLong
         return (totalBlocks - availableBlocks) * blockSize
+    }
+
+
+   suspend fun getCacheSize(onScanPath: (size:Long) -> Unit = {}): MutableList<FilesData> {
+        var allCache = 0L
+        var list = mutableListOf<FilesData>()
+        val packageManager: PackageManager = APP.instance.getPackageManager()
+        APP.instance.packageManager.getInstalledPackages(0).forEach {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (isInstalled(it.packageName)){
+                    val storageStatsManager = APP.instance.getSystemService(Context.STORAGE_STATS_SERVICE) as StorageStatsManager
+                    var stats = storageStatsManager.queryStatsForPackage(StorageManager.UUID_DEFAULT,it.packageName,myUserHandle())
+                    var cache = stats.externalCacheBytes
+                    if (cache>0){
+                        allCache +=cache
+                        list.add(FilesData().apply {
+                            fileSize = cache
+                            filePath = it.packageName
+                            imgId = packageManager.getApplicationIcon(it.applicationInfo)
+                            fileName = packageManager.getApplicationLabel(it.applicationInfo).toString()
+                            itemChecked = true
+                        })
+                        onScanPath.invoke(allCache)
+                    }
+                }
+            }
+        }
+        return list
     }
 
 }

@@ -12,8 +12,24 @@
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.GET_INSTALLED_APPS"/>
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
+
+
+<!--    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"-->
+<!--        tools:ignore="QueryAllPackagesPermission" />-->
+
+
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+
+    </queries>
+
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:icon="@mipmap/ic_start_logo"

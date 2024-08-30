@@ -31,6 +31,7 @@ import com.boom.aiobrowser.tools.clean.CleanConfig.cacheFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.junkFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.residualFiles
 import com.boom.aiobrowser.tools.clean.formatSize
+import com.boom.aiobrowser.tools.isCacheGranted
 import com.boom.aiobrowser.tools.rotateAnim
 import com.boom.aiobrowser.ui.activity.clean.load.CleanLoadActivity
 import com.boom.aiobrowser.ui.adapter.ScanAdapter2
@@ -39,6 +40,8 @@ import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
@@ -102,21 +105,50 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
         }
     }
 
-    private fun updateSelectedSize() {
-        addLaunch(success = {
+    var updateJob:Job?=null
+
+    private fun updateSelectedSize(cacheLength :Long=0L) {
+        if (cacheLength!=0L){
+            AppLogs.dLog(acTAG,"cacheLength:${cacheLength!!.formatSize()}")
+        }
+        updateJob?.cancel()
+        updateJob = addLaunch(success = {
             var allLength = 0L
+            var isCurrent = true
+            var jumpChild = false
             scanAdapter.items.forEach {
-                if (it.dataType == ViewItem.TYPE_PARENT){
-                    (it as ScanData).apply {
+                if (it.dataType== ViewItem.TYPE_PARENT){
+                    isCurrent = false
+                    jumpChild = false
+                    it as ScanData
+                    if (it.itemChecked){
                         allLength+=it.allLength
+                        jumpChild = true
+                    }
+                }
+                if (jumpChild.not()){
+                    if (it.dataType == ViewItem.TYPE_CHILD){
+                        isCurrent = true
+                        it as FilesData
+                        if (it.itemChecked){
+                            if (it.tempList.isNullOrEmpty()){
+                                allLength+=it.fileSize
+                            }else{
+                                it.tempList?.forEach {
+                                    allLength+=it.fileSize
+                                }
+                            }
+                        }
                     }
                 }
             }
             withContext(Dispatchers.Main){
-                acBinding.tvTitle.text = allLength.formatSize()
-                acBinding.tvSelectedSize.text = allLength.formatSize()
+                AppLogs.dLog(acTAG,"显示结果:${(allLength+(cacheLength?:0L)).formatSize()} item:${scanAdapter.items.size}")
+                acBinding.tvTitle.text = (allLength).formatSize()
+                acBinding.tvSelectedSize.text = (allLength).formatSize()
                 acBinding.cleanButton.setOneClick {
-                    CleanLoadActivity.startCleanLoadActivity(this@CleanScanActivity,allLength)
+                    if (allLength == 0L)return@setOneClick
+                    CleanLoadActivity.startCleanLoadActivity(this@CleanScanActivity,(allLength))
                 }
             }
         }, failBack = {},Dispatchers.IO)
@@ -133,6 +165,7 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                     if(data == null)return@setOnDebouncedItemClick
                     if (data.dataType == ViewItem.TYPE_PARENT){
                         data as ScanData
+                        if (data.isLoading)return@setOnDebouncedItemClick
                         data.itemExpend = data.itemExpend.not()
 //                        scanAdapter.notifyItemChanged(position,"updateExpend")
                         if (position == scanAdapter.items.size-1)return@setOnDebouncedItemClick
@@ -158,6 +191,10 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                                     }
                                 }
                             )
+                            list.forEach {
+                                it.itemChecked = data.itemChecked
+                            }
+
                             if (list.isNotEmpty()) scanAdapter.addAll(position+1,list)
                         }else{
                             var index = position
@@ -249,44 +286,73 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                         it.itemChecked = true
                         list.add(it)
                     }
+
                     list.add(ScanData().createJunkData(this@CleanScanActivity).apply {
                         checkedAll(true)
                     })
+                    var junkIndex = list.size-1
+                    var junkLength = 0L
                     CleanConfig.junkFiles.forEach {
                         it.scanType = CleanConfig.DATA_TYPE_JUNK
                         it.itemChecked = true
                         list.add(it)
+                        it.tempList?.forEach {
+                            junkLength+=it.fileSize
+                        }
                     }
+                    (list.get(junkIndex) as ScanData).apply {
+                        allLength = junkLength
+                    }
+                    var apkLength = 0L
                     list.add(ScanData().createApksData(this@CleanScanActivity).apply {
                         checkedAll(true)
                     })
+                    var apkIndex = list.size-1
                     CleanConfig.apkFiles.forEach {
                         it.scanType = CleanConfig.DATA_TYPE_APK
                         it.itemChecked = true
                         list.add(it)
+                        apkLength+=it.fileSize
+                    }
+                    (list.get(apkIndex) as ScanData).apply {
+                        allLength = apkLength
                     }
                     list.add(ScanData().createResidualData(this@CleanScanActivity).apply {
                         checkedAll(true)
                     })
+                    var residualIndex = list.size-1
+                    var residualLength = 0L
                     CleanConfig.residualFiles.forEach {
                         it.scanType = CleanConfig.DATA_TYPE_RESIDUAL
                         it.itemChecked = true
                         list.add(it)
+                        residualLength+=it.fileSize
+                    }
+                    (list.get(residualIndex) as ScanData).apply {
+                        allLength = residualLength
                     }
                     list.add(ScanData().createADData(this@CleanScanActivity).apply {
                         checkedAll(true)
                     })
+                    var adIndex = list.size-1
+                    var adLength = 0L
                     CleanConfig.adFiles.forEach {
                         it.scanType = CleanConfig.DATA_TYPE_AD
                         it.itemChecked = true
                         list.add(it)
+                        adLength+=it.fileSize
+                    }
+                    (list.get(adIndex) as ScanData).apply {
+                        allLength = adLength
                     }
                     scanAdapter.submitList(list)
                     acBinding.cleanButton.text = getString(R.string.app_clean)
                     updateSelectedSize()
-                    if (cacheFiles.isNullOrEmpty()){
-                        acBinding.root.postDelayed(Runnable { clickCache() }
-                        ,100)
+                    if (isCacheGranted()){
+                        if (cacheFiles.isNullOrEmpty()){
+                            acBinding.root.postDelayed(Runnable { clickCache() }
+                                ,1000)
+                        }
                     }
                 },600L)
             }, failBack = {},Dispatchers.Main)
@@ -298,7 +364,7 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
             var data = scanAdapter.getItem(0)
             data as ScanData
             data!!.isLoading = true
-//            scanAdapter.notifyItemChanged(0,"updateLoad")
+            scanAdapter.notifyItemChanged(0,"updateLoad")
             viewModel.startScanCache(onComplete={
                 addLaunch(success = {
                     scanAdapter.getItem(0)!!.apply {
@@ -322,6 +388,7 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                     }
                     scanAdapter.notifyItemChanged(0,"updateCache")
                 }, failBack = {},Dispatchers.Main)
+                updateSelectedSize(it)
             })
         }, onDenied = {
         })

@@ -26,7 +26,7 @@ class StoragePermissionManager(
     fun requestStoragePermission() {
         activity?.getPermission(onRequestTips = {
             StoragePop(activity!!).createPop{
-                if (it == 1){
+                if (it == 0){
                     activity?.getManageAllFilesPermission()
                 }
             }

@@ -70,12 +70,13 @@ class CleanViewModel : BaseDataModel() {
             delay(100)
             if (isAndroid12()){
                 cacheFiles = getCacheSize(onScanPath)
+                cacheFiles.sortByDescending { it.fileSize }
                 onComplete.invoke()
             }
         }, failBack = {},1)
     }
 
-    /**
+    /*
      * 扫描数据
      */
     fun startScan(

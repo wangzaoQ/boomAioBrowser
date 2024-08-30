@@ -14,9 +14,11 @@ import androidx.core.content.ContextCompat
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.FilesData
+import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.clean.CleanConfig.runningAppInfo
 import com.boom.aiobrowser.tools.clean.FileFilter.isInstalled
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 
@@ -155,6 +157,8 @@ object CleanToolsManager {
                             fileName = packageManager.getApplicationLabel(it.applicationInfo).toString()
                             itemChecked = true
                         })
+                        delay(10)
+                        AppLogs.dLog("getCacheSize",":${allCache.formatSize()}")
                         onScanPath.invoke(allCache)
                     }
                 }

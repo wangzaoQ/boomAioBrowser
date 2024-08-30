@@ -8,6 +8,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.text.TextUtils
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import com.blankj.utilcode.util.FileUtils
@@ -19,6 +20,8 @@ import com.boom.aiobrowser.tools.clean.FileFilter.isApk
 import com.boom.aiobrowser.tools.clean.FileFilter.isAudio
 import com.boom.aiobrowser.tools.clean.FileFilter.isImage
 import com.boom.aiobrowser.tools.clean.FileFilter.isVideo
+import com.boom.aiobrowser.tools.clean.UriManager
+import com.boom.aiobrowser.tools.clean.UriManager.URI_SEPARATOR
 import com.boom.aiobrowser.ui.isAndroid11
 import com.boom.aiobrowser.ui.isAndroid12
 import com.google.gson.Gson
@@ -342,11 +345,56 @@ fun Context.isStorageGranted(): Boolean {
     else isStoragePermissionGranted()
 }
 
-fun Context.isCacheGranted():Boolean{
+
+
+fun Context.existsGrantedUriPermission(
+    uri: String?,
+    activity: Context?
+): String? {
+    if (activity == null)return null
+    AppLogs.dLog("PermissionManager:", "请求权限的原始uri是:$uri")
+    //请求权限的原始uri是:content://com.android.externalstorage.documents/document/primary%3AAndroid%2Fdata
+    //获取需要授权uri的字符串，还不能匹配，还需要进行处理
+    val reqUri = uri?.replace("documents/document/primary", "documents/tree/primary")?:""
+    AppLogs.dLog("PermissionManager:", "请求权限处理后的uri(为了进行判断是否已经授权)是:$reqUri")
+
+    //获取已授权并已存储的uri列表
+    val uriPermissions = activity!!.contentResolver.persistedUriPermissions
+    AppLogs.dLog("PermissionManager:", "已经授权的uri集合是:$uriPermissions")
+    //已经授权的uri集合是:[UriPermission {uri=content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fdata, modeFlags=3, persistedTime=1669980673302}]
+    var tempUri: String
+    //遍历并判断请求的uri字符串是否已经被授权
+    for (uriP in uriPermissions) {
+        tempUri = uriP.uri.toString()
+        //如果父目录已经授权就返回已经授权
+        if (reqUri.matches(Regex(tempUri + URI_SEPARATOR + ".*")) || reqUri == tempUri && (uriP.isReadPermission || uriP.isWritePermission)) {
+            AppLogs.dLog("PermissionManager:",  reqUri + "已经授权")
+            return tempUri
+        }
+    }
+    AppLogs.dLog("PermissionManager:",  reqUri + "未授权")
+    return null
+}
+
+/**
+ * forceScan = true 则强制用原始Uri 判断 false则用先存的uri判断
+ */
+fun Context.isCacheGranted(forceScan:Boolean = true):Boolean{
     return if (isAndroid12()){
         XXPermissions.isGranted(this, Permission.PACKAGE_USAGE_STATS)
     }else if (isAndroid11()){
-        false
+        if (forceScan){
+            val isGet: Boolean = TextUtils.isEmpty(this.existsGrantedUriPermission(UriManager.URI_STORAGE_SAVED_ANRROID_DATA, this)).not()
+            //这里会对activity重新赋值
+            if (isGet) {
+                return true
+            }else{
+                return false
+            }
+        }else{
+            val uriPermissions = this!!.contentResolver.persistedUriPermissions
+           return uriPermissions.size>0
+        }
     }else{
         true
     }

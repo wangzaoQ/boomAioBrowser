@@ -1,12 +1,18 @@
 package com.boom.aiobrowser.ui.activity.clean
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Environment
+import android.provider.DocumentsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.documentfile.provider.DocumentFile
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.R
@@ -42,7 +48,6 @@ import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
@@ -144,7 +149,7 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                 }
             }
             withContext(Dispatchers.Main){
-                AppLogs.dLog(acTAG,"显示结果:${(allLength+(cacheLength?:0L)).formatSize()} item:${scanAdapter.items.size}")
+//                AppLogs.dLog(acTAG,"显示结果:${(allLength+(cacheLength?:0L)).formatSize()} item:${scanAdapter.items.size}")
                 acBinding.tvTitle.text = (allLength).formatSize()
                 acBinding.tvSelectedSize.text = (allLength).formatSize()
                 acBinding.cleanButton.setOneClick {
@@ -350,9 +355,9 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                     scanAdapter.submitList(list)
                     acBinding.cleanButton.text = getString(R.string.app_clean)
                     updateSelectedSize()
-                    if (isCacheGranted()){
+                    if (isCacheGranted(false)){
                         if (cacheFiles.isNullOrEmpty()){
-                            acBinding.root.postDelayed(Runnable { clickCache() }
+                            acBinding.root.postDelayed(Runnable { clickCache(false) }
                                 ,1000)
                         }
                     }
@@ -361,13 +366,15 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
         },5000L)
     }
 
-    private fun clickCache() {
+    private fun clickCache(forceScan:Boolean = true) {
         var permissionManager = CachePermissionManager(WeakReference(this@CleanScanActivity), onGranted = {
+            scanAdapter.itemAnimation = null
+
             var data = scanAdapter.getItem(0)
             data as ScanData
             data!!.isLoading = true
             scanAdapter.notifyItemChanged(0,"updateLoad")
-            viewModel.startScanCache(onComplete={
+            viewModel.startScanCache(forceScan,onComplete={
                 addLaunch(success = {
                     scanAdapter.getItem(0)!!.apply {
                         (this as ScanData).apply {
@@ -394,7 +401,7 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
             })
         }, onDenied = {
         })
-        permissionManager.requestCachePermission()
+        permissionManager.requestCachePermission(forceScan)
     }
 
     private fun updateParentChecked(position: Int) {
@@ -452,4 +459,42 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
             scanAdapter.notifyItemRangeChanged(position,endIndex-position,"updateCheck")
         }
     }
+
+
+    var REQUEST_CODE_FOR_DIR: Int = 5411122
+
+    //通过SAF获取权限
+    fun startForSAF(activity: Activity) {
+        val uri =
+            Uri.parse("content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fdata")
+        val documentFile = DocumentFile.fromTreeUri(activity, uri)
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+        intent.setFlags(
+            Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                    or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+                    or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
+        )
+        checkNotNull(documentFile)
+        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, documentFile.uri)
+        activity.startActivityForResult(intent, REQUEST_CODE_FOR_DIR)
+    }
+
+    @SuppressLint("WrongConstant")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        var uri: Uri?=null
+        if (requestCode == REQUEST_CODE_FOR_DIR && (data?.data.also { uri = it }) != null) {
+            uri?.apply {
+                if (data == null)return
+                contentResolver.takePersistableUriPermission(
+                    this,
+                    data.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                )
+                clickCache(false)
+            }
+        }
+    }
+
+
 }

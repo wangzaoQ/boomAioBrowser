@@ -35,6 +35,7 @@ import com.boom.aiobrowser.tools.isCacheGranted
 import com.boom.aiobrowser.tools.rotateAnim
 import com.boom.aiobrowser.ui.activity.clean.load.CleanLoadActivity
 import com.boom.aiobrowser.ui.adapter.ScanAdapter2
+import com.boom.aiobrowser.ui.isAndroid12
 import com.boom.base.adapter4.BaseQuickAdapter
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
@@ -218,6 +219,7 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                         updateChildChecked(position,data.itemChecked)
                     }else {
                         data as FilesData
+                        if (isAndroid12() && data.scanType == DATA_TYPE_CACHE)return@addOnDebouncedChildClick
                         data.itemChecked = data.itemChecked.not()
                         scanAdapter.notifyItemChanged(position,"updateCheck")
                         updateParentChecked(position)

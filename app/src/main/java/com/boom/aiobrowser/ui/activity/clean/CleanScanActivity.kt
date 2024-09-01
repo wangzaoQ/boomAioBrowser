@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Environment
+import android.os.storage.StorageManager
 import android.provider.DocumentsContract
 import android.view.LayoutInflater
 import android.view.View
@@ -113,13 +114,15 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
 
     var updateJob:Job?=null
 
+    var selectedAllLength = 0L
+
     private fun updateSelectedSize(cacheLength :Long=0L) {
         if (cacheLength!=0L){
             AppLogs.dLog(acTAG,"cacheLength:${cacheLength!!.formatSize()}")
         }
+        selectedAllLength = 0
         updateJob?.cancel()
         updateJob = addLaunch(success = {
-            var allLength = 0L
             var isCurrent = true
             var jumpChild = false
             scanAdapter.items.forEach {
@@ -128,7 +131,7 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                     jumpChild = false
                     it as ScanData
                     if (it.itemChecked){
-                        allLength+=it.allLength
+                        selectedAllLength+=it.allLength
                         jumpChild = true
                     }
                 }
@@ -138,10 +141,10 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                         it as FilesData
                         if (it.itemChecked){
                             if (it.tempList.isNullOrEmpty()){
-                                allLength+=it.fileSize
+                                selectedAllLength+=it.fileSize
                             }else{
                                 it.tempList?.forEach {
-                                    allLength+=it.fileSize
+                                    selectedAllLength+=it.fileSize
                                 }
                             }
                         }
@@ -150,11 +153,19 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
             }
             withContext(Dispatchers.Main){
 //                AppLogs.dLog(acTAG,"显示结果:${(allLength+(cacheLength?:0L)).formatSize()} item:${scanAdapter.items.size}")
-                acBinding.tvTitle.text = (allLength).formatSize()
-                acBinding.tvSelectedSize.text = (allLength).formatSize()
+                acBinding.tvTitle.text = (selectedAllLength).formatSize()
+                acBinding.tvSelectedSize.text = (selectedAllLength).formatSize()
                 acBinding.cleanButton.setOneClick {
-                    if (allLength == 0L)return@setOneClick
-                    CleanLoadActivity.startCleanLoadActivity(this@CleanScanActivity,(allLength))
+                    if (selectedAllLength == 0L)return@setOneClick
+                    if (isAndroid12()){
+                        val intent = Intent(StorageManager.ACTION_CLEAR_APP_CACHE)
+                        startActivityForResult(intent,101)
+                    }else{
+                        CleanLoadActivity.startCleanLoadActivity(
+                            this@CleanScanActivity,
+                            (selectedAllLength)
+                        )
+                    }
                 }
             }
         }, failBack = {},Dispatchers.IO)
@@ -483,18 +494,62 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
     @SuppressLint("WrongConstant")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        var uri: Uri?=null
+        var uri: Uri? = null
         if (requestCode == REQUEST_CODE_FOR_DIR && (data?.data.also { uri = it }) != null) {
             uri?.apply {
-                if (data == null)return
+                if (data == null) return
                 contentResolver.takePersistableUriPermission(
                     this,
                     data.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
                 )
                 clickCache(false)
             }
+        } else if (requestCode == 101) {
+            if (resultCode == -1) {
+                CleanLoadActivity.startCleanLoadActivity(
+                    this@CleanScanActivity,
+                    (selectedAllLength)
+                )
+            } else {
+                var length = 0L
+                addLaunch(success = {
+                    var jumpChild = false
+                    scanAdapter.items.forEach {
+                        if (it.dataType == ViewItem.TYPE_PARENT) {
+                            it as ScanData
+                            if (it.type != CleanConfig.DATA_TYPE_CACHE) {
+                                jumpChild = false
+                                if (it.itemChecked) {
+                                    length += it.allLength
+                                    jumpChild = true
+                                }
+                            } else {
+                                jumpChild = true
+                            }
+                        }
+                        if (jumpChild.not()) {
+                            if (it.dataType == ViewItem.TYPE_CHILD) {
+                                it as FilesData
+                                if (it.itemChecked) {
+                                    if (it.tempList.isNullOrEmpty()) {
+                                        length += it.fileSize
+                                    } else {
+                                        it.tempList?.forEach {
+                                            length += it.fileSize
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    withContext(Dispatchers.Main){
+                        CleanLoadActivity.startCleanLoadActivity(
+                            this@CleanScanActivity,
+                            (length)
+                        )
+                    }
+                }, failBack = {})
+            }
         }
     }
-
-
 }

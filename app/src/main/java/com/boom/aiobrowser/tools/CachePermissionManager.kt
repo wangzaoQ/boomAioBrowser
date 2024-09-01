@@ -65,6 +65,13 @@ class CachePermissionManager(
                 }
             }
             goApplyUriPermissionPage(UriManager.URI_STORAGE_SAVED_ANRROID_DATA,activity)
+        }else{
+            var permissionManager = StoragePermissionManager(WeakReference(activity), onGranted = {
+                onGranted.invoke()
+            }, onDenied = {
+                onDenied.invoke()
+            })
+            permissionManager.requestStoragePermission()
         }
     }
 

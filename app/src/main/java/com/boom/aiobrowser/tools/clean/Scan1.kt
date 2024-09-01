@@ -13,9 +13,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class Scan1(var parentDirectory: File,var waitTime:Long,var onProgress: (file:File) -> Unit,var onComplete: () -> Unit = {}) :ScanInterface {
-    var TAG = "Scan1"
+class Scan1(var parentDirectory: File,var waitTime:Long,var onProgress: (file:File) -> Unit,var onComplete: (files: MutableList<File>) -> Unit = {},var tag:String="清理") :ScanInterface {
+    var TAG = ""
     var scanTime = 0L
+    init {
+        TAG = "Scan1:${tag}"
+    }
 
     override fun scanProgress(file: File) {
 
@@ -62,6 +65,6 @@ class Scan1(var parentDirectory: File,var waitTime:Long,var onProgress: (file:Fi
 
     override fun scanComplete(files: MutableList<File>) {
         AppLogs.dLog(TAG,"结束扫描")
-        onComplete.invoke()
+        onComplete.invoke(files)
     }
 }

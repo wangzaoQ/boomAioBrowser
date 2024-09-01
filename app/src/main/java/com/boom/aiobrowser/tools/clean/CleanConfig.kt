@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.tools.clean
 
+import androidx.documentfile.provider.DocumentFile
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
@@ -36,6 +37,8 @@ object CleanConfig {
     var zipFiles: MutableList<FilesData> = mutableListOf()
     var documentsFiles: MutableList<FilesData> = mutableListOf()
     var recentFiles = mutableListOf<FilesData>()
+
+    var documentCacheFiles :MutableList<DocumentFile> = mutableListOf()
 
 
 

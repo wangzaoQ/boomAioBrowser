@@ -13,6 +13,7 @@ import com.boom.aiobrowser.model.CleanViewModel
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.clean.CleanConfig.imageFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.videoFiles
+import com.boom.aiobrowser.tools.clean.clickFile
 import com.boom.aiobrowser.ui.adapter.PhotoAdapter
 import com.boom.base.adapter4.QuickAdapterHelper
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
@@ -52,6 +53,8 @@ class ImageActivity : BaseActivity<FileActivityImagesBinding>() {
                     var data = photoAdapter.items.get(position)
                     if(type == FileManageData.FILE_TYPE_IMAGES){
                         ImagePreviewActivity.startActivity(this@ImageActivity,position)
+                    }else{
+                        clickFile(this@ImageActivity,data!!)
                     }
                 }
             }

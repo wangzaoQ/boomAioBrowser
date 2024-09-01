@@ -396,7 +396,7 @@ fun Context.isCacheGranted(forceScan:Boolean = true):Boolean{
            return uriPermissions.size>0
         }
     }else{
-        true
+        return isStoragePermissionGranted()
     }
 }
 

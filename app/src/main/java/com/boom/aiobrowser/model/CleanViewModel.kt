@@ -17,6 +17,7 @@ import com.boom.aiobrowser.tools.clean.CleanConfig.apkFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.appInstalledPkgList
 import com.boom.aiobrowser.tools.clean.CleanConfig.audioFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.cacheFiles
+import com.boom.aiobrowser.tools.clean.CleanConfig.documentCacheFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.documentsFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.downloadFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.imageFiles
@@ -102,6 +103,48 @@ class CleanViewModel : BaseDataModel() {
                         scanByUri(documentFile, onScanPath)
                     }
                 }
+            }else{
+                //android 10及以下
+                var allLength = 0L
+                val packageManager: PackageManager = APP.instance.getPackageManager()
+                Scan1(Environment.getExternalStorageDirectory(),3000L, onProgress = {
+                    var file = isRealFile(it) ?: return@Scan1
+                    APP.instance.packageManager.getInstalledPackages(0).forEach {
+                        var packageInfo = it
+                        if (isInstalled(it.packageName)) {
+                            var pkg = it.packageName
+                            //在所有的安装的app中遍历是否有这个文件的包名，有则拿到信息组建数据
+                                if (file.absolutePath.contains(pkg)) {
+                                    var appFileName =
+                                        packageManager.getApplicationLabel(packageInfo.applicationInfo)
+                                            .toString()
+                                    var oldData = false
+                                    //如果cacheFile中有这个App 就统一把数据归到一起
+                                    for (i in 0 until cacheFiles.size) {
+                                        var data = cacheFiles.get(i)
+                                        if (data.fileName == appFileName) {
+                                            data.fileSize += file.length()
+                                            oldData = true
+                                            break
+                                        }
+                                    }
+                                    if (oldData.not()) {
+                                        cacheFiles.add(FilesData().apply {
+                                            filePath = file.absolutePath
+                                            fileSize = file.length()
+                                            fileName = appFileName
+                                            imgId =
+                                                packageManager.getApplicationIcon(packageInfo.applicationInfo)
+                                        })
+                                    }
+                                    allLength += file.length()
+                                    onScanPath.invoke(allLength)
+                                }
+                        }
+                    }
+                }, onComplete = {
+                    onComplete.invoke()
+                },"10以下内存").scanStart()
             }
             var middleTime = (System.currentTimeMillis()-startTime)
             AppLogs.dLog(TAG,"扫描内存耗时:${middleTime}")
@@ -120,13 +163,13 @@ class CleanViewModel : BaseDataModel() {
         if (documentFile != null) {
             // 现在可以访问/Android/data目录
             val children = documentFile?.listFiles()
-            var files = mutableListOf<File>()
+            documentCacheFiles.clear()
             children?.forEach { file ->
-                files.addAll(scanDirectory(file))
+                documentCacheFiles.addAll(scanDirectory(file))
             }
             val packageManager: PackageManager = APP.instance.getPackageManager()
             var allLength = 0L
-            if (files.isNullOrEmpty()) {
+            if (documentCacheFiles.isNullOrEmpty()) {
                 return
             }
             APP.instance.packageManager.getInstalledPackages(0).forEach {
@@ -135,8 +178,9 @@ class CleanViewModel : BaseDataModel() {
                     if (isInstalled(it.packageName)) {
                         var pkg = it.packageName
                         //在所有的安装的app中遍历是否有这个文件的包名，有则拿到信息组建数据
-                        files.forEach {
-                            if (it.absolutePath.contains(pkg)) {
+                        documentCacheFiles.forEach {
+                            var fileName = getRealPathFromURI(it.uri)?:""
+                            if (fileName.contains(pkg)) {
                                 var appFileName =
                                     packageManager.getApplicationLabel(packageInfo.applicationInfo)
                                         .toString()
@@ -152,7 +196,7 @@ class CleanViewModel : BaseDataModel() {
                                 }
                                 if (oldData.not()) {
                                     cacheFiles.add(FilesData().apply {
-                                        filePath = it.absolutePath
+                                        filePath = fileName
                                         fileSize = it.length()
                                         fileName = appFileName
                                         imgId =
@@ -170,9 +214,9 @@ class CleanViewModel : BaseDataModel() {
         }
     }
 
-    suspend fun scanDirectory(dir: DocumentFile): MutableList<File> = coroutineScope {
-        val deferredResults = mutableListOf<Deferred<MutableList<File>>>()
-        val files = mutableListOf<File>()
+    suspend fun scanDirectory(dir: DocumentFile): MutableList<DocumentFile> = coroutineScope {
+        val deferredResults = mutableListOf<Deferred<MutableList<DocumentFile>>>()
+        val files = mutableListOf<DocumentFile>()
         dir.listFiles()?.forEach { file ->
 //
             if (file.isDirectory) {
@@ -184,9 +228,7 @@ class CleanViewModel : BaseDataModel() {
 //                scanDirectory(file)
             } else {
                 AppLogs.dLog(TAG,"清理扫描出的文件:${getRealPathFromURI(file.uri)} size:${File(getRealPathFromURI(file.uri)).length().formatSize()} 当前线程:${Thread.currentThread()}")
-                getRealPathFromURI(file.uri)?.apply {
-                    files.add(File(this))
-                }
+                files.add(file)
             }
         }
 
@@ -265,7 +307,7 @@ class CleanViewModel : BaseDataModel() {
                 downloadFiles.clear()
                 downloadFiles.addAll(fileList)
                 onComplete.invoke(fileList)
-            }).scanStart()
+            },"download").scanStart()
         }, failBack = {}, 1)
     }
 

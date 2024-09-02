@@ -71,21 +71,22 @@ class FileManageFragment : BaseFragment<FileFragmentFileManagerBinding>() {
 
     override fun setListener() {
         fBinding.llClean.setOneClick {
-            var permissionManager = StoragePermissionManager(WeakReference(rootActivity), onGranted = {
+            var permissionManager = StoragePermissionManager(WeakReference(rootActivity), jumpType = 1, onGranted = {
                 rootActivity.jumpActivity<CleanScanActivity>()
             }, onDenied = {
             })
             permissionManager.requestStoragePermission()
         }
         fBinding.llCleanTipsRoot.setOneClick {
-            var permissionManager = StoragePermissionManager(WeakReference(rootActivity), onGranted = {
+            var permissionManager = StoragePermissionManager(WeakReference(rootActivity), jumpType = 1,onGranted = {
                 rootActivity.jumpActivity<CleanScanActivity>()
             }, onDenied = {
             })
             permissionManager.requestStoragePermission()
         }
         fBinding.rlSetting.setOneClick {
-            var permissionManager = StoragePermissionManager(WeakReference(rootActivity), onGranted = {
+            var permissionManager = StoragePermissionManager(WeakReference(rootActivity),jumpType = 1, onGranted = {
+                startLoadData()
             }, onDenied = {
             })
             permissionManager.requestStoragePermission()

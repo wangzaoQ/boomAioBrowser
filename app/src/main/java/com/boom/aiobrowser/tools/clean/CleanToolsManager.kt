@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.FilesData
+import com.boom.aiobrowser.data.ViewItem
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.clean.CleanConfig.DATA_TYPE_CACHE
 import com.boom.aiobrowser.tools.clean.CleanConfig.runningAppInfo
@@ -28,7 +29,7 @@ object CleanToolsManager {
     fun getApkIcon(context: Context, apkFilePath: String?): Drawable? {
         val packageManager = context.packageManager
         val packageInfo =
-            packageManager.getPackageArchiveInfo(apkFilePath!!, PackageManager.GET_ACTIVITIES)
+            packageManager.getPackageArchiveInfo(apkFilePath!!, 0)
 
         if (packageInfo != null) {
             val appInfo = packageInfo.applicationInfo
@@ -158,6 +159,7 @@ object CleanToolsManager {
                             fileName = packageManager.getApplicationLabel(it.applicationInfo).toString()
                             itemChecked = true
                             scanType = DATA_TYPE_CACHE
+                            dataType = ViewItem.TYPE_PARENT
                         })
                         delay(10)
                         AppLogs.dLog("getCacheSize",":${allCache.formatSize()}")

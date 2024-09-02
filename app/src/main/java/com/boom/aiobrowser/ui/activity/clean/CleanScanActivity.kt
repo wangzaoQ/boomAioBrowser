@@ -46,7 +46,6 @@ import com.boom.aiobrowser.ui.adapter.ScanAdapter2
 import com.boom.aiobrowser.ui.isAndroid11
 import com.boom.aiobrowser.ui.isAndroid12
 import com.boom.aiobrowser.ui.pop.CachePop
-import com.boom.aiobrowser.ui.pop.StoragePop
 import com.boom.base.adapter4.BaseQuickAdapter
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick

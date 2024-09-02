@@ -13,6 +13,7 @@ import java.lang.ref.WeakReference
 
 class StoragePermissionManager(
     reference: WeakReference<BaseActivity<*>>,
+    var jumpType :Int= 0,
     var onGranted: () -> Unit = {},
     var onDenied: () -> Unit = {}
 ) {
@@ -82,10 +83,16 @@ class StoragePermissionManager(
                     override fun onDenied(permissions: List<String>, never: Boolean) {
                         onDenied.invoke()
                         AppLogs.dLog(TAG, "STORAGE 未通过  never--" + never)
+                        if (jumpType == 1){
+                            toOtherSetting()
+                        }
                     }
                 })
         }.onFailure {
             onDenied.invoke()
+            if (jumpType == 1){
+                toOtherSetting()
+            }
         }
     }
 
@@ -104,10 +111,16 @@ class StoragePermissionManager(
 
                         override fun onDenied(permissions: List<String>, never: Boolean) {
                             onDenied.invoke()
+                            if (jumpType == 1){
+                                toOtherSetting()
+                            }
                         }
                     })
             }.onFailure {
                 onDenied.invoke()
+                if (jumpType == 1){
+                    toOtherSetting()
+                }
             }
         }
     }

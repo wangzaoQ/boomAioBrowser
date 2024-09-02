@@ -6,6 +6,7 @@ import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.AppInfo
 import com.boom.aiobrowser.data.FilesData
+import com.boom.aiobrowser.data.ViewItem
 import com.boom.aiobrowser.tools.AppLogs
 
 object CleanConfig {
@@ -25,7 +26,7 @@ object CleanConfig {
     val audioExtension by lazy { mutableListOf("mp3", "wav", "wma", "ogg", "m4a", "opus", "flac", "aac", "mid") }
     val docExtension by lazy { mutableListOf("txt", "rtf", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "pptm") }
     val zipExtension by lazy { mutableListOf("zip") }
-    val apkExtension by lazy { mutableListOf("apk","apks") }
+    val apkExtension by lazy { mutableListOf("apk","apks","xapk") }
 
     val runningAppInfo = mutableListOf<AppInfo>()
 
@@ -88,11 +89,14 @@ object CleanConfig {
             fileName = APP.instance.getString(R.string.app_log)
             imgId = R.mipmap.ic_clean_log
             tempList = mutableListOf()
+            dataType = ViewItem.TYPE_CHILD
         })
         junkFiles.add(FilesData().apply {
             fileName = APP.instance.getString(R.string.app_temp)
             imgId = R.mipmap.ic_clean_temp
             tempList = mutableListOf()
+            dataType = ViewItem.TYPE_CHILD
+
         })
         apkFiles.clear()
         residualFiles.clear()

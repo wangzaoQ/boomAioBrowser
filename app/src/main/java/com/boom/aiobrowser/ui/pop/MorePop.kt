@@ -66,7 +66,7 @@ class MorePop(context: Context) : BasePopupWindow(context) {
 
 
     fun clearData(){
-        ClearPop(this as BaseActivity<*>).createPop {
+        ClearPop(context as BaseActivity<*>).createPop {
             CacheManager.clearAll()
             JumpDataManager.toMain()
         }

@@ -9,6 +9,7 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.MutableLiveData
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.data.FilesData
+import com.boom.aiobrowser.data.ViewItem
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.clean.CleanConfig
@@ -134,6 +135,7 @@ class CleanViewModel : BaseDataModel() {
                                             fileSize = file.length()
                                             fileName = appFileName
                                             itemChecked = true
+                                            dataType = ViewItem.TYPE_CHILD
                                             imgId =
                                                 packageManager.getApplicationIcon(packageInfo.applicationInfo)
                                         })
@@ -177,40 +179,39 @@ class CleanViewModel : BaseDataModel() {
             }
             APP.instance.packageManager.getInstalledPackages(0).forEach {
                 var packageInfo = it
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    if (isInstalled(it.packageName)) {
-                        var pkg = it.packageName
-                        //在所有的安装的app中遍历是否有这个文件的包名，有则拿到信息组建数据
-                        documentCacheFiles.forEach {
-                            var fileName = getRealPathFromURI(it.uri)?:""
-                            if (fileName.contains(pkg)) {
-                                var appFileName =
-                                    packageManager.getApplicationLabel(packageInfo.applicationInfo)
-                                        .toString()
-                                var oldData = false
-                                //如果cacheFile中有这个App 就统一把数据归到一起
-                                for (i in 0 until cacheFiles.size) {
-                                    var data = cacheFiles.get(i)
-                                    if (data.fileName == appFileName) {
-                                        data.fileSize = data.fileSize?.plus(it.length())
-                                        oldData = true
-                                        break
-                                    }
+                if (isInstalled(it.packageName)) {
+                    var pkg = it.packageName
+                    //在所有的安装的app中遍历是否有这个文件的包名，有则拿到信息组建数据
+                    documentCacheFiles.forEach {
+                        var fileName = getRealPathFromURI(it.uri)?:""
+                        if (fileName.contains(pkg)) {
+                            var appFileName =
+                                packageManager.getApplicationLabel(packageInfo.applicationInfo)
+                                    .toString()
+                            var oldData = false
+                            //如果cacheFile中有这个App 就统一把数据归到一起
+                            for (i in 0 until cacheFiles.size) {
+                                var data = cacheFiles.get(i)
+                                if (data.fileName == appFileName) {
+                                    data.fileSize = data.fileSize?.plus(it.length())
+                                    oldData = true
+                                    break
                                 }
-                                if (oldData.not()) {
-                                    cacheFiles.add(FilesData().apply {
-                                        filePath = fileName
-                                        fileSize = it.length()
-                                        fileName = appFileName
-                                        itemChecked = true
-                                        imgId =
-                                            packageManager.getApplicationIcon(packageInfo.applicationInfo)
-                                    })
-                                }
-                                allLength += it.length()
-    //                                        AppLogs.dLog("getCacheSize",":${allLength.formatSize()}")
-                                onScanPath.invoke(allLength)
                             }
+                            if (oldData.not()) {
+                                cacheFiles.add(FilesData().apply {
+                                    filePath = fileName
+                                    fileSize = it.length()
+                                    fileName = appFileName
+                                    itemChecked = true
+                                    dataType = ViewItem.TYPE_CHILD
+                                    imgId =
+                                        packageManager.getApplicationIcon(packageInfo.applicationInfo)
+                                })
+                            }
+                            allLength += it.length()
+                            //                                        AppLogs.dLog("getCacheSize",":${allLength.formatSize()}")
+                            onScanPath.invoke(allLength)
                         }
                     }
                 }
@@ -275,7 +276,9 @@ class CleanViewModel : BaseDataModel() {
             }, onComplete = {
                 var start = System.currentTimeMillis()
                 AppLogs.eLog(TAG,"onComplete 开始")
-                allFiles.sortByDescending { it.fileTime?:0L }
+                runCatching {
+                    allFiles.sortByDescending { it.fileTime?:0L }
+                }
                 largeFiles.sortByDescending { it.fileSize?:0L }
                 onComplete.invoke()
                 APP.instance.cleanComplete = true

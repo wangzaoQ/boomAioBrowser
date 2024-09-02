@@ -8,25 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.FilesData
-import com.boom.aiobrowser.data.HistoryData
 import com.boom.aiobrowser.data.ScanData
 import com.boom.aiobrowser.data.ViewItem
-import com.boom.aiobrowser.databinding.BrowserItemHistoryBinding
-import com.boom.aiobrowser.databinding.BrowserItemHistoryDateBinding
 import com.boom.aiobrowser.databinding.BrowserItemScanBinding
 import com.boom.aiobrowser.databinding.CleanItemFilesBinding
 import com.boom.aiobrowser.tools.GlideManager
-import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.clean.CleanConfig.cacheFiles
 import com.boom.aiobrowser.tools.clean.CleanToolsManager
 import com.boom.aiobrowser.tools.clean.formatSize
-import com.boom.aiobrowser.ui.adapter.HistoryAdapter.HistoryItem
-import com.boom.aiobrowser.ui.adapter.HistoryAdapter.HistoryItemTitle
-import com.boom.aiobrowser.ui.view.CustomLinearLayoutManager
 import com.boom.base.adapter4.BaseMultiItemAdapter
-import com.boom.base.adapter4.BaseQuickAdapter
-import com.boom.base.adapter4.util.setOnDebouncedItemClick
 
 class ScanAdapter2(var updateBack: () -> Unit) : BaseMultiItemAdapter<ViewItem>() {
 

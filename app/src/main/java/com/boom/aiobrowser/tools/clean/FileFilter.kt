@@ -23,7 +23,7 @@ object FileFilter {
     }
 
     fun isApks(file: File): Boolean {
-        return file.isFile && file.absolutePath.endsWith(".apk", true)
+        return file.absolutePath.isApk()
     }
 
     fun isADFile(file: File): Boolean {

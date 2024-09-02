@@ -11,7 +11,9 @@ import android.os.Process.myUserHandle
 import android.os.StatFs
 import android.os.storage.StorageManager
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.FilesData
 import com.boom.aiobrowser.data.ViewItem
@@ -19,9 +21,7 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.clean.CleanConfig.DATA_TYPE_CACHE
 import com.boom.aiobrowser.tools.clean.CleanConfig.runningAppInfo
 import com.boom.aiobrowser.tools.clean.FileFilter.isInstalled
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 
 
 object CleanToolsManager {
@@ -79,10 +79,17 @@ object CleanToolsManager {
     }
 
     fun cleanBackgroundProcess() {
+//        val mActivityManager = APP.instance.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val mActivityManager = APP.instance.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        runningAppInfo.forEach {
-            mActivityManager.killBackgroundProcesses(it.pkg)
+        val runningAppProcesses = mActivityManager!!.runningAppProcesses
+
+        for (processInfo in runningAppProcesses) {
+            if (processInfo.processName!=BuildConfig.APPLICATION_ID){
+                android.os.Process.killProcess(processInfo.pid)
+            }
+
         }
+
     }
 
 

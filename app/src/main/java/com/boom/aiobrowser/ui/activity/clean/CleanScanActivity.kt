@@ -25,6 +25,7 @@ import com.boom.aiobrowser.databinding.BrowserActivityCleanScanBinding
 import com.boom.aiobrowser.model.CleanViewModel
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.CachePermissionManager
 import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.clean.CleanConfig.DATA_TYPE_AD
@@ -192,6 +193,7 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                             (selectedAllLength)
                         )
                     }
+                    CacheManager.saveCleanTips()
                 }
             }
         }, failBack = {},Dispatchers.IO)

@@ -40,6 +40,7 @@ object CacheManager {
     const val KV_CLICK_EVERY_DAY = "KV_CLICK_EVERY_DAY"
     const val KV_SHOW_EVERY_DAY = "KV_SHOW_EVERY_DAY"
     const val KV_LAST_LAUNCH_TIME = "KV_LAST_LAUNCH_TIME"
+    const val KV_CLEAN_TIME = "KV_CLEAN_TIME"
 //    const val KV_FIRST_OPEN_APP = "KV_FIRST_OPEN_APP"
 
     // 是否首次打开start
@@ -275,5 +276,14 @@ object CacheManager {
         tabDataListNormal = mutableListOf()
         tabDataListPrivate = mutableListOf()
         browserStatus = 0
+    }
+
+    fun isAllowShowCleanTips(): Boolean {
+        var lastCleanTime = mmkv.decodeLong(KV_CLEAN_TIME)
+        return (System.currentTimeMillis()-lastCleanTime)>8*60*60*1000
+    }
+
+    fun saveCleanTips(){
+        mmkv.encode(KV_CLEAN_TIME,System.currentTimeMillis())
     }
 }

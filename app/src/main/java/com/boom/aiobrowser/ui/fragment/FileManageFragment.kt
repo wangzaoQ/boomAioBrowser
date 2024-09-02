@@ -59,6 +59,7 @@ class FileManageFragment : BaseFragment<FileFragmentFileManagerBinding>() {
 
     override fun startLoadData() {
         if (rootActivity.isStorageGranted()){
+            fBinding.refresh.isRefreshing = true
             cleanViewModel.startScan(Environment.getExternalStorageDirectory())
             fBinding.rlSetting.visibility = View.GONE
             fBinding.rvRecent.visibility = View.VISIBLE
@@ -70,6 +71,9 @@ class FileManageFragment : BaseFragment<FileFragmentFileManagerBinding>() {
 
 
     override fun setListener() {
+        fBinding.refresh.setOnRefreshListener {
+            cleanViewModel.startScan(Environment.getExternalStorageDirectory())
+        }
         fBinding.llClean.setOneClick {
             var permissionManager = StoragePermissionManager(WeakReference(rootActivity), jumpType = 1, onGranted = {
                 rootActivity.jumpActivity<CleanScanActivity>()
@@ -92,6 +96,7 @@ class FileManageFragment : BaseFragment<FileFragmentFileManagerBinding>() {
             permissionManager.requestStoragePermission()
         }
         cleanViewModel.recentListLiveData.observe(this){
+            fBinding.rvRecent.visibility = View.VISIBLE
             var list = mutableListOf<FilesData>()
             if (it.size>=4){
                 list = it.subList(0,4)
@@ -111,7 +116,9 @@ class FileManageFragment : BaseFragment<FileFragmentFileManagerBinding>() {
             }
         }
         APP.scanCompleteLiveData.observe(this){
-            fBinding.tvMemory.text = cleanViewModel.allFilesLength.formatSize()
+//            fBinding.tvMemory.text = cleanViewModel.allFilesLength.formatSize()
+            fileManageAdapter.notifyDataSetChanged()
+            fBinding.refresh.isRefreshing = false
         }
     }
 

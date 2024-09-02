@@ -89,7 +89,7 @@
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/cleanLlRoot"
                     android:layout_width="match_parent"
-                    android:layout_height="51dp"
+                    android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:layout_marginTop="22dp"
                     android:layout_marginHorizontal="13dp"
@@ -101,9 +101,14 @@
                         android:layout_width="match_parent"
                         android:layout_weight="1"
                         android:layout_marginEnd="7dp"
-                        android:layout_height="47dp"
-                        android:background="@drawable/shape_bg_home_clean"
+                        android:layout_height="51dp"
                         >
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="47dp"
+                            android:layout_alignParentBottom="true"
+                            android:background="@drawable/shape_bg_home_clean"
+                            >
                         <FrameLayout
                             android:layout_width="34dp"
                             android:layout_height="34dp"
@@ -136,8 +141,17 @@
                             android:layout_alignParentEnd="true"
                             android:layout_marginEnd="7dp"
                             ></androidx.appcompat.widget.AppCompatImageView>
+                        </RelativeLayout>
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/tips"
+                            android:layout_width="13dp"
+                            android:layout_height="13dp"
+                            app:srcCompat="@mipmap/ic_permission_tips"
+                            android:layout_alignParentEnd="true"
+                            ></androidx.appcompat.widget.AppCompatImageView>
                     </RelativeLayout>
                     <RelativeLayout
+                        android:layout_gravity="bottom"
                         android:id="@+id/rlProcess"
                         android:layout_width="match_parent"
                         android:layout_weight="1"

@@ -12,6 +12,7 @@ import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.StoragePermissionManager
 import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.activity.clean.CleanScanActivity
@@ -21,6 +22,7 @@ import com.boom.base.adapter4.QuickAdapterHelper
 import com.boom.base.adapter4.loadState.LoadState
 import com.boom.base.adapter4.loadState.trailing.TrailingLoadStateAdapter
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
+import java.lang.ref.WeakReference
 
 class CompleteActivity: BaseActivity<CleanActivityCompleteBinding>() {
 
@@ -115,7 +117,10 @@ class CompleteActivity: BaseActivity<CleanActivityCompleteBinding>() {
                 tvJumpTitle.text = getString(R.string.app_clean)
                 tvJumpContent.text = getString(R.string.app_clean_content)
                 rlToJump.setOneClick {
-                    jumpActivity<CleanScanActivity>()
+                    StoragePermissionManager(WeakReference(this@CompleteActivity), 1,onGranted = {
+                        jumpActivity<CleanScanActivity>()
+                    }, onDenied = {
+                    })
                 }
             }else{
                 if (num>0){

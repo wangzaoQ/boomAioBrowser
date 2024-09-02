@@ -4,10 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.boom.aiobrowser.data.AppInfo
 import com.boom.aiobrowser.data.FileManageData
-import com.boom.aiobrowser.databinding.CleanProcessItemBinding
 import com.boom.aiobrowser.databinding.FileItemFileManagerBinding
+import com.boom.aiobrowser.tools.clean.formatSize
+import com.boom.aiobrowser.tools.clean.getSizeByType
 import com.boom.base.adapter4.BaseQuickAdapter
 
 class FileManageAdapter: BaseQuickAdapter<FileManageData, FileManageAdapter.VH>() {
@@ -25,6 +25,7 @@ class FileManageAdapter: BaseQuickAdapter<FileManageData, FileManageAdapter.VH>(
         holder.viewBinding.apply {
             ivImg.setImageResource(item.getImage())
             tvContent.text = context.getString(item.getContent())
+            tvSize.text = getSizeByType(item.type).formatSize()
         }
     }
 

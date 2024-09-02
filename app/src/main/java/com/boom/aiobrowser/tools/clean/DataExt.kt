@@ -1,8 +1,15 @@
 package com.boom.aiobrowser.tools.clean
 
-import android.os.Build
 import com.blankj.utilcode.util.FileUtils
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_APKS
+import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_DOCUMENTS
+import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_DOWNLOADS
+import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_IMAGES
+import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_LARGE_FILE
+import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_MUSIC
+import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_VIDEOS
+import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_ZIP
 import com.boom.aiobrowser.data.FilesData
 import com.boom.aiobrowser.tools.clean.CleanConfig.apkFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.audioFiles
@@ -20,10 +27,6 @@ import com.boom.aiobrowser.tools.clean.FileFilter.isLargeFile
 import com.boom.aiobrowser.tools.clean.FileFilter.isVideo
 import com.boom.aiobrowser.tools.clean.FileFilter.isZip
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.attribute.BasicFileAttributes
-import java.nio.file.attribute.FileTime
 import kotlin.math.log10
 
 
@@ -55,6 +58,49 @@ fun String.getDocImg(): Int {
     } else {
         return R.mipmap.ic_default
     }
+}
+
+fun getSizeByType(type: Int):Long{
+    var allLength = 0L
+    var list = getListByType(type)
+    list.forEach {
+        allLength+=it.fileSize?:0L
+    }
+    return allLength
+}
+
+fun getListByType(type: Int) :MutableList<FilesData>{
+    var list :MutableList<FilesData>
+    when (type) {
+        FILE_TYPE_DOWNLOADS -> {
+            list = downloadFiles
+        }
+        FILE_TYPE_LARGE_FILE -> {
+            list = largeFiles
+        }
+        FILE_TYPE_IMAGES -> {
+            list = imageFiles
+        }
+        FILE_TYPE_VIDEOS -> {
+            list = videoFiles
+        }
+        FILE_TYPE_APKS -> {
+            list = apkFiles
+        }
+        FILE_TYPE_MUSIC -> {
+            list = audioFiles
+        }
+        FILE_TYPE_ZIP -> {
+            list = zipFiles
+        }
+        FILE_TYPE_DOCUMENTS -> {
+            list = documentsFiles
+        }
+        else -> {
+            list = mutableListOf()
+        }
+    }
+    return list
 }
 
 fun String.removeDataByFileExt(){

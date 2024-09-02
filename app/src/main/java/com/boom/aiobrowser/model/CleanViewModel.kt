@@ -287,8 +287,10 @@ class CleanViewModel : BaseDataModel() {
                 for (i in 0 until allFiles.size){
                     var data = allFiles.get(i)
                     if (TimeManager.isWithin30Days(System.currentTimeMillis(),data.fileTime?:0L)){
-                        recentList.add(data)
-                        recentFiles.add(data)
+                        if ((data.fileSize?:0L)>0L){
+                            recentList.add(data)
+                            recentFiles.add(data)
+                        }
                     }else{
                         break
                     }
@@ -298,6 +300,7 @@ class CleanViewModel : BaseDataModel() {
             }).scanStart()
         }, failBack = {
             onComplete.invoke()
+            APP.scanCompleteLiveData.postValue(0)
             AppLogs.dLog(TAG,"startScan onComplete error:${it.stackTraceToString()}")
         }, 1)
     }

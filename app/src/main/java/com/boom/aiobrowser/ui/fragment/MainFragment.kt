@@ -184,6 +184,11 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             }
             }
         }
+        if (CacheManager.isAllowShowCleanTips()){
+            fBinding.tips.visibility = View.VISIBLE
+        }else{
+            fBinding.tips.visibility = View.GONE
+        }
     }
 
     private fun updateEngine(type: Int) {

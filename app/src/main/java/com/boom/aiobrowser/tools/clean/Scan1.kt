@@ -13,7 +13,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class Scan1(var parentDirectory: File,var waitTime:Long,var onProgress: (file:File) -> Unit,var onComplete: (files: MutableList<File>) -> Unit = {},var tag:String="清理") :ScanInterface {
+class Scan1(var parentDirectory: File,var waitTime:Long,var onProgress: (file:File) -> Unit,var onComplete: (files: MutableList<File>) -> Unit = {},var tag:String="Clean") :ScanInterface {
     var TAG = ""
     var scanTime = 0L
     init {
@@ -42,7 +42,7 @@ class Scan1(var parentDirectory: File,var waitTime:Long,var onProgress: (file:Fi
 
         val files = mutableListOf<File>()
         dir.listFiles()?.forEach { file ->
-            if (file.isDirectory) {
+            if (file.isDirectory && files.size<10000) {
                 deferredResults.add(async {
                     scanDirectory(file)
                 })
@@ -51,7 +51,10 @@ class Scan1(var parentDirectory: File,var waitTime:Long,var onProgress: (file:Fi
                 AppLogs.dLog(TAG,"扫描出的文件:${file.absolutePath} 当前线程:${Thread.currentThread()}")
 //                Logger.writeLog(APP.instance,"扫描出的文件:${file.absolutePath}")
                 files.add(file)
-//                delay(1)
+                if (tag == "Cache"){
+                    delay(1)
+                }
+//
                 onProgress.invoke(file)
             }
         }

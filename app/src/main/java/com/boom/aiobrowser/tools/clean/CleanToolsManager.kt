@@ -15,6 +15,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.FilesData
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.clean.CleanConfig.DATA_TYPE_CACHE
 import com.boom.aiobrowser.tools.clean.CleanConfig.runningAppInfo
 import com.boom.aiobrowser.tools.clean.FileFilter.isInstalled
 import kotlinx.coroutines.Dispatchers
@@ -156,6 +157,7 @@ object CleanToolsManager {
                             imgId = packageManager.getApplicationIcon(it.applicationInfo)
                             fileName = packageManager.getApplicationLabel(it.applicationInfo).toString()
                             itemChecked = true
+                            scanType = DATA_TYPE_CACHE
                         })
                         delay(10)
                         AppLogs.dLog("getCacheSize",":${allCache.formatSize()}")

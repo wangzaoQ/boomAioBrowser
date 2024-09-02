@@ -83,7 +83,7 @@ class CleanViewModel : BaseDataModel() {
             delay(100)
             if (isAndroid12()){
                 cacheFiles = getCacheSize(onScanPath)
-                cacheFiles.sortByDescending { it.fileSize }
+                cacheFiles.sortByDescending { it.fileSize?:0L }
             }else if (isAndroid11()){
                 // 使用DocumentFile来管理该目录
                 if (forceScan){
@@ -123,7 +123,7 @@ class CleanViewModel : BaseDataModel() {
                                     for (i in 0 until cacheFiles.size) {
                                         var data = cacheFiles.get(i)
                                         if (data.fileName == appFileName) {
-                                            data.fileSize += file.length()
+                                            data.fileSize = data.fileSize?.plus(file.length())
                                             oldData = true
                                             break
                                         }
@@ -133,6 +133,7 @@ class CleanViewModel : BaseDataModel() {
                                             filePath = file.absolutePath
                                             fileSize = file.length()
                                             fileName = appFileName
+                                            itemChecked = true
                                             imgId =
                                                 packageManager.getApplicationIcon(packageInfo.applicationInfo)
                                         })
@@ -143,8 +144,7 @@ class CleanViewModel : BaseDataModel() {
                         }
                     }
                 }, onComplete = {
-                    onComplete.invoke()
-                },"10以下内存").scanStart()
+                },"Cache").scanStart()
             }
             var middleTime = (System.currentTimeMillis()-startTime)
             AppLogs.dLog(TAG,"扫描内存耗时:${middleTime}")
@@ -153,7 +153,10 @@ class CleanViewModel : BaseDataModel() {
             }
             AppLogs.dLog(TAG,"startScanCache onComplete")
             onComplete.invoke()
-        }, failBack = {},1)
+        }, failBack = {
+            AppLogs.dLog(TAG,"startScanCache onComplete errot:${it.stackTraceToString()}")
+            onComplete.invoke()
+        },1)
     }
 
     private suspend fun CleanViewModel.scanByUri(
@@ -189,7 +192,7 @@ class CleanViewModel : BaseDataModel() {
                                 for (i in 0 until cacheFiles.size) {
                                     var data = cacheFiles.get(i)
                                     if (data.fileName == appFileName) {
-                                        data.fileSize += it.length()
+                                        data.fileSize = data.fileSize?.plus(it.length())
                                         oldData = true
                                         break
                                     }
@@ -199,6 +202,7 @@ class CleanViewModel : BaseDataModel() {
                                         filePath = fileName
                                         fileSize = it.length()
                                         fileName = appFileName
+                                        itemChecked = true
                                         imgId =
                                             packageManager.getApplicationIcon(packageInfo.applicationInfo)
                                     })
@@ -271,15 +275,15 @@ class CleanViewModel : BaseDataModel() {
             }, onComplete = {
                 var start = System.currentTimeMillis()
                 AppLogs.eLog(TAG,"onComplete 开始")
-                allFiles.sortByDescending { it.fileTime }
-                largeFiles.sortByDescending { it.fileSize }
+                allFiles.sortByDescending { it.fileTime?:0L }
+                largeFiles.sortByDescending { it.fileSize?:0L }
                 onComplete.invoke()
                 APP.instance.cleanComplete = true
                 APP.scanCompleteLiveData.postValue(0)
                 var recentList = mutableListOf<FilesData>()
                 for (i in 0 until allFiles.size){
                     var data = allFiles.get(i)
-                    if (TimeManager.isWithin30Days(System.currentTimeMillis(),data.fileTime)){
+                    if (TimeManager.isWithin30Days(System.currentTimeMillis(),data.fileTime?:0L)){
                         recentList.add(data)
                         recentFiles.add(data)
                     }else{
@@ -289,7 +293,10 @@ class CleanViewModel : BaseDataModel() {
                 recentListLiveData.postValue(recentList)
                 AppLogs.eLog(TAG,"onComplete 结束时间 :${System.currentTimeMillis()-start}")
             }).scanStart()
-        }, failBack = {}, 1)
+        }, failBack = {
+            onComplete.invoke()
+            AppLogs.dLog(TAG,"startScan onComplete error:${it.stackTraceToString()}")
+        }, 1)
     }
 
     fun startScanDownload(waitTime:Long = 0,onComplete: (list:MutableList<FilesData>) -> Unit = {}){

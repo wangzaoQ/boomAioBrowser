@@ -320,6 +320,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
 
     private fun showTips() {
+        return
         if (CacheManager.isFirstShowClear){
             CacheManager.isFirstShowClear = false
             acBinding.root.postDelayed({

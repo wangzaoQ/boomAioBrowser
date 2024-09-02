@@ -15,6 +15,7 @@ import com.boom.aiobrowser.databinding.BrowserPopTabBinding
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.ui.JumpConfig
+import com.boom.aiobrowser.ui.activity.WebDetailsActivity
 import com.boom.aiobrowser.ui.adapter.TabAdapter
 import com.boom.base.adapter4.QuickAdapterHelper
 import com.boom.base.adapter4.dragswipe.QuickDragAndSwipe
@@ -109,7 +110,7 @@ class TabPop(context: Context) : BasePopupWindow(context) {
                             JumpDataManager.saveBrowserTabList(browserStatus,tabAdapter.items as MutableList<JumpData>,tag = "tabPop 删除item时更新")
                             CacheManager.browserStatus = browserStatus
                             var list= JumpDataManager.getBrowserTabList(0,tag = "tabPop 删除item时")
-                            APP.jumpLiveData.postValue(list.get(0))
+                            toLiveData(list.get(0))
                             dismiss()
                         }else{
                             JumpDataManager.saveBrowserTabList(browserStatus,tabAdapter.items as MutableList<JumpData>,tag = "tabPop 删除item时更新")
@@ -127,7 +128,7 @@ class TabPop(context: Context) : BasePopupWindow(context) {
                     var data = tabAdapter.items.get(position)
                     JumpDataManager.resetSelectedByStatus(data,browserStatus,tag = "tabPop 点击item时更新 当前jumpData")
                     CacheManager.browserStatus = browserStatus
-                    APP.jumpLiveData.postValue(data)
+                    toLiveData(data)
                     dismiss()
                 }
             }
@@ -145,8 +146,8 @@ class TabPop(context: Context) : BasePopupWindow(context) {
         }
         popBinding!!.ivAdd.setOnClickListener {
             addOrSelected = true
-            APP.jumpLiveData.postValue(JumpDataManager.addTab(browserStatus,"点击添加按钮"))
             CacheManager.browserStatus = browserStatus
+            toLiveData(JumpDataManager.addTab(browserStatus,"点击添加按钮"))
             dismiss()
         }
         showPopupWindow()
@@ -242,18 +243,26 @@ class TabPop(context: Context) : BasePopupWindow(context) {
                 var privateList = CacheManager.tabDataListPrivate
                 if (intoBrowserId!=privateList.get(privateList.size-1).dataId){
                     //如果最后一个数据发生变化
-                    APP.jumpLiveData.postValue(privateList.get(privateList.size-1))
+                    toLiveData(privateList.get(privateList.size-1))
                 }
             }else{
                 var normalList = CacheManager.tabDataListNormal
                 if (intoBrowserId!=normalList.get(normalList.size-1).dataId){
                     //如果最后一个数据发生变化
                     CacheManager.browserStatus = 0
-                    APP.jumpLiveData.postValue(normalList.get(normalList.size-1))
+                    toLiveData(normalList.get(normalList.size-1))
                 }
             }
         }
         super.onDismiss()
+    }
+
+    fun toLiveData(data:JumpData?){
+        if (context is WebDetailsActivity){
+            APP.jumpWebLiveData.postValue(data)
+        }else{
+            APP.jumpLiveData.postValue(data)
+        }
     }
 
 }

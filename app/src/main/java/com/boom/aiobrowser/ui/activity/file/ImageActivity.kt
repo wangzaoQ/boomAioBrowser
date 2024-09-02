@@ -5,6 +5,7 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.FileManageData
 import com.boom.aiobrowser.data.FilesData
@@ -43,6 +44,7 @@ class ImageActivity : BaseActivity<FileActivityImagesBinding>() {
     override fun setShowView() {
         type = intent.getIntExtra("fromType", FileManageData.FILE_TYPE_IMAGES)
         acBinding.apply {
+            tvTitle.text = getString(if (type == FileManageData.FILE_TYPE_IMAGES) R.string.app_images else R.string.app_videos)
             rv.apply {
                 layoutManager =
                     GridLayoutManager(this@ImageActivity, 4)

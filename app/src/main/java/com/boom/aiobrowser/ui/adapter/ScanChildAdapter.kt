@@ -57,11 +57,11 @@ class ScanChildAdapter(var type:Int) : BaseQuickAdapter<FilesData, ScanChildAdap
                 tvName.text = item.fileName
             }
             if (item.tempList.isNullOrEmpty()){
-                tvSize.text = item.fileSize.formatSize()
+                tvSize.text = item.fileSize?.formatSize()
             }else{
                 var allLength = 0L
                 item.tempList?.forEach {
-                    allLength+=it.fileSize
+                    allLength+=it.fileSize?:0L
                 }
                 tvSize.text = allLength.formatSize()
             }

@@ -37,7 +37,7 @@ class FileListAdapter() : BaseQuickAdapter<FilesData, FileListAdapter.VH>() {
     override fun onBindViewHolder(holder: VH, position: Int, item: FilesData?) {
         if (item == null)return
         holder.viewBinding.apply {
-            tvSize.text = item.fileSize.formatSize()
+            tvSize.text = item.fileSize?.formatSize()
             tvName.text = item.fileName
             var extension = FileUtils.getFileExtension(item.filePath)
             if (extension.isImage() || extension.isVideo()){

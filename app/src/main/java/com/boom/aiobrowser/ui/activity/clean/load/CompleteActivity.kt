@@ -109,7 +109,8 @@ class CompleteActivity: BaseActivity<CleanActivityCompleteBinding>() {
         acBinding.apply {
             if (fromType == 1){
                 //process
-                tvContent.text = getString(R.string.app_clean_title,"$num")
+                tvContent.text = getString(R.string.app_process_title,"${num}")
+
                 ivContent.setImageResource(R.mipmap.ic_scan_clean)
                 tvJumpTitle.text = getString(R.string.app_clean)
                 tvJumpContent.text = getString(R.string.app_clean_content)
@@ -117,7 +118,11 @@ class CompleteActivity: BaseActivity<CleanActivityCompleteBinding>() {
                     jumpActivity<CleanScanActivity>()
                 }
             }else{
-                tvContent.text = getString(R.string.app_process_title,num.formatSize())
+                if (num>0){
+                    tvContent.text = getString(R.string.app_clean_title,num.formatSize())
+                }else{
+                    acBinding.tvContent.text = getString(R.string.app_clean_no_junk)
+                }
                 ivContent.setImageResource(R.mipmap.ic_scan_process)
                 tvJumpTitle.text = getString(R.string.app_process)
                 tvJumpContent.text = getString(R.string.app_process_content)

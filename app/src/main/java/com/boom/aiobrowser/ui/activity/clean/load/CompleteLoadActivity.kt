@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.ui.activity.clean.load
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import com.boom.aiobrowser.R
@@ -37,12 +38,22 @@ class CompleteLoadActivity : BaseActivity<CleanActivityCompleteLoadBinding>() {
         var num = intent.getLongExtra("num",0L)
         var fromType = intent.getIntExtra("fromType",0)
         if (fromType == 1){
-            acBinding.tvContent.text = getString(R.string.app_process_title,num)
+            acBinding.tvContent.text = getString(R.string.app_process_title,"${num}")
         }else{
-            acBinding.tvContent.text = getString(R.string.app_clean_title,num.formatSize())
+            if (num == 0L){
+                acBinding.tvContent.text = getString(R.string.app_clean_no_junk)
+            }else{
+                acBinding.tvContent.text = getString(R.string.app_clean_title,num.formatSize())
+            }
         }
         acBinding.root.postDelayed({
             CompleteActivity.startCompleteActivity(this@CompleteLoadActivity,num,fromType)
         },2000)
+    }
+
+
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+
     }
 }

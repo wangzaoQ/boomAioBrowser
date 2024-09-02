@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.ui.activity.clean.load
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.animation.LinearInterpolator
@@ -25,9 +26,13 @@ class CleanLoadActivity : BaseActivity<CleanActivityLoadBinding>() {
          * fromType 0 clean  1 process
          */
         fun startCleanLoadActivity(activity: BaseActivity<*>,stopNum:Long){
-            activity.startActivity(Intent(activity,CleanLoadActivity::class.java).apply {
-                putExtra("num",stopNum)
-            })
+            if (stopNum>0){
+                activity.startActivity(Intent(activity,CleanLoadActivity::class.java).apply {
+                    putExtra("num",stopNum)
+                })
+            }else{
+                CompleteLoadActivity.startCompleteLoadActivity(activity,stopNum,0)
+            }
             activity.finish()
         }
     }
@@ -76,5 +81,11 @@ class CleanLoadActivity : BaseActivity<CleanActivityLoadBinding>() {
     private fun cancelSizeAnim() {
         sizeAnim?.cancel()
         sizeAnim = null
+    }
+
+
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+
     }
 }

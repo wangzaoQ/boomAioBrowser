@@ -26,7 +26,7 @@ class ScanData : ViewItem() {
         imgId = R.mipmap.ic_junk_files
         title = context.getString(R.string.app_clean_junk_files)
         junkFiles.forEach {
-            allLength+=it.fileSize
+            allLength+=(it.fileSize?:0L)
         }
         return this
     }
@@ -35,7 +35,7 @@ class ScanData : ViewItem() {
         imgId = R.mipmap.ic_apks
         title = context.getString(R.string.app_clean_apk)
         apkFiles.forEach {
-            allLength+=it.fileSize
+            allLength+=(it.fileSize?:0L)
         }
         return this
     }
@@ -44,7 +44,7 @@ class ScanData : ViewItem() {
         imgId = R.mipmap.ic_cache_junk
         title = context.getString(R.string.app_clean_cache)
         cacheFiles.forEach {
-            allLength+=it.fileSize
+            allLength+=(it.fileSize?:0L)
         }
         return this
     }
@@ -53,7 +53,7 @@ class ScanData : ViewItem() {
         imgId = R.mipmap.ic_residual
         title = context.getString(R.string.app_clean_residual)
         residualFiles.forEach {
-            allLength+=it.fileSize
+            allLength+=(it.fileSize?:0L)
         }
         return this
     }
@@ -62,7 +62,7 @@ class ScanData : ViewItem() {
         imgId = R.mipmap.ic_scan_ad
         title = context.getString(R.string.app_clean_ad)
         adFiles.forEach {
-            allLength+=it.fileSize
+            allLength+=(it.fileSize?:0L)
         }
         return this
     }

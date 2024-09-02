@@ -68,7 +68,7 @@ class MorePop(context: Context) : BasePopupWindow(context) {
     fun clearData(){
         ClearPop(this as BaseActivity<*>).createPop {
             CacheManager.clearAll()
-            APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag="清理数据后获取当前item"))
+            JumpDataManager.toMain()
         }
     }
 

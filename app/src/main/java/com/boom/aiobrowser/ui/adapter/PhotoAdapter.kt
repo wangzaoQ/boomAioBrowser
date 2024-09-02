@@ -25,7 +25,7 @@ class PhotoAdapter() : BaseQuickAdapter<FilesData, PhotoAdapter.VH>() {
     override fun onBindViewHolder(holder: VH, position: Int, item: FilesData?) {
         if (item == null)return
         holder.viewBinding.apply {
-            tvSize.text = item.fileSize.formatSize()
+            tvSize.text = item.fileSize?.formatSize()
             tvTitle.text = item.fileName
             GlideManager.loadImg(iv = ivImg, url = item.filePath)
         }

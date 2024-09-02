@@ -12,8 +12,8 @@ class FilesData :ViewItem(){
     var fileName = ""
     var filePath = ""
     var itemChecked = false
-    var fileSize = 0L
-    var fileTime = 0L
+    var fileSize :Long?= 0L
+    var fileTime :Long?= 0L
     var imgId :Any = R.mipmap.ic_file
 
     var scanType = -1

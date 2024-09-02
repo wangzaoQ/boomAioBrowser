@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.ScanData
+import com.boom.aiobrowser.data.ViewItem
 import com.boom.aiobrowser.databinding.CleanItemScanChildBinding
+import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.tools.rotateAnim
 
@@ -24,6 +26,11 @@ class ScanItemView : LinearLayout {
             }else{
                 isAnimation = false
                 ivEnd.clearAnimation()
+                if (item.dataType == ViewItem.TYPE_PARENT && item.type == CleanConfig.DATA_TYPE_CACHE){
+                    if (CleanConfig.cacheFiles.isNullOrEmpty()){
+                        item.itemChecked = false
+                    }
+                }
                 if (item.itemChecked){
                     ivEnd.setImageResource(R.mipmap.ic_scan_item_checked)
                 }else{
@@ -46,6 +53,13 @@ class ScanItemView : LinearLayout {
                 ivEnd.animation = 2000L.rotateAnim()
             }else{
                 isAnimation = false
+                if (item.type == CleanConfig.DATA_TYPE_CACHE){
+                    if (CleanConfig.cacheFiles.isNullOrEmpty()){
+                        item.itemChecked = false
+                    }else{
+                        item.itemChecked = true
+                    }
+                }
                 ivEnd.clearAnimation()
                 if (item.itemChecked){
                     ivEnd.setImageResource(R.mipmap.ic_scan_item_checked)

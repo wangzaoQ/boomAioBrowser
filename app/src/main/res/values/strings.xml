@@ -93,5 +93,8 @@
     <string name="app_share">Share</string>
     <string name="app_delete">Delete</string>
     <string name="app_cache_permission_tips">Grant Permissions To Clean Up Trash.</string>
+    <string name="app_clean_no_junk">Your phone has no junk.</string>
+    <string name="app_allow_cache_access">Grant permission to find cache</string>
+    <string name="app_allow_cache_access_content">Please enable storage permissions for AIO Browser in your phone settings.</string>
 
 </resources>

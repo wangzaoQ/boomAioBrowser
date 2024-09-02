@@ -1,15 +1,15 @@
 package com.boom.aiobrowser.ui.activity
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.LayoutInflater
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.JumpData
-import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
 import com.boom.aiobrowser.databinding.BrowserActivityWebDetailsBinding
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
-import com.boom.aiobrowser.tools.FragmentManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.ui.JumpConfig
@@ -18,7 +18,6 @@ import com.boom.aiobrowser.ui.fragment.WebFragment
 import com.boom.aiobrowser.ui.pop.ClearPop
 import com.boom.aiobrowser.ui.pop.TabPop
 import pop.basepopup.BasePopupWindow.OnDismissListener
-import java.lang.ref.WeakReference
 
 class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
 
@@ -36,8 +35,17 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         acBinding.ivHome.setOneClick {
             JumpDataManager.toMain()
         }
+        APP.jumpWebLiveData.observe(this){
+            when (it.jumpType){
+                JumpConfig.JUMP_WEB->{
+                    getWebData(it)
+                }
+                JumpConfig.JUMP_HOME->{
+                    JumpDataManager.toMain()
+                }
+            }
+        }
     }
-
 
     fun updateBottom(showBack:Boolean,showNext:Boolean,jumpData:JumpData?=null,tag:String) {
         AppLogs.dLog(acTAG,"updateBottom:${tag}")
@@ -77,7 +85,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
     fun clearData(){
         ClearPop(this).createPop {
             CacheManager.clearAll()
-            APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag="清理数据后获取当前item"))
+            JumpDataManager.toMain()
         }
     }
 
@@ -95,14 +103,33 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         acBinding.tvTabCount.text = "${JumpDataManager.getBrowserTabList(CacheManager.browserStatus,tag ="WebDetailsActivity 更新tab 数量").size}"
     }
 
-    override fun setShowView() {
+    @SuppressLint("MissingSuperCall")
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        getWebData(getBeanByGson(
+            intent.getStringExtra(ParamsConfig.JSON_PARAMS),
+            JumpData::class.java
+        ))
+    }
+
+    private fun getWebData(data: JumpData?) {
         var webFragment = supportFragmentManager.findFragmentById(R.id.webFragment) as WebFragment
         webFragment.updateData(
-            getBeanByGson(
-                intent.getStringExtra(ParamsConfig.JSON_PARAMS),
-                JumpData::class.java
-            )
+            data
         )
         updateTabCount()
+    }
+
+
+    override fun setShowView() {
+        getWebData(getBeanByGson(
+            intent.getStringExtra(ParamsConfig.JSON_PARAMS),
+            JumpData::class.java
+        ))
+    }
+
+    override fun onDestroy() {
+        APP.jumpWebLiveData.removeObservers(this)
+        super.onDestroy()
     }
 }

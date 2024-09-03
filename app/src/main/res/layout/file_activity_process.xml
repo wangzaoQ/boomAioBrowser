@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="#1DCDDA">
+
+    <RelativeLayout
+        android:id="@+id/rlTop"
+        android:layout_width="match_parent"
+        android:layout_height="37dp"
+        android:layout_marginTop="45dp"
+        >
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="13dp"
+            android:layout_centerVertical="true"
+            android:tint="@color/white"
+            app:srcCompat="@mipmap/ic_back"></androidx.appcompat.widget.AppCompatImageView>
+
+    </RelativeLayout>
+    <FrameLayout
+        android:layout_width="218dp"
+        android:layout_height="218dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="270dp"
+        >
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/shape_ring_1"
+            ></androidx.appcompat.widget.AppCompatImageView>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="168dp"
+            android:layout_height="168dp"
+            app:srcCompat="@drawable/shape_ring_2"
+            android:layout_gravity="center"
+            ></androidx.appcompat.widget.AppCompatImageView>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            app:srcCompat="@drawable/shape_white_oval"
+            android:layout_gravity="center"
+            ></androidx.appcompat.widget.AppCompatImageView>
+    </FrameLayout>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvMemory"
+        android:layout_marginTop="26dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:text="@string/app_scan_process_tips"
+        android:gravity="center"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="145dp"
+        android:layout_alignParentBottom="true"
+        ></androidx.appcompat.widget.AppCompatTextView>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

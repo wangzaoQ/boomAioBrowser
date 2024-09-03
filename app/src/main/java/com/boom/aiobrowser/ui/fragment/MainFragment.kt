@@ -16,12 +16,14 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.StoragePermissionManager
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.SearchConfig
 import com.boom.aiobrowser.ui.activity.clean.CleanScanActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.clean.ProcessActivity
+import com.boom.aiobrowser.ui.activity.clean.load.ProcessLoadActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.EngineGuidePop
 import com.boom.aiobrowser.ui.pop.SearchPop
@@ -133,7 +135,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             permissionManager.requestStoragePermission()
         }
         fBinding.rlProcess.setOneClick {
-            startActivity(Intent(rootActivity, ProcessActivity::class.java))
+            rootActivity.jumpActivity<ProcessLoadActivity>()
         }
 
         viewModel.value.newsLiveData.observe(rootActivity){

@@ -52,7 +52,7 @@
     <string name="app_clean_residual">Residual Files</string>
     <string name="app_clean_cache">Cache Files</string>
     <string name="app_selected">Selected</string>
-    <string name="app_scan_complete">Select The Folder You Want To Clean</string>
+    <string name="app_scan_complete">Select the folder you wanted to clean</string>
     <string name="app_allow_storage_access">Allow Storage Access</string>
     <string name="app_allow_storage_access_content">To use this feature, please go to your phone settings and enable storage permission </string>
     <string name="app_deny">Deny</string>
@@ -95,6 +95,8 @@
     <string name="app_cache_permission_tips">Grant Permissions To Clean Up Trash.</string>
     <string name="app_clean_no_junk">Your phone has no junk.</string>
     <string name="app_allow_cache_access">Grant permission to find cache</string>
-    <string name="app_allow_cache_access_content">Please enable storage permissions for AIO Browser in your phone settings.</string>
+    <string name="app_allow_cache_access_content">Please grant permissions to discover more junk files.</string>
+    <string name="app_later">Maybe Later</string>
+    <string name="app_scan_process_tips">Scanning for running processes</string>
 
 </resources>

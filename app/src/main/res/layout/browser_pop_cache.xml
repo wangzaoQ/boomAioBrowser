@@ -80,7 +80,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/shape_refuse"
                     android:gravity="center"
-                    android:text="@string/app_deny"
+                    android:text="@string/app_later"
                     android:textColor="#4D000000"
                     android:textSize="15sp"
                     android:textStyle="bold"></androidx.appcompat.widget.AppCompatTextView>

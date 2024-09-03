@@ -133,7 +133,7 @@ class CompleteActivity: BaseActivity<CleanActivityCompleteBinding>() {
                 tvJumpTitle.text = getString(R.string.app_process)
                 tvJumpContent.text = getString(R.string.app_process_content)
                 rlToJump.setOneClick {
-                    jumpActivity<ProcessActivity>()
+                    jumpActivity<ProcessLoadActivity>()
                 }
             }
 

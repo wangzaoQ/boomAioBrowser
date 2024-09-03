@@ -36,6 +36,7 @@ import com.boom.aiobrowser.tools.clean.FileFilter.isApks
 import com.boom.aiobrowser.tools.clean.FileFilter.isAudioFile
 import com.boom.aiobrowser.tools.clean.FileFilter.isDoc
 import com.boom.aiobrowser.tools.clean.FileFilter.isDocFile
+import com.boom.aiobrowser.tools.clean.FileFilter.isDownload
 import com.boom.aiobrowser.tools.clean.FileFilter.isImage
 import com.boom.aiobrowser.tools.clean.FileFilter.isImagesFile
 import com.boom.aiobrowser.tools.clean.FileFilter.isInstalled
@@ -469,7 +470,17 @@ class CleanViewModel : BaseDataModel() {
                 AppLogs.eLog(TAG,"isTmpFile:${it.stackTraceToString()}")
             }
             return true
-        } else if (isADFile(file)) {
+        } else if (isDownload(file)){
+            runCatching {
+                synchronized(downloadFiles) {
+                    var data = FilesData.createDefault(file)
+                    downloadFiles.add(data)
+                }
+            }.onFailure {
+                AppLogs.eLog(TAG,"isDownload:${it.stackTraceToString()}")
+            }
+            return true
+        }else if (isADFile(file)) {
             runCatching {
                 synchronized(adFiles) {
                     var data = FilesData.createDefault(file)

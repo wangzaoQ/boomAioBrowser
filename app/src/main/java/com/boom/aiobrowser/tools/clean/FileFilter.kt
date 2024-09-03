@@ -38,6 +38,16 @@ object FileFilter {
     fun isLogCatFile(file: File): Boolean = file.absolutePath.endsWith(".logcat", true)
 
     fun isTmpFile(file: File): Boolean = file.absolutePath.endsWith(".tmp", true)
+
+    fun isDownload(file: File): Boolean{
+        if(file.absolutePath.contains(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath,true)){
+            if (file.absolutePath.isVideo() || file.absolutePath.isImage() || file.absolutePath.isDoc()||file.absolutePath.isApk()||file.absolutePath.isZip()){
+                return true
+            }
+        }
+        return false
+    }
+
     fun isTemporaryFile(file: File): Boolean {
         val fileName = file.name.lowercase(Locale.getDefault())
         return fileName.endsWith(".tmp") || fileName.endsWith(".temp") || fileName.endsWith(".swp") ||

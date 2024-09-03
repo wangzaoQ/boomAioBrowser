@@ -124,26 +124,21 @@ class FileManageListActivity : BaseActivity<FileActivityListManageBinding>() {
                 acBinding.tvTitle.text = getString(R.string.app_recently)
                 fileListAdapter.submitList(recentFiles)
             }
+            FileManageData.FILE_TYPE_DOWNLOADS->{
+                acBinding.tvTitle.text = getString(R.string.app_downloads)
+                fileListAdapter.submitList(downloadFiles)
+            }
             else -> {}
         }
     }
 
     fun getDataList(){
-        if (fromType == FileManageData.FILE_TYPE_DOWNLOADS){
-            acBinding.tvTitle.text = getString(R.string.app_downloads)
-            viewModel.startScanDownload(){
-                addLaunch(success = {
-                    fileListAdapter.submitList(it)
-                }, failBack = {},Dispatchers.Main)
-            }
-        }else{
-            if (APP.instance.cleanComplete.not()){
-                APP.scanCompleteLiveData.observe(this){
-                    updateList()
-                }
-            }else{
+        if (APP.instance.cleanComplete.not()){
+            APP.scanCompleteLiveData.observe(this){
                 updateList()
             }
+        }else{
+            updateList()
         }
     }
 

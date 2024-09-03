@@ -130,6 +130,10 @@
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:launchMode="singleTop"
             ></activity>
+        <activity android:name=".ui.activity.clean.load.ProcessLoadActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            ></activity>
     </application>
 
 

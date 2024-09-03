@@ -9,6 +9,7 @@ import com.boom.aiobrowser.databinding.CleanActivityProcessBinding
 import com.boom.aiobrowser.model.ProcessDataModel
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
+import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.clean.CleanToolsManager
 import com.boom.aiobrowser.tools.clean.CleanToolsManager.getUsedMemoryPercent
 import com.boom.aiobrowser.tools.clean.formatSize
@@ -119,9 +120,15 @@ class ProcessActivity : BaseActivity<CleanActivityProcessBinding>() {
         }
     }
 
+    var isFirst = true
+
     override fun onResume() {
         super.onResume()
-        acBinding.refreshLayout.isRefreshing = true
-        viewModel.getProcessData()
+        if (isFirst.not()||CleanConfig.runningAppInfo.isNullOrEmpty()){
+            viewModel.getProcessData()
+        }else{
+            viewModel.processListLiveData.postValue(CleanConfig.runningAppInfo)
+            isFirst = false
+        }
     }
 }

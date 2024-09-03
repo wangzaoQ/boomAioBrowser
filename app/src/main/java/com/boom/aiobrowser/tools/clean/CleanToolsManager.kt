@@ -75,7 +75,7 @@ object CleanToolsManager {
 
     fun getUsedMemoryPercent(): Int {
         val memoryInfo = getMemoryInfo()
-        return ((memoryInfo.totalMem - memoryInfo.availMem) * 100 / memoryInfo.totalMem).toInt()
+        return ((memoryInfo.availMem) * 100 / memoryInfo.totalMem).toInt()
     }
 
     fun cleanBackgroundProcess() {

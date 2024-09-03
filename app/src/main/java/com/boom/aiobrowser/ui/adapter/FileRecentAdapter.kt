@@ -36,15 +36,19 @@ class FileRecentAdapter: BaseQuickAdapter<FilesData, FileRecentAdapter.VH>() {
         if (item == null)return
         holder.viewBinding.apply {
             tvTitle.text = item.fileName
-            var extension = FileUtils.getFileExtension(item.filePath)
-            if (extension.isImage() || extension.isVideo()){
-                GlideManager.loadImg(iv = ivImg, url = item.filePath)
-            }else if (extension.isAudio()){
-                GlideManager.loadImg(iv = ivImg, url = R.mipmap.ic_music)
-            }else if (extension.isApk()){
-                GlideManager.loadImg(iv = ivImg, url = CleanToolsManager.getApkIcon(APP.instance,item.filePath))
+            if (position == 4){
+                ivImg.setImageResource(R.mipmap.ic_more_recent)
             }else{
-                GlideManager.loadImg(iv = ivImg, url = item.filePath.getDocImg())
+                var extension = FileUtils.getFileExtension(item.filePath)
+                if (extension.isImage() || extension.isVideo()){
+                    GlideManager.loadImg(iv = ivImg, url = item.filePath)
+                }else if (extension.isAudio()){
+                    GlideManager.loadImg(iv = ivImg, url = R.mipmap.ic_music)
+                }else if (extension.isApk()){
+                    GlideManager.loadImg(iv = ivImg, url = CleanToolsManager.getApkIcon(APP.instance,item.filePath))
+                }else{
+                    GlideManager.loadImg(iv = ivImg, url = extension.getDocImg())
+                }
             }
         }
     }

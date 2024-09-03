@@ -47,7 +47,7 @@ class FileListAdapter() : BaseQuickAdapter<FilesData, FileListAdapter.VH>() {
             }else if (extension.isApk()){
                 GlideManager.loadImg(iv = ivImg, url = CleanToolsManager.getApkIcon(APP.instance,item.filePath))
             }else{
-                GlideManager.loadImg(iv = ivImg, url = item.filePath.getDocImg())
+                GlideManager.loadImg(iv = ivImg, url = extension.getDocImg())
             }
         }
     }

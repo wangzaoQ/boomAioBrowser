@@ -284,7 +284,7 @@
                     android:id="@+id/rvRecent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="9dp"></androidx.recyclerview.widget.RecyclerView>
+                    android:layout_marginHorizontal="7dp"></androidx.recyclerview.widget.RecyclerView>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,8 +26,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="123"
-        android:textColor="#B3000000"
+        android:textColor="#4D000000"
         android:textSize="11sp"
-        android:layout_marginTop="3dp"
+        android:visibility="gone"
+        android:layout_marginTop="1dp"
         ></androidx.appcompat.widget.AppCompatTextView>
 </androidx.appcompat.widget.LinearLayoutCompat>

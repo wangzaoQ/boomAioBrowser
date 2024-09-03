@@ -102,6 +102,7 @@ class FileManageFragment : BaseFragment<FileFragmentFileManagerBinding>() {
                 list = it.subList(0,4)
                 list.add(FilesData().apply {
                     fileName = getString(R.string.app_more_recent,"${it.size}")
+                    imgId = R.mipmap.ic_more_recent
                 })
                 fileRecentAdapter.submitList(list)
             }
@@ -117,7 +118,7 @@ class FileManageFragment : BaseFragment<FileFragmentFileManagerBinding>() {
         }
         APP.scanCompleteLiveData.observe(this){
 //            fBinding.tvMemory.text = cleanViewModel.allFilesLength.formatSize()
-            fileManageAdapter.notifyDataSetChanged()
+            fileManageAdapter.showSize(true)
             fBinding.refresh.isRefreshing = false
         }
     }

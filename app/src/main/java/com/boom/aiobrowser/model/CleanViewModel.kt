@@ -8,6 +8,7 @@ import android.provider.DocumentsContract
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.MutableLiveData
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.data.FilesData
 import com.boom.aiobrowser.data.ViewItem
 import com.boom.aiobrowser.tools.AppLogs
@@ -104,6 +105,7 @@ class CleanViewModel : BaseDataModel() {
                         scanByUri(documentFile, onScanPath)
                     }
                 }
+                cacheFiles.sortByDescending { it.fileSize?:0L }
             }else{
                 //android 10及以下
                 var allLength = 0L
@@ -112,40 +114,41 @@ class CleanViewModel : BaseDataModel() {
                     var file = isRealFile(it) ?: return@Scan1
                     APP.instance.packageManager.getInstalledPackages(0).forEach {
                         var packageInfo = it
-                        if (isInstalled(it.packageName)) {
                             var pkg = it.packageName
+                        if (pkg!=BuildConfig.APPLICATION_ID){
                             //在所有的安装的app中遍历是否有这个文件的包名，有则拿到信息组建数据
-                                if (file.absolutePath.contains(pkg)) {
-                                    var appFileName =
-                                        packageManager.getApplicationLabel(packageInfo.applicationInfo)
-                                            .toString()
-                                    var oldData = false
-                                    //如果cacheFile中有这个App 就统一把数据归到一起
-                                    for (i in 0 until cacheFiles.size) {
-                                        var data = cacheFiles.get(i)
-                                        if (data.fileName == appFileName) {
-                                            data.fileSize = data.fileSize?.plus(file.length())
-                                            oldData = true
-                                            break
-                                        }
+                            if (file.absolutePath.contains(pkg)) {
+                                var appFileName =
+                                    packageManager.getApplicationLabel(packageInfo.applicationInfo)
+                                        .toString()
+                                var oldData = false
+                                //如果cacheFile中有这个App 就统一把数据归到一起
+                                for (i in 0 until cacheFiles.size) {
+                                    var data = cacheFiles.get(i)
+                                    if (data.fileName == appFileName) {
+                                        data.fileSize = data.fileSize?.plus(file.length())
+                                        oldData = true
+                                        break
                                     }
-                                    if (oldData.not()) {
-                                        cacheFiles.add(FilesData().apply {
-                                            filePath = file.absolutePath
-                                            fileSize = file.length()
-                                            fileName = appFileName
-                                            itemChecked = true
-                                            dataType = ViewItem.TYPE_CHILD
-                                            imgId =
-                                                packageManager.getApplicationIcon(packageInfo.applicationInfo)
-                                        })
-                                    }
-                                    allLength += file.length()
-                                    onScanPath.invoke(allLength)
                                 }
+                                if (oldData.not()) {
+                                    cacheFiles.add(FilesData().apply {
+                                        filePath = file.absolutePath
+                                        fileSize = file.length()
+                                        fileName = appFileName
+                                        itemChecked = true
+                                        dataType = ViewItem.TYPE_CHILD
+                                        imgId =
+                                            packageManager.getApplicationIcon(packageInfo.applicationInfo)
+                                    })
+                                }
+                                allLength += file.length()
+                                onScanPath.invoke(allLength)
+                            }
                         }
                     }
                 }, onComplete = {
+                    cacheFiles.sortByDescending { it.fileSize?:0L }
                 },"Cache").scanStart()
             }
             var middleTime = (System.currentTimeMillis()-startTime)
@@ -179,8 +182,8 @@ class CleanViewModel : BaseDataModel() {
             }
             APP.instance.packageManager.getInstalledPackages(0).forEach {
                 var packageInfo = it
-                if (isInstalled(it.packageName)) {
-                    var pkg = it.packageName
+                var pkg = it.packageName
+                if (pkg!=BuildConfig.APPLICATION_ID) {
                     //在所有的安装的app中遍历是否有这个文件的包名，有则拿到信息组建数据
                     documentCacheFiles.forEach {
                         var fileName = getRealPathFromURI(it.uri)?:""

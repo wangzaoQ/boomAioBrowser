@@ -153,7 +153,7 @@ object CleanToolsManager {
         val packageManager: PackageManager = APP.instance.getPackageManager()
         APP.instance.packageManager.getInstalledPackages(0).forEach {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                if (isInstalled(it.packageName)){
+                if (it.packageName!=BuildConfig.APPLICATION_ID){
                     val storageStatsManager = APP.instance.getSystemService(Context.STORAGE_STATS_SERVICE) as StorageStatsManager
                     var stats = storageStatsManager.queryStatsForPackage(StorageManager.UUID_DEFAULT,it.packageName,myUserHandle())
                     var cache = stats.externalCacheBytes
@@ -166,7 +166,7 @@ object CleanToolsManager {
                             fileName = packageManager.getApplicationLabel(it.applicationInfo).toString()
                             itemChecked = true
                             scanType = DATA_TYPE_CACHE
-                            dataType = ViewItem.TYPE_PARENT
+                            dataType = ViewItem.TYPE_CHILD
                         })
                         delay(10)
                         AppLogs.dLog("getCacheSize",":${allCache.formatSize()}")

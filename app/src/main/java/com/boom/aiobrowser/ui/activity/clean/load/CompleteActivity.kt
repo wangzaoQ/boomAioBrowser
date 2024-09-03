@@ -117,10 +117,11 @@ class CompleteActivity: BaseActivity<CleanActivityCompleteBinding>() {
                 tvJumpTitle.text = getString(R.string.app_clean)
                 tvJumpContent.text = getString(R.string.app_clean_content)
                 rlToJump.setOneClick {
-                    StoragePermissionManager(WeakReference(this@CompleteActivity), 1,onGranted = {
+                    var permissionManager = StoragePermissionManager(WeakReference(this@CompleteActivity), 1,onGranted = {
                         jumpActivity<CleanScanActivity>()
                     }, onDenied = {
                     })
+                    permissionManager.requestStoragePermission()
                 }
             }else{
                 if (num>0){

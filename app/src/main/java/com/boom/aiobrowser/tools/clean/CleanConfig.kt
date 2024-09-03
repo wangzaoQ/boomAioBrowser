@@ -73,6 +73,7 @@ object CleanConfig {
     }
 
     fun clearFileConfig(){
+        cacheFiles.clear()
         largeFiles.clear()
         imageFiles.clear()
         videoFiles.clear()

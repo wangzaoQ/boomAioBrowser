@@ -74,7 +74,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 absVerticalOffset = Math.abs(verticalOffset) //AppBarLayout竖直方向偏移距离px
                 if (absVerticalOffset == 0)return
                 val totalScrollRange = appBarLayout!!.totalScrollRange //AppBarLayout总的距离px
-                var offset = BigDecimalUtils.mul(BigDecimalUtils.div(255.toDouble(), totalScrollRange.toDouble(),1),absVerticalOffset.toDouble()).toInt()
+                var offset = BigDecimalUtils.mul(BigDecimalUtils.div(255.toDouble(), totalScrollRange.toDouble(),10),absVerticalOffset.toDouble()).toInt()
 //                var offset = absVerticalOffset / 2
 //                offset = 255 - offset
                 AppLogs.dLog("onOffsetChanged", "offset=$offset")
@@ -87,8 +87,11 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                     fBinding.mainCl.alpha = 1f
                     fBinding.mainToolBar.alpha = 0f
                 } else {
-                    val div = BigDecimalUtils.div(offset.toDouble(), 255.0, 2)
+                    var div = BigDecimalUtils.div(offset.toDouble(), 255.0, 2)
                     AppLogs.dLog("onOffsetChanged", "div=$div")
+                    if (div<0.1){
+                        div = 0.0
+                    }
                     fBinding.mainToolBar.alpha = div.toFloat()
                     fBinding.mainCl.alpha = 1-div.toFloat()
                 }

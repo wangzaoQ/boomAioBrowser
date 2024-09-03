@@ -70,6 +70,5 @@ class ScanData : ViewItem() {
     fun checkedAll(check:Boolean){
         isLoading = false
         itemChecked = check
-
     }
 }

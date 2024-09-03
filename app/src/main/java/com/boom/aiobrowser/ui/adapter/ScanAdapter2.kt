@@ -98,10 +98,14 @@ class ScanAdapter2(var updateBack: () -> Unit) : BaseMultiItemAdapter<ViewItem>(
                         val payload = payloads[0].toString()
                         if (payload == "updateCheck") {
                             item as ScanData
-                            if (item.itemChecked) {
-                                holder.viewBinding!!.scanItem.binding.ivEnd.setImageResource(R.mipmap.ic_scan_item_checked)
-                            } else {
-                                holder.viewBinding!!.scanItem.binding.ivEnd.setImageResource(R.mipmap.ic_scan_item_unchecked)
+                            if (item.enableChecked){
+                                if (item.itemChecked) {
+                                    holder.viewBinding!!.scanItem.binding.ivEnd.setImageResource(R.mipmap.ic_scan_item_checked)
+                                } else {
+                                    holder.viewBinding!!.scanItem.binding.ivEnd.setImageResource(R.mipmap.ic_scan_item_unchecked)
+                                }
+                            }else{
+                                holder.viewBinding!!.scanItem.binding.ivEnd.setImageResource(R.mipmap.ic_checked_unable)
                             }
                         }else if (payload == "updateCache"){
                             item as ScanData
@@ -165,7 +169,15 @@ class ScanAdapter2(var updateBack: () -> Unit) : BaseMultiItemAdapter<ViewItem>(
                                 }
                                 tvSize.text = allLength.formatSize()
                             }
-                            ivEnd.setImageResource(if (item.itemChecked) R.mipmap.ic_scan_item_checked else R.mipmap.ic_scan_item_unchecked)
+                            if (item.enableChecked){
+                                if (item.itemChecked) {
+                                    holder.viewBinding!!.ivEnd.setImageResource(R.mipmap.ic_scan_item_checked)
+                                } else {
+                                    holder.viewBinding!!.ivEnd.setImageResource(R.mipmap.ic_scan_item_unchecked)
+                                }
+                            }else{
+                                holder.viewBinding!!.ivEnd.setImageResource(R.mipmap.ic_checked_unable)
+                            }
                         }
                     }
 
@@ -182,10 +194,14 @@ class ScanAdapter2(var updateBack: () -> Unit) : BaseMultiItemAdapter<ViewItem>(
                             val payload = payloads[0].toString()
                             if (payload == "updateCheck") {
                                 item as FilesData
-                                if (item.itemChecked) {
-                                    holder.viewBinding!!.ivEnd.setImageResource(R.mipmap.ic_scan_item_checked)
-                                } else {
-                                    holder.viewBinding!!.ivEnd.setImageResource(R.mipmap.ic_scan_item_unchecked)
+                                if (item.enableChecked){
+                                    if (item.itemChecked) {
+                                        holder.viewBinding!!.ivEnd.setImageResource(R.mipmap.ic_scan_item_checked)
+                                    } else {
+                                        holder.viewBinding!!.ivEnd.setImageResource(R.mipmap.ic_scan_item_unchecked)
+                                    }
+                                }else{
+                                    holder.viewBinding!!.ivEnd.setImageResource(R.mipmap.ic_checked_unable)
                                 }
                             }else if (payload == "updateLoad"){
 

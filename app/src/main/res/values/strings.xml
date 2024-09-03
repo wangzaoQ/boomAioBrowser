@@ -101,5 +101,6 @@
     <string name="app_yes">Yes</string>
     <string name="app_no">No</string>
     <string name="app_delete_msg">Confirm permanent deletion</string>
+    <string name="app_no_data">No data</string>
 
 </resources>

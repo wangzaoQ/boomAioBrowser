@@ -43,19 +43,35 @@ class Scan1(var parentDirectory: File,var waitTime:Long,var onProgress: (file:Fi
         val files = mutableListOf<File>()
         dir.listFiles()?.forEach { file ->
             if (file.isDirectory && files.size<10000) {
-                deferredResults.add(async {
-                    scanDirectory(file)
-                })
-//                scanDirectory(file)
-            } else {
-                AppLogs.dLog(TAG,"扫描出的文件:${file.absolutePath} 当前线程:${Thread.currentThread()}")
-//                Logger.writeLog(APP.instance,"扫描出的文件:${file.absolutePath}")
-                files.add(file)
-                if (tag == "Cache"){
-                    delay(1)
-                }
+//                var tempFile = File("/storage/emulated/0/Android/data/air.com.eprize.nylottery.app.NYLotteryApp/cache")
+//                if (tempFile.name.equals("cache", ignoreCase = true) ){
 //
-                onProgress.invoke(file)
+//                }else{
+//
+//                }
+                if (tag == "Cache"){
+                    deferredResults.add(async {
+                        scanDirectory(file)
+                    })
+                }else{
+                    if (file.absolutePath.contains("Android/data").not()){
+                        deferredResults.add(async {
+                            scanDirectory(file)
+                        })
+                    }
+                }
+            } else {
+//                Logger.writeLog(APP.instance,"扫描出的文件:${file.absolutePath}")
+                if (tag == "Cache"){
+                    if (file.absolutePath.contains("cache",true)){
+                        AppLogs.dLog(TAG,"扫描出的文件夹:${file.absolutePath} 当前线程:${Thread.currentThread()}")
+                        onProgress.invoke(file)
+                    }
+                }else{
+                    AppLogs.dLog(TAG,"扫描出的文件:${file.absolutePath} 当前线程:${Thread.currentThread()}")
+                    files.add(file)
+                    onProgress.invoke(file)
+                }
             }
         }
 

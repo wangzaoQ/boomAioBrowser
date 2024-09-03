@@ -111,6 +111,7 @@ class FileManageListActivity : BaseActivity<FileActivityListManageBinding>() {
                                 APP.deleteLiveData2.postValue(data!!.filePath)
                             }
                             builder.setNeutralButton(context.getString(R.string.app_no)) { dialog, which ->
+                                dialog.dismiss()
                             }
                             var dialog = builder.create()
                             dialog!!.show()

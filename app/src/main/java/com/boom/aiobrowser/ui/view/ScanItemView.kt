@@ -31,10 +31,14 @@ class ScanItemView : LinearLayout {
                         item.itemChecked = false
                     }
                 }
-                if (item.itemChecked){
-                    ivEnd.setImageResource(R.mipmap.ic_scan_item_checked)
+                if (item.enableChecked){
+                    if (item.itemChecked){
+                        ivEnd.setImageResource(R.mipmap.ic_scan_item_checked)
+                    }else{
+                        ivEnd.setImageResource(R.mipmap.ic_scan_item_unchecked)
+                    }
                 }else{
-                    ivEnd.setImageResource(R.mipmap.ic_scan_item_unchecked)
+                    ivEnd.setImageResource(R.mipmap.ic_checked_unable)
                 }
                 tvSize.text = item.allLength.formatSize()
             }
@@ -61,10 +65,14 @@ class ScanItemView : LinearLayout {
                     }
                 }
                 ivEnd.clearAnimation()
-                if (item.itemChecked){
-                    ivEnd.setImageResource(R.mipmap.ic_scan_item_checked)
+                if (item.enableChecked){
+                    if (item.itemChecked){
+                        ivEnd.setImageResource(R.mipmap.ic_scan_item_checked)
+                    }else{
+                        ivEnd.setImageResource(R.mipmap.ic_scan_item_unchecked)
+                    }
                 }else{
-                    ivEnd.setImageResource(R.mipmap.ic_scan_item_unchecked)
+                    ivEnd.setImageResource(R.mipmap.ic_checked_unable)
                 }
                 tvSize.text = item.allLength.formatSize()
             }

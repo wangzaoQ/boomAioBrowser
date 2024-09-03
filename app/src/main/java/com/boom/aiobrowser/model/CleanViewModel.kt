@@ -110,40 +110,42 @@ class CleanViewModel : BaseDataModel() {
                 //android 10及以下
                 var allLength = 0L
                 val packageManager: PackageManager = APP.instance.getPackageManager()
-                Scan1(Environment.getExternalStorageDirectory(),3000L, onProgress = {
+                Scan1(File("${Environment.getExternalStorageDirectory().absolutePath}/Android/data"),3000L, onProgress = {
                     var file = isRealFile(it) ?: return@Scan1
-                    APP.instance.packageManager.getInstalledPackages(0).forEach {
-                        var packageInfo = it
+                    synchronized("startScanCache"){
+                        APP.instance.packageManager.getInstalledPackages(0).forEach {
+                            var packageInfo = it
                             var pkg = it.packageName
-                        if (pkg!=BuildConfig.APPLICATION_ID){
-                            //在所有的安装的app中遍历是否有这个文件的包名，有则拿到信息组建数据
-                            if (file.absolutePath.contains(pkg)) {
-                                var appFileName =
-                                    packageManager.getApplicationLabel(packageInfo.applicationInfo)
-                                        .toString()
-                                var oldData = false
-                                //如果cacheFile中有这个App 就统一把数据归到一起
-                                for (i in 0 until cacheFiles.size) {
-                                    var data = cacheFiles.get(i)
-                                    if (data.fileName == appFileName) {
-                                        data.fileSize = data.fileSize?.plus(file.length())
-                                        oldData = true
-                                        break
+                            if (pkg!=BuildConfig.APPLICATION_ID){
+                                //在所有的安装的app中遍历是否有这个文件的包名，有则拿到信息组建数据
+                                if (file.absolutePath.contains(pkg)) {
+                                    var appFileName =
+                                        packageManager.getApplicationLabel(packageInfo.applicationInfo)
+                                            .toString()
+                                    var oldData = false
+                                    //如果cacheFile中有这个App 就统一把数据归到一起
+                                    for (i in 0 until cacheFiles.size) {
+                                        var data = cacheFiles.get(i)
+                                        if (data.fileName == appFileName) {
+                                            data.fileSize = data.fileSize?.plus(file.length())
+                                            oldData = true
+                                            break
+                                        }
                                     }
+                                    if (oldData.not()) {
+                                        cacheFiles.add(FilesData().apply {
+                                            filePath = file.absolutePath
+                                            fileSize = file.length()
+                                            fileName = appFileName
+                                            itemChecked = true
+                                            dataType = ViewItem.TYPE_CHILD
+                                            imgId =
+                                                packageManager.getApplicationIcon(packageInfo.applicationInfo)
+                                        })
+                                    }
+                                    allLength += file.length()
+                                    onScanPath.invoke(allLength)
                                 }
-                                if (oldData.not()) {
-                                    cacheFiles.add(FilesData().apply {
-                                        filePath = file.absolutePath
-                                        fileSize = file.length()
-                                        fileName = appFileName
-                                        itemChecked = true
-                                        dataType = ViewItem.TYPE_CHILD
-                                        imgId =
-                                            packageManager.getApplicationIcon(packageInfo.applicationInfo)
-                                    })
-                                }
-                                allLength += file.length()
-                                onScanPath.invoke(allLength)
                             }
                         }
                     }
@@ -226,17 +228,18 @@ class CleanViewModel : BaseDataModel() {
         val files = mutableListOf<File>()
         dir.listFiles()?.forEach { file ->
 //
-            if (file.isDirectory) {
-                if ((file.name?.contains("cache") == true)){
-                    deferredResults.add(async {
-                        scanDirectory(file)
-                    })
-                }
+            if (file.isDirectory && files.size<10000) {
+                deferredResults.add(async {
+                    scanDirectory(file)
+                })
 //                scanDirectory(file)
             } else {
                 AppLogs.dLog(TAG,"清理扫描出的cache文件:${getRealPathFromURI(file.uri)} size:${File(getRealPathFromURI(file.uri)).length().formatSize()} 当前线程:${Thread.currentThread()}")
                 getRealPathFromURI(file.uri)?.apply {
-                    files.add(File(this))
+                    var file = File(this)
+                    if (file.absolutePath.contains("cache",true)){
+                        files.add(file)
+                    }
                 }
             }
         }

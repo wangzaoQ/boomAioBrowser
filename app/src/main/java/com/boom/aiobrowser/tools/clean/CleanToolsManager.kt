@@ -167,6 +167,7 @@ object CleanToolsManager {
                             itemChecked = true
                             scanType = DATA_TYPE_CACHE
                             dataType = ViewItem.TYPE_CHILD
+                            enableChecked = false
                         })
                         delay(10)
                         AppLogs.dLog("getCacheSize",":${allCache.formatSize()}")

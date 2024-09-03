@@ -1,11 +1,13 @@
 package com.boom.aiobrowser.ui.activity.file
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.blankj.utilcode.util.FileUtils
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.FileManageData
 import com.boom.aiobrowser.data.FilesData
@@ -41,30 +43,41 @@ class ImagePreviewActivity: BaseActivity<FileActivityPreviewBinding>() {
             }
         }
         acBinding.ivDelete.setOneClick {
-            runCatching {
-                if (filesData == null){
-                    if(imageFiles.isNullOrEmpty())return@runCatching
-                    val bean = imageFiles?.get(index)
-                    if (bean == null)return@runCatching
-                    imageFiles.remove(bean)
-                    FileUtils.delete(File(bean?.filePath))
-                    APP.deleteLiveData.postValue(HashMap<Int, Int>().apply {
-                        put(FileManageData.FILE_TYPE_IMAGES,index)
-                    })
-                }else{
-                    var index = -1
-                    for (i in 0 until imageFiles.size){
-                        if (imageFiles.get(i).filePath == filesData!!.filePath){
-                            index = i
-                            break
+            var builder =  AlertDialog.Builder(this@ImagePreviewActivity)
+            builder.setMessage(R.string.app_delete_msg)
+            builder.setCancelable(true);
+            builder.setNegativeButton(getString(R.string.app_yes)) { dialog, which ->
+                runCatching {
+                    if (filesData == null){
+                        if(imageFiles.isNullOrEmpty())return@runCatching
+                        val bean = imageFiles?.get(index)
+                        if (bean == null)return@runCatching
+                        imageFiles.remove(bean)
+                        FileUtils.delete(File(bean?.filePath))
+                        APP.deleteLiveData.postValue(HashMap<Int, Int>().apply {
+                            put(FileManageData.FILE_TYPE_IMAGES,index)
+                        })
+                    }else{
+                        var index = -1
+                        for (i in 0 until imageFiles.size){
+                            if (imageFiles.get(i).filePath == filesData!!.filePath){
+                                index = i
+                                break
+                            }
                         }
+                        imageFiles.removeAt(index)
+                        FileUtils.delete(File(filesData!!.filePath))
+                        APP.deleteLiveData2.postValue(filesData!!.filePath)
                     }
-                    imageFiles.removeAt(index)
-                    FileUtils.delete(File(filesData!!.filePath))
-                    APP.deleteLiveData2.postValue(filesData!!.filePath)
+                    finish()
                 }
-                finish()
             }
+            builder.setNeutralButton(getString(R.string.app_no)) { dialog, which ->
+                dialog.dismiss()
+            }
+            var dialog = builder.create()
+            dialog!!.show()
+
         }
     }
 

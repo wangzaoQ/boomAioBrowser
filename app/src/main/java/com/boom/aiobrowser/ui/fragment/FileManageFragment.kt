@@ -76,6 +76,7 @@ class FileManageFragment : BaseFragment<FileFragmentFileManagerBinding>() {
         }
         fBinding.llClean.setOneClick {
             var permissionManager = StoragePermissionManager(WeakReference(rootActivity), jumpType = 1, onGranted = {
+                cleanViewModel.startScan(Environment.getExternalStorageDirectory())
                 rootActivity.jumpActivity<CleanScanActivity>()
             }, onDenied = {
             })
@@ -96,6 +97,7 @@ class FileManageFragment : BaseFragment<FileFragmentFileManagerBinding>() {
             permissionManager.requestStoragePermission()
         }
         cleanViewModel.recentListLiveData.observe(this){
+            fBinding.rlSetting.visibility = View.GONE
             fBinding.rvRecent.visibility = View.VISIBLE
             var list = mutableListOf<FilesData>()
             if (it.size>=4){
@@ -154,7 +156,7 @@ class FileManageFragment : BaseFragment<FileFragmentFileManagerBinding>() {
                     tvStorage.text = useStorage.formatSize()
                 }
                 fileManageAdapter.setOnDebouncedItemClick { adapter, view, position ->
-                    var permissionManager = StoragePermissionManager(WeakReference(rootActivity), onGranted = {
+                    var permissionManager = StoragePermissionManager(WeakReference(rootActivity), 1,onGranted = {
                         var data = fileManageAdapter.items.get(position)
                         if (data.type == FileManageData.FILE_TYPE_IMAGES || data.type == FileManageData.FILE_TYPE_VIDEOS){
                             rootActivity.jumpActivity<ImageActivity>(Bundle().apply {

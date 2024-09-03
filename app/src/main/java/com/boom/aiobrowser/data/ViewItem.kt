@@ -8,6 +8,7 @@ open class ViewItem {
 
     }
 
-    open var dataType=0
+    open var dataType :Int?=0
+    open var enableChecked = true
 
 }

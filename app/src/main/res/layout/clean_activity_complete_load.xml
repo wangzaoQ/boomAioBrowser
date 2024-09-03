@@ -22,10 +22,10 @@
     </RelativeLayout>
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/ivClear"
-        android:layout_width="134dp"
-        android:layout_height="134dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="270dp"
+        android:layout_marginTop="250dp"
         app:lottie_autoPlay="false"
         app:lottie_fileName="loading.json"
         android:scaleType="fitXY"

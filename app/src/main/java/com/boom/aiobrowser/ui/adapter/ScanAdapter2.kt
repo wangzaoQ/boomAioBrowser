@@ -193,7 +193,7 @@ class ScanAdapter2(var updateBack: () -> Unit) : BaseMultiItemAdapter<ViewItem>(
                         }
                     }
                 })
-            .onItemViewType { position, list -> list.get(position).dataType }
+            .onItemViewType { position, list -> list.get(position).dataType?:0 }
     }
 
 //

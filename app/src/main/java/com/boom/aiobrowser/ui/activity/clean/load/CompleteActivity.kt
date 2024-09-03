@@ -12,6 +12,7 @@ import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.JumpDataManager.toMain
 import com.boom.aiobrowser.tools.StoragePermissionManager
 import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.ui.JumpConfig
@@ -153,7 +154,7 @@ class CompleteActivity: BaseActivity<CleanActivityCompleteBinding>() {
                         isJumpClick = true
                     }
                     APP.jumpLiveData.postValue(jumpData)
-                    finish()
+                    toMain()
                 }
             }
             refreshLayout.setOnRefreshListener {

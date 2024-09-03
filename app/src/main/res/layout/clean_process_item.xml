@@ -2,8 +2,9 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="40dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:layout_marginBottom="13dp"
+    android:layout_marginBottom="14dp"
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -28,11 +29,10 @@
         android:id="@+id/tvStop"
         android:layout_width="67dp"
         android:layout_height="27dp"
-        android:background="@drawable/shape_blue_ff00cdda_84r"
         android:layout_gravity="center_vertical"
         android:text="@string/app_stop"
         android:gravity="center"
-        android:textColor="@color/white"
+        android:textColor="#FF3B30"
         android:textSize="11sp"
         android:textStyle="bold"
         ></androidx.appcompat.widget.AppCompatTextView>

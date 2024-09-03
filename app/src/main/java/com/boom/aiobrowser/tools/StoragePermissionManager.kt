@@ -73,7 +73,7 @@ class StoragePermissionManager(
             return
         }
         runCatching {
-            XXPermissions.with(this).permission(Permission.Group.STORAGE)
+            XXPermissions.with(this).permission(Permission.MANAGE_EXTERNAL_STORAGE)
                 .request(object : OnPermissionCallback {
                     override fun onGranted(permissions: List<String>, all: Boolean) {
                         onGranted.invoke()

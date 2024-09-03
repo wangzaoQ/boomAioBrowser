@@ -2,7 +2,9 @@ package com.boom.aiobrowser.ui.activity.file
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
+import android.view.View
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.FileUtils
@@ -27,6 +29,7 @@ import com.boom.aiobrowser.tools.clean.CleanConfig.recentFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.videoFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.zipFiles
 import com.boom.aiobrowser.tools.clean.clickFile
+import com.boom.aiobrowser.tools.clean.getListByType
 import com.boom.aiobrowser.tools.clean.removeDataByFileExt
 import com.boom.aiobrowser.ui.adapter.FileListAdapter
 import com.boom.aiobrowser.ui.pop.FileEditorPop
@@ -59,6 +62,8 @@ class FileManageListActivity : BaseActivity<FileActivityListManageBinding>() {
                     var data = fileListAdapter.items.get(i)
                     if (data.filePath == it){
                         fileListAdapter.remove(data)
+                        FileUtils.delete(data.filePath)
+                        data.filePath.removeDataByFileExt()
                         break
                     }
                 }
@@ -103,12 +108,6 @@ class FileManageListActivity : BaseActivity<FileActivityListManageBinding>() {
                             builder.setMessage(R.string.app_delete_msg)
                             builder.setCancelable(true);
                             builder.setNegativeButton(context.getString(R.string.app_yes)) { dialog, which ->
-                                runCatching {
-                                    FileUtils.delete(data.filePath)
-                                    data.filePath.removeDataByFileExt()
-                                }.onFailure {
-                                    AppLogs.eLog("FileEditorPop",it.stackTraceToString())
-                                }
                                 APP.deleteLiveData2.postValue(data!!.filePath)
                             }
                             builder.setNeutralButton(context.getString(R.string.app_no)) { dialog, which ->
@@ -155,6 +154,12 @@ class FileManageListActivity : BaseActivity<FileActivityListManageBinding>() {
             }
             else -> {}
         }
+        var list = getListByType(fromType)
+        if (list.isEmpty()){
+            acBinding.emptyView.root.visibility = View.VISIBLE
+        }else{
+            acBinding.emptyView.root.visibility = View.GONE
+        }
     }
 
     fun getDataList(){
@@ -162,6 +167,7 @@ class FileManageListActivity : BaseActivity<FileActivityListManageBinding>() {
             APP.scanCompleteLiveData.observe(this){
                 updateList()
             }
+            viewModel.startScan(Environment.getExternalStorageDirectory())
         }else{
             updateList()
         }

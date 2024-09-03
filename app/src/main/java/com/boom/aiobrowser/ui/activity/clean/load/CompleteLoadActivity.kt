@@ -3,10 +3,15 @@ package com.boom.aiobrowser.ui.activity.clean.load
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.CleanActivityCompleteLoadBinding
 import com.boom.aiobrowser.tools.clean.formatSize
+import com.boom.aiobrowser.tools.jobCancel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 
 class CompleteLoadActivity : BaseActivity<CleanActivityCompleteLoadBinding>() {
 
@@ -34,6 +39,8 @@ class CompleteLoadActivity : BaseActivity<CleanActivityCompleteLoadBinding>() {
         }
     }
 
+    var job:Job?=null
+
     override fun setShowView() {
         var num = intent.getLongExtra("num",0L)
         var fromType = intent.getIntExtra("fromType",0)
@@ -46,9 +53,20 @@ class CompleteLoadActivity : BaseActivity<CleanActivityCompleteLoadBinding>() {
                 acBinding.tvContent.text = getString(R.string.app_clean_title,num.formatSize())
             }
         }
-        acBinding.root.postDelayed({
+        job = addLaunch(success = {
+            delay(2000)
             CompleteActivity.startCompleteActivity(this@CompleteLoadActivity,num,fromType)
-        },2000)
+        }, failBack = {},Dispatchers.Main)
+        acBinding.ivClear.run {
+            visibility = View.VISIBLE
+            setAnimation("loading.json")
+            playAnimation()
+        }
+    }
+
+    override fun onDestroy() {
+        job.jobCancel()
+        super.onDestroy()
     }
 
 

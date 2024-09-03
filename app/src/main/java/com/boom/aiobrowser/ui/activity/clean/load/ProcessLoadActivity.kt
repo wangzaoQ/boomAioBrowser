@@ -23,6 +23,10 @@ class ProcessLoadActivity: BaseActivity<FileActivityProcessBinding>() {
     }
 
     override fun setShowView() {
+        acBinding.processLoad.apply {
+            setAnimation("process_load.json")
+            playAnimation()
+        }
         viewModel.getProcessData()
         acBinding.root.postDelayed({
             jumpActivity<ProcessActivity>()

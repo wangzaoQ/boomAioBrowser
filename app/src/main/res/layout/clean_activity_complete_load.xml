@@ -20,15 +20,17 @@
             android:layout_centerVertical="true"
             ></androidx.appcompat.widget.AppCompatImageView>
     </RelativeLayout>
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/ivClear"
         android:layout_width="134dp"
         android:layout_height="134dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/shape_bg_ok"
         android:layout_marginTop="270dp"
-        app:srcCompat="@mipmap/ic_ok"
-        ></androidx.appcompat.widget.AppCompatImageView>
+        app:lottie_autoPlay="false"
+        app:lottie_fileName="loading.json"
+        android:scaleType="fitXY"
+        app:lottie_loop="true"
+        ></com.airbnb.lottie.LottieAnimationView>
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_below="@+id/ivClear"
         android:id="@+id/tvContent"

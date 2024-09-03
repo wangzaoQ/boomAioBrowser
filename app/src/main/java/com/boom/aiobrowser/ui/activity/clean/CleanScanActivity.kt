@@ -74,9 +74,9 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
             currentPathLiveData.observe(this@CleanScanActivity){
                 acBinding.tvPath.text = "Storage : $it"
             }
-            currentSizeLiveData.observe(this@CleanScanActivity){
-                acBinding.tvSize.text = it
-            }
+//            currentSizeLiveData.observe(this@CleanScanActivity){
+//                acBinding.tvSize.text = it
+//            }
         }
 
         acBinding.mainAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
@@ -201,6 +201,10 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
 
     override fun setShowView() {
         acBinding.apply {
+            cpv.apply {
+                setAnimation("clean_load.json")
+                playAnimation()
+            }
             rv.apply {
                 layoutManager = LinearLayoutManager(this@CleanScanActivity, LinearLayoutManager.VERTICAL,false)
                 // 设置预加载，请调用以下方法
@@ -280,7 +284,6 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                     showCache()
                 }
             }
-            cpv.animation = 2000L.rotateAnim()
         }
         scanAdapter.add(ScanData().createCacheData(this@CleanScanActivity,false).apply {
             isLoading = true

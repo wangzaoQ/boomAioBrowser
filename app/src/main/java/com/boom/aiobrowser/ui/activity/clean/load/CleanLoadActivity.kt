@@ -10,7 +10,6 @@ import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.CleanActivityCompleteLoadBinding
 import com.boom.aiobrowser.databinding.CleanActivityLoadBinding
 import com.boom.aiobrowser.tools.clean.CleanConfig.cacheFiles
-import com.boom.aiobrowser.tools.clean.CleanConfig.documentCacheFiles
 import com.boom.aiobrowser.tools.clean.CleanManager
 import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.tools.rotateAnim

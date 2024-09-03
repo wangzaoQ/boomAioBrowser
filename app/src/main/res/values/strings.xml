@@ -98,5 +98,8 @@
     <string name="app_allow_cache_access_content">Please grant permissions to discover more junk files.</string>
     <string name="app_later">Maybe Later</string>
     <string name="app_scan_process_tips">Scanning for running processes</string>
+    <string name="app_yes">Yes</string>
+    <string name="app_no">No</string>
+    <string name="app_delete_msg">Confirm permanent deletion</string>
 
 </resources>

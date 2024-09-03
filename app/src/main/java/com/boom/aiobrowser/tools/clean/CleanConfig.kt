@@ -39,7 +39,6 @@ object CleanConfig {
     var documentsFiles: MutableList<FilesData> = mutableListOf()
     var recentFiles = mutableListOf<FilesData>()
 
-    var documentCacheFiles :MutableList<DocumentFile> = mutableListOf()
 
 
 

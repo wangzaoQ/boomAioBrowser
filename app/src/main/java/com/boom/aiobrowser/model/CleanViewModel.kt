@@ -19,7 +19,6 @@ import com.boom.aiobrowser.tools.clean.CleanConfig.apkFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.appInstalledPkgList
 import com.boom.aiobrowser.tools.clean.CleanConfig.audioFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.cacheFiles
-import com.boom.aiobrowser.tools.clean.CleanConfig.documentCacheFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.documentsFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.downloadFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.imageFiles
@@ -172,13 +171,13 @@ class CleanViewModel : BaseDataModel() {
         if (documentFile != null) {
             // 现在可以访问/Android/data目录
             val children = documentFile?.listFiles()
-            documentCacheFiles.clear()
+            var files = mutableListOf<File>()
             children?.forEach { file ->
-                documentCacheFiles.addAll(scanDirectory(file))
+                files.addAll(scanDirectory(file))
             }
             val packageManager: PackageManager = APP.instance.getPackageManager()
             var allLength = 0L
-            if (documentCacheFiles.isNullOrEmpty()) {
+            if (files.isNullOrEmpty()) {
                 return
             }
             APP.instance.packageManager.getInstalledPackages(0).forEach {
@@ -186,9 +185,8 @@ class CleanViewModel : BaseDataModel() {
                 var pkg = it.packageName
                 if (pkg!=BuildConfig.APPLICATION_ID) {
                     //在所有的安装的app中遍历是否有这个文件的包名，有则拿到信息组建数据
-                    documentCacheFiles.forEach {
-                        var fileName = getRealPathFromURI(it.uri)?:""
-                        if (fileName.contains(pkg)) {
+                    files.forEach {
+                        if (it.absolutePath.contains(pkg)) {
                             var appFileName =
                                 packageManager.getApplicationLabel(packageInfo.applicationInfo)
                                     .toString()
@@ -223,9 +221,9 @@ class CleanViewModel : BaseDataModel() {
         }
     }
 
-    suspend fun scanDirectory(dir: DocumentFile): MutableList<DocumentFile> = coroutineScope {
-        val deferredResults = mutableListOf<Deferred<MutableList<DocumentFile>>>()
-        val files = mutableListOf<DocumentFile>()
+    suspend fun scanDirectory(dir: DocumentFile): MutableList<File> = coroutineScope {
+        val deferredResults = mutableListOf<Deferred<MutableList<File>>>()
+        val files = mutableListOf<File>()
         dir.listFiles()?.forEach { file ->
 //
             if (file.isDirectory) {
@@ -236,8 +234,10 @@ class CleanViewModel : BaseDataModel() {
                 }
 //                scanDirectory(file)
             } else {
-                AppLogs.dLog(TAG,"清理扫描出的文件:${getRealPathFromURI(file.uri)} size:${File(getRealPathFromURI(file.uri)).length().formatSize()} 当前线程:${Thread.currentThread()}")
-                files.add(file)
+                AppLogs.dLog(TAG,"清理扫描出的cache文件:${getRealPathFromURI(file.uri)} size:${File(getRealPathFromURI(file.uri)).length().formatSize()} 当前线程:${Thread.currentThread()}")
+                getRealPathFromURI(file.uri)?.apply {
+                    files.add(File(this))
+                }
             }
         }
 
@@ -271,6 +271,7 @@ class CleanViewModel : BaseDataModel() {
         onComplete: () -> Unit = {},
         waitTime:Long = 0
     ) {
+        allFilesLength = 0
         allFiles.clear()
         CleanConfig.clearCleanConfig()
         CleanConfig.clearFileConfig()
@@ -412,6 +413,17 @@ class CleanViewModel : BaseDataModel() {
             }.onFailure {
                 AppLogs.eLog(TAG,"isDocFile:${it.stackTraceToString()}")
             }
+        } else if (isDownload(file)){
+            runCatching {
+                synchronized(downloadFiles) {
+                    var data = FilesData.createDefault(file)
+                    downloadFiles.add(data)
+                    allFiles.add(data)
+                }
+                return true
+            }.onFailure {
+                AppLogs.eLog(TAG,"isDownload:${it.stackTraceToString()}")
+            }
         }
         return false
     }
@@ -435,6 +447,7 @@ class CleanViewModel : BaseDataModel() {
                     var data = FilesData.createDefault(file)
                     residualFiles.add(data)
                 }
+                AppLogs.dLog("filter", "匹配到 isResidual file:${file.absolutePath}")
                 return true
             }.onFailure {
                 AppLogs.eLog(TAG,"isResidual:${it.stackTraceToString()}")
@@ -445,51 +458,45 @@ class CleanViewModel : BaseDataModel() {
                     var data = FilesData.createDefault(file)
                     apkFiles.add(data)
                 }
+                AppLogs.dLog("filter", "匹配到 isApks file:${file.absolutePath}")
+                return true
             }.onFailure {
                 AppLogs.eLog(TAG,"isDownloadApks:${it.stackTraceToString()}")
             }
 
-            return true
         } else if (isLogFile(file) || isLogCatFile(file)) {
             runCatching {
                 synchronized(junkFiles) {
                     var data = FilesData.createDefault(file)
                     junkFiles.get(0).tempList?.add(data)
                 }
+                AppLogs.dLog("filter", "匹配到 isLogFile isLogCatFile file:${file.absolutePath}")
+                return true
             }.onFailure {
                 AppLogs.eLog(TAG,"isLogFile:${it.stackTraceToString()}")
             }
-            return true
         } else if (isTmpFile(file)) {
             runCatching {
                 synchronized(junkFiles) {
                     var data = FilesData.createDefault(file)
                     junkFiles.get(1).tempList?.add(data)
                 }
+                AppLogs.dLog("filter", "匹配到 isTmpFile file:${file.absolutePath}")
+                return true
             }.onFailure {
                 AppLogs.eLog(TAG,"isTmpFile:${it.stackTraceToString()}")
             }
-            return true
-        } else if (isDownload(file)){
-            runCatching {
-                synchronized(downloadFiles) {
-                    var data = FilesData.createDefault(file)
-                    downloadFiles.add(data)
-                }
-            }.onFailure {
-                AppLogs.eLog(TAG,"isDownload:${it.stackTraceToString()}")
-            }
-            return true
         }else if (isADFile(file)) {
             runCatching {
                 synchronized(adFiles) {
                     var data = FilesData.createDefault(file)
                     adFiles.add(data)
                 }
+                AppLogs.dLog("filter", "匹配到 isADFile file:${file.absolutePath}")
+                return true
             }.onFailure {
                 AppLogs.eLog(TAG,"isADFile:${it.stackTraceToString()}")
             }
-            return true
         }
         return false
     }

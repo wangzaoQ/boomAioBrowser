@@ -1,9 +1,12 @@
 package com.boom.aiobrowser.ui.pop
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.view.animation.Animation
+import androidx.appcompat.app.AlertDialog
 import com.blankj.utilcode.util.FileUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
@@ -12,6 +15,7 @@ import com.boom.aiobrowser.data.FilesData
 import com.boom.aiobrowser.databinding.BrowserPopClearBinding
 import com.boom.aiobrowser.databinding.BrowserPopEngineBinding
 import com.boom.aiobrowser.databinding.FilePopEditorBinding
+import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.clean.removeDataByFileExt
 import com.boom.aiobrowser.tools.shareUseIntent
 import com.boom.aiobrowser.ui.activity.AboutActivity
@@ -41,9 +45,6 @@ class FileEditorPop(context: Context) : BasePopupWindow(context){
            }
             llDelete.setOnClickListener {
                 callBack.invoke(1)
-                FileUtils.delete(filesData.filePath)
-                APP.deleteLiveData2.postValue(filesData!!.filePath)
-                filesData.filePath.removeDataByFileExt()
                 dismiss()
             }
         }

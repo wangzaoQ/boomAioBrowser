@@ -1,9 +1,11 @@
 package com.boom.aiobrowser.ui.activity.file
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.blankj.utilcode.util.FileUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
@@ -11,6 +13,7 @@ import com.boom.aiobrowser.data.FileManageData
 import com.boom.aiobrowser.databinding.FileActivityImagesBinding
 import com.boom.aiobrowser.databinding.FileActivityListManageBinding
 import com.boom.aiobrowser.model.CleanViewModel
+import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.clean.CleanConfig
@@ -24,6 +27,7 @@ import com.boom.aiobrowser.tools.clean.CleanConfig.recentFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.videoFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.zipFiles
 import com.boom.aiobrowser.tools.clean.clickFile
+import com.boom.aiobrowser.tools.clean.removeDataByFileExt
 import com.boom.aiobrowser.ui.adapter.FileListAdapter
 import com.boom.aiobrowser.ui.pop.FileEditorPop
 import com.boom.base.adapter4.QuickAdapterHelper
@@ -50,12 +54,16 @@ class FileManageListActivity : BaseActivity<FileActivityListManageBinding>() {
     override fun setListener() {
         acBinding.ivBack.setOneClick { finish() }
         APP.deleteLiveData2.observe(this){
-            for (i in 0 until fileListAdapter.items.size){
-                var data = fileListAdapter.items.get(i)
-                if (data.filePath == it){
-                    fileListAdapter.remove(data)
-                    break
+            runCatching {
+                for (i in 0 until fileListAdapter.items.size){
+                    var data = fileListAdapter.items.get(i)
+                    if (data.filePath == it){
+                        fileListAdapter.remove(data)
+                        break
+                    }
                 }
+            }.onFailure {
+                AppLogs.eLog(acTAG,it.stackTraceToString())
             }
         }
     }
@@ -90,7 +98,24 @@ class FileManageListActivity : BaseActivity<FileActivityListManageBinding>() {
                     var data = adapter.getItem(position)
                     if (data == null)return@addOnDebouncedChildClick
                     FileEditorPop(this@FileManageListActivity).createPop(data) {
-
+                        if (it == 1){
+                            var builder =  AlertDialog.Builder(this@FileManageListActivity)
+                            builder.setMessage(R.string.app_delete_msg)
+                            builder.setCancelable(true);
+                            builder.setNegativeButton(context.getString(R.string.app_yes)) { dialog, which ->
+                                runCatching {
+                                    FileUtils.delete(data.filePath)
+                                    data.filePath.removeDataByFileExt()
+                                }.onFailure {
+                                    AppLogs.eLog("FileEditorPop",it.stackTraceToString())
+                                }
+                                APP.deleteLiveData2.postValue(data!!.filePath)
+                            }
+                            builder.setNeutralButton(context.getString(R.string.app_no)) { dialog, which ->
+                            }
+                            var dialog = builder.create()
+                            dialog!!.show()
+                        }
                     }
                 }
             }

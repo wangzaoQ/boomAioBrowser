@@ -45,6 +45,7 @@ class ProcessActivity : BaseActivity<CleanActivityProcessBinding>() {
             if (firstInit){
                 firstInit = false
                 firstNum = it.size
+                endNum = it.size
             }else{
                 endNum = it.size
             }

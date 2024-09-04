@@ -12,21 +12,16 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.FileManageData
-import com.boom.aiobrowser.databinding.FileActivityImagesBinding
 import com.boom.aiobrowser.databinding.FileActivityListManageBinding
 import com.boom.aiobrowser.model.CleanViewModel
 import com.boom.aiobrowser.tools.AppLogs
-import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
-import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.clean.CleanConfig.apkFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.audioFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.documentsFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.downloadFiles
-import com.boom.aiobrowser.tools.clean.CleanConfig.imageFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.largeFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.recentFiles
-import com.boom.aiobrowser.tools.clean.CleanConfig.videoFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.zipFiles
 import com.boom.aiobrowser.tools.clean.clickFile
 import com.boom.aiobrowser.tools.clean.getListByType
@@ -36,7 +31,6 @@ import com.boom.aiobrowser.ui.pop.FileEditorPop
 import com.boom.base.adapter4.QuickAdapterHelper
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
-import kotlinx.coroutines.Dispatchers
 
 class FileManageListActivity : BaseActivity<FileActivityListManageBinding>() {
 

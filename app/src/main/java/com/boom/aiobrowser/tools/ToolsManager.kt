@@ -254,6 +254,7 @@ fun Activity.openFile(path: String, isForceChoose: Boolean = false) {
 }
 
 fun Activity.shareUseIntent(path: String) {
+    APP.instance.isGoOther = true
     val newUri = getFinalUriFromPath(path) ?: Uri.parse(path)
     Intent(Intent.ACTION_SEND).apply {
         putExtra(Intent.EXTRA_STREAM, newUri)

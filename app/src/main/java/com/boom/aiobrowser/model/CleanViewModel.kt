@@ -156,7 +156,7 @@ class CleanViewModel : BaseDataModel() {
                                     }
                                     if (oldData.not()) {
                                         cacheFiles.add(FilesData().apply {
-                                            filePath = fileName
+                                            this.filePath = filePath
                                             fileSize = it.length()
                                             fileName = appFileName
                                             itemChecked = true

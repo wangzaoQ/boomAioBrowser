@@ -8,6 +8,7 @@ import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_DOWNLOADS
 import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_IMAGES
 import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_LARGE_FILE
 import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_MUSIC
+import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_OTHER
 import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_VIDEOS
 import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_ZIP
 import com.boom.aiobrowser.data.FilesData
@@ -18,6 +19,7 @@ import com.boom.aiobrowser.tools.clean.CleanConfig.documentsFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.downloadFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.imageFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.largeFiles
+import com.boom.aiobrowser.tools.clean.CleanConfig.recentFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.videoFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.zipFiles
 import com.boom.aiobrowser.tools.clean.FileFilter.isApk
@@ -105,6 +107,9 @@ fun getListByType(type: Int) :MutableList<FilesData>{
         }
         FILE_TYPE_DOCUMENTS -> {
             list = documentsFiles
+        }
+        FILE_TYPE_OTHER->{
+            list = recentFiles
         }
         else -> {
             list = mutableListOf()

@@ -4,9 +4,12 @@ import android.app.Application
 import android.os.Build
 import android.webkit.WebView
 import com.boom.aiobrowser.ad.AioADDataManager.initAD
+import com.boom.aiobrowser.data.FilesData
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.clean.CleanConfig
+import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.tools.event.ProtectedUnPeekLiveData
 import com.boom.aiobrowser.tools.isOtherPkg
 import com.tencent.mmkv.MMKV
@@ -20,14 +23,21 @@ class APP: Application() {
     var TAG = "AIO_APP"
     // 如果为false 证明当前有正在进行的 启动页 这时不再额外启动
     var allowShowStart = true
+    var isGoOther = false
+
+    var cleanComplete = false
 
     companion object{
         lateinit var instance:APP
         val isDebug = BuildConfig.DEBUG
 
         val jumpLiveData  by lazy { ProtectedUnPeekLiveData<JumpData>() }
+        val jumpWebLiveData  by lazy { ProtectedUnPeekLiveData<JumpData>() }
         val engineLiveData  by lazy { ProtectedUnPeekLiveData<Int>() }
         val bottomLiveData  by lazy { ProtectedUnPeekLiveData<String>() }
+        val deleteLiveData  by lazy { ProtectedUnPeekLiveData<HashMap<Int,Int>>() }
+        val deleteLiveData2  by lazy { ProtectedUnPeekLiveData<String>() }
+        val scanCompleteLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
 
     }
 
@@ -62,6 +72,7 @@ class APP: Application() {
                 MMKV.initialize(this@APP)
                 initFirebase()
                 initAD()
+                CleanConfig.initCleanConfig()
             }
         }
     }

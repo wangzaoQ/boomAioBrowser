@@ -41,4 +41,11 @@
             app:destination="@id/fragmentWeb" />
     </fragment>
 
+    <fragment
+        android:id="@+id/fragmentFile"
+        android:name="com.boom.aiobrowser.ui.fragment.FileManageFragment"
+        android:label="MainFragment"
+        tools:layout="@layout/file_fragment_file_manager">
+
+    </fragment>
 </navigation>

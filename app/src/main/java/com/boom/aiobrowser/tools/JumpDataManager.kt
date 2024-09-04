@@ -1,9 +1,16 @@
 package com.boom.aiobrowser.tools
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.ui.JumpConfig
+import com.boom.aiobrowser.ui.activity.MainActivity
+import java.lang.ref.WeakReference
 
 object JumpDataManager {
 
@@ -123,6 +130,41 @@ object JumpDataManager {
         }else{
             listPrivate.add(data)
             CacheManager.tabDataListPrivate = listPrivate
+        }
+    }
+
+
+    inline fun <reified T : Activity> Activity.jumpActivity(
+        extra: Bundle? = null,
+        flags: Int? = null,
+        showAnimal:Boolean ?= true
+    ) {
+        startActivity(getIntent<T>(flags, extra))
+        if (showAnimal != false){
+//            overridePendingTransition(R.anim.in_alpha, R.anim.out_alpha)
+        }
+    }
+
+    inline fun <reified T : Context> Context.getIntent(flags: Int?, extra: Bundle?): Intent =
+        Intent(this, T::class.java).apply {
+            flags?.let { setFlags(flags) }
+            extra?.let { putExtras(extra) }
+        }
+
+
+
+    fun toMain(){
+        var list = mutableListOf<Activity>()
+        for (i in 0 until APP.instance.lifecycleApp.stack.size){
+            var currentAc = APP.instance.lifecycleApp.stack.get(i)
+            if (currentAc is MainActivity){
+                continue
+            }else{
+                list.add(currentAc)
+            }
+        }
+        list.forEach {
+            it.finish()
         }
     }
 

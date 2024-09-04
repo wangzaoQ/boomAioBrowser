@@ -15,8 +15,8 @@ android {
         applicationId "com.fast.safe.browser"
         minSdk 24
         targetSdk 34
-        versionCode 4
-        versionName "1.0.3"
+        versionCode 5
+        versionName "1.0.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -171,6 +171,8 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.15.1'
     implementation 'com.airbnb.android:lottie:5.2.0'
     implementation 'com.google.code.gson:gson:2.8.6'
+    api 'com.github.chrisbanes:PhotoView:2.3.0'
+
     // 通用工具类
     api('com.blankj:utilcodex:1.31.0')
             {

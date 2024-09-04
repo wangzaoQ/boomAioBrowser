@@ -1,30 +1,29 @@
 package com.boom.aiobrowser.ui.fragment
 
-import android.R.attr.duration
-import android.animation.LayoutTransition
-import android.animation.ObjectAnimator
-import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
-import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.BrowserFragmentMainBinding
 import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.StoragePermissionManager
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.SearchConfig
+import com.boom.aiobrowser.ui.activity.clean.CleanScanActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
+import com.boom.aiobrowser.ui.activity.clean.ProcessActivity
+import com.boom.aiobrowser.ui.activity.clean.load.ProcessLoadActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.EngineGuidePop
 import com.boom.aiobrowser.ui.pop.SearchPop
@@ -40,6 +39,18 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 
     private val viewModel by lazy {
         rootActivity.viewModels<NewsViewModel>()
+    }
+
+    val permissionManager by lazy {
+        StoragePermissionManager(WeakReference(rootActivity), onGranted = {
+            rootActivity.startActivity(Intent(rootActivity, CleanScanActivity::class.java))
+        }, onDenied = {
+            toSetting()
+        })
+    }
+
+    private fun toSetting() {
+        permissionManager.toOtherSetting()
     }
 
     override fun startLoadData() {
@@ -61,8 +72,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         fBinding.mainAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
                 absVerticalOffset = Math.abs(verticalOffset) //AppBarLayout竖直方向偏移距离px
+                if (absVerticalOffset == 0)return
                 val totalScrollRange = appBarLayout!!.totalScrollRange //AppBarLayout总的距离px
-                var offset = BigDecimalUtils.mul(BigDecimalUtils.div(255.toDouble(), totalScrollRange.toDouble(),1),absVerticalOffset.toDouble()).toInt()
+                var offset = BigDecimalUtils.mul(BigDecimalUtils.div(255.toDouble(), totalScrollRange.toDouble(),10),absVerticalOffset.toDouble()).toInt()
 //                var offset = absVerticalOffset / 2
 //                offset = 255 - offset
                 AppLogs.dLog("onOffsetChanged", "offset=$offset")
@@ -75,8 +87,11 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                     fBinding.mainCl.alpha = 1f
                     fBinding.mainToolBar.alpha = 0f
                 } else {
-                    val div = BigDecimalUtils.div(offset.toDouble(), 255.0, 2)
+                    var div = BigDecimalUtils.div(offset.toDouble(), 255.0, 2)
                     AppLogs.dLog("onOffsetChanged", "div=$div")
+                    if (div<0.1){
+                        div = 0.0
+                    }
                     fBinding.mainToolBar.alpha = div.toFloat()
                     fBinding.mainCl.alpha = 1-div.toFloat()
                 }
@@ -116,9 +131,16 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 jumpType = JumpConfig.JUMP_SEARCH
             })
         }
-        fBinding.ivSearchEngine.setOnClickListener {
+        fBinding.ivSearchEngine.setOneClick {
             SearchPop.showPop(WeakReference(rootActivity),fBinding.ivSearchEngine)
         }
+        fBinding.rlClean.setOneClick {
+            permissionManager.requestStoragePermission()
+        }
+        fBinding.rlProcess.setOneClick {
+            rootActivity.jumpActivity<ProcessLoadActivity>()
+        }
+
         viewModel.value.newsLiveData.observe(rootActivity){
             if (page == 1){
                 newsAdapter.submitList(it)
@@ -143,6 +165,8 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             jumpData = JumpDataManager.getCurrentJumpData(tag = "MainFragment onResume 首次")
             if (jumpData.jumpType == JumpConfig.JUMP_WEB){
                 APP.jumpLiveData.postValue(jumpData)
+            }else{
+
             }
         }else{
             jumpData = JumpDataManager.getCurrentJumpData(isReset = true,tag = "MainFragment onResume 非首次")
@@ -154,16 +178,22 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             if (fBinding.refreshLayout.isRefreshing == true){
                 fBinding.refreshLayout.isRefreshing = false
             }
-        }
-
-        if (rootActivity is MainActivity){
-            (rootActivity as MainActivity).apply {
-                updateBottom(false,true, jumpData = jumpData,tag="mainFragment onResume")
-                updateTabCount()
+            if (jumpData.jumpType != JumpConfig.JUMP_HOME ){
+                APP.bottomLiveData.postValue(JumpConfig.JUMP_HOME)
+            }else{
+                if (rootActivity is MainActivity){
+                (rootActivity as MainActivity).apply {
+//                    acBinding.llWebControl.visibility = View.GONE
+                    acBinding.llMainControl.visibility = View.VISIBLE
+                }
+            }
             }
         }
-        APP.bottomLiveData.postValue(JumpConfig.JUMP_HOME)
-
+        if (CacheManager.isAllowShowCleanTips()){
+            fBinding.tips.visibility = View.VISIBLE
+        }else{
+            fBinding.tips.visibility = View.GONE
+        }
     }
 
     private fun updateEngine(type: Int) {

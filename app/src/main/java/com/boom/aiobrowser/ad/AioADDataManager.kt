@@ -35,9 +35,11 @@ object AioADDataManager {
 
 
     fun initAD(){
-        AppLogs.dLog(APP.instance.TAG,"admob初始化")
-        MobileAds.initialize(APP.instance)
-        AppLogs.dLog(APP.instance.TAG,"admob初始化结束")
+        runCatching {
+            AppLogs.dLog(APP.instance.TAG,"admob初始化")
+            MobileAds.initialize(APP.instance)
+            AppLogs.dLog(APP.instance.TAG,"admob初始化结束")
+        }
     }
 
     fun initADConfig(bean: AioADData) {

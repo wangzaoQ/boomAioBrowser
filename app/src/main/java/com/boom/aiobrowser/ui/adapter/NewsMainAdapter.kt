@@ -20,7 +20,7 @@ import com.boom.aiobrowser.tools.GlideManager
 import com.boom.aiobrowser.tools.TimeManager
 import com.boom.base.adapter4.BaseQuickAdapter
 
-class NewsMainAdapter(var fragmet :BaseFragment<*>) : BaseQuickAdapter<NewsData, NewsMainAdapter.VH>() {
+class NewsMainAdapter(var fragmet :BaseFragment<*>?=null) : BaseQuickAdapter<NewsData, NewsMainAdapter.VH>() {
     class VH(
         parent: ViewGroup,
         val viewBinding: BrowserItemMainNewsBinding = BrowserItemMainNewsBinding.inflate(

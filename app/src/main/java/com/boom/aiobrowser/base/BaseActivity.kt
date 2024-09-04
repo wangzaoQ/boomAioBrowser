@@ -15,8 +15,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.viewbinding.ViewBinding
 import com.blankj.utilcode.util.KeyboardUtils
+import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
-import com.boom.aiobrowser.tools.AppLogs
 import com.fast.newsnow.view.statusbar.StatusBarHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +27,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
     lateinit var acBinding: V
@@ -45,6 +46,7 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        APP.instance.isGoOther = false
         status = true
         stayTime = System.currentTimeMillis()
     }
@@ -115,6 +117,17 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
 
     }
+
+    var needAnimal = false
+
+    override fun finish() {
+        super.finish()
+        if (needAnimal){
+            // 设置结束动画
+            overridePendingTransition(R.anim.in_alpha, R.anim.out_alpha)
+        }
+    }
+
 
     override fun onDestroy() {
         newsScope.cancel()

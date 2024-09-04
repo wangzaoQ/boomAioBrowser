@@ -31,7 +31,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
 
     override fun setListener() {
         fBinding.btnBrowser.setOneClick {
-            toMain("点击Start")
+            toMain("点击Start",true)
         }
         fBinding.apply {
             tvPrivate.setOneClick {
@@ -45,16 +45,20 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         }
     }
 
-    private fun toMain(tag: String) {
+    private fun toMain(tag: String,isFirst:Boolean = false) {
         AppLogs.dLog(fragmentTAG,tag)
         if (isAdded.not())return
         fBinding.llLoadingRoot.visibility = View.VISIBLE
         fBinding.rlStart.visibility = View.GONE
-        startPb(0, 100, 10000, update = {
-            if (AioADDataManager.getLaunchData() == null && AioADDataManager.adAllowShowOpen() ) {
+        startPb(0, 100, if (isFirst) 1000 else 10000, update = {
+            if (isFirst.not()){
+                if (AioADDataManager.getLaunchData() == null && AioADDataManager.adAllowShowOpen() ) {
+                    fBinding.progress.progress = it
+                } else {
+                    showEnd()
+                }
+            }else{
                 fBinding.progress.progress = it
-            } else {
-                showEnd()
             }
         }, complete = {
             AppLogs.dLog(fragmentTAG, "10秒内没拿到ad")

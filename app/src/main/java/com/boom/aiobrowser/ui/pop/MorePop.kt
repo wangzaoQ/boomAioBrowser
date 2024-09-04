@@ -5,10 +5,13 @@ import android.content.Intent
 import android.view.View
 import android.view.animation.Animation
 import android.widget.CompoundButton
+import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserPopMoreBinding
 import com.boom.aiobrowser.tools.BrowserManager
+import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.ui.activity.AboutActivity
 import com.boom.aiobrowser.ui.activity.HistoryActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
@@ -41,9 +44,7 @@ class MorePop(context: Context) : BasePopupWindow(context) {
                 dismiss()
             }
             llClearData.setOnClickListener {
-                if (context is MainActivity){
-                    (context as MainActivity).clearData()
-                }
+                clearData()
                 dismiss()
             }
             llHistory.setOnClickListener {
@@ -61,6 +62,14 @@ class MorePop(context: Context) : BasePopupWindow(context) {
             updateUI()
         }
         showPopupWindow()
+    }
+
+
+    fun clearData(){
+        ClearPop(context as BaseActivity<*>).createPop {
+            CacheManager.clearAll()
+            JumpDataManager.toMain()
+        }
     }
 
     override fun onCreateShowAnimation(): Animation {

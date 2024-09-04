@@ -383,18 +383,19 @@ fun Context.isCacheGranted(forceScan:Boolean = true):Boolean{
     return if (isAndroid12()){
         XXPermissions.isGranted(this, Permission.PACKAGE_USAGE_STATS)
     }else if (isAndroid11()){
-        if (forceScan){
-            val isGet: Boolean = TextUtils.isEmpty(this.existsGrantedUriPermission(UriManager.URI_STORAGE_SAVED_ANRROID_DATA, this)).not()
-            //这里会对activity重新赋值
-            if (isGet) {
-                return true
-            }else{
-                return false
-            }
-        }else{
-            val uriPermissions = this!!.contentResolver.persistedUriPermissions
-           return uriPermissions.size>0
-        }
+//        if (forceScan){
+//            val isGet: Boolean = TextUtils.isEmpty(this.existsGrantedUriPermission(UriManager.URI_STORAGE_SAVED_ANRROID_DATA, this)).not()
+//            //这里会对activity重新赋值
+//            if (isGet) {
+//                return true
+//            }else{
+//                return false
+//            }
+//        }else{
+//            val uriPermissions = this!!.contentResolver.persistedUriPermissions
+//           return uriPermissions.size>0
+//        }
+        return false
     }else{
         return isStoragePermissionGranted()
     }

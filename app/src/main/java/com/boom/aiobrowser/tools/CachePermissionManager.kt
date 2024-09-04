@@ -35,6 +35,7 @@ class CachePermissionManager(
     }
 
     fun requestCachePermission(forceScan:Boolean) {
+        APP.instance.isGoOther = true
         if (activity!!.isCacheGranted()){
             onGranted.invoke()
             return
@@ -57,14 +58,14 @@ class CachePermissionManager(
                 onDenied.invoke()
             }
         }else if (isAndroid11()){
-            if (forceScan.not()){
-                val uriPermissions = activity!!.contentResolver.persistedUriPermissions
-                if (uriPermissions.size >0){
-                    onGranted.invoke()
-                    return
-                }
-            }
-            goApplyUriPermissionPage(UriManager.URI_STORAGE_SAVED_ANRROID_DATA,activity)
+//            if (forceScan.not()){
+//                val uriPermissions = activity!!.contentResolver.persistedUriPermissions
+//                if (uriPermissions.size >0){
+//                    onGranted.invoke()
+//                    return
+//                }
+//            }
+//            goApplyUriPermissionPage(UriManager.URI_STORAGE_SAVED_ANRROID_DATA,activity)
         }else{
             var permissionManager = StoragePermissionManager(WeakReference(activity), onGranted = {
                 onGranted.invoke()

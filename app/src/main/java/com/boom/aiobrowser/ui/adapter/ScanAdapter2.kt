@@ -18,6 +18,7 @@ import com.boom.aiobrowser.tools.clean.CleanConfig.cacheFiles
 import com.boom.aiobrowser.tools.clean.CleanToolsManager
 import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.ui.isAndroid11
+import com.boom.aiobrowser.ui.isAndroid12
 import com.boom.base.adapter4.BaseMultiItemAdapter
 
 class ScanAdapter2(var updateBack: () -> Unit) : BaseMultiItemAdapter<ViewItem>() {
@@ -78,7 +79,7 @@ class ScanAdapter2(var updateBack: () -> Unit) : BaseMultiItemAdapter<ViewItem>(
                     item as ScanData
                     holder.viewBinding?.apply {
                         scanItem.setScanData(item)
-                        if (position == 0 && item.isLoading.not() && cacheFiles.isNullOrEmpty()) {
+                        if (position == 0 && item.isLoading.not() && cacheFiles.isNullOrEmpty() && isAndroid12()) {
                             rlCacheTips.visibility = View.VISIBLE
                         } else {
                             rlCacheTips.visibility = View.GONE
@@ -110,7 +111,7 @@ class ScanAdapter2(var updateBack: () -> Unit) : BaseMultiItemAdapter<ViewItem>(
                         }else if (payload == "updateCache"){
                             item as ScanData
                             holder.viewBinding!!.scanItem.binding.tvSize.text = item.allLength.formatSize()
-                            if (position == 0 && item.isLoading.not() && cacheFiles.isNullOrEmpty() && isAndroid11()) {
+                            if (position == 0 && item.isLoading.not() && cacheFiles.isNullOrEmpty() && isAndroid12()) {
                                 holder.viewBinding!!.rlCacheTips.visibility = View.VISIBLE
                             } else {
                                 holder.viewBinding!!.rlCacheTips.visibility = View.GONE
@@ -118,7 +119,7 @@ class ScanAdapter2(var updateBack: () -> Unit) : BaseMultiItemAdapter<ViewItem>(
                         }else if (payload == "updateLoad"){
                             holder.viewBinding!!.apply {
                                 scanItem.updateScanData(item as ScanData)
-                                if (position == 0 && item.isLoading.not() && cacheFiles.isNullOrEmpty()) {
+                                if (position == 0 && item.isLoading.not() && cacheFiles.isNullOrEmpty() && isAndroid12()) {
                                     rlCacheTips.visibility = View.VISIBLE
                                 } else {
                                     rlCacheTips.visibility = View.GONE

@@ -1,14 +1,18 @@
 package com.boom.aiobrowser.model
 
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
+import androidx.core.content.FileProvider
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.MutableLiveData
+import com.blankj.utilcode.util.FileUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
+import com.boom.aiobrowser.data.AppInfo
 import com.boom.aiobrowser.data.FilesData
 import com.boom.aiobrowser.data.ViewItem
 import com.boom.aiobrowser.tools.AppLogs
@@ -26,9 +30,12 @@ import com.boom.aiobrowser.tools.clean.CleanConfig.junkFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.largeFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.recentFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.residualFiles
+import com.boom.aiobrowser.tools.clean.CleanConfig.runAPPExtension
+import com.boom.aiobrowser.tools.clean.CleanConfig.runningAppInfo
 import com.boom.aiobrowser.tools.clean.CleanConfig.videoFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.zipFiles
 import com.boom.aiobrowser.tools.clean.CleanToolsManager.getCacheSize
+import com.boom.aiobrowser.tools.clean.CleanToolsManager.getInstallTime
 import com.boom.aiobrowser.tools.clean.FileFilter.isADFile
 import com.boom.aiobrowser.tools.clean.FileFilter.isApk
 import com.boom.aiobrowser.tools.clean.FileFilter.isApks
@@ -52,6 +59,7 @@ import com.boom.aiobrowser.tools.clean.Scan1
 import com.boom.aiobrowser.tools.clean.UriManager
 import com.boom.aiobrowser.tools.clean.UriManager.URI_SEPARATOR
 import com.boom.aiobrowser.tools.clean.formatSize
+import com.boom.aiobrowser.tools.clean.hasConstants
 import com.boom.aiobrowser.ui.isAndroid11
 import com.boom.aiobrowser.ui.isAndroid12
 import kotlinx.coroutines.Deferred
@@ -59,7 +67,9 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
+import java.util.Objects
 
 class CleanViewModel : BaseDataModel() {
     var currentPathLiveData = MutableLiveData<String>()
@@ -86,85 +96,116 @@ class CleanViewModel : BaseDataModel() {
             if (isAndroid12()){
                 cacheFiles = getCacheSize(onScanPath)
                 cacheFiles.sortByDescending { it.fileSize?:0L }
+                toEnd(startTime, onComplete)
             }else if (isAndroid11()){
-                // 使用DocumentFile来管理该目录
-                if (forceScan){
-                    val documentFile = DocumentFile.fromTreeUri(APP.instance, Uri.parse(UriManager.URI_STORAGE_SAVED_ANRROID_DATA))
-                    scanByUri(documentFile, onScanPath)
-                }else{
-                    val uriPermissions = APP.instance.contentResolver.persistedUriPermissions
-                    AppLogs.dLog("PermissionManager:", "已经授权的uri集合是:$uriPermissions")
-                    //已经授权的uri集合是:[UriPermission {uri=content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fdata, modeFlags=3, persistedTime=1669980673302}]
-                    var tempUri: String
-                    //遍历并判断请求的uri字符串是否已经被授权
-                    for (uriP in uriPermissions) {
-                        tempUri = uriP.uri.toString()
-                        AppLogs.dLog("PermissionManager:", "tempUri:$tempUri")
-                        //如果父目录已经授权就返回已经授权
-                        val documentFile = DocumentFile.fromTreeUri(APP.instance, Uri.parse(tempUri))
-                        scanByUri(documentFile, onScanPath)
-                    }
-                }
-                cacheFiles.sortByDescending { it.fileSize?:0L }
+//                loadData(loadBack = {
+//                    // 使用DocumentFile来管理该目录
+//                    if (forceScan){
+//                        val documentFile = DocumentFile.fromTreeUri(APP.instance, Uri.parse(UriManager.URI_STORAGE_SAVED_ANRROID_DATA))
+//                        scanByUri(documentFile, onScanPath)
+//                    }else{
+//                        val uriPermissions = APP.instance.contentResolver.persistedUriPermissions
+//                        AppLogs.dLog("PermissionManager:", "已经授权的uri集合是:$uriPermissions")
+//                        //已经授权的uri集合是:[UriPermission {uri=content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fdata, modeFlags=3, persistedTime=1669980673302}]
+//                        var tempUri: String
+//                        //遍历并判断请求的uri字符串是否已经被授权
+//                        for (uriP in uriPermissions) {
+//                            tempUri = uriP.uri.toString()
+//                            AppLogs.dLog("PermissionManager:", "tempUri:$tempUri")
+//                            //如果父目录已经授权就返回已经授权
+//                            val documentFile = DocumentFile.fromTreeUri(APP.instance, Uri.parse(tempUri))
+//                            scanByUri(documentFile, onScanPath)
+//                        }
+//                    }
+//                    cacheFiles.sortByDescending { it.fileSize?:0L }
+//                    toEnd(startTime, onComplete)
+//                }, failBack = {},1)
             }else{
-                //android 10及以下
-                var allLength = 0L
-                val packageManager: PackageManager = APP.instance.getPackageManager()
-                Scan1(File("${Environment.getExternalStorageDirectory().absolutePath}/Android/data"),3000L, onProgress = {
-                    var file = isRealFile(it) ?: return@Scan1
+                loadData(loadBack = {
+                    //android 10及以下
+                    var allLength = 0L
+                    val packageManager: PackageManager = APP.instance.getPackageManager()
                     synchronized("startScanCache"){
-                        APP.instance.packageManager.getInstalledPackages(0).forEach {
-                            var packageInfo = it
-                            var pkg = it.packageName
-                            if (pkg!=BuildConfig.APPLICATION_ID){
-                                //在所有的安装的app中遍历是否有这个文件的包名，有则拿到信息组建数据
-                                if (file.absolutePath.contains(pkg)) {
-                                    var appFileName =
-                                        packageManager.getApplicationLabel(packageInfo.applicationInfo)
-                                            .toString()
+                        val pm: PackageManager = APP.instance.packageManager
+                        for (lp in pm.getInstalledPackages(0)) {
+                            if ((ApplicationInfo.FLAG_SYSTEM and lp.applicationInfo.flags) == 0 && (ApplicationInfo.FLAG_UPDATED_SYSTEM_APP and lp.applicationInfo.flags) == 0 && (ApplicationInfo.FLAG_STOPPED and lp.applicationInfo.flags) == 0) {
+                                // 第三方正在运行的 app 进程信息  更多信息查询 PackageInfo 类
+                                if (lp.packageName.hasConstants(runAPPExtension))continue
+                                var filePath = "${Environment.getExternalStorageDirectory().absolutePath}/Android/data/${lp.packageName}/cache"
+                                var file = File(filePath)
+                                if (lp.packageName.startsWith( "tap.fun.news")){
+                                    AppLogs.dLog(TAG,"test com.tap.fun.news大小:${file.length()}")
+                                }
+                                var appFileName =
+                                    packageManager.getApplicationLabel(lp.applicationInfo)
+                                        .toString()
+                                var imageId = packageManager.getApplicationIcon(lp.applicationInfo)
+                                scanDirectoryCache(file,onProgress = {
                                     var oldData = false
                                     //如果cacheFile中有这个App 就统一把数据归到一起
                                     for (i in 0 until cacheFiles.size) {
                                         var data = cacheFiles.get(i)
                                         if (data.fileName == appFileName) {
-                                            data.fileSize = data.fileSize?.plus(file.length())
+                                            AppLogs.dLog(TAG,"FilesData后续增加开始:${data.fileName} 原始大小:${data.fileSize}")
+                                            data.fileSize = data.fileSize?.plus(it.length())
+                                            AppLogs.dLog(TAG,"FilesData后续增加开始:${data.fileName} 增加的大小:${it.length()}")
                                             oldData = true
+                                            AppLogs.dLog(TAG,"FilesData后续增加结束:${data.fileName} 增加后总大小:${data.fileSize?.formatSize()}")
                                             break
                                         }
                                     }
                                     if (oldData.not()) {
                                         cacheFiles.add(FilesData().apply {
-                                            filePath = file.absolutePath
-                                            fileSize = file.length()
+                                            filePath = fileName
+                                            fileSize = it.length()
                                             fileName = appFileName
                                             itemChecked = true
                                             dataType = ViewItem.TYPE_CHILD
-                                            imgId =
-                                                packageManager.getApplicationIcon(packageInfo.applicationInfo)
+                                            imgId = imageId
+                                            AppLogs.dLog(TAG,"FilesData初始:${fileName} 大小:${fileSize}")
                                         })
                                     }
-                                    allLength += file.length()
+                                    allLength += it.length()
+                                    //                                        AppLogs.dLog("getCacheSize",":${allLength.formatSize()}")
+//                                    AppLogs.dLog(TAG,"扫描内存耗时回调:${it.absolutePath}")
                                     onScanPath.invoke(allLength)
-                                }
+                                })
                             }
                         }
                     }
-                }, onComplete = {
                     cacheFiles.sortByDescending { it.fileSize?:0L }
-                },"Cache").scanStart()
+                    toEnd(startTime, onComplete)
+                }, failBack = {},1)
             }
-            var middleTime = (System.currentTimeMillis()-startTime)
-            AppLogs.dLog(TAG,"扫描内存耗时:${middleTime}")
-            if (middleTime<3000){
-                delay(3000-middleTime)
-            }
-            AppLogs.dLog(TAG,"startScanCache onComplete")
-            onComplete.invoke()
+
         }, failBack = {
             AppLogs.dLog(TAG,"startScanCache onComplete errot:${it.stackTraceToString()}")
             onComplete.invoke()
         },1)
     }
+
+    private suspend fun toEnd(startTime: Long, onComplete: () -> Unit) {
+        var middleTime = (System.currentTimeMillis() - startTime)
+        AppLogs.dLog(TAG, "扫描内存耗时:${middleTime}")
+        if (middleTime < 3000) {
+            delay(3000 - middleTime)
+        }
+        AppLogs.dLog(TAG, "startScanCache onComplete")
+        onComplete.invoke()
+    }
+
+
+    fun scanDirectoryCache(dir: File,onProgress: (file:File) -> Unit){
+
+        dir.listFiles()?.forEach { file ->
+            if (file.isDirectory){
+                scanDirectoryCache(file,onProgress)
+            }else{
+                onProgress.invoke(file)
+            }
+        }
+    }
+
 
     private suspend fun CleanViewModel.scanByUri(
         documentFile: DocumentFile?,
@@ -182,15 +223,18 @@ class CleanViewModel : BaseDataModel() {
             if (files.isNullOrEmpty()) {
                 return
             }
-            APP.instance.packageManager.getInstalledPackages(0).forEach {
-                var packageInfo = it
-                var pkg = it.packageName
+            val pm: PackageManager = APP.instance.packageManager
+            for (lp in pm.getInstalledPackages(0)) {
+                if ((ApplicationInfo.FLAG_SYSTEM and lp.applicationInfo.flags) == 0 && (ApplicationInfo.FLAG_UPDATED_SYSTEM_APP and lp.applicationInfo.flags) == 0 && (ApplicationInfo.FLAG_STOPPED and lp.applicationInfo.flags) == 0) {
+                    // 第三方正在运行的 app 进程信息  更多信息查询 PackageInfo 类
+                    if (lp.packageName.hasConstants(runAPPExtension))continue
+                var pkg = lp.packageName
                 if (pkg!=BuildConfig.APPLICATION_ID) {
                     //在所有的安装的app中遍历是否有这个文件的包名，有则拿到信息组建数据
                     files.forEach {
                         if (it.absolutePath.contains(pkg)) {
                             var appFileName =
-                                packageManager.getApplicationLabel(packageInfo.applicationInfo)
+                                packageManager.getApplicationLabel(lp.applicationInfo)
                                     .toString()
                             var oldData = false
                             //如果cacheFile中有这个App 就统一把数据归到一起
@@ -204,13 +248,13 @@ class CleanViewModel : BaseDataModel() {
                             }
                             if (oldData.not()) {
                                 cacheFiles.add(FilesData().apply {
-                                    filePath = fileName
+                                    filePath = it.absolutePath
                                     fileSize = it.length()
                                     fileName = appFileName
                                     itemChecked = true
                                     dataType = ViewItem.TYPE_CHILD
                                     imgId =
-                                        packageManager.getApplicationIcon(packageInfo.applicationInfo)
+                                        packageManager.getApplicationIcon(lp.applicationInfo)
                                 })
                             }
                             allLength += it.length()
@@ -218,6 +262,7 @@ class CleanViewModel : BaseDataModel() {
                             onScanPath.invoke(allLength)
                         }
                     }
+                }
                 }
             }
         }
@@ -228,22 +273,22 @@ class CleanViewModel : BaseDataModel() {
         val files = mutableListOf<File>()
         dir.listFiles()?.forEach { file ->
 //
-            if (file.isDirectory && files.size<10000) {
-                deferredResults.add(async {
-                    scanDirectory(file)
-                })
-//                scanDirectory(file)
+            if (file.isDirectory) {
+                if (file.listFiles().size<200){
+                    deferredResults.add(async {
+                        scanDirectory(file)
+                    })
+                }
             } else {
-                AppLogs.dLog(TAG,"清理扫描出的cache文件:${getRealPathFromURI(file.uri)} size:${File(getRealPathFromURI(file.uri)).length().formatSize()} 当前线程:${Thread.currentThread()}")
                 getRealPathFromURI(file.uri)?.apply {
                     var file = File(this)
                     if (file.absolutePath.contains("cache",true)){
+                        AppLogs.dLog(TAG,"清理扫描出的cache文件:${file.absolutePath} size:${file.length()}} 当前线程:${Thread.currentThread()}")
                         files.add(file)
                     }
                 }
             }
         }
-
         deferredResults.forEach {
             files.addAll(it.await())
         }

@@ -11,6 +11,7 @@ import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_MUSIC
 import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_VIDEOS
 import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_ZIP
 import com.boom.aiobrowser.data.FilesData
+import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.clean.CleanConfig.apkFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.audioFiles
 import com.boom.aiobrowser.tools.clean.CleanConfig.documentsFiles
@@ -27,22 +28,31 @@ import com.boom.aiobrowser.tools.clean.FileFilter.isLargeFile
 import com.boom.aiobrowser.tools.clean.FileFilter.isVideo
 import com.boom.aiobrowser.tools.clean.FileFilter.isZip
 import java.io.File
+import java.math.BigDecimal
+import java.math.RoundingMode
 import kotlin.math.log10
 
 
 fun Long.formatSize(): String {
-    if (this <= 0) return "0 B"
-    val units = arrayOf("B", "KB", "MB", "GB", "TB")
-    val digitGroups = (log10(this.toDouble()) / log10(1024.0)).toInt()
-    var size = String.format(
-        "%.1f %s",
-        this / Math.pow(1024.0, digitGroups.toDouble()),
-        units[digitGroups]
-    )
-    if (size == "0") {
-        size = "0 B"
-    }
-    return size
+    // 定义单位数组，从 Bytes 到 PB（Petabytes）
+    val units = arrayOf("B", "KB", "MB", "GB", "TB", "PB")
+
+    // 如果大小为0，直接返回 "0 Bytes"
+    if (this < 1024) return "$this B"
+
+    // 将字节大小转换为 BigDecimal
+    val size = BigDecimal(this)
+
+    // 计算需要使用的单位级别（digitGroups）
+    val digitGroups = (Math.log10(size.toDouble()) / Math.log10(1024.0)).toInt()
+
+    // 计算转换后的值（使用 BigDecimal 计算以保持精度）
+//    BigDecimalUtils.div()
+    val divisor = BigDecimal(1024).pow(digitGroups)
+    val sizeInUnit = size.divide(divisor, 2, RoundingMode.HALF_UP)
+
+    // 格式化输出，附加相应的单位
+    return "${sizeInUnit.toPlainString()} ${units[digitGroups]}"
 }
 
 fun String.getRegexForFile(): String = ".+${this.replace(".", "\\.")}$".lowercase()

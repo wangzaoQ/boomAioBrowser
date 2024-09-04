@@ -36,6 +36,10 @@ fun isAndroid11(): Boolean {
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
 }
 
+fun isRealAndroid11():Boolean{
+    return Build.VERSION.SDK_INT == Build.VERSION_CODES.R
+}
+
 fun isAndroid8(): Boolean {
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 }

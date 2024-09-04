@@ -63,10 +63,8 @@ class Scan1(var parentDirectory: File,var waitTime:Long,var onProgress: (file:Fi
             } else {
 //                Logger.writeLog(APP.instance,"扫描出的文件:${file.absolutePath}")
                 if (tag == "Cache"){
-                    if (file.absolutePath.contains("cache",true)){
-                        AppLogs.dLog(TAG,"扫描出的文件夹:${file.absolutePath} 当前线程:${Thread.currentThread()}")
-                        onProgress.invoke(file)
-                    }
+                    AppLogs.dLog(TAG,"cache扫描出的文件:${file.absolutePath} 当前线程:${Thread.currentThread()}")
+                    onProgress.invoke(file)
                 }else{
                     AppLogs.dLog(TAG,"扫描出的文件:${file.absolutePath} 当前线程:${Thread.currentThread()}")
                     files.add(file)

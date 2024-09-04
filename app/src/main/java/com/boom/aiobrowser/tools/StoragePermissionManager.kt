@@ -25,6 +25,7 @@ class StoragePermissionManager(
     }
 
     fun requestStoragePermission() {
+        APP.instance.isGoOther = true
         activity?.getPermission(onRequestTips = {
             StoragePop(activity!!).createPop{
                 if (it == 0){
@@ -110,10 +111,10 @@ class StoragePermissionManager(
                         }
 
                         override fun onDenied(permissions: List<String>, never: Boolean) {
-                            onDenied.invoke()
-                            if (jumpType == 1){
-                                toOtherSetting()
-                            }
+//                            onDenied.invoke()
+//                            if (jumpType == 1){
+//                                toOtherSetting()
+//                            }
                         }
                     })
             }.onFailure {

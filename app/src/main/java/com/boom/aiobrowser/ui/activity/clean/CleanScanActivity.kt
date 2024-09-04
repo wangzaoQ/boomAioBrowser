@@ -46,6 +46,7 @@ import com.boom.aiobrowser.ui.activity.clean.load.CompleteLoadActivity
 import com.boom.aiobrowser.ui.adapter.ScanAdapter2
 import com.boom.aiobrowser.ui.isAndroid11
 import com.boom.aiobrowser.ui.isAndroid12
+import com.boom.aiobrowser.ui.isRealAndroid11
 import com.boom.aiobrowser.ui.pop.CachePop
 import com.boom.base.adapter4.BaseQuickAdapter
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
@@ -169,7 +170,7 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                 acBinding.cleanButton.setOneClick {
                     if (isScan)return@setOneClick
 //                    if (selectedAllLength == 0L)return@setOneClick
-                    if (isAndroid11()){
+                    if (isAndroid12()){
                         var data = scanAdapter.items.get(0) as ScanData
                         if (data.itemChecked.not()&& cacheFiles.isNullOrEmpty()){
                             //如果未选中内存就跳内存引导
@@ -290,9 +291,11 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                 }
             }
         }
-        scanAdapter.add(ScanData().createCacheData(this@CleanScanActivity,false).apply {
-            isLoading = true
-        })
+        if (isRealAndroid11().not()){
+            scanAdapter.add(ScanData().createCacheData(this@CleanScanActivity,false).apply {
+                isLoading = true
+            })
+        }
 
         addLaunch(success = {
             delay(500)
@@ -339,15 +342,17 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                 acBinding.ctl.layoutParams = params
                 delay(600)
                 var list = mutableListOf<ViewItem>()
-                list.add(ScanData().createCacheData(this@CleanScanActivity).apply {
-                    checkedAll(CleanConfig.cacheFiles.isNotEmpty())
-                })
-                CleanConfig.cacheFiles.forEach {
-                    it.scanType = CleanConfig.DATA_TYPE_CACHE
-                    it.itemChecked = true
-                    list.add(it)
-                    if (isAndroid12()){
-                        it.enableChecked = false
+                if (isRealAndroid11().not()){
+                    list.add(ScanData().createCacheData(this@CleanScanActivity).apply {
+                        checkedAll(CleanConfig.cacheFiles.isNotEmpty())
+                    })
+                    CleanConfig.cacheFiles.forEach {
+                        it.scanType = CleanConfig.DATA_TYPE_CACHE
+                        it.itemChecked = true
+                        list.add(it)
+                        if (isAndroid12()){
+                            it.enableChecked = false
+                        }
                     }
                 }
 
@@ -433,6 +438,8 @@ class CleanScanActivity: BaseActivity<BrowserActivityCleanScanBinding>()  {
                         delay(1000)
                         clickCache(false)
                     }
+                }else{
+                    isScan = false
                 }
             }, failBack = {
                 isScan = false

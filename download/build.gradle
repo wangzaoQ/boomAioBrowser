@@ -1,0 +1,38 @@
+apply plugin: 'com.android.library'
+android {
+    compileSdk 34
+
+    defaultConfig {
+        minSdkVersion 24
+        targetSdkVersion 34
+        versionCode 2
+        versionName "4.2.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    lintOptions{
+        abortOnError false
+    }
+//    repositories {
+//        flatDir {
+//            dirs 'libs', 'providedLibs'
+//        }
+//    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    implementation 'com.github.Justson:dispatch-queue:v1.0.5'
+    implementation 'androidx.annotation:annotation:1.8.0'
+    implementation 'androidx.core:core-ktx:1.13.1'
+
+}
+

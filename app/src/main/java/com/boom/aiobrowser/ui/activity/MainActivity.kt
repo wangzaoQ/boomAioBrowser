@@ -61,8 +61,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         return BrowserActivityMainBinding.inflate(layoutInflater)
     }
 
-  var navController :NavController?=null
-
     val mainFragment by lazy {
         MainFragment()
     }
@@ -253,10 +251,22 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
 
     override fun setShowView() {
-        if (CacheManager.browserStatus == 1){
-            CacheManager.browserStatus = 0
-        }
-        setVp()
+        acBinding.root.postDelayed({
+            var count = 0
+            for ( i in 0 until APP.instance.lifecycleApp.stack.size){
+                var activity = APP.instance.lifecycleApp.stack.get(i)
+                if (activity is MainActivity){
+                    count++
+                }
+            }
+            if (CacheManager.browserStatus == 1){
+                CacheManager.browserStatus = 0
+            }
+            if (count == 1){
+                setVp()
+                loadNews()
+            }
+        },500)
         startFragment = StartFragment()
         startFragment?.apply {
 //            fManager.showFragment(supportFragmentManager,this)
@@ -271,35 +281,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             updateUI(intent)
             fManager.addFragmentTag(supportFragmentManager,this,R.id.fragmentStart,"StartFragment")
         }
-//        acBinding.root.postDelayed({
-//            var count = 0
-//            for ( i in 0 until APP.instance.lifecycleApp.stack.size){
-//                var activity = APP.instance.lifecycleApp.stack.get(i)
-//                if (activity is MainActivity){
-//                    count++
-//                }
-//            }
-//            AppLogs.dLog(APP.instance.lifecycleApp.TAG,"目前MainActivity 数目:${count}")
-//            if (count == 1){
-//                fManager.addFragmentTag(supportFragmentManager,mainFragment,R.id.fragmentMainFl,"MainFragment")
-//            }
-//        }, 500)
-        loadNews()
-//        acBinding.root.postDelayed({
-//            var count = 0
-//            for ( i in 0 until APP.instance.lifecycleApp.stack.size){
-//                var activity = APP.instance.lifecycleApp.stack.get(i)
-//                if (activity is BaseActivity<*>){
-//                    count++
-//                }
-//            }
-//            AppLogs.dLog(APP.instance.TAG,"当前MainActivity count:${count}")
-//            if (count == 1){
-//                APP.jumpLiveData.postValue(JumpData().apply {
-//                    jumpType = JumpConfig.JUMP_MAIN
-//                })
-//            }
-//        },500)
     }
 
     fun hideStart() {

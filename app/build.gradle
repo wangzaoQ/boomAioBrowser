@@ -185,6 +185,15 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.0'
     implementation 'androidx.navigation:navigation-ui:2.3.0'
     implementation("androidx.webkit:webkit:1.9.0")
+
+    def room_version = "2.6.1"
+
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    // To use Kotlin annotation processing tool (kapt)
+    kapt "androidx.room:room-compiler:$room_version"
+
 //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
 
 
@@ -199,4 +208,11 @@ dependencies {
 //    implementation 'com.google.firebase:firebase-messaging-directboot:20.2.0'
 //    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
 //    implementation 'com.google.android.gms:play-services-appset:16.0.2'
+}
+
+
+kapt {
+    arguments {
+        arg("room.schemaLocation", "$projectDir/schemas".toString())
+    }
 }

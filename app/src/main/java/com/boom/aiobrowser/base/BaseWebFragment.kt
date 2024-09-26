@@ -16,6 +16,8 @@ import androidx.viewbinding.ViewBinding
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.toJson
+import com.boom.aiobrowser.tools.web.WebConfig
+import com.boom.aiobrowser.tools.web.WebScan
 import com.boom.web.AbsAgentWebSettings
 import com.boom.web.AgentWeb
 import com.boom.web.AgentWebConfig
@@ -92,7 +94,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
         if (webView!= null && webView.canGoBack()) {
             webView.goBack()
         }else{
-            rootActivity.onBackPressed()
+            rootActivity.finish()
         }
     }
 
@@ -113,6 +115,10 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
         override fun onProgressChanged(view:WebView,  newProgress:Int) {
             super.onProgressChanged(view, newProgress)
 //            AppLogs.dLog(fragmentTAG, "onProgressChanged:$newProgress  view:$view")
+        }
+
+        override fun getDefaultVideoPoster(): Bitmap? {
+            return Bitmap.createBitmap(10, 10, Bitmap.Config.RGB_565)
         }
     }
 
@@ -140,6 +146,25 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             view: WebView?,
             request: WebResourceRequest?
         ): WebResourceResponse? {
+            AppLogs.dLog(
+                fragmentTAG,
+                "mWebViewClient shouldInterceptRequest:${request?.url}"
+            )
+//            request?.url?.apply {
+//                if (WebScan.isTikTok(this.toString())){
+//                    var  builder = Request.Builder()
+//                    //do you want to do for builder
+//
+//                    var  req = builder.url(request?.url.toString()).get().build()
+//                    var  response = WebNet.netClient.newCall(req).execute()
+//                    //do you want to do for response
+//                    var  webResourceResponse = WebResourceResponse("text/html", "utf-8",  ByteArrayInputStream(response.body?.bytes()))
+//                    return webResourceResponse
+//                }
+//            }
+            if (isPageFinished && WebScan.isloading.not()){
+                WebScan.filterUri(request?.url)
+            }
             return super.shouldInterceptRequest(view, request)
         }
 
@@ -167,6 +192,8 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                 fragmentTAG,
                 "mUrl:" + url + " onPageStarted  target:" + getUrl()
             )
+            isPageFinished = false
+
             loadWebOnPageStared(url)
             timer[url] = System.currentTimeMillis()
 //            if (url == getUrl()) {
@@ -176,8 +203,12 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 //            }
         }
 
+        var isPageFinished = false
+
+
         override fun onPageFinished(view: WebView?, url: String) {
             super.onPageFinished(view, url)
+            CacheManager.videoDownloadTempList = mutableListOf()
             if (timer[url] != null) {
                 val overTime = System.currentTimeMillis()
                 val startTime = timer[url]
@@ -185,9 +216,23 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                     fragmentTAG,
                     "  page mUrl:" + url + "  used time:" + (overTime - startTime!!)
                 )
-                loadWebFinished()
                 timer.remove(url)
             }
+            loadWebFinished()
+            var cookieManager = CookieManager.getInstance()
+            var cookie = cookieManager.getCookie(url)?:""
+            AppLogs.dLog(fragmentTAG,"onPageFinished page mUrl:${url}  cookie:${cookie}")
+            if (WebScan.isTikTok(url) && cookie.isNotEmpty()){
+                WebConfig.cookieTikTok = cookie
+//                val cookieManager = CookieManager.getInstance()
+//                cookieManager.setAcceptCookie(true)
+//                cookieManager.setCookie("https://www.tiktok.com/foryou", cookie)
+//                // 需要同步 Cookie 信息到 WebView
+//                CookieManager.getInstance().flush()
+            }
+            WebScan.reset()
+            isPageFinished = true
+//            evaluateHTML(view!!)
         }
     }
 
@@ -221,7 +266,10 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
 
     open fun getUrl(): String {
-        var url = "https://www.youtube.com"
+//        var url = "https://www.tiktok.com/@poppiesstudios/video/7396952171536796971?is_from_webapp=1&sender_device=pc"
+//        var url = "https://nnyy.in/dianying/20308129.html"
+//        var url = "https://fmovie-s.to/movie"
+        var url = "https://cn.pornhub.com/"
 
 //		return "http://ggzy.sqzwfw.gov.cn/WebBuilderDS/WebbuilderMIS/attach/downloadZtbAttach.jspx?attachGuid=af982055-3d76-4b00-b5ab-36dee1f90b11&appUrlFlag=sqztb&siteGuid=7eb5f7f1-9041-43ad-8e13-8fcb82ea831a";
         return url
@@ -230,6 +278,16 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
     open fun loadWebFinished(){
 
+    }
+
+
+
+    private fun evaluateHTML(webView: WebView) {
+        webView.evaluateJavascript(
+            "javascript:document.getElementsByTagName('html')[0].innerHTML;"
+        ) { html -> // 这里的html就是网页的HTML内容
+            AppLogs.dLog(fragmentTAG,"HTML:${html!!}")
+        }
     }
 
 

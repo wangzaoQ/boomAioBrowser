@@ -28,7 +28,7 @@ object WebScan {
             if (url.contains(WebConfig.FILTER_TIKTOK,true)){
                 type = WebConfig.TIKTOK
                 AppLogs.dLog(TAG,"命中tiktok uri:${uri}")
-                var id = getTikTokId(url)
+                var id = "tiktok_${getTikTokId(url)}"
                 var list = CacheManager.videoDownloadTempList
                 var allow = true
                 for (i in 0 until list.size){
@@ -41,7 +41,7 @@ object WebScan {
                 if (allow){
                     var map = HashMap<String,Any>()
                     map.put("Cookie",WebConfig.cookieTikTok)
-                    var data = VideoDownloadData().createDefault(fileName = "tiktok_${id}", url = url, paramsMap = map, size = BigDecimal(0).toLong(), videoType = "")
+                    var data = VideoDownloadData().createDefault(videoId = id, fileName = id, url = url, paramsMap = map, size = BigDecimal(0).toLong(), videoType = "")
                     var list = CacheManager.videoDownloadTempList
                     var allow = true
                     for (i in 0 until list.size){
@@ -52,6 +52,7 @@ object WebScan {
                         }
                     }
                     if (allow){
+                        list.clear()
                         list.add(0,data)
                     }
                     CacheManager.videoDownloadTempList = list

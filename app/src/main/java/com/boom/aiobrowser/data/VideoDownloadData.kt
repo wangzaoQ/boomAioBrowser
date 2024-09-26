@@ -22,7 +22,7 @@ class VideoDownloadData{
     var isShow = false
 
 
-    fun createDefault(fileName:String,url:String,paramsMap:HashMap<String,Any>,size:Long,videoType: String):VideoDownloadData{
+    fun createDefault(videoId:String,fileName:String,url:String,paramsMap:HashMap<String,Any>,size:Long,videoType: String):VideoDownloadData{
         this.fileName = fileName
         this.url = url
         this.paramsMap = paramsMap
@@ -30,7 +30,7 @@ class VideoDownloadData{
         this.videoType = videoType
         this.downloadType = DOWNLOAD_NOT
         this.isShow = false
-        this.videoId = fileName
+        this.videoId = videoId
         return this
     }
 }

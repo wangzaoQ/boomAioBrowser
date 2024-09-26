@@ -106,6 +106,9 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         fBinding.flTop.binding.tvToolbarSearch.text = "${jumpData?.jumpTitle} ${getSearchTitle()}"
         fBinding.refreshLayout.isRefreshing = false
         var key = mAgentWeb?.webCreator?.webView?.url?:""
+//        if (rootActivity is WebDetailsActivity){
+//            (rootActivity as WebDetailsActivity).updateDownloadButtonStatus(true)
+//        }
     }
 
     fun getSearchTitle():String{
@@ -136,6 +139,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
             }
         }
     }
+
 
 
     /**

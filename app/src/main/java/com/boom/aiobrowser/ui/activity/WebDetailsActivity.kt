@@ -3,6 +3,7 @@ package com.boom.aiobrowser.ui.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
@@ -48,13 +49,35 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
             }
         }
         APP.videoScanLiveData.observe(this){
-            ToastUtils.showLong("视频获取成功")
+//            ToastUtils.showLong("视频获取成功")
             popDown?.updateData()
+            updateDownloadButtonStatus(true)
         }
         acBinding.ivDownload.setOneClick {
-            popDown = DownLoadPop(this@WebDetailsActivity)
-            popDown?.createPop()
+            showDownloadPop()
         }
+        acBinding.ivDownload2.setOneClick {
+            showDownloadPop()
+        }
+    }
+
+    open fun updateDownloadButtonStatus(status: Boolean) {
+        var size = CacheManager.videoDownloadTempList.size
+        if (status && size>0){
+            acBinding.ivDownload.visibility = View.GONE
+            acBinding.ivDownload2.visibility = View.VISIBLE
+            acBinding.tvDownload.text = "$size"
+            acBinding.tvDownload.visibility = View.VISIBLE
+            acBinding.ivDownload2.apply {
+                setAnimation("download.json")
+                playAnimation()
+            }
+        }
+    }
+
+    private fun showDownloadPop() {
+        popDown = DownLoadPop(this@WebDetailsActivity)
+        popDown?.createPop()
     }
 
     var popDown: DownLoadPop?=null
@@ -94,6 +117,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         }
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         acBinding.ivLeft.performClick()
 //        super.onBackPressed()
@@ -143,6 +167,8 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
             intent.getStringExtra(ParamsConfig.JSON_PARAMS),
             JumpData::class.java
         ))
+        updateDownloadButtonStatus(false)
+        acBinding.ivDownload.visibility = View.VISIBLE
     }
 
     override fun onDestroy() {

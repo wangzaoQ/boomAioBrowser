@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.tools.clean
 
 import com.blankj.utilcode.util.FileUtils
+import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_APKS
 import com.boom.aiobrowser.data.FileManageData.Companion.FILE_TYPE_DOCUMENTS
@@ -61,7 +62,9 @@ fun Long.formatSize(): String {
 fun Long.formatLength(): String {
     // 定义单位数组，从 Bytes 到 PB（Petabytes）
     val units = arrayOf("B", "KB", "MB", "GB", "TB", "PB")
-
+    if (this == 0L){
+        return APP.instance.getString(R.string.app_loading_content)
+    }
     // 如果大小为0，直接返回 "0 Bytes"
     if (this < 1024) return "$this B"
 
@@ -78,7 +81,7 @@ fun Long.formatLength(): String {
 
     // 格式化输出，附加相应的单位
     return if (sizeInUnit.toInt() == 0){
-        "loading"
+        APP.instance.getString(R.string.app_loading_content)
     }else{
         "${sizeInUnit.toPlainString()} ${units[digitGroups]}"
     }

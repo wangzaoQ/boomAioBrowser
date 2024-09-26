@@ -339,13 +339,36 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivDownload"
-        android:layout_width="68dp"
-        android:layout_height="68dp"
+    <FrameLayout
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_gravity="bottom|right"
-        android:layout_marginBottom="40dp"
-        android:scaleType="centerInside"
-        app:srcCompat="@mipmap/ic_download"></androidx.appcompat.widget.AppCompatImageView>
+        android:layout_marginBottom="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+        <androidx.cardview.widget.CardView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:cardCornerRadius="20dp"
+            android:layout_gravity="center"
+            >
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivDownload"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_download_tips"
+                    app:srcCompat="@mipmap/ic_arrow_down"
+                    android:scaleType="centerInside"
+                    android:layout_margin="2dp"
+                    ></androidx.appcompat.widget.AppCompatImageView>
+
+            </FrameLayout>
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
 
 </FrameLayout>

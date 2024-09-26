@@ -100,20 +100,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 //                    acBinding.llMainControl.visibility = View.GONE
 //                    updateBottom(true,false,it, tag = "JumpConfig.JUMP_WEB")
                 }
-                JumpConfig.JUMP_SEARCH -> {
-                    jumpActivity<SearchActivity>(Bundle().apply {
-                        putString(ParamsConfig.JSON_PARAMS, toJson(it))
-                    })
-//                    val navOptions = NavOptions.Builder()
-//                        .setEnterAnim(R.anim.in_alpha)
-//                        .setExitAnim(R.anim.out_alpha)
-//                        .build()
-//
-//                    navController?.navigate(R.id.fragmentSearch, Bundle().apply {
-//                        putString(ParamsConfig.JSON_PARAMS, toJson(it))
-//                    },navOptions)
-//                    updateBottom(true,false,it,tag = "JumpConfig.JUMP_SEARCH")
-                }
                 JumpConfig.JUMP_HOME ->{
 //                    val navOptions = NavOptions.Builder()
 //                        .setEnterAnim(R.anim.in_alpha)
@@ -125,19 +111,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 //                        putString(ParamsConfig.JSON_PARAMS, toJson(it))
 //                    },navOptions)
                     acBinding.vpRoot.setCurrentItem(0)
-                }
-                JumpConfig.JUMP_FILE ->{
-//                    val navOptions = NavOptions.Builder()
-//                        .setEnterAnim(R.anim.in_alpha)
-//                        .setExitAnim(R.anim.out_alpha)
-//                        .setPopUpTo(R.id.fragmentMain, true) // 将目标Fragment从Back Stack中移除
-//                        .build()
-//
-//                    navController?.navigate(R.id.fragmentFile, Bundle().apply {
-//                        putString(ParamsConfig.JSON_PARAMS, toJson(it))
-//                    },navOptions)
-                    acBinding.vpRoot.setCurrentItem(1)
-                    acBinding.llMainControl.visibility = View.VISIBLE
                 }
                 else -> {}
             }
@@ -204,7 +177,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     var morePop : MorePop?=null
 
 
-
     override fun onResume() {
         super.onResume()
         morePop?.updateUI()
@@ -247,8 +219,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             })
         }
     }
-
-
 
     override fun setShowView() {
         acBinding.root.postDelayed({

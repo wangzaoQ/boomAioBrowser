@@ -17,11 +17,13 @@ import com.boom.aiobrowser.model.SearchViewModel
 import com.boom.aiobrowser.net.SearchNet
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
+import com.boom.aiobrowser.ui.activity.WebDetailsActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.adapter.RecentSearchAdapter
 import com.boom.base.adapter4.QuickAdapterHelper
@@ -116,14 +118,15 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 jumpTitle = it
                 jumpUrl = url
             }
-            APP.jumpLiveData.postValue(jumpData)
             if (CacheManager.browserStatus == 0){
                 CacheManager.saveRecentSearchData(jumpData)
             }
+            toWebDetailsActivity(jumpData)
         })
         fBinding.topRoot.updateEngine(CacheManager.engineType)
-
-        fBinding.topRoot.binding.etToolBarSearch.setText("${jumpData?.jumpUrl}")
+        if (jumpData?.jumpUrl.isNullOrEmpty().not()){
+            fBinding.topRoot.binding.etToolBarSearch.setText("${jumpData?.jumpUrl}")
+        }
         fBinding.topRoot.binding.etToolBarSearch.selectAll()
 
         fBinding.rv.apply {
@@ -145,12 +148,26 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 var data = searchAdapter.items.get(position)
                 CacheManager.saveRecentSearchData(data)
 //                CacheManager.getCurrentJumpData(updateTime = true, updateData = data)
-                APP.jumpLiveData.postValue(data)
+                toWebDetailsActivity(data)
             }
-            postDelayed({
-                APP.bottomLiveData.postValue(JumpConfig.JUMP_SEARCH)
-            },0)
         }
+    }
+
+    private fun toWebDetailsActivity(data:JumpData){
+        var allow = true
+        for (i in 0 until APP.instance.lifecycleApp.stack.size){
+            var data = APP.instance.lifecycleApp.stack.get(i)
+            if (data is WebDetailsActivity){
+                allow = false
+                break
+            }
+        }
+        if (allow){
+            APP.jumpLiveData.postValue(data)
+        }else{
+            APP.jumpWebLiveData.postValue(data)
+        }
+        rootActivity.finish()
     }
 
     override fun onDestroy() {

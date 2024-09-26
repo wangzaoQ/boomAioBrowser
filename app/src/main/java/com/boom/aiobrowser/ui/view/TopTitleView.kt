@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.ui.view
 
 import android.content.Context
+import android.content.Intent
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
@@ -18,8 +19,11 @@ import com.boom.aiobrowser.databinding.LayoutTopBinding
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.jobCancel
+import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.JumpConfig
+import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.SearchConfig
+import com.boom.aiobrowser.ui.activity.SearchActivity
 import com.boom.aiobrowser.ui.pop.SearchPop
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -46,8 +50,12 @@ class TopTitleView : FrameLayout {
             )
         }
         binding.toolBarSearch.setOnClickListener {
-            APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(updateData = jumpData,tag ="TopTitleView 点击搜索").apply {
+            var data = JumpDataManager.getCurrentJumpData(updateData = jumpData,tag ="TopTitleView 点击搜索").apply {
                 jumpType = JumpConfig.JUMP_SEARCH
+            }
+
+            context.startActivity(Intent(context,SearchActivity::class.java).apply {
+                putExtra(ParamsConfig.JSON_PARAMS, toJson(data))
             })
         }
     }

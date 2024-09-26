@@ -84,7 +84,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
                     if (mMainNavFragment != null && mMainNavFragment is WebFragment) {
                         mMainNavFragment.goBack()
                     }else{
-                        onBackPressed()
+                        finish()
                     }
                 }
                 ivLeft.isEnabled = true
@@ -92,6 +92,11 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
                 ivLeft.isEnabled = false
             }
         }
+    }
+
+    override fun onBackPressed() {
+        acBinding.ivLeft.performClick()
+//        super.onBackPressed()
     }
 
     fun clearData(){

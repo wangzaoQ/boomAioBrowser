@@ -57,6 +57,33 @@ fun Long.formatSize(): String {
     return "${sizeInUnit.toPlainString()} ${units[digitGroups]}"
 }
 
+
+fun Long.formatLength(): String {
+    // 定义单位数组，从 Bytes 到 PB（Petabytes）
+    val units = arrayOf("B", "KB", "MB", "GB", "TB", "PB")
+
+    // 如果大小为0，直接返回 "0 Bytes"
+    if (this < 1024) return "$this B"
+
+    // 将字节大小转换为 BigDecimal
+    val size = BigDecimal(this)
+
+    // 计算需要使用的单位级别（digitGroups）
+    val digitGroups = (Math.log10(size.toDouble()) / Math.log10(1024.0)).toInt()
+
+    // 计算转换后的值（使用 BigDecimal 计算以保持精度）
+//    BigDecimalUtils.div()
+    val divisor = BigDecimal(1024).pow(digitGroups)
+    val sizeInUnit = size.divide(divisor, 2, RoundingMode.HALF_UP)
+
+    // 格式化输出，附加相应的单位
+    return if (sizeInUnit.toInt() == 0){
+        "loading"
+    }else{
+        "${sizeInUnit.toPlainString()} ${units[digitGroups]}"
+    }
+}
+
 fun String.getRegexForFile(): String = ".+${this.replace(".", "\\.")}$".lowercase()
 fun String.hasConstants(list: MutableList<String>) = list.any { contains(it, true) }
 

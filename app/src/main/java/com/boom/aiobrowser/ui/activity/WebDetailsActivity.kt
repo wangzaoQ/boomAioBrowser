@@ -3,6 +3,7 @@ package com.boom.aiobrowser.ui.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
+import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
@@ -16,6 +17,7 @@ import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.fragment.WebFragment
 import com.boom.aiobrowser.ui.pop.ClearPop
+import com.boom.aiobrowser.ui.pop.DownLoadPop
 import com.boom.aiobrowser.ui.pop.TabPop
 import pop.basepopup.BasePopupWindow.OnDismissListener
 
@@ -45,7 +47,17 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
                 }
             }
         }
+        APP.videoScanLiveData.observe(this){
+            ToastUtils.showLong("视频获取成功")
+            popDown?.updateData()
+        }
+        acBinding.ivDownload.setOneClick {
+            popDown = DownLoadPop(this@WebDetailsActivity)
+            popDown?.createPop()
+        }
     }
+
+    var popDown: DownLoadPop?=null
 
     fun updateBottom(showBack:Boolean,showNext:Boolean,jumpData:JumpData?=null,tag:String) {
         AppLogs.dLog(acTAG,"updateBottom:${tag}")
@@ -130,6 +142,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
 
     override fun onDestroy() {
         APP.jumpWebLiveData.removeObservers(this)
+        APP.videoScanLiveData.removeObservers(this)
         super.onDestroy()
     }
 }

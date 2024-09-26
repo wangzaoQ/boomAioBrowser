@@ -155,6 +155,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             adapterHelper.trailingLoadState = LoadState.NotLoading(false)
             fBinding.refreshLayout.isRefreshing = false
         }
+        fBinding.ivDownload.setOneClick {
+
+        }
     }
 
     override fun onResume() {

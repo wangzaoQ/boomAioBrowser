@@ -69,5 +69,14 @@
             app:srcCompat="@mipmap/ic_web_clear"
             ></androidx.appcompat.widget.AppCompatImageView>
     </androidx.appcompat.widget.LinearLayoutCompat>
-
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivDownload"
+        android:layout_width="68dp"
+        android:layout_height="68dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="87dp"
+        android:scaleType="centerInside"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:srcCompat="@mipmap/ic_download"></androidx.appcompat.widget.AppCompatImageView>
 </androidx.constraintlayout.widget.ConstraintLayout>

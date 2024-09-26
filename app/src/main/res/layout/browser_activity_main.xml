@@ -145,13 +145,4 @@
         android:text="@string/app_clear_data"
         ></TextView>
 
-    <ImageView
-        android:id="@+id/ivClearAnimal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerInside"
-        app:lottie_autoPlay="false"
-        app:lottie_fileName="test.json"
-        app:lottie_loop="true"
-        ></ImageView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,12 +4,11 @@ import android.app.Application
 import android.os.Build
 import android.webkit.WebView
 import com.boom.aiobrowser.ad.AioADDataManager.initAD
-import com.boom.aiobrowser.data.FilesData
+import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.clean.CleanConfig
-import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.tools.event.ProtectedUnPeekLiveData
 import com.boom.aiobrowser.tools.isOtherPkg
 import com.tencent.mmkv.MMKV
@@ -38,6 +37,7 @@ class APP: Application() {
         val deleteLiveData  by lazy { ProtectedUnPeekLiveData<HashMap<Int,Int>>() }
         val deleteLiveData2  by lazy { ProtectedUnPeekLiveData<String>() }
         val scanCompleteLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
+        val videoScanLiveData by lazy { ProtectedUnPeekLiveData<VideoDownloadData>() }
 
     }
 

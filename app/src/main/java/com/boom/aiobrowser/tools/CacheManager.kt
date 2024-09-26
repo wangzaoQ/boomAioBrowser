@@ -9,6 +9,7 @@ import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.RecentSearchData
 import com.boom.aiobrowser.data.TabData
+import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.net.NetRequest
 import com.boom.aiobrowser.ui.JumpConfig
 import com.tencent.mmkv.MMKV
@@ -27,6 +28,7 @@ object CacheManager {
     const val KV_ENGINE_TYPE = "KV_ENGINE_TYPE"
     const val KV_TAB_DATA_NORMAL = "KV_TAB_DATA_NORMAL"
     const val KV_TAB_DATA_PRIVATE = "KV_TAB_DATA_PRIVATE"
+    const val KV_VIDEO_DOWNLOAD = "KV_VIDEO_DOWNLOAD"
     const val KV_NEWS_LIST = "KV_NEWS_LIST"
     const val KV_BROWSER_STATUS = "KV_BROWSER_STATUS"
     const val KV_RECENT_SEARCH_DATA = "KV_RECENT_SEARCH_DATA"
@@ -43,6 +45,15 @@ object CacheManager {
     const val KV_CLEAN_TIME = "KV_CLEAN_TIME"
 //    const val KV_FIRST_OPEN_APP = "KV_FIRST_OPEN_APP"
 
+
+    var videoDownloadTempList :MutableList<VideoDownloadData>
+        get() {
+            var list = getListByGson(mmkv.decodeString(KV_VIDEO_DOWNLOAD),VideoDownloadData::class.java)?: mutableListOf()
+            return list
+        }
+        set(value) {
+            mmkv.encode(KV_VIDEO_DOWNLOAD, toJson(value))
+        }
     // 是否首次打开start
     var isFirstStart: Boolean
         get() {

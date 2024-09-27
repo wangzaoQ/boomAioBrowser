@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
-import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
@@ -53,6 +52,23 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
             popDown?.updateData()
             updateDownloadButtonStatus(true)
         }
+        APP.videoLiveData.observe(this){
+            var map = it
+            it.keys.forEach {
+                popDown?.updateStatus(it,map.get(it)){
+                    var videoId = it.videoId
+                    var list = CacheManager.videoDownloadTempList
+                    for (i in 0 until list.size){
+                        if (list.get(i).videoId == videoId){
+                            list.removeAt(i)
+                            break
+                        }
+                    }
+                    CacheManager.videoDownloadTempList = list
+                    updateDownloadButtonStatus(true)
+                }
+            }
+        }
         acBinding.ivDownload.setOneClick {
             showDownloadPop()
         }
@@ -66,12 +82,17 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         if (status && size>0){
             acBinding.ivDownload.visibility = View.GONE
             acBinding.ivDownload2.visibility = View.VISIBLE
-            acBinding.tvDownload.text = "$size"
             acBinding.tvDownload.visibility = View.VISIBLE
+            acBinding.tvDownload.text = "$size"
             acBinding.ivDownload2.apply {
                 setAnimation("download.json")
                 playAnimation()
             }
+        }else{
+            acBinding.ivDownload.visibility = View.VISIBLE
+            acBinding.ivDownload2.visibility = View.GONE
+            acBinding.tvDownload.visibility = View.GONE
+            acBinding.ivDownload2.cancelAnimation()
         }
     }
 
@@ -174,6 +195,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
     override fun onDestroy() {
         APP.jumpWebLiveData.removeObservers(this)
         APP.videoScanLiveData.removeObservers(this)
+        APP.videoLiveData.removeObservers(this)
         super.onDestroy()
     }
 }

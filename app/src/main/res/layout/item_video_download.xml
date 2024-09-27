@@ -100,8 +100,16 @@
             android:layout_height="match_parent"
             app:srcCompat="@mipmap/ic_video_download"
             app:layout_constraintEnd_toEndOf="parent"
-            android:paddingStart="14dp"
-            android:paddingEnd="4dp"
+            android:paddingStart="29dp"
+            ></androidx.appcompat.widget.AppCompatImageView>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivMore"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            app:srcCompat="@mipmap/ic_download_more"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingStart="35dp"
+            android:visibility="gone"
             ></androidx.appcompat.widget.AppCompatImageView>
     </FrameLayout>
 

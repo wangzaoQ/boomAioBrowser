@@ -4,10 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.boom.aiobrowser.data.model.DownloadModel
 
 
-@Database(entities = [DownloadModel::class], version = 1, exportSchema = true)
+@Database(entities = [DownloadModel::class], version = 1, exportSchema = false)
 public abstract class AppDatabase : RoomDatabase() {
     abstract fun downloadDao(): DownloadDao
 

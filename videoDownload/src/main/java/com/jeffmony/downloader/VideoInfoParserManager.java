@@ -52,19 +52,19 @@ public class VideoInfoParserManager {
                 return;
             }
 
-            if (TextUtils.isEmpty(taskItem.getCoverPath()) && !TextUtils.isEmpty(taskItem.getCoverUrl())) {
-                //请求视频的封面图
-                HttpURLConnection coverConn = HttpUtils.getConnection(taskItem.getCoverUrl(), headers, VideoDownloadUtils.getDownloadConfig().shouldIgnoreCertErrors());
-                int responseCode = coverConn.getResponseCode();
-                if (responseCode == HttpUtils.RESPONSE_200 || responseCode == HttpUtils.RESPONSE_206) {
-                    InputStream inputStream = coverConn.getInputStream();
-                    File coverFile = new File(VideoDownloadUtils.getDownloadConfig().getCacheRoot(), taskItem.getFileHash() + ".jpg");
-                    boolean result = saveCoverFile(inputStream, coverFile);
-                    if (result) {
-                        taskItem.setCoverPath(coverFile.getAbsolutePath());
-                    }
-                }
-            }
+//            if (TextUtils.isEmpty(taskItem.getCoverPath()) && !TextUtils.isEmpty(taskItem.getCoverUrl())) {
+//                //请求视频的封面图
+//                HttpURLConnection coverConn = HttpUtils.getConnection(taskItem.getCoverUrl(), headers, VideoDownloadUtils.getDownloadConfig().shouldIgnoreCertErrors());
+//                int responseCode = coverConn.getResponseCode();
+//                if (responseCode == HttpUtils.RESPONSE_200 || responseCode == HttpUtils.RESPONSE_206) {
+//                    InputStream inputStream = coverConn.getInputStream();
+//                    File coverFile = new File(VideoDownloadUtils.getDownloadConfig().getCacheRoot(), taskItem.getFileHash() + ".jpg");
+//                    boolean result = saveCoverFile(inputStream, coverFile);
+//                    if (result) {
+//                        taskItem.setCoverPath(coverFile.getAbsolutePath());
+//                    }
+//                }
+//            }
 
             String finalUrl = taskItem.getUrl();
             LogUtils.i(DownloadConstants.TAG, "doParseVideoInfoTask url="+finalUrl);

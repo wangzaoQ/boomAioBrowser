@@ -11,6 +11,8 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.event.ProtectedUnPeekLiveData
 import com.boom.aiobrowser.tools.isOtherPkg
+import com.boom.aiobrowser.tools.video.VideoManager.initVideo
+import com.jeffmony.downloader.model.VideoTaskItem
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +41,8 @@ class APP: Application() {
         val scanCompleteLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
         val videoScanLiveData by lazy { ProtectedUnPeekLiveData<VideoDownloadData>() }
 
+        val videoLiveData by lazy { ProtectedUnPeekLiveData<HashMap<Int, VideoTaskItem>>() }
+
     }
 
     override fun onCreate() {
@@ -51,6 +55,7 @@ class APP: Application() {
         registerActivityLifecycleCallbacks(lifecycleApp)
         initOtherSdk()
     }
+
 
     private fun configWebViewCacheDirWithAndroidP() {
         runCatching {
@@ -73,6 +78,7 @@ class APP: Application() {
                 initFirebase()
                 initAD()
                 CleanConfig.initCleanConfig()
+                initVideo()
             }
         }
     }

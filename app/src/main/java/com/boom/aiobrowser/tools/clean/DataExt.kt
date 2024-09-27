@@ -62,9 +62,7 @@ fun Long.formatSize(): String {
 fun Long.formatLength(): String {
     // 定义单位数组，从 Bytes 到 PB（Petabytes）
     val units = arrayOf("B", "KB", "MB", "GB", "TB", "PB")
-    if (this == 0L){
-        return APP.instance.getString(R.string.app_loading_content)
-    }
+
     // 如果大小为0，直接返回 "0 Bytes"
     if (this < 1024) return "$this B"
 
@@ -79,13 +77,16 @@ fun Long.formatLength(): String {
     val divisor = BigDecimal(1024).pow(digitGroups)
     val sizeInUnit = size.divide(divisor, 2, RoundingMode.HALF_UP)
 
-    // 格式化输出，附加相应的单位
-    return if (sizeInUnit.toInt() == 0){
-        APP.instance.getString(R.string.app_loading_content)
-    }else{
-        "${sizeInUnit.toPlainString()} ${units[digitGroups]}"
-    }
+    return "${sizeInUnit.toPlainString()} ${units[digitGroups]}"
+//    // 格式化输出，附加相应的单位
+//    return if (sizeInUnit.toInt() == 0){
+//        APP.instance.getString(R.string.app_loading_content)
+//    }else{
+//        if (needUnit) "${sizeInUnit.toPlainString()} ${units[digitGroups]}" else "${sizeInUnit.toPlainString()}"
+//    }
 }
+
+
 
 fun String.getRegexForFile(): String = ".+${this.replace(".", "\\.")}$".lowercase()
 fun String.hasConstants(list: MutableList<String>) = list.any { contains(it, true) }

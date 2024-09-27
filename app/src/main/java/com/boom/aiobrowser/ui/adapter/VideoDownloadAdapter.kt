@@ -5,14 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.ItemVideoDownloadBinding
+import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.GlideManager
 import com.boom.aiobrowser.tools.clean.formatLength
-import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.base.adapter4.BaseQuickAdapter
 
-class VideoDownloadAdapter: BaseQuickAdapter<VideoDownloadData, VideoDownloadAdapter.VH>() {
+class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<VideoDownloadData, VideoDownloadAdapter.VH>() {
     class VH(
         parent: ViewGroup,
         val viewBinding: ItemVideoDownloadBinding = ItemVideoDownloadBinding.inflate(
@@ -22,6 +23,83 @@ class VideoDownloadAdapter: BaseQuickAdapter<VideoDownloadData, VideoDownloadAda
 
     override fun onCreateViewHolder(context: Context, parent: ViewGroup, viewType: Int): VH {
         return VH(parent)
+    }
+
+    override fun onBindViewHolder(
+        holder: VH,
+        position: Int,
+        item: VideoDownloadData?,
+        payloads: List<Any>
+    ) {
+        if (payloads.isNullOrEmpty()){
+            onBindViewHolder(holder,position,item)
+        }else{
+            val payload = payloads[0].toString()
+            if (payload == "updateStatus"){
+                if (item == null)return
+                holder.viewBinding.apply {
+                    if(item.downloadType == VideoDownloadData.DOWNLOAD_NOT){
+                        progress.visibility = View.GONE
+                        llPlayRoot.visibility = View.GONE
+                        ivMore.visibility = View.GONE
+                        ivDownload.visibility = View.VISIBLE
+                        tvContent.text = item.size?.formatLength()
+                    }else{
+                        updateItem(item,holder)
+                    }
+                }
+            }else if (payload == "updateLoading"){
+                if (item == null)return
+                holder.viewBinding.apply{
+                    updateItem(item,holder)
+                }
+            }
+        }
+    }
+
+    private fun updateItem(item: VideoDownloadData, holder: VH): Boolean {
+        holder.viewBinding.apply {
+            when (item.downloadType) {
+                VideoDownloadData.DOWNLOAD_LOADING, VideoDownloadData.DOWNLOAD_PAUSE -> {
+                    llPlayRoot.visibility = View.VISIBLE
+                    progress.visibility = View.VISIBLE
+                    ivDownload.visibility = View.GONE
+                    ivMore.visibility = View.GONE
+                    var allSize = item.size ?: 0
+                    if (allSize == 0L) return true
+                    var fileProgress = BigDecimalUtils.mul(
+                        100.0,
+                        BigDecimalUtils.div((item.downloadSize ?: 0).toDouble(), allSize.toDouble())
+                    ).toInt()
+                    progress.progress = fileProgress
+                    if (item.downloadType == VideoDownloadData.DOWNLOAD_LOADING) {
+                        ivVideoStatus.setImageResource(R.mipmap.ic_video_pause)
+                    } else {
+                        ivVideoStatus.setImageResource(R.mipmap.ic_video_play)
+                    }
+                    tvContent.text = "${item.downloadSize?.formatLength()}/${item.size?.formatLength()}"
+                    tvContent.setTextColor(context.getColor(R.color.gray))
+                }
+                VideoDownloadData.DOWNLOAD_SUCCESS->{
+                    llPlayRoot.visibility = View.GONE
+                    ivDownload.visibility = View.GONE
+                    ivMore.visibility = View.VISIBLE
+                }
+                VideoDownloadData.DOWNLOAD_ERROR -> {
+                    progress.visibility = View.GONE
+                    llPlayRoot.visibility = View.VISIBLE
+                    ivDownload.visibility = View.GONE
+                    ivMore.visibility = View.GONE
+                    ivVideoStatus.setImageResource(R.mipmap.ic_video_error)
+                    tvContent.text = context.getString(R.string.app_download_error)
+                    tvContent.setTextColor(context.getColor(R.color.red_FF3B30))
+                }
+
+                else -> {}
+            }
+        }
+
+        return false
     }
 
     override fun onBindViewHolder(holder: VH, position: Int, item: VideoDownloadData?) {
@@ -35,9 +113,7 @@ class VideoDownloadAdapter: BaseQuickAdapter<VideoDownloadData, VideoDownloadAda
                 ivDownload.visibility = View.VISIBLE
                 tvContent.text = item.size?.formatLength()
             }else{
-                progress.visibility = View.VISIBLE
-                llPlayRoot.visibility = View.VISIBLE
-                ivDownload.visibility = View.GONE
+                updateItem(item, holder)
             }
         }
     }

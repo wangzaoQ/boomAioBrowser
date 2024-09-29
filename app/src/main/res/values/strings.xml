@@ -109,5 +109,8 @@
     <string name="app_progress">Progress</string>
     <string name="app_done">Done</string>
     <string name="app_no_record">No records</string>
+    <string name="app_rename">Rename</string>
+    <string name="app_file_info">File Information</string>
+    <string name="app_ok">Ok</string>
 
 </resources>

@@ -2,7 +2,7 @@ package com.boom.aiobrowser.data
 
 import com.boom.aiobrowser.data.model.DownloadModel
 import com.boom.aiobrowser.tools.getMapByGson
-import com.boom.aiobrowser.tools.gson
+import com.jeffmony.downloader.model.Video
 import com.jeffmony.downloader.model.VideoTaskItem
 
 class VideoDownloadData{
@@ -13,6 +13,8 @@ class VideoDownloadData{
         var DOWNLOAD_PAUSE = 2
         var DOWNLOAD_ERROR = 3
         var DOWNLOAD_SUCCESS = 4
+
+        var TYPE_MP4 = "video/mp4"
     }
 
     var videoId :String?=""
@@ -45,12 +47,17 @@ class VideoDownloadData{
     }
 
     fun createDownloadData(data:VideoDownloadData):VideoTaskItem{
-        return VideoTaskItem(
+        var task = VideoTaskItem(
             data.url,
             data.url,
             data.fileName,
             "group-1"
         )
+        if (data.videoType == TYPE_MP4){
+            task.videoType = Video.Type.MP4_TYPE
+        }
+        task.filePath
+        return task
     }
 
     fun createVideoDownloadData(model:DownloadModel):VideoDownloadData{

@@ -72,6 +72,9 @@ object VideoManager {
                 CoroutineScope(Dispatchers.IO).launch {
                     var model =  DownloadCacheManager.queryDownloadModelByUrl(item.url)
                     if (model!=null){
+                        if (item.downloadSize>=item.totalSize){
+                            return@launch
+                        }
                         model.downloadSize = item.downloadSize
                         model.downloadType = VideoDownloadData.DOWNLOAD_LOADING
                         DownloadCacheManager.updateModel(model)

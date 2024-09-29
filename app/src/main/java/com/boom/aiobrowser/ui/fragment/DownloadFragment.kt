@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.VideoFragmentDownloadBinding
@@ -14,6 +16,8 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.video.VideoManager
 import com.boom.aiobrowser.ui.adapter.VideoDownloadAdapter
+import com.boom.base.adapter4.util.addOnDebouncedChildClick
+import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import com.jeffmony.downloader.VideoDownloadManager
 import com.jeffmony.downloader.listener.IDownloadInfosCallback
 import com.jeffmony.downloader.model.VideoTaskItem
@@ -48,6 +52,29 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
             }else{
                 fBinding.llEmpty.visibility = View.GONE
             }
+        }
+
+        downloadAdapter.setOnDebouncedItemClick{adapter, view, position ->
+            var data = downloadAdapter.getItem(position)
+            data?.apply {
+                if (downloadType == VideoDownloadData.DOWNLOAD_PAUSE) {
+                    downloadType = VideoDownloadData.DOWNLOAD_LOADING
+                    VideoDownloadManager.getInstance().resumeDownload(url)
+                }else if (downloadType == VideoDownloadData.DOWNLOAD_LOADING){
+                    downloadType = VideoDownloadData.DOWNLOAD_PAUSE
+                    VideoDownloadManager.getInstance().pauseDownloadTask(url)
+                }
+                downloadAdapter.notifyItemChanged(position,"updateLoading")
+            }
+        }
+        downloadAdapter.addOnDebouncedChildClick(R.id.ivVideoClose) { adapter, view, position ->
+            var item = downloadAdapter.getItem(position)?:return@addOnDebouncedChildClick
+            downloadAdapter.remove(item)
+            var model = DownloadCacheManager.queryDownloadModel(item)
+            if (model!=null){
+                DownloadCacheManager.deleteModel(model)
+            }
+            APP.videoUpdateLiveData.postValue(0)
         }
     }
 

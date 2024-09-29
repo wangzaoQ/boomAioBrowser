@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/shape_bg_video_download"
     android:layout_marginHorizontal="13.5dp"
-    android:layout_marginBottom="13.5dp"
+    android:layout_marginTop="13.5dp"
     >
 
 

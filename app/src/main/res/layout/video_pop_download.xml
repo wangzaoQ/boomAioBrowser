@@ -6,6 +6,7 @@
     android:background="@drawable/shape_10r_white"
     >
     <RelativeLayout
+        android:id="@+id/rlTop"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_marginTop="7dp"
@@ -34,8 +35,8 @@
             ></androidx.appcompat.widget.AppCompatTextView>
     </RelativeLayout>
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/rlTop"
         android:id="@+id/rv"
-        android:layout_marginTop="55dp"
         android:layout_width="match_parent"
         android:layout_height="347dp"
         ></androidx.recyclerview.widget.RecyclerView>

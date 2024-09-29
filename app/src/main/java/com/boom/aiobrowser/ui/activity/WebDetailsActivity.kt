@@ -13,6 +13,7 @@ import com.boom.aiobrowser.databinding.BrowserActivityWebDetailsBinding
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
@@ -21,6 +22,8 @@ import com.boom.aiobrowser.ui.pop.ClearPop
 import com.boom.aiobrowser.ui.pop.DownLoadPop
 import com.boom.aiobrowser.ui.pop.TabPop
 import com.jeffmony.downloader.VideoDownloadManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import pop.basepopup.BasePopupWindow.OnDismissListener
 
 class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
@@ -62,30 +65,34 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
                 }
             }
         }
-//        APP.videoUpdateLiveData.observe(this){
-//            if (popDown?.isShowing == true){
-//                var list = CacheManager.videoDownloadTempList
-//                var endList = mutableListOf<VideoDownloadData>()
-//                addLaunch(success = {
-//
-//                }, failBack = {})
-//                VideoDownloadManager.getInstance().fetchDownloadItems {
-//                    it.forEach {
-//                        if (it.taskState != 5){
-//                            var url = it.url
-//                            var downloadSize = it.downloadSize
-//                            list.forEach {
-//                                if (url == it.url){
-//                                    it.downloadSize = downloadSize
-//                                    endList.add(it)
-//                                }
-//                            }
-//                        }
-//                    }
-//                    popDown?.updateProgress(list)
-//                }
-//            }
-//        }
+        APP.videoUpdateLiveData.observe(this){
+            var list = CacheManager.videoDownloadTempList
+            if (popDown?.isShowing == true && list.isNotEmpty()){
+                addLaunch(success = {
+                    var modelList = DownloadCacheManager.queryDownloadModelOther()
+                    if (modelList.isNullOrEmpty().not()){
+                        for (i in 0 until modelList!!.size){
+                            var data = modelList.get(i)
+                            var index = -1
+                            for (k in 0 until list.size){
+                                var bean = list.get(k)
+                                if (data.url == bean.url){
+                                    index = k
+                                    break
+                                }
+                            }
+                            if (index>=0){
+                                list.removeAt(index)
+                            }
+                        }
+                        CacheManager.videoDownloadTempList = list
+                        withContext(Dispatchers.Main){
+                            popDown?.updateData()
+                        }
+                    }
+                }, failBack = {})
+            }
+        }
         acBinding.ivDownload.setOneClick {
             showDownloadPop()
         }

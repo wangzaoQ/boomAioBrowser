@@ -16,7 +16,6 @@ class VideoDownloadModel  : BaseDataModel() {
         }else if (type == 1){
             list = DownloadCacheManager.queryDownloadModelDone()
         }
-        var endList = mutableListOf<VideoDownloadData>()
       dataLiveData.postValue(list?: mutableListOf())
     }
 }

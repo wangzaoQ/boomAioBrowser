@@ -147,11 +147,6 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                     downloadType = VideoDownloadData.DOWNLOAD_PAUSE
                     VideoDownloadManager.getInstance().pauseDownloadTask(url)
                 }
-//                var model = DownloadCacheManager.queryDownloadModel(data)
-//                if (model!=null){
-//                    model.downloadType = downloadType
-//                    DownloadCacheManager.updateModel(model)
-//                }
                 downloadAdapter.notifyItemChanged(position,"updateLoading")
             }
         }

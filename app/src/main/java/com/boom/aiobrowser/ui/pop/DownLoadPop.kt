@@ -68,18 +68,6 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         var item = downloadAdapter.getItem(position)?:return
         item.downloadType = type
         item.downloadSize = data.downloadSize
-        activity.addLaunch(success = {
-            var model = DownloadCacheManager.queryDownloadModel(item)
-            if (model!=null){
-                model.downloadType = type
-                model.downloadSize = data.downloadSize
-                if (type == VideoDownloadData.DOWNLOAD_SUCCESS){
-                    model.downloadFileName = data.fileName
-                    model.downloadFilePath = data.filePath
-                }
-                DownloadCacheManager.updateModel(model)
-            }
-        }, failBack = {})
         if (type == VideoDownloadData.DOWNLOAD_SUCCESS){
             downloadAdapter.remove(item)
             callBack.invoke(item)

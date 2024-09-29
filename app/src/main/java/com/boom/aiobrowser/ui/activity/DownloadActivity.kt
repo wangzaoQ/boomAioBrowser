@@ -66,6 +66,14 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
                 }
             })
         }
+        APP.videoLiveData.observe(this){
+            if (fragments.size>0){
+                var map = it
+                it.keys.forEach {
+                    (fragments.get(0) as DownloadFragment).updateStatus(it,map.get(it)){}
+                }
+            }
+        }
     }
 
     private fun updateUI(position: Int) {

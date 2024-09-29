@@ -69,20 +69,18 @@ object VideoManager {
             override fun onDownloadProgress(item: VideoTaskItem?) {
                 if (item==null)return
                 AppLogs.dLog(TAG,"onDownloadProgress:${item?.downloadSizeString} url:${item.url}")
-                videoLiveData.postValue(HashMap<Int,VideoTaskItem>().apply {
-                    put(VideoDownloadData.DOWNLOAD_LOADING,item)
-                })
-//                CoroutineScope(Dispatchers.IO).launch {
-//                    var model =  DownloadCacheManager.queryDownloadModelByUrl(item.url)
-//                    if (model!=null){
-//                        model.downloadSize = item.downloadSize
-//                        DownloadCacheManager.updateModel(model)
-//                    }
-//                    AppLogs.dLog(TAG,"收到进度消息 :${model?.downloadSize} url:${model?.url}")
-//                    videoLiveData.postValue(HashMap<Int,VideoTaskItem>().apply {
-//                        put(VideoDownloadData.DOWNLOAD_LOADING,item)
-//                    })
-//                }
+                CoroutineScope(Dispatchers.IO).launch {
+                    var model =  DownloadCacheManager.queryDownloadModelByUrl(item.url)
+                    if (model!=null){
+                        model.downloadSize = item.downloadSize
+                        model.downloadType = VideoDownloadData.DOWNLOAD_LOADING
+                        DownloadCacheManager.updateModel(model)
+                    }
+                    AppLogs.dLog(TAG,"收到进度消息 :${model?.downloadSize} url:${model?.url}")
+                    videoLiveData.postValue(HashMap<Int,VideoTaskItem>().apply {
+                        put(VideoDownloadData.DOWNLOAD_LOADING,item)
+                    })
+                }
             }
 
             override fun onDownloadSpeed(item: VideoTaskItem?) {}
@@ -90,46 +88,50 @@ object VideoManager {
             override fun onDownloadPause(item: VideoTaskItem?) {
                 AppLogs.dLog(TAG,"onDownloadPause:${item?.url}")
                 if (item==null)return
-                videoLiveData.postValue(HashMap<Int,VideoTaskItem>().apply {
-                    put(VideoDownloadData.DOWNLOAD_PAUSE,item)
-                })
-//                CoroutineScope(Dispatchers.IO).launch {
-//                    var model =  DownloadCacheManager.queryDownloadModelByUrl(item.url)
-//                    if (model!=null){
-//                        model.downloadSize = item.downloadSize
-//                        DownloadCacheManager.updateModel(model)
-//                    }
-//                    videoLiveData.postValue(HashMap<Int,VideoTaskItem>().apply {
-//                        put(VideoDownloadData.DOWNLOAD_PAUSE,item)
-//                    })
-//                }
+                CoroutineScope(Dispatchers.IO).launch {
+                    var model =  DownloadCacheManager.queryDownloadModelByUrl(item.url)
+                    if (model!=null){
+                        model.downloadSize = item.downloadSize
+                        model.downloadType = VideoDownloadData.DOWNLOAD_PAUSE
+                        DownloadCacheManager.updateModel(model)
+                    }
+                    videoLiveData.postValue(HashMap<Int,VideoTaskItem>().apply {
+                        put(VideoDownloadData.DOWNLOAD_PAUSE,item)
+                    })
+                }
             }
 
             override fun onDownloadError(item: VideoTaskItem?) {
                 AppLogs.dLog(TAG,"onDownloadError:${item?.url}")
                 if (item==null)return
-                videoLiveData.postValue(HashMap<Int,VideoTaskItem>().apply {
-                    put(VideoDownloadData.DOWNLOAD_ERROR,item)
-                })
+                CoroutineScope(Dispatchers.IO).launch {
+                    var model =  DownloadCacheManager.queryDownloadModelByUrl(item.url)
+                    if (model!=null){
+                        model.downloadSize = 0
+                        model.downloadType = VideoDownloadData.DOWNLOAD_ERROR
+                        DownloadCacheManager.updateModel(model)
+                    }
+                    videoLiveData.postValue(HashMap<Int,VideoTaskItem>().apply {
+                        put(VideoDownloadData.DOWNLOAD_ERROR,item)
+                    })
+                }
             }
 
             override fun onDownloadSuccess(item: VideoTaskItem?) {
                 AppLogs.dLog(TAG,"onDownloadSuccess:${item?.url}")
                 if (item==null)return
-                videoLiveData.postValue(HashMap<Int,VideoTaskItem>().apply {
-                    put(VideoDownloadData.DOWNLOAD_SUCCESS,item)
-                })
-//                CoroutineScope(Dispatchers.IO).launch {
-//                    var model =  DownloadCacheManager.queryDownloadModelByUrl(item.url)
-//                    if (model!=null){
-//                        model.downloadFileName = item.fileName
-//                        model.downloadFilePath = item.filePath
-//                        DownloadCacheManager.updateModel(model)
-//                    }
-//                    videoLiveData.postValue(HashMap<Int,VideoTaskItem>().apply {
-//                        put(VideoDownloadData.DOWNLOAD_SUCCESS,item)
-//                    })
-//                }
+                CoroutineScope(Dispatchers.IO).launch {
+                    var model =  DownloadCacheManager.queryDownloadModelByUrl(item.url)
+                    if (model!=null){
+                        model.downloadFileName = item.fileName
+                        model.downloadFilePath = item.filePath
+                        model.downloadType = VideoDownloadData.DOWNLOAD_SUCCESS
+                        DownloadCacheManager.updateModel(model)
+                    }
+                    videoLiveData.postValue(HashMap<Int,VideoTaskItem>().apply {
+                        put(VideoDownloadData.DOWNLOAD_SUCCESS,item)
+                    })
+                }
             }
         })
     }

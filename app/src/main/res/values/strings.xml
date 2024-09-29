@@ -106,5 +106,8 @@
     <string name="app_loading_content">loading</string>
     <string name="app_download_error">Download Failed</string>
     <string name="app_already_download">Already downloaded</string>
+    <string name="app_progress">Progress</string>
+    <string name="app_done">Done</string>
+    <string name="app_no_record">No records</string>
 
 </resources>

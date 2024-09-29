@@ -27,6 +27,7 @@ import com.boom.aiobrowser.ui.isAndroid12
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
+import com.google.gson.reflect.TypeToken
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import kotlinx.coroutines.Job
@@ -83,6 +84,16 @@ fun <T> getLinkedListByGson(json: String?, cls: Class<T>?): LinkedList<T>? {
 fun <T> getBeanByGson(jsonData: String?, type: Class<T>?): T? {
     runCatching {
         return gson.fromJson<T>(jsonData, type)!!
+    }.onFailure {
+        AppLogs.eLog("gson", it.stackTraceToString())
+    }
+    return null
+}
+
+fun getMapByGson(jsonData: String):HashMap<String,Any>?{
+    runCatching {
+        val mapType = object : TypeToken<HashMap<String?, Any?>?>() {}.getType()
+        return  gson.fromJson(jsonData, mapType)
     }.onFailure {
         AppLogs.eLog("gson", it.stackTraceToString())
     }

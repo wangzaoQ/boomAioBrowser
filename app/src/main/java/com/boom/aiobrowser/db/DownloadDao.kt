@@ -18,8 +18,23 @@ interface DownloadDao{
     @Query("SELECT * FROM download_tab WHERE videoId = :videoId")
     fun queryDataById(videoId:String): DownloadModel?
 
+    // 查询
+    @Query("SELECT * FROM download_tab WHERE url = :url")
+    fun queryDataByUrl(url:String): DownloadModel?
+
+    // 查询
+    @Query("SELECT * FROM download_tab WHERE downloadType = 4")
+    fun queryDataDone(): MutableList<DownloadModel>
+
+    // 查询
+    @Query("SELECT * FROM download_tab WHERE downloadType != 4")
+    fun queryDataOther(): MutableList<DownloadModel>
 
     // 更新某一个数据
     @Update
-    fun updateModel(vararg user: DownloadModel)
+    fun updateModel(vararg model: DownloadModel)
+
+    //删除某一个数据
+    @Delete
+    fun deleteModel(vararg model: DownloadModel)
 }

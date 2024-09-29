@@ -8,6 +8,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.JumpData
+import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserActivityWebDetailsBinding
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
@@ -19,6 +20,7 @@ import com.boom.aiobrowser.ui.fragment.WebFragment
 import com.boom.aiobrowser.ui.pop.ClearPop
 import com.boom.aiobrowser.ui.pop.DownLoadPop
 import com.boom.aiobrowser.ui.pop.TabPop
+import com.jeffmony.downloader.VideoDownloadManager
 import pop.basepopup.BasePopupWindow.OnDismissListener
 
 class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
@@ -55,26 +57,57 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         APP.videoLiveData.observe(this){
             var map = it
             it.keys.forEach {
-                popDown?.updateStatus(it,map.get(it)){
-                    var videoId = it.videoId
-                    var list = CacheManager.videoDownloadTempList
-                    for (i in 0 until list.size){
-                        if (list.get(i).videoId == videoId){
-                            list.removeAt(i)
-                            break
-                        }
-                    }
-                    CacheManager.videoDownloadTempList = list
-                    updateDownloadButtonStatus(true)
+                popDown?.updateStatus(this@WebDetailsActivity,it,map.get(it)){
+                    itemRemoveData(it)
                 }
             }
         }
+//        APP.videoUpdateLiveData.observe(this){
+//            if (popDown?.isShowing == true){
+//                var list = CacheManager.videoDownloadTempList
+//                var endList = mutableListOf<VideoDownloadData>()
+//                addLaunch(success = {
+//
+//                }, failBack = {})
+//                VideoDownloadManager.getInstance().fetchDownloadItems {
+//                    it.forEach {
+//                        if (it.taskState != 5){
+//                            var url = it.url
+//                            var downloadSize = it.downloadSize
+//                            list.forEach {
+//                                if (url == it.url){
+//                                    it.downloadSize = downloadSize
+//                                    endList.add(it)
+//                                }
+//                            }
+//                        }
+//                    }
+//                    popDown?.updateProgress(list)
+//                }
+//            }
+//        }
         acBinding.ivDownload.setOneClick {
             showDownloadPop()
         }
         acBinding.ivDownload2.setOneClick {
             showDownloadPop()
         }
+    }
+
+    /**
+     * 移除item
+     */
+    private fun itemRemoveData(it: VideoDownloadData) {
+        var videoId = it.videoId
+        var list = CacheManager.videoDownloadTempList
+        for (i in 0 until list.size) {
+            if (list.get(i).videoId == videoId) {
+                list.removeAt(i)
+                break
+            }
+        }
+        CacheManager.videoDownloadTempList = list
+        updateDownloadButtonStatus(true)
     }
 
     open fun updateDownloadButtonStatus(status: Boolean) {
@@ -98,7 +131,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
 
     private fun showDownloadPop() {
         popDown = DownLoadPop(this@WebDetailsActivity)
-        popDown?.createPop()
+        popDown?.createPop(){}
     }
 
     var popDown: DownLoadPop?=null
@@ -196,6 +229,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         APP.jumpWebLiveData.removeObservers(this)
         APP.videoScanLiveData.removeObservers(this)
         APP.videoLiveData.removeObservers(this)
+        APP.videoUpdateLiveData.removeObservers(this)
         super.onDestroy()
     }
 }

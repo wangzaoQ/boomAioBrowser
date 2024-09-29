@@ -79,11 +79,16 @@ class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<Vide
                     }
                     tvContent.text = "${item.downloadSize?.formatLength()}/${item.size?.formatLength()}"
                     tvContent.setTextColor(context.getColor(R.color.gray))
+                    GlideManager.loadImg(null,ivVideo,item.url,0,0,0)
                 }
                 VideoDownloadData.DOWNLOAD_SUCCESS->{
                     llPlayRoot.visibility = View.GONE
                     ivDownload.visibility = View.GONE
                     ivMore.visibility = View.VISIBLE
+                    progress.visibility = View.GONE
+                    tvContent.text = "${item.size?.formatLength()}"
+                    tvName.text = item.downloadFileName
+                    GlideManager.loadImg(null,ivVideo,item.downloadFilePath,0,0,0)
                 }
                 VideoDownloadData.DOWNLOAD_ERROR -> {
                     progress.visibility = View.GONE
@@ -93,6 +98,7 @@ class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<Vide
                     ivVideoStatus.setImageResource(R.mipmap.ic_video_error)
                     tvContent.text = context.getString(R.string.app_download_error)
                     tvContent.setTextColor(context.getColor(R.color.red_FF3B30))
+                    GlideManager.loadImg(null,ivVideo,item.url,0,0,0)
                 }
 
                 else -> {}
@@ -105,13 +111,13 @@ class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<Vide
     override fun onBindViewHolder(holder: VH, position: Int, item: VideoDownloadData?) {
         if (item == null) return
         holder.viewBinding.apply {
-            GlideManager.loadImg(null,ivVideo,item.url,0,0,0)
             tvName.text = item.fileName
             if(item.downloadType == VideoDownloadData.DOWNLOAD_NOT){
                 progress.visibility = View.GONE
                 llPlayRoot.visibility = View.GONE
                 ivDownload.visibility = View.VISIBLE
                 tvContent.text = item.size?.formatLength()
+                GlideManager.loadImg(null,ivVideo,item.url,0,0,0)
             }else{
                 updateItem(item, holder)
             }

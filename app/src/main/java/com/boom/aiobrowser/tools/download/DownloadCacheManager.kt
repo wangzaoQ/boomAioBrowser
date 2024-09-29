@@ -17,14 +17,43 @@ object DownloadCacheManager {
         var model=DataTransformationManager.downloadTransformation(data)
         AppLogs.dLog(TAG,"添加一条:${model.toString()}")
         downloadDao.insertDownloadModel(model)
-        if (APP.isDebug) AppLogs.dLog(TAG,"当前总共有:${downloadDao.queryAllDownload().size}条数据")
+        if (APP.isDebug) AppLogs.dLog(TAG,"当前总共有:${downloadDao.queryAllDownload().size}条数据 downloadType:${model.downloadType}")
     }
 
     fun queryDownloadModel(data: VideoDownloadData):DownloadModel?{
         return downloadDao.queryDataById(data.videoId?:"")
     }
 
+    fun queryDownloadModelByUrl(url: String):DownloadModel?{
+        return downloadDao.queryDataByUrl(url)
+    }
+
     fun updateModel( model: DownloadModel) {
         downloadDao.updateModel(model)
+        if (APP.isDebug) AppLogs.dLog(TAG,"当前总共有:${downloadDao.queryAllDownload().size}条数据 downloadType:${model.downloadType}")
     }
+
+    fun deleteModel(model: DownloadModel) {
+        downloadDao.deleteModel(model)
+        if (APP.isDebug) AppLogs.dLog(TAG,"当前总共有:${downloadDao.queryAllDownload().size}条数据")
+    }
+
+    fun queryDownloadModelOther():MutableList<VideoDownloadData>?{
+        var dataList = mutableListOf<VideoDownloadData>()
+        var list = downloadDao.queryDataOther()
+        list.forEach {
+            dataList.add(VideoDownloadData().createVideoDownloadData(it))
+        }
+        return dataList
+    }
+
+    fun queryDownloadModelDone():MutableList<VideoDownloadData>? {
+        var dataList = mutableListOf<VideoDownloadData>()
+        var list = downloadDao.queryDataDone()
+        list.forEach {
+            dataList.add(VideoDownloadData().createVideoDownloadData(it))
+        }
+        return dataList
+    }
+
 }

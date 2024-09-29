@@ -1,5 +1,8 @@
 package com.boom.aiobrowser.data
 
+import com.boom.aiobrowser.data.model.DownloadModel
+import com.boom.aiobrowser.tools.getMapByGson
+import com.boom.aiobrowser.tools.gson
 import com.jeffmony.downloader.model.VideoTaskItem
 
 class VideoDownloadData{
@@ -19,6 +22,9 @@ class VideoDownloadData{
     var downloadSize:Long?=0
     var videoType:String?=""
     var paramsMap:HashMap<String,Any>?=null
+
+    var downloadFileName :String = ""
+    var downloadFilePath :String = ""
 
     // 0 未开始 1 进行中 2 暂停 3 错误 4 成功
     var downloadType = 0
@@ -45,5 +51,19 @@ class VideoDownloadData{
             data.fileName,
             "group-1"
         )
+    }
+
+    fun createVideoDownloadData(model:DownloadModel):VideoDownloadData{
+        var data = VideoDownloadData()
+        data.videoId = model.videoId
+        data.fileName = model.fileName
+        data.url = model.url
+        data.size = model.size
+        data.downloadSize = model.downloadSize
+        data.paramsMap = getMapByGson(model.paramsMapJson?:"")
+        data.downloadType = model.downloadType?:DOWNLOAD_NOT
+        data.downloadFileName = model.downloadFileName
+        data.downloadFilePath = model.downloadFilePath
+        return data
     }
 }

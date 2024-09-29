@@ -19,6 +19,9 @@ public class DownloadModel{
     var paramsMapJson:String?=""
     var downloadType:Int?=0
 
+    var downloadFileName :String = ""
+    var downloadFilePath :String = ""
+
     fun createDownloadModel(downloadData: VideoDownloadData):DownloadModel{
         var model = DownloadModel()
         model.apply {
@@ -30,6 +33,8 @@ public class DownloadModel{
             paramsMapJson = toJson(downloadData.paramsMap)
             downloadType = downloadData.downloadType
             downloadSize = downloadData.downloadSize
+            downloadFileName = downloadData.downloadFileName
+            downloadFilePath = downloadData.downloadFilePath
         }
         return model
     }

@@ -32,6 +32,7 @@
         android:layout_marginStart="13dp"
         android:layout_marginEnd="10dp"
         android:orientation="vertical"
+        android:clickable="false"
         >
 
         <androidx.appcompat.widget.AppCompatTextView

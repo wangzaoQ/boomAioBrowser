@@ -42,6 +42,7 @@ class APP: Application() {
         val videoScanLiveData by lazy { ProtectedUnPeekLiveData<VideoDownloadData>() }
 
         val videoLiveData by lazy { ProtectedUnPeekLiveData<HashMap<Int, VideoTaskItem>>() }
+        val videoUpdateLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
 
     }
 

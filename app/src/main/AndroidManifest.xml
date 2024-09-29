@@ -141,6 +141,10 @@
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:launchMode="singleTop"
             ></activity>
+        <activity android:name=".ui.activity.DownloadActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            ></activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

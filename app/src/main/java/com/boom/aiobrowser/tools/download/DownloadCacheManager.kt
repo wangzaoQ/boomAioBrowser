@@ -47,6 +47,11 @@ object DownloadCacheManager {
         return dataList
     }
 
+    fun queryDownloadModelLoading():MutableList<DownloadModel>?{
+        var list = downloadDao.queryDataLoading()
+        return list
+    }
+
     fun queryDownloadModelDone():MutableList<VideoDownloadData>? {
         var dataList = mutableListOf<VideoDownloadData>()
         var list = downloadDao.queryDataDone()

@@ -20,6 +20,7 @@ import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.StoragePermissionManager
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.SearchConfig
+import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.clean.CleanScanActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.SearchActivity
@@ -158,12 +159,13 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             fBinding.refreshLayout.isRefreshing = false
         }
         fBinding.ivDownload.setOneClick {
-
+            rootActivity.startActivity(Intent(context, DownloadActivity::class.java))
         }
     }
 
     override fun onResume() {
         super.onResume()
+        if (APP.instance.isHideSplash.not())return
         var jumpData:JumpData
         if (firstLoad){
             firstLoad = false

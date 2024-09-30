@@ -7,6 +7,7 @@ import androidx.viewpager.widget.ViewPager
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
+import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.VideoActivityDownloadBinding
 import com.boom.aiobrowser.ui.fragment.DownloadFragment
 import com.boom.aiobrowser.ui.fragment.FileManageFragment
@@ -67,10 +68,15 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
             })
         }
         APP.videoLiveData.observe(this){
-            if (fragments.size>0){
-                var map = it
-                it.keys.forEach {
-                    (fragments.get(0) as DownloadFragment).updateStatus(it,map.get(it)){}
+            runCatching {
+                if (fragments.size>0){
+                    var map = it
+                    it.keys.forEach {
+                        (fragments.get(0) as DownloadFragment).updateStatus(it,map.get(it)){}
+                        if (it == VideoDownloadData.DOWNLOAD_SUCCESS){
+                            (fragments.get(0) as DownloadFragment).startLoadData()
+                        }
+                    }
                 }
             }
         }

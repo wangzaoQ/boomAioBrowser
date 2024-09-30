@@ -106,6 +106,8 @@ android {
     packagingOptions {
         jniLibs.useLegacyPackaging = true
     }
+    flavorDimensions "versionCode"
+
 }
 
 
@@ -149,6 +151,8 @@ dependencies {
     implementation project(':pop')
     implementation project(':web')
     implementation project(':videoDownload')
+    implementation project(':gsyVideoPlayer-java')
+    implementation project(':gsyVideoPlayer-exo_player2')
 //    implementation project(':download')
 //    implementation project(':indicator')
     implementation 'androidx.core:core-ktx:1.13.1'

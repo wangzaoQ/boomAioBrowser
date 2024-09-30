@@ -6,6 +6,10 @@ import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.toJson
+import com.fast.video.cache.CacheFactory
+import com.fast.video.media.exo2.Exo2PlayerManager
+import com.fast.video.media.exo2.ExoPlayerCacheManager
+import com.fast.video.player.PlayerFactory
 import com.jeffmony.downloader.VideoDownloadConfig
 import com.jeffmony.downloader.VideoDownloadManager
 import com.jeffmony.downloader.common.DownloadConstants
@@ -37,6 +41,8 @@ object VideoManager {
     var job:Job?=null
 
     fun initVideo() {
+        PlayerFactory.setPlayManager(Exo2PlayerManager::class.java) //EXO模式
+        CacheFactory.setCacheManager(ExoPlayerCacheManager::class.java) //exo缓存模式，支持m3u8，只支持exo
         val file = VideoStorageUtils.getVideoCacheDir(APP.instance)
         if (!file.exists()) {
             file.mkdir()
@@ -137,5 +143,12 @@ object VideoManager {
                 }
             }
         })
+
+        //重置状态
+        var modelList = DownloadCacheManager.queryDownloadModelLoading()
+        modelList?.forEach {
+            it.downloadType = VideoDownloadData.DOWNLOAD_PAUSE
+            DownloadCacheManager.updateModel(it)
+        }
     }
 }

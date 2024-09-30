@@ -29,6 +29,9 @@ interface DownloadDao{
     // 查询
     @Query("SELECT * FROM download_tab WHERE downloadType != 4")
     fun queryDataOther(): MutableList<DownloadModel>
+    // 查询
+    @Query("SELECT * FROM download_tab WHERE downloadType == 1")
+    fun queryDataLoading(): MutableList<DownloadModel>
 
     // 更新某一个数据
     @Update

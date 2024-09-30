@@ -239,6 +239,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         },500)
         startFragment = StartFragment()
         startFragment?.apply {
+            APP.instance.isHideSplash = false
 //            fManager.showFragment(supportFragmentManager,this)
             intent.data?.apply {
                 if (this.toString().isNotEmpty()){
@@ -254,6 +255,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
 
     fun hideStart() {
+        APP.instance.isHideSplash = true
         fManager.hideFragment(supportFragmentManager, startFragment!!)
         acBinding.llMainControl.visibility = View.VISIBLE
         if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault){

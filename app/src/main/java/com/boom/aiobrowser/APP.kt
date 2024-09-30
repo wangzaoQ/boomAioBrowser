@@ -27,6 +27,7 @@ class APP: Application() {
     var isGoOther = false
 
     var cleanComplete = false
+    var isHideSplash = false
 
     companion object{
         lateinit var instance:APP

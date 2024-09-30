@@ -14,8 +14,10 @@ import com.boom.aiobrowser.databinding.VideoFragmentDownloadBinding
 import com.boom.aiobrowser.model.VideoDownloadModel
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.video.VideoManager
+import com.boom.aiobrowser.ui.activity.VideoPreActivity
 import com.boom.aiobrowser.ui.adapter.VideoDownloadAdapter
 import com.boom.aiobrowser.ui.pop.VideoMorePop
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
@@ -64,39 +66,52 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
             data?.apply {
                 if (downloadType == VideoDownloadData.DOWNLOAD_PAUSE) {
                     downloadType = VideoDownloadData.DOWNLOAD_LOADING
-                    VideoDownloadManager.getInstance().resumeDownload(url)
+                    var isSuccess = VideoDownloadManager.getInstance().resumeDownload(url)
+                    if (isSuccess.not()){
+                        var headerMap = HashMap<String,String>()
+                        paramsMap?.forEach {
+                            headerMap.put(it.key,it.value.toString())
+                        }
+                        VideoDownloadManager.getInstance().startDownload(data.createDownloadData(data),headerMap)
+                    }
                     downloadAdapter.notifyItemChanged(position,"updateLoading")
                 }else if (downloadType == VideoDownloadData.DOWNLOAD_LOADING){
                     downloadType = VideoDownloadData.DOWNLOAD_PAUSE
                     VideoDownloadManager.getInstance().pauseDownloadTask(url)
                     downloadAdapter.notifyItemChanged(position,"updateLoading")
                 }else if (downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
-                    VideoMorePop(rootActivity).createPop(renameBack = {
-                        rootActivity.addLaunch(success = {
-                            var file =  File(it)
-                            data.downloadFilePath = file.absolutePath
-                            data.downloadFileName = file.name
-                            var model = DownloadCacheManager.queryDownloadModel(data)
-                            if (model!=null){
-                                model.downloadFilePath = file.absolutePath
-                                model.downloadFileName = file.name
-                                DownloadCacheManager.updateModel(model)
-                            }
-                            withContext(Dispatchers.Main){
-                                startLoadData()
-                            }
-                        }, failBack = {})
-                    }, deleteBack = {
-                        downloadAdapter.remove(this)
-                        rootActivity.addLaunch(success = {
-                            var model = DownloadCacheManager.queryDownloadModel(data)
-                            if (model!=null){
-                                DownloadCacheManager.deleteModel(model)
-                            }
-                        }, failBack = {})
-                    }).setFileData(data)
+                    rootActivity.jumpActivity<VideoPreActivity>(Bundle().apply {
+                        putString("video_path",data.downloadFilePath)
+                    })
                 }
             }
+        }
+        downloadAdapter.addOnDebouncedChildClick(R.id.ivMore) { adapter, view, position ->
+            var data = downloadAdapter.getItem(position)?:return@addOnDebouncedChildClick
+            VideoMorePop(rootActivity).createPop(renameBack = {
+                rootActivity.addLaunch(success = {
+                    var file =  File(it)
+                    data.downloadFilePath = file.absolutePath
+                    data.downloadFileName = file.name
+                    var model = DownloadCacheManager.queryDownloadModel(data)
+                    if (model!=null){
+                        model.downloadFilePath = file.absolutePath
+                        model.downloadFileName = file.name
+                        DownloadCacheManager.updateModel(model)
+                    }
+                    withContext(Dispatchers.Main){
+                        startLoadData()
+                    }
+                }, failBack = {})
+            }, deleteBack = {
+                downloadAdapter.remove(data)
+                rootActivity.addLaunch(success = {
+                    var model = DownloadCacheManager.queryDownloadModel(data)
+                    if (model!=null){
+                        DownloadCacheManager.deleteModel(model)
+                    }
+                }, failBack = {})
+            }).setFileData(data)
         }
         downloadAdapter.addOnDebouncedChildClick(R.id.ivVideoClose) { adapter, view, position ->
             var item = downloadAdapter.getItem(position)?:return@addOnDebouncedChildClick

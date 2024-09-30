@@ -439,11 +439,14 @@ public class VideoDownloadManager {
         }
     }
 
-    public void resumeDownload(String videoUrl) {
+    public boolean resumeDownload(String videoUrl) {
         if (mVideoItemTaskMap.containsKey(videoUrl)) {
             VideoTaskItem taskItem = mVideoItemTaskMap.get(videoUrl);
             startDownload(taskItem);
+        }else {
+            return false;
         }
+        return true;
     }
 
     //Delete one task

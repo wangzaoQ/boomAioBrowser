@@ -50,7 +50,31 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
     }
 
     fun updateData() {
-        downloadAdapter.submitList(CacheManager.videoDownloadTempList)
+        (context as BaseActivity<*>).addLaunch(success = {
+            var modelList = DownloadCacheManager.queryDownloadModelOther()
+            var list = CacheManager.videoDownloadTempList
+            var endList = mutableListOf<VideoDownloadData>()
+            if (modelList.isNullOrEmpty()){
+                endList.addAll(list)
+            }else{
+                for (i in 0 until list.size){
+                    var data = list.get(i)
+                    endList.add(data)
+                    for (k in 0 until modelList.size){
+                        var bean = modelList.get(k)
+                        if (bean.videoId == data.videoId){
+                            data.covertByDbData(bean)
+                            break
+                        }
+                    }
+                }
+            }
+//            https://cv-h.phncdn.com/hls/videos/202403/29/450295781/720P_4000K_450295781.mp4/master.m3u8?QaCiO5Bzg6BTFRoBus2eSVuz8wzBYxlR7tfu7LRNzTsUi0V1YeayzwFnKZtEkEpUnDTcqQ9YCLE-wAPtDNn7s6u_nTTLimIVMQ__B05X4auO40cH8UPPzY6x9So6IE0zQabTkhZcQvFOuJ5X0wVeyYsZeHvCDLYy8ht0bkbGmZjR0seYLgOuD215SYvEM--0aeZBLpVk-YY
+//            https://ev-h.phncdn.com/hls/videos/202403/29/450295781/720P_4000K_450295781.mp4/master.m3u8?validfrom=1728381435&validto=1728388635&ipa=35.212.235.107&hdl=-1&hash=L%2F0SzVQqsviZDjj4JDrDhkI%2F3ys%3D
+            withContext(Dispatchers.Main){
+                downloadAdapter.submitList(endList)
+            }
+        }, failBack = {})
     }
 
     fun updateStatus(activity:BaseActivity<*>,type: Int, data: VideoTaskItem?,callBack: (data:VideoDownloadData) -> Unit) {
@@ -59,7 +83,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         var position = -1
         for (i in 0 until downloadAdapter.items.size) {
             var item = downloadAdapter.getItem(i)
-            if (item?.url ?: "" == data.url) {
+            if (item?.videoId ?: "" == data.downloadVideoId) {
                 position = i
                 break
             }
@@ -88,30 +112,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 context.startActivity(Intent(context,DownloadActivity::class.java))
             }
         }
-        (context as BaseActivity<*>).addLaunch(success = {
-            var modelList = DownloadCacheManager.queryDownloadModelOther()
-            var list = CacheManager.videoDownloadTempList
-            var endList = mutableListOf<VideoDownloadData>()
-            if (modelList.isNullOrEmpty()){
-                endList.addAll(list)
-            }else{
-                for (i in 0 until list.size){
-                    var data = list.get(i)
-                    endList.add(data)
-                    for (k in 0 until modelList.size){
-                        var bean = modelList.get(k)
-                        if (bean.url == data.url){
-                            data.downloadSize = bean.downloadSize
-                            data.downloadType = bean.downloadType
-                            break
-                        }
-                    }
-                }
-            }
-            withContext(Dispatchers.Main){
-                downloadAdapter.submitList(endList)
-            }
-        }, failBack = {})
+
 
         downloadAdapter.addOnDebouncedChildClick(R.id.ivDownload) { adapter, view, position ->
             var data = downloadAdapter.getItem(position)
@@ -147,7 +148,14 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             data?.apply {
                 if (downloadType == VideoDownloadData.DOWNLOAD_PAUSE) {
                     downloadType = VideoDownloadData.DOWNLOAD_LOADING
-                    VideoDownloadManager.getInstance().resumeDownload(url)
+                    var success = VideoDownloadManager.getInstance().resumeDownload(url)
+                    if (success.not()){
+                        var headerMap = HashMap<String,String>()
+                        paramsMap?.forEach {
+                            headerMap.put(it.key,it.value.toString())
+                        }
+                        VideoDownloadManager.getInstance().startDownload(data.createDownloadData(data),headerMap)
+                    }
                 }else if (downloadType == VideoDownloadData.DOWNLOAD_LOADING){
                     downloadType = VideoDownloadData.DOWNLOAD_PAUSE
                     VideoDownloadManager.getInstance().pauseDownloadTask(url)
@@ -161,6 +169,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             DownloadControlManager.videoDelete(item!!)
             callBack.invoke(item)
         }
+        updateData()
         setOutSideDismiss(true)
         showPopupWindow()
     }

@@ -38,18 +38,18 @@ class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<Vide
             if (payload == "updateStatus"){
                 if (item == null)return
                 holder.viewBinding.apply {
-                    updateItem(item,holder)
+                    updateItem(item,holder,payload)
                 }
             }else if (payload == "updateLoading"){
                 if (item == null)return
                 holder.viewBinding.apply{
-                    updateItem(item,holder)
+                    updateItem(item,holder,payload)
                 }
             }
         }
     }
 
-    private fun updateItem(item: VideoDownloadData, holder: VH): Boolean {
+    private fun updateItem(item: VideoDownloadData, holder: VH,payload:String): Boolean {
         holder.viewBinding.apply {
             tvName.text = item.fileName
             when (item.downloadType) {
@@ -76,7 +76,7 @@ class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<Vide
                         tvContent.text = "${item.downloadSize?.formatLength()}/${item.size?.formatLength()}"
                         tvContent.setTextColor(context.getColor(R.color.gray))
                     }
-                    GlideManager.loadImg(null,ivVideo,item.imageUrl,0,0,0)
+                    if(payload.isNullOrEmpty()) GlideManager.loadImg(null,ivVideo,item.imageUrl,0,R.mipmap.ic_default_download,0)
                 }
                 VideoDownloadData.DOWNLOAD_SUCCESS->{
                     llPlayRoot.visibility = View.GONE
@@ -86,9 +86,9 @@ class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<Vide
                     tvContent.text = "${item.size?.formatLength()}"
                     tvName.text = item.downloadFileName
                     if (item.videoType == VideoDownloadData.TYPE_M3U8){
-                        GlideManager.loadImg(null,ivVideo,item.imageUrl,0,0,0)
+                        GlideManager.loadImg(null,ivVideo,item.imageUrl,0,R.mipmap.ic_default_download,0)
                     }else{
-                        GlideManager.loadImg(null,ivVideo,item.downloadFilePath,0,0,0)
+                        GlideManager.loadImg(null,ivVideo,item.downloadFilePath,0,R.mipmap.ic_default_download,0)
                     }
                 }
                 VideoDownloadData.DOWNLOAD_ERROR -> {
@@ -99,7 +99,7 @@ class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<Vide
                     ivVideoStatus.setImageResource(R.mipmap.ic_video_error)
                     tvContent.text = context.getString(R.string.app_download_error)
                     tvContent.setTextColor(context.getColor(R.color.red_FF3B30))
-                    GlideManager.loadImg(null,ivVideo,item.imageUrl,0,0,0)
+                    GlideManager.loadImg(null,ivVideo,item.imageUrl,0,R.mipmap.ic_default_download,0)
                 }
 
                 VideoDownloadData.DOWNLOAD_NOT ->{
@@ -108,7 +108,7 @@ class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<Vide
                     ivMore.visibility = View.GONE
                     ivDownload.visibility = View.VISIBLE
                     tvContent.text = item.size?.formatLength()
-                    GlideManager.loadImg(null,ivVideo,item.imageUrl,0,0,0)
+                    GlideManager.loadImg(null,ivVideo,item.imageUrl,0,R.mipmap.ic_default_download,0)
                 }
 
                 else -> {}
@@ -121,7 +121,7 @@ class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<Vide
     override fun onBindViewHolder(holder: VH, position: Int, item: VideoDownloadData?) {
         if (item == null) return
         holder.viewBinding.apply {
-            updateItem(item, holder)
+            updateItem(item, holder,"")
         }
     }
 

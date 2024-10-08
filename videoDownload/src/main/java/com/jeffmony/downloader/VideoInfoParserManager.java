@@ -154,8 +154,8 @@ public class VideoInfoParserManager {
             M3U8 m3u8 = M3U8Utils.parseNetworkM3U8Info(taskItem.getUrl(), headers, 0);
             // HLS LIVE video cannot be proxy cached.
             if (m3u8.hasEndList()) {
-                String saveName = VideoDownloadUtils.computeMD5(taskItem.getUrl());
-                File dir = new File(VideoDownloadUtils.getDownloadConfig().getCacheRoot(), saveName);
+//                String saveName = VideoDownloadUtils.computeMD5(taskItem.getUrl());
+                File dir = new File(VideoDownloadUtils.getDownloadConfig().getCacheRoot(),taskItem.getFileName());
                 if (!dir.exists()) {
                     dir.mkdir();
                 }

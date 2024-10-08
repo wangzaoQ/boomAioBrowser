@@ -349,11 +349,11 @@ public class VideoDownloadManager {
                         taskItem.setIsCompleted(true);
                         taskItem.setPercent(100f);
                         if (taskItem.isHlsType()) {
-                            taskItem.setFilePath(taskItem.getSaveDir() + File.separator + taskItem.getFileHash() + "_" + VideoDownloadUtils.LOCAL_M3U8);
-                            taskItem.setFileName(taskItem.getFileHash() + "_" + VideoDownloadUtils.LOCAL_M3U8);
+                            taskItem.setFilePath(taskItem.getSaveDir() + File.separator + taskItem.getFileName() + "_" + VideoDownloadUtils.LOCAL_M3U8);
+                            taskItem.setFileName(taskItem.getFileName() + "_" + VideoDownloadUtils.LOCAL_M3U8);
                         } else {
-                            taskItem.setFilePath(taskItem.getSaveDir() + File.separator + taskItem.getFileHash() + VideoDownloadUtils.VIDEO_SUFFIX);
-                            taskItem.setFileName(taskItem.getFileHash() + VideoDownloadUtils.VIDEO_SUFFIX);
+                            taskItem.setFilePath(taskItem.getSaveDir() + File.separator + taskItem.getFileName() + VideoDownloadUtils.VIDEO_SUFFIX);
+                            taskItem.setFileName(taskItem.getFileName() + VideoDownloadUtils.VIDEO_SUFFIX);
                         }
                         mVideoDownloadHandler.obtainMessage(DownloadConstants.MSG_DOWNLOAD_SUCCESS, taskItem).sendToTarget();
                         mVideoDownloadHandler.removeMessages(DownloadConstants.MSG_DOWNLOAD_PROCESSING);
@@ -454,8 +454,8 @@ public class VideoDownloadManager {
         String cacheFilePath = getDownloadPath();
         if (!TextUtils.isEmpty(cacheFilePath)) {
             pauseDownloadTask(taskItem);
-            String saveName = VideoDownloadUtils.computeMD5(taskItem.getUrl());
-            File file = new File(cacheFilePath + File.separator + saveName);
+//            String saveName = VideoDownloadUtils.computeMD5(taskItem.getUrl());
+            File file = new File(cacheFilePath + File.separator + taskItem.getFileName());
             WorkerThreadHandler.submitRunnableTask(() -> mVideoDatabaseHelper.deleteDownloadItemByUrl(taskItem));
             try {
                 if (shouldDeleteSourceFile) {
@@ -641,7 +641,7 @@ public class VideoDownloadManager {
         if (TextUtils.isEmpty(taskItem.getFileHash())) {
             taskItem.setFileHash(VideoDownloadUtils.computeMD5(taskItem.getUrl()));
         }
-        String outputPath = inputPath.substring(0, inputPath.lastIndexOf("/")) + File.separator + taskItem.getFileHash() + "_" + VideoDownloadUtils.OUTPUT_VIDEO;
+        String outputPath = inputPath.substring(0, inputPath.lastIndexOf("/")) + File.separator + taskItem.getFileName() + "_" + VideoDownloadUtils.OUTPUT_VIDEO;
         File outputFile = new File(outputPath);
         if (outputFile.exists()) {
             outputFile.delete();
@@ -692,12 +692,12 @@ public class VideoDownloadManager {
         if (TextUtils.isEmpty(taskItem.getFileHash())) {
             taskItem.setFileHash(VideoDownloadUtils.computeMD5(taskItem.getUrl()));
         }
-        String outputPath = inputPath.substring(0, inputPath.lastIndexOf("/")) + File.separator + taskItem.getFileHash() + "_" + VideoDownloadUtils.OUTPUT_VIDEO;
+        String outputPath = inputPath.substring(0, inputPath.lastIndexOf("/")) + File.separator + taskItem.getFileName() + "_" + VideoDownloadUtils.OUTPUT_VIDEO;
         File outputFile = new File(outputPath);
         if (outputFile.exists()) {
             outputFile.delete();
         }
-        inputPath = inputPath.substring(0, inputPath.lastIndexOf("/")) + File.separator + taskItem.getFileHash() + "_" + VideoDownloadUtils.LOCAL_M3U8_WITH_KEY;
+        inputPath = inputPath.substring(0, inputPath.lastIndexOf("/")) + File.separator + taskItem.getFileName() + "_" + VideoDownloadUtils.LOCAL_M3U8_WITH_KEY;
         VideoProcessManager.getInstance().transformM3U8ToMp4(inputPath, outputPath, new IVideoTransformListener() {
             @Override
             public void onTransformProgress(float progress) {

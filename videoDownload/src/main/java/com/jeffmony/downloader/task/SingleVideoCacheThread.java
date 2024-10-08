@@ -5,6 +5,7 @@ import android.os.Handler;
 import com.jeffmony.downloader.common.DownloadConstants;
 import com.jeffmony.downloader.listener.IVideoCacheListener;
 import com.jeffmony.downloader.model.VideoRange;
+import com.jeffmony.downloader.model.VideoTaskItem;
 import com.jeffmony.downloader.utils.HttpUtils;
 import com.jeffmony.downloader.utils.LogUtils;
 import com.jeffmony.downloader.utils.VideoDownloadUtils;
@@ -28,8 +29,9 @@ public class SingleVideoCacheThread implements Runnable {
     private boolean mIsRunning = true;
     private Handler mMsgHandler;
     private int mId;
+    private VideoTaskItem mTaskItem;
 
-    public SingleVideoCacheThread(String url, Map<String, String> headers, VideoRange range, long totalSize, String saveDir) {
+    public SingleVideoCacheThread(String url, Map<String, String> headers, VideoRange range, long totalSize, String saveDir, VideoTaskItem taskItem) {
         mUrl = url;
         if (headers == null) {
             headers = new HashMap<>();
@@ -38,6 +40,7 @@ public class SingleVideoCacheThread implements Runnable {
         mRange = range;
         mTotalSize = totalSize;
         mMd5 = VideoDownloadUtils.computeMD5(url);
+        mTaskItem = taskItem;
         mSaveDir = new File(saveDir);
         if (!mSaveDir.exists()) {
             mSaveDir.mkdir();
@@ -76,7 +79,7 @@ public class SingleVideoCacheThread implements Runnable {
     private void downloadVideo() {
         File videoFile;
         try {
-            videoFile = new File(mSaveDir, mMd5 + VideoDownloadUtils.VIDEO_SUFFIX);
+            videoFile = new File(mSaveDir, mTaskItem.getFileName() + VideoDownloadUtils.VIDEO_SUFFIX);
             if (!videoFile.exists()) {
                 videoFile.createNewFile();
             }

@@ -8,6 +8,7 @@ import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.event.ProtectedUnPeekLiveData
 import com.boom.aiobrowser.tools.isOtherPkg
@@ -80,6 +81,7 @@ class APP: Application() {
                 initFirebase()
                 initAD()
                 CleanConfig.initCleanConfig()
+                CacheManager.videoDownloadTempList = mutableListOf()
                 initVideo()
             }
         }

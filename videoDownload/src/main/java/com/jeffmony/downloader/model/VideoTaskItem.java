@@ -31,6 +31,7 @@ public class VideoTaskItem implements Cloneable {
     private long mLastUpdateTime;        //上一次更新数据库的时间
     private String mFileName;            //文件名
     private String mFilePath;            //文件完整路径(包括文件名)
+    private String downloadVideoId;
     private boolean mPaused;
 
     public VideoTaskItem(String url) {
@@ -337,5 +338,13 @@ public class VideoTaskItem implements Cloneable {
                 ", CoverPath=" + mCoverPath +
                 ", Title=" + mTitle +
                 "]";
+    }
+
+    public String getDownloadVideoId() {
+        return downloadVideoId;
+    }
+
+    public void setDownloadVideoId(String downloadVideoId) {
+        this.downloadVideoId = downloadVideoId;
     }
 }

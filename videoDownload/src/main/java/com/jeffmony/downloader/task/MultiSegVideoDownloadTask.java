@@ -111,7 +111,7 @@ public class MultiSegVideoDownloadTask extends VideoDownloadTask {
         for (int i = 0; i < requestSegment; i++) {
             cachedMap.put(i, 0L);
             completedMap.put(i, false);
-            SingleVideoCacheThread thread = new SingleVideoCacheThread(mFinalUrl, mHeaders, mRangeList.get(i), mTotalLength, mSaveDir.getAbsolutePath());
+            SingleVideoCacheThread thread = new SingleVideoCacheThread(mFinalUrl, mHeaders, mRangeList.get(i), mTotalLength, mSaveDir.getAbsolutePath(),mTaskItem);
 
             thread.setHandler(mMultiMsgHandler);
 

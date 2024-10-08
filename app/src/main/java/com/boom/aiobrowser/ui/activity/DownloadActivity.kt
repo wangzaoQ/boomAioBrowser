@@ -89,5 +89,6 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
 
     override fun onDestroy() {
         super.onDestroy()
+//        APP.videoUpdateLiveData.postValue(0)
     }
 }

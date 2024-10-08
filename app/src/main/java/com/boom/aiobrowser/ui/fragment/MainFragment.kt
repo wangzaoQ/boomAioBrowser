@@ -165,6 +165,10 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 
     override fun onResume() {
         super.onResume()
+        jump()
+    }
+
+    open fun jump() {
         if (APP.instance.isHideSplash.not())return
         var jumpData:JumpData
         if (firstLoad){
@@ -189,11 +193,11 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 APP.bottomLiveData.postValue(JumpConfig.JUMP_HOME)
             }else{
                 if (rootActivity is MainActivity){
-                (rootActivity as MainActivity).apply {
+                    (rootActivity as MainActivity).apply {
 //                    acBinding.llWebControl.visibility = View.GONE
-                    acBinding.llMainControl.visibility = View.VISIBLE
+                        acBinding.llMainControl.visibility = View.VISIBLE
+                    }
                 }
-            }
             }
         }
         if (CacheManager.isAllowShowCleanTips()){

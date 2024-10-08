@@ -13,6 +13,7 @@ public class DownloadModel{
     var videoId:String?=""
     var fileName:String? =""
     var url:String?=""
+    var imageUrl:String?=""
     var size:Long?=0
     var downloadSize:Long?=0
     var videoType:String?=""
@@ -35,6 +36,7 @@ public class DownloadModel{
             downloadSize = downloadData.downloadSize
             downloadFileName = downloadData.downloadFileName
             downloadFilePath = downloadData.downloadFilePath
+            imageUrl = downloadData.imageUrl
         }
         return model
     }

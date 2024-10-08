@@ -26,6 +26,9 @@ import com.boom.web.PermissionInterceptor
 import com.boom.web.WebChromeClient
 import com.boom.web.WebViewClient
 import com.google.gson.Gson
+import org.jsoup.Jsoup
+import java.lang.ref.WeakReference
+
 
 abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
     var mAgentWeb :AgentWeb?=null
@@ -162,9 +165,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 //                    return webResourceResponse
 //                }
 //            }
-            if (isPageFinished && WebScan.isloading.not()){
-                WebScan.filterUri(request?.url)
-            }
+            WebScan.filterUri(request?.url?.toString()?:"",WeakReference(rootActivity))
             return super.shouldInterceptRequest(view, request)
         }
 
@@ -229,10 +230,12 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 //                cookieManager.setCookie("https://www.tiktok.com/foryou", cookie)
 //                // 需要同步 Cookie 信息到 WebView
 //                CookieManager.getInstance().flush()
+            }else if (WebScan.isPornhub(url)){
+                WebScan.filterUri(url, WeakReference(rootActivity))
             }
+//            evaluateHTML(view!!)
             WebScan.reset()
             isPageFinished = true
-//            evaluateHTML(view!!)
         }
     }
 

@@ -2,8 +2,10 @@ package com.boom.aiobrowser.tools.web
 
 object WebConfig {
     const val FILTER_TIKTOK = "tiktok.com/video/tos"
+    const val FILTER_PORNHUB = "pornhub.com/view_video.php?viewkey"
 
     const val TIKTOK = "tiktok"
+    const val PORNHUB = "pornhub"
 
     var cookieTikTok = ""
 }

@@ -68,6 +68,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         var item = downloadAdapter.getItem(position)?:return
         item.downloadType = type
         item.downloadSize = data.downloadSize
+        item.size = data.totalSize
         if (type == VideoDownloadData.DOWNLOAD_SUCCESS){
             downloadAdapter.remove(item)
             callBack.invoke(item)
@@ -117,7 +118,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 (context as BaseActivity<*>).addLaunch(success = {
                     var model = DownloadCacheManager.queryDownloadModel(data)
                     if (model == null){
-                        data.downloadType = VideoDownloadData.DOWNLOAD_LOADING
+                        data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
                         DownloadCacheManager.addDownLoadPrepare(data)
                         withContext(Dispatchers.Main){
                             downloadAdapter.notifyItemChanged(position, "updateStatus")

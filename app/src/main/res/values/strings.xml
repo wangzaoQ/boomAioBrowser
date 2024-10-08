@@ -112,5 +112,6 @@
     <string name="app_rename">Rename</string>
     <string name="app_file_info">File Information</string>
     <string name="app_ok">Ok</string>
+    <string name="app_download_prepare">In preparation</string>
 
 </resources>

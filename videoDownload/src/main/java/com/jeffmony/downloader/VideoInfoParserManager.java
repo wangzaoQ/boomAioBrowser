@@ -161,7 +161,7 @@ public class VideoInfoParserManager {
                 }
 
                 M3U8Utils.createRemoteM3U8(dir, m3u8);
-
+//                taskItem.setTotalSize(new BigDecimal(m3u8.getAllSize()).longValue());
                 taskItem.setSaveDir(dir.getAbsolutePath());
                 taskItem.setVideoType(Video.Type.HLS_TYPE);
                 listener.onM3U8InfoSuccess(taskItem, m3u8);

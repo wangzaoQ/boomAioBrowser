@@ -11,6 +11,7 @@ public class M3U8 {
     private int mInitSequence;
     private int mVersion = 3;
     private boolean mHasEndList;
+    private double allSize = 0.0;
 
     public M3U8() {
         this("");
@@ -62,6 +63,7 @@ public class M3U8 {
         return mHasEndList;
     }
 
+
     public long getDuration() {
         long duration = 0L;
         for (M3U8Seg ts : mTsList) {
@@ -78,5 +80,13 @@ public class M3U8 {
                 return true;
         }
         return false;
+    }
+
+    public double getAllSize() {
+        return allSize;
+    }
+
+    public void setAllSize(double allSize) {
+        this.allSize = allSize;
     }
 }

@@ -270,6 +270,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }else{
             showTips()
         }
+        mainFragment.jump()
     }
 
     private fun showTips() {

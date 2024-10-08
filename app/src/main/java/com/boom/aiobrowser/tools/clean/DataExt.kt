@@ -58,6 +58,11 @@ fun Long.formatSize(): String {
     return "${sizeInUnit.toPlainString()} ${units[digitGroups]}"
 }
 
+fun Long.getFileSize(time:Int):Long{
+   var data =  this*time*1000
+   return BigDecimalUtils.div("${data}","8").toLong()
+}
+
 
 fun Long.formatLength(): String {
     // 定义单位数组，从 Bytes 到 PB（Petabytes）

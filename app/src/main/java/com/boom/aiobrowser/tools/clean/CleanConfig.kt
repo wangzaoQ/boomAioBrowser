@@ -22,7 +22,8 @@ object CleanConfig {
 
     val runAPPExtension by lazy { mutableListOf("xiaomi","miui","huawei","${BuildConfig.APPLICATION_ID}") }
     val imgExtension by lazy { mutableListOf("jpg", "png", "jpeg", "bmp", "webp", "heic", "heif", "gif") }
-    val videoExtension by lazy { mutableListOf("mp4", "mkv", "flv", "webm", "avi", "3gp", "mov", "m4v", "3gpp") }
+//    val videoExtension by lazy { mutableListOf("mp4", "mkv", "flv", "webm", "avi", "3gp", "mov", "m4v", "3gpp","m3u8") }
+    val videoExtension by lazy { mutableListOf("mp4","m3u8") }
     val audioExtension by lazy { mutableListOf("mp3", "wav", "wma", "ogg", "m4a", "opus", "flac", "aac", "mid") }
     val docExtension by lazy { mutableListOf("txt", "rtf", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "pptm") }
     val zipExtension by lazy { mutableListOf("zip") }

@@ -38,15 +38,7 @@ class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<Vide
             if (payload == "updateStatus"){
                 if (item == null)return
                 holder.viewBinding.apply {
-                    if(item.downloadType == VideoDownloadData.DOWNLOAD_NOT){
-                        progress.visibility = View.GONE
-                        llPlayRoot.visibility = View.GONE
-                        ivMore.visibility = View.GONE
-                        ivDownload.visibility = View.VISIBLE
-                        tvContent.text = item.size?.formatLength()
-                    }else{
-                        updateItem(item,holder)
-                    }
+                    updateItem(item,holder)
                 }
             }else if (payload == "updateLoading"){
                 if (item == null)return
@@ -59,8 +51,9 @@ class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<Vide
 
     private fun updateItem(item: VideoDownloadData, holder: VH): Boolean {
         holder.viewBinding.apply {
+            tvName.text = item.fileName
             when (item.downloadType) {
-                VideoDownloadData.DOWNLOAD_LOADING, VideoDownloadData.DOWNLOAD_PAUSE -> {
+                VideoDownloadData.DOWNLOAD_LOADING, VideoDownloadData.DOWNLOAD_PAUSE,VideoDownloadData.DOWNLOAD_PREPARE -> {
                     llPlayRoot.visibility = View.VISIBLE
                     progress.visibility = View.VISIBLE
                     ivDownload.visibility = View.GONE
@@ -72,14 +65,18 @@ class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<Vide
                         BigDecimalUtils.div((item.downloadSize ?: 0).toDouble(), allSize.toDouble())
                     ).toInt()
                     progress.progress = fileProgress
-                    if (item.downloadType == VideoDownloadData.DOWNLOAD_LOADING) {
+                    if (item.downloadType == VideoDownloadData.DOWNLOAD_LOADING || item.downloadType == VideoDownloadData.DOWNLOAD_PREPARE) {
                         ivVideoStatus.setImageResource(R.mipmap.ic_video_pause)
                     } else {
                         ivVideoStatus.setImageResource(R.mipmap.ic_video_play)
                     }
-                    tvContent.text = "${item.downloadSize?.formatLength()}/${item.size?.formatLength()}"
-                    tvContent.setTextColor(context.getColor(R.color.gray))
-                    GlideManager.loadImg(null,ivVideo,item.url,0,0,0)
+                    if (item.downloadType == VideoDownloadData.DOWNLOAD_PREPARE){
+                        tvContent.text = context.getString(R.string.app_download_prepare)
+                    }else{
+                        tvContent.text = "${item.downloadSize?.formatLength()}/${item.size?.formatLength()}"
+                        tvContent.setTextColor(context.getColor(R.color.gray))
+                    }
+                    GlideManager.loadImg(null,ivVideo,item.imageUrl,0,0,0)
                 }
                 VideoDownloadData.DOWNLOAD_SUCCESS->{
                     llPlayRoot.visibility = View.GONE
@@ -88,7 +85,11 @@ class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<Vide
                     progress.visibility = View.GONE
                     tvContent.text = "${item.size?.formatLength()}"
                     tvName.text = item.downloadFileName
-                    GlideManager.loadImg(null,ivVideo,item.downloadFilePath,0,0,0)
+                    if (item.videoType == VideoDownloadData.TYPE_M3U8){
+                        GlideManager.loadImg(null,ivVideo,item.imageUrl,0,0,0)
+                    }else{
+                        GlideManager.loadImg(null,ivVideo,item.downloadFilePath,0,0,0)
+                    }
                 }
                 VideoDownloadData.DOWNLOAD_ERROR -> {
                     progress.visibility = View.GONE
@@ -98,7 +99,16 @@ class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<Vide
                     ivVideoStatus.setImageResource(R.mipmap.ic_video_error)
                     tvContent.text = context.getString(R.string.app_download_error)
                     tvContent.setTextColor(context.getColor(R.color.red_FF3B30))
-                    GlideManager.loadImg(null,ivVideo,item.url,0,0,0)
+                    GlideManager.loadImg(null,ivVideo,item.imageUrl,0,0,0)
+                }
+
+                VideoDownloadData.DOWNLOAD_NOT ->{
+                    progress.visibility = View.GONE
+                    llPlayRoot.visibility = View.GONE
+                    ivMore.visibility = View.GONE
+                    ivDownload.visibility = View.VISIBLE
+                    tvContent.text = item.size?.formatLength()
+                    GlideManager.loadImg(null,ivVideo,item.imageUrl,0,0,0)
                 }
 
                 else -> {}
@@ -111,16 +121,7 @@ class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<Vide
     override fun onBindViewHolder(holder: VH, position: Int, item: VideoDownloadData?) {
         if (item == null) return
         holder.viewBinding.apply {
-            tvName.text = item.fileName
-            if(item.downloadType == VideoDownloadData.DOWNLOAD_NOT){
-                progress.visibility = View.GONE
-                llPlayRoot.visibility = View.GONE
-                ivDownload.visibility = View.VISIBLE
-                tvContent.text = item.size?.formatLength()
-                GlideManager.loadImg(null,ivVideo,item.url,0,0,0)
-            }else{
-                updateItem(item, holder)
-            }
+            updateItem(item, holder)
         }
     }
 

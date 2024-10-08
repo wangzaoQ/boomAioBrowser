@@ -13,13 +13,17 @@ class VideoDownloadData{
         var DOWNLOAD_PAUSE = 2
         var DOWNLOAD_ERROR = 3
         var DOWNLOAD_SUCCESS = 4
+        var DOWNLOAD_PREPARE = 5
 
         var TYPE_MP4 = "video/mp4"
+        var TYPE_M3U8 = "m3u8"
     }
 
     var videoId :String?=""
     var fileName:String? = ""
     var url:String?=""
+    var imageUrl:String?=""
+
     var size:Long?=0
     var downloadSize:Long?=0
     var videoType:String?=""
@@ -34,9 +38,10 @@ class VideoDownloadData{
     var isShow = false
 
 
-    fun createDefault(videoId:String, fileName:String, url:String, paramsMap:HashMap<String,Any>, size:Long, videoType: String):VideoDownloadData{
+    fun createDefault(videoId:String, fileName:String, url:String,imageUrl:String, paramsMap:HashMap<String,Any>, size:Long, videoType: String):VideoDownloadData{
         this.fileName = fileName
         this.url = url
+        this.imageUrl = imageUrl
         this.paramsMap = paramsMap
         this.size = size
         this.videoType = videoType
@@ -55,8 +60,10 @@ class VideoDownloadData{
         )
         if (data.videoType == TYPE_MP4){
             task.videoType = Video.Type.MP4_TYPE
+        }else if (data.videoType == TYPE_M3U8){
+            task.totalSize = data.size?:0L
         }
-        task.filePath
+//        task.filePath
         return task
     }
 
@@ -71,6 +78,8 @@ class VideoDownloadData{
         data.downloadType = model.downloadType?:DOWNLOAD_NOT
         data.downloadFileName = model.downloadFileName
         data.downloadFilePath = model.downloadFilePath
+        data.imageUrl = model.imageUrl
+        data.videoType = model.videoType
         return data
     }
 }

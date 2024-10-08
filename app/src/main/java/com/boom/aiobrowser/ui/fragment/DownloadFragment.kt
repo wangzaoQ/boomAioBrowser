@@ -16,6 +16,7 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
+import com.boom.aiobrowser.tools.download.DownloadControlManager
 import com.boom.aiobrowser.tools.video.VideoManager
 import com.boom.aiobrowser.ui.activity.VideoPreActivity
 import com.boom.aiobrowser.ui.adapter.VideoDownloadAdapter
@@ -116,10 +117,7 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
         downloadAdapter.addOnDebouncedChildClick(R.id.ivVideoClose) { adapter, view, position ->
             var item = downloadAdapter.getItem(position)?:return@addOnDebouncedChildClick
             downloadAdapter.remove(item)
-            var model = DownloadCacheManager.queryDownloadModel(item)
-            if (model!=null){
-                DownloadCacheManager.deleteModel(model)
-            }
+            DownloadControlManager.videoDelete(item!!)
             APP.videoUpdateLiveData.postValue(0)
         }
     }

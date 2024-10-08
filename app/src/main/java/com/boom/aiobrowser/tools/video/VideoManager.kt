@@ -127,7 +127,7 @@ object VideoManager {
             }
 
             override fun onDownloadSuccess(item: VideoTaskItem?) {
-                AppLogs.dLog(TAG,"onDownloadSuccess:${item?.url}")
+                AppLogs.dLog(TAG,"onDownloadSuccess:${item?.url} downloadSize:${item?.downloadSize} totalSize:${item?.totalSize}")
                 if (item==null)return
                 CoroutineScope(Dispatchers.IO).launch {
                     var model =  DownloadCacheManager.queryDownloadModelByUrl(item.url)

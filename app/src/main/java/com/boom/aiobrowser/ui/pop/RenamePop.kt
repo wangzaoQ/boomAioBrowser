@@ -28,9 +28,10 @@ class RenamePop (context: Context) : BasePopupWindow(context) {
                 if (data == null)return@setOnClickListener
                 var newName = etFile.text.toString().trim()
                 var oldFile = File(data!!.downloadFilePath)
-                var isSuccess = FileUtils.rename(oldFile,newName)
+                var ext = FileUtils.getFileExtension(oldFile)
+                var isSuccess= FileUtils.rename(oldFile, "$newName.$ext")
                 if (isSuccess){
-                    var newFile = File(oldFile.getParent() + File.separator + newName)
+                    var newFile = File(oldFile.getParent() + File.separator + "$newName.$ext")
                     callBack.invoke(newFile.absolutePath)
                     dismiss()
                 }
@@ -47,7 +48,10 @@ class RenamePop (context: Context) : BasePopupWindow(context) {
     fun setFileData(data: VideoDownloadData) {
         this.data = data
         defaultBinding?.apply {
-            etFile.setText(data.downloadFileName?:"")
+            var index = data.downloadFileName.indexOf(".")
+            if (index >=0){
+                etFile.setText(data.downloadFileName.substring(0,index))
+            }
         }
     }
 

@@ -5,20 +5,15 @@ import android.content.Context
 import android.view.View
 import android.view.animation.Animation
 import com.blankj.utilcode.util.FileUtils
-import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
-import com.boom.aiobrowser.base.BaseActivity
-import com.boom.aiobrowser.data.FileManageData
 import com.boom.aiobrowser.data.VideoDownloadData
-import com.boom.aiobrowser.databinding.BrowserPopClearBinding
-import com.boom.aiobrowser.databinding.BrowserPopStorageBinding
 import com.boom.aiobrowser.databinding.VideoPopManageBinding
-import com.boom.aiobrowser.tools.clean.CleanConfig.imageFiles
+import com.boom.aiobrowser.tools.download.DownloadControlManager
+import com.jeffmony.downloader.VideoDownloadManager
 import pop.basepopup.BasePopupWindow
 import pop.util.animation.AnimationHelper
 import pop.util.animation.TranslationConfig
 import java.io.File
-import java.util.HashMap
 
 class VideoMorePop(context: Context) : BasePopupWindow(context) {
 
@@ -48,11 +43,9 @@ class VideoMorePop(context: Context) : BasePopupWindow(context) {
                 builder.setCancelable(true);
                 builder.setNegativeButton(context.getString(R.string.app_yes)) { dialog, which ->
                     runCatching {
-                        var isSuccess = FileUtils.delete(File(data!!.downloadFilePath))
-                        if (isSuccess){
-                            deleteBack.invoke(data!!.downloadFilePath)
-                            dismiss()
-                        }
+                        DownloadControlManager.videoDelete(data!!)
+                        deleteBack.invoke(data!!.downloadFilePath)
+                        dismiss()
                     }
                 }
                 builder.setNeutralButton(context.getString(R.string.app_no)) { dialog, which ->

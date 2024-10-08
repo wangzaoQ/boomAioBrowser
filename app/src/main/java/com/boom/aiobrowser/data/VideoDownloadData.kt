@@ -63,6 +63,7 @@ class VideoDownloadData{
         }else if (data.videoType == TYPE_M3U8){
             task.totalSize = data.size?:0L
         }
+        task.fileName = data.fileName
 //        task.filePath
         return task
     }

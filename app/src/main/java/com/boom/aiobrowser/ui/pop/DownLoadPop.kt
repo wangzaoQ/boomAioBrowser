@@ -16,6 +16,7 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
+import com.boom.aiobrowser.tools.download.DownloadControlManager
 import com.boom.aiobrowser.tools.video.VideoManager
 import com.boom.aiobrowser.tools.web.WebScan
 import com.boom.aiobrowser.ui.JumpConfig
@@ -114,6 +115,9 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
 
         downloadAdapter.addOnDebouncedChildClick(R.id.ivDownload) { adapter, view, position ->
             var data = downloadAdapter.getItem(position)
+            if (data?.size?:0L == 0L){
+                return@addOnDebouncedChildClick
+            }
             data?.apply {
                 (context as BaseActivity<*>).addLaunch(success = {
                     var model = DownloadCacheManager.queryDownloadModel(data)
@@ -154,10 +158,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         downloadAdapter.addOnDebouncedChildClick(R.id.ivVideoClose) { adapter, view, position ->
             var item = downloadAdapter.getItem(position)?:return@addOnDebouncedChildClick
             downloadAdapter.remove(item)
-            var model = DownloadCacheManager.queryDownloadModel(item)
-            if (model!=null){
-                DownloadCacheManager.deleteModel(model)
-            }
+            DownloadControlManager.videoDelete(item!!)
             callBack.invoke(item)
         }
         setOutSideDismiss(true)

@@ -39,7 +39,7 @@ class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
 //            .setMapHeadData(header)
             .setShowFullAnimation(true)
             .setNeedLockFull(true)
-            .setCachePath(file)
+            .setCacheWithPlay(false)
             .setVideoAllCallBack(object : GSYSampleCallBack() {
                 override fun onPrepared(url: String, vararg objects: Any) {
                     super.onPrepared(url, *objects)

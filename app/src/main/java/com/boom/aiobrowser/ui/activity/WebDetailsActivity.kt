@@ -20,6 +20,7 @@ import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.fragment.WebFragment
 import com.boom.aiobrowser.ui.pop.ClearPop
 import com.boom.aiobrowser.ui.pop.DownLoadPop
+import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.TabPop
 import com.jeffmony.downloader.VideoDownloadManager
 import kotlinx.coroutines.Dispatchers
@@ -94,7 +95,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
             }
         }
         acBinding.ivDownload.setOneClick {
-            showDownloadPop()
+            DownloadVideoGuidePop(this).createPop {  }
         }
         acBinding.ivDownload2.setOneClick {
             showDownloadPop()

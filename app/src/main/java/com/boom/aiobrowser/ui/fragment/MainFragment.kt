@@ -161,7 +161,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         }
         fBinding.ivDownload.setOneClick {
             if (CacheManager.isVideoFirst){
-                CacheManager.isVideoFirst = false
                 DownloadVideoGuidePop(rootActivity).createPop {  }
             }else{
                 rootActivity.startActivity(Intent(context, DownloadActivity::class.java))

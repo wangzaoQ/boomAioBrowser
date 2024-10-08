@@ -3,6 +3,8 @@ package com.boom.aiobrowser
 import android.app.Application
 import android.os.Build
 import android.webkit.WebView
+import com.blankj.utilcode.util.NetworkUtils
+import com.blankj.utilcode.util.NetworkUtils.OnNetworkStatusChangedListener
 import com.boom.aiobrowser.ad.AioADDataManager.initAD
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.JumpData
@@ -10,9 +12,11 @@ import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.clean.CleanConfig
+import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.event.ProtectedUnPeekLiveData
 import com.boom.aiobrowser.tools.isOtherPkg
 import com.boom.aiobrowser.tools.video.VideoManager.initVideo
+import com.jeffmony.downloader.VideoDownloadManager
 import com.jeffmony.downloader.model.VideoTaskItem
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.CoroutineScope
@@ -84,6 +88,25 @@ class APP: Application() {
                 CacheManager.videoDownloadTempList = mutableListOf()
                 initVideo()
             }
+        }
+        NetworkUtils.registerNetworkStatusChangedListener(netBack)
+    }
+
+    var netBack = object : OnNetworkStatusChangedListener {
+        override fun onDisconnected() {
+            AppLogs.dLog(TAG, "network onDisconnected")
+            CoroutineScope(Dispatchers.IO).launch{
+                var list = DownloadCacheManager.queryDownloadModelOther()
+                var urlList = mutableListOf<String>()
+                list?.forEach {
+                    urlList.add(it.url?:"")
+                }
+                VideoDownloadManager.getInstance().pauseDownloadTask(urlList)
+            }
+        }
+
+        override fun onConnected(networkType: NetworkUtils.NetworkType?) {
+            AppLogs.dLog(TAG, "onConnected")
         }
     }
 }

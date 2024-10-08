@@ -8,6 +8,7 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserPopClearBinding
 import com.boom.aiobrowser.databinding.BrowserPopDownloadVideoGuideBinding
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.ui.adapter.PopGuideAdapter
 import com.zhpan.indicator.enums.IndicatorSlideMode
 import com.zhpan.indicator.enums.IndicatorStyle
@@ -86,6 +87,7 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
             }
         }
         showPopupWindow()
+        CacheManager.isVideoFirst = false
     }
 
 

@@ -113,5 +113,12 @@
     <string name="app_file_info">File Information</string>
     <string name="app_ok">Ok</string>
     <string name="app_download_prepare">In preparation</string>
+    <string name="app_skip">Skip</string>
+    <string name="app_guide_title0">Enter The Video URL</string>
+    <string name="app_guide_title1">Select The Downloaded Video</string>
+    <string name="app_guide_title2">Play Video Content</string>
+    <string name="app_guide_title3">Disclaimer</string>
+    <string name="app_guide_content">Please note that when using this service to download and upload videos, users must obtain authorization from the original source. Unauthorized operations may involve legal liability. Please consciously abide by relevant laws and regulations when using this service.</string>
+    <string name="app_try">Try</string>
 
 </resources>

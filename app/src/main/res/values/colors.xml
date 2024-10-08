@@ -16,4 +16,6 @@
     <color name="tran">#00000000</color>
     <color name="bg_scan_complete">#FFD24836</color>
     <color name="red_FF3B30">#FF3B30</color>
+    <color name="color_tab_n">#80FFFFFF</color>
+    <color name="color_tab_s">#FFFFFFFF</color>
 </resources>

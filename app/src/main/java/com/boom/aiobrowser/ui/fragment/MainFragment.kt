@@ -27,6 +27,7 @@ import com.boom.aiobrowser.ui.activity.SearchActivity
 import com.boom.aiobrowser.ui.activity.clean.ProcessActivity
 import com.boom.aiobrowser.ui.activity.clean.load.ProcessLoadActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
+import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.EngineGuidePop
 import com.boom.aiobrowser.ui.pop.SearchPop
 import com.boom.base.adapter4.QuickAdapterHelper
@@ -159,7 +160,12 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             fBinding.refreshLayout.isRefreshing = false
         }
         fBinding.ivDownload.setOneClick {
-            rootActivity.startActivity(Intent(context, DownloadActivity::class.java))
+            if (CacheManager.isVideoFirst){
+                CacheManager.isVideoFirst = false
+                DownloadVideoGuidePop(rootActivity).createPop {  }
+            }else{
+                rootActivity.startActivity(Intent(context, DownloadActivity::class.java))
+            }
         }
     }
 

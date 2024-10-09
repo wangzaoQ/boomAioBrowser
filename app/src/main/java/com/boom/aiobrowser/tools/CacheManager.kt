@@ -7,8 +7,6 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.data.NewsData
-import com.boom.aiobrowser.data.RecentSearchData
-import com.boom.aiobrowser.data.TabData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.net.NetRequest
 import com.boom.aiobrowser.ui.JumpConfig
@@ -22,6 +20,7 @@ object CacheManager {
 
     val mmkv = MMKV.mmkvWithID("${BuildConfig.APPLICATION_ID}kv", MMKV.MULTI_PROCESS_MODE)
     const val KV_FIRST_START = "KV_FIRST_START"
+    const val KV_INSTALL_REFER = "KV_INSTALL_REFER"
     const val KV_FIRST_VIDEO = "KV_FIRST_VIDEO"
     const val KV_FIRST_DISCLAIMER = "KV_FIRST_DISCLAIMER"
     const val KV_ENGINE_GUIDE_FIRST = "KV_ENGINE_GUIDE_FIRST"
@@ -41,6 +40,7 @@ object CacheManager {
     const val KV_HISTORY_DATA = "KV_HISTORY_DATA"
     const val KV_URL_LIST = "KV_URL_LIST"
     const val KV_SAVE_DAY = "KV_SAVE_DAY"
+    const val KV_GID = "KV_GID"
     const val KV_CLICK_EVERY_DAY = "KV_CLICK_EVERY_DAY"
     const val KV_SHOW_EVERY_DAY = "KV_SHOW_EVERY_DAY"
     const val KV_LAST_LAUNCH_TIME = "KV_LAST_LAUNCH_TIME"
@@ -57,7 +57,14 @@ object CacheManager {
             mmkv.encode(KV_VIDEO_DOWNLOAD, toJson(value))
         }
     // 是否首次打开start
-    var isFirstStart: Boolean
+    var installRefer: String
+        get() {
+            return mmkv.decodeString(KV_INSTALL_REFER)?:""
+        }
+        set(value) {
+            mmkv.encode(KV_INSTALL_REFER, value)
+        }
+     var isFirstStart: Boolean
         get() {
             return mmkv.decodeBool(KV_FIRST_START, true)
         }
@@ -123,6 +130,14 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_ENGINE_TYPE, value)
+        }
+
+    var GID: String
+        get() {
+            return mmkv.decodeString(KV_GID)?:""
+        }
+        set(value) {
+            mmkv.encode(KV_GID, value)
         }
 
     // 不一样就清除部分数据

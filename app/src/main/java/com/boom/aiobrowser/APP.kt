@@ -1,7 +1,9 @@
 package com.boom.aiobrowser
 
 import android.app.Application
+import android.net.Uri
 import android.os.Build
+import android.webkit.WebSettings
 import android.webkit.WebView
 import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.NetworkUtils.OnNetworkStatusChangedListener
@@ -9,6 +11,9 @@ import com.boom.aiobrowser.ad.AioADDataManager.initAD
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
+import com.boom.aiobrowser.point.Install
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointManager
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.clean.CleanConfig
@@ -16,6 +21,7 @@ import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.event.ProtectedUnPeekLiveData
 import com.boom.aiobrowser.tools.isOtherPkg
 import com.boom.aiobrowser.tools.video.VideoManager.initVideo
+import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.jeffmony.downloader.VideoDownloadManager
 import com.jeffmony.downloader.model.VideoTaskItem
 import com.tencent.mmkv.MMKV
@@ -33,6 +39,8 @@ class APP: Application() {
 
     var cleanComplete = false
     var isHideSplash = false
+    var GID=""
+    var webUA=""
 
     companion object{
         lateinit var instance:APP
@@ -85,11 +93,36 @@ class APP: Application() {
                 initFirebase()
                 initAD()
                 CleanConfig.initCleanConfig()
-                CacheManager.videoDownloadTempList = mutableListOf()
                 initVideo()
+                initOther()
+                Install.requestRefer(instance,0,{})
+                PointEvent.session()
             }
         }
+        //session
         NetworkUtils.registerNetworkStatusChangedListener(netBack)
+    }
+
+    suspend fun initOther() {
+        CacheManager.videoDownloadTempList = mutableListOf()
+        runCatching {
+            var gid = CacheManager.GID
+            if (gid.isNullOrEmpty()) {
+                GID = Uri.encode(AdvertisingIdClient.getAdvertisingIdInfo(APP.instance).id)
+                CacheManager.GID = GID
+            } else {
+                GID = gid
+            }
+            AppLogs.dLog(TAG, "gid获取成功---${GID}")
+        }.onFailure {
+            AppLogs.dLog(TAG, "gid获取失败---${it.stackTraceToString()}")
+        }
+
+        runCatching {
+            webUA = WebSettings.getDefaultUserAgent(APP.instance) ?: ""
+        }.onFailure {
+            AppLogs.eLog(TAG,"webConfig获取失败---"+it.stackTraceToString())
+        }
     }
 
     var netBack = object : OnNetworkStatusChangedListener {

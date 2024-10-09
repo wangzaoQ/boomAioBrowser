@@ -3,7 +3,9 @@ package com.boom.aiobrowser.ad
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.data.ADResultData
 import com.boom.aiobrowser.data.AioRequestData
+import com.boom.aiobrowser.point.PointEvent
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdValue
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.appopen.AppOpenAd
 import kotlinx.coroutines.CoroutineScope
@@ -13,6 +15,7 @@ import kotlinx.coroutines.withContext
 
 class AioADLoader(
     val requestBean: AioRequestData,
+    val adEnum: ADEnum,
     val successCallBack: (ADResultData) -> Unit,
     val failedCallBack: (String) -> Unit
 ) {
@@ -41,9 +44,12 @@ class AioADLoader(
                                 adType = requestBean.pxdtzgho
                                 adRequestTime = (System.currentTimeMillis() - startTime) / 1000
                             })
-//                    appOpenAd.setOnPaidEventListener {
-//                        FirebaseAnalysis.go(it, appOpenAd, requestBean, adEnum)
-//                    }
+                            if (APP.isDebug){
+                                PointEvent.adPoint(AdValue.zza(1,"",1),appOpenAd,requestBean,adEnum)
+                            }
+                            appOpenAd.setOnPaidEventListener {
+                                PointEvent.adPoint(it,appOpenAd,requestBean,adEnum)
+                            }
                         }
 
                         override fun onAdFailedToLoad(error: LoadAdError) {

@@ -23,6 +23,7 @@ object CacheManager {
     val mmkv = MMKV.mmkvWithID("${BuildConfig.APPLICATION_ID}kv", MMKV.MULTI_PROCESS_MODE)
     const val KV_FIRST_START = "KV_FIRST_START"
     const val KV_FIRST_VIDEO = "KV_FIRST_VIDEO"
+    const val KV_FIRST_DISCLAIMER = "KV_FIRST_DISCLAIMER"
     const val KV_ENGINE_GUIDE_FIRST = "KV_ENGINE_GUIDE_FIRST"
     const val KV_FIRST_SHOW_CLEAR = "KV_FIRST_SHOW_CLEAR"
     const val KV_FIRST_SHOW_BROWSER_DEFAULT = "KV_FIRST_SHOW_BROWSER_DEFAULT"
@@ -70,6 +71,13 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_FIRST_VIDEO, value)
+        }
+    var isDisclaimerFirst: Boolean
+        get() {
+            return mmkv.decodeBool(KV_FIRST_DISCLAIMER, true)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_DISCLAIMER, value)
         }
 
 

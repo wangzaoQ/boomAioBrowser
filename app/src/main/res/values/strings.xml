@@ -121,5 +121,8 @@
     <string name="app_guide_title3">Disclaimer</string>
     <string name="app_guide_content">Please note that when using this service to download and upload videos, users must obtain authorization from the original source. Unauthorized operations may involve legal liability. Please consciously abide by relevant laws and regulations when using this service.</string>
     <string name="app_try">Try</string>
+    <string name="app_disclaimer">Disclaimer</string>
+    <string name="app_disclaimer_content">Please note that when using this service to download and upload videos, users must obtain authorization from the original source. Unauthorized operations may involve legal liability. Please consciously abide by relevant laws and regulations when using this service.</string>
+    <string name="app_enable_permission">Enable Persmissions</string>
 
 </resources>

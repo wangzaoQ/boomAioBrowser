@@ -115,32 +115,13 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
 
 
         downloadAdapter.addOnDebouncedChildClick(R.id.ivDownload) { adapter, view, position ->
-            var data = downloadAdapter.getItem(position)
-            if (data?.size?:0L == 0L){
-                return@addOnDebouncedChildClick
-            }
-            data?.apply {
-                (context as BaseActivity<*>).addLaunch(success = {
-                    var model = DownloadCacheManager.queryDownloadModel(data)
-                    if (model == null){
-                        data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
-                        DownloadCacheManager.addDownLoadPrepare(data)
-                        withContext(Dispatchers.Main){
-                            downloadAdapter.notifyItemChanged(position, "updateStatus")
-                            var headerMap = HashMap<String,String>()
-                            paramsMap?.forEach {
-                                headerMap.put(it.key,it.value.toString())
-                            }
-                            VideoDownloadManager.getInstance().startDownload(data.createDownloadData(data),headerMap)
-                        }
-
-                    }else{
-                        withContext(Dispatchers.Main){
-                            ToastUtils.showLong(APP.instance.getString(R.string.app_already_download))
-                        }
-                    }
-                }, failBack = {})
-
+            if (CacheManager.isDisclaimerFirst){
+                CacheManager.isDisclaimerFirst = false
+                DisclaimerPop(context).createPop {
+                    clickDownload(position)
+                }
+            }else{
+                clickDownload(position)
             }
         }
         downloadAdapter.setOnDebouncedItemClick{adapter, view, position ->
@@ -182,6 +163,37 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         updateData()
         setOutSideDismiss(true)
         showPopupWindow()
+    }
+
+    private fun clickDownload(position: Int) {
+        var data = downloadAdapter.getItem(position)
+        if (data?.size ?: 0L == 0L) {
+            return
+        }
+        data?.apply {
+            (context as BaseActivity<*>).addLaunch(success = {
+                var model = DownloadCacheManager.queryDownloadModel(data)
+                if (model == null) {
+                    data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
+                    DownloadCacheManager.addDownLoadPrepare(data)
+                    withContext(Dispatchers.Main) {
+                        downloadAdapter.notifyItemChanged(position, "updateStatus")
+                        var headerMap = HashMap<String, String>()
+                        paramsMap?.forEach {
+                            headerMap.put(it.key, it.value.toString())
+                        }
+                        VideoDownloadManager.getInstance()
+                            .startDownload(data.createDownloadData(data), headerMap)
+                    }
+
+                } else {
+                    withContext(Dispatchers.Main) {
+                        ToastUtils.showLong(APP.instance.getString(R.string.app_already_download))
+                    }
+                }
+            }, failBack = {})
+
+        }
     }
 
     override fun onCreateShowAnimation(): Animation {

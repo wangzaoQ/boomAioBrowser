@@ -30,10 +30,10 @@ class GuideFragment :BaseFragment<BrowserFragmentVideoGuideBinding>() {
                         setAnimation("guide_1.json")
                         tvGuide.text = getString(R.string.app_guide_title0)
                     }else if(index == 1){
-                        setAnimation("guide_2.json")
+                        setAnimation("guide_3.json")
                         tvGuide.text = getString(R.string.app_guide_title1)
                     }else if(index == 2){
-                        setAnimation("guide_3.json")
+                        setAnimation("guide_2.json")
                         tvGuide.text = getString(R.string.app_guide_title2)
                     }
                     tvContent.visibility = View.GONE

@@ -141,7 +141,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 //                    jumpType = JumpConfig.JUMP_FILE
 //                    jumpTitle = APP.instance.getString(R.string.app_files)
 //                })
-                startActivity(Intent(this@MainActivity,DownloadActivity::class.java))
+                startActivity(Intent(this@MainActivity,DownloadActivity::class.java).apply {
+                    putExtra("fromPage","home_tab")
+                })
             }
             2 ->{
                 morePop = MorePop(this@MainActivity)

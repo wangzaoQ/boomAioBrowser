@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.ui.activity
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
@@ -9,11 +10,17 @@ import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.VideoActivityDownloadBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.ui.fragment.DownloadFragment
 import com.boom.aiobrowser.ui.fragment.FileManageFragment
 import com.boom.aiobrowser.ui.fragment.MainFragment
 
 class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
+
+
     override fun getBinding(inflater: LayoutInflater): VideoActivityDownloadBinding {
         return VideoActivityDownloadBinding.inflate(layoutInflater)
     }
@@ -34,9 +41,12 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
         }
     }
 
+    var fromPage = ""
+
     override fun setShowView() {
-        fragments.add(DownloadFragment.newInstance(0))
-        fragments.add(DownloadFragment.newInstance(1))
+        fromPage = intent.getStringExtra("fromPage")?:""
+        fragments.add(DownloadFragment.newInstance(0,fromPage))
+        fragments.add(DownloadFragment.newInstance(1,fromPage))
         acBinding.vpRoot.apply {
             offscreenPageLimit = fragments.size
             adapter = object : FragmentPagerAdapter(
@@ -80,6 +90,17 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
                 }
             }
         }
+        var isFirst = false
+        if (CacheManager.isFirstShowDownload){
+            isFirst = true
+            CacheManager.isFirstShowDownload = false
+        }
+        acBinding.root.postDelayed({
+            PointEvent.posePoint(PointEventKey.download_page, Bundle().apply {
+                putInt(PointValueKey.open_type,if (isFirst) 0 else 1)
+                putString(PointValueKey.from_page,fromPage)
+            })
+        },0)
     }
 
     private fun updateUI(position: Int) {

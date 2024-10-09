@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.ui.pop
 
 import android.content.Context
+import android.os.Bundle
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.blankj.utilcode.util.SizeUtils.dp2px
@@ -8,6 +9,9 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserPopClearBinding
 import com.boom.aiobrowser.databinding.BrowserPopDownloadVideoGuideBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.ui.adapter.PopGuideAdapter
 import com.zhpan.indicator.enums.IndicatorSlideMode
@@ -75,18 +79,20 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
                 })
             }
             tvSkip.setOnClickListener {
-                var index = vp.currentItem
-                if (index == 3){
-                    dismiss()
-                }else{
-                    vp.setCurrentItem(index+1,true)
-                }
+                PointEvent.posePoint(PointEventKey.download_tutorial_skip, Bundle().apply {
+                    putInt(PointValueKey.page,vp.currentItem)
+                })
+                dismiss()
             }
             btnCommit.setOnClickListener {
+                PointEvent.posePoint(PointEventKey.download_tutorial_try)
                 dismiss()
             }
         }
         showPopupWindow()
+        PointEvent.posePoint(PointEventKey.download_tutorial, Bundle().apply {
+            putInt(PointValueKey.open_type,if (CacheManager.isVideoFirst) 0 else 1)
+        })
         CacheManager.isVideoFirst = false
     }
 

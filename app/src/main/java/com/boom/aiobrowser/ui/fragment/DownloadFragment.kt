@@ -12,6 +12,8 @@ import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.VideoFragmentDownloadBinding
 import com.boom.aiobrowser.model.VideoDownloadModel
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
@@ -37,9 +39,10 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
     }
 
     companion object{
-        fun newInstance(type:Int):DownloadFragment {
+        fun newInstance(type:Int,fromPage:String):DownloadFragment {
             val args = Bundle()
             args.putInt("fromType",type)
+            args.putString("fromPage",fromPage)
             val fragment = DownloadFragment()
             fragment.arguments = args
             return fragment
@@ -83,6 +86,9 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
                 }else if (downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
                     rootActivity.jumpActivity<VideoPreActivity>(Bundle().apply {
                         putString("video_path",data.downloadFilePath)
+                    })
+                    PointEvent.posePoint(PointEventKey.download_page_play,Bundle().apply {
+                        putString("video_url",url)
                     })
                 }
             }

@@ -2,6 +2,7 @@ package com.boom.aiobrowser.ui.pop
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.widget.Toast
@@ -12,6 +13,8 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.VideoPopDownloadBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
@@ -109,7 +112,10 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 adapter = downloadAdapter
             }
             tvDownload.setOnClickListener {
-                context.startActivity(Intent(context,DownloadActivity::class.java))
+                context.startActivity(Intent(context,DownloadActivity::class.java).apply {
+                    putExtra("fromPage","webpage_download_pop")
+                })
+                PointEvent.posePoint(PointEventKey.webpage_download_pop_record)
             }
         }
 
@@ -163,6 +169,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         updateData()
         setOutSideDismiss(true)
         showPopupWindow()
+        PointEvent.posePoint(PointEventKey.webpage_download_pop)
     }
 
     private fun clickDownload(position: Int) {

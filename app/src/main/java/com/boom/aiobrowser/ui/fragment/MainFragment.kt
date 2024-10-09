@@ -1,17 +1,22 @@
 package com.boom.aiobrowser.ui.fragment
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.BrowserFragmentMainBinding
 import com.boom.aiobrowser.model.NewsViewModel
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
@@ -24,7 +29,6 @@ import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.clean.CleanScanActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.SearchActivity
-import com.boom.aiobrowser.ui.activity.clean.ProcessActivity
 import com.boom.aiobrowser.ui.activity.clean.load.ProcessLoadActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
@@ -127,6 +131,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                     jumpTitle = title
                     jumpUrl = url
                 })
+                PointEvent.posePoint(PointEventKey.home_page_tool_c,Bundle().apply {
+                    putString(PointValueKey.type,title)
+                })
             }
         }
         fBinding.rlSearch.setOneClick {
@@ -134,9 +141,13 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 jumpType = JumpConfig.JUMP_SEARCH
             }
             startActivity(Intent(rootActivity,SearchActivity::class.java))
+            PointEvent.posePoint(PointEventKey.home_page_search)
         }
         fBinding.ivSearchEngine.setOneClick {
             SearchPop.showPop(WeakReference(rootActivity),fBinding.ivSearchEngine)
+            PointEvent.posePoint(PointEventKey.home_page_searchengine, Bundle().apply {
+                putString(PointValueKey.click_source,"home")
+            })
         }
         fBinding.rlClean.setOneClick {
             permissionManager.requestStoragePermission()
@@ -160,10 +171,13 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             fBinding.refreshLayout.isRefreshing = false
         }
         fBinding.ivDownload.setOneClick {
+            PointEvent.posePoint(PointEventKey.home_page_dl)
             if (CacheManager.isVideoFirst){
                 DownloadVideoGuidePop(rootActivity).createPop {  }
             }else{
-                rootActivity.startActivity(Intent(context, DownloadActivity::class.java))
+                rootActivity.startActivity(Intent(context, DownloadActivity::class.java).apply {
+                    putExtra("fromPage","home_download_pop")
+                })
             }
         }
     }
@@ -253,6 +267,8 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             }).build()
     }
 
+    var isScroll = false
+
     override fun setShowView() {
         fBinding.refreshLayout.isRefreshing = true
         fBinding.apply {
@@ -272,7 +288,24 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                         isJumpClick = true
                     }
                     APP.jumpLiveData.postValue(jumpData)
+                    PointEvent.posePoint(PointEventKey.home_page_feeds,Bundle().apply {
+                        putString(PointValueKey.news_id,data.itackl)
+                    })
                 }
+                addOnScrollListener(object : RecyclerView.OnScrollListener(){
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        super.onScrollStateChanged(recyclerView, newState)
+                        if (newState!=RecyclerView.SCROLL_STATE_IDLE){
+                            isScroll = true
+                        }
+                        if (newState == RecyclerView.SCROLL_STATE_IDLE){
+                            if(isScroll){
+                                isScroll = false
+                                PointEvent.posePoint(PointEventKey.home_page_slide)
+                            }
+                        }
+                    }
+                })
             }
             refreshLayout.setOnRefreshListener {
                 fBinding.refreshLayout.isRefreshing = true
@@ -297,6 +330,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         if (rootActivity is MainActivity){
             (rootActivity as MainActivity).loadNews()
         }
+        PointEvent.posePoint(PointEventKey.home_page_refresh,Bundle().apply {
+            putString(PointValueKey.refresh_type,if (page == 1)"down" else "up")
+        })
     }
 
     override fun getBinding(

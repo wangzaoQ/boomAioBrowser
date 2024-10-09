@@ -10,24 +10,21 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
-import com.boom.aiobrowser.data.RecentSearchData
 import com.boom.aiobrowser.databinding.BrowserFragmentSearchBinding
-import com.boom.aiobrowser.databinding.BrowserFragmentTempBinding
 import com.boom.aiobrowser.model.SearchViewModel
 import com.boom.aiobrowser.net.SearchNet
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
-import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.jobCancel
-import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.activity.WebDetailsActivity
-import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.adapter.RecentSearchAdapter
 import com.boom.base.adapter4.QuickAdapterHelper
-import com.boom.base.adapter4.loadState.trailing.TrailingLoadStateAdapter
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import kotlinx.coroutines.Dispatchers
@@ -122,6 +119,9 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 CacheManager.saveRecentSearchData(jumpData)
             }
             toWebDetailsActivity(jumpData)
+            PointEvent.posePoint(PointEventKey.home_page_search_go,Bundle().apply {
+                putString(PointValueKey.input_text,it)
+            })
         })
         fBinding.topRoot.updateEngine(CacheManager.engineType)
         if (jumpData?.jumpUrl.isNullOrEmpty().not()){
@@ -149,6 +149,9 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 CacheManager.saveRecentSearchData(data)
 //                CacheManager.getCurrentJumpData(updateTime = true, updateData = data)
                 toWebDetailsActivity(data)
+                PointEvent.posePoint(PointEventKey.search_page_history,Bundle().apply {
+                    putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+                })
             }
         }
     }

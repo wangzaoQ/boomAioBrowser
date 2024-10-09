@@ -2,12 +2,15 @@ package com.boom.aiobrowser.ui.pop
 
 import android.app.AlertDialog
 import android.content.Context
+import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import com.blankj.utilcode.util.FileUtils
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.VideoPopManageBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.download.DownloadControlManager
 import com.jeffmony.downloader.VideoDownloadManager
 import pop.basepopup.BasePopupWindow
@@ -42,6 +45,7 @@ class VideoMorePop(context: Context) : BasePopupWindow(context) {
                 builder.setMessage(R.string.app_delete_msg)
                 builder.setCancelable(true);
                 builder.setNegativeButton(context.getString(R.string.app_yes)) { dialog, which ->
+                    PointEvent.posePoint(PointEventKey.download_page_more_delete)
                     runCatching {
                         DownloadControlManager.videoDelete(data!!)
                         deleteBack.invoke(data!!.downloadFilePath)
@@ -60,6 +64,7 @@ class VideoMorePop(context: Context) : BasePopupWindow(context) {
         }
         setOutSideDismiss(true)
         showPopupWindow()
+        PointEvent.posePoint(PointEventKey.download_page_more)
         return this
     }
 

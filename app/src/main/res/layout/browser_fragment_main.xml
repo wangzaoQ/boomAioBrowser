@@ -162,6 +162,7 @@
                             android:layout_gravity="bottom"
                             android:layout_marginStart="7dp"
                             android:layout_weight="1"
+                            android:visibility="gone"
                             android:background="@drawable/shape_bg_home_process">
 
                             <FrameLayout

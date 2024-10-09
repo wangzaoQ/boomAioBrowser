@@ -45,6 +45,7 @@ object CacheManager {
     const val KV_SHOW_EVERY_DAY = "KV_SHOW_EVERY_DAY"
     const val KV_LAST_LAUNCH_TIME = "KV_LAST_LAUNCH_TIME"
     const val KV_CLEAN_TIME = "KV_CLEAN_TIME"
+    const val KV_FIRST_SHOW_DOWNLOAD = "KV_FIRST_SHOW_DOWNLOAD"
 //    const val KV_FIRST_OPEN_APP = "KV_FIRST_OPEN_APP"
 
 
@@ -70,6 +71,13 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_FIRST_START, value)
+        }
+    var isFirstShowDownload: Boolean
+        get() {
+            return mmkv.decodeBool(KV_FIRST_SHOW_DOWNLOAD, true)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_SHOW_DOWNLOAD, value)
         }
 
     var isVideoFirst: Boolean

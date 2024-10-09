@@ -6,6 +6,8 @@ import com.blankj.utilcode.util.FileUtils
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.VideoPopRenameBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import pop.basepopup.BasePopupWindow
 import java.io.File
 
@@ -26,6 +28,7 @@ class RenamePop (context: Context) : BasePopupWindow(context) {
         defaultBinding?.apply {
             btnOk.setOnClickListener {
                 if (data == null)return@setOnClickListener
+                PointEvent.posePoint(PointEventKey.download_page_more_ra)
                 var newName = etFile.text.toString().trim()
                 var oldFile = File(data!!.downloadFilePath)
                 var ext = FileUtils.getFileExtension(oldFile)
@@ -39,7 +42,6 @@ class RenamePop (context: Context) : BasePopupWindow(context) {
         }
         setOutSideDismiss(true)
         showPopupWindow()
-
         return this
     }
 

@@ -15,7 +15,11 @@ object SearchNet {
 
     fun getSearchUrl(content:String):String{
         if (content.indexOf(".com")>=0){
-            return "https://${content}"
+            return if (content.startsWith("http")|| content.startsWith("https")){
+                content
+            }else{
+                "https://${content}"
+            }
         }
         var url = when (CacheManager.engineType) {
             1->{

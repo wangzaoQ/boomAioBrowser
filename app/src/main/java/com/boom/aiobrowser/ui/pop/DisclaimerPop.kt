@@ -1,10 +1,14 @@
 package com.boom.aiobrowser.ui.pop
 
 import android.content.Context
+import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.databinding.BrowserPopDisclaimerBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import pop.basepopup.BasePopupWindow
 import pop.util.animation.AnimationHelper
 import pop.util.animation.TranslationConfig
@@ -33,18 +37,19 @@ class DisclaimerPop(context: Context) : BasePopupWindow(context){
         }
         setOutSideDismiss(true)
         showPopupWindow()
+        PointEvent.posePoint(PointEventKey.webpage_download_pop_disclaimer)
         return this
     }
 
-    override fun onCreateShowAnimation(): Animation {
-        return AnimationHelper.asAnimation()
-            .withTranslation(TranslationConfig.FROM_BOTTOM)
-            .toShow()
-    }
-
-    override fun onCreateDismissAnimation(): Animation {
-        return AnimationHelper.asAnimation()
-            .withTranslation(TranslationConfig.TO_BOTTOM)
-            .toDismiss()
-    }
+//    override fun onCreateShowAnimation(): Animation {
+//        return AnimationHelper.asAnimation()
+//            .withTranslation(TranslationConfig.)
+//            .toShow()
+//    }
+//
+//    override fun onCreateDismissAnimation(): Animation {
+//        return AnimationHelper.asAnimation()
+//            .withTranslation(TranslationConfig.TO_BOTTOM)
+//            .toDismiss()
+//    }
 }

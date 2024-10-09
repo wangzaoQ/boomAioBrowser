@@ -1,22 +1,31 @@
 package com.boom.aiobrowser.point
 
 import android.os.Build
+import android.os.Bundle
 import com.android.installreferrer.api.ReferrerDetails
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.ad.ADEnum
-import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.data.AioRequestData
 import com.boom.aiobrowser.point.Install.isLoading
 import com.boom.aiobrowser.point.PointManager.PointCallback
+import com.boom.aiobrowser.point.PointManager.postEvent
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
-import com.google.android.gms.ads.AdValue
-import com.google.android.gms.ads.MobileAds
 import okhttp3.Response
 import org.json.JSONObject
-import java.math.BigDecimal
 
 object PointEvent {
+
+
+    fun posePoint(key:String, bundle: Bundle?=null) {
+        val jsonObject = GeneralParams.getGenericParams()
+        jsonObject.put("tahoe",key)
+        bundle?.keySet()?.forEach {
+            jsonObject.put("${it}>bassi",bundle.get(it))
+        }
+        postEvent(jsonObject,tag = key)
+    }
+
 
     /**
      * install

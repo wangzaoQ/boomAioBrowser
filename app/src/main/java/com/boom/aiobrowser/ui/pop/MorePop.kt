@@ -2,6 +2,7 @@ package com.boom.aiobrowser.ui.pop
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.widget.CompoundButton
@@ -9,6 +10,8 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserPopMoreBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.BrowserManager
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
@@ -42,33 +45,46 @@ class MorePop(context: Context) : BasePopupWindow(context) {
                 if (context is MainActivity){
                     (context as MainActivity).showTabPop()
                 }
+                PointEvent.posePoint(PointEventKey.profile_newtab)
                 dismiss()
             }
             llClearData.setOnClickListener {
                 clearData()
+                PointEvent.posePoint(PointEventKey.profile_cleardate)
                 dismiss()
             }
             llHistory.setOnClickListener {
                 if (context is BaseActivity<*>){
                     (context as MainActivity).startActivity(Intent(context,HistoryActivity::class.java))
                 }
+                PointEvent.posePoint(PointEventKey.profile_history)
                 dismiss()
             }
             llAbout.setOnClickListener {
                 if (context is BaseActivity<*>){
                     (context as MainActivity).startActivity(Intent(context,AboutActivity::class.java))
                 }
+                PointEvent.posePoint(PointEventKey.profile_about)
                 dismiss()
             }
             llDownload.setOnClickListener {
                 if (context is BaseActivity<*>){
-                    (context as MainActivity).startActivity(Intent(context, DownloadActivity::class.java))
+                    (context as MainActivity).startActivity(Intent(context, DownloadActivity::class.java).apply {
+                        putExtra("fromPage","home_more_pop")
+                    })
                 }
+                PointEvent.posePoint(PointEventKey.profile_download)
                 dismiss()
             }
             updateUI()
         }
         showPopupWindow()
+        PointEvent.posePoint(PointEventKey.profile_pop)
+    }
+
+    override fun dismiss() {
+        super.dismiss()
+        PointEvent.posePoint(PointEventKey.profile_close)
     }
 
 
@@ -103,6 +119,7 @@ class MorePop(context: Context) : BasePopupWindow(context) {
                 switchBrowser.setChecked(isDefault)
                 switchBrowser.isClickable = false
                 llBrowser.setOnClickListener {
+                    PointEvent.posePoint(PointEventKey.profile_setdefault)
                     if (isDefault.not()){
                         var pop = DefaultPop(context)
                         pop.createPop()

@@ -13,6 +13,7 @@ import com.boom.aiobrowser.tools.BrowserManager
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.ui.activity.AboutActivity
+import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.HistoryActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
 import pop.basepopup.BasePopupWindow
@@ -56,6 +57,12 @@ class MorePop(context: Context) : BasePopupWindow(context) {
             llAbout.setOnClickListener {
                 if (context is BaseActivity<*>){
                     (context as MainActivity).startActivity(Intent(context,AboutActivity::class.java))
+                }
+                dismiss()
+            }
+            llDownload.setOnClickListener {
+                if (context is BaseActivity<*>){
+                    (context as MainActivity).startActivity(Intent(context, DownloadActivity::class.java))
                 }
                 dismiss()
             }

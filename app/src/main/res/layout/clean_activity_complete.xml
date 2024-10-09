@@ -67,6 +67,7 @@
                         android:layout_height="61dp"
                         android:layout_marginHorizontal="13dp"
                         android:background="@drawable/shape_bg_80ffffff_84r"
+                        android:visibility="gone"
                         >
                         <FrameLayout
                             android:layout_width="47dp"

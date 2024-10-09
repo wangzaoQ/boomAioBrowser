@@ -3,6 +3,7 @@ package com.boom.aiobrowser.ui.activity
 import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import android.view.KeyEvent
@@ -73,7 +74,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     val fragments :MutableList<BaseFragment<*>> by lazy {
         mutableListOf<BaseFragment<*>>().apply {
             add(mainFragment)
-            add(fileFragment)
+//            add(fileFragment)
         }
     }
 
@@ -127,24 +128,22 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
 
     private fun clickIndex(index: Int) {
-       updateUI(index)
         when (index) {
             0 -> {
                 APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "点击 home tab ").apply {
                     jumpType = JumpConfig.JUMP_HOME
                     jumpTitle = APP.instance.getString(R.string.app_home)
                 })
+                updateUI(index)
             }
             1 ->{
-                APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "点击 file tab").apply {
-                    jumpType = JumpConfig.JUMP_FILE
-                    jumpTitle = APP.instance.getString(R.string.app_files)
-                })
+//                APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "点击 file tab").apply {
+//                    jumpType = JumpConfig.JUMP_FILE
+//                    jumpTitle = APP.instance.getString(R.string.app_files)
+//                })
+                startActivity(Intent(this@MainActivity,DownloadActivity::class.java))
             }
             2 ->{
-                showTabPop()
-            }
-            3->{
                 morePop = MorePop(this@MainActivity)
                 morePop?.createPop()
             }

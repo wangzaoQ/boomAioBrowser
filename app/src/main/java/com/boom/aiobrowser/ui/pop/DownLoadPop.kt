@@ -159,6 +159,16 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 }else if (downloadType == VideoDownloadData.DOWNLOAD_LOADING){
                     downloadType = VideoDownloadData.DOWNLOAD_PAUSE
                     VideoDownloadManager.getInstance().pauseDownloadTask(url)
+                }else if (downloadType == VideoDownloadData.DOWNLOAD_ERROR){
+                    downloadType = VideoDownloadData.DOWNLOAD_LOADING
+                    var success = VideoDownloadManager.getInstance().resumeDownload(url)
+                    if (success.not()){
+                        var headerMap = HashMap<String,String>()
+                        paramsMap?.forEach {
+                            headerMap.put(it.key,it.value.toString())
+                        }
+                        VideoDownloadManager.getInstance().startDownload(data.createDownloadData(data),headerMap)
+                    }
                 }
                 downloadAdapter.notifyItemChanged(position,"updateLoading")
             }

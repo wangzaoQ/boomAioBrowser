@@ -7,6 +7,7 @@ import android.view.View
 import android.view.animation.Animation
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
@@ -134,6 +135,9 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             var data = downloadAdapter.getItem(position)
             data?.apply {
                 if (downloadType == VideoDownloadData.DOWNLOAD_PAUSE) {
+                    if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO ){
+                        return@setOnDebouncedItemClick
+                    }
                     downloadType = VideoDownloadData.DOWNLOAD_LOADING
                     var success = VideoDownloadManager.getInstance().resumeDownload(url)
                     if (success.not()){
@@ -147,6 +151,9 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                     downloadType = VideoDownloadData.DOWNLOAD_PAUSE
                     VideoDownloadManager.getInstance().pauseDownloadTask(url)
                 }else if (downloadType == VideoDownloadData.DOWNLOAD_ERROR){
+                    if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO ){
+                        return@setOnDebouncedItemClick
+                    }
                     downloadType = VideoDownloadData.DOWNLOAD_LOADING
                     var success = VideoDownloadManager.getInstance().resumeDownload(url)
                     if (success.not()){

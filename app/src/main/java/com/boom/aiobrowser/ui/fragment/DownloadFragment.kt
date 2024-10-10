@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.blankj.utilcode.util.NetworkUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
@@ -69,6 +70,9 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
             var data = downloadAdapter.getItem(position)
             data?.apply {
                 if (downloadType == VideoDownloadData.DOWNLOAD_PAUSE) {
+                    if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO ){
+                        return@setOnDebouncedItemClick
+                    }
                     downloadType = VideoDownloadData.DOWNLOAD_LOADING
                     var isSuccess = VideoDownloadManager.getInstance().resumeDownload(url)
                     if (isSuccess.not()){
@@ -90,6 +94,19 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
                     PointEvent.posePoint(PointEventKey.download_page_play,Bundle().apply {
                         putString("video_url",url)
                     })
+                }else if (downloadType == VideoDownloadData.DOWNLOAD_ERROR){
+                    if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO ){
+                        return@setOnDebouncedItemClick
+                    }
+                    downloadType = VideoDownloadData.DOWNLOAD_LOADING
+                    var success = VideoDownloadManager.getInstance().resumeDownload(url)
+                    if (success.not()){
+                        var headerMap = HashMap<String,String>()
+                        paramsMap?.forEach {
+                            headerMap.put(it.key,it.value.toString())
+                        }
+                        VideoDownloadManager.getInstance().startDownload(data.createDownloadData(data),headerMap)
+                    }
                 }
             }
         }

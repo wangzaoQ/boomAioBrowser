@@ -2,6 +2,7 @@ package com.boom.aiobrowser.ui.activity
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
@@ -14,9 +15,13 @@ import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.ui.fragment.DownloadFragment
 import com.boom.aiobrowser.ui.fragment.FileManageFragment
 import com.boom.aiobrowser.ui.fragment.MainFragment
+import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
 
@@ -101,6 +106,17 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
                 putString(PointValueKey.from_page,fromPage)
             })
         },0)
+        addLaunch(success = {
+            var list = DownloadCacheManager.queryAllModel()
+            withContext(Dispatchers.Main){
+                if (list.isNullOrEmpty()){
+                    acBinding.llGuide.visibility = View.VISIBLE
+                    acBinding.llGuide.setOnClickListener {
+                        DownloadVideoGuidePop(this@DownloadActivity).createPop {  }
+                    }
+                }
+            }
+        }, failBack = {})
     }
 
     private fun updateUI(position: Int) {

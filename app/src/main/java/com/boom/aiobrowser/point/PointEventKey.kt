@@ -1,10 +1,27 @@
 package com.boom.aiobrowser.point
 
 object PointEventKey {
+
+    const val nn_session = "nn_session"
+    const val session_st = "session_st"
+    const val launch_page = "launch_page"
+    //启动页进入按钮点击
+    const val launch_page_start = "launch_page_start"
+    //app 停留时长
+    const val app_stay = "app_stay"
+    //设置默认弹窗展示
+    const val default_pop = "default_pop"
+    //设置默认弹窗设置按钮点击
+    const val default_pop_set = "default_pop_set"
+    //设置默认弹窗成功
+    const val default_pop_set_s = "default_pop_set_s"
+    //设置默认弹窗失败
+    const val default_pop_set_f = "default_pop_set_f"
+
+
     //首页搜索输入框点击
     const val home_page_search = "home_page_search"
-    //首页确认搜索
-    const val home_page_search_go = "home_page_search_go"
+
     //首页搜索输入框搜索引擎设置入口点击
     const val home_page_searchengine = "home_page_searchengine"
     // 首页点击新闻列表
@@ -22,6 +39,10 @@ object PointEventKey {
 
     //搜索历史记录点击
     const val search_page_history = "search_page_history"
+    // 搜索页展示
+    const val search_page = "search_page"
+    //搜索页确认搜索
+    const val search_page_go = "search_page_go"
 
     // 免责声明
     const val webpage_download_pop_disclaimer = "webpage_download_pop_disclaimer"
@@ -64,6 +85,13 @@ object PointEventKey {
     const val download_tutorial_skip = "download_tutorial_skip"
     // 下载教程 确认
     const val download_tutorial_try = "download_tutorial_try"
+    //搜索结果页返回
+    const val webpage_back = "webpage_back"
+    //搜索结果页前进
+    const val webpage_ahead = "webpage_ahead"
+
+    const val webpage_home = "webpage_home"
+    const val webpage_download = "webpage_download"
 }
 
 
@@ -74,6 +102,7 @@ object PointValueKey{
     const val news_id = "news_id"
     const val refresh_type = "refresh_type"
     const val type = "type"
+    const val url = "url"
 
     const val model_type = "model_type"
     const val open_type = "open_type"

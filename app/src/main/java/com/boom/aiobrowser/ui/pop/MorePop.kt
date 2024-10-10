@@ -110,6 +110,10 @@ class MorePop(context: Context) : BasePopupWindow(context) {
     fun updateUI() {
         popBinding?.apply {
             var isDefault = BrowserManager.isDefaultBrowser()
+            if (APP.instance.clickSetBrowser){
+                APP.instance.clickSetBrowser = false
+                PointEvent.posePoint(if (isDefault) PointEventKey.default_pop_set_s else PointEventKey.default_pop_set_f)
+            }
             if (isDefault){
                 llBrowser.visibility = View.GONE
                 viewLine.visibility = View.GONE

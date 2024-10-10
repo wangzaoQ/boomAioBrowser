@@ -59,7 +59,10 @@ class VideoMorePop(context: Context) : BasePopupWindow(context) {
                 dialog!!.show()
             }
             llInfo.setOnClickListener {
-
+                data?.apply {
+                    FileInfoPop(context).createPop(this)
+                    dismiss()
+                }
             }
         }
         setOutSideDismiss(true)

@@ -1,8 +1,10 @@
 package com.boom.aiobrowser.tools.video
 
 import android.os.Bundle
+import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.APP.Companion.videoLiveData
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
@@ -137,6 +139,7 @@ object VideoManager {
                     "onDownloadSuccess:${item?.url} downloadSize:${item?.downloadSize} totalSize:${item?.totalSize}"
                 )
                 if (item == null) return
+                ToastUtils.showShort(APP.instance.getString(R.string.download_finished))
                 CoroutineScope(Dispatchers.IO).launch {
                     var model = DownloadCacheManager.queryDownloadModelByUrl(item.url)
                     if (model != null) {

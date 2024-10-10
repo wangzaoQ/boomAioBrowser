@@ -2,6 +2,7 @@ package com.boom.aiobrowser.ui.fragment
 
 import android.animation.ValueAnimator
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,9 @@ import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.BrowserFragmentStartBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.ui.JumpConfig
@@ -31,6 +35,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
 
     override fun setListener() {
         fBinding.btnBrowser.setOneClick {
+            PointEvent.posePoint(PointEventKey.launch_page_start)
             toMain("点击Start",true)
         }
         fBinding.apply {
@@ -132,6 +137,9 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         fBinding.btnCheck.setOnCheckedChangeListener { compoundButton, b ->
             fBinding.btnBrowser.isEnabled = fBinding.btnCheck.isChecked
         }
+        PointEvent.posePoint(PointEventKey.launch_page, Bundle().apply {
+            putInt(PointValueKey.open_type,if (CacheManager.isFirstStart) 0 else 1)
+        })
         if (CacheManager.isFirstStart){
             fBinding.rlStart.visibility = View.VISIBLE
             fBinding.llLoadingRoot.visibility = View.GONE
@@ -142,6 +150,8 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             it.adLoadStatus = AioADDataManager.LOAD_STATUS_START
         }
         AioADDataManager.preloadAD(ADEnum.LAUNCH,"app启动")
+        PointEvent.session()
+        PointEvent.posePoint(PointEventKey.nn_session)
     }
 
     var dataIntent :Intent?=null

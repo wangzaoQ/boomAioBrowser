@@ -13,6 +13,7 @@ import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
 import com.boom.aiobrowser.point.Install
 import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointManager
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
@@ -27,6 +28,7 @@ import com.jeffmony.downloader.model.VideoTaskItem
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class APP: Application() {
@@ -41,6 +43,8 @@ class APP: Application() {
     var isHideSplash = false
     var GID=""
     var webUA=""
+
+    var clickSetBrowser = false
 
     companion object{
         lateinit var instance:APP
@@ -96,7 +100,13 @@ class APP: Application() {
                 initVideo()
                 initOther()
                 Install.requestRefer(instance,0,{})
-                PointEvent.session()
+                PointEvent.posePoint(PointEventKey.session_st)
+            }
+        }
+        CoroutineScope(Dispatchers.IO).launch{
+            while (true){
+                delay(60*60*1000)
+                PointEvent.posePoint(PointEventKey.session_st)
             }
         }
         //session

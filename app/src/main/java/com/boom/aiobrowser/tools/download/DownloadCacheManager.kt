@@ -20,6 +20,10 @@ object DownloadCacheManager {
         if (APP.isDebug) AppLogs.dLog(TAG,"当前总共有:${downloadDao.queryAllDownload().size}条数据 downloadType:${model.downloadType}")
     }
 
+    fun queryAllModel():MutableList<DownloadModel>{
+       return downloadDao.queryAllDownload()
+    }
+
     fun queryDownloadModel(data: VideoDownloadData):DownloadModel?{
         return downloadDao.queryDataById(data.videoId?:"")
     }

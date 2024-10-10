@@ -8,6 +8,8 @@ import android.content.Intent
 import android.os.Bundle
 import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.base.BaseActivity
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.WakeManager
 import com.boom.aiobrowser.ui.activity.MainActivity
@@ -87,6 +89,9 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
         count--
         AppLogs.dLog(APP.instance.TAG, "onActivityStopped() activity=" + activity + "count:"+count)
         if (0 >= count && APP.instance.isGoOther.not()) {
+            PointEvent.posePoint(PointEventKey.app_stay,Bundle().apply {
+                putInt("stay_times",((System.currentTimeMillis() - startTime)/1000).toInt())
+            })
             AioADDataManager.setADDismissTime()
             cancelJob?.cancel()
             cancelJob = CoroutineScope(Dispatchers.IO).launch{

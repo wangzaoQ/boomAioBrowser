@@ -119,7 +119,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 CacheManager.saveRecentSearchData(jumpData)
             }
             toWebDetailsActivity(jumpData)
-            PointEvent.posePoint(PointEventKey.home_page_search_go,Bundle().apply {
+            PointEvent.posePoint(PointEventKey.search_page_go,Bundle().apply {
                 putString(PointValueKey.input_text,it)
             })
         })
@@ -154,6 +154,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 })
             }
         }
+        PointEvent.posePoint(PointEventKey.search_page)
     }
 
     private fun toWebDetailsActivity(data:JumpData){

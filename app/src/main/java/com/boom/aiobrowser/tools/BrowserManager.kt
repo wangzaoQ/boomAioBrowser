@@ -8,18 +8,32 @@ import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS
-import androidx.fragment.app.FragmentActivity
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.base.BaseActivity
-import kotlin.jvm.internal.Intrinsics
 
 
 object BrowserManager {
 
     fun isDefaultBrowser(): Boolean {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://"))
-        val resolveInfo: ResolveInfo? = APP.instance.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
-        return resolveInfo != null && APP.instance.getPackageName().equals(resolveInfo.activityInfo.packageName)
+//        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://"))
+//        val resolveInfo: ResolveInfo? = APP.instance.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
+//        return resolveInfo != null && APP.instance.getPackageName().equals(resolveInfo.activityInfo.packageName)
+        return isDefaultBrowserSet(APP.instance)
+    }
+
+    fun isDefaultBrowserSet(context: Context): Boolean {
+        val actionIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://"))
+        val resolvedActivities = context.packageManager.queryIntentActivities(actionIntent, 0)
+
+        var isDefault = false
+        for (info in resolvedActivities) {
+            if (info.match != 0) {
+                isDefault = true
+                break
+            }
+        }
+
+        return isDefault
     }
 
     fun promptToSetDefaultBrowser(context: Context) {

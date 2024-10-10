@@ -2,6 +2,7 @@ package com.boom.aiobrowser.ui.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import com.boom.aiobrowser.APP
@@ -10,6 +11,9 @@ import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserActivityWebDetailsBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
@@ -42,6 +46,9 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         }
         acBinding.ivHome.setOneClick {
             JumpDataManager.toMain()
+            PointEvent.posePoint(PointEventKey.webpage_home,Bundle().apply {
+                putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+            })
         }
         APP.jumpWebLiveData.observe(this){
             when (it.jumpType){
@@ -96,9 +103,22 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         }
         acBinding.ivDownload.setOneClick {
             DownloadVideoGuidePop(this).createPop {  }
+            PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
+                putString(PointValueKey.type,"no_have")
+                putString(PointValueKey.url,jumpData?.jumpUrl)
+                putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+            })
         }
         acBinding.ivDownload2.setOneClick {
             showDownloadPop()
+            PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
+                putString(PointValueKey.type,"have")
+                putString(PointValueKey.url,jumpData?.jumpUrl)
+                putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+            })
+        }
+        acBinding.ivLeft.setOneClick{
+            finish()
         }
     }
 
@@ -115,6 +135,11 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
             }
         }
         CacheManager.videoDownloadTempList = list
+        runCatching {
+            if (list.isNullOrEmpty()){
+                popDown?.dismiss()
+            }
+        }
         updateDownloadButtonStatus(true)
     }
 
@@ -158,6 +183,9 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
                         jumpData?.jumpType = JumpConfig.JUMP_WEB
                         var webFragment = supportFragmentManager.findFragmentById(R.id.webFragment) as WebFragment
                         webFragment.updateData(jumpData)
+                        PointEvent.posePoint(PointEventKey.webpage_ahead,Bundle().apply {
+                            putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+                        })
                     }
                 }
             }else{
@@ -165,6 +193,9 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
             }
             if (showBack){
                 ivLeft.setOneClick {
+                    PointEvent.posePoint(PointEventKey.webpage_back,Bundle().apply {
+                        putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+                    })
                     var mMainNavFragment = supportFragmentManager.findFragmentById(R.id.webFragment)
                     if (mMainNavFragment != null && mMainNavFragment is WebFragment) {
                         mMainNavFragment.goBack()
@@ -215,7 +246,10 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         ))
     }
 
+    var jumpData:JumpData?= null
+
     private fun getWebData(data: JumpData?) {
+        jumpData = data
         var webFragment = supportFragmentManager.findFragmentById(R.id.webFragment) as WebFragment
         webFragment.updateData(
             data

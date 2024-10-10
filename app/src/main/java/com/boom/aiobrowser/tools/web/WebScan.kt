@@ -39,7 +39,7 @@ object WebScan {
             if (url.contains(WebConfig.FILTER_TIKTOK, true)) {
                 if (WebConfig.cookieTikTok.isNullOrEmpty())return
                 type = WebConfig.TIKTOK
-                AppLogs.dLog(TAG, "命中tiktok uri:${uri}")
+                AppLogs.dLog(TAG, "isloading :${isloading}  命中tiktok uri:${uri}")
                 var id = "tiktok_${getTikTokId(url)}"
                 var list = CacheManager.videoDownloadTempList
                 var allow = true

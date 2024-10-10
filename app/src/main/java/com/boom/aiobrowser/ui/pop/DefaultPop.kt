@@ -3,9 +3,12 @@ package com.boom.aiobrowser.ui.pop
 import android.content.Context
 import android.view.View
 import android.view.animation.Animation
+import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.databinding.BrowserPopDefaultBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.BrowserManager
 import pop.basepopup.BasePopupWindow
 import pop.util.animation.AnimationHelper
@@ -31,6 +34,8 @@ class DefaultPop(context: Context) : BasePopupWindow(context){
         }
         defaultBinding?.apply {
             btnConfirm.setOnClickListener {
+                PointEvent.posePoint(PointEventKey.default_pop_set)
+                APP.instance.clickSetBrowser = true
                 BrowserManager.setDefaultBrowser(context,BuildConfig.APPLICATION_ID)
                 dismiss()
             }
@@ -39,6 +44,7 @@ class DefaultPop(context: Context) : BasePopupWindow(context){
             }
         }
         showPopupWindow()
+        PointEvent.posePoint(PointEventKey.default_pop)
     }
 
     override fun onCreateShowAnimation(): Animation {

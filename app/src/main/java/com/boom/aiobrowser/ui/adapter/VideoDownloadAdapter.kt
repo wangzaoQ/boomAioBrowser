@@ -122,6 +122,11 @@ class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<Vide
         if (item == null) return
         holder.viewBinding.apply {
             updateItem(item, holder,"")
+            if (position == items.size-1){
+                tempLine.visibility = View.VISIBLE
+            }else{
+                tempLine.visibility = View.GONE
+            }
         }
     }
 

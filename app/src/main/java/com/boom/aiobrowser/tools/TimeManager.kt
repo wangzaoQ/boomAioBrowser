@@ -34,8 +34,8 @@ object TimeManager {
     }
 
 
-    fun getLogTime(time:Long?): String {
-        return SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date(time?:System.currentTimeMillis()))
+    fun getVideoTime(time:Long?): String {
+        return SimpleDateFormat("yyyy.MM.dd").format(Date(time?:System.currentTimeMillis()))
     }
 
     fun getHistoryDay(time:Long): String {

@@ -105,25 +105,30 @@
     <string name="app_download">Download</string>
     <string name="app_downloading">Downloading</string>
     <string name="app_loading_content">loading</string>
-    <string name="app_download_error">Download Failed</string>
+    <string name="app_download_error">Download failed</string>
     <string name="app_already_download">Already downloaded</string>
     <string name="app_progress">Progress</string>
     <string name="app_done">Done</string>
     <string name="app_no_record">No records</string>
     <string name="app_rename">Rename</string>
-    <string name="app_file_info">File Information</string>
+    <string name="app_file_info">File information</string>
     <string name="app_ok">Ok</string>
     <string name="app_download_prepare">In preparation</string>
     <string name="app_skip">Skip</string>
-    <string name="app_guide_title0">Enter The Video URL</string>
-    <string name="app_guide_title1">Select The Downloaded Video</string>
-    <string name="app_guide_title2">Play Video Content</string>
+    <string name="app_guide_title0">Enter the video URL</string>
+    <string name="app_guide_title1">Select the downloaded video</string>
+    <string name="app_guide_title2">Play video content</string>
     <string name="app_guide_title3">Disclaimer</string>
     <string name="app_guide_content">Please note that when using this service to download and upload videos, users must obtain authorization from the original source. Unauthorized operations may involve legal liability. Please consciously abide by relevant laws and regulations when using this service.</string>
     <string name="app_try">Try</string>
     <string name="app_disclaimer">Disclaimer</string>
     <string name="app_disclaimer_content">Please note that when using this service to download and upload videos, users must obtain authorization from the original source. Unauthorized operations may involve legal liability. Please consciously abide by relevant laws and regulations when using this service.</string>
-    <string name="app_enable_permission">Enable Persmissions</string>
+    <string name="app_enable_permission">Enable persmissions</string>
     <string name="app_record">Record</string>
+    <string name="app_video_download_guide">Download the tutorial</string>
+    <string name="download_finished">Download finished</string>
+    <string name="app_file_name">Name:</string>
+    <string name="app_file_size">File size:</string>
+    <string name="app_file_time">File time:</string>
 
 </resources>

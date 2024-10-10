@@ -50,13 +50,15 @@ object PointEventKey {
     const val webpage_download_pop_record = "webpage_download_pop_record"
     // 详情页下载弹窗展示
     const val webpage_download_pop = "webpage_download_pop"
+    // 详情页展示
+    const val webpage_page = "webpage_page"
 
     //更多弹窗
     const val profile_pop = "profile_pop"
     const val profile_close = "profile_close"
 
     //更多设置默认浏览器开关
-    const val profile_setdefault = "profile_pop"
+    const val profile_setdefault = "profile_setdefault"
     //更多-新tab点击
     const val profile_newtab = "profile_newtab"
     //更多-一键清除点击
@@ -92,6 +94,7 @@ object PointEventKey {
 
     const val webpage_home = "webpage_home"
     const val webpage_download = "webpage_download"
+    const val download_page_more_fi = "download_page_more_fi"
 }
 
 

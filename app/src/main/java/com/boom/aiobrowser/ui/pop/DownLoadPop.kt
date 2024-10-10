@@ -19,12 +19,14 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.download.DownloadControlManager
 import com.boom.aiobrowser.tools.video.VideoManager
 import com.boom.aiobrowser.tools.web.WebScan
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.activity.DownloadActivity
+import com.boom.aiobrowser.ui.activity.VideoPreActivity
 import com.boom.aiobrowser.ui.adapter.VideoDownloadAdapter
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
@@ -43,7 +45,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
     }
 
     private val downloadAdapter by lazy {
-        VideoDownloadAdapter()
+        VideoDownloadAdapter(true)
     }
 
     var defaultBinding: VideoPopDownloadBinding? = null
@@ -117,11 +119,21 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         AppLogs.dLog(VideoManager.TAG,"updateStatus position:${position} url:${data?.url}")
         if (position == -1) return
         var item = downloadAdapter.getItem(position)?:return
-        item.downloadType = type
-        item.downloadSize = data.downloadSize
-        item.size = data.totalSize
+
+        var downloadModel = DownloadCacheManager.queryDownloadModelByUrl(data.url)
+        if (downloadModel == null){
+            // 已删除
+            item.downloadType = VideoDownloadData.DOWNLOAD_NOT
+            item.downloadSize = 0
+        }else{
+            item.downloadType = type
+            item.downloadSize = data.downloadSize
+            item.size = data.totalSize
+        }
         if (type == VideoDownloadData.DOWNLOAD_SUCCESS){
-            downloadAdapter.remove(item)
+            item.downloadFilePath = data.filePath
+            item.downloadFileName = data.fileName
+            downloadAdapter.notifyItemChanged(position, "updateLoading")
             callBack.invoke(item)
         }else{
             downloadAdapter.notifyItemChanged(position, "updateLoading")
@@ -158,6 +170,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             data?.apply {
                 if (downloadType == VideoDownloadData.DOWNLOAD_PAUSE) {
                     if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO ){
+                        ToastUtils.showShort(context.getString(R.string.app_download_no_net))
                         return@setOnDebouncedItemClick
                     }
                     downloadType = VideoDownloadData.DOWNLOAD_LOADING
@@ -185,6 +198,10 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                         }
                         VideoDownloadManager.getInstance().startDownload(data.createDownloadData(data),headerMap)
                     }
+                }else if (downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
+                    context.jumpActivity<VideoPreActivity>(Bundle().apply {
+                        putString("video_path",data.downloadFilePath)
+                    })
                 }
                 downloadAdapter.notifyItemChanged(position,"updateLoading")
             }

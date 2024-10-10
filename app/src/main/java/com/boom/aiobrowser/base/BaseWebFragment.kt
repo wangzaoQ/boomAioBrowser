@@ -26,6 +26,7 @@ import com.boom.web.PermissionInterceptor
 import com.boom.web.WebChromeClient
 import com.boom.web.WebViewClient
 import com.google.gson.Gson
+import kotlinx.coroutines.delay
 import org.jsoup.Jsoup
 import java.lang.ref.WeakReference
 
@@ -165,7 +166,10 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 //                    return webResourceResponse
 //                }
 //            }
-            WebScan.filterUri(request?.url?.toString()?:"",WeakReference(rootActivity))
+            rootActivity.addLaunch(success = {
+                delay(500)
+                WebScan.filterUri(request?.url?.toString()?:"",WeakReference(rootActivity))
+            }, failBack = {})
             return super.shouldInterceptRequest(view, request)
         }
 

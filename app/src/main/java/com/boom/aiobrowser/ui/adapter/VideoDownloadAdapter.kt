@@ -13,7 +13,7 @@ import com.boom.aiobrowser.tools.GlideManager
 import com.boom.aiobrowser.tools.clean.formatLength
 import com.boom.base.adapter4.BaseQuickAdapter
 
-class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<VideoDownloadData, VideoDownloadAdapter.VH>() {
+class VideoDownloadAdapter(var isPop:Boolean = false): BaseQuickAdapter<VideoDownloadData, VideoDownloadAdapter.VH>() {
     class VH(
         parent: ViewGroup,
         val viewBinding: ItemVideoDownloadBinding = ItemVideoDownloadBinding.inflate(
@@ -82,6 +82,11 @@ class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<Vide
                     llPlayRoot.visibility = View.GONE
                     ivDownload.visibility = View.GONE
                     ivMore.visibility = View.VISIBLE
+                    if (isPop){
+                        ivMore.setImageResource(R.mipmap.ic_download_video_play)
+                    }else{
+                        ivMore.setImageResource(R.mipmap.ic_download_more)
+                    }
                     progress.visibility = View.GONE
                     tvContent.text = "${item.size?.formatLength()}"
                     tvName.text = item.downloadFileName
@@ -103,6 +108,7 @@ class VideoDownloadAdapter(var isProgress:Boolean = true): BaseQuickAdapter<Vide
                 }
 
                 VideoDownloadData.DOWNLOAD_NOT ->{
+                    progress.progress = 0
                     progress.visibility = View.GONE
                     llPlayRoot.visibility = View.GONE
                     ivMore.visibility = View.GONE

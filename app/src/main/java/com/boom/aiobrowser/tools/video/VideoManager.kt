@@ -46,6 +46,7 @@ object VideoManager {
 //    val showDialogFlow : SharedFlow<VideoTaskItem> = _showDialogFlow
 
     var job: Job? = null
+//    var flow = flow<VideoTaskItem>{}
 
     fun initVideo() {
         PlayerFactory.setPlayManager(Exo2PlayerManager::class.java) //EXO模式
@@ -119,6 +120,7 @@ object VideoManager {
 
             override fun onDownloadError(item: VideoTaskItem?) {
                 AppLogs.dLog(TAG, "onDownloadError:${item?.url}")
+                ToastUtils.showShort(APP.instance.getString(R.string.download_failed))
                 if (item == null) return
                 CoroutineScope(Dispatchers.IO).launch {
                     var model = DownloadCacheManager.queryDownloadModelByUrl(item.url)

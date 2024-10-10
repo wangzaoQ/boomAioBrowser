@@ -15,10 +15,10 @@ import com.boom.aiobrowser.base.BaseActivity
 object BrowserManager {
 
     fun isDefaultBrowser(): Boolean {
-//        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://"))
-//        val resolveInfo: ResolveInfo? = APP.instance.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
-//        return resolveInfo != null && APP.instance.getPackageName().equals(resolveInfo.activityInfo.packageName)
-        return isDefaultBrowserSet(APP.instance)
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://"))
+        val resolveInfo: ResolveInfo? = APP.instance.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
+        return resolveInfo != null && APP.instance.getPackageName().equals(resolveInfo.activityInfo.packageName)
+//        return isDefaultBrowserSet(APP.instance)
     }
 
     fun isDefaultBrowserSet(context: Context): Boolean {
@@ -27,7 +27,7 @@ object BrowserManager {
 
         var isDefault = false
         for (info in resolvedActivities) {
-            if (info.match != 0) {
+            if (APP.instance.getPackageName().equals(info.activityInfo.packageName)) {
                 isDefault = true
                 break
             }

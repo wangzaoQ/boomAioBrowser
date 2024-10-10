@@ -19,6 +19,7 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.getBeanByGson
+import com.boom.aiobrowser.tools.web.WebScan
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.fragment.WebFragment
@@ -26,6 +27,7 @@ import com.boom.aiobrowser.ui.pop.ClearPop
 import com.boom.aiobrowser.ui.pop.DownLoadPop
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.TabPop
+import com.boom.aiobrowser.ui.pop.TipsPop
 import com.jeffmony.downloader.VideoDownloadManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -69,7 +71,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
             var map = it
             it.keys.forEach {
                 popDown?.updateStatus(this@WebDetailsActivity,it,map.get(it)){
-                    itemRemoveData(it)
+//                    itemRemoveData(it)
                 }
             }
         }
@@ -88,6 +90,10 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
             }
         }
         acBinding.ivDownload.setOneClick {
+            if (WebScan.isYoutube(jumpData?.jumpUrl?:"")){
+                TipsPop(this).createPop {  }
+                return@setOneClick
+            }
             DownloadVideoGuidePop(this).createPop {  }
             PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
                 putString(PointValueKey.type,"no_have")
@@ -252,6 +258,11 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         ))
         updateDownloadButtonStatus(false)
         acBinding.ivDownload.visibility = View.VISIBLE
+        acBinding.root.postDelayed({
+            PointEvent.posePoint(PointEventKey.webpage_page,Bundle().apply {
+                putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+            })
+        },0)
     }
 
     override fun onDestroy() {

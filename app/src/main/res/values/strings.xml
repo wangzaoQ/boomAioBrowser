@@ -106,6 +106,7 @@
     <string name="app_downloading">Downloading</string>
     <string name="app_loading_content">loading</string>
     <string name="app_download_error">Download failed</string>
+    <string name="app_download_no_net">No network available at the moment</string>
     <string name="app_already_download">Already downloaded</string>
     <string name="app_progress">Progress</string>
     <string name="app_done">Done</string>
@@ -127,8 +128,11 @@
     <string name="app_record">Record</string>
     <string name="app_video_download_guide">Download the tutorial</string>
     <string name="download_finished">Download finished</string>
+    <string name="download_failed">Download failed</string>
     <string name="app_file_name">Name:</string>
     <string name="app_file_size">File size:</string>
     <string name="app_file_time">File time:</string>
+    <string name="app_tips">Tips</string>
+    <string name="app_tips_content">Due To Legal Restrictions, Videos On YouTubeCANNOT Be Downloaded.</string>
 
 </resources>

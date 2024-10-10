@@ -7,6 +7,8 @@ import com.blankj.utilcode.util.TimeUtils
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserPopFileInfoBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.GlideManager
 import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.clean.formatSize
@@ -42,5 +44,6 @@ class FileInfoPop(context: Context): BasePopupWindow(context) {
             tvFileTime.text =
                 TimeManager.getVideoTime(File(videoData.downloadFilePath).lastModified())
         }
+        PointEvent.posePoint(PointEventKey.download_page_more_fi)
     }
 }

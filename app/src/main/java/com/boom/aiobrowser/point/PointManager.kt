@@ -123,6 +123,7 @@ object PointManager {
     }
 
     fun postEvent(jsonObject: JSONObject, tag:String?="", callback: PointCallback?=null) {
+        AppLogs.dLog("event_tag",tag?:"")
         sendValue(jsonObject,tag,3,callback)
     }
 

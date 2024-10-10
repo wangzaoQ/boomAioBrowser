@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.NetworkUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
@@ -71,6 +72,7 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
             data?.apply {
                 if (downloadType == VideoDownloadData.DOWNLOAD_PAUSE) {
                     if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO ){
+                        ToastUtils.showShort(rootActivity.getString(R.string.app_download_no_net))
                         return@setOnDebouncedItemClick
                     }
                     downloadType = VideoDownloadData.DOWNLOAD_LOADING

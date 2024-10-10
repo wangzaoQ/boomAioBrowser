@@ -266,6 +266,10 @@ object WebScan {
         return url.contains(WebConfig.PORNHUB)
     }
 
+    fun isYoutube(url: String):Boolean{
+        return url.contains(WebConfig.YOUTUBE)
+    }
+
     fun reset() {
         isloading = false
         call?.cancel()

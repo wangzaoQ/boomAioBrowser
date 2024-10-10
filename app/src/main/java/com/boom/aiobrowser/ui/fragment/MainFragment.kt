@@ -22,14 +22,11 @@ import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
-import com.boom.aiobrowser.tools.StoragePermissionManager
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.SearchConfig
 import com.boom.aiobrowser.ui.activity.DownloadActivity
-import com.boom.aiobrowser.ui.activity.clean.CleanScanActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.SearchActivity
-import com.boom.aiobrowser.ui.activity.clean.load.ProcessLoadActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.EngineGuidePop
@@ -48,17 +45,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         rootActivity.viewModels<NewsViewModel>()
     }
 
-    val permissionManager by lazy {
-        StoragePermissionManager(WeakReference(rootActivity), onGranted = {
-            rootActivity.startActivity(Intent(rootActivity, CleanScanActivity::class.java))
-        }, onDenied = {
-            toSetting()
-        })
-    }
-
-    private fun toSetting() {
-        permissionManager.toOtherSetting()
-    }
 
     override fun startLoadData() {
 
@@ -148,12 +134,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             PointEvent.posePoint(PointEventKey.home_page_searchengine, Bundle().apply {
                 putString(PointValueKey.click_source,"home")
             })
-        }
-        fBinding.rlClean.setOneClick {
-            permissionManager.requestStoragePermission()
-        }
-        fBinding.rlProcess.setOneClick {
-            rootActivity.jumpActivity<ProcessLoadActivity>()
         }
 
         viewModel.value.newsLiveData.observe(rootActivity){

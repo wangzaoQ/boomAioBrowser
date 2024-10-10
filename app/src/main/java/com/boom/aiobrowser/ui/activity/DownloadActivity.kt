@@ -17,8 +17,6 @@ import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.ui.fragment.DownloadFragment
-import com.boom.aiobrowser.ui.fragment.FileManageFragment
-import com.boom.aiobrowser.ui.fragment.MainFragment
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

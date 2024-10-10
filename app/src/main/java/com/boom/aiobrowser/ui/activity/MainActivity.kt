@@ -23,7 +23,6 @@ import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
-import com.boom.aiobrowser.model.CleanViewModel
 import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BrowserManager
@@ -34,7 +33,6 @@ import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
-import com.boom.aiobrowser.ui.fragment.FileManageFragment
 import com.boom.aiobrowser.ui.fragment.MainFragment
 import com.boom.aiobrowser.ui.fragment.StartFragment
 import com.boom.aiobrowser.ui.fragment.WebFragment
@@ -65,11 +63,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     val mainFragment by lazy {
         MainFragment()
     }
-
-    val fileFragment by lazy {
-        FileManageFragment()
-    }
-
 
     val fragments :MutableList<BaseFragment<*>> by lazy {
         mutableListOf<BaseFragment<*>>().apply {

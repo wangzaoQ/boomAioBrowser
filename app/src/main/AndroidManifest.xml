@@ -26,17 +26,17 @@
 <!--    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />-->
 
 
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent>
+<!--    <queries>-->
+<!--        <intent>-->
+<!--            <action android:name="android.intent.action.MAIN" />-->
+<!--            <category android:name="android.intent.category.LAUNCHER" />-->
+<!--        </intent>-->
 
-    </queries>
+<!--    </queries>-->
 
-    <uses-permission
-        android:name="android.permission.PACKAGE_USAGE_STATS"
-        tools:ignore="ProtectedPermissions" />
+<!--    <uses-permission-->
+<!--        android:name="android.permission.PACKAGE_USAGE_STATS"-->
+<!--        tools:ignore="ProtectedPermissions" />-->
 
     <application
         android:icon="@mipmap/ic_start_logo"
@@ -101,21 +101,21 @@
         <activity android:name=".ui.activity.WebActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             ></activity>
-        <activity android:name=".ui.activity.clean.CleanScanActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            ></activity>
-        <activity android:name=".ui.activity.clean.ProcessActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            ></activity>
-        <activity android:name=".ui.activity.clean.load.CompleteLoadActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            ></activity>
-        <activity android:name=".ui.activity.clean.load.CompleteActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            ></activity>
-        <activity android:name=".ui.activity.clean.load.CleanLoadActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            ></activity>
+<!--        <activity android:name=".ui.activity.clean.CleanScanActivity"-->
+<!--            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"-->
+<!--            ></activity>-->
+<!--        <activity android:name=".ui.activity.clean.ProcessActivity"-->
+<!--            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"-->
+<!--            ></activity>-->
+<!--        <activity android:name=".ui.activity.clean.load.CompleteLoadActivity"-->
+<!--            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"-->
+<!--            ></activity>-->
+<!--        <activity android:name=".ui.activity.clean.load.CompleteActivity"-->
+<!--            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"-->
+<!--            ></activity>-->
+<!--        <activity android:name=".ui.activity.clean.load.CleanLoadActivity"-->
+<!--            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"-->
+<!--            ></activity>-->
         <activity android:name=".ui.activity.WebDetailsActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:launchMode="singleTop"
@@ -125,22 +125,22 @@
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:launchMode="singleTop"
             ></activity>
-        <activity android:name=".ui.activity.file.ImageActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:launchMode="singleTop"
-            ></activity>
-        <activity android:name=".ui.activity.file.ImagePreviewActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:launchMode="singleTop"
-            ></activity>
-        <activity android:name=".ui.activity.file.FileManageListActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:launchMode="singleTop"
-            ></activity>
-        <activity android:name=".ui.activity.clean.load.ProcessLoadActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:launchMode="singleTop"
-            ></activity>
+<!--        <activity android:name=".ui.activity.file.ImageActivity"-->
+<!--            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"-->
+<!--            android:launchMode="singleTop"-->
+<!--            ></activity>-->
+<!--        <activity android:name=".ui.activity.file.ImagePreviewActivity"-->
+<!--            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"-->
+<!--            android:launchMode="singleTop"-->
+<!--            ></activity>-->
+<!--        <activity android:name=".ui.activity.file.FileManageListActivity"-->
+<!--            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"-->
+<!--            android:launchMode="singleTop"-->
+<!--            ></activity>-->
+<!--        <activity android:name=".ui.activity.clean.load.ProcessLoadActivity"-->
+<!--            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"-->
+<!--            android:launchMode="singleTop"-->
+<!--            ></activity>-->
         <activity android:name=".ui.activity.DownloadActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:launchMode="singleTop"

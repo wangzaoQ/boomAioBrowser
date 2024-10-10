@@ -53,6 +53,28 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         defaultBinding = VideoPopDownloadBinding.bind(contentView)
     }
 
+    fun updateItem(){
+        var list = CacheManager.videoDownloadTempList
+        var adapterList = downloadAdapter.items
+        var endList = mutableListOf<VideoDownloadData>()
+        if (adapterList.isNullOrEmpty()){
+            endList.addAll(list)
+        }else{
+            for (i in 0 until list.size){
+                var data = list.get(i)
+                endList.add(data)
+                for (k in 0 until adapterList.size){
+                    var bean = adapterList.get(k)
+                    if (bean.videoId == data.videoId){
+                        bean.covertByDbData(data)
+                        break
+                    }
+                }
+            }
+        }
+        downloadAdapter.submitList(endList)
+    }
+
     fun updateData() {
         (context as BaseActivity<*>).addLaunch(success = {
             var modelList = DownloadCacheManager.queryDownloadModelOther()

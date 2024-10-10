@@ -14,6 +14,7 @@ import com.boom.aiobrowser.tools.clean.CleanConfig.videoExtension
 import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.tools.clean.getFileSize
 import com.boom.aiobrowser.tools.getBeanByGson
+import com.boom.aiobrowser.tools.toJson
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Request
@@ -39,7 +40,9 @@ object WebScan {
             if (url.contains(WebConfig.FILTER_TIKTOK, true)) {
                 if (WebConfig.cookieTikTok.isNullOrEmpty())return
                 type = WebConfig.TIKTOK
-                AppLogs.dLog(TAG, "isloading :${isloading}  命中tiktok uri:${uri}")
+                if (APP.isDebug){
+                    AppLogs.dLog(TAG, "判断 1 isloading :${isloading}  命中tiktok uri:${uri}")
+                }
                 var id = "tiktok_${getTikTokId(url)}"
                 var list = CacheManager.videoDownloadTempList
                 var allow = true
@@ -49,6 +52,9 @@ object WebScan {
                         allow = false
                         break
                     }
+                }
+                if (APP.isDebug){
+                    AppLogs.dLog(TAG, "判断 2 allow:${allow} list:${toJson(CacheManager.videoDownloadTempList)}")
                 }
                 if (allow) {
                     var map = HashMap<String, Any>()
@@ -75,7 +81,7 @@ object WebScan {
                     list.add(0, data)
                     CacheManager.videoDownloadTempList = list
                     if (isloading.not()) {
-                        AppLogs.dLog(TAG, "filterUri 发送数据变化 id:${data.videoId}")
+                        AppLogs.dLog(TAG, "判断 3 filterUri 发送数据变化 id:${data.videoId}")
                         APP.videoScanLiveData.postValue(data)
                         getVideoHeaderInfo(type, url, WebConfig.cookieTikTok)
                     }

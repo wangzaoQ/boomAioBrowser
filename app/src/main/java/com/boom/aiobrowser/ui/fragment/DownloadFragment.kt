@@ -140,8 +140,8 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
         downloadAdapter.addOnDebouncedChildClick(R.id.ivVideoClose) { adapter, view, position ->
             var item = downloadAdapter.getItem(position)?:return@addOnDebouncedChildClick
             downloadAdapter.remove(item)
-            DownloadControlManager.videoDelete(item!!)
-            APP.videoUpdateLiveData.postValue(0)
+            DownloadControlManager.videoDelete(item!!,false)
+            APP.videoUpdateLiveData.postValue(item.videoId)
         }
     }
 

@@ -76,29 +76,15 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         APP.videoUpdateLiveData.observe(this){
             var list = CacheManager.videoDownloadTempList
             if (popDown?.isShowing == true && list.isNotEmpty()){
-                addLaunch(success = {
-                    var modelList = DownloadCacheManager.queryDownloadModelOther()
-                    if (modelList.isNullOrEmpty().not()){
-                        for (i in 0 until modelList!!.size){
-                            var data = modelList.get(i)
-                            var index = -1
-                            for (k in 0 until list.size){
-                                var bean = list.get(k)
-                                if (data.url == bean.url){
-                                    index = k
-                                    break
-                                }
-                            }
-                            if (index>=0){
-                                list.removeAt(index)
-                            }
-                        }
+                for (i in 0 until list!!.size){
+                    var data = list.get(i)
+                    if (data.videoId == it){
+                        data.downloadType = VideoDownloadData.DOWNLOAD_NOT
                         CacheManager.videoDownloadTempList = list
-                        withContext(Dispatchers.Main){
-                            popDown?.updateData()
-                        }
+                        popDown?.updateItem()
+                        break
                     }
-                }, failBack = {})
+                }
             }
         }
         acBinding.ivDownload.setOneClick {
@@ -168,6 +154,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
     }
 
     var popDown: DownLoadPop?=null
+
 
     fun updateBottom(showBack:Boolean,showNext:Boolean,jumpData:JumpData?=null,tag:String) {
         AppLogs.dLog(acTAG,"updateBottom:${tag}")

@@ -237,6 +237,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 setVp()
                 loadNews()
             }
+            CacheManager.videoDownloadTempList = mutableListOf()
         },500)
         startFragment = StartFragment()
         startFragment?.apply {

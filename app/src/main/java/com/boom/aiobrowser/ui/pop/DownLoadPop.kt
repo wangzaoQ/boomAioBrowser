@@ -74,8 +74,20 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
     }
 
     fun updateDataByScan(it: VideoDownloadData) {
-        var list = CacheManager.videoDownloadTempList
-        downloadAdapter.submitList(list)
+        var index = -1
+        for (i in 0 until downloadAdapter.items.size){
+            var data = downloadAdapter.items.get(i)
+            if (data.videoId == it.videoId){
+                index = i
+                data.size = it.size
+                break
+            }
+        }
+        if (index>=0){
+            downloadAdapter.notifyItemChanged(index)
+        }else{
+            downloadAdapter.add(it)
+        }
     }
 
     fun updateData() {
@@ -128,7 +140,11 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             item.downloadSize = 0
         }else{
             if (item.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS)return
-            item.downloadType = type
+            if (item.downloadType == VideoDownloadData.DOWNLOAD_PAUSE && type == VideoDownloadData.DOWNLOAD_LOADING){
+                AppLogs.dLog(VideoManager.TAG,"updateStatus position:${position} 状态已暂停暂不更新状态")
+            }else{
+                item.downloadType = type
+            }
             item.downloadSize = data.downloadSize
             item.size = data.totalSize
         }

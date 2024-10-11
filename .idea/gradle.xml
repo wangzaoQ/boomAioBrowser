@@ -11,12 +11,10 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/adapter" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/download" />
             <option value="$PROJECT_DIR$/gsyVideoPlayer-base" />
             <option value="$PROJECT_DIR$/gsyVideoPlayer-exo_player2" />
             <option value="$PROJECT_DIR$/gsyVideoPlayer-java" />
             <option value="$PROJECT_DIR$/gsyVideoPlayer-proxy_cache" />
-            <option value="$PROJECT_DIR$/indicator" />
             <option value="$PROJECT_DIR$/pop" />
             <option value="$PROJECT_DIR$/videoDownload" />
             <option value="$PROJECT_DIR$/web" />

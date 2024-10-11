@@ -17,7 +17,6 @@ import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
-import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.web.WebScan
 import com.boom.aiobrowser.ui.JumpConfig
@@ -28,9 +27,6 @@ import com.boom.aiobrowser.ui.pop.DownLoadPop
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.TabPop
 import com.boom.aiobrowser.ui.pop.TipsPop
-import com.jeffmony.downloader.VideoDownloadManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import pop.basepopup.BasePopupWindow.OnDismissListener
 
 class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {

@@ -17,7 +17,7 @@ import androidx.viewbinding.ViewBinding
 import com.blankj.utilcode.util.KeyboardUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
-import com.fast.newsnow.view.statusbar.StatusBarHelper
+import com.boom.newsnow.view.statusbar.StatusBarHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

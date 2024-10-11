@@ -14,7 +14,6 @@ import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
 import com.boom.aiobrowser.point.Install
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
-import com.boom.aiobrowser.point.PointManager
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.clean.CleanConfig
@@ -23,8 +22,8 @@ import com.boom.aiobrowser.tools.event.ProtectedUnPeekLiveData
 import com.boom.aiobrowser.tools.isOtherPkg
 import com.boom.aiobrowser.tools.video.VideoManager.initVideo
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
-import com.jeffmony.downloader.VideoDownloadManager
-import com.jeffmony.downloader.model.VideoTaskItem
+import com.boom.downloader.VideoDownloadManager
+import com.boom.downloader.model.VideoTaskItem
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

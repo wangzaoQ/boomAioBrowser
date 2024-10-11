@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.ToastUtils
@@ -18,20 +17,17 @@ import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
-import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.download.DownloadControlManager
 import com.boom.aiobrowser.tools.video.VideoManager
-import com.boom.aiobrowser.tools.web.WebScan
-import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.VideoPreActivity
 import com.boom.aiobrowser.ui.adapter.VideoDownloadAdapter
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
-import com.jeffmony.downloader.VideoDownloadManager
-import com.jeffmony.downloader.model.VideoTaskItem
+import com.boom.downloader.VideoDownloadManager
+import com.boom.downloader.model.VideoTaskItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import pop.basepopup.BasePopupWindow
@@ -105,7 +101,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         }, failBack = {})
     }
 
-    fun updateStatus(activity:BaseActivity<*>,type: Int, data: VideoTaskItem?,callBack: (data:VideoDownloadData) -> Unit) {
+    fun updateStatus(activity:BaseActivity<*>, type: Int, data: VideoTaskItem?, callBack: (data:VideoDownloadData) -> Unit) {
         AppLogs.dLog(VideoManager.TAG,"updateStatus type:${type} url:${data?.url}")
         if (data == null) return
         var position = -1

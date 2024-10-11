@@ -1,4 +1,4 @@
-package com.fast.newsnow.view.statusbar
+package com.boom.newsnow.view.statusbar
 
 import android.app.Activity
 import android.os.Build

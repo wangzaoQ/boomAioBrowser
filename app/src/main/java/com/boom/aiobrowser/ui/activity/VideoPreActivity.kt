@@ -6,10 +6,10 @@ import android.view.View
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.VideoActivityPreviewBinding
 import com.boom.aiobrowser.ui.view.CustomVideoView
-import com.fast.video.GSYVideoManager
-import com.fast.video.builder.GSYVideoOptionBuilder
-import com.fast.video.listener.GSYSampleCallBack
-import com.fast.video.utils.OrientationUtils
+import com.boom.video.GSYVideoManager
+import com.boom.video.builder.GSYVideoOptionBuilder
+import com.boom.video.listener.GSYSampleCallBack
+import com.boom.video.utils.OrientationUtils
 import java.io.File
 
 class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){

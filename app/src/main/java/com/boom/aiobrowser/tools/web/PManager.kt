@@ -2,19 +2,14 @@ package com.boom.aiobrowser.tools.web
 
 import android.text.TextUtils
 import com.boom.aiobrowser.tools.BigDecimalUtils
-import com.jeffmony.downloader.common.DownloadConstants
-import com.jeffmony.downloader.m3u8.M3U8
-import com.jeffmony.downloader.m3u8.M3U8Constants
-import com.jeffmony.downloader.m3u8.M3U8Seg
-import com.jeffmony.downloader.m3u8.M3U8Utils
-import com.jeffmony.downloader.utils.HttpUtils
-import com.jeffmony.downloader.utils.LogUtils
-import com.jeffmony.downloader.utils.VideoDownloadUtils
+import com.boom.downloader.common.DownloadConstants
+import com.boom.downloader.utils.HttpUtils
+import com.boom.downloader.utils.LogUtils
+import com.boom.downloader.utils.VideoDownloadUtils
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 import java.util.regex.Pattern
-import kotlin.math.abs
 
 object PManager {
 

@@ -3,7 +3,7 @@ package com.boom.aiobrowser.tools.download
 import com.blankj.utilcode.util.FileUtils
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.tools.CacheManager
-import com.jeffmony.downloader.VideoDownloadManager
+import com.boom.downloader.VideoDownloadManager
 import java.io.File
 
 object DownloadControlManager {

@@ -17,7 +17,6 @@ import com.boom.aiobrowser.model.VideoDownloadModel
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
-import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.download.DownloadControlManager
@@ -27,9 +26,8 @@ import com.boom.aiobrowser.ui.adapter.VideoDownloadAdapter
 import com.boom.aiobrowser.ui.pop.VideoMorePop
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
-import com.jeffmony.downloader.VideoDownloadManager
-import com.jeffmony.downloader.listener.IDownloadInfosCallback
-import com.jeffmony.downloader.model.VideoTaskItem
+import com.boom.downloader.VideoDownloadManager
+import com.boom.downloader.model.VideoTaskItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File

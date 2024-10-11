@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 android {
     compileSdk 34
-    namespace 'com.fast.video.media.exo2'
+    namespace 'com.boom.video.media.exo2'
 
     defaultConfig {
         minSdk 23

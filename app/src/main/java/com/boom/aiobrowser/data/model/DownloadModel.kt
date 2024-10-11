@@ -22,6 +22,7 @@ public class DownloadModel{
 
     var downloadFileName :String = ""
     var downloadFilePath :String = ""
+    var fileTemp:String = ""
 
     fun createDownloadModel(downloadData: VideoDownloadData):DownloadModel{
         var model = DownloadModel()

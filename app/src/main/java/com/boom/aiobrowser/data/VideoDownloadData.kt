@@ -2,8 +2,8 @@ package com.boom.aiobrowser.data
 
 import com.boom.aiobrowser.data.model.DownloadModel
 import com.boom.aiobrowser.tools.getMapByGson
-import com.jeffmony.downloader.model.Video
-import com.jeffmony.downloader.model.VideoTaskItem
+import com.boom.downloader.model.Video
+import com.boom.downloader.model.VideoTaskItem
 
 class VideoDownloadData{
 
@@ -51,7 +51,7 @@ class VideoDownloadData{
         return this
     }
 
-    fun createDownloadData(data:VideoDownloadData):VideoTaskItem{
+    fun createDownloadData(data:VideoDownloadData): VideoTaskItem {
         var task = VideoTaskItem(
             data.url,
             data.url,

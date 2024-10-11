@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdk 34
-    namespace 'com.fast.videocache'
+    namespace 'com.boom.videocache'
 
     defaultConfig {
         minSdkVersion 23

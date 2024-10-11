@@ -13,11 +13,11 @@ import android.widget.SeekBar
 import com.boom.aiobrowser.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.fast.video.utils.CommonUtil
-import com.fast.video.utils.Debuger
-import com.fast.video.utils.GSYVideoType
-import com.fast.video.video.NormalGSYVideoPlayer
-import com.fast.video.video.base.GSYBaseVideoPlayer
+import com.boom.video.utils.CommonUtil
+import com.boom.video.utils.Debuger
+import com.boom.video.utils.GSYVideoType
+import com.boom.video.video.NormalGSYVideoPlayer
+import com.boom.video.video.base.GSYBaseVideoPlayer
 
 class CustomVideoView @JvmOverloads constructor(
     context: Context,

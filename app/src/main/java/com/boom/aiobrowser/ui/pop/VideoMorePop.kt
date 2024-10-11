@@ -2,21 +2,17 @@ package com.boom.aiobrowser.ui.pop
 
 import android.app.AlertDialog
 import android.content.Context
-import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
-import com.blankj.utilcode.util.FileUtils
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.VideoPopManageBinding
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.download.DownloadControlManager
-import com.jeffmony.downloader.VideoDownloadManager
 import pop.basepopup.BasePopupWindow
 import pop.util.animation.AnimationHelper
 import pop.util.animation.TranslationConfig
-import java.io.File
 
 class VideoMorePop(context: Context) : BasePopupWindow(context) {
 

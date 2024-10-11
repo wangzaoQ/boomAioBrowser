@@ -15,7 +15,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AnticipateInterpolator;
 
-import com.fast.video.R;
+import com.boom.video.R;
 
 /**
  * Created by codeest on 16/11/7.

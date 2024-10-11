@@ -60,7 +60,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         }
         APP.videoScanLiveData.observe(this){
 //            ToastUtils.showLong("视频获取成功")
-            popDown?.updateData()
+            popDown?.updateDataByScan(it)
             updateDownloadButtonStatus(true)
         }
         APP.videoLiveData.observe(this){

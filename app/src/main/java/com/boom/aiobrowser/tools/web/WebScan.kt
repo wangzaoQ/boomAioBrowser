@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.tools.web
 
+import android.webkit.CookieManager
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.PManageData
@@ -38,6 +39,11 @@ object WebScan {
         uri?.apply {
             var url = uri.toString()
             if (url.contains(WebConfig.FILTER_TIKTOK, true)) {
+                var cookieManager = CookieManager.getInstance()
+                WebConfig.cookieTikTok = cookieManager.getCookie(url)?:""
+                if (APP.isDebug){
+                    AppLogs.dLog(TAG, "判断 0 cookie :${WebConfig.cookieTikTok}  命中tiktok uri:${uri}")
+                }
                 if (WebConfig.cookieTikTok.isNullOrEmpty())return
                 type = WebConfig.TIKTOK
                 if (APP.isDebug){

@@ -73,6 +73,11 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         downloadAdapter.submitList(endList)
     }
 
+    fun updateDataByScan(it: VideoDownloadData) {
+        var list = CacheManager.videoDownloadTempList
+        downloadAdapter.submitList(list)
+    }
+
     fun updateData() {
         (context as BaseActivity<*>).addLaunch(success = {
             var modelList = DownloadCacheManager.queryDownloadModelOther()
@@ -264,5 +269,6 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
     fun updateProgress(list: MutableList<VideoDownloadData>) {
         downloadAdapter.submitList(list)
     }
+
 
 }

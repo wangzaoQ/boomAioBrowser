@@ -166,10 +166,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 //                    return webResourceResponse
 //                }
 //            }
-            rootActivity.addLaunch(success = {
-                delay(500)
-                WebScan.filterUri(request?.url?.toString()?:"",WeakReference(rootActivity))
-            }, failBack = {})
+            WebScan.filterUri(request?.url?.toString()?:"",WeakReference(rootActivity))
             return super.shouldInterceptRequest(view, request)
         }
 
@@ -228,7 +225,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             var cookie = cookieManager.getCookie(url)?:""
             AppLogs.dLog(fragmentTAG,"onPageFinished page mUrl:${url}  cookie:${cookie}")
             if (WebScan.isTikTok(url) && cookie.isNotEmpty()){
-                WebConfig.cookieTikTok = cookie
+//                WebConfig.cookieTikTok = cookie
 //                val cookieManager = CookieManager.getInstance()
 //                cookieManager.setAcceptCookie(true)
 //                cookieManager.setCookie("https://www.tiktok.com/foryou", cookie)

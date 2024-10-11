@@ -207,6 +207,9 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             var item = downloadAdapter.getItem(position)?:return@addOnDebouncedChildClick
             downloadAdapter.remove(item)
             DownloadControlManager.videoDelete(item!!)
+            if (downloadAdapter.items.isNullOrEmpty()){
+                dismiss()
+            }
             callBack.invoke(item)
         }
         updateData()

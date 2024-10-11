@@ -102,4 +102,37 @@
     <string name="app_no">Hayır</string>
     <string name="app_delete_msg">Kalıcı silmeyi onaylayın</string>
     <string name="app_no_data">Veri yok</string>
+
+    <string name="app_download">İndir</string>
+    <string name="app_downloading">İndiriliyor</string>
+    <string name="app_loading_content">Yükleniyor</string>
+    <string name="app_download_error">İndirme başarısız</string>
+    <string name="app_download_no_net">Şu anda ağ bağlantısı yok</string>
+    <string name="app_already_download">Zaten indirildi</string>
+    <string name="app_progress">İlerleme</string>
+    <string name="app_done">Tamamlandı</string>
+    <string name="app_no_record">Kayıt yok</string>
+    <string name="app_rename">Yeniden adlandır</string>
+    <string name="app_file_info">Dosya bilgisi</string>
+    <string name="app_ok">Tamam</string>
+    <string name="app_download_prepare">Hazırlanıyor</string>
+    <string name="app_skip">Atla</string>
+    <string name="app_guide_title0">Video URL\'sini girin</string>
+    <string name="app_guide_title1">İndirilen videoyu seçin</string>
+    <string name="app_guide_title2">Video içeriğini oynat</string>
+    <string name="app_guide_title3">Yasal uyarı</string>
+    <string name="app_guide_content">Bu hizmeti video indirmek ve yüklemek için kullanırken, kullanıcıların orijinal kaynaktan izin alması gerektiğini lütfen unutmayın. İzinsiz işlemler yasal sorumluluk doğurabilir. Lütfen bu hizmeti kullanırken ilgili yasa ve yönetmeliklere bilinçli olarak uyun.</string>
+    <string name="app_try">Dene</string>
+    <string name="app_disclaimer">Yasal uyarı</string>
+    <string name="app_disclaimer_content">Bu hizmeti video indirmek ve yüklemek için kullanırken, kullanıcıların orijinal kaynaktan izin alması gerektiğini lütfen unutmayın. İzinsiz işlemler yasal sorumluluk doğurabilir. Lütfen bu hizmeti kullanırken ilgili yasa ve yönetmeliklere bilinçli olarak uyun.</string>
+    <string name="app_enable_permission">İzinleri etkinleştir</string>
+    <string name="app_record">Kaydet</string>
+    <string name="app_video_download_guide">Öğreticiyi indir</string>
+    <string name="download_finished">İndirme tamamlandı</string>
+    <string name="download_failed">İndirme başarısız</string>
+    <string name="app_file_name">Ad:</string>
+    <string name="app_file_size">Dosya boyutu:</string>
+    <string name="app_file_time">Dosya zamanı:</string>
+    <string name="app_tips">İpuçları</string>
+    <string name="app_tips_content">Yasal kısıtlamalar nedeniyle YouTube videoları indirilemez.</string>
 </resources>

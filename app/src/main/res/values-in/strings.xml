@@ -102,4 +102,37 @@
     <string name="app_no">Tidak</string>
     <string name="app_delete_msg">Konfirmasi penghapusan permanen</string>
     <string name="app_no_data">Tidak ada data</string>
+
+    <string name="app_download">Unduh</string>
+    <string name="app_downloading">Mengunduh</string>
+    <string name="app_loading_content">Memuat</string>
+    <string name="app_download_error">Gagal mengunduh</string>
+    <string name="app_download_no_net">Tidak ada jaringan tersedia saat ini</string>
+    <string name="app_already_download">Sudah diunduh</string>
+    <string name="app_progress">Kemajuan</string>
+    <string name="app_done">Selesai</string>
+    <string name="app_no_record">Tidak ada catatan</string>
+    <string name="app_rename">Ubah nama</string>
+    <string name="app_file_info">Informasi file</string>
+    <string name="app_ok">Oke</string>
+    <string name="app_download_prepare">Sedang mempersiapkan</string>
+    <string name="app_skip">Lewati</string>
+    <string name="app_guide_title0">Masukkan URL video</string>
+    <string name="app_guide_title1">Pilih video yang diunduh</string>
+    <string name="app_guide_title2">Putar konten video</string>
+    <string name="app_guide_title3">Pernyataan penafian</string>
+    <string name="app_guide_content">Harap perhatikan bahwa saat menggunakan layanan ini untuk mengunduh dan mengunggah video, pengguna harus mendapatkan izin dari sumber asli. Operasi yang tidak sah dapat melibatkan tanggung jawab hukum. Harap patuhi hukum dan peraturan yang relevan saat menggunakan layanan ini.</string>
+    <string name="app_try">Coba</string>
+    <string name="app_disclaimer">Pernyataan penafian</string>
+    <string name="app_disclaimer_content">Harap perhatikan bahwa saat menggunakan layanan ini untuk mengunduh dan mengunggah video, pengguna harus mendapatkan izin dari sumber asli. Operasi yang tidak sah dapat melibatkan tanggung jawab hukum. Harap patuhi hukum dan peraturan yang relevan saat menggunakan layanan ini.</string>
+    <string name="app_enable_permission">Aktifkan izin</string>
+    <string name="app_record">Rekam</string>
+    <string name="app_video_download_guide">Unduh tutorial</string>
+    <string name="download_finished">Unduhan selesai</string>
+    <string name="download_failed">Gagal mengunduh</string>
+    <string name="app_file_name">Nama:</string>
+    <string name="app_file_size">Ukuran file:</string>
+    <string name="app_file_time">Waktu file:</string>
+    <string name="app_tips">Tips</string>
+    <string name="app_tips_content">Karena batasan hukum, video dari YouTube tidak dapat diunduh.</string>
 </resources>

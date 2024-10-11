@@ -166,6 +166,7 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
         AppLogs.dLog(VideoManager.TAG,"updateStatus position:${position} url:${data?.url}")
         if (position == -1) return
         var item = downloadAdapter.getItem(position)?:return
+        if (item.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS)return
         item.downloadType = type
         item.downloadSize = data.downloadSize
         if (type == VideoDownloadData.DOWNLOAD_SUCCESS){

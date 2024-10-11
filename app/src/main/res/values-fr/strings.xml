@@ -102,4 +102,37 @@
     <string name="app_no">Non</string>
     <string name="app_delete_msg">Confirmer la suppression définitive</string>
     <string name="app_no_data">Pas de données</string>
+
+    <string name="app_download">Télécharger</string>
+    <string name="app_downloading">Téléchargement en cours</string>
+    <string name="app_loading_content">Chargement</string>
+    <string name="app_download_error">Échec du téléchargement</string>
+    <string name="app_download_no_net">Aucun réseau disponible pour le moment</string>
+    <string name="app_already_download">Déjà téléchargé</string>
+    <string name="app_progress">Progression</string>
+    <string name="app_done">Terminé</string>
+    <string name="app_no_record">Aucun enregistrement</string>
+    <string name="app_rename">Renommer</string>
+    <string name="app_file_info">Informations sur le fichier</string>
+    <string name="app_ok">OK</string>
+    <string name="app_download_prepare">En préparation</string>
+    <string name="app_skip">Passer</string>
+    <string name="app_guide_title0">Entrez l\'URL de la vidéo</string>
+    <string name="app_guide_title1">Sélectionnez la vidéo téléchargée</string>
+    <string name="app_guide_title2">Lire le contenu vidéo</string>
+    <string name="app_guide_title3">Avis de non-responsabilité</string>
+    <string name="app_guide_content">Veuillez noter que lors de l\'utilisation de ce service pour télécharger et téléverser des vidéos, les utilisateurs doivent obtenir l\'autorisation de la source originale. Les opérations non autorisées peuvent engager une responsabilité juridique. Veuillez respecter consciencieusement les lois et réglementations pertinentes lors de l\'utilisation de ce service.</string>
+    <string name="app_try">Essayer</string>
+    <string name="app_disclaimer">Avis de non-responsabilité</string>
+    <string name="app_disclaimer_content">Veuillez noter que lors de l\'utilisation de ce service pour télécharger et téléverser des vidéos, les utilisateurs doivent obtenir l\'autorisation de la source originale. Les opérations non autorisées peuvent engager une responsabilité juridique. Veuillez respecter consciencieusement les lois et réglementations pertinentes lors de l\'utilisation de ce service.</string>
+    <string name="app_enable_permission">Activer les autorisations</string>
+    <string name="app_record">Enregistrer</string>
+    <string name="app_video_download_guide">Télécharger le tutoriel</string>
+    <string name="download_finished">Téléchargement terminé</string>
+    <string name="download_failed">Échec du téléchargement</string>
+    <string name="app_file_name">Nom :</string>
+    <string name="app_file_size">Taille du fichier :</string>
+    <string name="app_file_time">Date du fichier :</string>
+    <string name="app_tips">Conseils</string>
+    <string name="app_tips_content">En raison de restrictions légales, les vidéos sur YouTube ne peuvent pas être téléchargées.</string>
 </resources>

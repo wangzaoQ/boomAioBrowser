@@ -103,4 +103,38 @@
     <string name="app_no">No</string>
     <string name="app_delete_msg">Confirmar eliminación permanente</string>
     <string name="app_no_data">Sin datos</string>
+
+
+    <string name="app_download">Descargar</string>
+    <string name="app_downloading">Descargando</string>
+    <string name="app_loading_content">Cargando</string>
+    <string name="app_download_error">Error de descarga</string>
+    <string name="app_download_no_net">No hay red disponible en este momento</string>
+    <string name="app_already_download">Ya descargado</string>
+    <string name="app_progress">Progreso</string>
+    <string name="app_done">Hecho</string>
+    <string name="app_no_record">Sin registros</string>
+    <string name="app_rename">Renombrar</string>
+    <string name="app_file_info">Información del archivo</string>
+    <string name="app_ok">Aceptar</string>
+    <string name="app_download_prepare">En preparación</string>
+    <string name="app_skip">Omitir</string>
+    <string name="app_guide_title0">Ingrese la URL del video</string>
+    <string name="app_guide_title1">Seleccione el video descargado</string>
+    <string name="app_guide_title2">Reproducir contenido de video</string>
+    <string name="app_guide_title3">Aviso legal</string>
+    <string name="app_guide_content">Tenga en cuenta que al utilizar este servicio para descargar y subir videos, los usuarios deben obtener autorización de la fuente original. Las operaciones no autorizadas pueden implicar responsabilidad legal. Por favor, cumpla conscientemente con las leyes y regulaciones relevantes al utilizar este servicio.</string>
+    <string name="app_try">Probar</string>
+    <string name="app_disclaimer">Aviso legal</string>
+    <string name="app_disclaimer_content">Tenga en cuenta que al utilizar este servicio para descargar y subir videos, los usuarios deben obtener autorización de la fuente original. Las operaciones no autorizadas pueden implicar responsabilidad legal. Por favor, cumpla conscientemente con las leyes y regulaciones relevantes al utilizar este servicio.</string>
+    <string name="app_enable_permission">Habilitar permisos</string>
+    <string name="app_record">Grabar</string>
+    <string name="app_video_download_guide">Descargar el tutorial</string>
+    <string name="download_finished">Descarga finalizada</string>
+    <string name="download_failed">Error en la descarga</string>
+    <string name="app_file_name">Nombre:</string>
+    <string name="app_file_size">Tamaño del archivo:</string>
+    <string name="app_file_time">Tiempo del archivo:</string>
+    <string name="app_tips">Consejos</string>
+    <string name="app_tips_content">Debido a restricciones legales, los videos de YouTube no se pueden descargar.</string>
 </resources>

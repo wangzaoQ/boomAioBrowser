@@ -103,4 +103,37 @@
     <string name="app_no">ไม่ใช่</string>
     <string name="app_delete_msg">ยืนยันการลบอย่างถาวร</string>
     <string name="app_no_data">ไม่มีข้อมูล</string>
+
+    <string name="app_download">ดาวน์โหลด</string>
+    <string name="app_downloading">กำลังดาวน์โหลด</string>
+    <string name="app_loading_content">กำลังโหลด</string>
+    <string name="app_download_error">ดาวน์โหลดล้มเหลว</string>
+    <string name="app_download_no_net">ไม่มีเครือข่ายในขณะนี้</string>
+    <string name="app_already_download">ดาวน์โหลดแล้ว</string>
+    <string name="app_progress">ความคืบหน้า</string>
+    <string name="app_done">เสร็จสิ้น</string>
+    <string name="app_no_record">ไม่มีบันทึก</string>
+    <string name="app_rename">เปลี่ยนชื่อ</string>
+    <string name="app_file_info">ข้อมูลไฟล์</string>
+    <string name="app_ok">ตกลง</string>
+    <string name="app_download_prepare">กำลังเตรียมการ</string>
+    <string name="app_skip">ข้าม</string>
+    <string name="app_guide_title0">ป้อน URL วิดีโอ</string>
+    <string name="app_guide_title1">เลือกวิดีโอที่ดาวน์โหลด</string>
+    <string name="app_guide_title2">เล่นเนื้อหาวิดีโอ</string>
+    <string name="app_guide_title3">ข้อจำกัดความรับผิดชอบ</string>
+    <string name="app_guide_content">โปรดทราบว่าเมื่อใช้บริการนี้ในการดาวน์โหลดและอัปโหลดวิดีโอ ผู้ใช้จะต้องได้รับอนุญาตจากแหล่งที่มาดั้งเดิม การดำเนินการที่ไม่ได้รับอนุญาตอาจเกี่ยวข้องกับความรับผิดทางกฎหมาย โปรดปฏิบัติตามกฎหมายและข้อบังคับที่เกี่ยวข้องอย่างมีสติเมื่อใช้บริการนี้</string>
+    <string name="app_try">ลอง</string>
+    <string name="app_disclaimer">ข้อจำกัดความรับผิดชอบ</string>
+    <string name="app_disclaimer_content">โปรดทราบว่าเมื่อใช้บริการนี้ในการดาวน์โหลดและอัปโหลดวิดีโอ ผู้ใช้จะต้องได้รับอนุญาตจากแหล่งที่มาดั้งเดิม การดำเนินการที่ไม่ได้รับอนุญาตอาจเกี่ยวข้องกับความรับผิดทางกฎหมาย โปรดปฏิบัติตามกฎหมายและข้อบังคับที่เกี่ยวข้องอย่างมีสติเมื่อใช้บริการนี้</string>
+    <string name="app_enable_permission">เปิดใช้งานสิทธิ์</string>
+    <string name="app_record">บันทึก</string>
+    <string name="app_video_download_guide">ดาวน์โหลดคู่มือ</string>
+    <string name="download_finished">ดาวน์โหลดเสร็จสิ้น</string>
+    <string name="download_failed">ดาวน์โหลดล้มเหลว</string>
+    <string name="app_file_name">ชื่อ:</string>
+    <string name="app_file_size">ขนาดไฟล์:</string>
+    <string name="app_file_time">เวลาไฟล์:</string>
+    <string name="app_tips">เคล็ดลับ</string>
+    <string name="app_tips_content">เนื่องจากข้อจำกัดทางกฎหมาย วิดีโอบน YouTube ไม่สามารถดาวน์โหลดได้</string>
 </resources>

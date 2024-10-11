@@ -101,4 +101,37 @@
     <string name="app_no">いいえ</string>
     <string name="app_delete_msg">完全に削除することを確認</string>
     <string name="app_no_data">データなし</string>
+
+    <string name="app_download">ダウンロード</string>
+    <string name="app_downloading">ダウンロード中</string>
+    <string name="app_loading_content">読み込み中</string>
+    <string name="app_download_error">ダウンロード失敗</string>
+    <string name="app_download_no_net">現在ネットワークが利用できません</string>
+    <string name="app_already_download">すでにダウンロード済み</string>
+    <string name="app_progress">進捗</string>
+    <string name="app_done">完了</string>
+    <string name="app_no_record">記録なし</string>
+    <string name="app_rename">名前変更</string>
+    <string name="app_file_info">ファイル情報</string>
+    <string name="app_ok">OK</string>
+    <string name="app_download_prepare">準備中</string>
+    <string name="app_skip">スキップ</string>
+    <string name="app_guide_title0">動画URLを入力</string>
+    <string name="app_guide_title1">ダウンロードした動画を選択</string>
+    <string name="app_guide_title2">動画コンテンツを再生</string>
+    <string name="app_guide_title3">免責事項</string>
+    <string name="app_guide_content">このサービスを使用して動画をダウンロードおよびアップロードする際、ユーザーは元のソースから許可を得る必要があります。無許可の操作は法的責任を伴う可能性があります。このサービスを使用する際は、関連する法律や規制を意識的に遵守してください。</string>
+    <string name="app_try">試す</string>
+    <string name="app_disclaimer">免責事項</string>
+    <string name="app_disclaimer_content">このサービスを使用して動画をダウンロードおよびアップロードする際、ユーザーは元のソースから許可を得る必要があります。無許可の操作は法的責任を伴う可能性があります。このサービスを使用する際は、関連する法律や規制を意識的に遵守してください。</string>
+    <string name="app_enable_permission">権限を有効にする</string>
+    <string name="app_record">録画</string>
+    <string name="app_video_download_guide">チュートリアルをダウンロード</string>
+    <string name="download_finished">ダウンロード完了</string>
+    <string name="download_failed">ダウンロード失敗</string>
+    <string name="app_file_name">名前：</string>
+    <string name="app_file_size">ファイルサイズ：</string>
+    <string name="app_file_time">ファイル時間：</string>
+    <string name="app_tips">ヒント</string>
+    <string name="app_tips_content">法的制限により、YouTubeの動画はダウンロードできません。</string>
 </resources>

@@ -102,6 +102,7 @@
     <string name="app_no">No</string>
     <string name="app_delete_msg">Confirm permanent deletion</string>
     <string name="app_no_data">No data</string>
+
     <string name="app_download">Download</string>
     <string name="app_downloading">Downloading</string>
     <string name="app_loading_content">loading</string>
@@ -133,6 +134,6 @@
     <string name="app_file_size">File size:</string>
     <string name="app_file_time">File time:</string>
     <string name="app_tips">Tips</string>
-    <string name="app_tips_content">Due To Legal Restrictions, Videos On YouTubeCANNOT Be Downloaded.</string>
+    <string name="app_tips_content">Due to legal restrictions, videos on YouTube cannot be downloaded.</string>
 
 </resources>

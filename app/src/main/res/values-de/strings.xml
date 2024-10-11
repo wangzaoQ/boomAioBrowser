@@ -103,4 +103,37 @@
     <string name="app_no">Nein</string>
     <string name="app_delete_msg">Dauerhaftes Löschen bestätigen</string>
     <string name="app_no_data">Keine Daten</string>
+
+    <string name="app_download">Herunterladen</string>
+    <string name="app_downloading">Wird heruntergeladen</string>
+    <string name="app_loading_content">Lädt</string>
+    <string name="app_download_error">Download fehlgeschlagen</string>
+    <string name="app_download_no_net">Zurzeit kein Netzwerk verfügbar</string>
+    <string name="app_already_download">Bereits heruntergeladen</string>
+    <string name="app_progress">Fortschritt</string>
+    <string name="app_done">Fertig</string>
+    <string name="app_no_record">Keine Aufzeichnungen</string>
+    <string name="app_rename">Umbenennen</string>
+    <string name="app_file_info">Dateiinformationen</string>
+    <string name="app_ok">OK</string>
+    <string name="app_download_prepare">In Vorbereitung</string>
+    <string name="app_skip">Überspringen</string>
+    <string name="app_guide_title0">Video-URL eingeben</string>
+    <string name="app_guide_title1">Heruntergeladenes Video auswählen</string>
+    <string name="app_guide_title2">Videoinhalt abspielen</string>
+    <string name="app_guide_title3">Haftungsausschluss</string>
+    <string name="app_guide_content">Bitte beachten Sie, dass Benutzer beim Herunterladen und Hochladen von Videos mit diesem Dienst die Genehmigung der Originalquelle einholen müssen. Nicht autorisierte Vorgänge können rechtliche Konsequenzen nach sich ziehen. Bitte halten Sie sich bei der Nutzung dieses Dienstes bewusst an die entsprechenden Gesetze und Vorschriften.</string>
+    <string name="app_try">Versuchen</string>
+    <string name="app_disclaimer">Haftungsausschluss</string>
+    <string name="app_disclaimer_content">Bitte beachten Sie, dass Benutzer beim Herunterladen und Hochladen von Videos mit diesem Dienst die Genehmigung der Originalquelle einholen müssen. Nicht autorisierte Vorgänge können rechtliche Konsequenzen nach sich ziehen. Bitte halten Sie sich bei der Nutzung dieses Dienstes bewusst an die entsprechenden Gesetze und Vorschriften.</string>
+    <string name="app_enable_permission">Berechtigungen aktivieren</string>
+    <string name="app_record">Aufzeichnen</string>
+    <string name="app_video_download_guide">Anleitung herunterladen</string>
+    <string name="download_finished">Download abgeschlossen</string>
+    <string name="download_failed">Download fehlgeschlagen</string>
+    <string name="app_file_name">Name:</string>
+    <string name="app_file_size">Dateigröße:</string>
+    <string name="app_file_time">Dateizeit:</string>
+    <string name="app_tips">Tipps</string>
+    <string name="app_tips_content">Aufgrund rechtlicher Einschränkungen können Videos auf YouTube nicht heruntergeladen werden.</string>
 </resources>

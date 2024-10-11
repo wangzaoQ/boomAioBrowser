@@ -101,4 +101,37 @@
     <string name="app_no">لا</string>
     <string name="app_delete_msg">تأكيد الحذف الدائم</string>
     <string name="app_no_data">لا توجد بيانات</string>
+
+    <string name="app_download">تنزيل</string>
+    <string name="app_downloading">جاري التنزيل</string>
+    <string name="app_loading_content">جاري التحميل</string>
+    <string name="app_download_error">فشل التنزيل</string>
+    <string name="app_download_no_net">لا يوجد شبكة متاحة حاليًا</string>
+    <string name="app_already_download">تم التنزيل بالفعل</string>
+    <string name="app_progress">التقدم</string>
+    <string name="app_done">تم</string>
+    <string name="app_no_record">لا توجد سجلات</string>
+    <string name="app_rename">إعادة تسمية</string>
+    <string name="app_file_info">معلومات الملف</string>
+    <string name="app_ok">موافق</string>
+    <string name="app_download_prepare">قيد التحضير</string>
+    <string name="app_skip">تخطي</string>
+    <string name="app_guide_title0">أدخل رابط الفيديو</string>
+    <string name="app_guide_title1">حدد الفيديو الذي تم تنزيله</string>
+    <string name="app_guide_title2">تشغيل محتوى الفيديو</string>
+    <string name="app_guide_title3">إخلاء المسؤولية</string>
+    <string name="app_guide_content">يرجى ملاحظة أنه عند استخدام هذه الخدمة لتنزيل وتحميل مقاطع الفيديو، يجب على المستخدمين الحصول على إذن من المصدر الأصلي. قد تنطوي العمليات غير المصرح بها على مسؤولية قانونية. يرجى الالتزام بالقوانين واللوائح ذات الصلة عند استخدام هذه الخدمة.</string>
+    <string name="app_try">تجربة</string>
+    <string name="app_disclaimer">إخلاء المسؤولية</string>
+    <string name="app_disclaimer_content">يرجى ملاحظة أنه عند استخدام هذه الخدمة لتنزيل وتحميل مقاطع الفيديو، يجب على المستخدمين الحصول على إذن من المصدر الأصلي. قد تنطوي العمليات غير المصرح بها على مسؤولية قانونية. يرجى الالتزام بالقوانين واللوائح ذات الصلة عند استخدام هذه الخدمة.</string>
+    <string name="app_enable_permission">تفعيل الأذونات</string>
+    <string name="app_record">تسجيل</string>
+    <string name="app_video_download_guide">تنزيل الدليل التعليمي</string>
+    <string name="download_finished">اكتمل التنزيل</string>
+    <string name="download_failed">فشل التنزيل</string>
+    <string name="app_file_name">الاسم:</string>
+    <string name="app_file_size">حجم الملف:</string>
+    <string name="app_file_time">وقت الملف:</string>
+    <string name="app_tips">نصائح</string>
+    <string name="app_tips_content">نظرًا للقيود القانونية، لا يمكن تنزيل مقاطع الفيديو من YouTube.</string>
 </resources>

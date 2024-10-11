@@ -102,4 +102,37 @@
     <string name="app_no">Нет</string>
     <string name="app_delete_msg">Подтвердите окончательное удаление</string>
     <string name="app_no_data">Нет данных</string>
+
+    <string name="app_download">Скачать</string>
+    <string name="app_downloading">Скачивание</string>
+    <string name="app_loading_content">Загрузка</string>
+    <string name="app_download_error">Ошибка загрузки</string>
+    <string name="app_download_no_net">Сеть недоступна в данный момент</string>
+    <string name="app_already_download">Уже скачано</string>
+    <string name="app_progress">Прогресс</string>
+    <string name="app_done">Готово</string>
+    <string name="app_no_record">Нет записей</string>
+    <string name="app_rename">Переименовать</string>
+    <string name="app_file_info">Информация о файле</string>
+    <string name="app_ok">Ок</string>
+    <string name="app_download_prepare">Подготовка</string>
+    <string name="app_skip">Пропустить</string>
+    <string name="app_guide_title0">Введите URL видео</string>
+    <string name="app_guide_title1">Выберите скачанное видео</string>
+    <string name="app_guide_title2">Воспроизвести видеоконтент</string>
+    <string name="app_guide_title3">Отказ от ответственности</string>
+    <string name="app_guide_content">Обратите внимание, что при использовании этого сервиса для скачивания и загрузки видео пользователи должны получить разрешение от исходного источника. Несанкционированные действия могут повлечь за собой юридическую ответственность. Пожалуйста, сознательно соблюдайте соответствующие законы и правила при использовании этого сервиса.</string>
+    <string name="app_try">Попробовать</string>
+    <string name="app_disclaimer">Отказ от ответственности</string>
+    <string name="app_disclaimer_content">Обратите внимание, что при использовании этого сервиса для скачивания и загрузки видео пользователи должны получить разрешение от исходного источника. Несанкционированные действия могут повлечь за собой юридическую ответственность. Пожалуйста, сознательно соблюдайте соответствующие законы и правила при использовании этого сервиса.</string>
+    <string name="app_enable_permission">Включить разрешения</string>
+    <string name="app_record">Запись</string>
+    <string name="app_video_download_guide">Скачать инструкцию</string>
+    <string name="download_finished">Загрузка завершена</string>
+    <string name="download_failed">Ошибка загрузки</string>
+    <string name="app_file_name">Имя:</string>
+    <string name="app_file_size">Размер файла:</string>
+    <string name="app_file_time">Время файла:</string>
+    <string name="app_tips">Советы</string>
+    <string name="app_tips_content">Из-за юридических ограничений видео с YouTube нельзя скачивать.</string>
 </resources>

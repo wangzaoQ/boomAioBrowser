@@ -102,4 +102,37 @@
     <string name="app_no">Không</string>
     <string name="app_delete_msg">Xác nhận xóa vĩnh viễn</string>
     <string name="app_no_data">Không có dữ liệu</string>
+
+    <string name="app_download">Tải xuống</string>
+    <string name="app_downloading">Đang tải xuống</string>
+    <string name="app_loading_content">Đang tải</string>
+    <string name="app_download_error">Tải xuống thất bại</string>
+    <string name="app_download_no_net">Hiện không có mạng</string>
+    <string name="app_already_download">Đã tải xuống</string>
+    <string name="app_progress">Tiến độ</string>
+    <string name="app_done">Hoàn thành</string>
+    <string name="app_no_record">Không có bản ghi</string>
+    <string name="app_rename">Đổi tên</string>
+    <string name="app_file_info">Thông tin tệp</string>
+    <string name="app_ok">OK</string>
+    <string name="app_download_prepare">Đang chuẩn bị</string>
+    <string name="app_skip">Bỏ qua</string>
+    <string name="app_guide_title0">Nhập URL video</string>
+    <string name="app_guide_title1">Chọn video đã tải xuống</string>
+    <string name="app_guide_title2">Phát nội dung video</string>
+    <string name="app_guide_title3">Tuyên bố từ chối trách nhiệm</string>
+    <string name="app_guide_content">Xin lưu ý rằng khi sử dụng dịch vụ này để tải xuống và tải lên video, người dùng phải được sự cho phép từ nguồn gốc. Các hoạt động không được phép có thể liên quan đến trách nhiệm pháp lý. Vui lòng tuân thủ các luật và quy định liên quan khi sử dụng dịch vụ này.</string>
+    <string name="app_try">Thử</string>
+    <string name="app_disclaimer">Tuyên bố từ chối trách nhiệm</string>
+    <string name="app_disclaimer_content">Xin lưu ý rằng khi sử dụng dịch vụ này để tải xuống và tải lên video, người dùng phải được sự cho phép từ nguồn gốc. Các hoạt động không được phép có thể liên quan đến trách nhiệm pháp lý. Vui lòng tuân thủ các luật và quy định liên quan khi sử dụng dịch vụ này.</string>
+    <string name="app_enable_permission">Bật quyền</string>
+    <string name="app_record">Ghi</string>
+    <string name="app_video_download_guide">Tải hướng dẫn</string>
+    <string name="download_finished">Tải xuống hoàn tất</string>
+    <string name="download_failed">Tải xuống thất bại</string>
+    <string name="app_file_name">Tên:</string>
+    <string name="app_file_size">Kích thước tệp:</string>
+    <string name="app_file_time">Thời gian tệp:</string>
+    <string name="app_tips">Mẹo</string>
+    <string name="app_tips_content">Do hạn chế pháp lý, không thể tải xuống video từ YouTube.</string>
 </resources>

@@ -126,6 +126,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             item.downloadType = VideoDownloadData.DOWNLOAD_NOT
             item.downloadSize = 0
         }else{
+            if (item.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS)return
             item.downloadType = type
             item.downloadSize = data.downloadSize
             item.size = data.totalSize

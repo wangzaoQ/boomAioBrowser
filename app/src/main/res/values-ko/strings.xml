@@ -100,4 +100,37 @@
     <string name="app_no">아니오</string>
     <string name="app_delete_msg">영구 삭제 확인</string>
     <string name="app_no_data">데이터 없음</string>
+
+    <string name="app_download">다운로드</string>
+    <string name="app_downloading">다운로드 중</string>
+    <string name="app_loading_content">로딩 중</string>
+    <string name="app_download_error">다운로드 실패</string>
+    <string name="app_download_no_net">현재 사용 가능한 네트워크가 없습니다</string>
+    <string name="app_already_download">이미 다운로드됨</string>
+    <string name="app_progress">진행 상황</string>
+    <string name="app_done">완료</string>
+    <string name="app_no_record">기록 없음</string>
+    <string name="app_rename">이름 변경</string>
+    <string name="app_file_info">파일 정보</string>
+    <string name="app_ok">확인</string>
+    <string name="app_download_prepare">준비 중</string>
+    <string name="app_skip">건너뛰기</string>
+    <string name="app_guide_title0">동영상 URL 입력</string>
+    <string name="app_guide_title1">다운로드한 동영상 선택</string>
+    <string name="app_guide_title2">동영상 콘텐츠 재생</string>
+    <string name="app_guide_title3">면책 조항</string>
+    <string name="app_guide_content">이 서비스를 사용하여 동영상을 다운로드 및 업로드할 때 사용자는 원본 출처로부터 승인을 받아야 합니다. 무단 작업은 법적 책임을 수반할 수 있습니다. 이 서비스를 사용할 때는 관련 법규를 의식적으로 준수해 주시기 바랍니다.</string>
+    <string name="app_try">시도하기</string>
+    <string name="app_disclaimer">면책 조항</string>
+    <string name="app_disclaimer_content">이 서비스를 사용하여 동영상을 다운로드 및 업로드할 때 사용자는 원본 출처로부터 승인을 받아야 합니다. 무단 작업은 법적 책임을 수반할 수 있습니다. 이 서비스를 사용할 때는 관련 법규를 의식적으로 준수해 주시기 바랍니다.</string>
+    <string name="app_enable_permission">권한 활성화</string>
+    <string name="app_record">녹화</string>
+    <string name="app_video_download_guide">튜토리얼 다운로드</string>
+    <string name="download_finished">다운로드 완료</string>
+    <string name="download_failed">다운로드 실패</string>
+    <string name="app_file_name">이름:</string>
+    <string name="app_file_size">파일 크기:</string>
+    <string name="app_file_time">파일 시간:</string>
+    <string name="app_tips">팁</string>
+    <string name="app_tips_content">법적 제한으로 인해 YouTube 동영상은 다운로드할 수 없습니다.</string>
 </resources>

@@ -9,20 +9,19 @@
     >
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        app:srcCompat="@mipmap/ic_recent"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        app:srcCompat="@mipmap/ic_search"
         android:layout_centerVertical="true"
         android:layout_marginStart="13dp"
-        android:scaleType="centerInside"
         ></androidx.appcompat.widget.AppCompatImageView>
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvRecent"
+        android:id="@+id/tvSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:ellipsize="end"
-        android:textColor="@color/black"
+        android:textColor="#666666"
         android:textSize="14sp"
         android:layout_marginStart="39dp"
         android:layout_marginEnd="47dp"
@@ -31,13 +30,11 @@
         ></androidx.appcompat.widget.AppCompatTextView>
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivDelete"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        app:srcCompat="@mipmap/ic_recent_history_delete"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        app:srcCompat="@mipmap/ic_search_enter"
         android:layout_centerVertical="true"
         android:layout_marginEnd="13dp"
         android:layout_alignParentEnd="true"
-        android:padding="5dp"
         ></androidx.appcompat.widget.AppCompatImageView>
 </RelativeLayout>

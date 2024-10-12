@@ -27,6 +27,7 @@ import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.activity.WebDetailsActivity
 import com.boom.aiobrowser.ui.adapter.RecentSearchAdapter
+import com.boom.aiobrowser.ui.adapter.SearchResultAdapter
 import com.boom.base.adapter4.QuickAdapterHelper
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
@@ -59,7 +60,10 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
             fBinding.searchGuideRoot.visibility = View.GONE
             fBinding.recentSearchRoot.visibility = View.GONE
             fBinding.searchRv.visibility = View.VISIBLE
+            viewModel.searchResult(title)
         }else{
+            fBinding.searchRv.visibility = View.GONE
+            fBinding.recentSearchRoot.visibility = View.VISIBLE
             var searchist = CacheManager.recentSearchDataList
             if (isLoad){
                 fBinding.llDefaultRoot.visibility = View.VISIBLE
@@ -76,8 +80,8 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                     fBinding.searchExpendRv.visibility = View.VISIBLE
                 }
             }else{
-                fBinding.searchShrinkRoot.visibility = View.GONE
-                fBinding.searchExpendRv.visibility = View.VISIBLE
+                fBinding.recentSearchRoot.visibility = View.GONE
+                fBinding.searchGuideRoot.visibility = View.VISIBLE
             }
         }
     }
@@ -178,10 +182,19 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 addSearchShrink(CacheManager.recentSearchDataList,false)
             }
         }
+        viewModel.searchViewModel.observe(this){
+            startLoadData()
+            searchResultAdapter.content = fBinding.topRoot.binding.etToolBarSearch.text.toString()
+            searchResultAdapter.submitList(it)
+        }
     }
 
     val searchRecentAdapter by lazy {
         RecentSearchAdapter()
+    }
+
+    val searchResultAdapter by lazy {
+        SearchResultAdapter()
     }
 
     var changeJob: Job? = null
@@ -193,9 +206,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
             if (it.isNullOrEmpty()){
                 startLoadData()
             }else{
-                changeJob = rootActivity.addLaunch(success = {
-                    delay(1000)
-                }, failBack = {}, Dispatchers.IO)
+                viewModel.searchResult(it)
             }
         }, searchResult = {
 //            viewModel.searchResult(it)
@@ -235,6 +246,20 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
             searchRecentAdapter.setOnDebouncedItemClick{ adapter, view, position ->
                 var data = searchRecentAdapter.items.get(position)
                 clickHistory(data)
+            }
+        }
+        fBinding.searchRv.apply {
+            layoutManager = LinearLayoutManager(rootActivity,LinearLayoutManager.VERTICAL,false)
+            adapter = searchResultAdapter
+            searchResultAdapter.setOnDebouncedItemClick{ adapter, view, position ->
+                var data = searchResultAdapter.items.get(position)
+                var jumpData = JumpDataManager.getCurrentJumpData(tag = "searchFragment 点击联想搜索").apply {
+                    jumpType = JumpConfig.JUMP_WEB
+                    jumpTitle = data
+                    jumpUrl = SearchNet.getSearchUrl(data)
+                }
+//                JumpDataManager.updateCurrentJumpData(jumpData,tag="searchFragment 点击联想搜索")
+                clickHistory(jumpData)
             }
         }
         PointEvent.posePoint(PointEventKey.search_page)

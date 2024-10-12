@@ -23,16 +23,32 @@ object SearchNet {
         }
         var url = when (CacheManager.engineType) {
             1->{
-                "https://www.bing.com/search?q=${content}"
+                if (content.startsWith("https://www.bing.com/search?q=").not()){
+                    "https://www.bing.com/search?q=${content}"
+                }else{
+                    content
+                }
             }
             2->{
-                "https://search.yahoo.com/search?q=${content}"
+                if (content.startsWith("https://search.yahoo.com/search?q=").not()){
+                    "https://search.yahoo.com/search?q=${content}"
+                }else{
+                    content
+                }
             }
             3->{
-                "https://www.perplexity.ai/search?q=${content}"
+                if (content.startsWith("https://www.perplexity.ai/search?q=").not()){
+                    "https://www.perplexity.ai/search?q=${content}"
+                }else{
+                    content
+                }
             }
             else -> {
-                "https://www.google.com/search?q=${content}"
+                if (content.startsWith("https://www.google.com/search?q=").not()){
+                    "https://www.google.com/search?q=${content}"
+                }else{
+                    content
+                }
             }
         }
         return url

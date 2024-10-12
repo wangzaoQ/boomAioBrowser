@@ -1,9 +1,12 @@
 package com.boom.aiobrowser.ui.fragment
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.APP
@@ -52,44 +55,132 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
         if (status == 1)return
         var title = fBinding.topRoot.binding.etToolBarSearch.text.toString().trim()
         if (title.isNotEmpty()){
-            fBinding.rlRecentRoot.visibility = View.GONE
-        }
-        var searchist = CacheManager.recentSearchDataList
-        var dataList = mutableListOf<JumpData>()
-        if (searchist.isNotEmpty()){
-            fBinding.rlRecentRoot.visibility = View.VISIBLE
-            fBinding.rv.visibility = View.VISIBLE
-            if (searchist.size>5 && isShowMoreData.not()){
-                dataList = searchist.subList(0,5)
-                fBinding.llViewMore.visibility = View.VISIBLE
-            }else{
-                dataList = searchist
-            }
-            searchAdapter.submitList(dataList)
+            //进入就有数据
+            fBinding.searchGuideRoot.visibility = View.GONE
+            fBinding.recentSearchRoot.visibility = View.GONE
+            fBinding.searchRv.visibility = View.VISIBLE
         }else{
-            fBinding.rlRecentRoot.visibility = View.GONE
-            fBinding.rv.visibility = View.GONE
-            fBinding.llViewMore.visibility = View.GONE
+            var searchist = CacheManager.recentSearchDataList
+            if (isLoad){
+                fBinding.llDefaultRoot.visibility = View.VISIBLE
+                fBinding.searchShrinkRoot.visibility = View.VISIBLE
+            }
+            if (searchist.isNotEmpty()){
+                //默认展示小布局
+                if (recentListType == 0){
+                    fBinding.searchShrinkRoot.visibility = View.VISIBLE
+                    fBinding.searchExpendRv.visibility = View.GONE
+                    addSearchShrink(searchist,false)
+                }else if (recentListType == 1){
+                    fBinding.searchShrinkRoot.visibility = View.GONE
+                    fBinding.searchExpendRv.visibility = View.VISIBLE
+                }
+            }else{
+                fBinding.searchShrinkRoot.visibility = View.GONE
+                fBinding.searchExpendRv.visibility = View.VISIBLE
+            }
         }
     }
 
-    var isShowMoreData = false
+    var allowRecentDelete = false
+
+    /**
+     * 小布局
+     */
+    private fun addSearchShrink(dataList: MutableList<JumpData>,showDelete:Boolean,maxLimit:Boolean = true) {
+        fBinding.searchShrinkRoot.removeAllViews()
+        fBinding.searchShrinkRoot.heightLimit = false
+        fBinding.searchShrinkRoot.maxLimit = maxLimit
+//        var tempList = mutableListOf<JumpData>()
+        for (i in 0 until dataList.size){
+            var data = dataList.get(i)
+//            tempList.add(data)
+            var recentView = LayoutInflater.from(context).inflate(R.layout.item_search_recent,null,false)
+            var tv = recentView.findViewById<AppCompatTextView>(R.id.tvRecentHistory)
+            var iv = recentView.findViewById<AppCompatImageView>(R.id.ivRecentDelete)
+            iv.visibility = if (showDelete) View.VISIBLE else View.GONE
+            tv.text = data.jumpTitle
+            recentView.setOneClick {
+                if (allowRecentDelete){
+                    clickDelete(i)
+                    addSearchShrink(CacheManager.recentSearchDataList,true,false)
+                }else{
+                    var url = SearchNet.getSearchUrl(data.jumpTitle)
+                    var jumpData = JumpDataManager.getCurrentJumpData(tag = "searchFragment 搜索").apply {
+                        jumpType = JumpConfig.JUMP_WEB
+                        jumpTitle = tv.text.toString()
+                        jumpUrl = url
+                    }
+                    clickHistory(jumpData)
+                }
+            }
+            fBinding.searchShrinkRoot.addView(recentView)
+            if (fBinding.searchShrinkRoot.heightLimit){
+                break
+            }
+        }
+    }
+
+    // 0 小布局 1 展开
+    var recentListType = 0
 
     override fun setListener() {
-        fBinding.llViewMore.setOneClick {
-            isShowMoreData = true
-            startLoadData()
-        }
-        fBinding.tvClear.setOneClick {
-            CacheManager.recentSearchDataList = mutableListOf()
-            startLoadData()
-        }
         APP.engineLiveData.observe(this){
             fBinding.topRoot.updateEngine(it)
         }
+        fBinding.ivClean.setOneClick {
+            fBinding.llDefaultRoot.visibility = View.GONE
+            fBinding.llClearRoot.visibility = View.VISIBLE
+            if (recentListType == 0){
+                allowRecentDelete = true
+                addSearchShrink(CacheManager.recentSearchDataList,true,false)
+            }else if (recentListType == 1){
+                searchRecentAdapter.allowDelete = true
+                searchRecentAdapter.notifyDataSetChanged()
+            }
+        }
+        fBinding.tvClearAll.setOneClick {
+            var builder =  AlertDialog.Builder(rootActivity)
+            builder.setMessage(R.string.app_delete_msg)
+            builder.setCancelable(true);
+            builder.setNegativeButton(rootActivity.getString(R.string.app_yes)) { dialog, which ->
+                CacheManager.recentSearchDataList = mutableListOf()
+                startLoadData()
+                dialog.dismiss()
+            }
+            builder.setNeutralButton(rootActivity.getString(R.string.app_no)) { dialog, which ->
+                dialog.dismiss()
+            }
+            var dialog = builder.create()
+            dialog!!.show()
+        }
+        fBinding.tvFinish.setOneClick {
+            fBinding.llDefaultRoot.visibility = View.VISIBLE
+            fBinding.llClearRoot.visibility = View.GONE
+            if (recentListType == 0){
+                allowRecentDelete = false
+                addSearchShrink(CacheManager.recentSearchDataList,false)
+            }else if (recentListType == 1){
+                searchRecentAdapter.allowDelete = false
+                searchRecentAdapter.notifyDataSetChanged()
+            }
+        }
+        fBinding.ivExpend.setOneClick {
+            if (recentListType == 0){
+                recentListType = 1
+                fBinding.searchShrinkRoot.visibility = View.GONE
+                fBinding.searchExpendRv.visibility = View.VISIBLE
+                searchRecentAdapter.submitList(CacheManager.recentSearchDataList)
+            }else{
+                recentListType = 0
+                fBinding.searchShrinkRoot.visibility = View.VISIBLE
+                fBinding.searchExpendRv.visibility = View.GONE
+                addSearchShrink(CacheManager.recentSearchDataList,false)
+            }
+        }
     }
 
-    val searchAdapter by lazy {
+    val searchRecentAdapter by lazy {
         RecentSearchAdapter()
     }
 
@@ -129,32 +220,42 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
         }
         fBinding.topRoot.binding.etToolBarSearch.selectAll()
 
-        fBinding.rv.apply {
+        fBinding.searchExpendRv.apply {
             layoutManager = LinearLayoutManager(rootActivity,LinearLayoutManager.VERTICAL,false)
-            var helper = QuickAdapterHelper.Builder(searchAdapter)
+            var helper = QuickAdapterHelper.Builder(searchRecentAdapter)
                 .build()
             // 设置预加载，请调用以下方法
             // helper.trailingLoadStateAdapter?.preloadSize = 1
             adapter = helper.adapter
             // 添加子 view 的点击事件(去除点击抖动的扩展方法)
-            searchAdapter.addOnDebouncedChildClick(R.id.ivDelete) { adapter, view, position ->
-                searchAdapter.removeAt(position)
-                var list = CacheManager.recentSearchDataList
-                list.removeAt(position)
-                CacheManager.recentSearchDataList = list
-                startLoadData()
+            searchRecentAdapter.addOnDebouncedChildClick(R.id.ivDelete) { adapter, view, position ->
+                searchRecentAdapter.removeAt(position)
+                clickDelete(position)
             }
-            searchAdapter.setOnDebouncedItemClick{adapter, view, position ->
-                var data = searchAdapter.items.get(position)
-                CacheManager.saveRecentSearchData(data)
-//                CacheManager.getCurrentJumpData(updateTime = true, updateData = data)
-                toWebDetailsActivity(data)
-                PointEvent.posePoint(PointEventKey.search_page_history,Bundle().apply {
-                    putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
-                })
+            searchRecentAdapter.setOnDebouncedItemClick{ adapter, view, position ->
+                var data = searchRecentAdapter.items.get(position)
+                clickHistory(data)
             }
         }
         PointEvent.posePoint(PointEventKey.search_page)
+    }
+
+    private fun clickDelete(position: Int) {
+        var list = CacheManager.recentSearchDataList
+        list.removeAt(position)
+        CacheManager.recentSearchDataList = list
+        startLoadData()
+    }
+
+    private fun clickHistory(data: JumpData) {
+        CacheManager.saveRecentSearchData(data)
+        toWebDetailsActivity(data)
+        PointEvent.posePoint(PointEventKey.search_page_history, Bundle().apply {
+            putString(
+                PointValueKey.model_type,
+                if (CacheManager.browserStatus == 1) "private" else "normal"
+            )
+        })
     }
 
     private fun toWebDetailsActivity(data:JumpData){

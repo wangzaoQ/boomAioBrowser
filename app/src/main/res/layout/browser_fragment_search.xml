@@ -24,71 +24,128 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topRoot"></View>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topRoot"
-        android:layout_marginTop="7dp"
-        android:orientation="vertical"
-        >
-        <RelativeLayout
-            android:id="@+id/rlRecentRoot"
+        app:layout_constraintTop_toBottomOf="@+id/topRoot">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/recentSearchRoot"
             android:layout_width="match_parent"
-            android:layout_height="37dp"
-            android:paddingStart="13dp"
-            android:visibility="gone"
-            >
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="7dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topRoot">
+
+            <RelativeLayout
+                android:id="@+id/rlRecentRoot"
+                android:layout_width="match_parent"
+                android:layout_height="33dp"
+                android:layout_marginTop="5dp"
+                android:paddingStart="13dp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/app_text_bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/app_history"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"></androidx.appcompat.widget.AppCompatTextView>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/llClearRoot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvClearAll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingHorizontal="13dp"
+                        android:text="@string/app_clear_all"
+                        android:textColor="#FFFF3B30"
+                        android:textSize="12sp"></androidx.appcompat.widget.AppCompatTextView>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="#E1E1E1"></View>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvFinish"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingHorizontal="13dp"
+                        android:text="@string/app_finish"
+                        android:textColor="#333333"
+                        android:textSize="12sp"></androidx.appcompat.widget.AppCompatTextView>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/llDefaultRoot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivClean"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="3dp"
+                        android:paddingHorizontal="8dp"
+                        app:srcCompat="@mipmap/ic_search_delete"></androidx.appcompat.widget.AppCompatImageView>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="#E1E1E1"></View>
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivExpend"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginEnd="5dp"
+                        android:paddingHorizontal="8dp"
+                        app:srcCompat="@mipmap/ic_search_expend"></androidx.appcompat.widget.AppCompatImageView>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </RelativeLayout>
+
+            <com.boom.aiobrowser.ui.view.RecentSearchViewGroup
+                android:id="@+id/searchShrinkRoot"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/app_recent_search"
-                android:textColor="#FF000000"
-                style="@style/app_text_bold"
-                android:layout_centerVertical="true"
-                android:textSize="14sp"
-                ></androidx.appcompat.widget.AppCompatTextView>
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvClear"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingStart="13dp"
-                android:paddingEnd="13dp"
-                android:layout_alignParentEnd="true"
-                android:textSize="14sp"
-                android:textColor="#FFFF3B30"
-                android:text="@string/app_clear_all"
-                android:gravity="center"
-                ></androidx.appcompat.widget.AppCompatTextView>
-        </RelativeLayout>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv"
+                android:layout_marginHorizontal="13.5dp"
+                android:visibility="gone"></com.boom.aiobrowser.ui.view.RecentSearchViewGroup>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searchExpendRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <RelativeLayout
+            android:id="@+id/searchGuideRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            ></androidx.recyclerview.widget.RecyclerView>
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/llViewMore"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:orientation="vertical"
-            android:visibility="gone"
-            >
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#0A000000"
-              ></View>
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/app_view_more"
-                android:textColor="#4D000000"
-                android:textSize="15sp"
-                style="@style/app_text_bold"
-                android:layout_gravity="center"
-                android:gravity="center"
-                ></androidx.appcompat.widget.AppCompatTextView>
-        </androidx.appcompat.widget.LinearLayoutCompat>
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            android:visibility="gone"></RelativeLayout>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchRv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -146,7 +146,9 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 item.downloadType = type
             }
             item.downloadSize = data.downloadSize
-            item.size = data.totalSize
+            if (item.downloadType!=VideoDownloadData.DOWNLOAD_PAUSE){
+                item.size = data.totalSize
+            }
         }
         if (type == VideoDownloadData.DOWNLOAD_SUCCESS){
             item.downloadFilePath = data.filePath
@@ -194,6 +196,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                     downloadType = VideoDownloadData.DOWNLOAD_LOADING
                     var success = VideoDownloadManager.getInstance().resumeDownload(url)
                     if (success.not()){
+                        AppLogs.dLog(VideoManager.TAG,"从pause 恢复失败 重新下载")
                         var headerMap = HashMap<String,String>()
                         paramsMap?.forEach {
                             headerMap.put(it.key,it.value.toString())

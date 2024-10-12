@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.tools.video
 
 import android.os.Bundle
+import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.APP.Companion.videoLiveData
@@ -26,6 +27,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.io.File
 
 
 object VideoManager {
@@ -71,7 +73,7 @@ object VideoManager {
 
             override fun onDownloadProgress(item: VideoTaskItem?) {
                 if (item == null) return
-                AppLogs.dLog(TAG, "onDownloadProgress:${item?.downloadSizeString} url:${item.url}")
+                AppLogs.dLog(TAG, "onDownloadProgress:totalSize:${item?.totalSize} downloadSize:${item?.downloadSize} url:${item.url}")
                 CoroutineScope(Dispatchers.IO).launch {
                     var model = DownloadCacheManager.queryDownloadModelByUrl(item.url)
                     if (model != null) {
@@ -92,7 +94,7 @@ object VideoManager {
             override fun onDownloadSpeed(item: VideoTaskItem?) {}
 
             override fun onDownloadPause(item: VideoTaskItem?) {
-                AppLogs.dLog(TAG, "onDownloadPause:${item?.url}")
+                AppLogs.dLog(TAG, "onDownloadPause:${item?.url} totalSize:${item?.totalSize} downloadSize:${item?.downloadSize}")
                 if (item == null) return
                 CoroutineScope(Dispatchers.IO).launch {
                     var model = DownloadCacheManager.queryDownloadModelByUrl(item.url)
@@ -112,6 +114,8 @@ object VideoManager {
                 ToastUtils.showShort(APP.instance.getString(R.string.download_failed))
                 if (item == null) return
                 CoroutineScope(Dispatchers.IO).launch {
+                    var isSuccessParent = FileUtils.delete(File(item.filePath).parent)
+                    var isSuccess = FileUtils.delete(File(item.filePath))
                     var model = DownloadCacheManager.queryDownloadModelByUrl(item.url)
                     if (model != null) {
                         model.downloadSize = 0

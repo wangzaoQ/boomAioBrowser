@@ -20,6 +20,8 @@ import com.boom.aiobrowser.databinding.BrowserItemRecentSearchBinding
 import com.boom.base.adapter4.BaseQuickAdapter
 
 class RecentSearchAdapter : BaseQuickAdapter<JumpData, RecentSearchAdapter.VH>() {
+    var allowDelete: Boolean = false
+
     class VH(
         parent: ViewGroup,
         val viewBinding: BrowserItemRecentSearchBinding = BrowserItemRecentSearchBinding.inflate(
@@ -34,6 +36,7 @@ class RecentSearchAdapter : BaseQuickAdapter<JumpData, RecentSearchAdapter.VH>()
     override fun onBindViewHolder(holder: VH, position: Int, item: JumpData?) {
         holder.viewBinding.apply {
             tvRecent.text = item?.jumpTitle?:""
+            ivDelete.visibility = if (allowDelete) View.VISIBLE else View.GONE
         }
     }
 

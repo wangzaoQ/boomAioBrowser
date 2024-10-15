@@ -1,6 +1,9 @@
 package com.boom.aiobrowser
 
 import android.app.Application
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Build
 import android.webkit.WebSettings
@@ -10,7 +13,9 @@ import com.blankj.utilcode.util.NetworkUtils.OnNetworkStatusChangedListener
 import com.boom.aiobrowser.ad.AioADDataManager.initAD
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.JumpData
+import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
+import com.boom.aiobrowser.nf.NFReceiver
 import com.boom.aiobrowser.point.Install
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
@@ -53,10 +58,8 @@ class APP: Application() {
         val jumpWebLiveData  by lazy { ProtectedUnPeekLiveData<JumpData>() }
         val engineLiveData  by lazy { ProtectedUnPeekLiveData<Int>() }
         val bottomLiveData  by lazy { ProtectedUnPeekLiveData<String>() }
-        val deleteLiveData  by lazy { ProtectedUnPeekLiveData<HashMap<Int,Int>>() }
-        val deleteLiveData2  by lazy { ProtectedUnPeekLiveData<String>() }
-        val scanCompleteLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
         val videoScanLiveData by lazy { ProtectedUnPeekLiveData<VideoDownloadData>() }
+        val videoNFLiveData by lazy { ProtectedUnPeekLiveData<VideoDownloadData>() }
 
         val videoLiveData by lazy { ProtectedUnPeekLiveData<HashMap<Int, VideoTaskItem>>() }
         val videoUpdateLiveData by lazy { ProtectedUnPeekLiveData<String>() }
@@ -105,11 +108,38 @@ class APP: Application() {
         CoroutineScope(Dispatchers.IO).launch{
             while (true){
                 delay(60*60*1000)
+                //session_st
                 PointEvent.posePoint(PointEventKey.session_st)
             }
         }
-        //session
+        registerAny()
+    }
+
+    private fun registerAny() {
         NetworkUtils.registerNetworkStatusChangedListener(netBack)
+        registerNotifyReceiver(instance)
+    }
+
+    var nfReceiver: NFReceiver? = null
+    fun registerNotifyReceiver(context: Context) {
+        // logsi(FJST, "registerNotifyReceiver()111")
+        nfReceiver = NFReceiver()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.registerReceiver(nfReceiver, IntentFilter().apply {
+                addAction(Intent.ACTION_SCREEN_OFF)
+                addAction(Intent.ACTION_SCREEN_ON)
+                addAction(Intent.ACTION_USER_PRESENT)
+                addAction(NFEnum.NF_DOWNLOAD_VIDEO.channelId)
+            }, Context.RECEIVER_EXPORTED)
+        } else {
+            context.registerReceiver(nfReceiver, IntentFilter().apply {
+                addAction(Intent.ACTION_SCREEN_OFF)
+                addAction(Intent.ACTION_SCREEN_ON)
+                addAction(Intent.ACTION_USER_PRESENT)
+                addAction(NFEnum.NF_DOWNLOAD_VIDEO.channelId)
+            })
+        }
     }
 
     suspend fun initOther() {

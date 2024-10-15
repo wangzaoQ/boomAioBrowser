@@ -93,6 +93,14 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
                 }
             }
         }
+        APP.videoNFLiveData.observe(this){
+            runCatching {
+                if (fragments.size>0){
+                    (fragments.get(0) as DownloadFragment).updateByNf(it)
+                }
+            }
+        }
+
         var isFirst = false
         if (CacheManager.isFirstShowDownload){
             isFirst = true

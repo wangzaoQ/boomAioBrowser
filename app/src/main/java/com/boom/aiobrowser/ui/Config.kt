@@ -15,7 +15,10 @@ object JumpConfig{
     const val JUMP_HOME="JUMP_HOME"
     const val JUMP_WEB="JUMP_WEB"
     const val JUMP_SEARCH="JUMP_SEARCH"
-    const val JUMP_FILE="JUMP_FILE"
+
+    const val JUMP_DOWNLOAD_PROGRESS="JUMP_DOWNLOAD_PROGRESS"
+    const val JUMP_DOWNLOAD_DONE="JUMP_DOWNLOAD_DONE"
+    const val JUMP_VIDEO="JUMP_VIDEO"
 }
 
 object ParamsConfig{

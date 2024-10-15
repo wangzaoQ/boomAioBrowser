@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     >
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -149,6 +151,10 @@
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:launchMode="singleTop"
             ></activity>
+
+        <receiver
+            android:name=".nf.NFReceiver"
+            android:exported="false"></receiver>
 
         <provider
             android:name="androidx.core.content.FileProvider"

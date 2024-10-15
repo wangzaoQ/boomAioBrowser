@@ -13,6 +13,8 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.VideoPopDownloadBinding
+import com.boom.aiobrowser.nf.NFManager
+import com.boom.aiobrowser.nf.NFShow
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
@@ -33,6 +35,7 @@ import kotlinx.coroutines.withContext
 import pop.basepopup.BasePopupWindow
 import pop.util.animation.AnimationHelper
 import pop.util.animation.TranslationConfig
+import java.lang.ref.WeakReference
 
 class DownLoadPop(context: Context) : BasePopupWindow(context) {
 
@@ -80,6 +83,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             if (data.videoId == it.videoId){
                 index = i
                 data.size = it.size
+                data.downloadType = it.downloadType
                 break
             }
         }
@@ -194,6 +198,9 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                         return@setOnDebouncedItemClick
                     }
                     downloadType = VideoDownloadData.DOWNLOAD_LOADING
+                    NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
+                        NFShow.showDownloadNF(data)
+                    }, onFail = {})
                     var success = VideoDownloadManager.getInstance().resumeDownload(url)
                     if (success.not()){
                         AppLogs.dLog(VideoManager.TAG,"从pause 恢复失败 重新下载")
@@ -205,6 +212,9 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                     }
                 }else if (downloadType == VideoDownloadData.DOWNLOAD_LOADING){
                     downloadType = VideoDownloadData.DOWNLOAD_PAUSE
+                    NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
+                        NFShow.showDownloadNF(data)
+                    }, onFail = {})
                     VideoDownloadManager.getInstance().pauseDownloadTask(url)
                 }else if (downloadType == VideoDownloadData.DOWNLOAD_ERROR){
                     if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO ){

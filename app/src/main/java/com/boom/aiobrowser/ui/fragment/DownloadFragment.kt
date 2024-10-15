@@ -10,10 +10,13 @@ import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.VideoFragmentDownloadBinding
 import com.boom.aiobrowser.model.VideoDownloadModel
+import com.boom.aiobrowser.nf.NFManager
+import com.boom.aiobrowser.nf.NFShow
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
@@ -31,6 +34,7 @@ import com.boom.downloader.model.VideoTaskItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.lang.ref.WeakReference
 
 class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
 
@@ -74,6 +78,9 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
                         return@setOnDebouncedItemClick
                     }
                     downloadType = VideoDownloadData.DOWNLOAD_LOADING
+                    NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
+                        NFShow.showDownloadNF(data)
+                    }, onFail = {})
                     var isSuccess = VideoDownloadManager.getInstance().resumeDownload(url)
                     if (isSuccess.not()){
                         var headerMap = HashMap<String,String>()
@@ -85,6 +92,9 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
                     downloadAdapter.notifyItemChanged(position,"updateLoading")
                 }else if (downloadType == VideoDownloadData.DOWNLOAD_LOADING){
                     downloadType = VideoDownloadData.DOWNLOAD_PAUSE
+                    NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
+                        NFShow.showDownloadNF(data)
+                    }, onFail = {})
                     VideoDownloadManager.getInstance().pauseDownloadTask(url)
                     downloadAdapter.notifyItemChanged(position,"updateLoading")
                 }else if (downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
@@ -156,7 +166,7 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
         var position = -1
         for (i in 0 until downloadAdapter.items.size) {
             var item = downloadAdapter.getItem(i)
-            if (item?.url ?: "" == data.url) {
+            if (item?.videoId ?: "" == data.downloadVideoId) {
                 position = i
                 break
             }
@@ -171,6 +181,20 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
             downloadAdapter.remove(item)
             callBack.invoke(item)
         }else{
+            downloadAdapter.notifyItemChanged(position, "updateLoading")
+        }
+    }
+
+    fun updateByNf(data:VideoDownloadData){
+        var position = -1
+        for (i in 0 until downloadAdapter.items.size) {
+            var item = downloadAdapter.getItem(i)
+            if (item?.videoId == data.videoId) {
+                position = i
+                break
+            }
+        }
+        if (position>=0){
             downloadAdapter.notifyItemChanged(position, "updateLoading")
         }
     }

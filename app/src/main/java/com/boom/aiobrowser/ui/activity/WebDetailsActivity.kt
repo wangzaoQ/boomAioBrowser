@@ -59,9 +59,11 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
             }
         }
         APP.videoScanLiveData.observe(this){
-//            ToastUtils.showLong("视频获取成功")
             popDown?.updateDataByScan(it)
             updateDownloadButtonStatus(true)
+        }
+        APP.videoNFLiveData.observe(this){
+            popDown?.updateDataByScan(it)
         }
         APP.videoLiveData.observe(this){
             var map = it
@@ -266,6 +268,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         APP.videoScanLiveData.removeObservers(this)
         APP.videoLiveData.removeObservers(this)
         APP.videoUpdateLiveData.removeObservers(this)
+        APP.videoNFLiveData.removeObservers(this)
         super.onDestroy()
     }
 }

@@ -7,6 +7,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.APP.Companion.videoLiveData
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.VideoDownloadData
+import com.boom.aiobrowser.nf.NFShow
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -83,6 +84,7 @@ object VideoManager {
                         model.downloadSize = item.downloadSize
                         model.downloadType = VideoDownloadData.DOWNLOAD_LOADING
                         DownloadCacheManager.updateModel(model)
+                        NFShow.showDownloadNF(VideoDownloadData().createVideoDownloadData(model))
                     }
                     AppLogs.dLog(TAG, "收到进度消息 :${model?.downloadSize} url:${model?.url}")
                     videoLiveData.postValue(HashMap<Int, VideoTaskItem>().apply {
@@ -102,6 +104,7 @@ object VideoManager {
                         model.downloadSize = item.downloadSize
                         model.downloadType = VideoDownloadData.DOWNLOAD_PAUSE
                         DownloadCacheManager.updateModel(model)
+                        NFShow.showDownloadNF(VideoDownloadData().createVideoDownloadData(model))
                     }
                     videoLiveData.postValue(HashMap<Int, VideoTaskItem>().apply {
                         put(VideoDownloadData.DOWNLOAD_PAUSE, item)
@@ -121,6 +124,7 @@ object VideoManager {
                         model.downloadSize = 0
                         model.downloadType = VideoDownloadData.DOWNLOAD_ERROR
                         DownloadCacheManager.updateModel(model)
+                        NFShow.showDownloadNF(VideoDownloadData().createVideoDownloadData(model))
                     }
                     videoLiveData.postValue(HashMap<Int, VideoTaskItem>().apply {
                         put(VideoDownloadData.DOWNLOAD_ERROR, item)
@@ -142,6 +146,7 @@ object VideoManager {
                         model.downloadFilePath = item.filePath
                         model.downloadType = VideoDownloadData.DOWNLOAD_SUCCESS
                         DownloadCacheManager.updateModel(model)
+                        NFShow.showDownloadNF(VideoDownloadData().createVideoDownloadData(model))
                     }
                     videoLiveData.postValue(HashMap<Int, VideoTaskItem>().apply {
                         put(VideoDownloadData.DOWNLOAD_SUCCESS, item)

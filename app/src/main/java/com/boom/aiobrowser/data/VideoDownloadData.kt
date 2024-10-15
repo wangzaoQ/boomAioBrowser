@@ -37,6 +37,10 @@ class VideoDownloadData{
 
     var isShow = false
 
+    var nfId = 0
+
+
+
 
     fun createDefault(videoId:String, fileName:String, url:String,imageUrl:String, paramsMap:HashMap<String,Any>, size:Long, videoType: String):VideoDownloadData{
         this.fileName = fileName
@@ -70,20 +74,22 @@ class VideoDownloadData{
     }
 
     fun createVideoDownloadData(model:DownloadModel):VideoDownloadData{
-        var data = VideoDownloadData()
-        data.videoId = model.videoId
-        data.fileName = model.fileName
-        data.url = model.url
-        data.size = model.size
-        data.downloadSize = model.downloadSize
-        data.paramsMap = getMapByGson(model.paramsMapJson?:"")
-        data.downloadType = model.downloadType?:DOWNLOAD_NOT
-        data.downloadFileName = model.downloadFileName
-        data.downloadFilePath = model.downloadFilePath
-        data.imageUrl = model.imageUrl
-        data.videoType = model.videoType
-        return data
+        videoId = model.videoId
+        fileName = model.fileName
+        url = model.url
+        size = model.size
+        downloadSize = model.downloadSize
+        paramsMap = getMapByGson(model.paramsMapJson?:"")
+        downloadType = model.downloadType?:DOWNLOAD_NOT
+        downloadFileName = model.downloadFileName
+        downloadFilePath = model.downloadFilePath
+        imageUrl = model.imageUrl
+        videoType = model.videoType
+        return this
     }
+
+
+
 //    https://cv-h.phncdn.com/hls/videos/202408/28/457057941/720P_4000K_457057941.mp4/master.m3u8?QX0Q05F7u-cPEoc1oXSytihMGpXwo8esTE2tapcHZWC6phpPN5Nqub0V5tPbYS_QpS18MVf-1bidyf4SDPIq78jddyAYqPndUYzNHm6SXevfi3s2W_N1e_aIbxoBl-jQk_kv5tabRxpCLPXka3tLUK9rIe65ARwkyloDNDRTPUfLcqMiNfwSvCK9Cd6YLiQdqPbZR-O8
 //
 //    https://ev-h.phncdn.com/hls/videos/202408/28/457057941/720P_4000K_457057941.mp4/master.m3u8?validfrom=1728387179&validto=1728394379&ipa=38.90.18.212&hdl=-1&hash=AfL5m2Hv74LAA6ZSCulqlDAGn6w%3D

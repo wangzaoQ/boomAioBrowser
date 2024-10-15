@@ -22,14 +22,17 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
+import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
 import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BrowserManager
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.CommonParams
 import com.boom.aiobrowser.tools.FragmentManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
@@ -214,7 +217,12 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }
     }
 
+    var nfTo = ""
+    var nfData:VideoDownloadData?= null
+
     override fun setShowView() {
+        nfTo = intent.getStringExtra(CommonParams.NF_TO)?:""
+        nfData = getBeanByGson(intent.getStringExtra(CommonParams.NF_DATA)?:"",VideoDownloadData::class.java)
         acBinding.root.postDelayed({
             var count = 0
             for ( i in 0 until APP.instance.lifecycleApp.stack.size){
@@ -265,7 +273,19 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }else{
             showTips()
         }
-        mainFragment.jump()
+        if (nfTo.isNullOrEmpty()){
+            mainFragment.jump()
+        }else{
+            if (nfTo == JumpConfig.JUMP_VIDEO && nfData!=null){
+                jumpActivity<VideoPreActivity>(Bundle().apply {
+                    putString("video_path",nfData!!.downloadFilePath)
+                })
+            }else{
+                startActivity(Intent(this,DownloadActivity::class.java).apply {
+                    putExtra("fromPage","nf_${nfTo}")
+                })
+            }
+        }
     }
 
     private fun showTips() {

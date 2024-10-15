@@ -221,14 +221,13 @@ public class MultiSegVideoDownloadTask extends VideoDownloadTask {
             float percent = mCurrentCachedSize * 1.0f * 100 / mTotalLength;
             if (!VideoDownloadUtils.isFloatEqual(percent, mPercent)) {
                 long nowTime = System.currentTimeMillis();
-                if (mCurrentCachedSize > mLastCachedSize && nowTime > mLastInvokeTime) {
+                if (mCurrentCachedSize > mLastCachedSize && nowTime > mLastInvokeTime+1000) {
                     mSpeed = (mCurrentCachedSize - mLastCachedSize) * 1000 * 1.0f / (nowTime - mLastInvokeTime);
+                    mDownloadTaskListener.onTaskProgress(percent, mCurrentCachedSize, mTotalLength, mSpeed);
+                    mPercent = percent;
+                    mLastInvokeTime = nowTime;
+                    mLastCachedSize = mCurrentCachedSize;
                 }
-                mDownloadTaskListener.onTaskProgress(percent, mCurrentCachedSize, mTotalLength, mSpeed);
-                mPercent = percent;
-                mLastInvokeTime = nowTime;
-                mLastCachedSize = mCurrentCachedSize;
-
                 saveCacheInfo(cachedMap);
             }
         }

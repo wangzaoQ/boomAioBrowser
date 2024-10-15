@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.ui.fragment
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.boom.aiobrowser.APP
@@ -7,6 +8,9 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseWebFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.BrowserFragmentWebBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
@@ -14,8 +18,11 @@ import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.activity.WebDetailsActivity
+import com.boom.aiobrowser.ui.pop.ClearPop
+import com.boom.aiobrowser.ui.pop.TabPop
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import pop.basepopup.BasePopupWindow.OnDismissListener
 
 
 class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
@@ -32,55 +39,11 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     }
 
     private fun addLast(url: String) {
-        var showNext = false
-        rootActivity.addLaunch(success = {
-            var linkedUrlList = CacheManager.linkedUrlList
-            if (linkedUrlList.contains(url)){
-                jumpData?.apply {
-                    jumpUrl = url
-                    //之前加载过
-                    var index = linkedUrlList.indexOf(url)
-                    if (index == linkedUrlList.size-1){
-                        AppLogs.dLog(fragmentTAG,"之前加载过但是是最后一个")
-                        showNext = false
-                        //是最后一个
-                        nextJumpUrl = ""
-                    }else{
-                        showNext = true
-                        AppLogs.dLog(fragmentTAG,"之前加载过 index:${index}")
-                        nextJumpUrl = linkedUrlList.get(index+1)
-                        nextJumpType = JumpConfig.JUMP_WEB
-                    }
-                    JumpDataManager.updateCurrentJumpData(this,"webFragment 存储jumpData")
-                }
-            }else{
-                //没加载过
-                jumpData?.apply {
-                    jumpUrl = url
-                    nextJumpUrl = url
-                    showNext = false
-                    AppLogs.dLog(fragmentTAG,"之前未加载过")
-                    JumpDataManager.updateCurrentJumpData(this,"webFragment 存储jumpData")
-                }
-                linkedUrlList.add(url)
-                CacheManager.linkedUrlList = linkedUrlList
-            }
-            withContext(Dispatchers.Main){
-                if (rootActivity is WebDetailsActivity){
-                    (rootActivity as WebDetailsActivity).apply {
-                        updateBottom(true,showNext, jumpData = jumpData,"webView loadWebOnPageStared")
-                    }
-                }
-            }
-            if(CacheManager.browserStatus == 0){
-                var list = CacheManager.historyDataList
-                jumpData?.apply {
-                    updateTime = System.currentTimeMillis()
-                    list.add(0,this)
-                    CacheManager.historyDataList = list
-                }
-            }
-        }, failBack = {})
+        jumpData?.apply {
+            jumpUrl = url
+            jumpType = JumpConfig.JUMP_WEB
+            JumpDataManager.updateCurrentJumpData(this,"MainFragment onResume 更新 jumpData")
+        }
     }
 
     override fun startLoadData() {
@@ -93,6 +56,41 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         fBinding.flTop.updateTopView(2,searchRefresh={
             refresh()
         })
+        fBinding.tvTabCount.setOneClick {
+            showTabPop()
+        }
+        fBinding.ivClear.setOneClick {
+            clearData()
+        }
+        fBinding.ivHome.setOneClick {
+            JumpDataManager.toMain()
+            PointEvent.posePoint(PointEventKey.webpage_home, Bundle().apply {
+                putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+            })
+        }
+    }
+
+
+    fun showTabPop() {
+        var tabPop = TabPop(rootActivity)
+        tabPop.createPop()
+        tabPop.setOnDismissListener(object : OnDismissListener(){
+            override fun onDismiss() {
+                updateTabCount()
+            }
+        })
+    }
+
+    fun updateTabCount() {
+        fBinding.tvTabCount.text = "${JumpDataManager.getBrowserTabList(CacheManager.browserStatus,tag ="WebDetailsActivity 更新tab 数量").size}"
+    }
+
+
+    fun clearData(){
+        ClearPop(rootActivity).createPop {
+            CacheManager.clearAll()
+            JumpDataManager.toMain()
+        }
     }
 
     private fun refresh() {
@@ -109,6 +107,14 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 //        if (rootActivity is WebDetailsActivity){
 //            (rootActivity as WebDetailsActivity).updateDownloadButtonStatus(true)
 //        }
+        if(CacheManager.browserStatus == 0){
+            var list = CacheManager.historyDataList
+            jumpData?.apply {
+                updateTime = System.currentTimeMillis()
+                list.add(0,this)
+                CacheManager.historyDataList = list
+            }
+        }
     }
 
     fun getSearchTitle():String{
@@ -126,17 +132,23 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         fBinding.flTop.binding.tvToolbarSearch.text = jumpData?.jumpUrl
         fBinding.refreshLayout.isEnabled = false
         fBinding.flTop.setData(jumpData)
-        back = {
+        fBinding.root.postDelayed({
             jumpData?.apply {
-                nextJumpType = JumpConfig.JUMP_WEB
-                nextJumpUrl = mAgentWeb?.webCreator?.webView?.url
-                JumpDataManager.updateCurrentJumpData(this,tag="webFragment goBack")
-                if (rootActivity is WebDetailsActivity){
-                    (rootActivity as WebDetailsActivity).apply {
-                        updateBottom(true,true, jumpData = jumpData,"webView goBack")
-                    }
-                }
+                jumpType = JumpConfig.JUMP_WEB
+                JumpDataManager.updateCurrentJumpData(this,"MainFragment onResume 更新 jumpData")
             }
+        },0)
+        back = {
+//            jumpData?.apply {
+//                nextJumpType = JumpConfig.JUMP_WEB
+//                nextJumpUrl = mAgentWeb?.webCreator?.webView?.url
+//                JumpDataManager.updateCurrentJumpData(this,tag="webFragment goBack")
+//                if (rootActivity is WebDetailsActivity){
+//                    (rootActivity as WebDetailsActivity).apply {
+//                        updateBottom(true,true, jumpData = jumpData,"webView goBack")
+//                    }
+//                }
+//            }
         }
     }
 
@@ -147,7 +159,8 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
      */
 
     override fun setShowView() {
-
+        updateData(getBeanByGson(arguments?.getString(ParamsConfig.JSON_PARAMS)?:"",JumpData::class.java))
+        updateTabCount()
     }
 
     override fun onResume() {

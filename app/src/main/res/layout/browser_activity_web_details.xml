@@ -10,65 +10,7 @@
         android:layout_height="0dp"
         android:name="com.boom.aiobrowser.ui.fragment.WebFragment"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/llWebControl"
         ></fragment>
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/llWebControl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="13dp"
-        android:paddingBottom="13dp"
-        android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivLeft"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="33dp"
-            app:srcCompat="@drawable/selector_back_bg"
-            ></androidx.appcompat.widget.AppCompatImageView>
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivRight"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="33dp"
-            app:srcCompat="@drawable/selector_next_bg"
-            ></androidx.appcompat.widget.AppCompatImageView>
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivHome"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="33dp"
-            app:srcCompat="@mipmap/ic_home"
-            ></androidx.appcompat.widget.AppCompatImageView>
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="33dp"
-            android:layout_weight="1"
-            >
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvTabCount"
-                android:layout_width="33dp"
-                android:layout_height="33dp"
-                android:background="@drawable/shape_tab_bg"
-                android:layout_gravity="center"
-                android:textSize="17sp"
-                android:textColor="#B3000000"
-                android:gravity="center"
-                tools:text="5"
-                style="@style/app_text_bold"
-                ></androidx.appcompat.widget.AppCompatTextView>
-        </FrameLayout>
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivClear"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="33dp"
-            app:srcCompat="@mipmap/ic_web_clear"
-            ></androidx.appcompat.widget.AppCompatImageView>
-    </androidx.appcompat.widget.LinearLayoutCompat>
     <FrameLayout
         android:layout_width="45dp"
         android:layout_height="45dp"

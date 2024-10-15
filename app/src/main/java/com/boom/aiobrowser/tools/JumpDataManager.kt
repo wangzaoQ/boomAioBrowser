@@ -154,18 +154,10 @@ object JumpDataManager {
 
 
     fun toMain(){
-        var list = mutableListOf<Activity>()
-        for (i in 0 until APP.instance.lifecycleApp.stack.size){
-            var currentAc = APP.instance.lifecycleApp.stack.get(i)
-            if (currentAc is MainActivity){
-                continue
-            }else{
-                list.add(currentAc)
-            }
-        }
-        list.forEach {
-            it.finish()
-        }
+        APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "toMain 方法").apply {
+            jumpType = JumpConfig.JUMP_HOME
+            jumpTitle = APP.instance.getString(R.string.app_home)
+        })
     }
 
 }

@@ -55,6 +55,7 @@ class APP: Application() {
         val isDebug = BuildConfig.DEBUG
 
         val jumpLiveData  by lazy { ProtectedUnPeekLiveData<JumpData>() }
+        val jumpResumeData  by lazy { ProtectedUnPeekLiveData<Int>() }
         val jumpWebLiveData  by lazy { ProtectedUnPeekLiveData<JumpData>() }
         val engineLiveData  by lazy { ProtectedUnPeekLiveData<Int>() }
         val bottomLiveData  by lazy { ProtectedUnPeekLiveData<String>() }

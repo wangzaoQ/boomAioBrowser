@@ -36,18 +36,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
     }
 
     override fun setListener() {
-        acBinding.tvTabCount.setOneClick {
-            showTabPop()
-        }
-        acBinding.ivClear.setOneClick {
-            clearData()
-        }
-        acBinding.ivHome.setOneClick {
-            JumpDataManager.toMain()
-            PointEvent.posePoint(PointEventKey.webpage_home,Bundle().apply {
-                putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
-            })
-        }
+
         APP.jumpWebLiveData.observe(this){
             when (it.jumpType){
                 JumpConfig.JUMP_WEB->{
@@ -107,9 +96,6 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
                 putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
             })
         }
-        acBinding.ivLeft.setOneClick{
-            finish()
-        }
     }
 
     /**
@@ -159,74 +145,54 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
 
     var popDown: DownLoadPop?=null
 
-
-    fun updateBottom(showBack:Boolean,showNext:Boolean,jumpData:JumpData?=null,tag:String) {
-        AppLogs.dLog(acTAG,"updateBottom:${tag}")
-        acBinding.apply {
-            if(showNext){
-                if (jumpData?.nextJumpUrl.isNullOrEmpty()){
-                    ivRight.isEnabled = false
-                }else{
-                    ivRight.isEnabled = true
-                    ivRight.setOneClick {
-                        jumpData?.jumpUrl = jumpData?.nextJumpUrl?:""
-                        jumpData?.nextJumpUrl = ""
-                        jumpData?.jumpType = JumpConfig.JUMP_WEB
-                        var webFragment = supportFragmentManager.findFragmentById(R.id.webFragment) as WebFragment
-                        webFragment.updateData(jumpData)
-                        PointEvent.posePoint(PointEventKey.webpage_ahead,Bundle().apply {
-                            putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
-                        })
-                    }
-                }
-            }else{
-                ivRight.isEnabled = false
-            }
-            if (showBack){
-                ivLeft.setOneClick {
-                    PointEvent.posePoint(PointEventKey.webpage_back,Bundle().apply {
-                        putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
-                    })
-                    var mMainNavFragment = supportFragmentManager.findFragmentById(R.id.webFragment)
-                    if (mMainNavFragment != null && mMainNavFragment is WebFragment) {
-                        mMainNavFragment.goBack()
-                    }else{
-                        finish()
-                    }
-                }
-                ivLeft.isEnabled = true
-            }else{
-                ivLeft.isEnabled = false
-            }
-        }
-    }
+//
+//    fun updateBottom(showBack:Boolean,showNext:Boolean,jumpData:JumpData?=null,tag:String) {
+//        AppLogs.dLog(acTAG,"updateBottom:${tag}")
+//        acBinding.apply {
+//            if(showNext){
+//                if (jumpData?.nextJumpUrl.isNullOrEmpty()){
+//                    ivRight.isEnabled = false
+//                }else{
+//                    ivRight.isEnabled = true
+//                    ivRight.setOneClick {
+//                        jumpData?.jumpUrl = jumpData?.nextJumpUrl?:""
+//                        jumpData?.nextJumpUrl = ""
+//                        jumpData?.jumpType = JumpConfig.JUMP_WEB
+//                        var webFragment = supportFragmentManager.findFragmentById(R.id.webFragment) as WebFragment
+//                        webFragment.updateData(jumpData)
+//                        PointEvent.posePoint(PointEventKey.webpage_ahead,Bundle().apply {
+//                            putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+//                        })
+//                    }
+//                }
+//            }else{
+//                ivRight.isEnabled = false
+//            }
+//            if (showBack){
+//                ivLeft.setOneClick {
+//                    PointEvent.posePoint(PointEventKey.webpage_back,Bundle().apply {
+//                        putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+//                    })
+//                    var mMainNavFragment = supportFragmentManager.findFragmentById(R.id.webFragment)
+//                    if (mMainNavFragment != null && mMainNavFragment is WebFragment) {
+//                        mMainNavFragment.goBack()
+//                    }else{
+//                        finish()
+//                    }
+//                }
+//                ivLeft.isEnabled = true
+//            }else{
+//                ivLeft.isEnabled = false
+//            }
+//        }
+//    }
 
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
-        acBinding.ivLeft.performClick()
 //        super.onBackPressed()
     }
 
-    fun clearData(){
-        ClearPop(this).createPop {
-            CacheManager.clearAll()
-            JumpDataManager.toMain()
-        }
-    }
 
-    fun showTabPop() {
-        var tabPop = TabPop(this)
-        tabPop.createPop()
-        tabPop.setOnDismissListener(object : OnDismissListener(){
-            override fun onDismiss() {
-                updateTabCount()
-            }
-        })
-    }
-
-    fun updateTabCount() {
-        acBinding.tvTabCount.text = "${JumpDataManager.getBrowserTabList(CacheManager.browserStatus,tag ="WebDetailsActivity 更新tab 数量").size}"
-    }
 
     @SuppressLint("MissingSuperCall")
     override fun onNewIntent(intent: Intent) {
@@ -245,7 +211,6 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         webFragment.updateData(
             data
         )
-        updateTabCount()
     }
 
 

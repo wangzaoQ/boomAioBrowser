@@ -5,15 +5,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white">
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/vpRoot"
+    <fragment
+        android:id="@+id/fragment_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/llMainControl"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:navGraph="@navigation/nav_graph"
+        app:defaultNavHost="true"
         />
 
     <FrameLayout
@@ -41,6 +43,7 @@
             android:orientation="horizontal"
             android:visibility="gone"
             android:clickable="true"
+            android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             >
             <androidx.appcompat.widget.LinearLayoutCompat

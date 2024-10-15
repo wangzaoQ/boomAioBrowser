@@ -61,6 +61,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             updateEngine(it)
             fBinding.topSearch.updateEngine(it)
         }
+        APP.jumpResumeData.observe(this){
+            jump()
+        }
         fBinding.topSearch.binding.ivRefresh.visibility = View.GONE
         fBinding.mainAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
@@ -325,6 +328,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     override fun onDestroy() {
         APP.engineLiveData.removeObservers(this)
         APP.bottomLiveData.removeObservers(this)
+        APP.jumpResumeData.removeObservers(this)
         super.onDestroy()
     }
 }

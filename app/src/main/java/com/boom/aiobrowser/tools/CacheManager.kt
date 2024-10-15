@@ -38,6 +38,7 @@ object CacheManager {
     const val KV_PHONE_ID = "KV_PHONE_ID"
     const val KV_NEWS_SAVE_TIME = "KV_NEWS_SAVE_TIME"
     const val KV_HISTORY_DATA = "KV_HISTORY_DATA"
+    const val KV_HISTORY_DATA_JUMP = "KV_HISTORY_DATA_JUMP"
     const val KV_URL_LIST = "KV_URL_LIST"
     const val KV_SAVE_DAY = "KV_SAVE_DAY"
     const val KV_GID = "KV_GID"
@@ -273,6 +274,32 @@ object CacheManager {
         set(value) {
             mmkv.encode(KV_HISTORY_DATA, toJson(value))
         }
+
+    var historyJumpList :MutableList<JumpData>
+        get() {
+            return getListByGson(mmkv.decodeString(KV_HISTORY_DATA_JUMP),JumpData::class.java) ?: mutableListOf()
+        }
+        set(value) {
+            mmkv.encode(KV_HISTORY_DATA_JUMP, toJson(value))
+        }
+
+    fun addHistoryJump(data: JumpData){
+        var list = historyJumpList
+        var index = -1
+        for ( i in 0 until list.size){
+            var item = list.get(i)
+            if (item.jumpTitle == data.jumpTitle){
+                index = i
+                break
+            }
+        }
+        if (index>=0){
+            list.removeAt(index)
+        }
+        list.add(0,data)
+        historyJumpList = list
+    }
+
 //
 //    var firstOpenApp:Boolean
 //        get(){

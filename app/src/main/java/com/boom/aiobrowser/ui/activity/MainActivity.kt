@@ -84,7 +84,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                         .setExitAnim(R.anim.out_alpha)
 //                        .setPopUpTo(R.id.fragmentFile, true) // 将目标Fragment从Back Stack中移除
                         .build()
-
                     navController?.navigate(R.id.fragmentMain, Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
                     },navOptions)

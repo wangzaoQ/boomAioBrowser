@@ -22,6 +22,7 @@ import com.boom.aiobrowser.ui.pop.ClearPop
 import com.boom.aiobrowser.ui.pop.TabPop
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.jsoup.Jsoup
 import pop.basepopup.BasePopupWindow.OnDismissListener
 
 
@@ -104,16 +105,20 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         fBinding.flTop.binding.tvToolbarSearch.text = "${jumpData?.jumpTitle} ${getSearchTitle()}"
         fBinding.refreshLayout.isRefreshing = false
         var key = mAgentWeb?.webCreator?.webView?.url?:""
-//        if (rootActivity is WebDetailsActivity){
-//            (rootActivity as WebDetailsActivity).updateDownloadButtonStatus(true)
-//        }
         if(CacheManager.browserStatus == 0){
-            var list = CacheManager.historyDataList
-            jumpData?.apply {
-                updateTime = System.currentTimeMillis()
-                list.add(0,this)
-                CacheManager.historyDataList = list
-            }
+            rootActivity.addLaunch(success = {
+                var doc = Jsoup.connect(key).get()
+                var list = CacheManager.historyDataList
+                JumpData().apply {
+                    jumpTitle = doc.title()
+                    jumpUrl = key
+                    jumpType = JumpConfig.JUMP_WEB
+                    updateTime = System.currentTimeMillis()
+                    list.add(0,this)
+                    CacheManager.historyDataList = list
+                    CacheManager.addHistoryJump(this)
+                }
+            }, failBack = {})
         }
     }
 

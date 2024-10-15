@@ -21,12 +21,12 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
-import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.SearchConfig
 import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.SearchActivity
+import com.boom.aiobrowser.ui.adapter.HomeHistoryAdapter
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.EngineGuidePop
@@ -163,6 +163,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 })
             }
         }
+        fBinding.tvGuide.setOneClick {
+            DownloadVideoGuidePop(rootActivity).createPop {  }
+        }
     }
 
     override fun onResume() {
@@ -207,6 +210,15 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         }else{
             fBinding.tips.visibility = View.GONE
         }
+        var historyList = CacheManager.historyJumpList
+        if (historyList.isNullOrEmpty()){
+            fBinding.rvHistory.visibility = View.GONE
+            fBinding.rlEmptyHistory.visibility = View.VISIBLE
+        }else{
+            fBinding.rvHistory.visibility = View.VISIBLE
+            fBinding.rlEmptyHistory.visibility = View.GONE
+            historyAdapter.submitList(historyList)
+        }
     }
 
     private fun updateEngine(type: Int) {
@@ -229,6 +241,11 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     val newsAdapter by lazy {
         NewsMainAdapter(this)
     }
+
+    val historyAdapter by lazy {
+        HomeHistoryAdapter(this)
+    }
+
     val adapterHelper  by lazy {
         QuickAdapterHelper.Builder(newsAdapter)
             .setTrailingLoadStateAdapter(object :
@@ -295,6 +312,15 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 page = 1
                 adapterHelper.trailingLoadState = LoadState.None
                 loadData()
+            }
+
+            rvHistory.apply {
+                layoutManager = LinearLayoutManager(rootActivity,LinearLayoutManager.HORIZONTAL,false)
+                adapter = historyAdapter
+                historyAdapter.setOnDebouncedItemClick{adapter, view, position ->
+                    var data = historyAdapter.items.get(position)
+                    APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag="首页点击", updateData = data))
+                }
             }
         }
         updateEngine(CacheManager.engineType)

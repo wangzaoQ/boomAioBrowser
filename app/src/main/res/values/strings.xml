@@ -136,4 +136,11 @@
     <string name="app_tips">Tips</string>
     <string name="app_tips_content">Due to legal restrictions, videos on YouTube cannot be downloaded.</string>
 
+    <string name="app_vimeo">Vimeo</string>
+    <string name="app_x">X</string>
+    <string name="app_whats">Whatsapp</string>
+    <string name="app_home_no_history">Enter a website URL to download videos.</string>
+    <string name="app_view_the_guide">View the guide</string>
+
+
 </resources>

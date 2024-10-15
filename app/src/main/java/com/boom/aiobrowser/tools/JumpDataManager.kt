@@ -154,10 +154,12 @@ object JumpDataManager {
 
 
     fun toMain(){
-        APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "toMain 方法").apply {
+        var data = getCurrentJumpData(tag = "toMain 方法").apply {
             jumpType = JumpConfig.JUMP_HOME
             jumpTitle = APP.instance.getString(R.string.app_home)
-        })
+        }
+        updateCurrentJumpData(data,tag = "toMain 方法")
+        APP.jumpLiveData.postValue(data)
     }
 
 }

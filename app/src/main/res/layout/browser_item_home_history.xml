@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="61dp"
+    android:layout_marginStart="7dp"
+    android:layout_marginEnd="7dp"
+    android:orientation="horizontal">
+
+    <View
+        android:id="@+id/leftTemp"
+        android:layout_width="7dp"
+        android:layout_height="7dp"
+        android:visibility="gone"
+        ></View>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:minWidth="61dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivBrowser"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerInside"
+            app:srcCompat="@mipmap/ic_default_browser_icon"></androidx.appcompat.widget.AppCompatImageView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvBrowser"
+            style="@style/app_text_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/app_vimeo"
+            android:textColor="#80000000"
+            android:textSize="11sp"
+            android:textStyle="bold"></androidx.appcompat.widget.AppCompatTextView>
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/rightTemp"
+        android:layout_width="7dp"
+        android:layout_height="7dp"
+        android:visibility="gone"
+        ></View>
+</androidx.appcompat.widget.LinearLayoutCompat>

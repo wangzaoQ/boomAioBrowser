@@ -47,103 +47,31 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
                 }
             }
         }
-        APP.videoScanLiveData.observe(this){
-            popDown?.updateDataByScan(it)
-            updateDownloadButtonStatus(true)
-        }
-        APP.videoNFLiveData.observe(this){
-            popDown?.updateDataByScan(it)
-        }
-        APP.videoLiveData.observe(this){
-            var map = it
-            it.keys.forEach {
-                popDown?.updateStatus(this@WebDetailsActivity,it,map.get(it)){
-//                    itemRemoveData(it)
-                }
-            }
-        }
-        APP.videoUpdateLiveData.observe(this){
-            var list = CacheManager.videoDownloadTempList
-            if (popDown?.isShowing == true && list.isNotEmpty()){
-                for (i in 0 until list!!.size){
-                    var data = list.get(i)
-                    if (data.videoId == it){
-                        data.downloadType = VideoDownloadData.DOWNLOAD_NOT
-                        CacheManager.videoDownloadTempList = list
-                        popDown?.updateItem()
-                        break
-                    }
-                }
-            }
-        }
-        acBinding.ivDownload.setOneClick {
-            if (WebScan.isYoutube(jumpData?.jumpUrl?:"")){
-                TipsPop(this).createPop {  }
-                return@setOneClick
-            }
-            DownloadVideoGuidePop(this).createPop {  }
-            PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
-                putString(PointValueKey.type,"no_have")
-                putString(PointValueKey.url,jumpData?.jumpUrl)
-                putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
-            })
-        }
-        acBinding.ivDownload2.setOneClick {
-            showDownloadPop()
-            PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
-                putString(PointValueKey.type,"have")
-                putString(PointValueKey.url,jumpData?.jumpUrl)
-                putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
-            })
-        }
+
+
     }
 
-    /**
-     * 移除item
-     */
-    private fun itemRemoveData(it: VideoDownloadData) {
-        var videoId = it.videoId
-        var list = CacheManager.videoDownloadTempList
-        for (i in 0 until list.size) {
-            if (list.get(i).videoId == videoId) {
-                list.removeAt(i)
-                break
-            }
-        }
-        CacheManager.videoDownloadTempList = list
-        runCatching {
-            if (list.isNullOrEmpty()){
-                popDown?.dismiss()
-            }
-        }
-        updateDownloadButtonStatus(true)
-    }
+//    /**
+//     * 移除item
+//     */
+//    private fun itemRemoveData(it: VideoDownloadData) {
+//        var videoId = it.videoId
+//        var list = CacheManager.videoDownloadTempList
+//        for (i in 0 until list.size) {
+//            if (list.get(i).videoId == videoId) {
+//                list.removeAt(i)
+//                break
+//            }
+//        }
+//        CacheManager.videoDownloadTempList = list
+//        runCatching {
+//            if (list.isNullOrEmpty()){
+//                popDown?.dismiss()
+//            }
+//        }
+//        updateDownloadButtonStatus(true)
+//    }
 
-    open fun updateDownloadButtonStatus(status: Boolean) {
-        var size = CacheManager.videoDownloadTempList.size
-        if (status && size>0){
-            acBinding.ivDownload.visibility = View.GONE
-            acBinding.ivDownload2.visibility = View.VISIBLE
-            acBinding.tvDownload.visibility = View.VISIBLE
-            acBinding.tvDownload.text = "$size"
-            acBinding.ivDownload2.apply {
-                setAnimation("download.json")
-                playAnimation()
-            }
-        }else{
-            acBinding.ivDownload.visibility = View.VISIBLE
-            acBinding.ivDownload2.visibility = View.GONE
-            acBinding.tvDownload.visibility = View.GONE
-            acBinding.ivDownload2.cancelAnimation()
-        }
-    }
-
-    private fun showDownloadPop() {
-        popDown = DownLoadPop(this@WebDetailsActivity)
-        popDown?.createPop(){}
-    }
-
-    var popDown: DownLoadPop?=null
 
 //
 //    fun updateBottom(showBack:Boolean,showNext:Boolean,jumpData:JumpData?=null,tag:String) {
@@ -215,17 +143,15 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
 
 
     override fun setShowView() {
-        getWebData(getBeanByGson(
-            intent.getStringExtra(ParamsConfig.JSON_PARAMS),
-            JumpData::class.java
-        ))
-        updateDownloadButtonStatus(false)
-        acBinding.ivDownload.visibility = View.VISIBLE
-        acBinding.root.postDelayed({
-            PointEvent.posePoint(PointEventKey.webpage_page,Bundle().apply {
-                putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
-            })
-        },0)
+//        getWebData(getBeanByGson(
+//            intent.getStringExtra(ParamsConfig.JSON_PARAMS),
+//            JumpData::class.java
+//        ))
+//        updateDownloadButtonStatus(false)
+//        acBinding.ivDownload.visibility = View.VISIBLE
+//        acBinding.root.postDelayed({
+
+//        },0)
     }
 
     override fun onDestroy() {

@@ -99,20 +99,25 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 var url = ""
                 when(i){
                     0 ->{
-                        title = getString(R.string.app_ytb)
-                        url = "https://www.youtube.com/"
+                        title = getString(R.string.app_vimeo)
+                        url = "https://vimeo.com/"
                     }
                     1 ->{
+                        title = getString(R.string.app_tt)
+                        url = "https://www.tiktok.com/"
+
+                    }
+                    2 ->{
+                        title = getString(R.string.app_x)
+                        url = "https://x.com/"
+                    }
+                    3 ->{
                         title = getString(R.string.app_fb)
                         url = "https://www.facebook.com/"
                     }
-                    2 ->{
-                        title = getString(R.string.app_instagram)
-                        url = "https://www.instagram.com/"
-                    }
-                    3 ->{
-                        title = getString(R.string.app_tt)
-                        url = "https://www.tiktok.com/"
+                    4 ->{
+                        title = getString(R.string.app_whats)
+                        url = "https://www.whatsapp.com/"
                     }
                 }
                 APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "mainFragment 点击热们功能").apply {

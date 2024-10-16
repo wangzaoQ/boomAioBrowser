@@ -2,11 +2,13 @@ package com.boom.aiobrowser.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseWebFragment
 import com.boom.aiobrowser.data.JumpData
+import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserFragmentWebBinding
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
@@ -15,11 +17,15 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.getBeanByGson
+import com.boom.aiobrowser.tools.web.WebScan
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.activity.WebDetailsActivity
 import com.boom.aiobrowser.ui.pop.ClearPop
+import com.boom.aiobrowser.ui.pop.DownLoadPop
+import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.TabPop
+import com.boom.aiobrowser.ui.pop.TipsPop
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
@@ -69,7 +75,89 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                 putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
             })
         }
+
+        fBinding.ivDownload.setOneClick {
+            if (WebScan.isYoutube(jumpData?.jumpUrl?:"")){
+                TipsPop(rootActivity).createPop {  }
+                return@setOneClick
+            }
+            DownloadVideoGuidePop(rootActivity).createPop {  }
+            PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
+                putString(PointValueKey.type,"no_have")
+                putString(PointValueKey.url,jumpData?.jumpUrl)
+                putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+            })
+        }
+        fBinding.ivDownload2.setOneClick {
+            showDownloadPop()
+            PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
+                putString(PointValueKey.type,"have")
+                putString(PointValueKey.url,jumpData?.jumpUrl)
+                putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+            })
+        }
+
+        APP.videoScanLiveData.observe(this){
+            popDown?.updateDataByScan(it)
+            updateDownloadButtonStatus(true)
+        }
+        APP.videoNFLiveData.observe(this){
+            popDown?.updateDataByScan(it)
+        }
+        APP.videoLiveData.observe(this){
+            var map = it
+            it.keys.forEach {
+                popDown?.updateStatus(rootActivity,it,map.get(it)){
+//                    itemRemoveData(it)
+                }
+            }
+        }
+        APP.videoUpdateLiveData.observe(this){
+            var list = CacheManager.videoDownloadTempList
+            if (popDown?.isShowing == true && list.isNotEmpty()){
+                for (i in 0 until list!!.size){
+                    var data = list.get(i)
+                    if (data.videoId == it){
+                        data.downloadType = VideoDownloadData.DOWNLOAD_NOT
+                        CacheManager.videoDownloadTempList = list
+                        popDown?.updateItem()
+                        break
+                    }
+                }
+            }
+        }
     }
+
+
+    open fun updateDownloadButtonStatus(status: Boolean) {
+        var size = CacheManager.videoDownloadTempList.size
+        fBinding.apply {
+            if (status && size>0){
+                ivDownload.visibility = View.GONE
+                ivDownload2.visibility = View.VISIBLE
+                tvDownload.visibility = View.VISIBLE
+                tvDownload.text = "$size"
+                ivDownload2.apply {
+                    setAnimation("download.json")
+                    playAnimation()
+                }
+            }else{
+                ivDownload.visibility = View.VISIBLE
+                ivDownload2.visibility = View.GONE
+                tvDownload.visibility = View.GONE
+                ivDownload2.cancelAnimation()
+            }
+        }
+    }
+
+
+    private fun showDownloadPop() {
+        popDown = DownLoadPop(rootActivity)
+        popDown?.createPop(){}
+    }
+
+    var popDown: DownLoadPop?=null
+
 
 
     fun showTabPop() {
@@ -166,6 +254,11 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     override fun setShowView() {
         updateData(getBeanByGson(arguments?.getString(ParamsConfig.JSON_PARAMS)?:"",JumpData::class.java))
         updateTabCount()
+        updateDownloadButtonStatus(false)
+        fBinding.ivDownload.visibility = View.VISIBLE
+        PointEvent.posePoint(PointEventKey.webpage_page,Bundle().apply {
+            putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+        })
     }
 
     override fun onResume() {

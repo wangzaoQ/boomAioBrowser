@@ -141,6 +141,9 @@
     <string name="app_whats">Whatsapp</string>
     <string name="app_home_no_history">Enter a website URL to download videos.</string>
     <string name="app_view_the_guide">View the guide</string>
+    <string name="app_method">Method</string>
+    <string name="app_tt_tips_1">Open\" TikTok \" and click \"Share\"</string>
+    <string name="app_tt_tips_2">Click \" AIO Browser \", start downloading</string>
 
 
 </resources>

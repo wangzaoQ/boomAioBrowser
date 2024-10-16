@@ -21,9 +21,11 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.SearchConfig
 import com.boom.aiobrowser.ui.activity.DownloadActivity
+import com.boom.aiobrowser.ui.activity.HomeGuideActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.SearchActivity
 import com.boom.aiobrowser.ui.adapter.HomeHistoryAdapter
@@ -97,15 +99,16 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             fBinding.llRoot.getChildAt(i).setOnClickListener {
                 var title = ""
                 var url = ""
+                var jumpGuide = false
                 when(i){
                     0 ->{
                         title = getString(R.string.app_vimeo)
                         url = "https://vimeo.com/"
                     }
                     1 ->{
+                        jumpGuide = true
                         title = getString(R.string.app_tt)
                         url = "https://www.tiktok.com/"
-
                     }
                     2 ->{
                         title = getString(R.string.app_x)
@@ -120,11 +123,15 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                         url = "https://www.whatsapp.com/"
                     }
                 }
-                APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "mainFragment 点击热们功能").apply {
-                    jumpType = JumpConfig.JUMP_WEB
-                    jumpTitle = title
-                    jumpUrl = url
-                })
+                if (jumpGuide){
+                    rootActivity.jumpActivity<HomeGuideActivity>()
+                }else{
+                    APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "mainFragment 点击热们功能").apply {
+                        jumpType = JumpConfig.JUMP_WEB
+                        jumpTitle = title
+                        jumpUrl = url
+                    })
+                }
                 PointEvent.posePoint(PointEventKey.home_page_tool_c,Bundle().apply {
                     putString(PointValueKey.type,title)
                 })

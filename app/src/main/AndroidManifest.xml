@@ -151,6 +151,10 @@
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:launchMode="singleTop"
             ></activity>
+        <activity android:name=".ui.activity.HomeGuideActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            ></activity>
 
         <receiver
             android:name=".nf.NFReceiver"

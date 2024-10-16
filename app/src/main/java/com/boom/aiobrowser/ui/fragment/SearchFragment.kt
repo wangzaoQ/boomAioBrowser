@@ -9,8 +9,11 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
+import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.BrowserFragmentSearchBinding
@@ -26,11 +29,15 @@ import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.activity.WebDetailsActivity
+import com.boom.aiobrowser.ui.adapter.HomeGuideAdapter
+import com.boom.aiobrowser.ui.adapter.PopGuideAdapter
 import com.boom.aiobrowser.ui.adapter.RecentSearchAdapter
 import com.boom.aiobrowser.ui.adapter.SearchResultAdapter
 import com.boom.base.adapter4.QuickAdapterHelper
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
+import com.zhpan.indicator.enums.IndicatorSlideMode
+import com.zhpan.indicator.enums.IndicatorStyle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -81,9 +88,53 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 }
             }else{
                 fBinding.recentSearchRoot.visibility = View.GONE
-                fBinding.searchGuideRoot.visibility = View.VISIBLE
+                showGuideRoot()
             }
         }
+    }
+
+
+    private fun showGuideRoot() {
+        fBinding.searchGuideRoot.visibility = View.VISIBLE
+        guideList.clear()
+        guideList.add(0)
+        guideList.add(1)
+        var width = dp2px(7f).toFloat()
+        fBinding.indicator.apply {
+            setSliderColor(context.getColor(R.color.color_tab_DAE5EC), context.getColor(R.color.color_tab_5755D9))
+            setSliderWidth(width)
+            setSliderHeight(width)
+            setSlideMode(IndicatorSlideMode.SMOOTH)
+            setIndicatorStyle(IndicatorStyle.CIRCLE)
+            setPageSize(guideList.size)
+            notifyDataChanged()
+            fBinding.vpGuide.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int
+                ) {
+                    super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+                    fBinding.indicator.onPageScrolled(
+                        position,
+                        positionOffset,
+                        positionOffsetPixels
+                    )
+                }
+
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    fBinding.indicator.onPageSelected(position)
+                    setGuideIvByPosition(position,guideList)
+                }
+            })
+        }
+        homeGuideAdapter.submitList(guideList)
+    }
+
+    private fun setGuideIvByPosition(position: Int,dataList: MutableList<Int>) {
+        fBinding.ivRight.setImageResource(if (position == dataList.size-1) R.mipmap.ic_guide_right1 else R.mipmap.ic_guide_right2)
+        fBinding.ivLeft.setImageResource(if (position == 0) R.mipmap.ic_guide_left1 else R.mipmap.ic_guide_left2)
     }
 
     var allowRecentDelete = false
@@ -129,6 +180,37 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
     var recentListType = 0
 
     override fun setListener() {
+        for (i in 0 until fBinding.llRoot.childCount){
+            fBinding.llRoot.getChildAt(i).setOneClick {
+                var title = ""
+                var url = ""
+                var jumpGuide = false
+                when(i){
+                    0 ->{
+                        jumpGuide = true
+                        title = getString(R.string.app_tt)
+                        url = "https://www.tiktok.com/"
+                    }
+                    1 ->{
+                        title = getString(R.string.app_vimeo)
+                        url = "https://vimeo.com/"
+                    }
+                    2 ->{
+                        title = getString(R.string.app_x)
+                        url = "https://x.com/"
+                    }
+                }
+                if (jumpGuide){
+
+                }else{
+                    toWebDetailsActivity(JumpDataManager.getCurrentJumpData(tag = "searchFragment 点击推荐").apply {
+                        jumpType = JumpConfig.JUMP_WEB
+                        jumpTitle = title
+                        jumpUrl = url
+                    })
+                }
+            }
+        }
         APP.engineLiveData.observe(this){
             fBinding.topRoot.updateEngine(it)
         }
@@ -197,6 +279,14 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
         SearchResultAdapter()
     }
 
+    val homeGuideAdapter by lazy {
+        HomeGuideAdapter()
+    }
+
+    val guideList by lazy {
+        mutableListOf<Int>()
+    }
+
     var changeJob: Job? = null
 
     override fun setShowView() {
@@ -262,6 +352,11 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 clickHistory(jumpData)
             }
         }
+        fBinding.vpGuide.apply {
+            setOrientation(ViewPager2.ORIENTATION_HORIZONTAL)
+            adapter = homeGuideAdapter
+        }
+
         PointEvent.posePoint(PointEventKey.search_page)
     }
 
@@ -284,19 +379,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
     }
 
     private fun toWebDetailsActivity(data:JumpData){
-        var allow = true
-        for (i in 0 until APP.instance.lifecycleApp.stack.size){
-            var data = APP.instance.lifecycleApp.stack.get(i)
-            if (data is WebDetailsActivity){
-                allow = false
-                break
-            }
-        }
-        if (allow){
-            APP.jumpLiveData.postValue(data)
-        }else{
-            APP.jumpWebLiveData.postValue(data)
-        }
+        APP.jumpLiveData.postValue(data)
         rootActivity.finish()
     }
 

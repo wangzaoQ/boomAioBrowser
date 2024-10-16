@@ -6,10 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseWebFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserFragmentWebBinding
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -77,11 +80,13 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         }
 
         fBinding.ivDownload.setOneClick {
-            if (WebScan.isYoutube(jumpData?.jumpUrl?:"")){
-                TipsPop(rootActivity).createPop {  }
-                return@setOneClick
+            showDownloadAD{
+                if (WebScan.isYoutube(jumpData?.jumpUrl?:"")){
+                    TipsPop(rootActivity).createPop {  }
+                    return@showDownloadAD
+                }
+                DownloadVideoGuidePop(rootActivity).createPop {  }
             }
-            DownloadVideoGuidePop(rootActivity).createPop {  }
             PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
                 putString(PointValueKey.type,"no_have")
                 putString(PointValueKey.url,jumpData?.jumpUrl)
@@ -89,12 +94,15 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
             })
         }
         fBinding.ivDownload2.setOneClick {
-            showDownloadPop()
+            showDownloadAD{
+                showDownloadPop()
+            }
             PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
                 putString(PointValueKey.type,"have")
                 putString(PointValueKey.url,jumpData?.jumpUrl)
                 putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
             })
+
         }
 
         APP.videoScanLiveData.observe(this){
@@ -125,6 +133,18 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                     }
                 }
             }
+        }
+    }
+
+    private fun showDownloadAD(result: () -> Unit) {
+        if (CacheManager.isFirstClickDownloadButton){
+            result.invoke()
+            CacheManager.isFirstClickDownloadButton = false
+        }else{
+            var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "插屏") {
+                result.invoke()
+            }
+            manager.showScreenAD(AD_POINT.aobws_download_int)
         }
     }
 

@@ -3,8 +3,11 @@ package com.boom.aiobrowser.ui.activity
 import android.content.pm.ActivityInfo
 import android.view.LayoutInflater
 import android.view.View
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.VideoActivityPreviewBinding
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.ui.view.CustomVideoView
 import com.boom.video.GSYVideoManager
 import com.boom.video.builder.GSYVideoOptionBuilder
@@ -64,7 +67,9 @@ class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
             })
             .build(gsyVideoPlayer)
         //设置返回按键功能
-        gsyVideoPlayer?.getBackButton()?.setOnClickListener(View.OnClickListener { onBackPressed() })
+        gsyVideoPlayer?.getBackButton()?.setOnClickListener(View.OnClickListener {
+            back()
+        })
 
 
         //设置旋转
@@ -90,13 +95,20 @@ class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
 
     override fun onBackPressed() {
 ///       不需要回归竖屏
+        back()
+    }
+
+    private fun back() {
         if (orientationUtils?.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
             gsyVideoPlayer?.getFullscreenButton()?.performClick();
             return;
         }else{
-            //释放所有
-            gsyVideoPlayer?.setVideoAllCallBack(null)
-            super.onBackPressed()
+            var manager = AioADShowManager(this@VideoPreActivity, ADEnum.INT_AD, tag = "插屏") {
+                //释放所有
+                gsyVideoPlayer?.setVideoAllCallBack(null)
+                finish()
+            }
+            manager.showScreenAD(AD_POINT.aobws_return_int)
         }
     }
 

@@ -26,6 +26,9 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.nativead.MediaView
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 class AioADShowManager(
     private val activity: BaseActivity<*>,
@@ -107,7 +110,13 @@ class AioADShowManager(
                         (adResultData.adAny as InterstitialAd).run {
                             fullScreenContentCallback = callback
                             if (adEnum != ADEnum.LAUNCH_AD){
-                                AioADDataManager.isShowAD = true
+//                                AioADDataManager.isShowAD = true
+//                                activity.addLaunch(success = {
+//                                    delay(1000)
+//                                    withContext(Dispatchers.Main){
+//                                        loadComplete(type = AioADDataManager.AD_SHOW_TYPE_SUCCESS, tag)
+//                                    }
+//                                }, failBack = {})
                                 loadComplete(type = AioADDataManager.AD_SHOW_TYPE_SUCCESS, tag)
                             }
                             show(activity!!)

@@ -128,4 +128,6 @@ object PointValueKey{
 
 object AD_POINT{
     const val aobws_launch = "aobws_launch"
+    const val aobws_download_int = "aobws_download_int"
+    const val aobws_return_int = "aobws_return_int"
 }

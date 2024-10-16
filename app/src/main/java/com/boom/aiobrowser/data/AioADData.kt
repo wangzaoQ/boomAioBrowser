@@ -16,7 +16,10 @@ npxotusg：广告层级权重，数值越大优先级越高
 data class AioADData(
     val pnvdskmb: Int,
     val qwmkszbx: Int,
-    val aobws_launch: MutableList<AioRequestData>?=null
+    val aobws_launch: MutableList<AioRequestData>?=null,
+    val aobws_main_one: MutableList<AioRequestData>?=null,
+    val aobws_detail_bnat: MutableList<AioRequestData>?=null,
+    val aobws_download_bnat: MutableList<AioRequestData>?=null
 )
 
 data class AioRequestData(

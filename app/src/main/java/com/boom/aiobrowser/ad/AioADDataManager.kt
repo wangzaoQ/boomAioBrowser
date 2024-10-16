@@ -24,6 +24,8 @@ object AioADDataManager {
 
     const val AD_TYPE_OPEN = "op"
     const val AD_TYPE_INT = "int"
+    const val AD_TYPE_NATIVE = "nat"
+    const val AD_TYPE_BANNER = "ban"
 
     const val AD_SHOW_TYPE_SUCCESS = "AD_SHOW_TYPE_SUCCESS"
     const val AD_SHOW_TYPE_FAILED = "AD_SHOW_TYPE_FAILED"
@@ -49,7 +51,21 @@ object AioADDataManager {
     fun initADConfig(bean: AioADData) {
         adRootBean = bean
         ADEnum.values().forEach {
-            it.adRequestList = bean.aobws_launch ?: mutableListOf()
+            when (it) {
+                LAUNCH_AD -> {
+                    it.adRequestList = bean.aobws_launch ?: mutableListOf()
+                }
+                INT_AD ->{
+                    it.adRequestList = bean.aobws_main_one ?: mutableListOf()
+                }
+                NATIVE_AD ->{
+                    it.adRequestList = bean.aobws_detail_bnat ?: mutableListOf()
+                }
+                NATIVE_DOWNLOAD_AD ->{
+                    it.adRequestList = bean.aobws_download_bnat ?: mutableListOf()
+                }
+                else -> {}
+            }
             it.adRequestList.sortByDescending { it.npxotusg }
         }
     }

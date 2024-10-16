@@ -35,6 +35,9 @@ class AioADLoader(
     init {
         when (requestBean.pxdtzgho) {
             AioADDataManager.AD_TYPE_OPEN -> openAD()
+            AioADDataManager.AD_TYPE_INT -> intAD()
+            AioADDataManager.AD_TYPE_NATIVE -> nativeAD()
+            AioADDataManager.AD_TYPE_BANNER -> banner()
         }
     }
 

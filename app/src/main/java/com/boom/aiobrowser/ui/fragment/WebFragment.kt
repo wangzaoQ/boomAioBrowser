@@ -30,6 +30,7 @@ import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.TabPop
 import com.boom.aiobrowser.ui.pop.TipsPop
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import pop.basepopup.BasePopupWindow.OnDismissListener
@@ -81,11 +82,16 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
         fBinding.ivDownload.setOneClick {
             showDownloadAD{
-                if (WebScan.isYoutube(jumpData?.jumpUrl?:"")){
-                    TipsPop(rootActivity).createPop {  }
-                    return@showDownloadAD
-                }
-                DownloadVideoGuidePop(rootActivity).createPop {  }
+                rootActivity.addLaunch(success = {
+                    delay(500)
+                    withContext(Dispatchers.Main){
+                        if (WebScan.isYoutube(jumpData?.jumpUrl?:"")){
+                            TipsPop(rootActivity).createPop {  }
+                            return@withContext
+                        }
+                        DownloadVideoGuidePop(rootActivity).createPop {  }
+                    }
+                }, failBack = {})
             }
             PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
                 putString(PointValueKey.type,"no_have")
@@ -95,7 +101,12 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         }
         fBinding.ivDownload2.setOneClick {
             showDownloadAD{
-                showDownloadPop()
+                rootActivity.addLaunch(success = {
+                    delay(500)
+                    withContext(Dispatchers.Main){
+                        showDownloadPop()
+                    }
+                }, failBack = {})
             }
             PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
                 putString(PointValueKey.type,"have")

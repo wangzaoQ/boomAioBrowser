@@ -76,7 +76,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     navController?.navigate(R.id.fragmentWeb, Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
                     },navOptions)
-                    acBinding.llMainControl.visibility = View.GONE
                 }
                 JumpConfig.JUMP_HOME ->{
                     val navOptions = NavOptions.Builder()

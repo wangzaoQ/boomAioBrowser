@@ -160,6 +160,7 @@ fun appDataReset(){
         CacheManager.clickEveryDay = 0
         CacheManager.showEveryDay = 0
         CacheManager.saveDay = tmpDate
+        CacheManager.adLastTime = 0
     }
 }
 

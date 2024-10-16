@@ -1,13 +1,14 @@
 package com.boom.aiobrowser.ad
 
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.ad.ADEnum.*
 import com.boom.aiobrowser.data.ADResultData
 import com.boom.aiobrowser.data.AioADData
 import com.boom.aiobrowser.data.AioRequestData
 import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
-import com.boom.aiobrowser.tools.CacheManager.launchLastTime
+import com.boom.aiobrowser.tools.CacheManager.adLastTime
 import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.appDataReset
 import com.google.android.gms.ads.MobileAds
@@ -22,6 +23,7 @@ object AioADDataManager {
     const val AD_PLATFORM_ADMOB = "admob"
 
     const val AD_TYPE_OPEN = "op"
+    const val AD_TYPE_INT = "int"
 
     const val AD_SHOW_TYPE_SUCCESS = "AD_SHOW_TYPE_SUCCESS"
     const val AD_SHOW_TYPE_FAILED = "AD_SHOW_TYPE_FAILED"
@@ -32,6 +34,8 @@ object AioADDataManager {
     var adCache: HashMap<ADEnum, ADResultData> = HashMap()
 
     var adRootBean: AioADData? = null
+
+    var isShowAD = false
 
 
     fun initAD(){
@@ -45,11 +49,7 @@ object AioADDataManager {
     fun initADConfig(bean: AioADData) {
         adRootBean = bean
         ADEnum.values().forEach {
-            when (it) {
-                ADEnum.LAUNCH -> {
-                    it.adRequestList = bean.aobws_launch ?: mutableListOf()
-                }
-            }
+            it.adRequestList = bean.aobws_launch ?: mutableListOf()
             it.adRequestList.sortByDescending { it.npxotusg }
         }
     }
@@ -133,11 +133,11 @@ object AioADDataManager {
 
 
 
-    fun adAllowShowOpen():Boolean{
+    fun adAllowShowScreen():Boolean{
         appDataReset()
         var allow=true
         var content=""
-        var launchMiddle = (System.currentTimeMillis()-launchLastTime)/1000
+        var launchMiddle = (System.currentTimeMillis()-adLastTime)/1000
         if (launchMiddle<FirebaseConfig.AD_CD_ALL){
             allow = false
             content = "间隔时间还差 ${(FirebaseConfig.AD_CD_ALL-launchMiddle)} seconds"
@@ -147,7 +147,7 @@ object AioADDataManager {
             content = "adShowMax"
         }
         if (allow.not()){
-            AppLogs.dLog(TAG,"开屏检测未通过:${content}")
+            AppLogs.dLog(TAG,"全屏广告检测未通过:${content}")
         }
         return allow
     }
@@ -158,7 +158,7 @@ object AioADDataManager {
             return
         }
         if (APP.instance.lifecycleApp.adScreenType == 0){
-            CacheManager.launchLastTime = System.currentTimeMillis()
+            CacheManager.adLastTime = System.currentTimeMillis()
             AppLogs.dLog(AioADDataManager.TAG,"setLaunchLastTime:${TimeManager.getADTime()}")
         }
         APP.instance.lifecycleApp.adScreenType = -1
@@ -176,6 +176,8 @@ object AioADDataManager {
     }
 
     fun getLaunchData(): ADResultData? {
-       return adCache[ADEnum.LAUNCH]
+       return adCache[LAUNCH_AD]
     }
+
+
 }

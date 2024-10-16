@@ -13,14 +13,13 @@ import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseFragment
-import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.BrowserFragmentStartBinding
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
-import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.UrlConfig
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.WebActivity
@@ -57,7 +56,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         fBinding.rlStart.visibility = View.GONE
         startPb(0, 100, if (isFirst) 1000 else 10000, update = {
             if (isFirst.not()){
-                if (AioADDataManager.getLaunchData() == null && AioADDataManager.adAllowShowOpen() ) {
+                if (AioADDataManager.getLaunchData() == null && AioADDataManager.adAllowShowScreen() ) {
                     fBinding.progress.progress = it
                 } else {
                     showEnd()
@@ -106,9 +105,10 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
                 withContext(Dispatchers.Main) {
                     AppLogs.dLog(fragmentTAG, "条件1点击和展示是否超过限制:${AioADDataManager.adFilter1()}")
                     if (AioADDataManager.adFilter1().not()) {
-                        AioADShowManager(rootActivity,ADEnum.LAUNCH, tag = "开屏") {
+                        var manager = AioADShowManager(rootActivity,ADEnum.LAUNCH_AD, tag = "开屏") {
                             adLoadComplete(it)
-                        }.showScreenAD()
+                        }
+                        manager.showScreenAD(AD_POINT.aobws_launch)
                     } else {
                         AppLogs.dLog(fragmentTAG, "不展示广告直接跳转")
                         adLoadComplete(AioADDataManager.AD_SHOW_TYPE_FAILED)
@@ -137,9 +137,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         fBinding.btnCheck.setOnCheckedChangeListener { compoundButton, b ->
             fBinding.btnBrowser.isEnabled = fBinding.btnCheck.isChecked
         }
-        PointEvent.posePoint(PointEventKey.launch_page, Bundle().apply {
-            putInt(PointValueKey.open_type,if (CacheManager.isFirstStart) 0 else 1)
-        })
+
         if (CacheManager.isFirstStart){
             fBinding.rlStart.visibility = View.VISIBLE
             fBinding.llLoadingRoot.visibility = View.GONE
@@ -149,9 +147,13 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         ADEnum.values().forEach {
             it.adLoadStatus = AioADDataManager.LOAD_STATUS_START
         }
-        AioADDataManager.preloadAD(ADEnum.LAUNCH,"app启动")
+        AioADDataManager.preloadAD(ADEnum.LAUNCH_AD,"app启动")
+        AioADDataManager.preloadAD(ADEnum.INT_AD,"app启动")
         PointEvent.session()
         PointEvent.posePoint(PointEventKey.nn_session)
+        PointEvent.posePoint(PointEventKey.launch_page, Bundle().apply {
+            putInt(PointValueKey.open_type,if (CacheManager.isFirstStart) 0 else 1)
+        })
     }
 
     var dataIntent :Intent?=null

@@ -2,6 +2,11 @@ package com.boom.aiobrowser.point
 
 object PointEventKey {
 
+    const val aobws_ad_chance = "aobws_ad_chance"
+    const val aobws_ad_impression = "aobws_ad_impression"
+    const val aobws_ad_load = "aobws_ad_load"
+
+
     const val nn_session = "nn_session"
     const val session_st = "session_st"
     const val launch_page = "launch_page"
@@ -113,4 +118,14 @@ object PointValueKey{
     const val video_source = "video_source"
     const val video_url = "video_url"
     const val page = "page"
+
+
+    const val ad_pos_id = "ad_pos_id"
+    const val ad_time = "ad_time"
+    const val ad_key = "ad_key"
+}
+
+
+object AD_POINT{
+    const val aobws_launch = "aobws_launch"
 }

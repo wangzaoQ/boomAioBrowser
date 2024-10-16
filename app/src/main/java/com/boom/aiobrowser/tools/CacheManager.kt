@@ -173,7 +173,7 @@ object CacheManager {
             mmkv.encode(KV_SHOW_EVERY_DAY, value)
         }
 
-    var launchLastTime: Long
+    var adLastTime: Long
         get() {
             return mmkv.decodeLong(KV_LAST_LAUNCH_TIME)
         }

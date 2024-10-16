@@ -39,6 +39,8 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
     var stayTime = 0L
     var timeResult: ((Long) -> Unit?)? =null
 
+    var life = BaseActivityLife()
+
     override fun onStart() {
         super.onStart()
         status = false

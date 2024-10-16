@@ -61,7 +61,7 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
             AppLogs.dLog(APP.instance.TAG,"onActivityStarted_isBackstage:${isBackstage}")
             isBackstage = false
 //            activity.startActivity(Intent(activity, NowStartActivity::class.java))
-            if (AioADDataManager.adAllowShowOpen()){
+            if (AioADDataManager.adAllowShowScreen()){
                 val temp = mutableListOf<Activity>()
                 stack.forEach {
                     if ((it is BaseActivity<*>).not()) {
@@ -97,7 +97,7 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
             cancelJob = CoroutineScope(Dispatchers.IO).launch{
                 startTime = 0L
                 if (AioADDataManager.adFilter1().not()){
-                    while (AioADDataManager.adAllowShowOpen().not()){
+                    while (AioADDataManager.adAllowShowScreen().not()){
                         delay(1000)
                     }
                 }

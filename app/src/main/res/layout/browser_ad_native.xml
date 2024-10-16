@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.gms.ads.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="228dp">
+
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            >
+            <ImageView
+                android:id="@+id/is_icon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="14dp"
+                tools:background="@mipmap/ic_start_logo" />
+
+            <TextView
+                android:id="@+id/is_headline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textColor="#312F3E"
+                android:textSize="13sp"
+                android:layout_weight="1"
+                android:layout_marginEnd="5dp"
+                tools:text="amazon music" />
+            <TextView
+                android:id="@+id/is_call"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginEnd="15dp"
+                android:paddingHorizontal="15dp"
+                android:background="@drawable/shape_bg_ad_install"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                tools:text="install" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="14dp"
+            >
+            <com.google.android.gms.ads.nativead.MediaView
+                android:id="@+id/is_media"
+                android:layout_width="match_parent"
+                android:layout_height="139dp"
+                tools:background="#000000" />
+            <TextView
+                android:layout_width="25dp"
+                android:layout_height="16dp"
+                android:background="@drawable/shape_ad_tips"
+                android:gravity="center"
+                android:text="AD"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/white"
+                android:textSize="11sp" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/is_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="14dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textStyle="bold"
+            android:textColor="#312F3E"
+            android:textSize="17sp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="11dp"
+            tools:text="podcasts now streaming !" />
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</com.google.android.gms.ads.nativead.NativeAdView>

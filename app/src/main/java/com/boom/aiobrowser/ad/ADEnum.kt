@@ -5,7 +5,11 @@ import com.boom.aiobrowser.data.AioRequestData
 
 enum class ADEnum(var adName: String = "", var adLoadStatus: Int = LOAD_STATUS_START,
                   var adRequestList: MutableList<AioRequestData> = mutableListOf()) {
-    LAUNCH("ad_launch",LOAD_STATUS_START),
+    LAUNCH_AD("aobws_launch",LOAD_STATUS_START),
+    INT_AD("aobws_main_one",LOAD_STATUS_START),
+    NATIVE_AD("aobws_detail_bnat",LOAD_STATUS_START),
+    NATIVE_DOWNLOAD_AD("aobws_download_bnat",LOAD_STATUS_START),
+    BANNER_AD("aobws_ban_one",LOAD_STATUS_START),
 }
 
 

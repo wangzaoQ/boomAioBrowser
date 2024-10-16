@@ -197,8 +197,15 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
             rootActivity.addLaunch(success = {
                 var doc = Jsoup.connect(key).get()
                 var list = CacheManager.historyDataList
+                var title = doc.title()
+                runCatching {
+                    var splits = doc.title().split(" ")
+                    if (splits.isNotEmpty()){
+                        title = splits.get(0)
+                    }
+                }
                 JumpData().apply {
-                    jumpTitle = doc.title()
+                    jumpTitle = title
                     jumpUrl = key
                     jumpType = JumpConfig.JUMP_WEB
                     updateTime = System.currentTimeMillis()

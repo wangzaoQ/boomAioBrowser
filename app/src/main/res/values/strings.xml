@@ -30,7 +30,7 @@
     <string name="app_private_search2">When you use InPrivate tabs, your search data isn\'t saved on your device after you\'re done. Temporary data is also deleted from your device after InPrivate tabs are closed, or the app is restarted.</string>
     <string name="app_clear_data">Clear Data</string>
     <string name="app_more">More</string>
-    <string name="app_set_as_default_browser">Set As Default Browser</string>
+    <string name="app_set_as_default_browser">Set as Default Browser</string>
     <string name="app_new_tab">New Tab</string>
     <string name="app_history">History</string>
     <string name="app_about">About</string>
@@ -149,6 +149,10 @@
     <string name="app_video_failed_tips">Failed? Report this web page to us</string>
     <string name="app_feedback_title">Confirm To Send This Website Feedback To Us?</string>
     <string name="app_feedback_content">Once we receive the feedback, we will address it as soon as possible.</string>
+    <string name="app_fast_performance">Fast Performance</string>
+    <string name="app_security_features">Security Features</string>
+    <string name="app_simple_and_easy">Simple and Easy</string>
+    <string name="app_set_as_default">Set as Default</string>
 
 
 </resources>

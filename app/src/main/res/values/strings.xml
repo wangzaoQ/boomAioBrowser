@@ -144,6 +144,11 @@
     <string name="app_method">Method</string>
     <string name="app_tt_tips_1">Open\" TikTok \" and click \"Share\"</string>
     <string name="app_tt_tips_2">Click \" AIO Browser \", start downloading</string>
+    <string name="app_video_not_detected">Video Not Detected?</string>
+    <string name="app_video_guide_content">1: Play video first.\n\n2: Refresh the page,and the button will be available.</string>
+    <string name="app_video_failed_tips">Failed? Report this web page to us</string>
+    <string name="app_feedback_title">Confirm To Send This Website Feedback To Us?</string>
+    <string name="app_feedback_content">Once we receive the feedback, we will address it as soon as possible.</string>
 
 
 </resources>

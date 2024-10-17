@@ -29,6 +29,7 @@ import com.boom.aiobrowser.ui.pop.DownLoadPop
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.TabPop
 import com.boom.aiobrowser.ui.pop.TipsPop
+import com.boom.aiobrowser.ui.pop.VideoPop2
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -89,7 +90,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                             TipsPop(rootActivity).createPop {  }
                             return@withContext
                         }
-                        DownloadVideoGuidePop(rootActivity).createPop {  }
+                        VideoPop2(rootActivity).createPop {  }
                     }
                 }, failBack = {})
             }

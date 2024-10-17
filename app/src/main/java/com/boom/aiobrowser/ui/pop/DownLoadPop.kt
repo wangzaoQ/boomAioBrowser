@@ -259,27 +259,30 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             return
         }
         data?.apply {
-            (context as BaseActivity<*>).addLaunch(success = {
-                var model = DownloadCacheManager.queryDownloadModel(data)
-                if (model == null) {
-                    data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
-                    DownloadCacheManager.addDownLoadPrepare(data)
-                    withContext(Dispatchers.Main) {
-                        downloadAdapter.notifyItemChanged(position, "updateStatus")
-                        var headerMap = HashMap<String, String>()
-                        paramsMap?.forEach {
-                            headerMap.put(it.key, it.value.toString())
+            NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
+                (context as BaseActivity<*>).addLaunch(success = {
+                    var model = DownloadCacheManager.queryDownloadModel(data)
+                    if (model == null) {
+                        data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
+                        DownloadCacheManager.addDownLoadPrepare(data)
+                        withContext(Dispatchers.Main) {
+                            downloadAdapter.notifyItemChanged(position, "updateStatus")
+                            var headerMap = HashMap<String, String>()
+                            paramsMap?.forEach {
+                                headerMap.put(it.key, it.value.toString())
+                            }
+                            VideoDownloadManager.getInstance()
+                                .startDownload(data.createDownloadData(data), headerMap)
+                            NFShow.showDownloadNF(data,true)
                         }
-                        VideoDownloadManager.getInstance()
-                            .startDownload(data.createDownloadData(data), headerMap)
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            ToastUtils.showLong(APP.instance.getString(R.string.app_already_download))
+                        }
                     }
+                }, failBack = {})
+            }, onFail = {})
 
-                } else {
-                    withContext(Dispatchers.Main) {
-                        ToastUtils.showLong(APP.instance.getString(R.string.app_already_download))
-                    }
-                }
-            }, failBack = {})
 
         }
     }

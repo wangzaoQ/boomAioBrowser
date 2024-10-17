@@ -9,6 +9,7 @@
     >
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivLeft"
         android:layout_width="14dp"
         android:layout_height="14dp"
         app:srcCompat="@mipmap/ic_search"

@@ -72,11 +72,8 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
             fBinding.searchRv.visibility = View.GONE
             fBinding.recentSearchRoot.visibility = View.VISIBLE
             var searchist = CacheManager.recentSearchDataList
-            if (isLoad){
-                fBinding.llDefaultRoot.visibility = View.VISIBLE
-                fBinding.searchShrinkRoot.visibility = View.VISIBLE
-            }
             if (searchist.isNotEmpty()){
+                fBinding.recentSearchRoot.visibility = View.VISIBLE
                 //默认展示小布局
                 if (recentListType == 0){
                     fBinding.searchShrinkRoot.visibility = View.VISIBLE
@@ -85,6 +82,13 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 }else if (recentListType == 1){
                     fBinding.searchShrinkRoot.visibility = View.GONE
                     fBinding.searchExpendRv.visibility = View.VISIBLE
+                }
+                if (cleanType == 0){
+                    fBinding.llDefaultRoot.visibility = View.VISIBLE
+                    fBinding.llClearRoot.visibility = View.GONE
+                }else{
+                    fBinding.llDefaultRoot.visibility = View.GONE
+                    fBinding.llClearRoot.visibility = View.VISIBLE
                 }
             }else{
                 fBinding.recentSearchRoot.visibility = View.GONE
@@ -179,6 +183,9 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
     // 0 小布局 1 展开
     var recentListType = 0
 
+    // 0 默认 1 clean 状态
+    var cleanType = 0
+
     override fun setListener() {
         for (i in 0 until fBinding.llRoot.childCount){
             fBinding.llRoot.getChildAt(i).setOneClick {
@@ -214,6 +221,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
             fBinding.topRoot.updateEngine(it)
         }
         fBinding.ivClean.setOneClick {
+            cleanType = 1
             fBinding.llDefaultRoot.visibility = View.GONE
             fBinding.llClearRoot.visibility = View.VISIBLE
             if (recentListType == 0){
@@ -240,6 +248,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
             dialog!!.show()
         }
         fBinding.tvFinish.setOneClick {
+            cleanType = 0
             fBinding.llDefaultRoot.visibility = View.VISIBLE
             fBinding.llClearRoot.visibility = View.GONE
             if (recentListType == 0){
@@ -344,8 +353,8 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 var data = searchResultAdapter.items.get(position)
                 var jumpData = JumpDataManager.getCurrentJumpData(tag = "searchFragment 点击联想搜索").apply {
                     jumpType = JumpConfig.JUMP_WEB
-                    jumpTitle = data
-                    jumpUrl = SearchNet.getSearchUrl(data)
+                    jumpTitle = data.searchContent
+                    jumpUrl = SearchNet.getSearchUrl(data.searchContent)
                 }
 //                JumpDataManager.updateCurrentJumpData(jumpData,tag="searchFragment 点击联想搜索")
                 clickHistory(jumpData)

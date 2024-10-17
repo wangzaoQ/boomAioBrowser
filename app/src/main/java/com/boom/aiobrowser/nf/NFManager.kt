@@ -55,6 +55,7 @@ object NFManager {
             return true
         }else{
             AppLogs.dLog(NFManager.TAG,"NF refuse: $refuseContent")
+            return false
         }
         return true
     }

@@ -44,7 +44,7 @@ object NFShow {
                 nfId = Random.nextInt(0,999999)
                 videoNFMap.put(data.videoId!!,nfId)
                 if (posePoint){
-                    if (data.downloadType == VideoDownloadData.DOWNLOAD_LOADING){
+                    if (data.downloadType == VideoDownloadData.DOWNLOAD_LOADING || data.downloadType == VideoDownloadData.DOWNLOAD_PREPARE){
                         PointEvent.posePoint(PointEventKey.download_push_conduct,Bundle().apply {
                             putString(PointValueKey.ponit_action, PointValue.show)
                         })

@@ -2,8 +2,10 @@ package com.boom.aiobrowser.model
 
 import androidx.lifecycle.MutableLiveData
 import com.boom.aiobrowser.data.NewsData
+import com.boom.aiobrowser.data.SearchResultData
 import com.boom.aiobrowser.net.SearchNet
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.toJson
 import okhttp3.Call
 import okhttp3.Callback
@@ -18,7 +20,7 @@ class SearchViewModel:BaseDataModel() {
 
     var call:Call?= null
 
-    var searchViewModel = MutableLiveData<MutableList<String>>()
+    var searchViewModel = MutableLiveData<MutableList<SearchResultData>>()
 
 
     fun searchResult(content:String){
@@ -36,7 +38,23 @@ class SearchViewModel:BaseDataModel() {
                 val bodyStr = response?.body?.string() ?: ""
                 var list = parseXML(bodyStr)
                 AppLogs.dLog(TAG,"搜索出的数据:${toJson(list)}")
-                searchViewModel.postValue(list)
+                var dataList = mutableListOf<SearchResultData>()
+                var recentList = CacheManager.recentSearchDataList
+                recentList.forEach {
+                    if (it.jumpTitle.startsWith(content)){
+                        dataList.add(SearchResultData().apply {
+                            type = 1
+                            searchContent = it.jumpTitle
+                        })
+                    }
+                }
+                list.forEach {
+                    dataList.add(SearchResultData().apply {
+                        searchContent = it
+                        type = 0
+                    })
+                }
+                searchViewModel.postValue(dataList)
             }
         })
     }

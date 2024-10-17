@@ -31,4 +31,11 @@ class NewsData {
     var sfindi:String?=""
     var sschem:String?=""
     var pphilo:Long?=0
+
+    var dataType = 0
+
+    companion object{
+        var TYPE_NEWS = 0
+        var TYPE_AD = 1
+    }
 }

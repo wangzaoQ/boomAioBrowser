@@ -47,6 +47,7 @@ class APP: Application() {
     var isHideSplash = false
     var GID=""
     var webUA=""
+    var firstInsertHomeAD = true
 
     var clickSetBrowser = false
 

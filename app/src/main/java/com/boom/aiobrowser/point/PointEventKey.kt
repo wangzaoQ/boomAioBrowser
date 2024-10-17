@@ -130,4 +130,6 @@ object AD_POINT{
     const val aobws_launch = "aobws_launch"
     const val aobws_download_int = "aobws_download_int"
     const val aobws_return_int = "aobws_return_int"
+    const val aobws_news_one = "aobws_news_one"
+    const val aobws_download_one = "aobws_download_one"
 }

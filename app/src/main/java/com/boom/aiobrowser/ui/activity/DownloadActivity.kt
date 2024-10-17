@@ -7,10 +7,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADDataManager
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.VideoActivityDownloadBinding
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -123,6 +127,14 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
                 }
             }
         }, failBack = {})
+        if (AioADDataManager.adFilter1().not()) {
+            PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
+                putString(PointValueKey.ad_pos_id, AD_POINT.aobws_download_one)
+            })
+        }
+        AioADShowManager(this,ADEnum.NATIVE_DOWNLOAD_AD,"下载页原生"){
+
+        }.showNativeAD(acBinding.flRoot)
     }
 
     private fun updateUI(position: Int) {

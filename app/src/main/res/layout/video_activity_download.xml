@@ -67,11 +67,18 @@
             android:layout_alignParentBottom="true"
             ></View>
     </RelativeLayout>
+    <FrameLayout
+        android:id="@+id/flRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_below="@+id/rlTop"
+        ></FrameLayout>
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/vpRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/rlTop"
+        android:layout_below="@+id/flRoot"
         />
 
     <androidx.appcompat.widget.LinearLayoutCompat

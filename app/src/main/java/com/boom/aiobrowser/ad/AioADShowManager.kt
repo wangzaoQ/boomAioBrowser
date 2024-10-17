@@ -147,20 +147,19 @@ class AioADShowManager(
     fun showNativeAD(
         flRoot: FrameLayout,
         showType: Int = 0,
-        result: () -> Unit
     ) {
 
         val data = AioADDataManager.getCacheAD(adEnum)
         var status = activity?.getActivityStatus()?.not()?:true
-        if (adEnum == ADEnum.NATIVE_AD){
+        if (adEnum == ADEnum.NATIVE_AD || adEnum == ADEnum.NATIVE_DOWNLOAD_AD){
             status = false
         }
         if (activity == null || status || data == null) {
-            result.invoke()
+            loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag)
             return
         }
         if (data.adRequestData?.pxdtzgho?:"" == "ban"){
-            showADBanner(flRoot,data,result)
+            showADBanner(flRoot,data)
         }else{
             initNativeAdmob(data, flRoot, showType)
 //            when (data.adRequestData?.tybxumpn) {
@@ -169,10 +168,9 @@ class AioADShowManager(
         }
     }
 
-
-    private fun showADBanner(parent:ViewGroup, data: ADResultData, result: () -> Unit) {
+    private fun showADBanner(parent:ViewGroup, data: ADResultData) {
         if (data?.adAny == null) {
-            result()
+            loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag)
             return
         }
         var view:View? = data.adAny as AdView

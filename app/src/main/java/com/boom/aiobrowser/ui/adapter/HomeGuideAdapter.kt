@@ -11,12 +11,6 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.BrowserFragmentSearchGuideBinding
-import com.boom.aiobrowser.databinding.BrowserItemMainNewsBinding
-import com.boom.aiobrowser.tools.GlideManager
-import com.boom.aiobrowser.tools.TimeManager
-import com.boom.aiobrowser.ui.adapter.NewsMainAdapter.VH
-import com.boom.aiobrowser.ui.fragment.guide.GuideFragment
-import com.boom.aiobrowser.ui.fragment.guide.HomeGuideFragment
 import com.boom.base.adapter4.BaseQuickAdapter
 
 class HomeGuideAdapter() : BaseQuickAdapter<Int, HomeGuideAdapter.VH>() {

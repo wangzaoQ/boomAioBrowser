@@ -15,6 +15,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
@@ -205,6 +207,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
     fun hideStart() {
         APP.instance.isHideSplash = true
+        AioADDataManager.preloadAD(ADEnum.NATIVE_AD,"首页展示时")
+        AioADDataManager.preloadAD(ADEnum.NATIVE_DOWNLOAD_AD,"首页展示时")
         fManager.hideFragment(supportFragmentManager, startFragment!!)
         acBinding.llMainControl.visibility = View.VISIBLE
         if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault){

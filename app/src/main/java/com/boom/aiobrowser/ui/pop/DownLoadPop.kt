@@ -22,6 +22,7 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.download.DownloadControlManager
+import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.tools.video.VideoManager
 import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.VideoPreActivity
@@ -199,7 +200,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                     }
                     downloadType = VideoDownloadData.DOWNLOAD_LOADING
                     NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
-                        NFShow.showDownloadNF(data)
+                        NFShow.showDownloadNF(data,true)
                     }, onFail = {})
                     var success = VideoDownloadManager.getInstance().resumeDownload(url)
                     if (success.not()){
@@ -213,7 +214,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 }else if (downloadType == VideoDownloadData.DOWNLOAD_LOADING){
                     downloadType = VideoDownloadData.DOWNLOAD_PAUSE
                     NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
-                        NFShow.showDownloadNF(data)
+                        NFShow.showDownloadNF(data,true)
                     }, onFail = {})
                     VideoDownloadManager.getInstance().pauseDownloadTask(url)
                 }else if (downloadType == VideoDownloadData.DOWNLOAD_ERROR){
@@ -231,7 +232,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                     }
                 }else if (downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
                     context.jumpActivity<VideoPreActivity>(Bundle().apply {
-                        putString("video_path",data.downloadFilePath)
+                        putString("video_path", toJson(data))
                     })
                 }
                 downloadAdapter.notifyItemChanged(position,"updateLoading")

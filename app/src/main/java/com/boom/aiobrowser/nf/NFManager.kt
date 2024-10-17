@@ -4,10 +4,16 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
+import android.os.Bundle
 import androidx.core.app.NotificationManagerCompat
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.NFEnum
+import com.boom.aiobrowser.data.VideoDownloadData
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValue
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
@@ -83,6 +89,31 @@ object NFManager {
             })
         }.onFailure {
             onFail.invoke()
+        }
+    }
+
+    fun clickPoint(nfData: VideoDownloadData?) {
+        if (nfData == null)return
+        when (nfData.downloadType) {
+             VideoDownloadData.DOWNLOAD_PAUSE,VideoDownloadData.DOWNLOAD_LOADING-> {
+                 PointEvent.posePoint(PointEventKey.download_push_conduct, Bundle().apply {
+                     putString(PointValueKey.ponit_action, PointValue.click)
+                     putString(PointValueKey.video_url, nfData.url)
+                 })
+             }
+            VideoDownloadData.DOWNLOAD_SUCCESS->{
+                PointEvent.posePoint(PointEventKey.download_push_success, Bundle().apply {
+                    putString(PointValueKey.ponit_action, PointValue.click)
+                    putString(PointValueKey.video_url, nfData.url)
+                })
+            }
+            VideoDownloadData.DOWNLOAD_ERROR ->{
+                PointEvent.posePoint(PointEventKey.download_push_fail, Bundle().apply {
+                    putString(PointValueKey.ponit_action, PointValue.click)
+                    putString(PointValueKey.video_url, nfData.url)
+                })
+            }
+            else -> {}
         }
     }
 }

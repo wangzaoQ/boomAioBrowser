@@ -153,13 +153,28 @@ object JumpDataManager {
 
 
 
-    fun toMain(){
+    fun toMain(closeAll:Boolean = false){
         var data = getCurrentJumpData(tag = "toMain 方法").apply {
             jumpType = JumpConfig.JUMP_HOME
             jumpTitle = APP.instance.getString(R.string.app_home)
         }
         updateCurrentJumpData(data,tag = "toMain 方法")
         APP.jumpLiveData.postValue(data)
+    }
+
+    fun closeAll(){
+        var list = mutableListOf<Activity>()
+        for (i in 0 until APP.instance.lifecycleApp.stack.size){
+            var currentAc = APP.instance.lifecycleApp.stack.get(i)
+            if (currentAc is MainActivity){
+                continue
+            }else{
+                list.add(currentAc)
+            }
+        }
+        list.forEach {
+            it.finish()
+        }
     }
 
 }

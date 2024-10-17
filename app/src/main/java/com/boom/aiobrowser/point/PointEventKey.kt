@@ -48,6 +48,8 @@ object PointEventKey {
     const val search_page = "search_page"
     //搜索页确认搜索
     const val search_page_go = "search_page_go"
+    //搜索快捷点击
+    const val search_page_qb = "search_page_qb"
 
     // 免责声明
     const val webpage_download_pop_disclaimer = "webpage_download_pop_disclaimer"
@@ -100,6 +102,26 @@ object PointEventKey {
     const val webpage_home = "webpage_home"
     const val webpage_download = "webpage_download"
     const val download_page_more_fi = "download_page_more_fi"
+
+    // 下载中
+    const val download_push_conduct = "download_push_conduct"
+    //下载失败
+    const val download_push_fail = "download_push_fail"
+    //下载完成
+    const val download_push_success = "download_push_success"
+
+    //无下载内容弹窗
+    const val webpage_page_pop_nodl = "webpage_page_pop_nodl"
+    //反馈弹窗
+    const val webpage_page_pop_fb = "webpage_page_pop_fb"
+    const val webpage_page_pop_cancel = "webpage_page_pop_cancel"
+
+    // 视频播放 页面展示
+    const val video_playback_page = "video_playback_page"
+    // 来源点击
+    const val video_playback_source = "video_playback_source"
+
+
 }
 
 
@@ -123,6 +145,15 @@ object PointValueKey{
     const val ad_pos_id = "ad_pos_id"
     const val ad_time = "ad_time"
     const val ad_key = "ad_key"
+
+    const val ponit_action = "ponit_action"
+
+}
+
+object PointValue{
+    const val show = "show"
+    const val click = "click"
+
 }
 
 

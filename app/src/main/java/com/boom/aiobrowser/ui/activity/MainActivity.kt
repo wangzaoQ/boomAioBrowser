@@ -21,6 +21,7 @@ import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
 import com.boom.aiobrowser.model.NewsViewModel
+import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BrowserManager
 import com.boom.aiobrowser.tools.CacheManager
@@ -172,6 +173,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         navController = Navigation.findNavController(this@MainActivity,R.id.fragment_view)
         nfTo = intent.getStringExtra(CommonParams.NF_TO)?:""
         nfData = getBeanByGson(intent.getStringExtra(CommonParams.NF_DATA)?:"",VideoDownloadData::class.java)
+        NFManager.clickPoint(nfData)
         acBinding.root.postDelayed({
             var count = 0
             for ( i in 0 until APP.instance.lifecycleApp.stack.size){
@@ -235,7 +237,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }else{
             if (nfTo == JumpConfig.JUMP_VIDEO && nfData!=null){
                 jumpActivity<VideoPreActivity>(Bundle().apply {
-                    putString("video_path",nfData!!.downloadFilePath)
+                    putString("video_path", toJson(nfData))
                 })
             }else{
                 startActivity(Intent(this,DownloadActivity::class.java).apply {

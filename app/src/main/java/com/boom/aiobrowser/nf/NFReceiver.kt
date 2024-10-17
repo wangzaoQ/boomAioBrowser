@@ -14,6 +14,7 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CommonParams
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.getBeanByGson
+import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.tools.video.VideoManager
 import com.boom.aiobrowser.ui.activity.VideoPreActivity
 import com.boom.downloader.VideoDownloadManager
@@ -62,7 +63,7 @@ class NFReceiver: BroadcastReceiver()  {
                         }
                     }else if (downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
                         context?.startActivity(Intent(context,VideoPreActivity::class.java).apply {
-                            putExtra("video_path",data.downloadFilePath)
+                            putExtra("video_path", toJson(data))
                         })
                     }
                 }

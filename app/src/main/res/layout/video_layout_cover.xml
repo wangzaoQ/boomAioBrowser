@@ -100,12 +100,13 @@
         android:layout_marginTop="6dp"
         android:visibility="gone" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/layout_top"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="45dp"
         android:background="@drawable/video_title_bg"
+        android:orientation="horizontal"
         android:gravity="center_vertical">
 
         <ImageView
@@ -119,12 +120,24 @@
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:textColor="@android:color/white"
+            android:layout_centerInParent="true"
+            android:layout_toEndOf="@+id/back"
             android:textSize="18sp" />
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/ivSource"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:paddingEnd="10dp"
+            android:src="@mipmap/ic_tt"
+            android:scaleType="centerCrop"
+            android:layout_alignParentEnd="true"
+            ></ImageView>
+    </RelativeLayout>
 
     <moe.codeest.enviews.ENDownloadView
         android:id="@+id/loading"

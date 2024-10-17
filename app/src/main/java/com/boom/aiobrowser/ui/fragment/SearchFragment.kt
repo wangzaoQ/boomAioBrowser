@@ -200,15 +200,14 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                         url = "https://x.com/"
                     }
                 }
-                if (jumpGuide){
-
-                }else{
-                    toWebDetailsActivity(JumpDataManager.getCurrentJumpData(tag = "searchFragment 点击推荐").apply {
-                        jumpType = JumpConfig.JUMP_WEB
-                        jumpTitle = title
-                        jumpUrl = url
-                    })
-                }
+                PointEvent.posePoint(PointEventKey.search_page_qb,Bundle().apply {
+                    putString(PointValueKey.type,title)
+                })
+                toWebDetailsActivity(JumpDataManager.getCurrentJumpData(tag = "searchFragment 点击推荐").apply {
+                    jumpType = JumpConfig.JUMP_WEB
+                    jumpTitle = title
+                    jumpUrl = url
+                })
             }
         }
         APP.engineLiveData.observe(this){

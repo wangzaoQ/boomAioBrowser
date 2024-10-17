@@ -3,11 +3,23 @@ package com.boom.aiobrowser.ui.activity
 import android.content.pm.ActivityInfo
 import android.view.LayoutInflater
 import android.view.View
+import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
+import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.VideoActivityPreviewBinding
 import com.boom.aiobrowser.point.AD_POINT
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.tools.JumpDataManager.getCurrentJumpData
+import com.boom.aiobrowser.tools.JumpDataManager.updateCurrentJumpData
+import com.boom.aiobrowser.tools.getBeanByGson
+import com.boom.aiobrowser.tools.getUrlIcon
+import com.boom.aiobrowser.tools.getUrlSource
+import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.view.CustomVideoView
 import com.boom.video.GSYVideoManager
 import com.boom.video.builder.GSYVideoOptionBuilder
@@ -16,6 +28,7 @@ import com.boom.video.utils.OrientationUtils
 import java.io.File
 
 class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
+
     override fun getBinding(inflater: LayoutInflater): VideoActivityPreviewBinding {
         return VideoActivityPreviewBinding.inflate(layoutInflater)
     }
@@ -28,12 +41,12 @@ class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
     var orientationUtils: OrientationUtils? = null
 
     override fun setShowView() {
-       var videoPath =  intent.getStringExtra("video_path")
+       var data  = getBeanByGson(intent.getStringExtra("video_path"),VideoDownloadData::class.java)
         gsyVideoPlayer = acBinding.videoItemPlayer
-        var file = File(videoPath)
+        var file = File(data?.downloadFilePath)
         gsyVideoOptionBuilder!!
             .setIsTouchWiget(false) //.setThumbImageView(imageView)
-            .setUrl(videoPath)
+            .setUrl(data?.downloadFilePath)
             .setVideoTitle(file.name)
 //            .setCacheWithPlay(true)
             .setRotateViewAuto(false)
@@ -89,7 +102,16 @@ class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
 //        gsyVideoPlayer!!.getBackButton().setVisibility(View.GONE)
         gsyVideoPlayer!!.loadCoverImage(file.absolutePath)
         gsyVideoPlayer?.startPlayLogic()
-
+        PointEvent.posePoint(PointEventKey.video_playback_page)
+        gsyVideoPlayer!!.setSourceIcon(getUrlIcon(data?.url?:"")){
+            var jumpData = getCurrentJumpData(tag = "视频页点击来源").apply {
+                jumpType = JumpConfig.JUMP_WEB
+                jumpUrl = getUrlSource(data?.url?:"")
+            }
+            updateCurrentJumpData(jumpData,tag = "视频页点击来源")
+            APP.jumpLiveData.postValue(jumpData)
+            JumpDataManager.closeAll()
+        }
     }
 
 

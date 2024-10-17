@@ -20,6 +20,7 @@ import com.boom.aiobrowser.tools.clean.FileFilter.isApk
 import com.boom.aiobrowser.tools.clean.FileFilter.isAudio
 import com.boom.aiobrowser.tools.clean.FileFilter.isImage
 import com.boom.aiobrowser.tools.clean.FileFilter.isVideo
+import com.boom.aiobrowser.tools.web.WebScan
 
 import com.boom.aiobrowser.ui.isAndroid11
 import com.boom.aiobrowser.ui.isAndroid12
@@ -176,6 +177,31 @@ fun Context.isManageAllFilesGranted(): Boolean {
 fun Context.isStorageGranted(): Boolean {
     return if (isAndroid11()) isManageAllFilesGranted()
     else isStoragePermissionGranted()
+}
+
+fun getUrlIcon(url:String):Any{
+    runCatching {
+        if (WebScan.isTikTok(url)){
+            return R.mipmap.ic_tt
+        }else{
+            var uri = Uri.parse(url)
+            var iconUrl = "${uri.scheme}://${uri.host}/favicon.ico"
+//            GlideManager.loadImg(mainFragment,ivBrowser,iconUrl, errorId = R.mipmap.ic_default_browser_icon)
+            return iconUrl
+        }
+    }.onFailure {
+    }
+    return ""
+}
+
+fun getUrlSource(url:String):String{
+    runCatching {
+        if (WebScan.isPornhub(url)){
+            return "https://www.pornhub.com/"
+        }
+    }.onFailure {
+    }
+    return "https://www.tiktok.com/"
 }
 
 

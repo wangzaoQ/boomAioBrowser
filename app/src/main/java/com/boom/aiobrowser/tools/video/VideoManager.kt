@@ -124,7 +124,7 @@ object VideoManager {
                         model.downloadSize = 0
                         model.downloadType = VideoDownloadData.DOWNLOAD_ERROR
                         DownloadCacheManager.updateModel(model)
-                        NFShow.showDownloadNF(VideoDownloadData().createVideoDownloadData(model))
+                        NFShow.showDownloadNF(VideoDownloadData().createVideoDownloadData(model),true)
                     }
                     videoLiveData.postValue(HashMap<Int, VideoTaskItem>().apply {
                         put(VideoDownloadData.DOWNLOAD_ERROR, item)
@@ -146,7 +146,7 @@ object VideoManager {
                         model.downloadFilePath = item.filePath
                         model.downloadType = VideoDownloadData.DOWNLOAD_SUCCESS
                         DownloadCacheManager.updateModel(model)
-                        NFShow.showDownloadNF(VideoDownloadData().createVideoDownloadData(model))
+                        NFShow.showDownloadNF(VideoDownloadData().createVideoDownloadData(model),true)
                     }
                     videoLiveData.postValue(HashMap<Int, VideoTaskItem>().apply {
                         put(VideoDownloadData.DOWNLOAD_SUCCESS, item)

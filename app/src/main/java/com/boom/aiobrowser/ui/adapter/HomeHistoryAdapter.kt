@@ -46,8 +46,6 @@ class HomeHistoryAdapter(var mainFragment: MainFragment) : BaseQuickAdapter<Jump
             var uri = Uri.parse(item.jumpUrl)
             uri.host
             uri.scheme
-//            var iconUrl = "${uri.scheme}://${uri.host}/favicon.ico"
-//            GlideManager.loadImg(mainFragment,ivBrowser,iconUrl, errorId = R.mipmap.ic_default_browser_icon)
             if(item.jumpTitle.isNullOrEmpty()){
                 tvBrowser.text = item.jumpUrl
             }else{

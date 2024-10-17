@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Notification
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Bundle
 import android.widget.RemoteViews
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -14,6 +15,10 @@ import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.nf.NFManager.nfAllow
 import com.boom.aiobrowser.nf.NFManager.videoNFMap
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValue
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
@@ -28,7 +33,7 @@ object NFShow {
         }
     }
 
-    fun showDownloadNF(data: VideoDownloadData) {
+    fun showDownloadNF(data: VideoDownloadData,posePoint:Boolean = false) {
         if (nfAllow().not())return
         val smallRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data)
         val largeRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data, true)
@@ -38,6 +43,24 @@ object NFShow {
             if (nfId == null){
                 nfId = Random.nextInt(0,999999)
                 videoNFMap.put(data.videoId!!,nfId)
+                if (posePoint){
+                    if (data.downloadType == VideoDownloadData.DOWNLOAD_LOADING){
+                        PointEvent.posePoint(PointEventKey.download_push_conduct,Bundle().apply {
+                            putString(PointValueKey.ponit_action, PointValue.show)
+                        })
+                    }
+                }
+            }
+            if (posePoint){
+                if (data.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
+                    PointEvent.posePoint(PointEventKey.download_push_success,Bundle().apply {
+                        putString(PointValueKey.ponit_action, PointValue.show)
+                    })
+                }else if (data.downloadType == VideoDownloadData.DOWNLOAD_ERROR){
+                    PointEvent.posePoint(PointEventKey.download_push_fail,Bundle().apply {
+                        putString(PointValueKey.ponit_action, PointValue.show)
+                    })
+                }
             }
             if (ActivityCompat.checkSelfPermission(
                     APP.instance,
@@ -47,6 +70,7 @@ object NFShow {
 
                 return
             }
+
             NFManager.manager.notify(nfId, bulider.build())
         }
     }

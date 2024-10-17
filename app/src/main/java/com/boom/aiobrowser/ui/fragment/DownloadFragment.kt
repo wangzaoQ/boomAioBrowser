@@ -23,6 +23,7 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.download.DownloadControlManager
+import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.tools.video.VideoManager
 import com.boom.aiobrowser.ui.activity.VideoPreActivity
 import com.boom.aiobrowser.ui.adapter.VideoDownloadAdapter
@@ -79,7 +80,7 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
                     }
                     downloadType = VideoDownloadData.DOWNLOAD_LOADING
                     NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
-                        NFShow.showDownloadNF(data)
+                        NFShow.showDownloadNF(data,true)
                     }, onFail = {})
                     var isSuccess = VideoDownloadManager.getInstance().resumeDownload(url)
                     if (isSuccess.not()){
@@ -93,13 +94,13 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
                 }else if (downloadType == VideoDownloadData.DOWNLOAD_LOADING){
                     downloadType = VideoDownloadData.DOWNLOAD_PAUSE
                     NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
-                        NFShow.showDownloadNF(data)
+                        NFShow.showDownloadNF(data,true)
                     }, onFail = {})
                     VideoDownloadManager.getInstance().pauseDownloadTask(url)
                     downloadAdapter.notifyItemChanged(position,"updateLoading")
                 }else if (downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
                     rootActivity.jumpActivity<VideoPreActivity>(Bundle().apply {
-                        putString("video_path",data.downloadFilePath)
+                        putString("video_path", toJson(data))
                     })
                     PointEvent.posePoint(PointEventKey.download_page_play,Bundle().apply {
                         putString("video_url",url)

@@ -11,6 +11,7 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.SeekBar
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.tools.GlideManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.boom.video.utils.CommonUtil
@@ -59,6 +60,13 @@ class CustomVideoView @JvmOverloads constructor(
         }
     }
 
+    fun setSourceIcon(iconId:Any,clickSource: () -> Unit){
+        var sourceIv: ImageView = findViewById(R.id.ivSource)
+        GlideManager.loadImg(null,sourceIv,iconId)
+        sourceIv.setOnClickListener {
+            clickSource.invoke()
+        }
+    }
 
     fun loadCoverImage(url: String) {
         mCoverOriginUrl = url

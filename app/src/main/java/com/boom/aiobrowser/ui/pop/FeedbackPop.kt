@@ -2,11 +2,16 @@ package com.boom.aiobrowser.ui.pop
 
 import android.content.Context
 import android.graphics.Paint
+import android.os.Bundle
 import android.view.View
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.databinding.BrowserPopCacheBinding
 import com.boom.aiobrowser.databinding.BrowserVideoFeedbackBinding
 import com.boom.aiobrowser.databinding.BrowserVideoPopNotDetectedBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValue
+import com.boom.aiobrowser.point.PointValueKey
 import pop.basepopup.BasePopupWindow
 
 /**
@@ -28,12 +33,19 @@ class FeedbackPop (context: Context) : BasePopupWindow(context) {
     fun createPop(callBack: (type:Int) -> Unit){
         defaultBinding?.apply {
             tvCancel.setOnClickListener {
+                PointEvent.posePoint(PointEventKey.webpage_page_pop_cancel)
                 dismiss()
             }
             btnOk.setOnClickListener {
+                PointEvent.posePoint(PointEventKey.webpage_page_pop_fb, Bundle().apply {
+                    putString(PointValueKey.ponit_action, PointValue.click)
+                })
                 dismiss()
             }
         }
         showPopupWindow()
+        PointEvent.posePoint(PointEventKey.webpage_page_pop_fb, Bundle().apply {
+            putString(PointValueKey.ponit_action, PointValue.show)
+        })
     }
 }

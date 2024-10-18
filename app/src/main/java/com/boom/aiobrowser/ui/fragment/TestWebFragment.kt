@@ -38,7 +38,6 @@ class TestWebFragment: BaseWebFragment<BrowserFragmentWebBinding>() {
         APP.videoScanLiveData.observe(this){
             if ((it.size?:0L) <= 0L)return@observe
             allowDownload = true
-            rootActivity.finish()
         }
     }
 
@@ -55,10 +54,11 @@ class TestWebFragment: BaseWebFragment<BrowserFragmentWebBinding>() {
         rootActivity.addLaunch(success = {
             delay(6000)
             if (allowDownload.not()){
-                ToastUtils.showLong(getString(R.string.app_dead_linked))
+                ToastUtils.showShort(getString(R.string.app_dead_linked))
                 rootActivity.finish()
             }
         }, failBack = {})
+        APP.instance.shareText = ""
     }
 
     override fun getUrl(): String {

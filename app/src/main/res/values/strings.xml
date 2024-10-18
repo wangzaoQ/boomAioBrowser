@@ -156,6 +156,8 @@
     <string name="app_open">Open</string>
     <string name="app_copy_link_recognized">Copy Link Recognized</string>
     <string name="app_dead_linked">Dead Links</string>
+    <string name="app_feedback">Feedback</string>
+    <string name="app_search_guide">Paste share URL here</string>
 
 
 </resources>

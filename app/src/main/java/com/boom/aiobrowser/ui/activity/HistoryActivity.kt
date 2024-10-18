@@ -24,7 +24,7 @@ class HistoryActivity: BaseActivity<BrowserActivityHistoryBinding>() {
             finish()
         }
         acBinding.ivDelete.setOneClick {
-            CacheManager.historyDataList = mutableListOf()
+            CacheManager.recentSearchDataList = mutableListOf()
             historyAdapter.submitList(mutableListOf())
         }
     }
@@ -42,7 +42,7 @@ class HistoryActivity: BaseActivity<BrowserActivityHistoryBinding>() {
             rv.layoutManager = LinearLayoutManager(this@HistoryActivity,LinearLayoutManager.VERTICAL,false)
             rv.adapter = historyAdapter
         }
-        var list = CacheManager.historyDataList
+        var list = CacheManager.recentSearchDataList
         var lastTime = ""
         for (i in 0 until list.size){
             var data = list.get(i)

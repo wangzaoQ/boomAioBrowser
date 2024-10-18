@@ -277,39 +277,6 @@ object CacheManager {
             mmkv.encode(KV_RECENT_SEARCH_DATA, toJson(value))
         }
 
-    var historyDataList :MutableList<JumpData>
-        get() {
-            return getListByGson(mmkv.decodeString(KV_HISTORY_DATA),JumpData::class.java) ?: mutableListOf()
-        }
-        set(value) {
-            mmkv.encode(KV_HISTORY_DATA, toJson(value))
-        }
-
-    var historyJumpList :MutableList<JumpData>
-        get() {
-            return getListByGson(mmkv.decodeString(KV_HISTORY_DATA_JUMP),JumpData::class.java) ?: mutableListOf()
-        }
-        set(value) {
-            mmkv.encode(KV_HISTORY_DATA_JUMP, toJson(value))
-        }
-
-    fun addHistoryJump(data: JumpData){
-        var list = historyJumpList
-        var index = -1
-        for ( i in 0 until list.size){
-            var item = list.get(i)
-            if (item.jumpTitle == data.jumpTitle){
-                index = i
-                break
-            }
-        }
-        if (index>=0){
-            list.removeAt(index)
-        }
-        list.add(0,data)
-        historyJumpList = list
-    }
-
 //
 //    var firstOpenApp:Boolean
 //        get(){
@@ -360,7 +327,6 @@ object CacheManager {
         }
 
     fun clearAll() {
-        historyDataList = mutableListOf()
         recentSearchDataList = mutableListOf()
         tabDataListNormal = mutableListOf()
         tabDataListPrivate = mutableListOf()

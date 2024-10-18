@@ -220,32 +220,6 @@
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:visibility="invisible"
-                    android:orientation="vertical">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        app:srcCompat="@mipmap/ic_instagram"></androidx.appcompat.widget.AppCompatImageView>
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        style="@style/app_text_bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/app_instagram"
-                        android:textColor="#80000000"
-                        android:textSize="11sp"></androidx.appcompat.widget.AppCompatTextView>
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.viewpager2.widget.ViewPager2
                 android:layout_below="@+id/llRoot"

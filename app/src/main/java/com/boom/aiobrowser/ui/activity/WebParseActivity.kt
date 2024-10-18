@@ -56,10 +56,12 @@ class WebParseActivity: BaseActivity<BrowserActivityWebParseBinding>() {
                         VideoDownloadManager.getInstance()
                             .startDownload(data.createDownloadData(data), headerMap)
                         NFShow.showDownloadNF(data,true)
+                        finish()
                     }
                 } else {
                     withContext(Dispatchers.Main) {
                         ToastUtils.showLong(APP.instance.getString(R.string.app_already_download))
+                        finish()
                     }
                 }
             }, failBack = {})
@@ -70,6 +72,5 @@ class WebParseActivity: BaseActivity<BrowserActivityWebParseBinding>() {
         FragmentManager().addFragment(supportFragmentManager,TestWebFragment.newInstance(intent.getStringExtra("url")?:""),
             R.id.flRoot
         )
-        APP.instance.shareText = ""
     }
 }

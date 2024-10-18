@@ -31,8 +31,10 @@ import com.boom.aiobrowser.tools.CommonParams
 import com.boom.aiobrowser.tools.FragmentManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.clearClipboard
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.getBeanByGson
+import com.boom.aiobrowser.tools.getClipContent
 import com.boom.aiobrowser.tools.inputStream2Byte
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.JumpConfig
@@ -48,6 +50,7 @@ import com.boom.aiobrowser.ui.pop.ProcessingTextPop
 import com.boom.aiobrowser.ui.pop.TabPop
 import com.boom.downloader.VideoDownloadManager
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import pop.basepopup.BasePopupWindow.OnDismissListener
 import java.lang.ref.WeakReference
@@ -90,6 +93,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     navController?.navigate(R.id.fragmentWeb, Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
                     },navOptions)
+                    if (CacheManager.browserStatus == 0){
+                        CacheManager.saveRecentSearchData(it)
+                    }
                 }
                 JumpConfig.JUMP_HOME ->{
                     val navOptions = NavOptions.Builder()
@@ -280,13 +286,14 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 })
             }
         }
-        if (APP.instance.shareText .isNotEmpty()){
+        if (APP.instance.shareText.isNotEmpty()){
             ProcessingTextPop(this).createPop(APP.instance.shareText ){
                 jumpActivity<WebParseActivity>(Bundle().apply {
                     putString("url",APP.instance.shareText )
                 })
-//                FragmentManager().addFragment(supportFragmentManager,TestWebFragment.newInstance(shareText), R.id.tempFl)
             }
+        }else{
+
         }
         if (isNormal.not()){
             finish()

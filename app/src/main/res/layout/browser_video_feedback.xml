@@ -16,6 +16,7 @@
         android:textStyle="bold"
         android:layout_marginHorizontal="27dp"
         android:textColor="@color/black"
+        android:gravity="center"
         android:layout_marginTop="13dp"
         ></androidx.appcompat.widget.AppCompatTextView>
     <androidx.appcompat.widget.AppCompatTextView
@@ -42,7 +43,8 @@
         android:background="@drawable/shape_commit"
         android:textColor="@color/white"
         android:layout_marginTop="13dp"
-        android:text="@string/app_ok"
+        android:textAllCaps="false"
+        android:text="@string/app_feedback"
         ></androidx.appcompat.widget.AppCompatButton>
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvCancel"

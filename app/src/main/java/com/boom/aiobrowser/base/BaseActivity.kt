@@ -17,6 +17,11 @@ import androidx.viewbinding.ViewBinding
 import com.blankj.utilcode.util.KeyboardUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.clearClipboard
+import com.boom.aiobrowser.tools.getClipContent
+import com.boom.aiobrowser.ui.activity.WebParseActivity
+import com.boom.aiobrowser.ui.pop.ProcessingTextPop
 import com.boom.newsnow.view.statusbar.StatusBarHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -25,6 +30,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.actor
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -46,11 +52,41 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
         status = false
     }
 
+
+    var job:Job?=null
+
     override fun onResume() {
         super.onResume()
         APP.instance.isGoOther = false
         status = true
         stayTime = System.currentTimeMillis()
+        job?.cancel()
+        job = addLaunch(success = {
+            delay(1000)
+            if (APP.instance.shareText.isEmpty()){
+                var copy = getClipContent()
+                if (copy.isNullOrEmpty().not()){
+                    clearClipboard()
+                    var index = -1
+                    for (i in 0 until APP.instance.lifecycleApp.stack.size){
+                        var activity = APP.instance.lifecycleApp.stack.get(i)
+                        if (activity is WebParseActivity){
+                            index = i
+                            break
+                        }
+                    }
+                    if (index==-1){
+                        withContext(Dispatchers.Main){
+                            ProcessingTextPop(this@BaseActivity).createPop(copy?:""){
+                                this@BaseActivity.jumpActivity<WebParseActivity>(Bundle().apply {
+                                    putString("url",copy)
+                                })
+                            }
+                        }
+                    }
+                }
+            }
+        }, failBack = {})
     }
 
     abstract fun getBinding(inflater: LayoutInflater): V
@@ -96,6 +132,7 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
         setListener()
         setDataListener()
     }
+
 
     abstract fun setListener()
     open fun setDataListener(){}

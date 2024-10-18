@@ -10,11 +10,14 @@ import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.VideoPopDownloadBinding
 import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.nf.NFShow
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
@@ -145,11 +148,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             item.downloadSize = 0
         }else{
             if (item.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS)return
-            if (item.downloadType == VideoDownloadData.DOWNLOAD_PAUSE && type == VideoDownloadData.DOWNLOAD_LOADING){
-                AppLogs.dLog(VideoManager.TAG,"updateStatus position:${position} 状态已暂停暂不更新状态")
-            }else{
-                item.downloadType = type
-            }
+            item.downloadType = type
             item.downloadSize = data.downloadSize
             if (item.downloadType!=VideoDownloadData.DOWNLOAD_PAUSE){
                 item.size = data.totalSize
@@ -187,7 +186,9 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                     clickDownload(position)
                 }
             }else{
-                clickDownload(position)
+                showDownloadAD{
+                    clickDownload(position)
+                }
             }
         }
         downloadAdapter.setOnDebouncedItemClick{adapter, view, position ->
@@ -285,6 +286,13 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
 
 
         }
+    }
+
+    fun showDownloadAD(result: () -> Unit) {
+        var manager = AioADShowManager(context as BaseActivity<*>, ADEnum.INT_AD, tag = "插屏") {
+            result.invoke()
+        }
+        manager.showScreenAD(AD_POINT.aobws_download_int)
     }
 
     override fun onCreateShowAnimation(): Animation {

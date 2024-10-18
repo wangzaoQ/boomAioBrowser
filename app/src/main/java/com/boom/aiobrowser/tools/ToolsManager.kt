@@ -1,8 +1,10 @@
 package com.boom.aiobrowser.tools
 
 import android.app.ActivityManager
+import android.content.ClipboardManager
 import android.content.Context
 import android.net.Uri
+import android.text.TextUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.tools.web.WebScan
@@ -208,6 +210,47 @@ fun inputStream2Byte(inputStream: InputStream): String? {
     //指定编码格式为UIT-8
     return String(bos.toByteArray(), charset("UTF-8"))
 }
+
+/**
+ * 获取剪贴板的文本
+ *
+ * @return 剪贴板的文本
+ */
+/**
+ * 获取系统剪贴板内容
+ */
+fun getClipContent(): String {
+    val manager = APP.instance
+        .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    if (manager != null) {
+        if (manager.hasPrimaryClip() && manager.primaryClip!!.itemCount > 0) {
+            val addedText = manager.primaryClip!!.getItemAt(0).text
+            val addedTextString = addedText.toString()
+            if (!TextUtils.isEmpty(addedTextString)) {
+                return addedTextString
+            }
+        }
+    }
+    return ""
+}
+
+/**
+ * 清空剪贴板内容
+ */
+fun clearClipboard() {
+    val manager = APP.instance
+        .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    if (manager != null) {
+        try {
+            manager.setPrimaryClip(manager.primaryClip!!)
+            manager.text = null
+        } catch (e: Exception) {
+
+        }
+    }
+}
+
+
 
 
 

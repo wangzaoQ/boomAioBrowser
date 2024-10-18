@@ -25,16 +25,20 @@ import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.clearClipboard
+import com.boom.aiobrowser.tools.getClipContent
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.SearchConfig
 import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.HomeGuideActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.SearchActivity
+import com.boom.aiobrowser.ui.activity.WebParseActivity
 import com.boom.aiobrowser.ui.adapter.HomeHistoryAdapter
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.EngineGuidePop
+import com.boom.aiobrowser.ui.pop.ProcessingTextPop
 import com.boom.aiobrowser.ui.pop.SearchPop
 import com.boom.base.adapter4.QuickAdapterHelper
 import com.boom.base.adapter4.loadState.LoadState
@@ -226,7 +230,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         }else{
             fBinding.tips.visibility = View.GONE
         }
-        var historyList = CacheManager.historyJumpList
+        var historyList = CacheManager.recentSearchDataList
         if (historyList.isNullOrEmpty()){
             fBinding.rvHistory.visibility = View.GONE
             fBinding.rlEmptyHistory.visibility = View.VISIBLE

@@ -323,9 +323,6 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 jumpTitle = it
                 jumpUrl = url
             }
-            if (CacheManager.browserStatus == 0){
-                CacheManager.saveRecentSearchData(jumpData)
-            }
             toWebDetailsActivity(jumpData)
             PointEvent.posePoint(PointEventKey.search_page_go,Bundle().apply {
                 putString(PointValueKey.input_text,it)

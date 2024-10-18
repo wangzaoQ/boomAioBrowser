@@ -82,18 +82,16 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         }
 
         fBinding.ivDownload.setOneClick {
-            showDownloadAD{
-                rootActivity.addLaunch(success = {
-                    delay(500)
-                    withContext(Dispatchers.Main){
-                        if (WebScan.isYoutube(jumpData?.jumpUrl?:"")){
-                            TipsPop(rootActivity).createPop {  }
-                            return@withContext
-                        }
-                        VideoPop2(rootActivity).createPop {  }
-                    }
-                }, failBack = {})
+            if (WebScan.isYoutube(jumpData?.jumpUrl?:"")){
+                TipsPop(rootActivity).createPop {  }
+                return@setOneClick
             }
+            rootActivity.addLaunch(success = {
+                delay(500)
+                withContext(Dispatchers.Main){
+                    VideoPop2(rootActivity).createPop {  }
+                }
+            }, failBack = {})
             PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
                 putString(PointValueKey.type,"no_have")
                 putString(PointValueKey.url,jumpData?.jumpUrl)
@@ -101,14 +99,12 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
             })
         }
         fBinding.ivDownload2.setOneClick {
-            showDownloadAD{
-                rootActivity.addLaunch(success = {
-                    delay(500)
-                    withContext(Dispatchers.Main){
-                        showDownloadPop()
-                    }
-                }, failBack = {})
-            }
+            rootActivity.addLaunch(success = {
+                delay(500)
+                withContext(Dispatchers.Main){
+                    showDownloadPop()
+                }
+            }, failBack = {})
             PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
                 putString(PointValueKey.type,"have")
                 putString(PointValueKey.url,jumpData?.jumpUrl)
@@ -145,18 +141,6 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                     }
                 }
             }
-        }
-    }
-
-    private fun showDownloadAD(result: () -> Unit) {
-        if (CacheManager.isFirstClickDownloadButton){
-            result.invoke()
-            CacheManager.isFirstClickDownloadButton = false
-        }else{
-            var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "插屏") {
-                result.invoke()
-            }
-            manager.showScreenAD(AD_POINT.aobws_download_int)
         }
     }
 
@@ -220,33 +204,17 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         }
     }
 
+    var isFirstYoutube = true
+
     override fun loadWebFinished() {
         super.loadWebFinished()
+        if (WebScan.isYoutube(jumpData?.jumpUrl?:"")&&isFirstYoutube){
+            isFirstYoutube = false
+            TipsPop(rootActivity).createPop {  }
+        }
         fBinding.flTop.binding.tvToolbarSearch.text = "${jumpData?.jumpTitle} ${getSearchTitle()}"
         fBinding.refreshLayout.isRefreshing = false
         var key = mAgentWeb?.webCreator?.webView?.url?:""
-        if(CacheManager.browserStatus == 0){
-            rootActivity.addLaunch(success = {
-                var doc = Jsoup.connect(key).get()
-                var list = CacheManager.historyDataList
-                var title = doc.title()
-                runCatching {
-                    var splits = doc.title().split(" ")
-                    if (splits.isNotEmpty()){
-                        title = splits.get(0)
-                    }
-                }
-                JumpData().apply {
-                    jumpTitle = title
-                    jumpUrl = key
-                    jumpType = JumpConfig.JUMP_WEB
-                    updateTime = System.currentTimeMillis()
-                    list.add(0,this)
-                    CacheManager.historyDataList = list
-                    CacheManager.addHistoryJump(this)
-                }
-            }, failBack = {})
-        }
     }
 
     fun getSearchTitle():String{
@@ -268,6 +236,9 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
             jumpData?.apply {
                 jumpType = JumpConfig.JUMP_WEB
                 JumpDataManager.updateCurrentJumpData(this,"MainFragment onResume 更新 jumpData")
+                if(CacheManager.browserStatus == 0 ){
+                    CacheManager.saveRecentSearchData(this)
+                }
             }
         },0)
         back = {

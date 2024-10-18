@@ -1,5 +1,7 @@
 package com.boom.aiobrowser.ui.activity
 
+import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
@@ -10,6 +12,7 @@ import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserActivityHomeGuideBinding
 import com.boom.aiobrowser.databinding.VideoActivityDownloadBinding
 import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.adapter.HomeGuideAdapter
 import com.zhpan.indicator.enums.IndicatorSlideMode
@@ -33,6 +36,17 @@ class HomeGuideActivity : BaseActivity<BrowserActivityHomeGuideBinding>() {
                 jumpUrl = url
             })
             finish()
+        }
+
+        acBinding.etGuide.setOnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                var searchText = acBinding.etGuide.text.toString().trim()
+                jumpActivity<WebParseActivity>(Bundle().apply {
+                    putString("url",searchText)
+                })
+                return@setOnKeyListener true
+            }
+            return@setOnKeyListener false
         }
     }
 

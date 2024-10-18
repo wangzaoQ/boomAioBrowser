@@ -3,6 +3,7 @@ package com.boom.aiobrowser.ui.pop
 import android.content.Context
 import android.view.View
 import com.blankj.utilcode.util.FileUtils
+import com.blankj.utilcode.util.KeyboardUtils
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.VideoPopRenameBinding
@@ -43,6 +44,11 @@ class RenamePop (context: Context) : BasePopupWindow(context) {
         setOutSideDismiss(true)
         showPopupWindow()
         return this
+    }
+
+    override fun dismiss() {
+        KeyboardUtils.hideSoftInput(defaultBinding!!.etFile)
+        super.dismiss()
     }
 
     var data : VideoDownloadData?=null

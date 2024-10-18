@@ -93,6 +93,7 @@ class MorePop(context: Context) : BasePopupWindow(context) {
             CacheManager.clearAll()
             JumpDataManager.toMain()
         }
+        PointEvent.posePoint(PointEventKey.webpage_delete)
     }
 
     override fun onCreateShowAnimation(): Animation {

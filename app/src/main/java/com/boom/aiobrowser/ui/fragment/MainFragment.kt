@@ -327,7 +327,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                                 isScroll = false
                                 PointEvent.posePoint(PointEventKey.home_page_slide)
                             }
-                            if (lastPosition!=-1 &&firstShowAD){
+                            if (lastPosition!=-1 &&firstShowAD && nativeADAlive.not()){
                                 firstShowAD = false
                                 AppLogs.dLog(fragmentTAG,"滑动停止刷新插入广告 刷新位置:${lastPosition}")
                                 newsAdapter.notifyItemRangeChanged(lastPosition, newsAdapter.mutableItems.size)

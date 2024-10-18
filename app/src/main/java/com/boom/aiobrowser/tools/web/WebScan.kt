@@ -94,7 +94,7 @@ object WebScan {
                 }
             } else if (url.contains(WebConfig.FILTER_PORNHUB,true)){
                 activity?.addLaunch(success = {
-                    if (url.contains("https://cn.pornhub.com/view_video.php?viewkey",true)){
+                    if (url.contains("pornhub.com/view_video.php?viewkey",true)){
                         var startTime = System.currentTimeMillis()
                         var doc = Jsoup.connect(url).get()
 

@@ -121,6 +121,11 @@ object PointEventKey {
     // 来源点击
     const val video_playback_source = "video_playback_source"
 
+    //标签
+    const val webpage_tag = "webpage_tag"
+    //一键即焚
+    const val webpage_delete = "webpage_delete"
+
 
 }
 

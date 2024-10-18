@@ -184,6 +184,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                 updateTabCount()
             }
         })
+        PointEvent.posePoint(PointEventKey.webpage_tag)
     }
 
     fun updateTabCount() {

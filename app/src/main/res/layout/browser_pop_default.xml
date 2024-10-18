@@ -4,7 +4,7 @@
     android:id="@+id/rlTabRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="65dp"
+    android:layout_marginTop="192dp"
     android:background="@drawable/shape_default_pop_bg"
     android:orientation="vertical">
 
@@ -26,7 +26,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="77dp"
+            android:layout_marginTop="40dp"
             app:srcCompat="@mipmap/ic_start_logo"></androidx.appcompat.widget.AppCompatImageView>
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -42,24 +42,13 @@
             android:textColor="#000000"
             android:textSize="24sp"></androidx.appcompat.widget.AppCompatTextView>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvContent"
-            style="@style/app_text_bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvTitle"
-            android:layout_marginHorizontal="13dp"
-            android:layout_marginTop="12dp"
-            android:gravity="center"
-            android:textColor="#80000000"
-            android:textSize="15sp"></androidx.appcompat.widget.AppCompatTextView>
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvContent"
+            android:layout_below="@+id/tvTitle"
             android:layout_marginHorizontal="13dp"
-            android:layout_marginTop="26dp"
+            android:layout_marginTop="25dp"
             android:orientation="vertical">
 
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -129,25 +118,36 @@
                     android:textColor="#80000000"
                     android:textSize="17sp"></androidx.appcompat.widget.AppCompatTextView>
             </androidx.appcompat.widget.LinearLayoutCompat>
+
+
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="95dp"
-            android:background="#FFF5F5F5"></View>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnConfirm"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="47dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_alignParentBottom="true"
-            android:layout_marginHorizontal="13dp"
-            android:layout_marginBottom="35dp"
-            android:background="@drawable/shape_start_confirm"
-            android:text="@string/app_set_as_default"
-            android:textAllCaps="false"
-            android:textColor="@color/white"></androidx.appcompat.widget.AppCompatButton>
+            >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:background="#FFF5F5F5"></View>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnConfirm"
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginHorizontal="13dp"
+                android:layout_marginBottom="14dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/shape_start_confirm"
+                android:text="@string/app_set_as_default"
+                android:textAllCaps="false"
+                android:textColor="@color/white"></androidx.appcompat.widget.AppCompatButton>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
     </RelativeLayout>
 </com.boom.aiobrowser.ui.view.BottomRootView>

@@ -6,6 +6,7 @@ import android.view.animation.Animation
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.databinding.BrowserPopProcessingTextBinding
 import com.boom.aiobrowser.databinding.VideoPopRenameBinding
+import com.boom.aiobrowser.tools.CacheManager
 import pop.basepopup.BasePopupWindow
 import pop.util.animation.AnimationHelper
 import pop.util.animation.TranslationConfig
@@ -39,8 +40,16 @@ class ProcessingTextPop (context: Context)  : BasePopupWindow(context) {
         defaultBinding?.apply {
             tvShareText.text = text
             btnOk.setOnClickListener {
-                callBack.invoke()
-                dismiss()
+                if (CacheManager.isDisclaimerFirst){
+                    CacheManager.isDisclaimerFirst = false
+                    DisclaimerPop(context).createPop {
+                        callBack.invoke()
+                        dismiss()
+                    }
+                }else{
+                    callBack.invoke()
+                    dismiss()
+                }
             }
         }
         setOutSideDismiss(true)

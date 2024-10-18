@@ -139,6 +139,14 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
     private fun setGuideIvByPosition(position: Int,dataList: MutableList<Int>) {
         fBinding.ivRight.setImageResource(if (position == dataList.size-1) R.mipmap.ic_guide_right1 else R.mipmap.ic_guide_right2)
         fBinding.ivLeft.setImageResource(if (position == 0) R.mipmap.ic_guide_left1 else R.mipmap.ic_guide_left2)
+        fBinding.ivRight.setOneClick {
+            if (position == dataList.size-1)return@setOneClick
+            fBinding.vpGuide.setCurrentItem(position+1,true)
+        }
+        fBinding.ivLeft.setOneClick {
+            if (position == 0)return@setOneClick
+            fBinding.vpGuide.setCurrentItem(position-1,true)
+        }
     }
 
     var allowRecentDelete = false

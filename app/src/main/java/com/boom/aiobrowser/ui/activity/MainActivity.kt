@@ -113,43 +113,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             }
         }
         updateUI(0)
-        APP.videoScanLiveData.observe(this){
-            if ((it.size?:0L) <= 0L)return@observe
-            if (CacheManager.isDisclaimerFirst){
-                CacheManager.isDisclaimerFirst = false
-                DisclaimerPop(this@MainActivity).createPop {
-                    downData(data = it)
-                }
-            }else{
-                downData(data = it)
-            }
-        }
     }
 
-    private fun downData(data: VideoDownloadData) {
-        NFManager.requestNotifyPermission(WeakReference((this)), onSuccess = {
-            addLaunch(success = {
-                var model = DownloadCacheManager.queryDownloadModel(data)
-                if (model == null) {
-                    data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
-                    DownloadCacheManager.addDownLoadPrepare(data)
-                    withContext(Dispatchers.Main) {
-                        var headerMap = HashMap<String, String>()
-                        data.paramsMap?.forEach {
-                            headerMap.put(it.key, it.value.toString())
-                        }
-                        VideoDownloadManager.getInstance()
-                            .startDownload(data.createDownloadData(data), headerMap)
-                        NFShow.showDownloadNF(data,true)
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        ToastUtils.showLong(APP.instance.getString(R.string.app_already_download))
-                    }
-                }
-            }, failBack = {})
-        }, onFail = {})
-    }
 
     private fun clickIndex(index: Int) {
         when (index) {
@@ -215,11 +180,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
     var nfTo = ""
     var nfData:VideoDownloadData?= null
-    @Volatile
-    var shareText = ""
 
     override fun setShowView() {
-        shareText = ""
+        APP.instance.shareText = ""
         val action = intent.action //获取Intent的Action
         val type = intent.type //获取Intent的Type
         addLaunch(success = {
@@ -239,16 +202,16 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 if (type.startsWith("text/")) {
                     //我们这里处理所有的文本类型
                     //一般的文本处理，我们直接显示字符串 ------如图1
-                    shareText = intent.getStringExtra(Intent.EXTRA_TEXT)?:""
-                    AppLogs.dLog(acTAG,"获取分享的内容1: $shareText")
-                    if (shareText.isNullOrEmpty()) {
+                    APP.instance.shareText  = intent.getStringExtra(Intent.EXTRA_TEXT)?:""
+                    AppLogs.dLog(acTAG,"获取分享的内容1: $APP.instance.shareText ")
+                    if (APP.instance.shareText .isNullOrEmpty()) {
                         //文本文件处理，从Uri中获取输入流，然后将输入流转换成字符串
                         var textUri =intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
                         if (textUri != null) {
                             runCatching {
                                 contentResolver.openInputStream(textUri)?.apply {
-                                    shareText = inputStream2Byte(this)?:""
-                                    AppLogs.dLog(acTAG,"获取分享的内容2: $shareText")
+                                    APP.instance.shareText  = inputStream2Byte(this)?:""
+                                    AppLogs.dLog(acTAG,"获取分享的内容2: $APP.instance.shareText ")
                                 }
                             }
                         }
@@ -317,10 +280,10 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 })
             }
         }
-        if (shareText.isNotEmpty()){
-            ProcessingTextPop(this).createPop(shareText){
+        if (APP.instance.shareText .isNotEmpty()){
+            ProcessingTextPop(this).createPop(APP.instance.shareText ){
                 jumpActivity<WebParseActivity>(Bundle().apply {
-                    putString("url",shareText)
+                    putString("url",APP.instance.shareText )
                 })
 //                FragmentManager().addFragment(supportFragmentManager,TestWebFragment.newInstance(shareText), R.id.tempFl)
             }

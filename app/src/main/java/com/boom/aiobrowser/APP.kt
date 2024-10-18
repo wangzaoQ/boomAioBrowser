@@ -51,6 +51,10 @@ class APP: Application() {
 
     var clickSetBrowser = false
 
+    @Volatile
+    var shareText = ""
+
+
     companion object{
         lateinit var instance:APP
         val isDebug = BuildConfig.DEBUG

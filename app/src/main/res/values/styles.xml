@@ -33,6 +33,10 @@
 
     </declare-styleable>
 
+    <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="windowNoTitle">true</item>
+    </style>
+
 <!--    <declare-styleable name="ScanItemStyle">-->
 <!--        <attr name="itemIcon" format="reference" />-->
 <!--        <attr name="itemTitle" format="string" />-->

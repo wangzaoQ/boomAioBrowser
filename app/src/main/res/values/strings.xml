@@ -153,6 +153,9 @@
     <string name="app_security_features">Security Features</string>
     <string name="app_simple_and_easy">Simple and Easy</string>
     <string name="app_set_as_default">Set as Default</string>
+    <string name="app_open">Open</string>
+    <string name="app_copy_link_recognized">Copy Link Recognized</string>
+    <string name="app_dead_linked">Dead Links</string>
 
 
 </resources>

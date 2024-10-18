@@ -93,6 +93,14 @@
                 <data android:scheme="http" />
                 <data android:scheme="https" />
             </intent-filter>
+
+
+            <!-- 处理文字的Intent 我们需要定义action,  category, 和文字对应的MIME -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/*" />
+            </intent-filter>
         </activity>
         <activity android:name=".ui.activity.HistoryActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
@@ -154,6 +162,9 @@
         <activity android:name=".ui.activity.HomeGuideActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:launchMode="singleTop"
+            ></activity>
+        <activity android:name=".ui.activity.WebParseActivity"
+            android:theme="@style/AppTheme.Dialog"
             ></activity>
 
         <receiver

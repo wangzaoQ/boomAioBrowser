@@ -33,7 +33,7 @@ object NFViews {
             var content= ""
             var nfToRoot = JumpConfig.JUMP_DOWNLOAD_PROGRESS
             when (data.downloadType) {
-                VideoDownloadData.DOWNLOAD_LOADING,VideoDownloadData.DOWNLOAD_PAUSE-> {
+                VideoDownloadData.DOWNLOAD_LOADING,VideoDownloadData.DOWNLOAD_PAUSE,VideoDownloadData.DOWNLOAD_PREPARE -> {
                     leftIcon = R.mipmap.nf_video_download
                     content = "${data.downloadSize?.formatLength()}/${data.size?.formatLength()}"
                     if (data.downloadType == VideoDownloadData.DOWNLOAD_PAUSE){

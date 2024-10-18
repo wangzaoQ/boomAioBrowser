@@ -3,7 +3,9 @@ package com.boom.aiobrowser.ui.activity
 import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -13,15 +15,15 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
+import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
-import com.boom.aiobrowser.ad.ADEnum
-import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
 import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.nf.NFManager
+import com.boom.aiobrowser.nf.NFShow
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BrowserManager
 import com.boom.aiobrowser.tools.CacheManager
@@ -29,17 +31,26 @@ import com.boom.aiobrowser.tools.CommonParams
 import com.boom.aiobrowser.tools.FragmentManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.getBeanByGson
+import com.boom.aiobrowser.tools.inputStream2Byte
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
-import com.boom.aiobrowser.ui.fragment.MainFragment
 import com.boom.aiobrowser.ui.fragment.StartFragment
+import com.boom.aiobrowser.ui.fragment.TestWebFragment
 import com.boom.aiobrowser.ui.fragment.WebFragment
 import com.boom.aiobrowser.ui.pop.DefaultPop
+import com.boom.aiobrowser.ui.pop.DisclaimerPop
+import com.boom.aiobrowser.ui.pop.DownLoadPop
 import com.boom.aiobrowser.ui.pop.MorePop
+import com.boom.aiobrowser.ui.pop.ProcessingTextPop
 import com.boom.aiobrowser.ui.pop.TabPop
+import com.boom.downloader.VideoDownloadManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import pop.basepopup.BasePopupWindow.OnDismissListener
+import java.lang.ref.WeakReference
 import java.util.LinkedList
 
 
@@ -102,6 +113,42 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             }
         }
         updateUI(0)
+        APP.videoScanLiveData.observe(this){
+            if ((it.size?:0L) <= 0L)return@observe
+            if (CacheManager.isDisclaimerFirst){
+                CacheManager.isDisclaimerFirst = false
+                DisclaimerPop(this@MainActivity).createPop {
+                    downData(data = it)
+                }
+            }else{
+                downData(data = it)
+            }
+        }
+    }
+
+    private fun downData(data: VideoDownloadData) {
+        NFManager.requestNotifyPermission(WeakReference((this)), onSuccess = {
+            addLaunch(success = {
+                var model = DownloadCacheManager.queryDownloadModel(data)
+                if (model == null) {
+                    data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
+                    DownloadCacheManager.addDownLoadPrepare(data)
+                    withContext(Dispatchers.Main) {
+                        var headerMap = HashMap<String, String>()
+                        data.paramsMap?.forEach {
+                            headerMap.put(it.key, it.value.toString())
+                        }
+                        VideoDownloadManager.getInstance()
+                            .startDownload(data.createDownloadData(data), headerMap)
+                        NFShow.showDownloadNF(data,true)
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        ToastUtils.showLong(APP.instance.getString(R.string.app_already_download))
+                    }
+                }
+            }, failBack = {})
+        }, onFail = {})
     }
 
     private fun clickIndex(index: Int) {
@@ -168,8 +215,49 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
     var nfTo = ""
     var nfData:VideoDownloadData?= null
+    @Volatile
+    var shareText = ""
 
     override fun setShowView() {
+        shareText = ""
+        val action = intent.action //获取Intent的Action
+        val type = intent.type //获取Intent的Type
+        addLaunch(success = {
+            if (Intent.ACTION_SEND.equals(action) && type != null) {
+                var finishList = mutableListOf<Activity>()
+                for (i in 0 until APP.instance.lifecycleApp.stack.size){
+                    var activity = APP.instance.lifecycleApp.stack.get(i)
+                    if (activity== this@MainActivity){
+                        continue
+                    }
+                    finishList.add(activity)
+                }
+                AppLogs.dLog(acTAG,"结束的activity 数量: ${finishList.size}")
+                finishList.forEach {
+                    it.finish()
+                }
+                if (type.startsWith("text/")) {
+                    //我们这里处理所有的文本类型
+                    //一般的文本处理，我们直接显示字符串 ------如图1
+                    shareText = intent.getStringExtra(Intent.EXTRA_TEXT)?:""
+                    AppLogs.dLog(acTAG,"获取分享的内容1: $shareText")
+                    if (shareText.isNullOrEmpty()) {
+                        //文本文件处理，从Uri中获取输入流，然后将输入流转换成字符串
+                        var textUri =intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+                        if (textUri != null) {
+                            runCatching {
+                                contentResolver.openInputStream(textUri)?.apply {
+                                    shareText = inputStream2Byte(this)?:""
+                                    AppLogs.dLog(acTAG,"获取分享的内容2: $shareText")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }, failBack = {
+
+        })
         navController = Navigation.findNavController(this@MainActivity,R.id.fragment_view)
         nfTo = intent.getStringExtra(CommonParams.NF_TO)?:""
         nfData = getBeanByGson(intent.getStringExtra(CommonParams.NF_DATA)?:"",VideoDownloadData::class.java)
@@ -207,24 +295,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }
     }
 
-    fun hideStart() {
+    fun hideStart(isNormal: Boolean) {
         APP.instance.isHideSplash = true
-        AioADDataManager.preloadAD(ADEnum.NATIVE_AD,"首页展示时")
-        AioADDataManager.preloadAD(ADEnum.NATIVE_DOWNLOAD_AD,"首页展示时")
-        fManager.hideFragment(supportFragmentManager, startFragment!!)
-        acBinding.llMainControl.visibility = View.VISIBLE
-        if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault){
-            CacheManager.isFirstShowBrowserDefault = false
-            var pop = DefaultPop(this@MainActivity)
-            pop.setOnDismissListener(object :OnDismissListener(){
-                override fun onDismiss() {
-                    showTips()
-                }
-            })
-            pop.createPop()
-        }else{
-            showTips()
-        }
         if (nfTo.isNullOrEmpty()){
 //            mainFragment.jump()
 //            val mMainNavFragment = supportFragmentManager.findFragmentById(R.id.fragmentMain)
@@ -244,6 +316,32 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     putExtra("fromPage","nf_${nfTo}")
                 })
             }
+        }
+        if (shareText.isNotEmpty()){
+            ProcessingTextPop(this).createPop(shareText){
+                jumpActivity<WebParseActivity>(Bundle().apply {
+                    putString("url",shareText)
+                })
+//                FragmentManager().addFragment(supportFragmentManager,TestWebFragment.newInstance(shareText), R.id.tempFl)
+            }
+        }
+        if (isNormal.not()){
+            finish()
+            return
+        }
+        fManager.hideFragment(supportFragmentManager, startFragment!!)
+        acBinding.llMainControl.visibility = View.VISIBLE
+        if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault){
+            CacheManager.isFirstShowBrowserDefault = false
+            var pop = DefaultPop(this@MainActivity)
+            pop.setOnDismissListener(object :OnDismissListener(){
+                override fun onDismiss() {
+                    showTips()
+                }
+            })
+            pop.createPop()
+        }else{
+            showTips()
         }
     }
 

@@ -82,12 +82,14 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
                 count++
             }
         }
+        AioADDataManager.preloadAD(ADEnum.NATIVE_AD,"首页展示时")
+        AioADDataManager.preloadAD(ADEnum.NATIVE_DOWNLOAD_AD,"首页展示时")
         if (count>1){
             AppLogs.dLog(APP.instance.TAG,"启动页 关闭")
-            (rootActivity as MainActivity).finish()
+            (rootActivity as MainActivity).hideStart(false)
         }else{
             (rootActivity as MainActivity).apply {
-                (rootActivity as MainActivity).hideStart()
+                (rootActivity as MainActivity).hideStart(true)
                 CacheManager.isFirstStart = false
                 AppLogs.dLog(APP.instance.TAG,"启动页 隐藏")
             }

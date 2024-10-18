@@ -1,29 +1,12 @@
 package com.boom.aiobrowser.tools
 
-import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
-import android.content.Intent
-import android.database.Cursor
 import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
-import android.text.TextUtils
-import androidx.annotation.RequiresApi
-import androidx.core.content.FileProvider
-import com.blankj.utilcode.util.FileUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
-import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
-import com.boom.aiobrowser.tools.clean.FileFilter.isApk
-import com.boom.aiobrowser.tools.clean.FileFilter.isAudio
-import com.boom.aiobrowser.tools.clean.FileFilter.isImage
-import com.boom.aiobrowser.tools.clean.FileFilter.isVideo
 import com.boom.aiobrowser.tools.web.WebScan
-
 import com.boom.aiobrowser.ui.isAndroid11
-import com.boom.aiobrowser.ui.isAndroid12
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
@@ -31,14 +14,13 @@ import com.google.gson.reflect.TypeToken
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import kotlinx.coroutines.Job
-import java.io.File
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.io.InputStream
 import java.text.SimpleDateFormat
-import java.util.Base64
 import java.util.Date
 import java.util.LinkedList
 import java.util.Locale
-import javax.crypto.Cipher
-import javax.crypto.spec.SecretKeySpec
 
 
 val gson: Gson by lazy {
@@ -204,6 +186,28 @@ fun getUrlSource(url:String):String{
     return "https://www.tiktok.com/"
 }
 
+
+/**
+ * 将输入流转换成字符串
+ *
+ * @param inputStream
+ * @return
+ * @throws IOException
+ */
+@Throws(IOException::class)
+fun inputStream2Byte(inputStream: InputStream): String? {
+    val bos = ByteArrayOutputStream()
+
+    val buffer = ByteArray(1024)
+    var len = -1
+
+    while ((inputStream.read(buffer).also { len = it }) != -1) {
+        bos.write(buffer, 0, len)
+    }
+    bos.close()
+    //指定编码格式为UIT-8
+    return String(bos.toByteArray(), charset("UTF-8"))
+}
 
 
 

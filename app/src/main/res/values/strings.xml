@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Aio Browser</string>
+    <string name="facebook_app_id"></string>
 
     <string name="app_start">Start</string>
     <string name="app_loading">Safe Loading In Progress...</string>

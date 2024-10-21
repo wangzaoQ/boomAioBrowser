@@ -2,6 +2,10 @@ package com.boom.aiobrowser.point
 
 import android.os.Build
 import android.os.Bundle
+import com.adjust.sdk.Adjust
+import com.adjust.sdk.AdjustAdRevenue
+import com.adjust.sdk.AdjustConfig
+import com.adjust.sdk.AdjustEvent
 import com.android.installreferrer.api.ReferrerDetails
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.ad.ADEnum
@@ -11,11 +15,14 @@ import com.boom.aiobrowser.point.PointManager.PointCallback
 import com.boom.aiobrowser.point.PointManager.postEvent
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
+import com.facebook.appevents.AppEventsLogger
 import okhttp3.Response
 import org.json.JSONObject
+import java.util.Currency
 
 object PointEvent {
 
+    private val fb by lazy { AppEventsLogger.newLogger(APP.instance) }
 
     fun posePoint(key:String, bundle: Bundle?=null) {
         val jsonObject = GeneralParams.getGenericParams()
@@ -83,6 +90,16 @@ object PointEvent {
                 put("syringa",adPointManager.getSDKVersion())
             })
         },"adPoint")
+        runCatching {
+            val adjustAdRevenue = AdjustAdRevenue(AdjustConfig.AD_REVENUE_ADMOB)
+            adjustAdRevenue.setRevenue(adPointManager.getADValue(), "USD")
+            adjustAdRevenue.setAdRevenueNetwork(adPointManager.getADFill())
+            Adjust.trackAdRevenue(adjustAdRevenue)
+        }
+
+        runCatching {
+            fb.logPurchase((adPointManager.getADValue()).toBigDecimal(), Currency.getInstance("USD"))
+        }
     }
 
 

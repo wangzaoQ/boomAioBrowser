@@ -11,11 +11,11 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.tools.AppLogs
-import com.boom.aiobrowser.tools.CommonParams
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.tools.video.VideoManager
+import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.activity.VideoPreActivity
 import com.boom.downloader.VideoDownloadManager
 
@@ -23,7 +23,7 @@ class NFReceiver: BroadcastReceiver()  {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val action: String? = intent?.action
-        var data = getBeanByGson(intent?.getStringExtra(CommonParams.NF_DATA)?:"",VideoDownloadData::class.java)
+        var data = getBeanByGson(intent?.getStringExtra(ParamsConfig.NF_DATA)?:"",VideoDownloadData::class.java)
 
         when (action) {
             NFEnum.NF_DOWNLOAD_VIDEO.channelId -> {

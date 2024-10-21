@@ -17,6 +17,7 @@ import androidx.viewbinding.ViewBinding
 import com.blankj.utilcode.util.KeyboardUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.point.PointValue
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.clearClipboard
 import com.boom.aiobrowser.tools.getClipContent
@@ -60,6 +61,7 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
         APP.instance.isGoOther = false
         status = true
         stayTime = System.currentTimeMillis()
+        if (APP.instance.isHideSplash.not())return
         job?.cancel()
         job = addLaunch(success = {
             delay(1000)
@@ -77,7 +79,7 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
                     }
                     if (index==-1){
                         withContext(Dispatchers.Main){
-                            ProcessingTextPop(this@BaseActivity).createPop(copy?:""){
+                            ProcessingTextPop(this@BaseActivity).createPop(copy?:"", PointValue.clipboard){
                                 this@BaseActivity.jumpActivity<WebParseActivity>(Bundle().apply {
                                     putString("url",copy)
                                 })

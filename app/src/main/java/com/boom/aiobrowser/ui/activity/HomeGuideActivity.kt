@@ -111,6 +111,14 @@ class HomeGuideActivity : BaseActivity<BrowserActivityHomeGuideBinding>() {
     private fun setGuideIvByPosition(position: Int, dataList: MutableList<Int>) {
         acBinding.ivRight.setImageResource(if (position == dataList.size - 1) R.mipmap.ic_guide_right1 else R.mipmap.ic_guide_right2)
         acBinding.ivLeft.setImageResource(if (position == 0) R.mipmap.ic_guide_left1 else R.mipmap.ic_guide_left2)
+        acBinding.ivRight.setOneClick {
+            if (position == dataList.size-1)return@setOneClick
+            acBinding.vpGuide.setCurrentItem(position+1,true)
+        }
+        acBinding.ivLeft.setOneClick {
+            if (position == 0)return@setOneClick
+            acBinding.vpGuide.setCurrentItem(position-1,true)
+        }
     }
 
 

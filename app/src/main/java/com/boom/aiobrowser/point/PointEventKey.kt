@@ -126,6 +126,10 @@ object PointEventKey {
     //一键即焚
     const val webpage_delete = "webpage_delete"
 
+    const val webpage_download_pop_dl = "webpage_download_pop_dl"
+    const val clipboard = "clipboard"
+    const val clipboard_open = "clipboard_open"
+
 
 }
 
@@ -158,7 +162,9 @@ object PointValueKey{
 object PointValue{
     const val show = "show"
     const val click = "click"
-
+    const val parse = "parse"
+    const val share = "share"
+    const val clipboard = "clipboard"
 }
 
 

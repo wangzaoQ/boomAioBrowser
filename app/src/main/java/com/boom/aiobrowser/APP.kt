@@ -8,6 +8,8 @@ import android.net.Uri
 import android.os.Build
 import android.webkit.WebSettings
 import android.webkit.WebView
+import com.adjust.sdk.Adjust
+import com.adjust.sdk.AdjustConfig
 import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.NetworkUtils.OnNetworkStatusChangedListener
 import com.boom.aiobrowser.ad.AioADDataManager.initAD
@@ -29,6 +31,7 @@ import com.boom.aiobrowser.tools.video.VideoManager.initVideo
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.boom.downloader.VideoDownloadManager
 import com.boom.downloader.model.VideoTaskItem
+import com.facebook.FacebookSdk
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -105,6 +108,9 @@ class APP: Application() {
                 initFirebase()
                 initAD()
                 CleanConfig.initCleanConfig()
+                initFB()
+                initAdjust()
+
                 initVideo()
                 initOther()
                 Install.requestRefer(instance,0,{})
@@ -119,6 +125,21 @@ class APP: Application() {
             }
         }
         registerAny()
+    }
+
+    private fun initAdjust() {
+        val config = AdjustConfig(this, "ih2pm2dr3k74", AdjustConfig.ENVIRONMENT_SANDBOX)
+        config.setDelayStart(5.5)
+        Adjust.addSessionCallbackParameter("customer_user_id",CacheManager.getID())
+        config.setOnEventTrackingSucceededListener {
+            AppLogs.dLog(APP.instance.TAG, "adjust 初始化成功 event：${it.eventToken}")
+        }
+        Adjust.onCreate(config)
+    }
+
+    private fun initFB() {
+        FacebookSdk.setClientToken("")
+        FacebookSdk.sdkInitialize(APP.instance)
     }
 
     private fun registerAny() {

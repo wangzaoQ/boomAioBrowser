@@ -24,10 +24,11 @@ import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
 import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.nf.NFShow
+import com.boom.aiobrowser.point.PointValue
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BrowserManager
 import com.boom.aiobrowser.tools.CacheManager
-import com.boom.aiobrowser.tools.CommonParams
 import com.boom.aiobrowser.tools.FragmentManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
@@ -228,8 +229,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
         })
         navController = Navigation.findNavController(this@MainActivity,R.id.fragment_view)
-        nfTo = intent.getStringExtra(CommonParams.NF_TO)?:""
-        nfData = getBeanByGson(intent.getStringExtra(CommonParams.NF_DATA)?:"",VideoDownloadData::class.java)
+        nfTo = intent.getStringExtra(ParamsConfig.NF_TO)?:""
+        nfData = getBeanByGson(intent.getStringExtra(ParamsConfig.NF_DATA)?:"",VideoDownloadData::class.java)
         NFManager.clickPoint(nfData)
         acBinding.root.postDelayed({
             var count = 0
@@ -287,7 +288,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             }
         }
         if (APP.instance.shareText.isNotEmpty()){
-            ProcessingTextPop(this).createPop(APP.instance.shareText ){
+            ProcessingTextPop(this).createPop(APP.instance.shareText, PointValue.share){
                 jumpActivity<WebParseActivity>(Bundle().apply {
                     putString("url",APP.instance.shareText )
                 })

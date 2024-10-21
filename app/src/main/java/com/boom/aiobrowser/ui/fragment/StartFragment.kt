@@ -23,6 +23,8 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.ui.UrlConfig
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.WebActivity
+import com.google.android.ump.ConsentRequestParameters
+import com.google.android.ump.UserMessagingPlatform
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -82,8 +84,22 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
                 count++
             }
         }
-        AioADDataManager.preloadAD(ADEnum.NATIVE_AD,"首页展示时")
-        AioADDataManager.preloadAD(ADEnum.NATIVE_DOWNLOAD_AD,"首页展示时")
+        val params = ConsentRequestParameters
+            .Builder()
+            .build()
+
+        var consentInformation = UserMessagingPlatform.getConsentInformation(activity)
+        consentInformation.requestConsentInfoUpdate(
+            activity,
+            params,
+            {
+                loadAD()
+            },
+            { requestConsentError ->
+                loadAD()
+                AppLogs.eLog(AioADDataManager.TAG,"${requestConsentError.errorCode}: ${requestConsentError.message}")
+            })
+
         if (count>1){
             AppLogs.dLog(APP.instance.TAG,"启动页 关闭")
             (rootActivity as MainActivity).hideStart(false)
@@ -94,6 +110,11 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
                 AppLogs.dLog(APP.instance.TAG,"启动页 隐藏")
             }
         }
+    }
+
+    private fun loadAD() {
+        AioADDataManager.preloadAD(ADEnum.NATIVE_AD,"首页展示时")
+        AioADDataManager.preloadAD(ADEnum.NATIVE_DOWNLOAD_AD,"首页展示时")
     }
 
     private fun showEnd() {

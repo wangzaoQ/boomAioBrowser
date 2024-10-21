@@ -22,7 +22,13 @@ object JumpConfig{
 }
 
 object ParamsConfig{
+    const val NF_DATA = "nf_data"
+    const val NF_TO = "nf_to"
+
     const val JSON_PARAMS="JSON_PARAMS"
+
+    const val JUMP_FROM="JUMP_FROM"
+    const val JUMP_URL="JUMP_URL"
 }
 
 object UrlConfig{

@@ -35,6 +35,10 @@ class ADPointManager(var adValue: Any, var ad: Any, var requestBean: AioRequestD
         return valueMicros
     }
 
+    fun getADValue():Double{
+        return detailValueMicros
+    }
+
     fun getADSDK():String{
         if (requestBean.tybxumpn == AioADDataManager.AD_PLATFORM_ADMOB){
             return "admob"

@@ -15,9 +15,10 @@ import kotlinx.coroutines.delay
 class TestWebFragment: BaseWebFragment<BrowserFragmentWebBinding>() {
 
     companion object{
-        fun newInstance(url:String): TestWebFragment{
+        fun newInstance(url:String,fromPage:String): TestWebFragment{
             val args = Bundle()
             args.putString("url",url)
+            args.putString("fromPage",fromPage)
             val fragment = TestWebFragment()
             fragment.arguments = args
             return fragment
@@ -50,6 +51,7 @@ class TestWebFragment: BaseWebFragment<BrowserFragmentWebBinding>() {
     var webUrl = ""
     override fun setShowView() {
         webUrl =  arguments?.getString("url")?:""
+        var fromPage =  arguments?.getString("fromPage")?:""
         initWeb()
         rootActivity.addLaunch(success = {
             delay(6000)

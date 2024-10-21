@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.os.Bundle
+import com.adjust.sdk.Adjust
 import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.point.PointEvent
@@ -78,11 +79,11 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityResumed(activity: Activity) {
-
+        Adjust.onResume()
     }
 
     override fun onActivityPaused(activity: Activity) {
-
+        Adjust.onPause()
     }
 
     override fun onActivityStopped(activity: Activity) {

@@ -11,10 +11,10 @@ import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
-import com.boom.aiobrowser.tools.CommonParams
 import com.boom.aiobrowser.tools.clean.formatLength
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.JumpConfig
+import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.activity.MainActivity
 import kotlin.random.Random
 
@@ -97,7 +97,7 @@ object NFViews {
         }else {
             val intent = Intent(APP.instance, NFReceiver::class.java).apply {
                 action = enum.channelId
-                putExtra(CommonParams.NF_DATA,toJson(data))
+                putExtra(ParamsConfig.NF_DATA,toJson(data))
             }
             return PendingIntent.getBroadcast(
                 APP.instance,
@@ -109,9 +109,9 @@ object NFViews {
     fun getJumpIntent(nfTo:String,data: VideoDownloadData?=null): PendingIntent {
         val intent = Intent(APP.instance, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        intent.putExtra(CommonParams.NF_TO, nfTo)
+        intent.putExtra(ParamsConfig.NF_TO, nfTo)
         if (data!=null){
-            intent.putExtra(CommonParams.NF_DATA, toJson(data))
+            intent.putExtra(ParamsConfig.NF_DATA, toJson(data))
         }
         return PendingIntent.getActivity(APP.instance, getCode(), intent, getFlags())
     }

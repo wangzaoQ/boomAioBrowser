@@ -190,6 +190,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                     clickDownload(position)
                 }
             }
+            PointEvent.posePoint(PointEventKey.webpage_download_pop_dl)
         }
         downloadAdapter.setOnDebouncedItemClick{adapter, view, position ->
             var data = downloadAdapter.getItem(position)

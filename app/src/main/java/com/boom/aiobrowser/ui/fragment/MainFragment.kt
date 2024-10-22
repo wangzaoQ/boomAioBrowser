@@ -330,7 +330,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                             if (lastPosition!=-1 &&firstShowAD && nativeADAlive.not()){
                                 firstShowAD = false
                                 AppLogs.dLog(fragmentTAG,"滑动停止刷新插入广告 刷新位置:${lastPosition}")
-                                newsAdapter.notifyItemRangeChanged(lastPosition, newsAdapter.mutableItems.size)
                             }
                             showShareImage()
                         }
@@ -357,6 +356,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                                             }
                                         }
                                         newsAdapter.notifyItemInserted(lastPosition)
+                                        newsAdapter.notifyItemRangeChanged(lastPosition, newsAdapter.mutableItems.size-lastPosition)
                                     }
                                 }
                             }

@@ -93,7 +93,7 @@ class VideoDownloadAdapter(var isPop:Boolean = false): BaseQuickAdapter<VideoDow
                     if (item.videoType == VideoDownloadData.TYPE_M3U8){
                         GlideManager.loadImg(null,ivVideo,item.imageUrl,0,R.mipmap.ic_default_download,0)
                     }else{
-                        GlideManager.loadImg(null,ivVideo,item.downloadFilePath,0,R.mipmap.ic_default_download,0)
+                        GlideManager.loadImg(null,ivVideo,item.imageUrl,0,R.mipmap.ic_default_download,0)
                     }
                 }
                 VideoDownloadData.DOWNLOAD_ERROR -> {

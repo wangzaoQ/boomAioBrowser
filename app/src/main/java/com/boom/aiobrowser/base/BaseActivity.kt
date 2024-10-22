@@ -64,7 +64,9 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
         if (APP.instance.isHideSplash.not())return
         job?.cancel()
         job = addLaunch(success = {
-            delay(1000)
+            while (APP.instance.isHideSplash.not()){
+                delay(1000)
+            }
             if (APP.instance.shareText.isEmpty()){
                 var copy = getClipContent()
                 if (copy.isNullOrEmpty().not()){

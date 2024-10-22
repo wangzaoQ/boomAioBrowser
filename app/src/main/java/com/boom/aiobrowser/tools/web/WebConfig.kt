@@ -8,5 +8,4 @@ object WebConfig {
     const val PORNHUB = "pornhub"
     const val YOUTUBE = "youtube"
 
-    var cookieTikTok = ""
 }

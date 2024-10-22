@@ -39,59 +39,51 @@ object WebScan {
         uri?.apply {
             var url = uri.toString()
             if (url.contains(WebConfig.FILTER_TIKTOK, true)) {
-                var cookieManager = CookieManager.getInstance()
-                WebConfig.cookieTikTok = cookieManager.getCookie(url)?:""
-                if (APP.isDebug){
-                    AppLogs.dLog(TAG, "判断 0 cookie :${WebConfig.cookieTikTok}  命中tiktok uri:${uri}")
-                }
-                if (WebConfig.cookieTikTok.isNullOrEmpty())return
-                type = WebConfig.TIKTOK
-                if (APP.isDebug){
-                    AppLogs.dLog(TAG, "判断 1 isloading :${isloading}  命中tiktok uri:${uri}")
-                }
-                var id = "tiktok_${getTikTokId(url)}"
-                var list = CacheManager.videoDownloadTempList
-                var allow = true
-                for (i in 0 until list.size) {
-                    var data = list.get(i)
-                    if (data.videoId == id) {
-                        allow = false
-                        break
-                    }
-                }
-                if (APP.isDebug){
-                    AppLogs.dLog(TAG, "判断 2 allow:${allow} list:${toJson(CacheManager.videoDownloadTempList)}")
-                }
-                if (allow) {
-                    var map = HashMap<String, Any>()
-                    map.put("Cookie", WebConfig.cookieTikTok)
-                    var data = VideoDownloadData().createDefault(
-                        videoId = id,
-                        fileName = id,
-                        url = url,
-                        imageUrl = url,
-                        paramsMap = map,
-                        size = BigDecimal(0).toLong(),
-                        videoType = ""
-                    )
-                    var list = CacheManager.videoDownloadTempList
-//                    var allow = true
-//                    for (i in 0 until list.size){
-//                        var data = list.get(i)
-//                        if(data.videoId == id){
-//                            allow = false
-//                            break
-//                        }
+//                var cookieManager = CookieManager.getInstance()
+//                var cookieTikTok = cookieManager.getCookie(url)?:""
+//                if (APP.isDebug){
+//                    AppLogs.dLog(TAG, "判断 0 cookie :${cookieTikTok}  命中tiktok uri:${uri}")
+//                }
+//                if (cookieTikTok.isNullOrEmpty())return
+//                type = WebConfig.TIKTOK
+//                if (APP.isDebug){
+//                    AppLogs.dLog(TAG, "判断 1 isloading :${isloading}  命中tiktok uri:${uri}")
+//                }
+//                var id = "tiktok_${getTikTokId(url)}"
+//                var list = CacheManager.videoDownloadTempList
+//                var allow = true
+//                for (i in 0 until list.size) {
+//                    var data = list.get(i)
+//                    if (data.videoId == id) {
+//                        allow = false
+//                        break
 //                    }
-                    list.clear()
-                    list.add(0, data)
-                    CacheManager.videoDownloadTempList = list
-                    if (isloading.not()) {
-                        AppLogs.dLog(TAG, "判断 3 filterUri 发送数据变化 id:${data.videoId}")
-                        APP.videoScanLiveData.postValue(data)
-                        getVideoHeaderInfo(type, url, WebConfig.cookieTikTok)
-                    }
-                }
+//                }
+//                if (APP.isDebug){
+//                    AppLogs.dLog(TAG, "判断 2 allow:${allow} list:${toJson(CacheManager.videoDownloadTempList)}")
+//                }
+//                if (allow) {
+//                    var map = HashMap<String, Any>()
+//                    map.put("Cookie", cookieTikTok)
+//                    var data = VideoDownloadData().createDefault(
+//                        videoId = id,
+//                        fileName = id,
+//                        url = url,
+//                        imageUrl = url,
+//                        paramsMap = map,
+//                        size = BigDecimal(0).toLong(),
+//                        videoType = ""
+//                    )
+//                    var list = CacheManager.videoDownloadTempList
+//                    list.clear()
+//                    list.add(0, data)
+//                    CacheManager.videoDownloadTempList = list
+//                    if (isloading.not()) {
+//                        AppLogs.dLog(TAG, "判断 3 filterUri 发送数据变化 id:${data.videoId}")
+//                        APP.videoScanLiveData.postValue(data)
+//                        getVideoHeaderInfo(type, url, cookieTikTok)
+//                    }
+//                }
             } else if (url.contains(WebConfig.FILTER_PORNHUB,true)){
                 activity?.addLaunch(success = {
                     if (url.contains("pornhub.com/view_video.php?viewkey",true)){

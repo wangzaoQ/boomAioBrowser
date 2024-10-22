@@ -2,6 +2,7 @@ package com.boom.aiobrowser.net
 
 import com.boom.aiobrowser.data.AreaData
 import com.boom.aiobrowser.data.NewsData
+import com.boom.aiobrowser.data.WebData
 
 object NetController {
     private val service: NetService by lazy {
@@ -14,6 +15,14 @@ object NetController {
 
     suspend fun getLocation(lcommu: Double,ldrawi: Double): NetResponse<AreaData> {
         return service.getLocation(lcommu,ldrawi)
+    }
+
+    suspend fun getWebConfig(): NetResponse<MutableList<WebData>> {
+        return service.getWebConfig()
+    }
+
+    suspend fun getWebDetail(dsurpr:String,kdepen:String): NetResponse<String> {
+        return service.getWebDetail(dsurpr,kdepen)
     }
 
 }

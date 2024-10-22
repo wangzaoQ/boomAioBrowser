@@ -275,7 +275,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 //            if (fragment is MainFragment) {
 //                fragment.jump()
 //            }
-            APP.jumpResumeData.postValue(0)
         }else{
             if (nfTo == JumpConfig.JUMP_VIDEO && nfData!=null){
                 jumpActivity<VideoPreActivity>(Bundle().apply {

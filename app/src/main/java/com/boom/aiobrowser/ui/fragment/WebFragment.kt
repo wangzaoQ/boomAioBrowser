@@ -110,7 +110,6 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                 putString(PointValueKey.url,jumpData?.jumpUrl)
                 putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
             })
-
         }
 
         APP.videoScanLiveData.observe(this){
@@ -197,6 +196,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
             CacheManager.clearAll()
             JumpDataManager.toMain()
         }
+        PointEvent.posePoint(PointEventKey.webpage_delete)
     }
 
     private fun refresh() {
@@ -277,7 +277,8 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     }
 
     override fun getUrl(): String {
-        return jumpData?.jumpUrl?:""
+//        return jumpData?.jumpUrl?:""
+        return "https://www.tiktok.com/@kbsviews/video/7416341514881633567"
     }
 
     override fun getBinding(

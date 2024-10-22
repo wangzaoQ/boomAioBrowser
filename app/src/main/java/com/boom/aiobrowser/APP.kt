@@ -16,7 +16,9 @@ import com.boom.aiobrowser.ad.AioADDataManager.initAD
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.NFEnum
+import com.boom.aiobrowser.data.WebConfigData
 import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
+import com.boom.aiobrowser.net.NetController
 import com.boom.aiobrowser.nf.NFReceiver
 import com.boom.aiobrowser.point.Install
 import com.boom.aiobrowser.point.PointEvent
@@ -110,7 +112,6 @@ class APP: Application() {
                 CleanConfig.initCleanConfig()
                 initFB()
                 initAdjust()
-
                 initVideo()
                 initOther()
                 Install.requestRefer(instance,0,{})
@@ -128,18 +129,27 @@ class APP: Application() {
     }
 
     private fun initAdjust() {
-        val config = AdjustConfig(this, "ih2pm2dr3k74", AdjustConfig.ENVIRONMENT_SANDBOX)
-        config.setDelayStart(5.5)
-        Adjust.addSessionCallbackParameter("customer_user_id",CacheManager.getID())
-        config.setOnEventTrackingSucceededListener {
-            AppLogs.dLog(APP.instance.TAG, "adjust 初始化成功 event：${it.eventToken}")
+        runCatching {
+            val config = AdjustConfig(this, "ih2pm2dr3k74", AdjustConfig.ENVIRONMENT_SANDBOX)
+            config.setDelayStart(5.5)
+            Adjust.addSessionCallbackParameter("customer_user_id",CacheManager.getID())
+            config.setOnEventTrackingSucceededListener {
+                AppLogs.dLog(APP.instance.TAG, "adjust 初始化成功 event：${it.eventToken}")
+            }
+            Adjust.onCreate(config)
+        }.onFailure {
+            AppLogs.eLog(APP.instance.TAG,"adjust init error :${it.stackTraceToString()}")
         }
-        Adjust.onCreate(config)
+
     }
 
     private fun initFB() {
-        FacebookSdk.setClientToken("")
-        FacebookSdk.sdkInitialize(APP.instance)
+        runCatching {
+            FacebookSdk.setClientToken("")
+            FacebookSdk.sdkInitialize(APP.instance)
+        }.onFailure {
+            AppLogs.eLog(APP.instance.TAG,"fb init error :${it.stackTraceToString()}")
+        }
     }
 
     private fun registerAny() {
@@ -206,6 +216,33 @@ class APP: Application() {
 
         override fun onConnected(networkType: NetworkUtils.NetworkType?) {
             AppLogs.dLog(TAG, "onConnected")
+        }
+    }
+
+
+    fun getWebConfig(){
+        CoroutineScope(Dispatchers.IO).launch {
+            CacheManager.pageList.clear()
+            CacheManager.fetchList.clear()
+            var pageList = CacheManager.pageList
+            var fetchList = CacheManager.fetchList
+            NetController.getWebConfig().data?.forEach {
+                if (it.kdepen == "FETCH"){
+                    fetchList.add(WebConfigData().apply {
+                        cType = it.kdepen
+                        cUrl = it.dsurpr
+                        cDetail = NetController.getWebDetail(it.dsurpr,it.kdepen).data?:""
+                    })
+                }else if (it.kdepen == "PAGE"){
+                    pageList.add(WebConfigData().apply {
+                        cType = it.kdepen
+                        cUrl = it.dsurpr
+                        cDetail = NetController.getWebDetail(it.dsurpr,it.kdepen).data?:""
+                    })
+                }
+            }
+            CacheManager.pageList = pageList
+            CacheManager.fetchList = fetchList
         }
     }
 }

@@ -8,6 +8,7 @@ import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
+import com.boom.aiobrowser.data.WebConfigData
 import com.boom.aiobrowser.net.NetRequest
 import com.boom.aiobrowser.ui.JumpConfig
 import com.tencent.mmkv.MMKV
@@ -32,6 +33,8 @@ object CacheManager {
     const val KV_TAB_DATA_PRIVATE = "KV_TAB_DATA_PRIVATE"
     const val KV_VIDEO_DOWNLOAD = "KV_VIDEO_DOWNLOAD"
     const val KV_NEWS_LIST = "KV_NEWS_LIST"
+    const val KV_WEB_PAGE_LIST = "KV_WEB_PAGE_LIST"
+    const val KV_WEB_FETCH_LIST = "KV_WEB_FETCH_LIST"
     const val KV_BROWSER_STATUS = "KV_BROWSER_STATUS"
     const val KV_RECENT_SEARCH_DATA = "KV_RECENT_SEARCH_DATA"
     const val KV_LAST_JUMP_DATA = "KV_LAST_JUMP_DATA"
@@ -252,6 +255,23 @@ object CacheManager {
         set(value) {
             mmkv.encode(KV_NEWS_LIST, toJson(value))
         }
+
+    var pageList:MutableList<WebConfigData>
+        get() {
+            return getListByGson(mmkv.decodeString(KV_WEB_PAGE_LIST),WebConfigData::class.java) ?: mutableListOf()
+        }
+        set(value) {
+            mmkv.encode(KV_WEB_PAGE_LIST, toJson(value))
+        }
+
+    var fetchList:MutableList<WebConfigData>
+        get() {
+            return getListByGson(mmkv.decodeString(KV_WEB_FETCH_LIST),WebConfigData::class.java) ?: mutableListOf()
+        }
+        set(value) {
+            mmkv.encode(KV_WEB_FETCH_LIST, toJson(value))
+        }
+
 
     fun saveRecentSearchData(data: JumpData){
         var list = recentSearchDataList

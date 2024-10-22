@@ -128,6 +128,7 @@ class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
             var manager = AioADShowManager(this@VideoPreActivity, ADEnum.INT_AD, tag = "插屏") {
                 //释放所有
                 gsyVideoPlayer?.setVideoAllCallBack(null)
+                PointEvent.posePoint(PointEventKey.video_playback_return)
                 finish()
             }
             manager.showScreenAD(AD_POINT.aobws_return_int)

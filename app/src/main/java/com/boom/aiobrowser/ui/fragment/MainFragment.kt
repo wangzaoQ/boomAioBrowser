@@ -195,6 +195,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 
     open fun jump() {
         if (APP.instance.isHideSplash.not())return
+        PointEvent.posePoint(PointEventKey.home_page)
         var jumpData:JumpData
         if (firstLoad){
             firstLoad = false

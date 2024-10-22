@@ -6,6 +6,7 @@ import android.os.Build
 import android.view.KeyEvent
 import android.view.ViewGroup
 import android.webkit.CookieManager
+import android.webkit.JavascriptInterface
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -13,8 +14,12 @@ import android.webkit.WebView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.viewbinding.ViewBinding
+import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.data.VideoDownloadData
+import com.boom.aiobrowser.data.WebDetailsData
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.tools.web.WebConfig
 import com.boom.aiobrowser.tools.web.WebScan
@@ -26,7 +31,6 @@ import com.boom.web.PermissionInterceptor
 import com.boom.web.WebChromeClient
 import com.boom.web.WebViewClient
 import com.google.gson.Gson
-import kotlinx.coroutines.delay
 import org.jsoup.Jsoup
 import java.lang.ref.WeakReference
 
@@ -64,6 +68,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 //            .additionalHttpHeader(getUrl(), "cookie", "41bc7ddf04a26b91803f6b11817a5a1c")
 //            .useMiddlewareWebClient(getMiddlewareWebClient()) //设置WebViewClient中间件，支持多个WebViewClient， AgentWeb 3.0.0 加入。
                 .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK) //打开其他页面时，弹窗质询用户前往其他应用 AgentWeb 3.0.0 加入。
+                .addJavascriptInterface("${"$"}__",MyJavaScriptInterface(rootActivity,getUrl()))
                 .interceptUnkownUrl() //拦截找不到相关页面的Url AgentWeb 3.0.0 加入。
                 .createAgentWeb() //创建AgentWeb。
                 .ready() //设置 WebSettings。
@@ -85,6 +90,49 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
     }
 
     abstract fun getInsertParent(): ViewGroup
+
+    class MyJavaScriptInterface(context: BaseActivity<*>,var  url: String) {
+        var mContext = context
+
+        @JavascriptInterface
+        fun result(kind: String, detail: String){
+            AppLogs.dLog("webReceive","结果类型:${kind} detail:${detail}")
+           getBeanByGson(detail,WebDetailsData::class.java)?.apply {
+                if (WebScan.isTikTok(url)){
+                    if (this.formats.isNullOrEmpty().not()){
+                        var data = formats!!.get(0)
+                        var doc = Jsoup.connect(url).get()
+                        var map = HashMap<String,Any>()
+                        if (data.cookie == true){
+                            var cookie = CookieManager.getInstance().getCookie(url)?:""
+                            map.put("Cookie", cookie)
+                        }
+                        var videoDownloadData = VideoDownloadData().createDefault(
+                            videoId = "tiktok_${this.id}",
+                            fileName = doc.title(),
+                            url = data.url?:"",
+                            imageUrl = this.thumbnail?:"",
+                            paramsMap = map,
+                            size = data.size?.toLong()?:0,
+                            videoType = data.format?:""
+                        )
+                        APP.videoScanLiveData.postValue(videoDownloadData)
+                    }
+                }
+            }
+
+
+        }
+//
+//        @JavascriptInterface
+//        fun load(url: String, headers: String): String?{
+//            val request: Request = Request.Builder()
+//                .url(url)
+//                .build()
+//            var call = WebNet.netClient.newCall(request)
+//            return call.execute().body?.string()
+//        }
+    }
 
 
     fun goBack(keyCode:Int , event: KeyEvent?):Boolean {
@@ -111,7 +159,6 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             override fun bindAgentWebSupport(agentWeb: AgentWeb?) {
                 this.mAgentWeb = agentWeb
             }
-
         }
     }
 
@@ -224,13 +271,9 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             var cookieManager = CookieManager.getInstance()
             var cookie = cookieManager.getCookie(url)?:""
             AppLogs.dLog(fragmentTAG,"onPageFinished page mUrl:${url}  cookie:${cookie}")
-            if (WebScan.isTikTok(url) && cookie.isNotEmpty()){
-//                WebConfig.cookieTikTok = cookie
-//                val cookieManager = CookieManager.getInstance()
-//                cookieManager.setAcceptCookie(true)
-//                cookieManager.setCookie("https://www.tiktok.com/foryou", cookie)
-//                // 需要同步 Cookie 信息到 WebView
-//                CookieManager.getInstance().flush()
+            if (WebScan.isTikTok(url)){
+                CacheManager.pageList.get(0).cDetail
+                mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${CacheManager.pageList.get(0).cDetail}");
             }else if (WebScan.isPornhub(url)){
                 WebScan.filterUri(url, WeakReference(rootActivity))
             }

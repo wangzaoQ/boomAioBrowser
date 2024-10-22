@@ -87,13 +87,14 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         val params = ConsentRequestParameters
             .Builder()
             .build()
-
         var consentInformation = UserMessagingPlatform.getConsentInformation(activity)
         consentInformation.requestConsentInfoUpdate(
             activity,
             params,
             {
-                loadAD()
+                UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) { formError ->
+                    loadAD()
+                }
             },
             { requestConsentError ->
                 loadAD()
@@ -178,6 +179,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         PointEvent.posePoint(PointEventKey.launch_page, Bundle().apply {
             putInt(PointValueKey.open_type,if (CacheManager.isFirstStart) 0 else 1)
         })
+        APP.instance.getWebConfig()
     }
 
     var dataIntent :Intent?=null

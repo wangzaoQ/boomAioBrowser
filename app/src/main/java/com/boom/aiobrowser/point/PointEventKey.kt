@@ -24,6 +24,7 @@ object PointEventKey {
     const val default_pop_set_f = "default_pop_set_f"
 
 
+    const val home_page = "home_page"
     //首页搜索输入框点击
     const val home_page_search = "home_page_search"
 
@@ -129,6 +130,8 @@ object PointEventKey {
     const val webpage_download_pop_dl = "webpage_download_pop_dl"
     const val clipboard = "clipboard"
     const val clipboard_open = "clipboard_open"
+    //播放页返回
+    const val video_playback_return = "video_playback_return"
 
 
 }

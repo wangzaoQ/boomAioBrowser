@@ -20,6 +20,7 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValue
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.web.WebScan
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import kotlin.random.Random
@@ -45,8 +46,15 @@ object NFShow {
                 videoNFMap.put(data.videoId!!,nfId)
                 if (posePoint){
                     if (data.downloadType == VideoDownloadData.DOWNLOAD_LOADING || data.downloadType == VideoDownloadData.DOWNLOAD_PREPARE){
+                        var source = ""
+                        if (WebScan.isTikTok(data.url?:"")) {
+                            source = "tiktok"
+                        } else if (WebScan.isPornhub(data.url?:"")) {
+                            source = "pornhub"
+                        }
                         PointEvent.posePoint(PointEventKey.download_push_conduct,Bundle().apply {
                             putString(PointValueKey.ponit_action, PointValue.show)
+                            putString(PointValueKey.video_source,source)
                         })
                     }
                 }

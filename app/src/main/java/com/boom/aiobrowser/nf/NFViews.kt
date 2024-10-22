@@ -30,12 +30,10 @@ object NFViews {
         remoteViews.apply {
             var leftIcon = 0
             var rightIcon = 0
-            var content= ""
             var nfToRoot = JumpConfig.JUMP_DOWNLOAD_PROGRESS
             when (data.downloadType) {
                 VideoDownloadData.DOWNLOAD_LOADING,VideoDownloadData.DOWNLOAD_PAUSE,VideoDownloadData.DOWNLOAD_PREPARE -> {
                     leftIcon = R.mipmap.nf_video_download
-                    content = "${data.downloadSize?.formatLength()}/${data.size?.formatLength()}"
                     if (data.downloadType == VideoDownloadData.DOWNLOAD_PAUSE){
                         rightIcon = R.mipmap.ic_video_play
                     }else{
@@ -58,7 +56,6 @@ object NFViews {
                 }
                 VideoDownloadData.DOWNLOAD_ERROR ->{
                     leftIcon = R.mipmap.nf_video_download_error
-                    content = APP.instance.getString(R.string.app_download_error)
                     rightIcon = R.mipmap.ic_video_error
                     setViewVisibility(R.id.progress,View.GONE)
                     if (isLargeView){
@@ -67,7 +64,6 @@ object NFViews {
                 }
                 VideoDownloadData.DOWNLOAD_SUCCESS ->{
                     leftIcon = R.mipmap.nf_video_download_success
-                    content = "${data.size?.formatLength()}"
                     rightIcon = R.mipmap.ic_nf_video_success
                     nfToRoot = JumpConfig.JUMP_DOWNLOAD_DONE
                     setViewVisibility(R.id.progress,View.GONE)
@@ -75,10 +71,11 @@ object NFViews {
                 }
                 else -> {}
             }
-            setImageViewResource(R.id.ivLeft,leftIcon)
+            if (isLargeView){
+                setImageViewResource(R.id.ivLeft,leftIcon)
+            }
             setImageViewResource(R.id.ivStatus,rightIcon)
             setTextViewText(R.id.tvName,data.fileName)
-            setTextViewText(R.id.tvContent,content)
             setOnClickPendingIntent(
                 R.id.ivStatus,
                 getRefreshIntent(data,enum)

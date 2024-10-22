@@ -26,9 +26,6 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.nativead.MediaView
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 
 class AioADShowManager(
     private val activity: BaseActivity<*>,
@@ -37,18 +34,18 @@ class AioADShowManager(
     var result: (type: String) -> Unit
 ) {
 
-    private fun showAD() {
+    private fun showAD(tTag: String) {
         var data = AioADDataManager.getCacheAD(adEnum)
         if (data == null || activity == null || activity.getActivityStatus().not()) {
             loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "activity 状态异常")
             return
         }
-        initScreenAdmob(data, adEnum)
+        initScreenAdmob(data, adEnum,tTag)
     }
 
 
 
-    fun showScreenAD(tag: String) {
+    fun showScreenAD(tTag: String) {
         if (activity == null){
             result?.invoke(AioADDataManager.AD_SHOW_TYPE_FAILED)
             return
@@ -56,18 +53,18 @@ class AioADShowManager(
         if (AioADDataManager.adAllowShowScreen()){
             //有展示机会
             PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
-                putString(PointValueKey.ad_pos_id,tag)
+                putString(PointValueKey.ad_pos_id,tTag)
             })
         }
 
         if (AioADDataManager.getCacheAD(adEnum)!=null && AioADDataManager.adAllowShowScreen()) { // 插屏广告 冷却设置
-            showAD()
+            showAD(tTag)
         } else {
             result?.invoke(AioADDataManager.AD_SHOW_TYPE_FAILED)
         }
     }
 
-    private fun initScreenAdmob(adResultData: ADResultData, adEnum: ADEnum) {
+    private fun initScreenAdmob(adResultData: ADResultData, adEnum: ADEnum,tTag: String) {
         when (adResultData.adRequestData?.tybxumpn) {
             AioADDataManager.AD_PLATFORM_ADMOB -> {
                 val callback = object : FullScreenContentCallback() {
@@ -146,7 +143,7 @@ class AioADShowManager(
 
     fun showNativeAD(
         flRoot: FrameLayout,
-        showType: Int = 0,
+        tTag:String
     ) {
 
         val data = AioADDataManager.getCacheAD(adEnum)
@@ -159,16 +156,16 @@ class AioADShowManager(
             return
         }
         if (data.adRequestData?.pxdtzgho?:"" == "ban"){
-            showADBanner(flRoot,data)
+            showADBanner(flRoot,data,tTag)
         }else{
-            initNativeAdmob(data, flRoot, showType)
+            initNativeAdmob(data, flRoot,tTag)
 //            when (data.adRequestData?.tybxumpn) {
 //                AioADDataManager.AD_TYPE_OPEN -> initNativeAdmob(data, flRoot, showType)
 //            }
         }
     }
 
-    private fun showADBanner(parent:ViewGroup, data: ADResultData) {
+    private fun showADBanner(parent:ViewGroup, data: ADResultData,tTag:String) {
         if (data?.adAny == null) {
             loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag)
             return
@@ -180,6 +177,9 @@ class AioADShowManager(
             visibility = View.VISIBLE
             addView(view)
         }
+        PointEvent.posePoint(PointEventKey.aobws_ad_impression,Bundle().apply {
+            putString(PointValueKey.ad_pos_id,tTag)
+        })
         activity.life.destoryList.add {
             if(it!=0)return@add
             runCatching {
@@ -195,7 +195,7 @@ class AioADShowManager(
         }
     }
 
-    private fun initNativeAdmob(data: ADResultData, bFRoot: FrameLayout, showType: Int? = 0) {
+    private fun initNativeAdmob(data: ADResultData, bFRoot: FrameLayout, tTag: String) {
         var nativeAd = (data.adAny as NativeAd)
         var nativeAdView: NativeAdView
         if (bFRoot.childCount == 0 || (bFRoot.get(0) is NativeAdView).not()) {
@@ -240,6 +240,9 @@ class AioADShowManager(
                 setNativeAd(it)
             }
         }
+        PointEvent.posePoint(PointEventKey.aobws_ad_impression,Bundle().apply {
+            putString(PointValueKey.ad_pos_id,tTag)
+        })
     }
 
 
@@ -262,6 +265,9 @@ class AioADShowManager(
         AioADDataManager.addShowNumber(tag)
         AioADDataManager.preloadAD(adEnum,"广告展示时")
         APP.instance.lifecycleApp.adScreenType = 0
+        PointEvent.posePoint(PointEventKey.aobws_ad_impression,Bundle().apply {
+            putString(PointValueKey.ad_pos_id,adEnum.adName)
+        })
     }
 
     private fun loadComplete(type: String, tag: String) {

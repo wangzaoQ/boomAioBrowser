@@ -74,47 +74,38 @@
             android:layout_height="match_parent"></FrameLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <FrameLayout
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="97dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="27dp"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         >
-        <androidx.cardview.widget.CardView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:cardCornerRadius="20dp"
+        <FrameLayout
+            android:layout_width="85dp"
+            android:layout_height="85dp"
             android:layout_gravity="center"
             >
-            <FrameLayout
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivDownload"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/ivDownload"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/shape_download_tips"
-                    app:srcCompat="@mipmap/ic_arrow_down"
-                    android:scaleType="centerInside"
-                    android:layout_margin="2dp"
-                    ></androidx.appcompat.widget.AppCompatImageView>
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/ivDownload2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:lottie_autoPlay="false"
-                    app:lottie_fileName="download.json"
-                    android:scaleType="fitXY"
-                    app:lottie_loop="true"
-                    android:layout_margin="2dp"
-                    android:background="@drawable/shape_download_tips2"
-                    android:visibility="gone"
-                    ></com.airbnb.lottie.LottieAnimationView>
+                android:layout_height="match_parent"
+                app:srcCompat="@mipmap/ic_default_download_video"
+                android:scaleType="centerInside"
+                ></androidx.appcompat.widget.AppCompatImageView>
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/ivDownload2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:lottie_autoPlay="false"
+                app:lottie_fileName="download.json"
+                android:scaleType="fitXY"
+                app:lottie_loop="true"
+                android:visibility="gone"
+                ></com.airbnb.lottie.LottieAnimationView>
 
-            </FrameLayout>
-        </androidx.cardview.widget.CardView>
+        </FrameLayout>
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvDownload"
             android:layout_width="13dp"
@@ -122,8 +113,8 @@
             android:background="@drawable/shape_download_tips3"
             android:layout_gravity="end"
             android:elevation="3dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginEnd="17dp"
+            android:layout_marginTop="17dp"
             android:textColor="@color/white"
             tools:text="12"
             android:textSize="9sp"

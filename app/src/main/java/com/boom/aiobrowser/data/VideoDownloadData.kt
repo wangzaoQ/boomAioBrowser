@@ -5,9 +5,9 @@ import com.boom.aiobrowser.tools.getMapByGson
 import com.boom.downloader.model.Video
 import com.boom.downloader.model.VideoTaskItem
 
-class VideoDownloadData{
+class VideoDownloadData {
 
-    companion object{
+    companion object {
         var DOWNLOAD_NOT = 0
         var DOWNLOAD_LOADING = 1
         var DOWNLOAD_PAUSE = 2
@@ -19,18 +19,18 @@ class VideoDownloadData{
         var TYPE_M3U8 = "m3u8"
     }
 
-    var videoId :String?=""
-    var fileName:String? = ""
-    var url:String?=""
-    var imageUrl:String?=""
+    var videoId: String? = ""
+    var fileName: String? = ""
+    var url: String? = ""
+    var imageUrl: String? = ""
 
-    var size:Long?=0
-    var downloadSize:Long?=0
-    var videoType:String?=""
-    var paramsMap:HashMap<String,Any>?=null
+    var size: Long? = 0
+    var downloadSize: Long? = 0
+    var videoType: String? = ""
+    var paramsMap: HashMap<String, Any>? = null
 
-    var downloadFileName :String = ""
-    var downloadFilePath :String = ""
+    var downloadFileName: String = ""
+    var downloadFilePath: String = ""
 
     // 0 未开始 1 进行中 2 暂停 3 错误 4 成功
     var downloadType = 0
@@ -40,9 +40,15 @@ class VideoDownloadData{
     var nfId = 0
 
 
-
-
-    fun createDefault(videoId:String, fileName:String, url:String,imageUrl:String, paramsMap:HashMap<String,Any>, size:Long, videoType: String):VideoDownloadData{
+    fun createDefault(
+        videoId: String,
+        fileName: String,
+        url: String,
+        imageUrl: String,
+        paramsMap: HashMap<String, Any>,
+        size: Long,
+        videoType: String
+    ): VideoDownloadData {
         this.fileName = fileName
         this.url = url
         this.imageUrl = imageUrl
@@ -55,17 +61,17 @@ class VideoDownloadData{
         return this
     }
 
-    fun createDownloadData(data:VideoDownloadData): VideoTaskItem {
+    fun createDownloadData(data: VideoDownloadData): VideoTaskItem {
         var task = VideoTaskItem(
             data.url,
             data.url,
             data.fileName,
             "group-1"
         )
-        if (data.videoType == TYPE_MP4){
+        if (data.videoType == TYPE_MP4) {
             task.videoType = Video.Type.MP4_TYPE
-        }else if (data.videoType == TYPE_M3U8){
-            task.totalSize = data.size?:0L
+        } else if (data.videoType == TYPE_M3U8) {
+            task.totalSize = data.size ?: 0L
         }
         task.fileName = data.fileName
         task.downloadVideoId = data.videoId
@@ -73,14 +79,14 @@ class VideoDownloadData{
         return task
     }
 
-    fun createVideoDownloadData(model:DownloadModel):VideoDownloadData{
+    fun createVideoDownloadData(model: DownloadModel): VideoDownloadData {
         videoId = model.videoId
         fileName = model.fileName
         url = model.url
         size = model.size
         downloadSize = model.downloadSize
-        paramsMap = getMapByGson(model.paramsMapJson?:"")
-        downloadType = model.downloadType?:DOWNLOAD_NOT
+        paramsMap = getMapByGson(model.paramsMapJson ?: "")
+        downloadType = model.downloadType ?: DOWNLOAD_NOT
         downloadFileName = model.downloadFileName
         downloadFilePath = model.downloadFilePath
         imageUrl = model.imageUrl
@@ -89,13 +95,14 @@ class VideoDownloadData{
     }
 
 
-
-//    https://cv-h.phncdn.com/hls/videos/202408/28/457057941/720P_4000K_457057941.mp4/master.m3u8?QX0Q05F7u-cPEoc1oXSytihMGpXwo8esTE2tapcHZWC6phpPN5Nqub0V5tPbYS_QpS18MVf-1bidyf4SDPIq78jddyAYqPndUYzNHm6SXevfi3s2W_N1e_aIbxoBl-jQk_kv5tabRxpCLPXka3tLUK9rIe65ARwkyloDNDRTPUfLcqMiNfwSvCK9Cd6YLiQdqPbZR-O8
+    //    https://cv-h.phncdn.com/hls/videos/202408/28/457057941/720P_4000K_457057941.mp4/master.m3u8?QX0Q05F7u-cPEoc1oXSytihMGpXwo8esTE2tapcHZWC6phpPN5Nqub0V5tPbYS_QpS18MVf-1bidyf4SDPIq78jddyAYqPndUYzNHm6SXevfi3s2W_N1e_aIbxoBl-jQk_kv5tabRxpCLPXka3tLUK9rIe65ARwkyloDNDRTPUfLcqMiNfwSvCK9Cd6YLiQdqPbZR-O8
 //
 //    https://ev-h.phncdn.com/hls/videos/202408/28/457057941/720P_4000K_457057941.mp4/master.m3u8?validfrom=1728387179&validto=1728394379&ipa=38.90.18.212&hdl=-1&hash=AfL5m2Hv74LAA6ZSCulqlDAGn6w%3D
     fun covertByDbData(bean: VideoDownloadData) {
         downloadSize = bean.downloadSize
         downloadType = bean.downloadType
+        downloadFilePath = bean.downloadFilePath
+        downloadFileName = bean.downloadFileName
         url = bean.url
         size = bean.size
         videoType = bean.videoType

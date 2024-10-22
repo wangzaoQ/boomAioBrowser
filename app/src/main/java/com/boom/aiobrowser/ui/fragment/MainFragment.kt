@@ -1,5 +1,7 @@
 package com.boom.aiobrowser.ui.fragment
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,21 +27,18 @@ import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
-import com.boom.aiobrowser.tools.clearClipboard
-import com.boom.aiobrowser.tools.getClipContent
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.SearchConfig
 import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.HomeGuideActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.SearchActivity
-import com.boom.aiobrowser.ui.activity.WebParseActivity
 import com.boom.aiobrowser.ui.adapter.HomeHistoryAdapter
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.EngineGuidePop
-import com.boom.aiobrowser.ui.pop.ProcessingTextPop
 import com.boom.aiobrowser.ui.pop.SearchPop
+import com.boom.aiobrowser.ui.view.ShareImageView.dp2px
 import com.boom.base.adapter4.QuickAdapterHelper
 import com.boom.base.adapter4.loadState.LoadState
 import com.boom.base.adapter4.loadState.trailing.TrailingLoadStateAdapter
@@ -333,6 +332,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                                 AppLogs.dLog(fragmentTAG,"滑动停止刷新插入广告 刷新位置:${lastPosition}")
                                 newsAdapter.notifyItemRangeChanged(lastPosition, newsAdapter.mutableItems.size)
                             }
+                            showShareImage()
                         }
                         if (newState !=RecyclerView.SCROLL_STATE_SETTLING){
                             //不是惯性滑动
@@ -360,6 +360,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                                     }
                                 }
                             }
+                            hideShareImage()
                         }
                     }
                 })
@@ -418,6 +419,43 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         PointEvent.posePoint(PointEventKey.home_page_refresh,Bundle().apply {
             putString(PointValueKey.refresh_type,if (page == 1)"down" else "up")
         })
+    }
+    private var isAnimatorEnd = false
+
+    private fun showShareImage() {
+//        val translationX: Float = fBinding.flBottom.getTranslationX()
+//        val animator: ObjectAnimator = ObjectAnimator.ofFloat(fBinding.flBottom, "translationX", 10f)
+//        animator.setDuration(600)
+//        if (!isAnimatorEnd) {
+//            animator.startDelay = 1200
+//        }
+//        animator.start()
+    }
+
+    private fun hideShareImage() {
+//        isAnimatorEnd = false
+//        val translationX: Float = fBinding.flBottom.getTranslationX()
+//        val animator = ObjectAnimator.ofFloat(
+//            fBinding.flBottom, "translationX", dp2px(
+//                activity, 70f
+//            ).toFloat()
+//        )
+//        animator.setDuration(600)
+//        animator.addListener(object : Animator.AnimatorListener {
+//            override fun onAnimationStart(animation: Animator) {
+//            }
+//
+//            override fun onAnimationEnd(animation: Animator) {
+//                isAnimatorEnd = true
+//            }
+//
+//            override fun onAnimationCancel(animation: Animator) {
+//            }
+//
+//            override fun onAnimationRepeat(animation: Animator) {
+//            }
+//        })
+//        animator.start()
     }
 
     override fun getBinding(

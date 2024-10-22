@@ -17,9 +17,11 @@ import androidx.viewbinding.ViewBinding
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.WebDetailsData
+import com.boom.aiobrowser.net.WebNet
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.getBeanByGson
+import com.boom.aiobrowser.tools.getMapByGson
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.tools.web.WebConfig
 import com.boom.aiobrowser.tools.web.WebScan
@@ -31,6 +33,7 @@ import com.boom.web.PermissionInterceptor
 import com.boom.web.WebChromeClient
 import com.boom.web.WebViewClient
 import com.google.gson.Gson
+import okhttp3.Request
 import org.jsoup.Jsoup
 import java.lang.ref.WeakReference
 
@@ -68,7 +71,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 //            .additionalHttpHeader(getUrl(), "cookie", "41bc7ddf04a26b91803f6b11817a5a1c")
 //            .useMiddlewareWebClient(getMiddlewareWebClient()) //设置WebViewClient中间件，支持多个WebViewClient， AgentWeb 3.0.0 加入。
                 .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK) //打开其他页面时，弹窗质询用户前往其他应用 AgentWeb 3.0.0 加入。
-                .addJavascriptInterface("${"$"}__",MyJavaScriptInterface(rootActivity,getUrl()))
+                .addJavascriptInterface("${"$"}__",MyJavaScriptInterface(rootActivity,getRealParseUrl()))
                 .interceptUnkownUrl() //拦截找不到相关页面的Url AgentWeb 3.0.0 加入。
                 .createAgentWeb() //创建AgentWeb。
                 .ready() //设置 WebSettings。
@@ -96,12 +99,12 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
         @JavascriptInterface
         fun result(kind: String, detail: String){
-            AppLogs.dLog("webReceive","结果类型:${kind} detail:${detail}")
-           getBeanByGson(detail,WebDetailsData::class.java)?.apply {
+            AppLogs.dLog("webReceive","结果类型:${kind} thread:${Thread.currentThread()} detail:${detail}   ")
+            getBeanByGson(detail,WebDetailsData::class.java)?.apply {
                 if (WebScan.isTikTok(url)){
                     if (this.formats.isNullOrEmpty().not()){
                         var data = formats!!.get(0)
-                        var doc = Jsoup.connect(url).get()
+//                        var doc = Jsoup.connect(url).get()
                         var map = HashMap<String,Any>()
                         if (data.cookie == true){
                             var cookie = CookieManager.getInstance().getCookie(url)?:""
@@ -109,29 +112,43 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                         }
                         var videoDownloadData = VideoDownloadData().createDefault(
                             videoId = "tiktok_${this.id}",
-                            fileName = doc.title(),
+                            fileName = "tiktok_${this.id}",
                             url = data.url?:"",
                             imageUrl = this.thumbnail?:"",
                             paramsMap = map,
                             size = data.size?.toLong()?:0,
                             videoType = data.format?:""
                         )
+                        var list =  CacheManager.videoDownloadTempList
+                        list.add(videoDownloadData)
+                        CacheManager.videoDownloadTempList = list
                         APP.videoScanLiveData.postValue(videoDownloadData)
                     }
                 }
             }
-
-
         }
-//
-//        @JavascriptInterface
-//        fun load(url: String, headers: String): String?{
-//            val request: Request = Request.Builder()
-//                .url(url)
+
+        @JavascriptInterface
+        fun load(url: String, headers: String): String?{
+            AppLogs.dLog("webReceive","load:${url} headers:${headers} thread:${Thread.currentThread()}")
+            var map = getMapByGson(headers)
+            val request: Request.Builder = Request.Builder()
+                .url(url)
 //                .build()
-//            var call = WebNet.netClient.newCall(request)
-//            return call.execute().body?.string()
-//        }
+            map?.forEach { s, any ->
+                request.addHeader(s,any.toString())
+            }
+            var call = WebNet.netClient.newCall(request.build())
+            var result = call.execute()
+            result.headers.toMultimap().get("set-cookie")?.forEach {
+                CookieManager.getInstance().setCookie(url,it)
+                AppLogs.dLog("webReceive","cookie:${it}")
+            }
+            return toJson(HashMap<String,Any>().apply {
+                put("code",result.code)
+                put("body",result.body?.string()?:"")
+            })
+        }
     }
 
 
@@ -242,7 +259,6 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                 "mUrl:" + url + " onPageStarted  target:" + getUrl()
             )
             isPageFinished = false
-
             loadWebOnPageStared(url)
             timer[url] = System.currentTimeMillis()
 //            if (url == getUrl()) {
@@ -257,7 +273,6 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
         override fun onPageFinished(view: WebView?, url: String) {
             super.onPageFinished(view, url)
-            CacheManager.videoDownloadTempList = mutableListOf()
             if (timer[url] != null) {
                 val overTime = System.currentTimeMillis()
                 val startTime = timer[url]
@@ -321,6 +336,8 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 //		return "http://ggzy.sqzwfw.gov.cn/WebBuilderDS/WebbuilderMIS/attach/downloadZtbAttach.jspx?attachGuid=af982055-3d76-4b00-b5ab-36dee1f90b11&appUrlFlag=sqztb&siteGuid=7eb5f7f1-9041-43ad-8e13-8fcb82ea831a";
         return url
     }
+
+    abstract fun getRealParseUrl():String
 
 
     open fun loadWebFinished(){

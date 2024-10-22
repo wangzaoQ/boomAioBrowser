@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
+import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.databinding.BrowserPopProcessingTextBinding
 import com.boom.aiobrowser.databinding.VideoPopRenameBinding
@@ -41,12 +42,16 @@ class ProcessingTextPop (context: Context)  : BasePopupWindow(context) {
     }
 
     fun createPop(text:String,fromPage:String,callBack: () -> Unit){
+        var endText = text
+        if (APP.isDebug){
+            endText = "https://www.tiktok.com/@kbsviews/video/7416341514881633567"
+        }
         defaultBinding?.apply {
-            tvShareText.text = text
+            tvShareText.text = endText
             btnOk.setOnClickListener {
                 PointEvent.posePoint(PointEventKey.clipboard_open, Bundle().apply {
                     putString(PointValueKey.from_page,fromPage)
-                    putString(PointValueKey.url,text)
+                    putString(PointValueKey.url,endText)
                 })
                 if (CacheManager.isDisclaimerFirst){
                     CacheManager.isDisclaimerFirst = false
@@ -65,7 +70,7 @@ class ProcessingTextPop (context: Context)  : BasePopupWindow(context) {
 
         PointEvent.posePoint(PointEventKey.clipboard, Bundle().apply {
             putString(PointValueKey.from_page,fromPage)
-            putString(PointValueKey.url,text)
+            putString(PointValueKey.url,endText)
         })
     }
 }

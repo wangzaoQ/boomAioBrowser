@@ -177,7 +177,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     override fun onResume() {
         super.onResume()
         morePop?.updateUI()
-//        cleanViewModel.startScan(Environment.getExternalStorageDirectory())
     }
 
     fun loadNews(){
@@ -288,9 +287,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }
         if (APP.instance.shareText.isNotEmpty()){
             ProcessingTextPop(this).createPop(APP.instance.shareText, PointValue.share){
-                jumpActivity<WebParseActivity>(Bundle().apply {
-                    putString("url",APP.instance.shareText )
-                })
+                WebParseActivity.toWebParseActivity(this@MainActivity,1,APP.instance.shareText)
             }
         }else{
 

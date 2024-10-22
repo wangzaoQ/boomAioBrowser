@@ -58,76 +58,106 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         defaultBinding = VideoPopDownloadBinding.bind(contentView)
     }
 
-    fun updateItem(){
+    fun updateItem() {
         var list = CacheManager.videoDownloadTempList
         var adapterList = downloadAdapter.items
         var endList = mutableListOf<VideoDownloadData>()
-        if (adapterList.isNullOrEmpty()){
+        if (adapterList.isNullOrEmpty()) {
             endList.addAll(list)
-        }else{
-            for (i in 0 until list.size){
+        } else {
+            for (i in 0 until list.size) {
                 var data = list.get(i)
+//                for (k in 0 until adapterList.size) {
+//                    var bean = adapterList.get(k)
+//                    if (bean.videoId == data.videoId) {
+//                        data.covertByDbData(bean)
+//                        break
+//                    }
+//                }
                 endList.add(data)
-                for (k in 0 until adapterList.size){
-                    var bean = adapterList.get(k)
-                    if (bean.videoId == data.videoId){
-                        bean.covertByDbData(data)
-                        break
-                    }
-                }
             }
         }
         downloadAdapter.submitList(endList)
     }
 
-    fun updateDataByScan(it: VideoDownloadData) {
-        var index = -1
-        for (i in 0 until downloadAdapter.items.size){
-            var data = downloadAdapter.items.get(i)
-            if (data.videoId == it.videoId){
-                index = i
-                data.size = it.size
-                data.downloadType = it.downloadType
-                break
-            }
-        }
-        if (index>=0){
-            downloadAdapter.notifyItemChanged(index)
-        }else{
-            downloadAdapter.add(it)
-        }
-    }
-
-    fun updateData() {
+    fun updateDataByScan(data: VideoDownloadData, reset: Boolean) {
         (context as BaseActivity<*>).addLaunch(success = {
-            var modelList = DownloadCacheManager.queryDownloadModelOther()
-            var list = CacheManager.videoDownloadTempList
-            var endList = mutableListOf<VideoDownloadData>()
-            if (modelList.isNullOrEmpty()){
-                endList.addAll(list)
-            }else{
-                for (i in 0 until list.size){
-                    var data = list.get(i)
-                    endList.add(data)
-                    for (k in 0 until modelList.size){
+            if (reset) {
+                //1.如果是第一次进入 先将数据与库里状态对齐
+                var modelList = DownloadCacheManager.queryDownloadModelOther()
+                if (modelList.isNullOrEmpty().not()) {
+                    for (k in 0 until modelList!!.size) {
                         var bean = modelList.get(k)
-                        if (bean.videoId == data.videoId){
+                        if (bean.videoId == data.videoId) {
                             data.covertByDbData(bean)
                             break
                         }
                     }
                 }
             }
+            //2.找到adapter 中的这一条
+
+            var index = -1
+            for (i in 0 until downloadAdapter.items.size) {
+                var data = downloadAdapter.items.get(i)
+                if (data.videoId == data.videoId) {
+                    index = i
+                    data.size = data.size
+                    data.downloadType = data.downloadType
+                    break
+                }
+            }
+
+            withContext(Dispatchers.Main) {
+                if (index >= 0) {
+                    downloadAdapter.notifyItemChanged(index)
+                } else {
+                    downloadAdapter.add(data)
+                }
+            }
+        }, failBack = {})
+
+
+    }
+
+    fun updateData() {
+        (context as BaseActivity<*>).addLaunch(success = {
+            var modelList = mutableListOf<VideoDownloadData>()
+            DownloadCacheManager.queryAllModel().forEach {
+                modelList.add(VideoDownloadData().createVideoDownloadData(it))
+            }
+            var list = CacheManager.videoDownloadTempList
+            var endList = mutableListOf<VideoDownloadData>()
+            if (modelList.isNullOrEmpty()) {
+                endList.addAll(list)
+            } else {
+                for (i in 0 until list.size) {
+                    var data = list.get(i)
+                    for (k in 0 until modelList.size) {
+                        var bean = modelList.get(k)
+                        if (bean.videoId == data.videoId) {
+                            data.covertByDbData(bean)
+                            break
+                        }
+                    }
+                    endList.add(data)
+                }
+            }
 //            https://cv-h.phncdn.com/hls/videos/202403/29/450295781/720P_4000K_450295781.mp4/master.m3u8?QaCiO5Bzg6BTFRoBus2eSVuz8wzBYxlR7tfu7LRNzTsUi0V1YeayzwFnKZtEkEpUnDTcqQ9YCLE-wAPtDNn7s6u_nTTLimIVMQ__B05X4auO40cH8UPPzY6x9So6IE0zQabTkhZcQvFOuJ5X0wVeyYsZeHvCDLYy8ht0bkbGmZjR0seYLgOuD215SYvEM--0aeZBLpVk-YY
 //            https://ev-h.phncdn.com/hls/videos/202403/29/450295781/720P_4000K_450295781.mp4/master.m3u8?validfrom=1728381435&validto=1728388635&ipa=35.212.235.107&hdl=-1&hash=L%2F0SzVQqsviZDjj4JDrDhkI%2F3ys%3D
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 downloadAdapter.submitList(endList)
             }
         }, failBack = {})
     }
 
-    fun updateStatus(activity:BaseActivity<*>, type: Int, data: VideoTaskItem?, callBack: (data:VideoDownloadData) -> Unit) {
-        AppLogs.dLog(VideoManager.TAG,"updateStatus type:${type} url:${data?.url}")
+    fun updateStatus(
+        activity: BaseActivity<*>,
+        type: Int,
+        data: VideoTaskItem?,
+        callBack: (data: VideoDownloadData) -> Unit
+    ) {
+        AppLogs.dLog(VideoManager.TAG, "updateStatus type:${type} url:${data?.url}")
         if (data == null) return
         var position = -1
         for (i in 0 until downloadAdapter.items.size) {
@@ -137,42 +167,42 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 break
             }
         }
-        AppLogs.dLog(VideoManager.TAG,"updateStatus position:${position} url:${data?.url}")
+        AppLogs.dLog(VideoManager.TAG, "updateStatus position:${position} url:${data?.url}")
         if (position == -1) return
-        var item = downloadAdapter.getItem(position)?:return
+        var item = downloadAdapter.getItem(position) ?: return
 
         var downloadModel = DownloadCacheManager.queryDownloadModelByUrl(data.url)
-        if (downloadModel == null){
+        if (downloadModel == null) {
             // 已删除
             item.downloadType = VideoDownloadData.DOWNLOAD_NOT
             item.downloadSize = 0
-        }else{
-            if (item.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS)return
+        } else {
+            if (item.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS) return
             item.downloadType = type
             item.downloadSize = data.downloadSize
-            if (item.downloadType!=VideoDownloadData.DOWNLOAD_PAUSE){
+            if (item.downloadType != VideoDownloadData.DOWNLOAD_PAUSE) {
                 item.size = data.totalSize
             }
         }
-        if (type == VideoDownloadData.DOWNLOAD_SUCCESS){
+        if (type == VideoDownloadData.DOWNLOAD_SUCCESS) {
             item.downloadFilePath = data.filePath
             item.downloadFileName = data.fileName
             downloadAdapter.notifyItemChanged(position, "updateLoading")
             callBack.invoke(item)
-        }else{
+        } else {
             downloadAdapter.notifyItemChanged(position, "updateLoading")
         }
     }
 
-    fun createPop(callBack: (data:VideoDownloadData) -> Unit) {
+    fun createPop(callBack: (data: VideoDownloadData) -> Unit) {
         defaultBinding?.apply {
             rv.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                 adapter = downloadAdapter
             }
             tvDownload.setOnClickListener {
-                context.startActivity(Intent(context,DownloadActivity::class.java).apply {
-                    putExtra("fromPage","webpage_download_pop")
+                context.startActivity(Intent(context, DownloadActivity::class.java).apply {
+                    putExtra("fromPage", "webpage_download_pop")
                 })
                 PointEvent.posePoint(PointEventKey.webpage_download_pop_record)
             }
@@ -180,71 +210,79 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
 
 
         downloadAdapter.addOnDebouncedChildClick(R.id.ivDownload) { adapter, view, position ->
-            if (CacheManager.isDisclaimerFirst){
+            if (CacheManager.isDisclaimerFirst) {
                 CacheManager.isDisclaimerFirst = false
                 DisclaimerPop(context).createPop {
                     clickDownload(position)
                 }
-            }else{
-                showDownloadAD{
+            } else {
+                showDownloadAD {
                     clickDownload(position)
                 }
             }
             PointEvent.posePoint(PointEventKey.webpage_download_pop_dl)
         }
-        downloadAdapter.setOnDebouncedItemClick{adapter, view, position ->
+        downloadAdapter.setOnDebouncedItemClick { adapter, view, position ->
             var data = downloadAdapter.getItem(position)
             data?.apply {
                 if (downloadType == VideoDownloadData.DOWNLOAD_PAUSE) {
-                    if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO ){
+                    if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
                         ToastUtils.showShort(context.getString(R.string.app_download_no_net))
                         return@setOnDebouncedItemClick
                     }
                     downloadType = VideoDownloadData.DOWNLOAD_LOADING
-                    NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
-                        NFShow.showDownloadNF(data,true)
-                    }, onFail = {})
+                    NFManager.requestNotifyPermission(
+                        WeakReference((context as BaseActivity<*>)),
+                        onSuccess = {
+                            NFShow.showDownloadNF(data, true)
+                        },
+                        onFail = {})
                     var success = VideoDownloadManager.getInstance().resumeDownload(url)
-                    if (success.not()){
-                        AppLogs.dLog(VideoManager.TAG,"从pause 恢复失败 重新下载")
-                        var headerMap = HashMap<String,String>()
+                    if (success.not()) {
+                        AppLogs.dLog(VideoManager.TAG, "从pause 恢复失败 重新下载")
+                        var headerMap = HashMap<String, String>()
                         paramsMap?.forEach {
-                            headerMap.put(it.key,it.value.toString())
+                            headerMap.put(it.key, it.value.toString())
                         }
-                        VideoDownloadManager.getInstance().startDownload(data.createDownloadData(data),headerMap)
+                        VideoDownloadManager.getInstance()
+                            .startDownload(data.createDownloadData(data), headerMap)
                     }
-                }else if (downloadType == VideoDownloadData.DOWNLOAD_LOADING){
+                } else if (downloadType == VideoDownloadData.DOWNLOAD_LOADING) {
                     downloadType = VideoDownloadData.DOWNLOAD_PAUSE
-                    NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
-                        NFShow.showDownloadNF(data,true)
-                    }, onFail = {})
+                    NFManager.requestNotifyPermission(
+                        WeakReference((context as BaseActivity<*>)),
+                        onSuccess = {
+                            NFShow.showDownloadNF(data, true)
+                        },
+                        onFail = {})
                     VideoDownloadManager.getInstance().pauseDownloadTask(url)
-                }else if (downloadType == VideoDownloadData.DOWNLOAD_ERROR){
-                    if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO ){
+                } else if (downloadType == VideoDownloadData.DOWNLOAD_ERROR) {
+                    if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
                         return@setOnDebouncedItemClick
                     }
                     downloadType = VideoDownloadData.DOWNLOAD_LOADING
                     var success = VideoDownloadManager.getInstance().resumeDownload(url)
-                    if (success.not()){
-                        var headerMap = HashMap<String,String>()
+                    if (success.not()) {
+                        var headerMap = HashMap<String, String>()
                         paramsMap?.forEach {
-                            headerMap.put(it.key,it.value.toString())
+                            headerMap.put(it.key, it.value.toString())
                         }
-                        VideoDownloadManager.getInstance().startDownload(data.createDownloadData(data),headerMap)
+                        VideoDownloadManager.getInstance()
+                            .startDownload(data.createDownloadData(data), headerMap)
                     }
-                }else if (downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
+                } else if (downloadType == VideoDownloadData.DOWNLOAD_SUCCESS) {
                     context.jumpActivity<VideoPreActivity>(Bundle().apply {
                         putString("video_path", toJson(data))
                     })
                 }
-                downloadAdapter.notifyItemChanged(position,"updateLoading")
+                downloadAdapter.notifyItemChanged(position, "updateLoading")
             }
         }
         downloadAdapter.addOnDebouncedChildClick(R.id.ivVideoClose) { adapter, view, position ->
-            var item = downloadAdapter.getItem(position)?:return@addOnDebouncedChildClick
+            var item = downloadAdapter.getItem(position) ?: return@addOnDebouncedChildClick
             downloadAdapter.remove(item)
             DownloadControlManager.videoDelete(item!!)
-            if (downloadAdapter.items.isNullOrEmpty()){
+            if (downloadAdapter.items.isNullOrEmpty()) {
                 dismiss()
             }
             callBack.invoke(item)
@@ -261,29 +299,32 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             return
         }
         data?.apply {
-            NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
-                (context as BaseActivity<*>).addLaunch(success = {
-                    var model = DownloadCacheManager.queryDownloadModel(data)
-                    if (model == null) {
-                        data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
-                        DownloadCacheManager.addDownLoadPrepare(data)
-                        withContext(Dispatchers.Main) {
-                            downloadAdapter.notifyItemChanged(position, "updateStatus")
-                            var headerMap = HashMap<String, String>()
-                            paramsMap?.forEach {
-                                headerMap.put(it.key, it.value.toString())
+            NFManager.requestNotifyPermission(
+                WeakReference((context as BaseActivity<*>)),
+                onSuccess = {
+                    (context as BaseActivity<*>).addLaunch(success = {
+                        var model = DownloadCacheManager.queryDownloadModel(data)
+                        if (model == null) {
+                            data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
+                            DownloadCacheManager.addDownLoadPrepare(data)
+                            withContext(Dispatchers.Main) {
+                                downloadAdapter.notifyItemChanged(position, "updateStatus")
+                                var headerMap = HashMap<String, String>()
+                                paramsMap?.forEach {
+                                    headerMap.put(it.key, it.value.toString())
+                                }
+                                VideoDownloadManager.getInstance()
+                                    .startDownload(data.createDownloadData(data), headerMap)
+                                NFShow.showDownloadNF(data, true)
                             }
-                            VideoDownloadManager.getInstance()
-                                .startDownload(data.createDownloadData(data), headerMap)
-                            NFShow.showDownloadNF(data,true)
+                        } else {
+                            withContext(Dispatchers.Main) {
+                                ToastUtils.showLong(APP.instance.getString(R.string.app_already_download))
+                            }
                         }
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            ToastUtils.showLong(APP.instance.getString(R.string.app_already_download))
-                        }
-                    }
-                }, failBack = {})
-            }, onFail = {})
+                    }, failBack = {})
+                },
+                onFail = {})
 
 
         }

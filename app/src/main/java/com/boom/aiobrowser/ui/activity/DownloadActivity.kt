@@ -134,7 +134,7 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
         }
         AioADShowManager(this,ADEnum.NATIVE_DOWNLOAD_AD,"下载页原生"){
 
-        }.showNativeAD(acBinding.flRoot)
+        }.showNativeAD(acBinding.flRoot,AD_POINT.aobws_download_one)
     }
 
     private fun updateUI(position: Int) {

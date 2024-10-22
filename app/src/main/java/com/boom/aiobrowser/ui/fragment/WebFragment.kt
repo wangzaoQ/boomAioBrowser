@@ -35,6 +35,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import pop.basepopup.BasePopupWindow.OnDismissListener
+import java.lang.ref.WeakReference
 
 
 class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
@@ -48,6 +49,9 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
     override fun loadWebOnPageStared(url: String) {
         addLast(url)
+        if (WebScan.isTikTok(url)){
+            mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${CacheManager.pageList.get(0).cDetail}");
+        }
     }
 
     private fun addLast(url: String) {
@@ -113,11 +117,11 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         }
 
         APP.videoScanLiveData.observe(this){
-            popDown?.updateDataByScan(it)
+            popDown?.updateDataByScan(it,true)
             updateDownloadButtonStatus(true)
         }
         APP.videoNFLiveData.observe(this){
-            popDown?.updateDataByScan(it)
+            popDown?.updateDataByScan(it,false)
         }
         APP.videoLiveData.observe(this){
             var map = it
@@ -265,6 +269,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     override fun setShowView() {
         updateData(getBeanByGson(arguments?.getString(ParamsConfig.JSON_PARAMS)?:"",JumpData::class.java))
         updateTabCount()
+        CacheManager.videoDownloadTempList = mutableListOf()
         updateDownloadButtonStatus(false)
         fBinding.ivDownload.visibility = View.VISIBLE
         PointEvent.posePoint(PointEventKey.webpage_page,Bundle().apply {
@@ -277,8 +282,11 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     }
 
     override fun getUrl(): String {
-//        return jumpData?.jumpUrl?:""
-        return "https://www.tiktok.com/@kbsviews/video/7416341514881633567"
+        return jumpData?.jumpUrl?:""
+    }
+
+    override fun getRealParseUrl(): String {
+        return jumpData?.jumpUrl?:""
     }
 
     override fun getBinding(

@@ -118,7 +118,7 @@ class NewsMainAdapter(var fragmet :BaseFragment<*>?=null) : BaseMultiItemAdapter
                             }
                             AioADShowManager(fragmet!!.rootActivity,ADEnum.NATIVE_AD,"原生"){
 
-                            }.showNativeAD(flRoot)
+                            }.showNativeAD(flRoot,AD_POINT.aobws_news_one)
                         }
                     }
 

@@ -41,6 +41,7 @@ class VideoPop2 (context: Context) : BasePopupWindow(context) {
                 dismiss()
             }
         }
+        setBackground(R.color.color_70_black)
         showPopupWindow()
         PointEvent.posePoint(PointEventKey.webpage_page_pop_nodl)
     }

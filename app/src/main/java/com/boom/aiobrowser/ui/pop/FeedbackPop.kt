@@ -30,7 +30,7 @@ class FeedbackPop (context: Context) : BasePopupWindow(context) {
         defaultBinding = BrowserVideoFeedbackBinding.bind(contentView)
     }
 
-    fun createPop(callBack: (type:Int) -> Unit){
+    fun createPop(url:String,callBack: (type:Int) -> Unit){
         defaultBinding?.apply {
             tvCancel.setOnClickListener {
                 PointEvent.posePoint(PointEventKey.webpage_page_pop_cancel)
@@ -39,6 +39,7 @@ class FeedbackPop (context: Context) : BasePopupWindow(context) {
             btnOk.setOnClickListener {
                 PointEvent.posePoint(PointEventKey.webpage_page_pop_fb, Bundle().apply {
                     putString(PointValueKey.ponit_action, PointValue.click)
+                    putString(PointValueKey.url, url)
                 })
                 dismiss()
             }
@@ -47,6 +48,7 @@ class FeedbackPop (context: Context) : BasePopupWindow(context) {
         showPopupWindow()
         PointEvent.posePoint(PointEventKey.webpage_page_pop_fb, Bundle().apply {
             putString(PointValueKey.ponit_action, PointValue.show)
+            putString(PointValueKey.url, url)
         })
     }
 }

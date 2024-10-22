@@ -29,12 +29,12 @@ class VideoPop2 (context: Context) : BasePopupWindow(context) {
         defaultBinding = BrowserVideoPopNotDetectedBinding.bind(contentView)
     }
 
-    fun createPop(callBack: (type:Int) -> Unit){
+    fun createPop(url:String,callBack: (type:Int) -> Unit){
         defaultBinding?.apply {
             tvFeedBack.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
             tvFeedBack.getPaint().setAntiAlias(true);//抗锯齿
             tvFeedBack.setOnClickListener {
-                FeedbackPop(context).createPop {  }
+                FeedbackPop(context).createPop(url) {  }
                 dismiss()
             }
             btnOk.setOnClickListener {

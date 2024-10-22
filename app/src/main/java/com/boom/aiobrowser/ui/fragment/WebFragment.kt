@@ -93,7 +93,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
             rootActivity.addLaunch(success = {
                 delay(500)
                 withContext(Dispatchers.Main){
-                    VideoPop2(rootActivity).createPop {  }
+                    VideoPop2(rootActivity).createPop(getRealParseUrl()) {  }
                 }
             }, failBack = {})
             PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {

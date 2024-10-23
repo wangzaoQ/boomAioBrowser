@@ -55,6 +55,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
             var pageData = list.get(i)
             var uri = Uri.parse(url)
             if (uri.host?.contains(pageData.cUrl)?:false){
+                AppLogs.dLog("webReceive","page 模式执行脚本")
                 mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${pageData.cDetail}");
                 break
             }

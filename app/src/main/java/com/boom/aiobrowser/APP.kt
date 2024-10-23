@@ -222,8 +222,8 @@ class APP: Application() {
 
     fun getWebConfig(){
         CoroutineScope(Dispatchers.IO).launch {
-            CacheManager.pageList.clear()
-            CacheManager.fetchList.clear()
+            CacheManager.pageList = mutableListOf()
+            CacheManager.fetchList = mutableListOf()
             var pageList = CacheManager.pageList
             var fetchList = CacheManager.fetchList
             NetController.getWebConfig().data?.forEach {

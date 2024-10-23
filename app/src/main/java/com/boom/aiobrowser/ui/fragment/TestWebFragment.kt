@@ -73,7 +73,7 @@ class TestWebFragment: BaseWebFragment<BrowserFragmentTempBinding>() {
     override fun setShowView() {
         webUrl =  arguments?.getString("url")?:""
 //        if (APP.isDebug){
-//            webUrl = "https://www.tiktok.com/@kbsviews/video/7416341514881633567"
+//            webUrl = "https://vt.tiktok.com/ZSjdnyE59/"
 //        }
         var fromPage =  arguments?.getString("fromPage")?:""
         initWeb()

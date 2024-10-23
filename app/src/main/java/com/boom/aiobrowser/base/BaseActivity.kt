@@ -82,9 +82,7 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
                     if (index==-1){
                         withContext(Dispatchers.Main){
                             ProcessingTextPop(this@BaseActivity).createPop(copy?:"", PointValue.clipboard){
-                                this@BaseActivity.jumpActivity<WebParseActivity>(Bundle().apply {
-                                    putString("url",copy)
-                                })
+                                WebParseActivity.toWebParseActivity(this@BaseActivity,2,copy)
                             }
                         }
                     }

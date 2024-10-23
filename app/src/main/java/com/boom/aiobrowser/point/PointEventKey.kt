@@ -128,6 +128,8 @@ object PointEventKey {
     const val webpage_delete = "webpage_delete"
 
     const val webpage_download_pop_dl = "webpage_download_pop_dl"
+
+    const val webpage_download_show = "webpage_download_show"
     const val clipboard = "clipboard"
     const val clipboard_open = "clipboard_open"
     //播放页返回

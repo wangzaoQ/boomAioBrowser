@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.view.KeyEvent
 import android.view.ViewGroup
 import android.webkit.CookieManager
@@ -19,6 +20,9 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.WebDetailsData
 import com.boom.aiobrowser.net.WebNet
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.getBeanByGson
@@ -35,6 +39,7 @@ import com.boom.web.WebChromeClient
 import com.boom.web.WebViewClient
 import com.google.gson.Gson
 import okhttp3.Request
+import okhttp3.Response
 import org.jsoup.Jsoup
 import java.lang.ref.WeakReference
 
@@ -100,7 +105,16 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
         @JavascriptInterface
         fun result(kind: String, detail: String){
-            AppLogs.dLog("webReceive","结果类型:${kind} thread:${Thread.currentThread()} detail:${detail}   ")
+            AppLogs.dLog("webReceive","结果类型:${kind} thread:${Thread.currentThread()} detail:${detail}")
+            if (kind == "ERROR"){
+                PointEvent.posePoint(PointEventKey.webpage_download_show, Bundle().apply {
+                    putString(PointValueKey.type,"no_have")
+                })
+            }else{
+                PointEvent.posePoint(PointEventKey.webpage_download_show, Bundle().apply {
+                    putString(PointValueKey.type,"have")
+                })
+            }
             getBeanByGson(detail,WebDetailsData::class.java)?.apply {
                 if (this.formats.isNullOrEmpty().not()){
                     var data = formats!!.get(0)
@@ -163,15 +177,28 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                 request.addHeader(s,any.toString())
             }
             var call = WebNet.netClient.newCall(request.build())
-            var result = call.execute()
-            result.headers.toMultimap().get("set-cookie")?.forEach {
-                CookieManager.getInstance().setCookie(url,it)
-                AppLogs.dLog("webReceive","cookie:${it}")
+            var result:Response?=null
+            runCatching {
+                result = call.execute()
+            }.onFailure {
+                AppLogs.eLog("webRecive",it.stackTraceToString())
             }
-            return toJson(HashMap<String,Any>().apply {
-                put("code",result.code)
-                put("body",result.body?.string()?:"")
-            })
+            if (result ==null){
+                return toJson(HashMap<String,Any>().apply {
+                    put("code",502)
+                })
+            }else{
+                var bodyString = result!!.body?.string()?:""
+                AppLogs.dLog("webRecive","body:${bodyString}")
+                result!!.headers.toMultimap().get("set-cookie")?.forEach {
+                    CookieManager.getInstance().setCookie(url,it)
+                    AppLogs.dLog("webReceive","cookie:${it}")
+                }
+                return toJson(HashMap<String,Any>().apply {
+                    put("code",result!!.code)
+                    put("body",bodyString)
+                })
+            }
         }
     }
 

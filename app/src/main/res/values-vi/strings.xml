@@ -135,4 +135,28 @@
     <string name="app_file_time">Thời gian tệp:</string>
     <string name="app_tips">Mẹo</string>
     <string name="app_tips_content">Do hạn chế pháp lý, không thể tải xuống video từ YouTube.</string>
+
+    <string name="app_vimeo">Vimeo</string>
+    <string name="app_x">X</string>
+    <string name="app_whats">Whatsapp</string>
+    <string name="app_home_no_history">Nhập URL trang web để tải video.</string>
+    <string name="app_view_the_guide">Xem hướng dẫn</string>
+    <string name="app_method">Bước</string>
+    <string name="app_tt_tips_1">Mở "TikTok" và nhấp vào "Chia sẻ"</string>
+    <string name="app_tt_tips_2">Nhấp vào "AIO Browser", bắt đầu tải xuống</string>
+    <string name="app_video_not_detected">Không phát hiện video?</string>
+    <string name="app_video_guide_content">1: Phát video trước.\n\n2: Làm mới trang, và nút sẽ khả dụng.</string>
+    <string name="app_video_failed_tips">Thất bại? Báo cáo trang web này cho chúng tôi</string>
+    <string name="app_feedback_title">Xác nhận gửi phản hồi về trang web này cho chúng tôi?</string>
+    <string name="app_feedback_content">Khi nhận được phản hồi, chúng tôi sẽ xử lý càng sớm càng tốt.</string>
+    <string name="app_fast_performance">Hiệu suất nhanh</string>
+    <string name="app_security_features">Tính năng bảo mật</string>
+    <string name="app_simple_and_easy">Đơn giản và dễ dàng</string>
+    <string name="app_set_as_default">Đặt làm mặc định</string>
+    <string name="app_open">Mở</string>
+    <string name="app_copy_link_recognized">Đã nhận dạng liên kết sao chép</string>
+    <string name="app_dead_linked">Liên kết chết</string>
+    <string name="app_feedback">Phản hồi</string>
+    <string name="app_search_guide">Dán URL chia sẻ tại đây</string>
+    <string name="app_video_downlod">Trình tải video</string>
 </resources>

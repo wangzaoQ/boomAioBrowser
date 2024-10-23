@@ -135,4 +135,28 @@
     <string name="app_file_time">Время файла:</string>
     <string name="app_tips">Советы</string>
     <string name="app_tips_content">Из-за юридических ограничений видео с YouTube нельзя скачивать.</string>
+
+    <string name="app_vimeo">Vimeo</string>
+    <string name="app_x">X</string>
+    <string name="app_whats">Whatsapp</string>
+    <string name="app_home_no_history">Введите URL веб-сайта для загрузки видео.</string>
+    <string name="app_view_the_guide">Посмотреть руководство</string>
+    <string name="app_method">Шаг</string>
+    <string name="app_tt_tips_1">Откройте "TikTok" и нажмите "Поделиться"</string>
+    <string name="app_tt_tips_2">Нажмите "AIO Browser", начните загрузку</string>
+    <string name="app_video_not_detected">Видео не обнаружено?</string>
+    <string name="app_video_guide_content">1: Сначала воспроизведите видео.\n\n2: Обновите страницу, и кнопка станет доступной.</string>
+    <string name="app_video_failed_tips">Не удалось? Сообщите нам об этой веб-странице</string>
+    <string name="app_feedback_title">Подтвердить отправку отзыва об этом сайте?</string>
+    <string name="app_feedback_content">Как только мы получим отзыв, мы рассмотрим его как можно скорее.</string>
+    <string name="app_fast_performance">Быстрая производительность</string>
+    <string name="app_security_features">Функции безопасности</string>
+    <string name="app_simple_and_easy">Просто и легко</string>
+    <string name="app_set_as_default">Установить по умолчанию</string>
+    <string name="app_open">Открыть</string>
+    <string name="app_copy_link_recognized">Распознанная копия ссылки</string>
+    <string name="app_dead_linked">Мертвые ссылки</string>
+    <string name="app_feedback">Обратная связь</string>
+    <string name="app_search_guide">Вставьте URL для обмена здесь</string>
+    <string name="app_video_downlod">Загрузчик видео</string>
 </resources>

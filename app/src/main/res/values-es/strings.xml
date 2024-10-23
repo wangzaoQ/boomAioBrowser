@@ -137,4 +137,29 @@
     <string name="app_file_time">Tiempo del archivo:</string>
     <string name="app_tips">Consejos</string>
     <string name="app_tips_content">Debido a restricciones legales, los videos de YouTube no se pueden descargar.</string>
+
+
+    <string name="app_vimeo">Vimeo</string>
+    <string name="app_x">X</string>
+    <string name="app_whats">Whatsapp</string>
+    <string name="app_home_no_history">Ingrese una URL del sitio web para descargar videos.</string>
+    <string name="app_view_the_guide">Ver la guía</string>
+    <string name="app_method">Paso</string>
+    <string name="app_tt_tips_1">Abra "TikTok" y haga clic en "Compartir"</string>
+    <string name="app_tt_tips_2">Haga clic en "AIO Browser", comience a descargar</string>
+    <string name="app_video_not_detected">¿Video no detectado?</string>
+    <string name="app_video_guide_content">1: Reproduzca el video primero.\n\n2: Actualice la página y el botón estará disponible.</string>
+    <string name="app_video_failed_tips">¿Falló? Repórtenos esta página web</string>
+    <string name="app_feedback_title">¿Confirmar enviar comentarios de este sitio web?</string>
+    <string name="app_feedback_content">Una vez que recibamos los comentarios, los abordaremos lo antes posible.</string>
+    <string name="app_fast_performance">Rendimiento rápido</string>
+    <string name="app_security_features">Características de seguridad</string>
+    <string name="app_simple_and_easy">Simple y fácil</string>
+    <string name="app_set_as_default">Establecer como predeterminado</string>
+    <string name="app_open">Abrir</string>
+    <string name="app_copy_link_recognized">Enlace copiado reconocido</string>
+    <string name="app_dead_linked">Enlaces muertos</string>
+    <string name="app_feedback">Comentarios</string>
+    <string name="app_search_guide">Pegue aquí la URL compartida</string>
+    <string name="app_video_downlod">Descargador de videos</string>
 </resources>

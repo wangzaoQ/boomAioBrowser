@@ -136,4 +136,28 @@
     <string name="app_file_time">เวลาไฟล์:</string>
     <string name="app_tips">เคล็ดลับ</string>
     <string name="app_tips_content">เนื่องจากข้อจำกัดทางกฎหมาย วิดีโอบน YouTube ไม่สามารถดาวน์โหลดได้</string>
+
+    <string name="app_vimeo">Vimeo</string>
+    <string name="app_x">X</string>
+    <string name="app_whats">Whatsapp</string>
+    <string name="app_home_no_history">ป้อน URL ของเว็บไซต์เพื่อดาวน์โหลดวิดีโอ</string>
+    <string name="app_view_the_guide">ดูคู่มือ</string>
+    <string name="app_method">ขั้นตอน</string>
+    <string name="app_tt_tips_1">เปิด "TikTok" และคลิก "แชร์"</string>
+    <string name="app_tt_tips_2">คลิก "AIO Browser" เริ่มดาวน์โหลด</string>
+    <string name="app_video_not_detected">ไม่พบวิดีโอ?</string>
+    <string name="app_video_guide_content">1: เล่นวิดีโอก่อน\n\n2: รีเฟรชหน้า และปุ่มจะพร้อมใช้งาน</string>
+    <string name="app_video_failed_tips">ล้มเหลว? รายงานหน้าเว็บนี้ให้เรา</string>
+    <string name="app_feedback_title">ยืนยันการส่งข้อเสนอแนะเว็บไซต์นี้ให้เรา?</string>
+    <string name="app_feedback_content">เมื่อเราได้รับข้อเสนอแนะ เราจะดำเนินการโดยเร็วที่สุด</string>
+    <string name="app_fast_performance">ประสิทธิภาพรวดเร็ว</string>
+    <string name="app_security_features">คุณสมบัติความปลอดภัย</string>
+    <string name="app_simple_and_easy">ง่ายและสะดวก</string>
+    <string name="app_set_as_default">ตั้งเป็นค่าเริ่มต้น</string>
+    <string name="app_open">เปิด</string>
+    <string name="app_copy_link_recognized">คัดลอกลิงก์ที่รู้จัก</string>
+    <string name="app_dead_linked">ลิงก์เสีย</string>
+    <string name="app_feedback">ข้อเสนอแนะ</string>
+    <string name="app_search_guide">วาง URL ที่แชร์ที่นี่</string>
+    <string name="app_video_downlod">ตัวดาวน์โหลดวิดีโอ</string>
 </resources>

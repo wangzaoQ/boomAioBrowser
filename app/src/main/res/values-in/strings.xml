@@ -135,4 +135,29 @@
     <string name="app_file_time">Waktu file:</string>
     <string name="app_tips">Tips</string>
     <string name="app_tips_content">Karena batasan hukum, video dari YouTube tidak dapat diunduh.</string>
+
+
+    <string name="app_vimeo">Vimeo</string>
+    <string name="app_x">X</string>
+    <string name="app_whats">Whatsapp</string>
+    <string name="app_home_no_history">Masukkan URL situs web untuk mengunduh video.</string>
+    <string name="app_view_the_guide">Lihat panduan</string>
+    <string name="app_method">Langkah</string>
+    <string name="app_tt_tips_1">Buka "TikTok" dan klik "Bagikan"</string>
+    <string name="app_tt_tips_2">Klik "AIO Browser", mulai mengunduh</string>
+    <string name="app_video_not_detected">Video Tidak Terdeteksi?</string>
+    <string name="app_video_guide_content">1: Putar video terlebih dahulu.\n\n2: Segarkan halaman, dan tombol akan tersedia.</string>
+    <string name="app_video_failed_tips">Gagal? Laporkan halaman web ini kepada kami</string>
+    <string name="app_feedback_title">Konfirmasi Untuk Mengirim Umpan Balik Situs Web Ini Kepada Kami?</string>
+    <string name="app_feedback_content">Setelah kami menerima umpan balik, kami akan menanganinya secepat mungkin.</string>
+    <string name="app_fast_performance">Kinerja Cepat</string>
+    <string name="app_security_features">Fitur Keamanan</string>
+    <string name="app_simple_and_easy">Sederhana dan Mudah</string>
+    <string name="app_set_as_default">Atur sebagai Default</string>
+    <string name="app_open">Buka</string>
+    <string name="app_copy_link_recognized">Tautan yang Disalin Dikenali</string>
+    <string name="app_dead_linked">Tautan Mati</string>
+    <string name="app_feedback">Umpan Balik</string>
+    <string name="app_search_guide">Tempel URL berbagi di sini</string>
+    <string name="app_video_downlod">Pengunduh Video</string>
 </resources>

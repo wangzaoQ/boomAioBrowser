@@ -135,4 +135,28 @@
     <string name="app_file_time">Dosya zamanı:</string>
     <string name="app_tips">İpuçları</string>
     <string name="app_tips_content">Yasal kısıtlamalar nedeniyle YouTube videoları indirilemez.</string>
+
+    <string name="app_vimeo">Vimeo</string>
+    <string name="app_x">X</string>
+    <string name="app_whats">Whatsapp</string>
+    <string name="app_home_no_history">Video indirmek için web sitesi URL\'sini girin.</string>
+    <string name="app_view_the_guide">Kılavuzu görüntüle</string>
+    <string name="app_method">Adım</string>
+    <string name="app_tt_tips_1">"TikTok"u açın ve "Paylaş"a tıklayın</string>
+    <string name="app_tt_tips_2">"AIO Browser"a tıklayın, indirmeye başlayın</string>
+    <string name="app_video_not_detected">Video Algılanmadı mı?</string>
+    <string name="app_video_guide_content">1: Önce videoyu oynatın.\n\n2: Sayfayı yenileyin, düğme kullanılabilir olacak.</string>
+    <string name="app_video_failed_tips">Başarısız mı? Bu web sayfasını bize bildirin</string>
+    <string name="app_feedback_title">Bu Web Sitesi Geri Bildirimini Bize Göndermeyi Onaylıyor musunuz?</string>
+    <string name="app_feedback_content">Geri bildirimi aldığımızda, mümkün olan en kısa sürede ele alacağız.</string>
+    <string name="app_fast_performance">Hızlı Performans</string>
+    <string name="app_security_features">Güvenlik Özellikleri</string>
+    <string name="app_simple_and_easy">Basit ve Kolay</string>
+    <string name="app_set_as_default">Varsayılan Olarak Ayarla</string>
+    <string name="app_open">Aç</string>
+    <string name="app_copy_link_recognized">Tanınan Bağlantı Kopyalandı</string>
+    <string name="app_dead_linked">Ölü Bağlantılar</string>
+    <string name="app_feedback">Geri Bildirim</string>
+    <string name="app_search_guide">Paylaşım URL\'sini buraya yapıştırın</string>
+    <string name="app_video_downlod">Video İndirici</string>
 </resources>

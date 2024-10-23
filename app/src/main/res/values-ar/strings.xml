@@ -134,4 +134,28 @@
     <string name="app_file_time">وقت الملف:</string>
     <string name="app_tips">نصائح</string>
     <string name="app_tips_content">نظرًا للقيود القانونية، لا يمكن تنزيل مقاطع الفيديو من YouTube.</string>
+
+    <string name="app_vimeo">Vimeo</string>
+    <string name="app_x">X</string>
+    <string name="app_whats">Whatsapp</string>
+    <string name="app_home_no_history">أدخل رابط الموقع لتحميل مقاطع الفيديو.</string>
+    <string name="app_view_the_guide">عرض الدليل</string>
+    <string name="app_method">خطوة</string>
+    <string name="app_tt_tips_1">افتح "تيك توك" وانقر على "مشاركة"</string>
+    <string name="app_tt_tips_2">انقر على "AIO Browser"، ابدأ التحميل</string>
+    <string name="app_video_not_detected">لم يتم اكتشاف الفيديو؟</string>
+    <string name="app_video_guide_content">1: قم بتشغيل الفيديو أولاً.\n\n2: قم بتحديث الصفحة، وسيكون الزر متاحًا.</string>
+    <string name="app_video_failed_tips">فشل؟ أبلغ عن صفحة الويب هذه</string>
+    <string name="app_feedback_title">تأكيد إرسال تعليقات هذا الموقع إلينا؟</string>
+    <string name="app_feedback_content">بمجرد استلام التعليقات، سنعالجها في أقرب وقت ممكن.</string>
+    <string name="app_fast_performance">أداء سريع</string>
+    <string name="app_security_features">ميزات الأمان</string>
+    <string name="app_simple_and_easy">بسيط وسهل</string>
+    <string name="app_set_as_default">تعيين كافتراضي</string>
+    <string name="app_open">فتح</string>
+    <string name="app_copy_link_recognized">تم التعرف على الرابط المنسوخ</string>
+    <string name="app_dead_linked">روابط معطلة</string>
+    <string name="app_feedback">تعليقات</string>
+    <string name="app_search_guide">الصق رابط المشاركة هنا</string>
+    <string name="app_video_downlod">برنامج تحميل الفيديو</string>
 </resources>

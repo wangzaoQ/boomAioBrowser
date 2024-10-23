@@ -133,4 +133,28 @@
     <string name="app_file_time">파일 시간:</string>
     <string name="app_tips">팁</string>
     <string name="app_tips_content">법적 제한으로 인해 YouTube 동영상은 다운로드할 수 없습니다.</string>
+
+    <string name="app_vimeo">Vimeo</string>
+    <string name="app_x">X</string>
+    <string name="app_whats">Whatsapp</string>
+    <string name="app_home_no_history">동영상을 다운로드하려면 웹사이트 URL을 입력하세요.</string>
+    <string name="app_view_the_guide">가이드 보기</string>
+    <string name="app_method">단계</string>
+    <string name="app_tt_tips_1">"TikTok"을 열고 "공유"를 클릭하세요</string>
+    <string name="app_tt_tips_2">"AIO Browser"를 클릭하고 다운로드를 시작하세요</string>
+    <string name="app_video_not_detected">동영상이 감지되지 않나요?</string>
+    <string name="app_video_guide_content">1: 먼저 동영상을 재생하세요.\n\n2: 페이지를 새로 고치면 버튼을 사용할 수 있습니다.</string>
+    <string name="app_video_failed_tips">실패했나요? 이 웹페이지를 신고해주세요</string>
+    <string name="app_feedback_title">이 웹사이트에 대한 피드백을 보내시겠습니까?</string>
+    <string name="app_feedback_content">피드백을 받으면 최대한 빨리 처리하도록 하겠습니다.</string>
+    <string name="app_fast_performance">빠른 성능</string>
+    <string name="app_security_features">보안 기능</string>
+    <string name="app_simple_and_easy">간단하고 쉬움</string>
+    <string name="app_set_as_default">기본값으로 설정</string>
+    <string name="app_open">열기</string>
+    <string name="app_copy_link_recognized">인식된 링크 복사</string>
+    <string name="app_dead_linked">끊어진 링크</string>
+    <string name="app_feedback">피드백</string>
+    <string name="app_search_guide">여기에 공유 URL을 붙여넣으세요</string>
+    <string name="app_video_downlod">동영상 다운로더</string>
 </resources>

@@ -134,4 +134,28 @@
     <string name="app_file_time">ファイル時間：</string>
     <string name="app_tips">ヒント</string>
     <string name="app_tips_content">法的制限により、YouTubeの動画はダウンロードできません。</string>
+
+    <string name="app_vimeo">Vimeo</string>
+    <string name="app_x">X</string>
+    <string name="app_whats">Whatsapp</string>
+    <string name="app_home_no_history">動画をダウンロードするにはウェブサイトのURLを入力してください。</string>
+    <string name="app_view_the_guide">ガイドを表示</string>
+    <string name="app_method">ステップ</string>
+    <string name="app_tt_tips_1">「TikTok」を開いて「シェア」をクリック</string>
+    <string name="app_tt_tips_2">「AIO Browser」をクリックしてダウンロードを開始</string>
+    <string name="app_video_not_detected">動画が検出されませんか？</string>
+    <string name="app_video_guide_content">1: まず動画を再生してください。\n\n2: ページを更新すると、ボタンが利用可能になります。</string>
+    <string name="app_video_failed_tips">失敗しましたか？このウェブページを報告してください</string>
+    <string name="app_feedback_title">このウェブサイトのフィードバックを送信してもよろしいですか？</string>
+    <string name="app_feedback_content">フィードバックを受け取り次第、できるだけ早く対応いたします。</string>
+    <string name="app_fast_performance">高速パフォーマンス</string>
+    <string name="app_security_features">セキュリティ機能</string>
+    <string name="app_simple_and_easy">シンプルで簡単</string>
+    <string name="app_set_as_default">デフォルトに設定</string>
+    <string name="app_open">開く</string>
+    <string name="app_copy_link_recognized">認識されたリンクをコピー</string>
+    <string name="app_dead_linked">無効なリンク</string>
+    <string name="app_feedback">フィードバック</string>
+    <string name="app_search_guide">共有URLをここに貼り付け</string>
+    <string name="app_video_downlod">動画ダウンローダー</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.ui.fragment
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -49,8 +50,14 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
     override fun loadWebOnPageStared(url: String) {
         addLast(url)
-        if (WebScan.isTikTok(url)){
-            mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${CacheManager.pageList.get(0).cDetail}");
+        var list = CacheManager.pageList
+        for (i in 0 until list.size){
+            var pageData = list.get(i)
+            var uri = Uri.parse(url)
+            if (uri.host?.contains(pageData.cUrl)?:false){
+                mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${pageData.cDetail}");
+                break
+            }
         }
     }
 

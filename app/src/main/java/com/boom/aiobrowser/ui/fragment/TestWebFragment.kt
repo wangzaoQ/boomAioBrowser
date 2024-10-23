@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.ui.fragment
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,7 +13,9 @@ import com.boom.aiobrowser.databinding.BrowserFragmentWebBinding
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.ui.pop.DisclaimerPop
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import java.net.URLEncoder
 
 class TestWebFragment: BaseWebFragment<BrowserFragmentTempBinding>() {
@@ -33,11 +36,20 @@ class TestWebFragment: BaseWebFragment<BrowserFragmentTempBinding>() {
     }
 
     override fun loadWebOnPageStared(url: String) {
-        var script = CacheManager.fetchList.get(0).cDetail
-        script = script.replace("__INPUT_URL__",URLEncoder.encode(webUrl))
-        AppLogs.dLog("webReceive", "loadWebOnPageStared thread:${Thread.currentThread()}")
-        mAgentWeb!!.getWebCreator().getWebView().evaluateJavascript(script) {
-            AppLogs.dLog("webReceive", "evaluateJavascript 接收:$it thread:${Thread.currentThread()}")
+        var script = ""
+        var list = CacheManager.fetchList
+        for (i in 0 until list.size){
+            var fetchData = list.get(i)
+            var uri = Uri.parse(webUrl)
+            if (uri.host?.contains(fetchData.cUrl)?:false){
+                script = fetchData.cDetail
+                script = script.replace("__INPUT_URL__",URLEncoder.encode(webUrl))
+                AppLogs.dLog("webReceive", "loadWebOnPageStared thread:${Thread.currentThread()}")
+                mAgentWeb!!.getWebCreator().getWebView().evaluateJavascript(script) {
+                    AppLogs.dLog("webReceive", "evaluateJavascript 接收:$it thread:${Thread.currentThread()}")
+                }
+                break
+            }
         }
     }
 
@@ -60,19 +72,22 @@ class TestWebFragment: BaseWebFragment<BrowserFragmentTempBinding>() {
     var webUrl = ""
     override fun setShowView() {
         webUrl =  arguments?.getString("url")?:""
+//        if (APP.isDebug){
+//            webUrl = "https://www.tiktok.com/@kbsviews/video/7416341514881633567"
+//        }
         var fromPage =  arguments?.getString("fromPage")?:""
         initWeb()
-//        rootActivity.addLaunch(success = {
-//            delay(6000)
-//            if (allowDownload.not()){
-//                ToastUtils.showShort(getString(R.string.app_dead_linked))
-//                rootActivity.finish()
-//            }
-//        }, failBack = {})
-//        APP.instance.shareText = ""
+        rootActivity.addLaunch(success = {
+            delay(6000)
+            if (allowDownload.not()){
+                withContext(Dispatchers.Main){
+                    ToastUtils.showLong(getString(R.string.app_dead_linked))
+                    rootActivity.finish()
+                }
+            }
+        }, failBack = {})
+        APP.instance.shareText = ""
     }
-
-
 
     override fun getUrl(): String {
         return "file:///android_asset/load.html"

@@ -2,6 +2,7 @@ package com.boom.aiobrowser.base
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.view.KeyEvent
 import android.view.ViewGroup
@@ -101,25 +102,48 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
         fun result(kind: String, detail: String){
             AppLogs.dLog("webReceive","结果类型:${kind} thread:${Thread.currentThread()} detail:${detail}   ")
             getBeanByGson(detail,WebDetailsData::class.java)?.apply {
-                if (WebScan.isTikTok(url)){
-                    if (this.formats.isNullOrEmpty().not()){
-                        var data = formats!!.get(0)
+                if (this.formats.isNullOrEmpty().not()){
+                    var data = formats!!.get(0)
 //                        var doc = Jsoup.connect(url).get()
-                        var map = HashMap<String,Any>()
-                        if (data.cookie == true){
-                            var cookie = CookieManager.getInstance().getCookie(url)?:""
-                            map.put("Cookie", cookie)
+                    var map = HashMap<String,Any>()
+                    if (data.cookie == true){
+                        var cookie = CookieManager.getInstance().getCookie(url)?:""
+                        map.put("Cookie", cookie)
+                    }
+                    var pageList = CacheManager.pageList
+                    var fileStart = ""
+                    runCatching {
+                        for (i in 0 until pageList.size){
+                            var pageData = pageList.get(i)
+                            var uri = Uri.parse(url)
+                            if (uri.host?.contains(pageData.cUrl)?:false){
+                                var split = pageData.cUrl.split(".")
+                                if (split.size>0){
+                                    fileStart = split[0]
+                                }
+                                break
+                            }
                         }
-                        var videoDownloadData = VideoDownloadData().createDefault(
-                            videoId = "tiktok_${this.id}",
-                            fileName = "tiktok_${this.id}",
-                            url = data.url?:"",
-                            imageUrl = this.thumbnail?:"",
-                            paramsMap = map,
-                            size = data.size?.toLong()?:0,
-                            videoType = data.format?:""
-                        )
-                        var list =  CacheManager.videoDownloadTempList
+                    }
+                    var videoDownloadData = VideoDownloadData().createDefault(
+                        videoId = "${fileStart}_${this.id}",
+                        fileName = "${fileStart}_${this.id}",
+                        url = data.url?:"",
+                        imageUrl = this.thumbnail?:"",
+                        paramsMap = map,
+                        size = data.size?.toLong()?:0,
+                        videoType = data.format?:""
+                    )
+                    var index = -1
+                    var list =  CacheManager.videoDownloadTempList
+                    for (i in 0 until list.size){
+                        var data = list.get(i)
+                        if (data.videoId == videoDownloadData.videoId){
+                            index = i
+                            break
+                        }
+                    }
+                    if (index == -1){
                         list.add(videoDownloadData)
                         CacheManager.videoDownloadTempList = list
                         APP.videoScanLiveData.postValue(videoDownloadData)
@@ -287,8 +311,8 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             var cookie = cookieManager.getCookie(url)?:""
             AppLogs.dLog(fragmentTAG,"onPageFinished page mUrl:${url}  cookie:${cookie}")
             if (WebScan.isTikTok(url)){
-                CacheManager.pageList.get(0).cDetail
-                mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${CacheManager.pageList.get(0).cDetail}");
+//                CacheManager.pageList.get(0).cDetail
+//                mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${CacheManager.pageList.get(0).cDetail}");
             }else if (WebScan.isPornhub(url)){
                 WebScan.filterUri(url, WeakReference(rootActivity))
             }

@@ -4,7 +4,8 @@
     android:id="@+id/tempFl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/tran">
+    android:background="@color/tran"
+    >
 
     <FrameLayout
         android:id="@+id/flRoot"
@@ -12,21 +13,12 @@
         android:layout_height="1px"></FrameLayout>
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:orientation="vertical"
-
         >
-        <!--        <ImageView-->
-        <!--            android:id="@+id/lottieAnim"-->
-        <!--            android:layout_width="30dp"-->
-        <!--            android:layout_height="30dp"-->
-        <!--            android:src="@mipmap/ic_start_logo"-->
-        <!--            android:layout_marginTop="15dp"-->
-        <!--            android:layout_marginBottom="15dp"-->
-        <!--            />-->
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottieAnim"
@@ -34,8 +26,9 @@
             android:layout_height="51dp"
             android:adjustViewBounds="true"
             app:lottie_autoPlay="false"
-            app:lottie_fileName="test.json"
+            app:lottie_fileName="loading.json"
             app:lottie_imageAssetsFolder="images"
+            android:background="@color/tran"
             app:lottie_loop="true" />
 
         <TextView

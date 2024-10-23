@@ -43,9 +43,9 @@ class ProcessingTextPop (context: Context)  : BasePopupWindow(context) {
 
     fun createPop(text:String,fromPage:String,callBack: () -> Unit){
         var endText = text
-        if (APP.isDebug){
-            endText = "https://www.tiktok.com/@kbsviews/video/7416341514881633567"
-        }
+//        if (APP.isDebug){
+//            endText = "https://www.tiktok.com/@kbsviews/video/7416341514881633567"
+//        }
         defaultBinding?.apply {
             tvShareText.text = endText
             btnOk.setOnClickListener {

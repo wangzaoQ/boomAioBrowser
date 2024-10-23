@@ -35,6 +35,7 @@
 
     <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/tran</item>
     </style>
 
 <!--    <declare-styleable name="ScanItemStyle">-->

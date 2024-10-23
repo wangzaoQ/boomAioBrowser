@@ -41,9 +41,8 @@ class HomeGuideActivity : BaseActivity<BrowserActivityHomeGuideBinding>() {
         acBinding.etGuide.setOnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
                 var searchText = acBinding.etGuide.text.toString().trim()
-                jumpActivity<WebParseActivity>(Bundle().apply {
-                    putString("url",searchText)
-                })
+                WebParseActivity.toWebParseActivity(this,0,searchText)
+
                 return@setOnKeyListener true
             }
             return@setOnKeyListener false

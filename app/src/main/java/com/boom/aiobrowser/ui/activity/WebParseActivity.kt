@@ -106,7 +106,7 @@ class WebParseActivity: BaseActivity<BrowserActivityWebParseBinding>() {
             R.id.flRoot
         )
         acBinding.lottieAnim.apply {
-            setAnimation("test.json")
+            setAnimation("loading.json")
             playAnimation()
         }
     }

@@ -5,6 +5,12 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
         maven { url 'https://jitpack.io' }
+        maven {
+            url = uri("https://artifact.bytedance.com/repository/pangle/")
+        }
+        maven {
+            url = uri("https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea")
+        }
     }
 }
 dependencyResolutionManagement {
@@ -14,6 +20,12 @@ dependencyResolutionManagement {
         jcenter()
         mavenCentral()
         maven { url 'https://jitpack.io' }
+        maven {
+            url = uri("https://artifact.bytedance.com/repository/pangle/")
+        }
+        maven {
+            url = uri("https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea")
+        }
     }
 }
 rootProject.name = "Aio Browser"

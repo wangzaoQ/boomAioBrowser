@@ -25,6 +25,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:shapeAppearance="@style/style_RoundStyle_8r"
         android:layout_marginStart="7dp"
+        android:src="@mipmap/ic_default_download"
         ></com.google.android.material.imageview.ShapeableImageView>
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="0dp"

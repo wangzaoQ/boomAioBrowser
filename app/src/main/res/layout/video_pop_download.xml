@@ -2,10 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:maxHeight="347dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="bottom"
-    android:background="@drawable/shape_10r_white"
-    >
+    android:background="@drawable/shape_10r_white">
     <RelativeLayout
         android:id="@+id/rlTop"
         android:layout_width="match_parent"
@@ -35,10 +34,11 @@
             android:layout_alignParentEnd="true"
             ></androidx.appcompat.widget.AppCompatTextView>
     </RelativeLayout>
-    <androidx.recyclerview.widget.RecyclerView
+    <com.boom.aiobrowser.ui.view.MaxRecyclerView
         android:layout_below="@+id/rlTop"
         android:id="@+id/rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        ></androidx.recyclerview.widget.RecyclerView>
+        app:maxHeight="400dp"
+        ></com.boom.aiobrowser.ui.view.MaxRecyclerView>
 </RelativeLayout>

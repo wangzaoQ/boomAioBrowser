@@ -162,7 +162,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                         url = data.url?:"",
                         imageUrl = this.thumbnail?:"",
                         paramsMap = map,
-                        size = 1024*1024*100,
+                        size = data.size?.toLong()?:0,
                         videoType = data.format?:""
                     )
                     var index = -1
@@ -358,7 +358,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 //                CacheManager.pageList.get(0).cDetail
 //                mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${CacheManager.pageList.get(0).cDetail}");
             }else if (WebScan.isPornhub(url)){
-//                WebScan.filterUri(url, WeakReference(rootActivity))
+                WebScan.filterUri(url, WeakReference(rootActivity))
             }
 //            evaluateHTML(view!!)
             WebScan.reset()

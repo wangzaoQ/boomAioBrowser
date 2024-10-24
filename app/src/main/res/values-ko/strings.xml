@@ -157,4 +157,6 @@
     <string name="app_feedback">피드백</string>
     <string name="app_search_guide">여기에 공유 URL을 붙여넣으세요</string>
     <string name="app_video_downlod">동영상 다운로더</string>
+    <string name="app_confirm">확정하다</string>
+
 </resources>

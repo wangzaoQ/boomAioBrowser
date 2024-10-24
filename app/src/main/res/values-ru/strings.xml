@@ -159,4 +159,6 @@
     <string name="app_feedback">Обратная связь</string>
     <string name="app_search_guide">Вставьте URL для обмена здесь</string>
     <string name="app_video_downlod">Загрузчик видео</string>
+    <string name="app_confirm">подтверждать</string>
+
 </resources>

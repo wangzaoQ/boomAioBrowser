@@ -159,4 +159,6 @@
     <string name="app_feedback">Commentaires</string>
     <string name="app_search_guide">Collez l\'URL de partage ici</string>
     <string name="app_video_downlod">Téléchargeur de vidéos</string>
+    <string name="app_confirm">Confirmer</string>
+
 </resources>

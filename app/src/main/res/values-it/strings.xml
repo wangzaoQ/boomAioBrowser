@@ -159,4 +159,6 @@
     <string name="app_feedback">Feedback</string>
     <string name="app_search_guide">Incolla qui l\'URL di condivisione</string>
     <string name="app_video_downlod">Scaricatore di video</string>
+    <string name="app_confirm">Confermare</string>
+
 </resources>

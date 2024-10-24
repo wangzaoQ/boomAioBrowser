@@ -160,4 +160,6 @@
     <string name="app_feedback">Feedback</string>
     <string name="app_search_guide">Teilen-URL hier einfügen</string>
     <string name="app_video_downlod">Video-Downloader</string>
+    <string name="app_confirm">Bestätigen</string>
+
 </resources>

@@ -158,4 +158,6 @@
     <string name="app_feedback">フィードバック</string>
     <string name="app_search_guide">共有URLをここに貼り付け</string>
     <string name="app_video_downlod">動画ダウンローダー</string>
+    <string name="app_confirm">確定する</string>
+
 </resources>

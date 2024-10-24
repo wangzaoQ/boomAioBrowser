@@ -158,4 +158,6 @@
     <string name="app_feedback">تعليقات</string>
     <string name="app_search_guide">الصق رابط المشاركة هنا</string>
     <string name="app_video_downlod">برنامج تحميل الفيديو</string>
+    <string name="app_confirm">التأكد</string>
+
 </resources>

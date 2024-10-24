@@ -160,4 +160,6 @@
     <string name="app_feedback">Umpan Balik</string>
     <string name="app_search_guide">Tempel URL berbagi di sini</string>
     <string name="app_video_downlod">Pengunduh Video</string>
+    <string name="app_confirm">Memastikan</string>
+
 </resources>

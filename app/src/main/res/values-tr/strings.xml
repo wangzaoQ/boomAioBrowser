@@ -159,4 +159,6 @@
     <string name="app_feedback">Geri Bildirim</string>
     <string name="app_search_guide">Paylaşım URL\'sini buraya yapıştırın</string>
     <string name="app_video_downlod">Video İndirici</string>
+    <string name="app_confirm">Onaylamak</string>
+
 </resources>

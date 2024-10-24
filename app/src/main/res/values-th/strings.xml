@@ -160,4 +160,6 @@
     <string name="app_feedback">ข้อเสนอแนะ</string>
     <string name="app_search_guide">วาง URL ที่แชร์ที่นี่</string>
     <string name="app_video_downlod">ตัวดาวน์โหลดวิดีโอ</string>
+    <string name="app_confirm">ยืนยัน</string>
+
 </resources>

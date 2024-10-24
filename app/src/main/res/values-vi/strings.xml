@@ -159,4 +159,6 @@
     <string name="app_feedback">Phản hồi</string>
     <string name="app_search_guide">Dán URL chia sẻ tại đây</string>
     <string name="app_video_downlod">Trình tải video</string>
+    <string name="app_confirm">xác định</string>
+
 </resources>

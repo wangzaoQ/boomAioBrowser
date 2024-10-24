@@ -160,4 +160,6 @@
     <string name="app_feedback">Feedback</string>
     <string name="app_search_guide">Cole o URL compartilhado aqui</string>
     <string name="app_video_downlod">Baixador de vídeos</string>
+    <string name="app_confirm">Confirmar</string>
+
 </resources>

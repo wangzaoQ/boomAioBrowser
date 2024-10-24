@@ -42,24 +42,32 @@ abstract class BaseFragment<V : ViewBinding> :Fragment(){
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         AppLogs.dLog(fragmentTAG,"onCreateView")
-        if (showView!=null){
-            AppLogs.dLog(fragmentTAG,"onCreateView1")
-            (showView?.parent as? ViewGroup)?.apply {
-                AppLogs.dLog(fragmentTAG,"onCreateView1.1")
-                removeView(showView!!)
-           }
-        }else{
-            AppLogs.dLog(fragmentTAG,"onCreateView2")
-            fBinding = getBinding(inflater, container)
-            AppLogs.dLog(fragmentTAG,"setShowView")
-            setShowView()
-            AppLogs.dLog(fragmentTAG,"setListener")
-            setListener()
-            AppLogs.dLog(fragmentTAG,"setDataListener")
-            setDataListener()
-            showView = fBinding.root
-        }
-
+//        if (showView!=null){
+//            AppLogs.dLog(fragmentTAG,"onCreateView1")
+//            (showView?.parent as? ViewGroup)?.apply {
+//                AppLogs.dLog(fragmentTAG,"onCreateView1.1")
+//                removeView(showView!!)
+//           }
+//        }else{
+//            AppLogs.dLog(fragmentTAG,"onCreateView2")
+//            fBinding = getBinding(inflater, container)
+//            AppLogs.dLog(fragmentTAG,"setShowView")
+//            setShowView()
+//            AppLogs.dLog(fragmentTAG,"setListener")
+//            setListener()
+//            AppLogs.dLog(fragmentTAG,"setDataListener")
+//            setDataListener()
+//            showView = fBinding.root
+//        }
+        AppLogs.dLog(fragmentTAG,"onCreateView2")
+        fBinding = getBinding(inflater, container)
+        AppLogs.dLog(fragmentTAG,"setShowView")
+        setShowView()
+        AppLogs.dLog(fragmentTAG,"setListener")
+        setListener()
+        AppLogs.dLog(fragmentTAG,"setDataListener")
+        setDataListener()
+        showView = fBinding.root
         return showView
     }
 

@@ -133,7 +133,7 @@
     <string name="app_file_size">حجم الملف:</string>
     <string name="app_file_time">وقت الملف:</string>
     <string name="app_tips">نصائح</string>
-    <string name="app_tips_content">نظرًا للقيود القانونية، لا يمكن تنزيل مقاطع الفيديو من YouTube.</string>
+    <string name="app_tips_content">نظراً للقيود القانونية، لا يمكن تنزيل الفيديوهات</string>
 
     <string name="app_vimeo">Vimeo</string>
     <string name="app_x">X</string>

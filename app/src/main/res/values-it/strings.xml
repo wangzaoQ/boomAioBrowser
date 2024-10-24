@@ -134,7 +134,7 @@
     <string name="app_file_size">Dimensione file:</string>
     <string name="app_file_time">Tempo file:</string>
     <string name="app_tips">Suggerimenti</string>
-    <string name="app_tips_content">A causa di restrizioni legali, i video di YouTube non possono essere scaricati.</string>
+    <string name="app_tips_content">A causa di restrizioni legali, i video non possono essere scaricati.</string>
 
     <string name="app_vimeo">Vimeo</string>
     <string name="app_x">X</string>

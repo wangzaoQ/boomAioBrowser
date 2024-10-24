@@ -132,7 +132,7 @@
     <string name="app_file_size">파일 크기:</string>
     <string name="app_file_time">파일 시간:</string>
     <string name="app_tips">팁</string>
-    <string name="app_tips_content">법적 제한으로 인해 YouTube 동영상은 다운로드할 수 없습니다.</string>
+    <string name="app_tips_content">법적 제한으로 인해 비디오를 다운로드할 수 없습니다.</string>
 
     <string name="app_vimeo">Vimeo</string>
     <string name="app_x">X</string>

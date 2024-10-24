@@ -50,24 +50,25 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
     var back: () -> Unit = {}
 
     fun initWeb(){
-        if (mAgentWeb != null){
-            mAgentWeb!!.go(getUrl())
-        }else{
-            mAgentWeb = AgentWeb.with(this) //
-                .setAgentWebParent(
-                    getInsertParent(),
-                    -1,
-                    LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                    )
-                ) //传入AgentWeb的父控件。
-                .useDefaultIndicator(-1, 3) //设置进度条颜色与高度，-1为默认值，高度为2，单位为dp。
-                .setAgentWebWebSettings(getSettings()) //设置 IAgentWebSettings。
-                .setWebViewClient(mWebViewClient) //WebViewClient ， 与 WebView 使用一致 ，但是请勿获取WebView调用setWebViewClient(xx)方法了,会覆盖AgentWeb DefaultWebClient,同时相应的中间件也会失效。
-                .setWebChromeClient(webChromeClient) //WebChromeClient
-                .setPermissionInterceptor(mPermissionInterceptor) //权限拦截 2.0.0 加入。
-                .setSecurityType(AgentWeb.SecurityType.STRICT_CHECK) //严格模式 Android 4.2.2 以下会放弃注入对象 ，使用AgentWebView没影响。
+        runCatching {
+            if (mAgentWeb != null){
+                mAgentWeb!!.go(getUrl())
+            }else{
+                mAgentWeb = AgentWeb.with(this) //
+                    .setAgentWebParent(
+                        getInsertParent(),
+                        -1,
+                        LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT
+                        )
+                    ) //传入AgentWeb的父控件。
+                    .useDefaultIndicator(-1, 3) //设置进度条颜色与高度，-1为默认值，高度为2，单位为dp。
+                    .setAgentWebWebSettings(getSettings()) //设置 IAgentWebSettings。
+                    .setWebViewClient(mWebViewClient) //WebViewClient ， 与 WebView 使用一致 ，但是请勿获取WebView调用setWebViewClient(xx)方法了,会覆盖AgentWeb DefaultWebClient,同时相应的中间件也会失效。
+                    .setWebChromeClient(webChromeClient) //WebChromeClient
+                    .setPermissionInterceptor(mPermissionInterceptor) //权限拦截 2.0.0 加入。
+                    .setSecurityType(AgentWeb.SecurityType.STRICT_CHECK) //严格模式 Android 4.2.2 以下会放弃注入对象 ，使用AgentWebView没影响。
 //            .setAgentWebUIController(UIController(activity)) //自定义UI  AgentWeb3.0.0 加入。
 //            .setMainFrameErrorView(
 //                com.just.agentweb.R.layout.agentweb_error_page,
@@ -76,24 +77,28 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 //            .useMiddlewareWebChrome(getMiddlewareWebChrome()) //设置WebChromeClient中间件，支持多个WebChromeClient，AgentWeb 3.0.0 加入。
 //            .additionalHttpHeader(getUrl(), "cookie", "41bc7ddf04a26b91803f6b11817a5a1c")
 //            .useMiddlewareWebClient(getMiddlewareWebClient()) //设置WebViewClient中间件，支持多个WebViewClient， AgentWeb 3.0.0 加入。
-                .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK) //打开其他页面时，弹窗质询用户前往其他应用 AgentWeb 3.0.0 加入。
-                .addJavascriptInterface("${"$"}__",MyJavaScriptInterface(rootActivity,getRealParseUrl()))
-                .interceptUnkownUrl() //拦截找不到相关页面的Url AgentWeb 3.0.0 加入。
-                .createAgentWeb() //创建AgentWeb。
-                .ready() //设置 WebSettings。
-                .go(getUrl()) //WebView载入该url地址的页面并显示。
-        }
+                    .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK) //打开其他页面时，弹窗质询用户前往其他应用 AgentWeb 3.0.0 加入。
+                    .addJavascriptInterface("${"$"}__",MyJavaScriptInterface(rootActivity,getRealParseUrl()))
+                    .interceptUnkownUrl() //拦截找不到相关页面的Url AgentWeb 3.0.0 加入。
+                    .createAgentWeb() //创建AgentWeb。
+                    .ready() //设置 WebSettings。
+                    .go(getUrl()) //WebView载入该url地址的页面并显示。
+            }
 
-        AgentWebConfig.debug()
+            if (APP.isDebug){
+                AgentWebConfig.debug()
+            }
 
-        // AgentWeb 没有把WebView的功能全面覆盖 ，所以某些设置 AgentWeb 没有提供 ， 请从WebView方面入手设置。
-        mAgentWeb!!.getWebCreator().getWebView().setOverScrollMode(WebView.OVER_SCROLL_NEVER)
-        if (CacheManager.browserStatus == 1){
-            runCatching {
-                // 禁止记录cookie
-                CookieManager.getInstance().setAcceptCookie(true)
-                CookieManager.getInstance().removeSessionCookie()
-                mAgentWeb!!.getWebCreator().getWebView().settings.setSaveFormData(false)
+
+            // AgentWeb 没有把WebView的功能全面覆盖 ，所以某些设置 AgentWeb 没有提供 ， 请从WebView方面入手设置。
+            mAgentWeb!!.getWebCreator().getWebView().setOverScrollMode(WebView.OVER_SCROLL_NEVER)
+            if (CacheManager.browserStatus == 1){
+                runCatching {
+                    // 禁止记录cookie
+                    CookieManager.getInstance().setAcceptCookie(true)
+                    CookieManager.getInstance().removeSessionCookie()
+                    mAgentWeb!!.getWebCreator().getWebView().settings.setSaveFormData(false)
+                }
             }
         }
     }
@@ -157,7 +162,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                         url = data.url?:"",
                         imageUrl = this.thumbnail?:"",
                         paramsMap = map,
-                        size = data.size?.toLong()?:0,
+                        size = 1024*1024*100,
                         videoType = data.format?:""
                     )
                     var index = -1
@@ -353,7 +358,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 //                CacheManager.pageList.get(0).cDetail
 //                mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${CacheManager.pageList.get(0).cDetail}");
             }else if (WebScan.isPornhub(url)){
-                WebScan.filterUri(url, WeakReference(rootActivity))
+//                WebScan.filterUri(url, WeakReference(rootActivity))
             }
 //            evaluateHTML(view!!)
             WebScan.reset()

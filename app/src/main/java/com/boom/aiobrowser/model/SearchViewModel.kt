@@ -36,7 +36,10 @@ class SearchViewModel:BaseDataModel() {
 
             override fun onResponse(call: Call, response: Response) {
                 val bodyStr = response?.body?.string() ?: ""
-                var list = parseXML(bodyStr)
+                var list:MutableList<String> = mutableListOf()
+                runCatching {
+                    list.addAll(parseXML(bodyStr))
+                }
                 AppLogs.dLog(TAG,"搜索出的数据:${toJson(list)}")
                 var dataList = mutableListOf<SearchResultData>()
                 var recentList = CacheManager.recentSearchDataList

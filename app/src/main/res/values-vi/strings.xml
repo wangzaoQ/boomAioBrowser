@@ -134,7 +134,7 @@
     <string name="app_file_size">Kích thước tệp:</string>
     <string name="app_file_time">Thời gian tệp:</string>
     <string name="app_tips">Mẹo</string>
-    <string name="app_tips_content">Do hạn chế pháp lý, không thể tải xuống video từ YouTube.</string>
+    <string name="app_tips_content">Do hạn chế pháp lý, video không thể được tải xuống.</string>
 
     <string name="app_vimeo">Vimeo</string>
     <string name="app_x">X</string>

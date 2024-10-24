@@ -133,7 +133,7 @@
     <string name="app_file_size">ファイルサイズ：</string>
     <string name="app_file_time">ファイル時間：</string>
     <string name="app_tips">ヒント</string>
-    <string name="app_tips_content">法的制限により、YouTubeの動画はダウンロードできません。</string>
+    <string name="app_tips_content">法的制限により、動画をダウンロードすることはできません。</string>
 
     <string name="app_vimeo">Vimeo</string>
     <string name="app_x">X</string>

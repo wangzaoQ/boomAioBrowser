@@ -134,7 +134,7 @@
     <string name="app_file_size">Размер файла:</string>
     <string name="app_file_time">Время файла:</string>
     <string name="app_tips">Советы</string>
-    <string name="app_tips_content">Из-за юридических ограничений видео с YouTube нельзя скачивать.</string>
+    <string name="app_tips_content">Из-за юридических ограничений видео нельзя скачать.</string>
 
     <string name="app_vimeo">Vimeo</string>
     <string name="app_x">X</string>

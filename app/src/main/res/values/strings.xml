@@ -135,7 +135,7 @@
     <string name="app_file_size">File size:</string>
     <string name="app_file_time">File time:</string>
     <string name="app_tips">Tips</string>
-    <string name="app_tips_content">Due to legal restrictions, videos on YouTube cannot be downloaded.</string>
+    <string name="app_tips_content">Due to legal restrictions, videos cannot be downloaded.</string>
 
     <string name="app_vimeo">Vimeo</string>
     <string name="app_x">X</string>

@@ -134,7 +134,7 @@
     <string name="app_file_size">Dosya boyutu:</string>
     <string name="app_file_time">Dosya zamanı:</string>
     <string name="app_tips">İpuçları</string>
-    <string name="app_tips_content">Yasal kısıtlamalar nedeniyle YouTube videoları indirilemez.</string>
+    <string name="app_tips_content">Yasal kısıtlamalar nedeniyle videolar indirilemez.</string>
 
     <string name="app_vimeo">Vimeo</string>
     <string name="app_x">X</string>

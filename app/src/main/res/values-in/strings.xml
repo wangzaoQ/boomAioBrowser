@@ -134,7 +134,7 @@
     <string name="app_file_size">Ukuran file:</string>
     <string name="app_file_time">Waktu file:</string>
     <string name="app_tips">Tips</string>
-    <string name="app_tips_content">Karena batasan hukum, video dari YouTube tidak dapat diunduh.</string>
+    <string name="app_tips_content">Karena batasan hukum, video tidak dapat diunduh.</string>
 
 
     <string name="app_vimeo">Vimeo</string>

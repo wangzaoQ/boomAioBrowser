@@ -59,12 +59,13 @@ class VideoDownloadAdapter(var isPop:Boolean = false): BaseQuickAdapter<VideoDow
                     ivDownload.visibility = View.GONE
                     ivMore.visibility = View.GONE
                     var allSize = item.size ?: 0
-                    if (allSize == 0L) return true
-                    var fileProgress = BigDecimalUtils.mul(
-                        100.0,
-                        BigDecimalUtils.div((item.downloadSize ?: 0).toDouble(), allSize.toDouble())
-                    ).toInt()
-                    progress.progress = fileProgress
+                    if (allSize != 0L){
+                        var fileProgress = BigDecimalUtils.mul(
+                            100.0,
+                            BigDecimalUtils.div((item.downloadSize ?: 0).toDouble(), allSize.toDouble())
+                        ).toInt()
+                        progress.progress = fileProgress
+                    }
                     if (item.downloadType == VideoDownloadData.DOWNLOAD_LOADING || item.downloadType == VideoDownloadData.DOWNLOAD_PREPARE) {
                         ivVideoStatus.setImageResource(R.mipmap.ic_video_pause)
                     } else {
@@ -113,7 +114,11 @@ class VideoDownloadAdapter(var isPop:Boolean = false): BaseQuickAdapter<VideoDow
                     llPlayRoot.visibility = View.GONE
                     ivMore.visibility = View.GONE
                     ivDownload.visibility = View.VISIBLE
-                    tvContent.text = item.size?.formatLength()
+                    if (item.size == 0L) {
+                        tvContent.text = ""
+                    }else{
+                        tvContent.text = item.size?.formatLength()
+                    }
                     GlideManager.loadImg(null,ivVideo,item.imageUrl,0,R.mipmap.ic_default_download,0)
                 }
 

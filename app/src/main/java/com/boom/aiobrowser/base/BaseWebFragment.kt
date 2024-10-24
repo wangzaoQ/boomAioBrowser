@@ -139,9 +139,21 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                             }
                         }
                     }
+                    runCatching {
+                        if (fileStart.isNullOrEmpty()){
+                            var uri = Uri.parse(url)
+                            var split = uri.host?.split(".")
+                            if (split!!.size>0){
+                                fileStart = split[0]
+                            }
+                        }
+                    }
+                    if (fileStart.isNullOrEmpty()){
+                        fileStart = ""
+                    }
                     var videoDownloadData = VideoDownloadData().createDefault(
-                        videoId = "${fileStart}_${this.id}",
-                        fileName = "${fileStart}_${this.id}",
+                        videoId = "${fileStart}_${id}",
+                        fileName = "${fileStart}_${System.currentTimeMillis()}",
                         url = data.url?:"",
                         imageUrl = this.thumbnail?:"",
                         paramsMap = map,

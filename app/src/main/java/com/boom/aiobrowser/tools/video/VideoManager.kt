@@ -83,6 +83,7 @@ object VideoManager {
                         }
                         model.downloadSize = item.downloadSize
                         model.downloadType = VideoDownloadData.DOWNLOAD_LOADING
+                        model.size = item.totalSize
                         DownloadCacheManager.updateModel(model)
                         NFShow.showDownloadNF(VideoDownloadData().createVideoDownloadData(model))
                     }
@@ -117,8 +118,16 @@ object VideoManager {
                 ToastUtils.showShort(APP.instance.getString(R.string.download_failed))
                 if (item == null) return
                 CoroutineScope(Dispatchers.IO).launch {
-                    var isSuccessParent = FileUtils.delete(File(item.filePath).parent)
-                    var isSuccess = FileUtils.delete(File(item.filePath))
+                    runCatching {
+                        var isSuccessParent = FileUtils.delete(File(item.filePath).parent)
+                    }.onFailure {
+                        AppLogs.eLog(TAG,it.stackTraceToString())
+                    }
+                    runCatching {
+                        var isSuccess = FileUtils.delete(File(item.filePath))
+                    }.onFailure {
+                        AppLogs.eLog(TAG,it.stackTraceToString())
+                    }
                     var model = DownloadCacheManager.queryDownloadModelByUrl(item.url)
                     if (model != null) {
                         model.downloadSize = 0
@@ -145,6 +154,7 @@ object VideoManager {
                         model.downloadFileName = item.fileName
                         model.downloadFilePath = item.filePath
                         model.downloadType = VideoDownloadData.DOWNLOAD_SUCCESS
+                        model.size = item.totalSize
                         DownloadCacheManager.updateModel(model)
                         NFShow.showDownloadNF(VideoDownloadData().createVideoDownloadData(model),true)
                     }

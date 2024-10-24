@@ -200,7 +200,7 @@ object WebScan {
 
     private var call: Call? = null
 
-    fun getVideoHeaderInfo(type: String, videoUrl: String, cookie: String) {
+    fun getVideoHeaderInfo( videoUrl: String, cookie: String): String? {
         isloading = true
         val request: Request = Request.Builder()
             .url(videoUrl)
@@ -208,42 +208,45 @@ object WebScan {
             .head() // 只请求头信息
             .build()
         call = WebNet.netClient.newCall(request)
-        call?.enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                AppLogs.eLog(TAG, e.stackTraceToString())
-                isloading = false
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                // 获取文件的内容类型
-                val contentType = response.header("Content-Type")
-                // 获取视频文件的大小
-                val contentLength = response.header("Content-Length")
-                AppLogs.dLog(TAG, "Content-Type:$contentType")
-                AppLogs.dLog(TAG, "Content-Length:$contentLength bytes")
-                isloading = false
-                var id = ""
-                if (type == WebConfig.TIKTOK) {
-                    id = "tiktok_${getTikTokId(videoUrl)}"
-//                    var map = HashMap<String, Any>()
-//                    map.put("Cookie", cookie)
-                }else{
-                    id = "video_${videoUrl}"
-                }
-                var list = CacheManager.videoDownloadTempList
-                for (i in 0 until list.size) {
-                    var data = list.get(i)
-                    if (data.videoId == id) {
-                        data.videoType = contentType
-                        data.size = BigDecimal(contentLength).toLong()
-                        CacheManager.videoDownloadTempList = list
-                        AppLogs.dLog(TAG, "getVideoHeaderInfo 发送数据变化 id:${data.videoId}")
-                        APP.videoScanLiveData.postValue(data)
-                        break
-                    }
-                }
-            }
-        })
+        var result = call?.execute()
+        var contentLength = result?.header("Content-Length")
+        return contentLength
+//        call?.enqueue(object : Callback {
+//            override fun onFailure(call: Call, e: IOException) {
+//                AppLogs.eLog(TAG, e.stackTraceToString())
+//                isloading = false
+//            }
+//
+//            override fun onResponse(call: Call, response: Response) {
+//                // 获取文件的内容类型
+//                val contentType = response.header("Content-Type")
+//                // 获取视频文件的大小
+//                val contentLength = response.header("Content-Length")
+//                AppLogs.dLog(TAG, "Content-Type:$contentType")
+//                AppLogs.dLog(TAG, "Content-Length:$contentLength bytes")
+//                isloading = false
+//                var id = ""
+//                if (type == WebConfig.TIKTOK) {
+//                    id = "tiktok_${getTikTokId(videoUrl)}"
+////                    var map = HashMap<String, Any>()
+////                    map.put("Cookie", cookie)
+//                }else{
+//                    id = "video_${videoUrl}"
+//                }
+//                var list = CacheManager.videoDownloadTempList
+//                for (i in 0 until list.size) {
+//                    var data = list.get(i)
+//                    if (data.videoId == id) {
+//                        data.videoType = contentType
+//                        data.size = BigDecimal(contentLength).toLong()
+//                        CacheManager.videoDownloadTempList = list
+//                        AppLogs.dLog(TAG, "getVideoHeaderInfo 发送数据变化 id:${data.videoId}")
+//                        APP.videoScanLiveData.postValue(data)
+//                        break
+//                    }
+//                }
+//            }
+//        })
     }
 
     private fun getTikTokId(videoUrl: String): String {

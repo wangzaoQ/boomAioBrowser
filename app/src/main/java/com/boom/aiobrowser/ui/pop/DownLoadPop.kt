@@ -295,9 +295,9 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
 
     private fun clickDownload(position: Int) {
         var data = downloadAdapter.getItem(position)
-        if (data?.size ?: 0L == 0L) {
-            return
-        }
+//        if (data?.size ?: 0L == 0L) {
+//            return
+//        }
         data?.apply {
             NFManager.requestNotifyPermission(
                 WeakReference((context as BaseActivity<*>)),

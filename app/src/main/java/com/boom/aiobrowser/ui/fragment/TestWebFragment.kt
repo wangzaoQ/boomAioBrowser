@@ -38,17 +38,34 @@ class TestWebFragment: BaseWebFragment<BrowserFragmentTempBinding>() {
     override fun loadWebOnPageStared(url: String) {
         var script = ""
         var list = CacheManager.fetchList
+        var index = -1
         for (i in 0 until list.size){
             var fetchData = list.get(i)
             var uri = Uri.parse(webUrl)
             if (uri.host?.contains(fetchData.cUrl)?:false){
                 script = fetchData.cDetail
                 script = script.replace("__INPUT_URL__",URLEncoder.encode(webUrl))
-                AppLogs.dLog("webReceive", "loadWebOnPageStared thread:${Thread.currentThread()}")
+                AppLogs.dLog("webReceive","fetch 模式执行特定脚本")
                 mAgentWeb!!.getWebCreator().getWebView().evaluateJavascript(script) {
                     AppLogs.dLog("webReceive", "evaluateJavascript 接收:$it thread:${Thread.currentThread()}")
                 }
+                index = i
                 break
+            }
+        }
+        if (index == -1){
+            //通用
+            for (i in 0 until list.size){
+                var fetchData = list.get(i)
+                if (fetchData.cUrl == "*"){
+                    script = fetchData.cDetail
+                    script = script.replace("__INPUT_URL__",URLEncoder.encode(webUrl))
+                    AppLogs.dLog("webReceive","fetch 模式执行通用脚本")
+                    mAgentWeb!!.getWebCreator().getWebView().evaluateJavascript(script) {
+                        AppLogs.dLog("webReceive", "evaluateJavascript 接收:$it thread:${Thread.currentThread()}")
+                    }
+                    break
+                }
             }
         }
     }

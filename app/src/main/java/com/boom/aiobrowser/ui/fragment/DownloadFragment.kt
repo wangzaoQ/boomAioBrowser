@@ -178,6 +178,9 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
         if (item.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS)return
         item.downloadType = type
         item.downloadSize = data.downloadSize
+        if (item.downloadType != VideoDownloadData.DOWNLOAD_PAUSE) {
+            item.size = data.totalSize
+        }
         if (type == VideoDownloadData.DOWNLOAD_SUCCESS){
             downloadAdapter.remove(item)
             callBack.invoke(item)

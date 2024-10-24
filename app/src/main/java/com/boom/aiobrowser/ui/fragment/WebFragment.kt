@@ -51,13 +51,26 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     override fun loadWebOnPageStared(url: String) {
         addLast(url)
         var list = CacheManager.pageList
+        var index = -1
         for (i in 0 until list.size){
             var pageData = list.get(i)
             var uri = Uri.parse(url)
             if (uri.host?.contains(pageData.cUrl)?:false){
-                AppLogs.dLog("webReceive","page 模式执行脚本")
+                AppLogs.dLog("webReceive","page 模式执行特定脚本")
                 mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${pageData.cDetail}");
+                index = i
                 break
+            }
+        }
+        if (index == -1){
+            //通用
+            for (i in 0 until list.size){
+                var pageData = list.get(i)
+                if (pageData.cUrl == "*"){
+                    AppLogs.dLog("webReceive","page 模式执行通用脚本")
+                    mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${pageData.cDetail}");
+                    break
+                }
             }
         }
     }

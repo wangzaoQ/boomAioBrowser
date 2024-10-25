@@ -23,6 +23,7 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValue
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.GlideManager
 import com.boom.aiobrowser.tools.web.WebScan
 import com.boom.aiobrowser.ui.isAndroid12
@@ -31,6 +32,47 @@ import com.hjq.permissions.XXPermissions
 import kotlin.random.Random
 
 object NFShow {
+
+    suspend fun showNewsNFFilter(enum: NFEnum) {
+        var refreshSession = false
+        var count = 0
+        var newsList: MutableList<NewsData>? = null
+        var oldTime = CacheManager.getLastRefreshTime(enum.menuName)
+//        var limit = if (NewsAPP.isDebug)1*60*1000 else 12*60*60*1000
+        var limit = 3 * 60 * 60 * 1000
+        var refresh = (System.currentTimeMillis() - oldTime) > limit
+        AppLogs.dLog(
+            NFManager.TAG,
+            "name:${enum.menuName} 判断是否需要强制刷新数据/refresh:${refresh}"
+        )
+        if (refresh) {
+            CacheManager.saveNFNewsList(enum.menuName, mutableListOf())
+        }
+        newsList = CacheManager.getNFNewsList(enum.menuName)
+        while (count < 10 && newsList.isNullOrEmpty()) {
+            AppLogs.dLog(NFManager.TAG, "name:${enum.menuName} 获取数据来源次数count:${count + 1}")
+            if (enum == NFEnum.NF_NEWS) {
+                newsList = NFData.getNFForYou(refreshSession)
+            }
+            count++
+            if (count == 7) {
+                refreshSession = true
+            }
+        }
+        AppLogs.dLog(
+            NFManager.TAG,
+            "name:${enum.menuName} 已经过判断当前缓存已有数量:${newsList?.size}"
+        )
+        newsList?.removeFirstOrNull()?.apply {
+            showNewsNF(this, enum)
+        }
+        AppLogs.dLog(
+            NFManager.TAG,
+            "name:${enum.menuName} 已经过判断移除当前通知后缓存已有数量:${newsList?.size}"
+        )
+        CacheManager.saveNFNewsList(enum.menuName, newsList ?: mutableListOf())
+    }
+
 
     fun showDownloadNFAll(mutableList: MutableList<VideoDownloadData>){
         if (nfAllow().not())return
@@ -90,11 +132,11 @@ object NFShow {
     }
 
     @SuppressLint("MissingPermission")
-    fun showNewsNF(data:NewsData){
+    fun showNewsNF(data:NewsData,enum: NFEnum){
         if (nfAllow().not())return
-        val smallRemote = NFViews.getNewsRemoteView(NFEnum.NF_NEWS,data)
-        val largeRemote = NFViews.getNewsRemoteView(NFEnum.NF_NEWS,data, true)
-        var bulider = createBuilder(NFEnum.NF_NEWS,smallRemote,largeRemote)
+        val smallRemote = NFViews.getNewsRemoteView(enum,data)
+        val largeRemote = NFViews.getNewsRemoteView(enum,data, true)
+        var bulider = createBuilder(enum,smallRemote,largeRemote)
         NFManager.manager.notify(NFManager.nfNewsId, bulider.build())
         var width = dp2px(331f)
         var height = dp2px(181f)
@@ -109,6 +151,7 @@ object NFShow {
             largeRemote?.setImageViewResource(R.id.ivPic, R.mipmap.bg_news_default)
             NFManager.manager.notify(NFManager.nfNewsId, bulider.build())
         } )
+        CacheManager.saveLastRefreshTime(enum.menuName)
     }
 
     fun getForegroundNF(){

@@ -16,6 +16,8 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValue
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.getBeanByGson
+import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.isAndroid12
 import com.boom.aiobrowser.ui.isAndroid14
 import com.hjq.permissions.OnPermissionCallback
@@ -100,29 +102,43 @@ object NFManager {
         }
     }
 
-    fun clickPoint(nfData: VideoDownloadData?) {
-        if (nfData == null)return
-        when (nfData.downloadType) {
-             VideoDownloadData.DOWNLOAD_PAUSE,VideoDownloadData.DOWNLOAD_LOADING-> {
-                 PointEvent.posePoint(PointEventKey.download_push_conduct, Bundle().apply {
-                     putString(PointValueKey.ponit_action, PointValue.click)
-                     putString(PointValueKey.video_url, nfData.url)
-                 })
-             }
-            VideoDownloadData.DOWNLOAD_SUCCESS->{
-                PointEvent.posePoint(PointEventKey.download_push_success, Bundle().apply {
-                    putString(PointValueKey.ponit_action, PointValue.click)
-                    putString(PointValueKey.video_url, nfData.url)
-                })
+    fun clickPoint(nfData: String, nfTo: Int,enumName: String) {
+        when (enumName) {
+            NFEnum.NF_DOWNLOAD_VIDEO.menuName -> {
+                var data = getBeanByGson(nfData,VideoDownloadData::class.java)
+                // 0 进度中点击 1 失败点击 2成功点击  3 成功点击观看视频
+                when (nfTo) {
+                     0-> {
+                         PointEvent.posePoint(PointEventKey.download_push_conduct, Bundle().apply {
+                             putString(PointValueKey.ponit_action, PointValue.click)
+                             putString(PointValueKey.video_url, data?.url?:"")
+                         })
+                     }
+                    1->{
+                        PointEvent.posePoint(PointEventKey.download_push_fail, Bundle().apply {
+                            putString(PointValueKey.ponit_action, PointValue.click)
+                            putString(PointValueKey.video_url, data?.url?:"")
+                        })
+                    }
+                    2,3->{
+                        PointEvent.posePoint(PointEventKey.download_push_success, Bundle().apply {
+                            putString(PointValueKey.ponit_action, PointValue.click)
+                            putString(PointValueKey.video_url, data?.url?:"")
+                        })
+                    }
+                    else -> {}
+                }
             }
-            VideoDownloadData.DOWNLOAD_ERROR ->{
-                PointEvent.posePoint(PointEventKey.download_push_fail, Bundle().apply {
-                    putString(PointValueKey.ponit_action, PointValue.click)
-                    putString(PointValueKey.video_url, nfData.url)
-                })
+            NFEnum.NF_SEARCH_VIDEO.menuName -> {
+                // 0 暂无 1 点击search  2-4 右侧按钮
+
+            }
+            NFEnum.NF_NEWS.menuName -> {
+
             }
             else -> {}
         }
+
     }
 
     fun startForeground(tag: String) {

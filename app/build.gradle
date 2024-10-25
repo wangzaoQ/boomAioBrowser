@@ -194,6 +194,10 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.3.0'
     implementation("androidx.webkit:webkit:1.9.0")
 
+    // worker manager
+    implementation "androidx.work:work-runtime-ktx:2.7.1"
+
+
     def room_version = "2.6.1"
 
     implementation "androidx.room:room-runtime:$room_version"

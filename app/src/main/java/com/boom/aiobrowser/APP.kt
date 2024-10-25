@@ -8,6 +8,9 @@ import android.net.Uri
 import android.os.Build
 import android.webkit.WebSettings
 import android.webkit.WebView
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
 import com.adjust.sdk.Adjust
 import com.adjust.sdk.AdjustConfig
 import com.blankj.utilcode.util.NetworkUtils
@@ -18,8 +21,10 @@ import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.WebConfigData
 import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
+import com.boom.aiobrowser.model.AppViewModel
 import com.boom.aiobrowser.net.NetController
 import com.boom.aiobrowser.nf.NFReceiver
+import com.boom.aiobrowser.nf.NFWorkManager
 import com.boom.aiobrowser.point.Install
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
@@ -40,7 +45,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class APP: Application() {
+class APP: Application(), ViewModelStoreOwner {
     var lifecycleApp = BrowserLifeCycle()
 
     var TAG = "AIO_APP"
@@ -60,7 +65,9 @@ class APP: Application() {
     var shareText = ""
 
     var showForeground = false
-
+    val appModel by lazy {
+        ViewModelProvider(APP.instance).get(AppViewModel::class.java)
+    }
 
     companion object{
         lateinit var instance:APP
@@ -76,6 +83,7 @@ class APP: Application() {
 
         val videoLiveData by lazy { ProtectedUnPeekLiveData<HashMap<Int, VideoTaskItem>>() }
         val videoUpdateLiveData by lazy { ProtectedUnPeekLiveData<String>() }
+
 
     }
 
@@ -111,13 +119,13 @@ class APP: Application() {
                 MMKV.initialize(this@APP)
                 initFirebase()
                 initAD()
+                PointEvent.posePoint(PointEventKey.session_st)
                 CleanConfig.initCleanConfig()
                 initFB()
                 initAdjust()
                 initVideo()
                 initOther()
                 Install.requestRefer(instance,0,{})
-                PointEvent.posePoint(PointEventKey.session_st)
             }
         }
         CoroutineScope(Dispatchers.IO).launch{
@@ -128,6 +136,11 @@ class APP: Application() {
             }
         }
         registerAny()
+        initNFConfig()
+    }
+
+    private fun initNFConfig() {
+        NFWorkManager.startNF()
     }
 
     private fun initAdjust() {
@@ -203,6 +216,10 @@ class APP: Application() {
         }
     }
 
+    fun getWebConfig() {
+        appModel.getWebConfig()
+    }
+
     var netBack = object : OnNetworkStatusChangedListener {
         override fun onDisconnected() {
             AppLogs.dLog(TAG, "network onDisconnected")
@@ -222,29 +239,6 @@ class APP: Application() {
     }
 
 
-    fun getWebConfig(){
-        CoroutineScope(Dispatchers.IO).launch {
-            CacheManager.pageList = mutableListOf()
-            CacheManager.fetchList = mutableListOf()
-            var pageList = CacheManager.pageList
-            var fetchList = CacheManager.fetchList
-            NetController.getWebConfig().data?.forEach {
-                if (it.kdepen == "FETCH"){
-                    fetchList.add(WebConfigData().apply {
-                        cType = it.kdepen
-                        cUrl = it.dsurpr
-                        cDetail = NetController.getWebDetail(it.dsurpr,it.kdepen).data?:""
-                    })
-                }else if (it.kdepen == "PAGE"){
-                    pageList.add(WebConfigData().apply {
-                        cType = it.kdepen
-                        cUrl = it.dsurpr
-                        cDetail = NetController.getWebDetail(it.dsurpr,it.kdepen).data?:""
-                    })
-                }
-            }
-            CacheManager.pageList = pageList
-            CacheManager.fetchList = fetchList
-        }
-    }
+    override val viewModelStore: ViewModelStore
+        get() = ViewModelStore()
 }

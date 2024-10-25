@@ -338,6 +338,22 @@ object CacheManager {
         return mmkv.decodeString("${key}_${NetRequest.keyTag}","")?:""
     }
 
+    fun getLastRefreshTime(key:String):Long{
+        return mmkv.decodeLong(key,0L)
+    }
+    fun saveLastRefreshTime(key:String){
+        mmkv.encode(key,System.currentTimeMillis())
+    }
+
+    fun getNFNewsList(key:String):MutableList<NewsData>{
+        return getListByGson(mmkv.decodeString(key),NewsData::class.java) ?: mutableListOf()
+    }
+
+    fun saveNFNewsList(key: String,list:MutableList<NewsData>){
+        mmkv.encode(key, toJson(list))
+    }
+
+
     var linkedUrlList :LinkedList<String>
         get() {
             return getLinkedListByGson(mmkv.decodeString(KV_URL_LIST),String::class.java) ?: LinkedList<String>()
@@ -361,4 +377,6 @@ object CacheManager {
     fun saveCleanTips(){
         mmkv.encode(KV_CLEAN_TIME,System.currentTimeMillis())
     }
+
+
 }

@@ -33,7 +33,7 @@ object NFViews {
         remoteViews.apply {
             var leftIcon = 0
             var rightIcon = 0
-            var nfToRoot = JumpConfig.JUMP_DOWNLOAD_PROGRESS
+            var nfToRoot = 0
             when (data.downloadType) {
                 VideoDownloadData.DOWNLOAD_LOADING,VideoDownloadData.DOWNLOAD_PAUSE,VideoDownloadData.DOWNLOAD_PREPARE -> {
                     leftIcon = R.mipmap.nf_video_download
@@ -64,11 +64,12 @@ object NFViews {
                     if (isLargeView){
                         AppLogs.dLog(NFManager.TAG,"状态: error ")
                     }
+                    nfToRoot = 1
                 }
                 VideoDownloadData.DOWNLOAD_SUCCESS ->{
                     leftIcon = R.mipmap.nf_video_download_success
                     rightIcon = R.mipmap.ic_nf_video_success
-                    nfToRoot = JumpConfig.JUMP_DOWNLOAD_DONE
+                    nfToRoot = 2
                     setViewVisibility(R.id.progress,View.GONE)
                     AppLogs.dLog(NFManager.TAG,"状态: success")
                 }
@@ -85,7 +86,7 @@ object NFViews {
             )
             setOnClickPendingIntent(
                 R.id.rlRoot,
-                getJumpIntent(nfToRoot,data)
+                getJumpIntent(nfToRoot,data,enum)
             )
         }
         return remoteViews
@@ -101,11 +102,11 @@ object NFViews {
         remoteViews.apply {
             setOnClickPendingIntent(
                 R.id.ivDownload,
-                getJumpIntent(JumpConfig.JUMP_HOME)
+                getJumpIntent(4,null,enum)
             )
             setOnClickPendingIntent(
                 R.id.tvSearch,
-                getJumpIntent(JumpConfig.JUMP_SEARCH)
+                getJumpIntent(1,null,enum)
             )
         }
         return remoteViews
@@ -123,7 +124,7 @@ object NFViews {
             setTextViewText(R.id.tvContent,data.sissue)
             setOnClickPendingIntent(
                 R.id.llRoot,
-                getJumpIntent(JumpConfig.JUMP_WEB,data)
+                getJumpIntent(0,data,enum)
             )
         }
         return remoteViews

@@ -16,14 +16,12 @@ object JumpConfig{
     const val JUMP_WEB="JUMP_WEB"
     const val JUMP_SEARCH="JUMP_SEARCH"
 
-    const val JUMP_DOWNLOAD_PROGRESS="JUMP_DOWNLOAD_PROGRESS"
-    const val JUMP_DOWNLOAD_DONE="JUMP_DOWNLOAD_DONE"
-    const val JUMP_VIDEO="JUMP_VIDEO"
 }
 
 object ParamsConfig{
     const val NF_DATA = "nf_data"
     const val NF_TO = "nf_to"
+    const val NF_ENUM_NAME = "nf_enum_name"
 
     const val JSON_PARAMS="JSON_PARAMS"
 

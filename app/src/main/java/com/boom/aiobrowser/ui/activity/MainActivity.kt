@@ -15,47 +15,36 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
-import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
+import com.boom.aiobrowser.data.NFEnum
+import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
 import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.nf.NFManager
-import com.boom.aiobrowser.nf.NFShow
 import com.boom.aiobrowser.point.PointValue
-import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BrowserManager
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.FragmentManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
-import com.boom.aiobrowser.tools.clearClipboard
-import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.getBeanByGson
-import com.boom.aiobrowser.tools.getClipContent
 import com.boom.aiobrowser.tools.inputStream2Byte
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.fragment.StartFragment
-import com.boom.aiobrowser.ui.fragment.TestWebFragment
 import com.boom.aiobrowser.ui.fragment.WebFragment
 import com.boom.aiobrowser.ui.isAndroid12
 import com.boom.aiobrowser.ui.pop.DefaultPop
-import com.boom.aiobrowser.ui.pop.DisclaimerPop
-import com.boom.aiobrowser.ui.pop.DownLoadPop
 import com.boom.aiobrowser.ui.pop.MorePop
 import com.boom.aiobrowser.ui.pop.ProcessingTextPop
 import com.boom.aiobrowser.ui.pop.TabPop
-import com.boom.downloader.VideoDownloadManager
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 import pop.basepopup.BasePopupWindow.OnDismissListener
-import java.lang.ref.WeakReference
 import java.util.LinkedList
 
 
@@ -185,8 +174,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
 
 
-    var nfTo = ""
-    var nfData:VideoDownloadData?= null
+    var nfTo = 0
+    var nfData:String =""
+    var enumName:String =""
 
     override fun setShowView() {
         APP.instance.shareText = ""
@@ -229,9 +219,10 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
         })
         navController = Navigation.findNavController(this@MainActivity,R.id.fragment_view)
-        nfTo = intent.getStringExtra(ParamsConfig.NF_TO)?:""
-        nfData = getBeanByGson(intent.getStringExtra(ParamsConfig.NF_DATA)?:"",VideoDownloadData::class.java)
-        NFManager.clickPoint(nfData)
+        nfTo = intent.getIntExtra(ParamsConfig.NF_TO,0)
+        nfData = intent.getStringExtra(ParamsConfig.NF_DATA)?:""
+        enumName = intent.getStringExtra(ParamsConfig.NF_ENUM_NAME)?:""
+        NFManager.clickPoint(nfData,nfTo,enumName)
         acBinding.root.postDelayed({
             var count = 0
             for ( i in 0 until APP.instance.lifecycleApp.stack.size){
@@ -277,25 +268,36 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
     fun hideStart(isNormal: Boolean) {
         APP.instance.isHideSplash = true
-        if (nfTo.isNullOrEmpty()){
-//            mainFragment.jump()
-//            val mMainNavFragment = supportFragmentManager.findFragmentById(R.id.fragmentMain)
-//            //获取指定的fragment
-//            val fragment = mMainNavFragment!!.childFragmentManager.primaryNavigationFragment
-//            if (fragment is MainFragment) {
-//                fragment.jump()
-//            }
-        }else{
-            if (nfTo == JumpConfig.JUMP_VIDEO && nfData!=null){
-                jumpActivity<VideoPreActivity>(Bundle().apply {
-                    putString("video_path", toJson(nfData))
-                })
-            }else if (nfTo == JumpConfig.JUMP_DOWNLOAD_PROGRESS || nfTo == JumpConfig.JUMP_DOWNLOAD_DONE){
-                startActivity(Intent(this,DownloadActivity::class.java).apply {
-                    putExtra("fromPage","nf_${nfTo}")
-                })
-            }else if (nfTo == JumpConfig.JUMP_SEARCH){
-                jumpActivity<SearchActivity>()
+        if (enumName.isNullOrEmpty().not()){
+            when (enumName) {
+                NFEnum.NF_DOWNLOAD_VIDEO.menuName -> {
+                    var data = getBeanByGson(nfData,VideoDownloadData::class.java)
+                    // 0 进度中点击 1 失败点击 2成功点击  3 成功点击观看视频
+                    if (nfTo == 3){
+                        jumpActivity<VideoPreActivity>(Bundle().apply {
+                            putString("video_path", toJson(nfData))
+                        })
+                    }else{
+                        startActivity(Intent(this,DownloadActivity::class.java).apply {
+                            putExtra("fromPage","nf")
+                        })
+                    }
+                }
+                NFEnum.NF_SEARCH_VIDEO.menuName->{
+                    jumpActivity<SearchActivity>()
+                }
+                NFEnum.NF_NEWS.menuName->{
+                    var data = getBeanByGson(nfData,NewsData::class.java)
+                    var jumpData = JumpDataManager.getCurrentJumpData(tag="新闻跳转")
+                    jumpData.apply {
+                        jumpUrl= data?.uweek?:""
+                        jumpType = JumpConfig.JUMP_WEB
+                        jumpTitle = data?.tconsi?:""
+                        isJumpClick = true
+                    }
+                    APP.jumpLiveData.postValue(jumpData)
+                }
+                else -> {}
             }
         }
         if (APP.instance.shareText.isNotEmpty()){

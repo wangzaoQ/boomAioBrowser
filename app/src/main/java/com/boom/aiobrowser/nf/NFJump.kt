@@ -14,9 +14,19 @@ import kotlin.random.Random
 
 object NFJump {
 
+
+    /**
+     *  NF_DOWNLOAD_VIDEO  0 进度中点击 1 失败点击 2成功点击  3 成功点击观看视频
+     *
+     *  NF_SEARCH_VIDEO  0 暂无 1 点击search  2-4 右侧按钮
+     *
+     *  NF_NEWS  0 点击item
+     */
+
+
     fun getRefreshIntent(data: VideoDownloadData, enum: NFEnum): PendingIntent {
         if (data.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
-            return getJumpIntent(JumpConfig.JUMP_VIDEO,data)
+            return getJumpIntent(3,data,enum)
         }else {
             val intent = Intent(APP.instance, NFReceiver::class.java).apply {
                 action = enum.channelId
@@ -29,10 +39,13 @@ object NFJump {
     }
 
 
-    fun getJumpIntent(nfTo:String,data: Any?=null): PendingIntent {
+    fun getJumpIntent(nfTo:Int,data: Any?=null,enum: NFEnum): PendingIntent {
         val intent = Intent(APP.instance, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        //具体点的是当前通知哪一个区域 状态各有不同
         intent.putExtra(ParamsConfig.NF_TO, nfTo)
+        //点击的是哪一种通知
+        intent.putExtra(ParamsConfig.NF_ENUM_NAME,enum.menuName)
         if (data!=null){
             intent.putExtra(ParamsConfig.NF_DATA, toJson(data))
         }

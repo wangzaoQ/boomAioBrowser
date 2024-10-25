@@ -88,6 +88,22 @@ object NFViews {
         return remoteViews
     }
 
+    fun getForegroundRemoteView(enum: NFEnum,isLargeView:Boolean=false): RemoteViews {
+        var layoutId = if (isLargeView){
+            R.layout.nf_foreground_large
+        }else{
+            R.layout.nf_foreground_small
+        }
+        var remoteViews = RemoteViews(APP.instance.packageName, layoutId)
+        remoteViews.apply {
+            setOnClickPendingIntent(
+                R.id.ivDownload,
+                getJumpIntent(JumpConfig.JUMP_HOME)
+            )
+        }
+        return remoteViews
+    }
+
     fun getRefreshIntent(data: VideoDownloadData, enum: NFEnum): PendingIntent {
         if (data.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
             return getJumpIntent(JumpConfig.JUMP_VIDEO,data)

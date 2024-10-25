@@ -21,6 +21,7 @@ import com.boom.aiobrowser.point.PointValue
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.web.WebScan
+import com.boom.aiobrowser.ui.isAndroid12
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import kotlin.random.Random
@@ -83,6 +84,22 @@ object NFShow {
         }
     }
 
+
+    @SuppressLint("MissingPermission")
+    fun showForegroundNF(){
+        if (nfAllow().not())return
+        getForegroundNF()
+        NFManager.manager.notify(NFManager.nfForegroundId,NFManager.nfForeground!!)
+        NFManager.startForeground("showForegroundNF")
+    }
+
+    fun getForegroundNF(){
+        val smallRemote = NFViews.getForegroundRemoteView(NFEnum.NF_SEARCH_VIDEO)
+        val largeRemote = NFViews.getForegroundRemoteView(NFEnum.NF_SEARCH_VIDEO, true)
+        var bulider = createBuilder(NFEnum.NF_DOWNLOAD_VIDEO,smallRemote,largeRemote)
+        NFManager.nfForeground = bulider.build()
+    }
+
     fun createBuilder(enum: NFEnum, smallRemote: RemoteViews, largeRemote: RemoteViews):NotificationCompat.Builder{
         NFManager.newChannel(enum)
         val nfBuilder = NotificationCompat.Builder(APP.instance, enum.channelId)
@@ -105,7 +122,7 @@ object NFShow {
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setGroupSummary(false)
             .setGroup(enum.menuName)
-            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setPriority(enum.nfPriority)
             .setWhen(System.currentTimeMillis())
 //            .setContentIntent(NFViews.getJumpIntent(0))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

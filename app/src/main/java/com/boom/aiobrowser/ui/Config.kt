@@ -52,3 +52,7 @@ fun isRealAndroid11():Boolean{
 fun isAndroid8(): Boolean {
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 }
+
+fun isAndroid14():Boolean{
+    return Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU
+}

@@ -128,4 +128,8 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
         AppLogs.dLog(APP.instance.TAG, "onActivityDestroyed() activity=" + activity + " stack.size=" + stack.size)
     }
 
+    fun isBackGround(): Boolean {
+        return count<=0
+    }
+
 }

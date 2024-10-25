@@ -2,10 +2,11 @@ package com.boom.aiobrowser.nf
 
 import android.app.Notification
 import android.app.NotificationChannel
-import android.app.NotificationManager
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.NFEnum
@@ -15,6 +16,8 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValue
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.ui.isAndroid12
+import com.boom.aiobrowser.ui.isAndroid14
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
@@ -27,6 +30,9 @@ object NFManager {
 
     val videoNFMap = LinkedHashMap<String,Int>()
 
+    val nfForegroundId = 9500000
+    var nfForeground:Notification?=null
+
 
     val manager: NotificationManagerCompat by lazy {
         NotificationManagerCompat.from(APP.instance)
@@ -36,7 +42,7 @@ object NFManager {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel: NotificationChannel? = manager.getNotificationChannel(enum.channelId)
             if (Objects.isNull(channel)) {
-                val channelNew: NotificationChannel = NotificationChannel(enum.channelId, enum.channelId, enum.priority)
+                val channelNew: NotificationChannel = NotificationChannel(enum.channelId, enum.channelId, enum.channelPriority)
                 channelNew.setSound(null,null)
                 channelNew.setShowBadge(true)
                 channelNew.lockscreenVisibility = Notification.VISIBILITY_PUBLIC;
@@ -115,6 +121,27 @@ object NFManager {
                 })
             }
             else -> {}
+        }
+    }
+
+    fun startForeground(tag: String) {
+        AppLogs.dLog(NFManager.TAG,"前台服务 触发 ${tag}-${Build.VERSION.SDK_INT}")
+        if (nfAllow().not())return
+        if (isAndroid12() && APP.instance.lifecycleApp.isBackGround())return
+        if (isAndroid14()){
+//            if (XXPermissions.isGranted(APP.instance, Permissions.FOREGROUND_SERVICE_DATA_SYNC, Permission.ACCESS_COARSE_LOCATION).not())return
+        }
+        AppLogs.dLog(NFManager.TAG,"前台服务 允许展示 ${tag}-${Build.VERSION.SDK_INT}")
+        runCatching {
+            if (APP.instance.showForeground.not()){
+                ContextCompat.startForegroundService(APP.instance,
+                    Intent(APP.instance, NFService::class.java)
+                )
+            }else{
+                AppLogs.dLog(NFManager.TAG,"前台服务 正在展示中不需要重复启动 ${tag}-${Build.VERSION.SDK_INT}")
+            }
+        }.onFailure {
+            AppLogs.eLog(NFManager.TAG,it.stackTraceToString())
         }
     }
 }

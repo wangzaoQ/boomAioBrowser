@@ -59,6 +59,8 @@ class APP: Application() {
     @Volatile
     var shareText = ""
 
+    var showForeground = false
+
 
     companion object{
         lateinit var instance:APP

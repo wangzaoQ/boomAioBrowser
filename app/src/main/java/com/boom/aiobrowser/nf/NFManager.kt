@@ -30,7 +30,8 @@ object NFManager {
 
     val videoNFMap = LinkedHashMap<String,Int>()
 
-    val nfForegroundId = 9500000
+    val nfForegroundId = 95000
+    val nfNewsId = 94000
     var nfForeground:Notification?=null
 
 

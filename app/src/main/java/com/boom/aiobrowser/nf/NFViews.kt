@@ -8,7 +8,10 @@ import android.widget.RemoteViews
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.NFEnum
+import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
+import com.boom.aiobrowser.nf.NFJump.getJumpIntent
+import com.boom.aiobrowser.nf.NFJump.getRefreshIntent
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.clean.formatLength
@@ -108,35 +111,23 @@ object NFViews {
         return remoteViews
     }
 
-    fun getRefreshIntent(data: VideoDownloadData, enum: NFEnum): PendingIntent {
-        if (data.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
-            return getJumpIntent(JumpConfig.JUMP_VIDEO,data)
-        }else {
-            val intent = Intent(APP.instance, NFReceiver::class.java).apply {
-                action = enum.channelId
-                putExtra(ParamsConfig.NF_DATA,toJson(data))
-            }
-            return PendingIntent.getBroadcast(
-                APP.instance,
-                getCode(), intent, getFlags())
+    fun getNewsRemoteView(enum: NFEnum, data: NewsData, isLargeView:Boolean=false): RemoteViews {
+        var layoutId = if (isLargeView){
+            R.layout.nf_news_large
+        }else{
+            R.layout.nf_news_small
         }
+        var remoteViews = RemoteViews(APP.instance.packageName, layoutId)
+        remoteViews.apply {
+            setTextViewText(R.id.tvTitle,data.tconsi)
+            setTextViewText(R.id.tvContent,data.sissue)
+            setOnClickPendingIntent(
+                R.id.llRoot,
+                getJumpIntent(JumpConfig.JUMP_WEB,data)
+            )
+        }
+        return remoteViews
     }
 
-
-    fun getJumpIntent(nfTo:String,data: VideoDownloadData?=null): PendingIntent {
-        val intent = Intent(APP.instance, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        intent.putExtra(ParamsConfig.NF_TO, nfTo)
-        if (data!=null){
-            intent.putExtra(ParamsConfig.NF_DATA, toJson(data))
-        }
-        return PendingIntent.getActivity(APP.instance, getCode(), intent, getFlags())
-    }
-
-
-    fun getCode() = (1001..99998).random(Random(System.currentTimeMillis()))
-
-    fun getFlags() =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT else PendingIntent.FLAG_UPDATE_CURRENT
 
 }

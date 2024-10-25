@@ -8,32 +8,43 @@
     <ImageView
         android:layout_width="29dp"
         android:layout_height="29dp"
-        android:src="@mipmap/ic_start_logo"
+        android:src="@mipmap/ic_nf_logo"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="7dp"
         ></ImageView>
     <TextView
+        android:id="@+id/tvSearch"
         android:layout_width="match_parent"
         android:layout_height="29dp"
         android:layout_weight="1"
         android:background="@drawable/shape_nf_search"
         android:layout_marginStart="14dp"
+        android:text="@string/app_search_video"
+        android:textSize="12sp"
+        android:textColor="#80000000"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
         ></TextView>
     <ImageView
+        android:id="@+id/ivX"
         android:layout_width="29dp"
         android:layout_height="29dp"
         android:layout_marginStart="15dp"
+        android:src="@mipmap/ic_nf_x"
         ></ImageView>
     <ImageView
+        android:id="@+id/ivIns"
         android:layout_width="29dp"
         android:layout_height="29dp"
         android:layout_marginStart="15dp"
+        android:src="@mipmap/ic_nf_ins"
         ></ImageView>
     <ImageView
         android:id="@+id/ivDownload"
         android:layout_width="29dp"
         android:layout_height="29dp"
         android:layout_marginStart="15dp"
-        android:src="@mipmap/ic_download"
+        android:layout_marginEnd="7dp"
+        android:src="@mipmap/ic_nf_download"
         ></ImageView>
 </LinearLayout>

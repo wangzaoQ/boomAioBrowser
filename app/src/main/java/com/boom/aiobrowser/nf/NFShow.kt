@@ -35,11 +35,13 @@ object NFShow {
         }
     }
 
-    fun showDownloadNF(data: VideoDownloadData,posePoint:Boolean = false) {
+    @SuppressLint("MissingPermission")
+    fun showDownloadNF(data: VideoDownloadData, posePoint:Boolean = false) {
         if (nfAllow().not())return
         val smallRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data)
         val largeRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data, true)
         var bulider = createBuilder(NFEnum.NF_DOWNLOAD_VIDEO,smallRemote,largeRemote)
+        bulider.setOngoing(true)
         var nfId = videoNFMap.get(data.videoId)
         if (data.videoId.isNullOrEmpty().not()){
             if (nfId == null){
@@ -71,15 +73,6 @@ object NFShow {
                     })
                 }
             }
-            if (ActivityCompat.checkSelfPermission(
-                    APP.instance,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-
-                return
-            }
-
             NFManager.manager.notify(nfId, bulider.build())
         }
     }
@@ -97,6 +90,7 @@ object NFShow {
         val smallRemote = NFViews.getForegroundRemoteView(NFEnum.NF_SEARCH_VIDEO)
         val largeRemote = NFViews.getForegroundRemoteView(NFEnum.NF_SEARCH_VIDEO, true)
         var bulider = createBuilder(NFEnum.NF_DOWNLOAD_VIDEO,smallRemote,largeRemote)
+        bulider.setOngoing(true)
         NFManager.nfForeground = bulider.build()
     }
 

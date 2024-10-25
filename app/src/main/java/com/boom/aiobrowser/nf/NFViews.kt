@@ -100,6 +100,10 @@ object NFViews {
                 R.id.ivDownload,
                 getJumpIntent(JumpConfig.JUMP_HOME)
             )
+            setOnClickPendingIntent(
+                R.id.tvSearch,
+                getJumpIntent(JumpConfig.JUMP_SEARCH)
+            )
         }
         return remoteViews
     }

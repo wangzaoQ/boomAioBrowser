@@ -43,6 +43,7 @@ import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.fragment.StartFragment
 import com.boom.aiobrowser.ui.fragment.TestWebFragment
 import com.boom.aiobrowser.ui.fragment.WebFragment
+import com.boom.aiobrowser.ui.isAndroid12
 import com.boom.aiobrowser.ui.pop.DefaultPop
 import com.boom.aiobrowser.ui.pop.DisclaimerPop
 import com.boom.aiobrowser.ui.pop.DownLoadPop
@@ -262,6 +263,16 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             updateUI(intent)
             fManager.addFragmentTag(supportFragmentManager,this,R.id.fragmentStart,"StartFragment")
         }
+        if (isAndroid12()){
+            addLaunch(success = {
+                while (APP.instance.lifecycleApp.isBackGround()){
+                    delay(1000)
+                }
+                runCatching {
+                    NFManager.startForeground("mainActivity")
+                }
+            }, failBack = {})
+        }
     }
 
     fun hideStart(isNormal: Boolean) {
@@ -279,10 +290,12 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 jumpActivity<VideoPreActivity>(Bundle().apply {
                     putString("video_path", toJson(nfData))
                 })
-            }else{
+            }else if (nfTo == JumpConfig.JUMP_DOWNLOAD_PROGRESS || nfTo == JumpConfig.JUMP_DOWNLOAD_DONE){
                 startActivity(Intent(this,DownloadActivity::class.java).apply {
                     putExtra("fromPage","nf_${nfTo}")
                 })
+            }else if (nfTo == JumpConfig.JUMP_SEARCH){
+                jumpActivity<SearchActivity>()
             }
         }
         if (APP.instance.shareText.isNotEmpty()){

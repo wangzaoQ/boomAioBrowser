@@ -12,8 +12,11 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.ad.AioADShowManager
+import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.databinding.BrowserFragmentStartBinding
+import com.boom.aiobrowser.nf.NFManager
+import com.boom.aiobrowser.nf.NFShow
 import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
@@ -28,6 +31,7 @@ import com.google.android.ump.UserMessagingPlatform
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import java.lang.ref.WeakReference
 
 class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
     override fun startLoadData() {
@@ -180,6 +184,9 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             putInt(PointValueKey.open_type,if (CacheManager.isFirstStart) 0 else 1)
         })
         APP.instance.getWebConfig()
+        NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
+            NFShow.showForegroundNF()
+        }, onFail = {})
     }
 
     var dataIntent :Intent?=null

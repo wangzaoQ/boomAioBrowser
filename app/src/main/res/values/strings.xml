@@ -162,5 +162,6 @@
     <string name="app_video_downlod">Video Downloader</string>
 
     <string name="app_confirm">Confirm</string>
+    <string name="app_search_video">Search Video</string>
 
 </resources>

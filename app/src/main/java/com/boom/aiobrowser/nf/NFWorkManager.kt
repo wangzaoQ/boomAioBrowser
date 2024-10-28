@@ -17,7 +17,7 @@ object NFWorkManager {
 
     fun startNF(){
         AppLogs.dLog(NFManager.TAG,"WorkManager start")
-        WorkManager.getInstance(APP.instance).cancelAllWork();
+//        WorkManager.getInstance(APP.instance).cancelAllWork();
         if (APP.isDebug){
             start(APP.instance,NormalNewsWork::class.java,NFEnum.NF_NEWS.menuName,3000,15*60*1000)
         }else{

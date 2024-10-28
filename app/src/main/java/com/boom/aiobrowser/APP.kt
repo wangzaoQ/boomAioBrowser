@@ -140,7 +140,9 @@ class APP: Application(), ViewModelStoreOwner {
     }
 
     private fun initNFConfig() {
-        NFWorkManager.startNF()
+        if (isDebug){
+            NFWorkManager.startNF()
+        }
     }
 
     private fun initAdjust() {

@@ -28,8 +28,7 @@ class SearchViewModel:BaseDataModel() {
         var request = Request.Builder().get().url(url).build()
         call?.cancel()
         call = SearchNet.net.newCall(request)
-        call?.enqueue(object :
-            Callback {
+        call?.enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 AppLogs.eLog(TAG,e.stackTraceToString())
             }
@@ -39,6 +38,8 @@ class SearchViewModel:BaseDataModel() {
                 var list:MutableList<String> = mutableListOf()
                 runCatching {
                     list.addAll(parseXML(bodyStr))
+                }.onFailure {
+                    AppLogs.eLog(TAG,it.stackTraceToString())
                 }
                 AppLogs.dLog(TAG,"搜索出的数据:${toJson(list)}")
                 var dataList = mutableListOf<SearchResultData>()
@@ -65,20 +66,23 @@ class SearchViewModel:BaseDataModel() {
 
     fun parseXML(xml: String): MutableList<String> {
         val suggestions = mutableListOf<String>()
-        val factory = XmlPullParserFactory.newInstance()
-        val parser = factory.newPullParser()
+        runCatching {
+            val factory = XmlPullParserFactory.newInstance()
+            val parser = factory.newPullParser()
 
-        parser.setInput(xml.reader())
+            parser.setInput(xml.reader())
 
-        var eventType = parser.eventType
-        while (eventType != XmlPullParser.END_DOCUMENT) {
-            if (eventType == XmlPullParser.START_TAG && parser.name == "suggestion") {
-                val data = parser.getAttributeValue(null, "data")
-                suggestions.add(data)
+            var eventType = parser.eventType
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG && parser.name == "suggestion") {
+                    val data = parser.getAttributeValue(null, "data")
+                    suggestions.add(data)
+                }
+                eventType = parser.next()
             }
-            eventType = parser.next()
+        }.onFailure {
+            AppLogs.eLog(TAG,it.stackTraceToString())
         }
-
         return suggestions
     }
 

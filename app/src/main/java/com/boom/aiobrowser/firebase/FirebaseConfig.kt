@@ -8,4 +8,6 @@ object FirebaseConfig {
 
     //控制应用内所有广告间的间隔的广告cd，本地默认60s
     var AD_CD_ALL = if (APP.isDebug)10 else 60
+
+//    var pushData:PushData?=null
 }

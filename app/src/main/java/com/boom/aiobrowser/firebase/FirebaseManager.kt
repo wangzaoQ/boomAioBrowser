@@ -8,6 +8,7 @@ import com.boom.aiobrowser.ad.AioADDataManager.adRootBean
 import com.boom.aiobrowser.data.AioADData
 import com.boom.aiobrowser.data.AioRequestData
 import com.boom.aiobrowser.firebase.FirebaseConfig.AD_DEFAULT_JSON
+import com.boom.aiobrowser.nf.NFWorkManager
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.google.firebase.FirebaseApp
@@ -49,6 +50,7 @@ object FirebaseManager {
                     firebaseRemoteConfig?.fetchAndActivate()?.addOnCompleteListener {
                         if (it.isSuccessful) {
                             initFirebaseConfig("firebase 获取最新配置")
+//                            NFWorkManager.startNF()
                         }
                     }
                     delay(60*60*1000)
@@ -66,7 +68,9 @@ object FirebaseManager {
         runCatching {
             FirebaseConfig.AD_CD_ALL = firebaseRemoteConfig?.getString("aobws_cd")?.toInt()?:if (APP.isDebug)10 else 60
         }
-
+//        runCatching {
+//            FirebaseConfig.pushTime = firebaseRemoteConfig?.getString("aio_push")?.toInt()
+//        }
     }
 
     fun getADConfig() {

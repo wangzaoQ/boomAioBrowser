@@ -131,10 +131,26 @@ object NFManager {
             }
             NFEnum.NF_SEARCH_VIDEO.menuName -> {
                 // 0 暂无 1 点击search  2-4 右侧按钮
-
+                var type = ""
+                if (nfTo == 0){
+                    type = "home"
+                }else if (nfTo == 1){
+                    type = "search"
+                }else if (nfTo == 2){
+                    type = "x"
+                }else if (nfTo == 3){
+                    type = "ins"
+                }else if (nfTo == 4){
+                    type = "download"
+                }
+                PointEvent.posePoint(PointEventKey.fixed_explore, Bundle().apply {
+                    putString(PointValueKey.type,type)
+                })
             }
             NFEnum.NF_NEWS.menuName -> {
-
+                PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
+                    putString(PointValueKey.push_type, enumName)
+                })
             }
             else -> {}
         }

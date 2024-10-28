@@ -13,9 +13,6 @@ import kotlinx.coroutines.withContext
 
 open class BaseDataModel :ViewModel(), LifecycleObserver {
 
-    val errorHandler: ((Throwable) -> Unit).() -> CoroutineExceptionHandler = {
-        CoroutineExceptionHandler { _, throwable -> this(throwable) }
-    }
 
     val TAG by lazy { javaClass.name }
 
@@ -23,7 +20,11 @@ open class BaseDataModel :ViewModel(), LifecycleObserver {
 
     fun loadData(loadBack: suspend CoroutineScope.() -> Unit, failBack: (Throwable) -> Unit?, type:Int?=0) {
         runCatching {
-            viewModelScope.launch(errorHandler(failBack)) {
+            viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
+                AppLogs.eLog(TAG,"error1:${throwable.stackTraceToString()}")
+                failLiveData.postValue("BaseDataModelError")
+
+            }) {
                 if (type == 0){
                     loadBack()
                 }else {
@@ -35,7 +36,7 @@ open class BaseDataModel :ViewModel(), LifecycleObserver {
         }.onFailure {
             failLiveData.postValue("BaseDataModelError")
             failBack.invoke(it)
-            AppLogs.eLog(TAG,it.stackTraceToString())
+            AppLogs.eLog(TAG,"error2:${it.stackTraceToString()}")
         }
     }
 }

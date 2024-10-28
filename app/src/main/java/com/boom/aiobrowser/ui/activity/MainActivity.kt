@@ -43,6 +43,8 @@ import com.boom.aiobrowser.ui.pop.DefaultPop
 import com.boom.aiobrowser.ui.pop.MorePop
 import com.boom.aiobrowser.ui.pop.ProcessingTextPop
 import com.boom.aiobrowser.ui.pop.TabPop
+import com.hjq.permissions.Permission
+import com.hjq.permissions.XXPermissions
 import kotlinx.coroutines.delay
 import pop.basepopup.BasePopupWindow.OnDismissListener
 import java.util.LinkedList
@@ -279,12 +281,18 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                         })
                     }else{
                         startActivity(Intent(this,DownloadActivity::class.java).apply {
-                            putExtra("fromPage","nf")
+                            putExtra("fromPage","nf_download")
                         })
                     }
                 }
                 NFEnum.NF_SEARCH_VIDEO.menuName->{
-                    jumpActivity<SearchActivity>()
+                    if (nfTo == 1){
+                        jumpActivity<SearchActivity>()
+                    }else if (nfTo == 4){
+                        startActivity(Intent(this,DownloadActivity::class.java).apply {
+                            putExtra("fromPage","nf_fix")
+                        })
+                    }
                 }
                 NFEnum.NF_NEWS.menuName->{
                     var data = getBeanByGson(nfData,NewsData::class.java)
@@ -325,6 +333,12 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }else{
             showTips()
         }
+        if (XXPermissions.isGranted(APP.instance, Permission.POST_NOTIFICATIONS).not()){
+            //无通知权限
+        }else{
+
+        }
+
     }
 
     private fun showTips() {

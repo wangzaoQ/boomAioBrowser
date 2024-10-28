@@ -101,12 +101,24 @@ object NFViews {
         var remoteViews = RemoteViews(APP.instance.packageName, layoutId)
         remoteViews.apply {
             setOnClickPendingIntent(
-                R.id.ivDownload,
-                getJumpIntent(4,null,enum)
+                R.id.llRoot,
+                getJumpIntent(0,null,enum)
             )
             setOnClickPendingIntent(
                 R.id.tvSearch,
                 getJumpIntent(1,null,enum)
+            )
+            setOnClickPendingIntent(
+                R.id.ivX,
+                getJumpIntent(2,null,enum)
+            )
+            setOnClickPendingIntent(
+                R.id.ivIns,
+                getJumpIntent(3,null,enum)
+            )
+            setOnClickPendingIntent(
+                R.id.ivDownload,
+                getJumpIntent(4,null,enum)
             )
         }
         return remoteViews

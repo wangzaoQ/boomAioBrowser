@@ -135,6 +135,13 @@ object PointEventKey {
     //播放页返回
     const val video_playback_return = "video_playback_return"
 
+    //固定通知点击
+    const val fixed_explore = "fixed_explore"
+    //通知点击
+    const val all_noti_c = "all_noti_c"
+    //通知触发
+    const val all_noti_t = "all_noti_t"
+
 
 }
 
@@ -161,6 +168,7 @@ object PointValueKey{
     const val ad_key = "ad_key"
 
     const val ponit_action = "ponit_action"
+    const val push_type = "push_type"
 
 }
 

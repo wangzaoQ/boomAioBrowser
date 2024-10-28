@@ -94,8 +94,8 @@ class APP: Application(), ViewModelStoreOwner {
             configWebViewCacheDirWithAndroidP()
         }
         if (isOtherPkg(this)) return
-        registerActivityLifecycleCallbacks(lifecycleApp)
         initOtherSdk()
+        registerActivityLifecycleCallbacks(lifecycleApp)
     }
 
 
@@ -113,14 +113,14 @@ class APP: Application(), ViewModelStoreOwner {
     }
 
     private fun initOtherSdk() {
+        MMKV.initialize(this@APP)
         CoroutineScope(Dispatchers.IO).launch{
             //1. mmkv
             runCatching {
-                MMKV.initialize(this@APP)
                 initFirebase()
                 initAD()
                 PointEvent.posePoint(PointEventKey.session_st)
-                CleanConfig.initCleanConfig()
+//                CleanConfig.initCleanConfig()
                 initFB()
                 initAdjust()
                 initVideo()

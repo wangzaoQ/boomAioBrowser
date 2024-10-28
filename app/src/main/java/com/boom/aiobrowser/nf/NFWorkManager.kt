@@ -10,6 +10,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.data.NFEnum
+import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.tools.AppLogs
 import java.util.concurrent.TimeUnit
 
@@ -18,11 +19,13 @@ object NFWorkManager {
     fun startNF(){
         AppLogs.dLog(NFManager.TAG,"WorkManager start")
 //        WorkManager.getInstance(APP.instance).cancelAllWork();
-        if (APP.isDebug){
-            start(APP.instance,NormalNewsWork::class.java,NFEnum.NF_NEWS.menuName,3000,15*60*1000)
+        var time = if (APP.isDebug){
+           60*1000
         }else{
-            start(APP.instance,NormalNewsWork::class.java,NFEnum.NF_NEWS.menuName,5*60*1000,15*60*1000)
+            (FirebaseConfig.pushData?.time_interval?:360)*60*1000
         }
+        start(APP.instance,NormalNewsWork::class.java,NFEnum.NF_NEWS.menuName,time.toLong(),time.toLong())
+
     }
 
     fun start(context: Context, clazz: Class<out BaseNotifyWork>, workTag:String, delayMilli: Long, time:Long) {

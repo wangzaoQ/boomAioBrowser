@@ -34,6 +34,7 @@ import kotlin.random.Random
 object NFShow {
 
     suspend fun showNewsNFFilter(enum: NFEnum) {
+        if (nfAllow().not())return
         var refreshSession = false
         var count = 0
         var newsList: MutableList<NewsData>? = null
@@ -134,6 +135,9 @@ object NFShow {
     @SuppressLint("MissingPermission")
     fun showNewsNF(data:NewsData,enum: NFEnum){
         if (nfAllow().not())return
+        PointEvent.posePoint(PointEventKey.all_noti_t,Bundle().apply {
+            putString(PointValueKey.push_type, enum.menuName)
+        })
         val smallRemote = NFViews.getNewsRemoteView(enum,data)
         val largeRemote = NFViews.getNewsRemoteView(enum,data, true)
         var bulider = createBuilder(enum,smallRemote,largeRemote)

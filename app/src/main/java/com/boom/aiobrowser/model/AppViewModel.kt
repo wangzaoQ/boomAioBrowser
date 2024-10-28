@@ -2,6 +2,7 @@ package com.boom.aiobrowser.model
 
 import com.boom.aiobrowser.data.WebConfigData
 import com.boom.aiobrowser.net.NetController
+import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,8 +29,14 @@ class AppViewModel : BaseDataModel() {
                     })
                 }
             }
-            CacheManager.pageList = pageList
-            CacheManager.fetchList = fetchList
-        }, failBack = {},1)
+            if (pageList.isNotEmpty()){
+                CacheManager.pageList = pageList
+            }
+            if (fetchList.isNotEmpty()){
+                CacheManager.fetchList = fetchList
+            }
+        }, failBack = {
+            AppLogs.eLog(TAG,it.stackTraceToString())
+        },1)
     }
 }

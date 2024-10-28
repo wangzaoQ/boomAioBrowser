@@ -9,12 +9,14 @@ import com.boom.aiobrowser.data.AioADData
 import com.boom.aiobrowser.data.AioRequestData
 import com.boom.aiobrowser.data.PushData
 import com.boom.aiobrowser.firebase.FirebaseConfig.AD_DEFAULT_JSON
+import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.nf.NFWorkManager
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
@@ -22,6 +24,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 object FirebaseManager {
 
@@ -59,6 +62,18 @@ object FirebaseManager {
             }
         }.onFailure {
             it.printStackTrace()
+        }
+        runCatching {
+            var topic = if (APP.isDebug){
+                "test~ALL2"
+            }else{
+                "${Locale.getDefault().country}~ALL"
+            }
+            AppLogs.dLog(NFManager.TAG,"message topic:${topic} country:${Locale.getDefault().country}")
+            Firebase.messaging.subscribeToTopic(topic)
+                .addOnCompleteListener { task ->
+                    AppLogs.dLog(NFManager.TAG,"message 初始化成功")
+                }
         }
     }
 

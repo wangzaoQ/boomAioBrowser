@@ -193,6 +193,36 @@ fun getUrlSource(url:String):String{
     return "https://www.tiktok.com/"
 }
 
+//fun matchCountryShort():String{
+//    return when (Locale.getDefault().language) {
+//        "pt" -> {
+//            "BR"
+//        }
+//        "ja" -> {
+//            "JP"
+//        }
+//
+//        "in" -> {
+//            "ID"
+//        }
+//
+//        "ko" -> {
+//            "KR"
+//        }
+//
+//        "es" ->{
+//            "MX"
+//        }
+//        "ar"->{
+//
+//        }
+//
+//        else -> {
+//            "US"
+//        }
+//    }
+//}
+
 
 /**
  * 将输入流转换成字符串

@@ -144,7 +144,7 @@
     <string name="app_view_the_guide">View the guide</string>
     <string name="app_method">Step</string>
     <string name="app_tt_tips_1">Open\" TikTok \" and click \"Share\"</string>
-    <string name="app_tt_tips_2">Click \" AIO Browser \", start downloading</string>
+    <string name="app_common_tips1">Click \" AIO Browser \", start downloading</string>
     <string name="app_video_not_detected">Video Not Detected?</string>
     <string name="app_video_guide_content">1: Play video first.\n\n2: Refresh the page,and the button will be available.</string>
     <string name="app_video_failed_tips">Failed? Report this web page to us</string>
@@ -163,5 +163,11 @@
 
     <string name="app_confirm">Confirm</string>
     <string name="app_search_video">Search Video</string>
+    <string name="app_guide_title">Smooth Downloads,Instant Updates.</string>
+    <string name="app_nf_pop_guide1">Your video has finished downloading!</string>
+    <string name="app_nf_pop_guide2">New trending videos just updated—you\'re going to love them!</string>
+    <string name="app_nf_pop_guide3">Turn on notifications</string>
+    <string name="app_x_tips_1">Open\" X \" and click \"Share\"</string>
+    <string name="app_x_tips_2">Open\" X \" and click copy link</string>
 
 </resources>

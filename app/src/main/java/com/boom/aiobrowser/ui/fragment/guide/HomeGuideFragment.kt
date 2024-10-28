@@ -2,12 +2,10 @@ package com.boom.aiobrowser.ui.fragment.guide
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.databinding.BrowserFragmentSearchGuideBinding
-import com.boom.aiobrowser.databinding.BrowserFragmentVideoGuideBinding
 
 class HomeGuideFragment :BaseFragment<BrowserFragmentSearchGuideBinding>() {
     override fun startLoadData() {
@@ -29,8 +27,8 @@ class HomeGuideFragment :BaseFragment<BrowserFragmentSearchGuideBinding>() {
                     ivBg.setImageResource(R.mipmap.bg_guide_tiktok1)
                 }
                 1 -> {
-                    tvContent.text = getString(R.string.app_tt_tips_2)
-                    ivBg.setImageResource(R.mipmap.bg_guide_tiktok2)
+                    tvContent.text = getString(R.string.app_common_tips1)
+                    ivBg.setImageResource(R.mipmap.bg_guide_common)
                 }
                 else -> {}
             }

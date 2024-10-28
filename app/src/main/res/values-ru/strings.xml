@@ -143,7 +143,7 @@
     <string name="app_view_the_guide">Посмотреть руководство</string>
     <string name="app_method">Шаг</string>
     <string name="app_tt_tips_1">Откройте "TikTok" и нажмите "Поделиться"</string>
-    <string name="app_tt_tips_2">Нажмите "AIO Browser", начните загрузку</string>
+    <string name="app_common_tips1">Нажмите "AIO Browser", начните загрузку</string>
     <string name="app_video_not_detected">Видео не обнаружено?</string>
     <string name="app_video_guide_content">1: Сначала воспроизведите видео.\n\n2: Обновите страницу, и кнопка станет доступной.</string>
     <string name="app_video_failed_tips">Не удалось? Сообщите нам об этой веб-странице</string>

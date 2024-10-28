@@ -141,6 +141,21 @@ object PointEventKey {
     const val all_noti_c = "all_noti_c"
     //通知触发
     const val all_noti_t = "all_noti_t"
+    //通知二次开启页面展示
+    const val noti_confirm_pop = "noti_confirm_pop"
+    //通知二次开启页面允许
+    const val noti_confirm_pop_allow = "noti_confirm_pop_allow"
+    //通知二次开启页面成功打开
+    const val noti_confirm_pop_suc = "noti_confirm_pop_suc"
+    //通知二次开启页面打开失败
+    const val noti_confirm_pop_fail = "noti_confirm_pop_fail"
+    //通知权限允许
+    const val noti_req_allow = "noti_req_allow"
+    //通知权限拒绝
+    const val noti_req_refuse = "noti_req_refuse"
+    //通知二次开启页面跳过
+    const val noti_confirm_pop_skip = "noti_confirm_pop_skip"
+
 
 
 }

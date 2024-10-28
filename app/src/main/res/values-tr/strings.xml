@@ -143,7 +143,7 @@
     <string name="app_view_the_guide">Kılavuzu görüntüle</string>
     <string name="app_method">Adım</string>
     <string name="app_tt_tips_1">"TikTok"u açın ve "Paylaş"a tıklayın</string>
-    <string name="app_tt_tips_2">"AIO Browser"a tıklayın, indirmeye başlayın</string>
+    <string name="app_common_tips1">"AIO Browser"a tıklayın, indirmeye başlayın</string>
     <string name="app_video_not_detected">Video Algılanmadı mı?</string>
     <string name="app_video_guide_content">1: Önce videoyu oynatın.\n\n2: Sayfayı yenileyin, düğme kullanılabilir olacak.</string>
     <string name="app_video_failed_tips">Başarısız mı? Bu web sayfasını bize bildirin</string>

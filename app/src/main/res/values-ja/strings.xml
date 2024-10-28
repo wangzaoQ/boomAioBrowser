@@ -142,7 +142,7 @@
     <string name="app_view_the_guide">ガイドを表示</string>
     <string name="app_method">ステップ</string>
     <string name="app_tt_tips_1">「TikTok」を開いて「シェア」をクリック</string>
-    <string name="app_tt_tips_2">「AIO Browser」をクリックしてダウンロードを開始</string>
+    <string name="app_common_tips1">「AIO Browser」をクリックしてダウンロードを開始</string>
     <string name="app_video_not_detected">動画が検出されませんか？</string>
     <string name="app_video_guide_content">1: まず動画を再生してください。\n\n2: ページを更新すると、ボタンが利用可能になります。</string>
     <string name="app_video_failed_tips">失敗しましたか？このウェブページを報告してください</string>

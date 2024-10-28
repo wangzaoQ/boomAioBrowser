@@ -33,6 +33,7 @@ import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.inputStream2Byte
+import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
@@ -41,10 +42,12 @@ import com.boom.aiobrowser.ui.fragment.WebFragment
 import com.boom.aiobrowser.ui.isAndroid12
 import com.boom.aiobrowser.ui.pop.DefaultPop
 import com.boom.aiobrowser.ui.pop.MorePop
+import com.boom.aiobrowser.ui.pop.NFGuidePop
 import com.boom.aiobrowser.ui.pop.ProcessingTextPop
 import com.boom.aiobrowser.ui.pop.TabPop
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import pop.basepopup.BasePopupWindow.OnDismissListener
 import java.util.LinkedList
@@ -256,8 +259,15 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             updateUI(intent)
             fManager.addFragmentTag(supportFragmentManager,this,R.id.fragmentStart,"StartFragment")
         }
+        showForeground()
+    }
+
+    var foregroundJob:Job?=null
+
+    private fun showForeground() {
         if (isAndroid12()){
-            addLaunch(success = {
+            foregroundJob.jobCancel()
+            foregroundJob = addLaunch(success = {
                 while (APP.instance.lifecycleApp.isBackGround()){
                     delay(1000)
                 }
@@ -291,6 +301,14 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     }else if (nfTo == 4){
                         startActivity(Intent(this,DownloadActivity::class.java).apply {
                             putExtra("fromPage","nf_fix")
+                        })
+                    }else if (nfTo == 2){
+                        jumpActivity<HomeGuideActivity>(Bundle().apply {
+                            putString(ParamsConfig.JUMP_FROM,getString(R.string.app_x))
+                        })
+                    }else if (nfTo == 3){
+                        jumpActivity<HomeGuideActivity>(Bundle().apply {
+                            putString(ParamsConfig.JUMP_FROM,getString(R.string.app_instagram))
                         })
                     }
                 }
@@ -335,6 +353,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }
         if (XXPermissions.isGranted(APP.instance, Permission.POST_NOTIFICATIONS).not()){
             //无通知权限
+            NFGuidePop(this@MainActivity).createPop {
+                showForeground()
+            }
         }else{
 
         }

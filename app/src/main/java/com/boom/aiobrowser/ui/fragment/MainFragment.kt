@@ -28,6 +28,7 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.ui.JumpConfig
+import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.SearchConfig
 import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.HomeGuideActivity
@@ -117,6 +118,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                         url = "https://www.tiktok.com/"
                     }
                     2 ->{
+                        jumpGuide = true
                         title = getString(R.string.app_x)
                         url = "https://x.com/"
                     }
@@ -130,7 +132,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                     }
                 }
                 if (jumpGuide){
-                    rootActivity.jumpActivity<HomeGuideActivity>()
+                    rootActivity.jumpActivity<HomeGuideActivity>(Bundle().apply {
+                        putString(ParamsConfig.JUMP_FROM,title)
+                    })
                 }else{
                     APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "mainFragment 点击热们功能").apply {
                         jumpType = JumpConfig.JUMP_WEB

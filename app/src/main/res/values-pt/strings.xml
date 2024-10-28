@@ -144,7 +144,7 @@
     <string name="app_view_the_guide">Ver o guia</string>
     <string name="app_method">Passo</string>
     <string name="app_tt_tips_1">Abra o "TikTok" e clique em "Compartilhar"</string>
-    <string name="app_tt_tips_2">Clique em "AIO Browser", comece a baixar</string>
+    <string name="app_common_tips1">Clique em "AIO Browser", comece a baixar</string>
     <string name="app_video_not_detected">Vídeo não detectado?</string>
     <string name="app_video_guide_content">1: Reproduza o vídeo primeiro.\n\n2: Atualize a página e o botão estará disponível.</string>
     <string name="app_video_failed_tips">Falhou? Reporte esta página para nós</string>

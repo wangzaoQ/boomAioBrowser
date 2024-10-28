@@ -296,7 +296,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
     }
 
     val homeGuideAdapter by lazy {
-        HomeGuideAdapter()
+        HomeGuideAdapter(getString(R.string.app_tt))
     }
 
     val guideList by lazy {

@@ -14,6 +14,7 @@ import com.boom.aiobrowser.databinding.VideoActivityDownloadBinding
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.ui.JumpConfig
+import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.adapter.HomeGuideAdapter
 import com.zhpan.indicator.enums.IndicatorSlideMode
 import com.zhpan.indicator.enums.IndicatorStyle
@@ -42,20 +43,22 @@ class HomeGuideActivity : BaseActivity<BrowserActivityHomeGuideBinding>() {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
                 var searchText = acBinding.etGuide.text.toString().trim()
                 WebParseActivity.toWebParseActivity(this,0,searchText)
-
                 return@setOnKeyListener true
             }
             return@setOnKeyListener false
         }
     }
 
+    var fromApp = ""
+
     override fun setShowView() {
+        fromApp = intent.getStringExtra(ParamsConfig.JUMP_FROM)?:""
         showGuideRoot()
     }
 
 
     val homeGuideAdapter by lazy {
-        HomeGuideAdapter()
+        HomeGuideAdapter(fromApp)
     }
 
     val guideList by lazy {
@@ -64,8 +67,26 @@ class HomeGuideActivity : BaseActivity<BrowserActivityHomeGuideBinding>() {
 
     private fun showGuideRoot() {
         guideList.clear()
-        guideList.add(0)
-        guideList.add(1)
+        when (fromApp) {
+            getString(R.string.app_tt) -> {
+                guideList.add(0)
+                guideList.add(1)
+            }
+            getString(R.string.app_x)->{
+                guideList.add(0)
+                guideList.add(1)
+                guideList.add(2)
+                guideList.add(3)
+            }
+            getString(R.string.app_instagram)->{
+                guideList.add(0)
+                guideList.add(1)
+                guideList.add(2)
+                guideList.add(3)
+            }
+            else -> {}
+        }
+
         var width = dp2px(7f).toFloat()
         acBinding.vpGuide.apply {
             setOrientation(ViewPager2.ORIENTATION_HORIZONTAL)

@@ -144,7 +144,7 @@
     <string name="app_view_the_guide">Lihat panduan</string>
     <string name="app_method">Langkah</string>
     <string name="app_tt_tips_1">Buka "TikTok" dan klik "Bagikan"</string>
-    <string name="app_tt_tips_2">Klik "AIO Browser", mulai mengunduh</string>
+    <string name="app_common_tips1">Klik "AIO Browser", mulai mengunduh</string>
     <string name="app_video_not_detected">Video Tidak Terdeteksi?</string>
     <string name="app_video_guide_content">1: Putar video terlebih dahulu.\n\n2: Segarkan halaman, dan tombol akan tersedia.</string>
     <string name="app_video_failed_tips">Gagal? Laporkan halaman web ini kepada kami</string>

@@ -144,7 +144,7 @@
     <string name="app_view_the_guide">ดูคู่มือ</string>
     <string name="app_method">ขั้นตอน</string>
     <string name="app_tt_tips_1">เปิด "TikTok" และคลิก "แชร์"</string>
-    <string name="app_tt_tips_2">คลิก "AIO Browser" เริ่มดาวน์โหลด</string>
+    <string name="app_common_tips1">คลิก "AIO Browser" เริ่มดาวน์โหลด</string>
     <string name="app_video_not_detected">ไม่พบวิดีโอ?</string>
     <string name="app_video_guide_content">1: เล่นวิดีโอก่อน\n\n2: รีเฟรชหน้า และปุ่มจะพร้อมใช้งาน</string>
     <string name="app_video_failed_tips">ล้มเหลว? รายงานหน้าเว็บนี้ให้เรา</string>

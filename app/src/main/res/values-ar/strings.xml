@@ -142,7 +142,7 @@
     <string name="app_view_the_guide">عرض الدليل</string>
     <string name="app_method">خطوة</string>
     <string name="app_tt_tips_1">افتح "تيك توك" وانقر على "مشاركة"</string>
-    <string name="app_tt_tips_2">انقر على "AIO Browser"، ابدأ التحميل</string>
+    <string name="app_common_tips1">انقر على "AIO Browser"، ابدأ التحميل</string>
     <string name="app_video_not_detected">لم يتم اكتشاف الفيديو؟</string>
     <string name="app_video_guide_content">1: قم بتشغيل الفيديو أولاً.\n\n2: قم بتحديث الصفحة، وسيكون الزر متاحًا.</string>
     <string name="app_video_failed_tips">فشل؟ أبلغ عن صفحة الويب هذه</string>

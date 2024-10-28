@@ -144,7 +144,7 @@
     <string name="app_view_the_guide">Anleitung ansehen</string>
     <string name="app_method">Schritt</string>
     <string name="app_tt_tips_1">Öffnen Sie "TikTok" und klicken Sie auf "Teilen"</string>
-    <string name="app_tt_tips_2">Klicken Sie auf "AIO Browser", starten Sie den Download</string>
+    <string name="app_common_tips1">Klicken Sie auf "AIO Browser", starten Sie den Download</string>
     <string name="app_video_not_detected">Video nicht erkannt?</string>
     <string name="app_video_guide_content">1: Spielen Sie zuerst das Video ab.\n\n2: Aktualisieren Sie die Seite, und die Schaltfläche wird verfügbar sein.</string>
     <string name="app_video_failed_tips">Fehlgeschlagen? Melden Sie uns diese Webseite</string>

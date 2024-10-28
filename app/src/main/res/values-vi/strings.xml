@@ -143,7 +143,7 @@
     <string name="app_view_the_guide">Xem hướng dẫn</string>
     <string name="app_method">Bước</string>
     <string name="app_tt_tips_1">Mở "TikTok" và nhấp vào "Chia sẻ"</string>
-    <string name="app_tt_tips_2">Nhấp vào "AIO Browser", bắt đầu tải xuống</string>
+    <string name="app_common_tips1">Nhấp vào "AIO Browser", bắt đầu tải xuống</string>
     <string name="app_video_not_detected">Không phát hiện video?</string>
     <string name="app_video_guide_content">1: Phát video trước.\n\n2: Làm mới trang, và nút sẽ khả dụng.</string>
     <string name="app_video_failed_tips">Thất bại? Báo cáo trang web này cho chúng tôi</string>

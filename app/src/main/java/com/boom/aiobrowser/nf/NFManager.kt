@@ -91,11 +91,13 @@ object NFManager {
             xxPermissions.request(object : OnPermissionCallback {
                 override fun onGranted(permissions: MutableList<String>, allGranted: Boolean) {
                     AppLogs.dLog(TAG,"onGranted:${allGranted}")
+                    PointEvent.posePoint(PointEventKey.noti_req_allow)
                     onSuccess.invoke()
                 }
 
                 override fun onDenied(permissions: MutableList<String>, doNotAskAgain: Boolean) {
                     super.onDenied(permissions, doNotAskAgain)
+                    PointEvent.posePoint(PointEventKey.noti_req_refuse)
                     onFail.invoke()
                 }
             })

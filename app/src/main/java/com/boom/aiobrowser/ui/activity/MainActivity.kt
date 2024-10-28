@@ -294,7 +294,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                         })
                     }
                 }
-                NFEnum.NF_NEWS.menuName->{
+                NFEnum.NF_NEWS.menuName,NFEnum.NF_NEWS_FCM.menuName->{
                     var data = getBeanByGson(nfData,NewsData::class.java)
                     var jumpData = JumpDataManager.getCurrentJumpData(tag="新闻跳转")
                     jumpData.apply {

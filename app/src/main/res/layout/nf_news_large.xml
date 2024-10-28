@@ -43,15 +43,7 @@
         android:layout_marginTop="15dp"
         android:paddingHorizontal="7dp"
         >
-        <ImageView
-            android:id="@+id/ivBg"
-            android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:background="@drawable/shape_nf_news_bg"
-            android:layout_alignParentBottom="true"
-            tools:visibility="visible"
-            android:visibility="gone"
-            ></ImageView>
+
         <ImageView
             android:id="@+id/ivPic"
             android:layout_width="match_parent"
@@ -59,7 +51,16 @@
             android:scaleType="centerCrop"
             android:layout_marginBottom="7dp"
             ></ImageView>
-
+        <ImageView
+            android:id="@+id/ivBg"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="@drawable/shape_nf_news_bg"
+            android:layout_alignParentBottom="true"
+            tools:visibility="visible"
+            android:layout_marginBottom="7dp"
+            android:visibility="gone"
+            ></ImageView>
         <TextView
             android:id="@+id/tvContent"
             android:layout_width="wrap_content"

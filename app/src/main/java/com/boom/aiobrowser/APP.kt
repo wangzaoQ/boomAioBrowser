@@ -23,6 +23,7 @@ import com.boom.aiobrowser.data.WebConfigData
 import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
 import com.boom.aiobrowser.model.AppViewModel
 import com.boom.aiobrowser.net.NetController
+import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.nf.NFReceiver
 import com.boom.aiobrowser.nf.NFWorkManager
 import com.boom.aiobrowser.point.Install
@@ -34,6 +35,7 @@ import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.event.ProtectedUnPeekLiveData
 import com.boom.aiobrowser.tools.isOtherPkg
+import com.boom.aiobrowser.tools.stringToMap
 import com.boom.aiobrowser.tools.video.VideoManager.initVideo
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.boom.downloader.VideoDownloadManager
@@ -137,6 +139,10 @@ class APP: Application(), ViewModelStoreOwner {
         }
         registerAny()
         initNFConfig()
+        if (isDebug){
+            var map5 = "{\"a\":\"b\",\"tag\":\"tg_a\",\"body\":\"从 Android 7.0（API 级别 24）开始，您可以在一个组中显示相关通知。例如，如果您的应用针对收到的电子邮件显示通知，请将有关新电子邮件的所有通知放入同一个群组中，以便它们收起来。\",\"image\":\"https://clevertap.com/wp-content/uploads/2021/05/Push-Notification-Header.png?w\\u003d1024\",\"title\":\"Hello - ck_a - ch_a - lbl_a - tg_a - 44\",\"channel\":\"ch_a\",\"news_url\":\"https://www.baidu.com/\"}"
+            NFManager.showFCM(stringToMap(map5))
+        }
     }
 
     private fun initNFConfig() {

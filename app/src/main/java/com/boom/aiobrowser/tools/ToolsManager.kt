@@ -64,7 +64,6 @@ fun <T> getLinkedListByGson(json: String?, cls: Class<T>?): LinkedList<T>? {
     return null
 }
 
-
 fun <T> getBeanByGson(jsonData: String?, type: Class<T>?): T? {
     runCatching {
         return gson.fromJson<T>(jsonData, type)!!
@@ -72,6 +71,12 @@ fun <T> getBeanByGson(jsonData: String?, type: Class<T>?): T? {
         AppLogs.eLog("gson", it.stackTraceToString())
     }
     return null
+}
+
+fun stringToMap(content:String):Map<String,String>{
+    val gson = Gson()
+    val mapType = object : TypeToken<Map<String?, String?>?>() {}.getType()
+    return gson.fromJson(content, mapType)
 }
 
 fun getMapByGson(jsonData: String):HashMap<String,Any>?{

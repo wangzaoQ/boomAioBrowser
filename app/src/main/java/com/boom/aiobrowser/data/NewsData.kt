@@ -34,6 +34,11 @@ class NewsData {
 
     var dataType = 0
 
+
+    var tag:String?=""
+    var channel:String?=""
+    var nId :Int=0
+
     companion object{
         var TYPE_NEWS = 0
         var TYPE_AD = 1

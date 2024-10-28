@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.NFEnum
+import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
@@ -25,6 +26,7 @@ import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import java.lang.ref.WeakReference
 import java.util.Objects
+import kotlin.random.Random
 
 object NFManager {
 
@@ -152,6 +154,11 @@ object NFManager {
                     putString(PointValueKey.push_type, enumName)
                 })
             }
+            NFEnum.NF_NEWS_FCM.menuName->{
+                PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
+                    putString(PointValueKey.push_type, enumName)
+                })
+            }
             else -> {}
         }
 
@@ -176,5 +183,26 @@ object NFManager {
         }.onFailure {
             AppLogs.eLog(NFManager.TAG,it.stackTraceToString())
         }
+    }
+
+    fun showFCM(map: Map<String, String>) {
+        var chanel = map.get("channel")?:""
+        var tag = map.get("tag")?:""
+        var body = map.get("body")?:""
+        var image = map.get("image")?:""
+        var newsId = map.get("NEWS_ID")?:""
+        var title = map.get("title")?:""
+        var url = map.get("news_url")?:""
+        var data = NewsData().apply {
+            tconsi = title
+            iassum = image
+            itackl = newsId
+            uweek = url
+            sissue = body
+            this.tag = tag
+            this.channel = chanel
+            this.nId = Random.nextInt(1000000)
+        }
+        NFShow.showNewsNF(data,NFEnum.NF_NEWS_FCM)
     }
 }

@@ -18,7 +18,7 @@ object NFWorkManager {
 
     fun startNF(){
         AppLogs.dLog(NFManager.TAG,"WorkManager start")
-//        WorkManager.getInstance(APP.instance).cancelAllWork();
+        WorkManager.getInstance(APP.instance).cancelAllWork();
         var time = if (APP.isDebug){
            60*1000
         }else{

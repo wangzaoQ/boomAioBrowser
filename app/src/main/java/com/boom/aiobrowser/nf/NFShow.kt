@@ -73,6 +73,8 @@ object NFShow {
                 "name:${enum.menuName} 已经过判断移除当前通知后缓存已有数量:${newsList?.size}"
             )
             CacheManager.saveNFNewsList(enum.menuName, newsList ?: mutableListOf())
+        }.onFailure {
+            AppLogs.eLog(NFManager.TAG,it.stackTraceToString())
         }
     }
 
@@ -125,6 +127,8 @@ object NFShow {
                 }
                 NFManager.manager.notify(nfId, bulider.build())
             }
+        }.onFailure {
+            AppLogs.eLog(NFManager.TAG,it.stackTraceToString())
         }
     }
 
@@ -135,6 +139,8 @@ object NFShow {
             getForegroundNF()
             NFManager.manager.notify(NFManager.nfForegroundId,NFManager.nfForeground!!)
             NFManager.startForeground("showForegroundNF")
+        }.onFailure {
+            AppLogs.eLog(NFManager.TAG,it.stackTraceToString())
         }
     }
 
@@ -178,6 +184,8 @@ object NFShow {
                 }
             })
             CacheManager.saveLastRefreshTime(enum.menuName)
+        }.onFailure {
+            AppLogs.eLog(NFManager.TAG,it.stackTraceToString())
         }
     }
 

@@ -155,11 +155,19 @@ object NFManager {
                 PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
                     putString(PointValueKey.push_type, enumName)
                 })
+                runCatching {
+                    manager.cancel(nfNewsId)
+                }
             }
             NFEnum.NF_NEWS_FCM.menuName->{
                 PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
                     putString(PointValueKey.push_type, enumName)
                 })
+                getBeanByGson(nfData,NewsData::class.java)?.apply {
+                    runCatching {
+                        manager.cancel(tag,nId)
+                    }
+                }
             }
             else -> {}
         }

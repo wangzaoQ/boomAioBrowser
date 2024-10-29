@@ -28,15 +28,29 @@ class HomeGuideActivity : BaseActivity<BrowserActivityHomeGuideBinding>() {
         acBinding.ivBack.setOneClick {
             finish()
         }
+        var url = ""
         acBinding.ivJump.setOneClick {
             var title = getString(R.string.app_tt)
-            var url = "https://www.tiktok.com/"
-            APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "HomeGuideActivity 点击跳转").apply {
-                jumpType = JumpConfig.JUMP_WEB
-                jumpTitle = title
-                jumpUrl = url
-            })
-            finish()
+            when (fromApp) {
+                getString(R.string.app_tt) -> {
+                    url = "https://www.tiktok.com/"
+                }
+                getString(R.string.app_x)->{
+                    url = "https://x.com/"
+                }
+                getString(R.string.app_instagram)->{
+                    url = "https://www.instagram.com/"
+                }
+                else -> {}
+            }
+            if (url.isNotEmpty()){
+                APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "HomeGuideActivity 点击跳转").apply {
+                    jumpType = JumpConfig.JUMP_WEB
+                    jumpTitle = title
+                    jumpUrl = url
+                })
+                finish()
+            }
         }
 
         acBinding.etGuide.setOnKeyListener { v, keyCode, event ->
@@ -58,7 +72,7 @@ class HomeGuideActivity : BaseActivity<BrowserActivityHomeGuideBinding>() {
 
 
     val homeGuideAdapter by lazy {
-        HomeGuideAdapter(fromApp)
+        HomeGuideAdapter()
     }
 
     val guideList by lazy {
@@ -71,12 +85,14 @@ class HomeGuideActivity : BaseActivity<BrowserActivityHomeGuideBinding>() {
             getString(R.string.app_tt) -> {
                 guideList.add(0)
                 guideList.add(1)
+                acBinding.ivJump.setImageResource(R.mipmap.ic_tt)
             }
             getString(R.string.app_x)->{
                 guideList.add(0)
                 guideList.add(1)
                 guideList.add(2)
                 guideList.add(3)
+                acBinding.ivJump.setImageResource(R.mipmap.ic_x)
             }
             getString(R.string.app_instagram)->{
                 guideList.add(0)
@@ -91,6 +107,7 @@ class HomeGuideActivity : BaseActivity<BrowserActivityHomeGuideBinding>() {
         acBinding.vpGuide.apply {
             setOrientation(ViewPager2.ORIENTATION_HORIZONTAL)
             adapter = homeGuideAdapter
+            homeGuideAdapter.setFromAPP(getString(R.string.app_tt))
         }
         acBinding.indicator.apply {
             setSliderColor(

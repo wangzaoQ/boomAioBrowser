@@ -194,6 +194,8 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
     // 0 默认 1 clean 状态
     var cleanType = 0
 
+    var currentPosition = 0
+
     override fun setListener() {
         for (i in 0 until fBinding.llRoot.childCount){
             fBinding.llRoot.getChildAt(i).setOneClick {
@@ -218,11 +220,18 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 PointEvent.posePoint(PointEventKey.search_page_qb,Bundle().apply {
                     putString(PointValueKey.type,title)
                 })
-                toWebDetailsActivity(JumpDataManager.getCurrentJumpData(tag = "searchFragment 点击推荐").apply {
-                    jumpType = JumpConfig.JUMP_WEB
-                    jumpTitle = title
-                    jumpUrl = url
-                })
+                if (i !=1 && i!=currentPosition){
+                    homeGuideAdapter.setFromAPP(title)
+                    homeGuideAdapter.notifyDataSetChanged()
+                    currentPosition = i
+                    fBinding.vpGuide.currentItem = 0
+                }else{
+                    toWebDetailsActivity(JumpDataManager.getCurrentJumpData(tag = "searchFragment 点击推荐").apply {
+                        jumpType = JumpConfig.JUMP_WEB
+                        jumpTitle = title
+                        jumpUrl = url
+                    })
+                }
             }
         }
         APP.engineLiveData.observe(this){
@@ -296,7 +305,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
     }
 
     val homeGuideAdapter by lazy {
-        HomeGuideAdapter(getString(R.string.app_tt))
+        HomeGuideAdapter()
     }
 
     val guideList by lazy {

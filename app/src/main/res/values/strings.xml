@@ -162,6 +162,8 @@
     <string name="app_video_downlod">Video Downloader</string>
 
     <string name="app_confirm">Confirm</string>
+    <string name="app_ins_tips_1">Open\" instagram \" and click \"Share\"</string>
+    <string name="app_ins_tips_2">Open\" instagram \" and click \"copy link\"</string>
     <string name="app_search_video">Search Video</string>
     <string name="app_guide_title">Smooth Downloads,Instant Updates.</string>
     <string name="app_nf_pop_guide1">Your video has finished downloading!</string>
@@ -169,5 +171,4 @@
     <string name="app_nf_pop_guide3">Turn on notifications</string>
     <string name="app_x_tips_1">Open\" X \" and click \"Share\"</string>
     <string name="app_x_tips_2">Open\" X \" and click copy link</string>
-
 </resources>

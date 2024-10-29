@@ -321,7 +321,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                         jumpTitle = data?.tconsi?:""
                         isJumpClick = true
                     }
-                    APP.jumpLiveData.postValue(jumpData)
+                    JumpDataManager.updateCurrentJumpData(jumpData,tag="新闻跳转")
+//                    APP.jumpLiveData.postValue(jumpData)
                 }
                 else -> {}
             }
@@ -338,6 +339,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             return
         }
         fManager.hideFragment(supportFragmentManager, startFragment!!)
+        APP.jumpResumeData.postValue(0)
         acBinding.llMainControl.visibility = View.VISIBLE
         if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault){
             CacheManager.isFirstShowBrowserDefault = false

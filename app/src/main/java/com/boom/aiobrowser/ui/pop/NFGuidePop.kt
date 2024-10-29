@@ -41,6 +41,7 @@ class NFGuidePop(context: Context) : BasePopupWindow(context) {
     fun createPop(callBack: () -> Unit){
         defaultBinding?.apply {
             btnConfirm.setOnClickListener {
+                APP.instance.isGoOther = true
                 isComplete = true
                 PointEvent.posePoint(PointEventKey.noti_confirm_pop_allow)
                 NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)),

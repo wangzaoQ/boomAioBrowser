@@ -8,7 +8,9 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.databinding.BrowserFragmentSearchGuideBinding
 import com.boom.base.adapter4.BaseQuickAdapter
 
-class HomeGuideAdapter(var fromApp:String) : BaseQuickAdapter<Int, HomeGuideAdapter.VH>() {
+class HomeGuideAdapter() : BaseQuickAdapter<Int, HomeGuideAdapter.VH>() {
+
+    var fromApp = ""
     class VH(
         parent: ViewGroup,
         val viewBinding: BrowserFragmentSearchGuideBinding = BrowserFragmentSearchGuideBinding.inflate(
@@ -52,7 +54,28 @@ class HomeGuideAdapter(var fromApp:String) : BaseQuickAdapter<Int, HomeGuideAdap
                         }
                         2 -> {
                             tvContent.text = context.getString(R.string.app_x_tips_2)
-                            ivBg.setImageResource(R.mipmap.bg_guide_x1)
+                            ivBg.setImageResource(R.mipmap.bg_guide_x2)
+                        }
+                        3 -> {
+                            tvContent.text = context.getString(R.string.app_common_tips1)
+                            ivBg.setImageResource(R.mipmap.bg_guide_common)
+                        }
+                        else -> {}
+                    }
+                }
+                context.getString(R.string.app_instagram) -> {
+                    when (item) {
+                        0 -> {
+                            tvContent.text = context.getString(R.string.app_ins_tips_1)
+                            ivBg.setImageResource(R.mipmap.bg_guide_ins1)
+                        }
+                        1 -> {
+                            tvContent.text = context.getString(R.string.app_common_tips1)
+                            ivBg.setImageResource(R.mipmap.bg_guide_common)
+                        }
+                        2 -> {
+                            tvContent.text = context.getString(R.string.app_ins_tips_2)
+                            ivBg.setImageResource(R.mipmap.bg_guide_ins2)
                         }
                         3 -> {
                             tvContent.text = context.getString(R.string.app_common_tips1)
@@ -64,5 +87,9 @@ class HomeGuideAdapter(var fromApp:String) : BaseQuickAdapter<Int, HomeGuideAdap
                 else -> {}
             }
         }
+    }
+
+    fun setFromAPP(fromApp:String){
+        this.fromApp = fromApp
     }
 }

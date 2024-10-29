@@ -35,43 +35,45 @@ object NFShow {
 
     suspend fun showNewsNFFilter(enum: NFEnum) {
         if (nfAllow().not())return
-        var refreshSession = false
-        var count = 0
-        var newsList: MutableList<NewsData>? = null
-        var oldTime = CacheManager.getLastRefreshTime(enum.menuName)
+        runCatching {
+            var refreshSession = false
+            var count = 0
+            var newsList: MutableList<NewsData>? = null
+            var oldTime = CacheManager.getLastRefreshTime(enum.menuName)
 //        var limit = if (NewsAPP.isDebug)1*60*1000 else 12*60*60*1000
-        var limit = 3 * 60 * 60 * 1000
-        var refresh = (System.currentTimeMillis() - oldTime) > limit
-        AppLogs.dLog(
-            NFManager.TAG,
-            "name:${enum.menuName} 判断是否需要强制刷新数据/refresh:${refresh}"
-        )
-        if (refresh) {
-            CacheManager.saveNFNewsList(enum.menuName, mutableListOf())
-        }
-        newsList = CacheManager.getNFNewsList(enum.menuName)
-        while (count < 10 && newsList.isNullOrEmpty()) {
-            AppLogs.dLog(NFManager.TAG, "name:${enum.menuName} 获取数据来源次数count:${count + 1}")
-            if (enum == NFEnum.NF_NEWS) {
-                newsList = NFData.getNFForYou(refreshSession)
+            var limit = 3 * 60 * 60 * 1000
+            var refresh = (System.currentTimeMillis() - oldTime) > limit
+            AppLogs.dLog(
+                NFManager.TAG,
+                "name:${enum.menuName} 判断是否需要强制刷新数据/refresh:${refresh}"
+            )
+            if (refresh) {
+                CacheManager.saveNFNewsList(enum.menuName, mutableListOf())
             }
-            count++
-            if (count == 7) {
-                refreshSession = true
+            newsList = CacheManager.getNFNewsList(enum.menuName)
+            while (count < 10 && newsList.isNullOrEmpty()) {
+                AppLogs.dLog(NFManager.TAG, "name:${enum.menuName} 获取数据来源次数count:${count + 1}")
+                if (enum == NFEnum.NF_NEWS) {
+                    newsList = NFData.getNFForYou(refreshSession)
+                }
+                count++
+                if (count == 7) {
+                    refreshSession = true
+                }
             }
+            AppLogs.dLog(
+                NFManager.TAG,
+                "name:${enum.menuName} 已经过判断当前缓存已有数量:${newsList?.size}"
+            )
+            newsList?.removeFirstOrNull()?.apply {
+                showNewsNF(this, enum)
+            }
+            AppLogs.dLog(
+                NFManager.TAG,
+                "name:${enum.menuName} 已经过判断移除当前通知后缓存已有数量:${newsList?.size}"
+            )
+            CacheManager.saveNFNewsList(enum.menuName, newsList ?: mutableListOf())
         }
-        AppLogs.dLog(
-            NFManager.TAG,
-            "name:${enum.menuName} 已经过判断当前缓存已有数量:${newsList?.size}"
-        )
-        newsList?.removeFirstOrNull()?.apply {
-            showNewsNF(this, enum)
-        }
-        AppLogs.dLog(
-            NFManager.TAG,
-            "name:${enum.menuName} 已经过判断移除当前通知后缓存已有数量:${newsList?.size}"
-        )
-        CacheManager.saveNFNewsList(enum.menuName, newsList ?: mutableListOf())
     }
 
 
@@ -85,51 +87,55 @@ object NFShow {
     @SuppressLint("MissingPermission")
     fun showDownloadNF(data: VideoDownloadData, posePoint:Boolean = false) {
         if (nfAllow().not())return
-        val smallRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data)
-        val largeRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data, true)
-        var bulider = createBuilder(NFEnum.NF_DOWNLOAD_VIDEO,smallRemote,largeRemote)
-        bulider.setOngoing(true)
-        var nfId = videoNFMap.get(data.videoId)
-        if (data.videoId.isNullOrEmpty().not()){
-            if (nfId == null){
-                nfId = Random.nextInt(0,999999)
-                videoNFMap.put(data.videoId!!,nfId)
-                if (posePoint){
-                    if (data.downloadType == VideoDownloadData.DOWNLOAD_LOADING || data.downloadType == VideoDownloadData.DOWNLOAD_PREPARE){
-                        var source = ""
-                        if (WebScan.isTikTok(data.url?:"")) {
-                            source = "tiktok"
-                        } else if (WebScan.isPornhub(data.url?:"")) {
-                            source = "pornhub"
+        runCatching {
+            val smallRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data)
+            val largeRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data, true)
+            var bulider = createBuilder(NFEnum.NF_DOWNLOAD_VIDEO,smallRemote,largeRemote)
+            bulider.setOngoing(true)
+            var nfId = videoNFMap.get(data.videoId)
+            if (data.videoId.isNullOrEmpty().not()){
+                if (nfId == null){
+                    nfId = Random.nextInt(0,999999)
+                    videoNFMap.put(data.videoId!!,nfId)
+                    if (posePoint){
+                        if (data.downloadType == VideoDownloadData.DOWNLOAD_LOADING || data.downloadType == VideoDownloadData.DOWNLOAD_PREPARE){
+                            var source = ""
+                            if (WebScan.isTikTok(data.url?:"")) {
+                                source = "tiktok"
+                            } else if (WebScan.isPornhub(data.url?:"")) {
+                                source = "pornhub"
+                            }
+                            PointEvent.posePoint(PointEventKey.download_push_conduct,Bundle().apply {
+                                putString(PointValueKey.ponit_action, PointValue.show)
+                                putString(PointValueKey.video_source,source)
+                            })
                         }
-                        PointEvent.posePoint(PointEventKey.download_push_conduct,Bundle().apply {
+                    }
+                }
+                if (posePoint){
+                    if (data.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
+                        PointEvent.posePoint(PointEventKey.download_push_success,Bundle().apply {
                             putString(PointValueKey.ponit_action, PointValue.show)
-                            putString(PointValueKey.video_source,source)
+                        })
+                    }else if (data.downloadType == VideoDownloadData.DOWNLOAD_ERROR){
+                        PointEvent.posePoint(PointEventKey.download_push_fail,Bundle().apply {
+                            putString(PointValueKey.ponit_action, PointValue.show)
                         })
                     }
                 }
+                NFManager.manager.notify(nfId, bulider.build())
             }
-            if (posePoint){
-                if (data.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
-                    PointEvent.posePoint(PointEventKey.download_push_success,Bundle().apply {
-                        putString(PointValueKey.ponit_action, PointValue.show)
-                    })
-                }else if (data.downloadType == VideoDownloadData.DOWNLOAD_ERROR){
-                    PointEvent.posePoint(PointEventKey.download_push_fail,Bundle().apply {
-                        putString(PointValueKey.ponit_action, PointValue.show)
-                    })
-                }
-            }
-            NFManager.manager.notify(nfId, bulider.build())
         }
     }
 
     @SuppressLint("MissingPermission")
     fun showForegroundNF(){
         if (nfAllow().not())return
-        getForegroundNF()
-        NFManager.manager.notify(NFManager.nfForegroundId,NFManager.nfForeground!!)
-        NFManager.startForeground("showForegroundNF")
+        runCatching {
+            getForegroundNF()
+            NFManager.manager.notify(NFManager.nfForegroundId,NFManager.nfForeground!!)
+            NFManager.startForeground("showForegroundNF")
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -138,39 +144,41 @@ object NFShow {
         PointEvent.posePoint(PointEventKey.all_noti_t,Bundle().apply {
             putString(PointValueKey.push_type, enum.menuName)
         })
-        val smallRemote = NFViews.getNewsRemoteView(enum,data)
-        val largeRemote = NFViews.getNewsRemoteView(enum,data, true)
-        var bulider = createBuilder(enum,smallRemote,largeRemote)
-        if (data.tag.isNullOrEmpty()){
-            NFManager.manager.notify(NFManager.nfNewsId, bulider.build())
-        }else{
-            NFManager.manager.cancel(data.tag,0)
-            NFManager.manager.notify(data.tag,data.nId,bulider.build())
+        runCatching {
+            val smallRemote = NFViews.getNewsRemoteView(enum,data)
+            val largeRemote = NFViews.getNewsRemoteView(enum,data, true)
+            var bulider = createBuilder(enum,smallRemote,largeRemote)
+            if (data.tag.isNullOrEmpty()){
+                NFManager.manager.notify(NFManager.nfNewsId, bulider.build())
+            }else{
+                NFManager.manager.cancel(data.tag,0)
+                NFManager.manager.notify(data.tag,data.nId,bulider.build())
+            }
+            var width = dp2px(331f)
+            var height = dp2px(181f)
+            GlideManager.loadNFBitmap(APP.instance,data.iassum?:"",width,height, bitmapCall ={
+                smallRemote?.setImageViewBitmap(R.id.ivPic, it)
+                largeRemote?.setImageViewBitmap(R.id.ivPic, it)
+                largeRemote.setViewVisibility(R.id.ivBg,View.VISIBLE)
+                smallRemote.setViewVisibility(R.id.ivBg,View.VISIBLE)
+                if (data.tag.isNullOrEmpty()){
+                    NFManager.manager.notify(NFManager.nfNewsId, bulider.build())
+                }else{
+                    NFManager.manager.cancel(data.tag,0)
+                    NFManager.manager.notify(data.tag,data.nId,bulider.build())
+                }
+            },callFail ={
+                smallRemote?.setImageViewResource(R.id.ivPic, R.mipmap.bg_news_default)
+                largeRemote?.setImageViewResource(R.id.ivPic, R.mipmap.bg_news_default)
+                if (data.tag.isNullOrEmpty()){
+                    NFManager.manager.notify(NFManager.nfNewsId, bulider.build())
+                }else{
+                    NFManager.manager.cancel(data.tag,0)
+                    NFManager.manager.notify(data.tag,data.nId,bulider.build())
+                }
+            })
+            CacheManager.saveLastRefreshTime(enum.menuName)
         }
-        var width = dp2px(331f)
-        var height = dp2px(181f)
-        GlideManager.loadNFBitmap(APP.instance,data.iassum?:"",width,height, bitmapCall ={
-            smallRemote?.setImageViewBitmap(R.id.ivPic, it)
-            largeRemote?.setImageViewBitmap(R.id.ivPic, it)
-            largeRemote.setViewVisibility(R.id.ivBg,View.VISIBLE)
-            smallRemote.setViewVisibility(R.id.ivBg,View.VISIBLE)
-            if (data.tag.isNullOrEmpty()){
-                NFManager.manager.notify(NFManager.nfNewsId, bulider.build())
-            }else{
-                NFManager.manager.cancel(data.tag,0)
-                NFManager.manager.notify(data.tag,data.nId,bulider.build())
-            }
-        },callFail ={
-            smallRemote?.setImageViewResource(R.id.ivPic, R.mipmap.bg_news_default)
-            largeRemote?.setImageViewResource(R.id.ivPic, R.mipmap.bg_news_default)
-            if (data.tag.isNullOrEmpty()){
-                NFManager.manager.notify(NFManager.nfNewsId, bulider.build())
-            }else{
-                NFManager.manager.cancel(data.tag,0)
-                NFManager.manager.notify(data.tag,data.nId,bulider.build())
-            }
-        })
-        CacheManager.saveLastRefreshTime(enum.menuName)
     }
 
     fun getForegroundNF(){

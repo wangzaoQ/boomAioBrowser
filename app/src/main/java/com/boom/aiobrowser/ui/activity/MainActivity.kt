@@ -24,6 +24,7 @@ import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
 import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.nf.NFManager
+import com.boom.aiobrowser.other.ShortManager
 import com.boom.aiobrowser.point.PointValue
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BrowserManager
@@ -50,6 +51,7 @@ import com.hjq.permissions.XXPermissions
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import pop.basepopup.BasePopupWindow.OnDismissListener
+import java.lang.ref.WeakReference
 import java.util.LinkedList
 
 
@@ -334,6 +336,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }else{
 
         }
+        ShortManager.addPinShortcut(WeakReference(this@MainActivity))
+
         if (isNormal.not()){
             finish()
             return
@@ -359,7 +363,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 showForeground()
             }
         }else{
-
         }
 
     }

@@ -176,16 +176,16 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             adapterHelper.trailingLoadState = LoadState.NotLoading(false)
             fBinding.refreshLayout.isRefreshing = false
         }
-        fBinding.ivDownload.setOneClick {
-            PointEvent.posePoint(PointEventKey.home_page_dl)
-            if (CacheManager.isVideoFirst){
-                DownloadVideoGuidePop(rootActivity).createPop {  }
-            }else{
-                rootActivity.startActivity(Intent(context, DownloadActivity::class.java).apply {
-                    putExtra("fromPage","home_download_pop")
-                })
-            }
-        }
+//        fBinding.ivDownload.setOneClick {
+//            PointEvent.posePoint(PointEventKey.home_page_dl)
+//            if (CacheManager.isVideoFirst){
+//                DownloadVideoGuidePop(rootActivity).createPop {  }
+//            }else{
+//                rootActivity.startActivity(Intent(context, DownloadActivity::class.java).apply {
+//                    putExtra("fromPage","home_download_pop")
+//                })
+//            }
+//        }
         fBinding.tvGuide.setOneClick {
             DownloadVideoGuidePop(rootActivity).createPop {  }
         }

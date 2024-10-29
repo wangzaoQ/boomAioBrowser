@@ -225,6 +225,23 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/providers" />
         </provider>
+
+
+<!--        <receiver-->
+<!--            android:name=".view.appwidget.NowAppWidgetNewsContent"-->
+<!--            android:exported="true">-->
+<!--            &lt;!&ndash; 声明widget对应的AppWidgetProvider &ndash;&gt;-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
+<!--                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />-->
+<!--                <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />-->
+<!--                <action android:name="now.app.widget_update" />-->
+<!--            </intent-filter>-->
+
+<!--            <meta-data-->
+<!--                android:name="android.appwidget.provider"-->
+<!--                android:resource="@xml/aio_widget_provider" />-->
+<!--        </receiver>-->
     </application>
 
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/bg_main">
+    android:background="@color/white">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -89,14 +89,13 @@
                             tools:visibility="visible"></androidx.appcompat.widget.AppCompatImageView>
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/app_text_bold"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="3dp"
                             android:text="@string/app_search_hint"
-                            android:textColor="#80000000"></androidx.appcompat.widget.AppCompatTextView>
+                            android:textColor="#801C274C"></androidx.appcompat.widget.AppCompatTextView>
                     </androidx.appcompat.widget.LinearLayoutCompat>
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -251,9 +250,9 @@
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/llRoot"
                         android:layout_width="match_parent"
-                        android:layout_height="87dp"
+                        android:layout_height="94dp"
                         android:layout_marginHorizontal="13.5dp"
-                        android:background="@drawable/shape_other_bg"
+                        android:background="@drawable/shape_ll_main_top"
                         app:layout_constraintTop_toBottomOf="@+id/cleanLlRoot">
 
                         <androidx.appcompat.widget.LinearLayoutCompat
@@ -264,18 +263,17 @@
                             android:orientation="vertical">
 
                             <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                app:srcCompat="@mipmap/ic_vimeo"></androidx.appcompat.widget.AppCompatImageView>
+                                android:layout_width="47dp"
+                                android:layout_height="47dp"
+                                app:srcCompat="@mipmap/ic_home_vimeo"></androidx.appcompat.widget.AppCompatImageView>
 
                             <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/app_text_bold"
+                                style="@style/app_home_tab_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
                                 android:text="@string/app_vimeo"
-                                android:textColor="#80000000"
-                                android:textSize="11sp"></androidx.appcompat.widget.AppCompatTextView>
+                                android:textColor="#801C274C"
+                                android:textSize="14sp"></androidx.appcompat.widget.AppCompatTextView>
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -287,18 +285,16 @@
                             android:orientation="vertical">
 
                             <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                app:srcCompat="@mipmap/ic_tt"></androidx.appcompat.widget.AppCompatImageView>
+                                android:layout_width="47dp"
+                                android:layout_height="47dp"
+                                app:srcCompat="@mipmap/ic_home_tt"></androidx.appcompat.widget.AppCompatImageView>
 
                             <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/app_text_bold"
+                                style="@style/app_home_tab_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
                                 android:text="@string/app_tt"
-                                android:textColor="#80000000"
-                                android:textSize="11sp"></androidx.appcompat.widget.AppCompatTextView>
+                                ></androidx.appcompat.widget.AppCompatTextView>
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -310,18 +306,16 @@
                             android:orientation="vertical">
 
                             <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                app:srcCompat="@mipmap/ic_x"></androidx.appcompat.widget.AppCompatImageView>
+                                android:layout_width="47dp"
+                                android:layout_height="47dp"
+                                app:srcCompat="@mipmap/ic_home_x"></androidx.appcompat.widget.AppCompatImageView>
 
                             <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/app_text_bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
                                 android:text="@string/app_x"
-                                android:textColor="#80000000"
-                                android:textSize="11sp"></androidx.appcompat.widget.AppCompatTextView>
+                                style="@style/app_home_tab_text"
+                                ></androidx.appcompat.widget.AppCompatTextView>
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -333,18 +327,16 @@
                             android:orientation="vertical">
 
                             <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                app:srcCompat="@mipmap/ic_fb"></androidx.appcompat.widget.AppCompatImageView>
+                                android:layout_width="47dp"
+                                android:layout_height="47dp"
+                                app:srcCompat="@mipmap/ic_home_fb"></androidx.appcompat.widget.AppCompatImageView>
 
                             <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/app_text_bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
                                 android:text="@string/app_fb"
-                                android:textColor="#80000000"
-                                android:textSize="11sp"></androidx.appcompat.widget.AppCompatTextView>
+                                style="@style/app_home_tab_text"
+                                ></androidx.appcompat.widget.AppCompatTextView>
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
                         <androidx.appcompat.widget.LinearLayoutCompat
@@ -355,18 +347,16 @@
                             android:orientation="vertical">
 
                             <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                app:srcCompat="@mipmap/ic_whats"></androidx.appcompat.widget.AppCompatImageView>
+                                android:layout_width="47dp"
+                                android:layout_height="47dp"
+                                app:srcCompat="@mipmap/ic_home_whats"></androidx.appcompat.widget.AppCompatImageView>
 
                             <androidx.appcompat.widget.AppCompatTextView
-                                style="@style/app_text_bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
                                 android:text="@string/app_whats"
-                                android:textColor="#80000000"
-                                android:textSize="11sp"></androidx.appcompat.widget.AppCompatTextView>
+                                style="@style/app_home_tab_text"
+                                ></androidx.appcompat.widget.AppCompatTextView>
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
                     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -410,37 +400,5 @@
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    <FrameLayout
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
-        <androidx.cardview.widget.CardView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:cardCornerRadius="20dp"
-            android:layout_gravity="center"
-            >
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/ivDownload"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/shape_download_tips"
-                    app:srcCompat="@mipmap/ic_arrow_down"
-                    android:scaleType="centerInside"
-                    android:layout_margin="2dp"
-                    ></androidx.appcompat.widget.AppCompatImageView>
-
-            </FrameLayout>
-        </androidx.cardview.widget.CardView>
-    </FrameLayout>
 
 </FrameLayout>

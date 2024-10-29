@@ -38,7 +38,7 @@
             android:singleLine="true"
             android:ellipsize="end"
             tools:text="12312313131313131313112313112313"
-            android:textColor="#80000000"
+            android:textColor="#801C274C"
             android:textSize="11sp"
             android:textStyle="bold"></androidx.appcompat.widget.AppCompatTextView>
     </RelativeLayout>

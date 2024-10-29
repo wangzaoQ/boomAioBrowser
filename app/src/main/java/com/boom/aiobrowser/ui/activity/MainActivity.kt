@@ -147,14 +147,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
 
 
-    fun showTabPop() {
-        var tabPop = TabPop(this)
-        tabPop.createPop()
-        tabPop.setOnDismissListener(object : OnDismissListener(){
-            override fun onDismiss() {
-            }
-        })
-    }
 
     private fun updateUI(index: Int) {
         if (index == 2 || index == 3){

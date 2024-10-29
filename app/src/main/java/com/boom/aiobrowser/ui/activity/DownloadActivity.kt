@@ -1,8 +1,10 @@
 package com.boom.aiobrowser.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
@@ -22,6 +24,7 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.ui.fragment.DownloadFragment
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
+import com.boom.aiobrowser.ui.pop.MorePop
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -46,7 +49,39 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
         acBinding.tvDone.setOneClick {
             acBinding.vpRoot.currentItem = 1
         }
+        for ( i in 0 until acBinding.llMainControl.childCount){
+            acBinding.llMainControl.getChildAt(i).setOneClick {
+                clickIndex(i)
+            }
+        }
+        APP.jumpLiveData.observe(this){
+            finish()
+        }
     }
+
+    private fun updateBottomUI(index: Int) {
+        for ( start in 0 until acBinding.llMainControl.childCount){
+            var ll = acBinding.llMainControl.getChildAt(start) as LinearLayoutCompat
+            for (i in 0 until ll.childCount){
+                ll.getChildAt(i).isEnabled = (start == index).not()
+            }
+        }
+    }
+
+    private fun clickIndex(index: Int) {
+        when (index) {
+            0 -> {
+                finish()
+            }
+            2 ->{
+                morePop = MorePop(this@DownloadActivity)
+                morePop?.createPop()
+            }
+            else -> {}
+        }
+    }
+
+    var morePop : MorePop?=null
 
     var fromPage = ""
 
@@ -135,6 +170,7 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
         AioADShowManager(this,ADEnum.NATIVE_DOWNLOAD_AD,"下载页原生"){
 
         }.showNativeAD(acBinding.flRoot,AD_POINT.aobws_download_one)
+        updateBottomUI(1)
     }
 
     private fun updateUI(position: Int) {
@@ -144,6 +180,6 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
 
     override fun onDestroy() {
         super.onDestroy()
-//        APP.videoUpdateLiveData.postValue(0)
+        APP.jumpLiveData.removeObservers(this)
     }
 }

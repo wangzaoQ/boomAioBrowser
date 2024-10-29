@@ -124,6 +124,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
             })
         }
         fBinding.ivDownload2.setOneClick {
+            fBinding.ivDownload2.cancelAnimation()
             rootActivity.addLaunch(success = {
                 delay(500)
                 withContext(Dispatchers.Main){

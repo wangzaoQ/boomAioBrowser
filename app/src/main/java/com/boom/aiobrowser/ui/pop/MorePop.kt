@@ -36,15 +36,22 @@ class MorePop(context: Context) : BasePopupWindow(context) {
         popBinding = BrowserPopMoreBinding.bind(contentView)
     }
 
+    fun showTabPop() {
+        var tabPop = TabPop(context)
+        tabPop.createPop()
+        tabPop.setOnDismissListener(object : OnDismissListener(){
+            override fun onDismiss() {
+            }
+        })
+    }
+
     fun createPop(){
         popBinding?.apply {
             ivDelete.setOnClickListener {
                 dismiss()
             }
             llNewTab.setOnClickListener {
-                if (context is MainActivity){
-                    (context as MainActivity).showTabPop()
-                }
+                showTabPop()
                 PointEvent.posePoint(PointEventKey.profile_newtab)
                 dismiss()
             }
@@ -55,21 +62,21 @@ class MorePop(context: Context) : BasePopupWindow(context) {
             }
             llHistory.setOnClickListener {
                 if (context is BaseActivity<*>){
-                    (context as MainActivity).startActivity(Intent(context,HistoryActivity::class.java))
+                    (context as BaseActivity<*>).startActivity(Intent(context,HistoryActivity::class.java))
                 }
                 PointEvent.posePoint(PointEventKey.profile_history)
                 dismiss()
             }
             llAbout.setOnClickListener {
                 if (context is BaseActivity<*>){
-                    (context as MainActivity).startActivity(Intent(context,AboutActivity::class.java))
+                    (context as BaseActivity<*>).startActivity(Intent(context,AboutActivity::class.java))
                 }
                 PointEvent.posePoint(PointEventKey.profile_about)
                 dismiss()
             }
             llDownload.setOnClickListener {
                 if (context is BaseActivity<*>){
-                    (context as MainActivity).startActivity(Intent(context, DownloadActivity::class.java).apply {
+                    (context as BaseActivity<*>).startActivity(Intent(context, DownloadActivity::class.java).apply {
                         putExtra("fromPage","home_more_pop")
                     })
                 }

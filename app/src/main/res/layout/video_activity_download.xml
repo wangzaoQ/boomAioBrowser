@@ -79,17 +79,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/flRoot"
+        android:layout_above="@+id/llMainControl"
         />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/llGuide"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="61dp"
         android:orientation="horizontal"
         android:layout_marginHorizontal="13.5dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="54dp"
+        android:layout_marginBottom="104dp"
+        android:visibility="gone"
         android:background="@drawable/shape_video_guide"
         >
         <androidx.appcompat.widget.AppCompatImageView
@@ -118,6 +119,80 @@
             app:srcCompat="@mipmap/ic_guide_enter"
             android:layout_marginEnd="13.5dp"
             ></androidx.appcompat.widget.AppCompatImageView>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llMainControl"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        >
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1"
+            >
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:srcCompat="@drawable/selector_main_home"
+                ></androidx.appcompat.widget.AppCompatImageView>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_home"
+                android:textSize="9sp"
+                android:layout_marginTop="3dp"
+                android:textColor="@drawable/selector_tab_text"
+                ></androidx.appcompat.widget.AppCompatTextView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1"
+            >
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:srcCompat="@drawable/selector_main_download"
+                ></androidx.appcompat.widget.AppCompatImageView>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_download"
+                android:textSize="9sp"
+                android:layout_marginTop="3dp"
+                android:textColor="@drawable/selector_tab_text"
+                ></androidx.appcompat.widget.AppCompatTextView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1"
+            >
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:srcCompat="@mipmap/ic_home_setting"
+                ></androidx.appcompat.widget.AppCompatImageView>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_me"
+                android:textSize="9sp"
+                android:layout_marginTop="3dp"
+                android:textColor="@drawable/selector_tab_text"
+                ></androidx.appcompat.widget.AppCompatTextView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </RelativeLayout>

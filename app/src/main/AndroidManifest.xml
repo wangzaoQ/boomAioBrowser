@@ -176,6 +176,7 @@
             ></activity>
         <activity android:name=".ui.activity.WebParseActivity"
             android:theme="@style/AppTheme.Dialog"
+            android:launchMode="singleTop"
             ></activity>
         <service android:name=".nf.NFService"
             android:exported="true"

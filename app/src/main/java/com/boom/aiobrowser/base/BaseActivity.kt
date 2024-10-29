@@ -70,7 +70,6 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
             if (APP.instance.shareText.isEmpty()){
                 var copy = getClipContent()
                 if (copy.isNullOrEmpty().not()){
-                    clearClipboard()
                     var index = -1
                     for (i in 0 until APP.instance.lifecycleApp.stack.size){
                         var activity = APP.instance.lifecycleApp.stack.get(i)
@@ -82,6 +81,7 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
                     if (index==-1){
                         withContext(Dispatchers.Main){
                             ProcessingTextPop(this@BaseActivity).createPop(copy?:"", PointValue.clipboard){
+                                clearClipboard()
                                 WebParseActivity.toWebParseActivity(this@BaseActivity,2,copy)
                             }
                         }

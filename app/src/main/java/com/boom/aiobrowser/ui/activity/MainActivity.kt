@@ -242,7 +242,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             if (count == 1){
                 loadNews()
             }
-            CacheManager.videoDownloadTempList = mutableListOf()
+//            CacheManager.videoDownloadTempList = mutableListOf()
         },500)
         startFragment = StartFragment()
         startFragment?.apply {

@@ -227,21 +227,21 @@
         </provider>
 
 
-<!--        <receiver-->
-<!--            android:name=".view.appwidget.NowAppWidgetNewsContent"-->
-<!--            android:exported="true">-->
-<!--            &lt;!&ndash; 声明widget对应的AppWidgetProvider &ndash;&gt;-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
-<!--                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />-->
-<!--                <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />-->
-<!--                <action android:name="now.app.widget_update" />-->
-<!--            </intent-filter>-->
+        <receiver
+            android:name=".other.WidgetProvider"
+            android:exported="true">
+            <!-- 声明widget对应的AppWidgetProvider -->
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+                <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
+                <action android:name="aio.widget_update" />
+            </intent-filter>
 
-<!--            <meta-data-->
-<!--                android:name="android.appwidget.provider"-->
-<!--                android:resource="@xml/aio_widget_provider" />-->
-<!--        </receiver>-->
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/aio_widget_provider" />
+        </receiver>
     </application>
 
 

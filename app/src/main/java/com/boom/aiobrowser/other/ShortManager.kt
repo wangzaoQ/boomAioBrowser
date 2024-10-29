@@ -1,11 +1,15 @@
 package com.boom.aiobrowser.other
 
 import android.app.PendingIntent
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
+import android.os.Bundle
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.nf.NFJump.getFlags
@@ -75,6 +79,39 @@ object ShortManager {
                             pinShortcutInfo,
                             successCallback.intentSender
                         )
+                    }
+                }
+            }
+        }.onFailure {
+            AppLogs.eLog(TAG,it.stackTraceToString())
+        }
+    }
+
+
+    val APP_WIDGET_UPDATE = "aio.widget_update"
+
+    fun widgetUpdate(context: Context) {
+        AppLogs.dLog(APP_WIDGET_UPDATE,"widgetUpdate")
+        context.sendBroadcast(Intent(APP_WIDGET_UPDATE, null, context, WidgetProvider::class.java))
+    }
+
+    fun addWidgetToLaunch(context: Context) { // 添加组件到桌面
+        runCatching {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val appWidgetManager: AppWidgetManager? = context.getSystemService(AppWidgetManager::class.java) as AppWidgetManager
+                appWidgetManager?.let {
+                    if (appWidgetManager.isRequestPinAppWidgetSupported) {
+                        val myProvider = ComponentName(context, WidgetProvider::class.java)
+                        val addWidgetCallIntent = Intent(context, WidgetProvider::class.java)
+                        val successCallback: PendingIntent = PendingIntent.getBroadcast(
+                            context,
+                            0,
+                            addWidgetCallIntent, PendingIntent.FLAG_IMMUTABLE
+//                    PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+//                    PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_IMMUTABLE
+//                    PendingIntent.FLAG_UPDATE_CURRENT
+                        )
+                        appWidgetManager.requestPinAppWidget(myProvider, Bundle().apply { putString("add_widget", "add_widget") }, successCallback)
                     }
                 }
             }

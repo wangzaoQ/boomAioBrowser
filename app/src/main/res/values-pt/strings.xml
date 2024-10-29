@@ -161,5 +161,13 @@
     <string name="app_search_guide">Cole o URL compartilhado aqui</string>
     <string name="app_video_downlod">Baixador de vídeos</string>
     <string name="app_confirm">Confirmar</string>
-
+    <string name="app_ins_tips_1">Abra o "Instagram" e clique em "Compartilhar"</string>
+    <string name="app_ins_tips_2">Abra o "Instagram" e clique em "Copiar link"</string>
+    <string name="app_search_video">Pesquisar vídeo</string>
+    <string name="app_guide_title">Downloads rápidos, atualizações instantâneas.</string>
+    <string name="app_nf_pop_guide1">Seu vídeo foi baixado com sucesso!</string>
+    <string name="app_nf_pop_guide2">Novos vídeos populares acabaram de ser atualizados—você vai adorar!</string>
+    <string name="app_nf_pop_guide3">Ativar notificações</string>
+    <string name="app_x_tips_1">Abra o "X" e clique em "Compartilhar"</string>
+    <string name="app_x_tips_2">Abra o "X" e clique em "Copiar link"</string>
 </resources>

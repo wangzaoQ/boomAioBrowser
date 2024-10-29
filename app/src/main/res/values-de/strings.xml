@@ -161,5 +161,13 @@
     <string name="app_search_guide">Teilen-URL hier einfügen</string>
     <string name="app_video_downlod">Video-Downloader</string>
     <string name="app_confirm">Bestätigen</string>
-
+    <string name="app_ins_tips_1">Öffne "Instagram" und klicke auf "Teilen"</string>
+    <string name="app_ins_tips_2">Öffne "Instagram" und klicke auf "Link kopieren"</string>
+    <string name="app_search_video">Video suchen</string>
+    <string name="app_guide_title">Reibungslose Downloads, sofortige Updates.</string>
+    <string name="app_nf_pop_guide1">Dein Video wurde heruntergeladen!</string>
+    <string name="app_nf_pop_guide2">Neue trendige Videos wurden gerade aktualisiert – du wirst sie lieben!</string>
+    <string name="app_nf_pop_guide3">Benachrichtigungen aktivieren</string>
+    <string name="app_x_tips_1">Öffne "X" und klicke auf "Teilen"</string>
+    <string name="app_x_tips_2">Öffne "X" und klicke auf "Link kopieren"</string>
 </resources>

@@ -160,5 +160,13 @@
     <string name="app_search_guide">Paylaşım URL\'sini buraya yapıştırın</string>
     <string name="app_video_downlod">Video İndirici</string>
     <string name="app_confirm">Onaylamak</string>
-
+    <string name="app_ins_tips_1">"Instagram"ı açın ve "Paylaş"a tıklayın</string>
+    <string name="app_ins_tips_2">"Instagram"ı açın ve "Bağlantıyı kopyala"ya tıklayın</string>
+    <string name="app_search_video">Video Ara</string>
+    <string name="app_guide_title">Sorunsuz İndirme, Anında Güncellemeler.</string>
+    <string name="app_nf_pop_guide1">Videonuz indirildi!</string>
+    <string name="app_nf_pop_guide2">Yeni trend videolar güncellendi—çok seveceksiniz!</string>
+    <string name="app_nf_pop_guide3">Bildirimleri aç</string>
+    <string name="app_x_tips_1">"X"i açın ve "Paylaş"a tıklayın</string>
+    <string name="app_x_tips_2">"X"i açın ve "Bağlantıyı kopyala"ya tıklayın</string>
 </resources>

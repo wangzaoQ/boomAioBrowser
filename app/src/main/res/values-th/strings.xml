@@ -161,5 +161,13 @@
     <string name="app_search_guide">วาง URL ที่แชร์ที่นี่</string>
     <string name="app_video_downlod">ตัวดาวน์โหลดวิดีโอ</string>
     <string name="app_confirm">ยืนยัน</string>
-
+    <string name="app_ins_tips_1">เปิด "Instagram" และคลิก "แชร์"</string>
+    <string name="app_ins_tips_2">เปิด "Instagram" และคลิก "คัดลอกลิงก์"</string>
+    <string name="app_search_video">ค้นหาวิดีโอ</string>
+    <string name="app_guide_title">ดาวน์โหลดได้อย่างราบรื่น การอัปเดตทันที</string>
+    <string name="app_nf_pop_guide1">ดาวน์โหลดวิดีโอเสร็จสิ้นแล้ว!</string>
+    <string name="app_nf_pop_guide2">วิดีโอเทรนด์ใหม่เพิ่งอัปเดต—คุณจะต้องชอบ!</string>
+    <string name="app_nf_pop_guide3">เปิดการแจ้งเตือน</string>
+    <string name="app_x_tips_1">เปิด "X" และคลิก "แชร์"</string>
+    <string name="app_x_tips_2">เปิด "X" และคลิก "คัดลอกลิงก์"</string>
 </resources>

@@ -161,5 +161,13 @@
     <string name="app_search_guide">Tempel URL berbagi di sini</string>
     <string name="app_video_downlod">Pengunduh Video</string>
     <string name="app_confirm">Memastikan</string>
-
+    <string name="app_ins_tips_1">Buka "Instagram" dan klik "Bagikan"</string>
+    <string name="app_ins_tips_2">Buka "Instagram" dan klik "Salin tautan"</string>
+    <string name="app_search_video">Cari Video</string>
+    <string name="app_guide_title">Unduhan Lancar, Pembaruan Instan.</string>
+    <string name="app_nf_pop_guide1">Video Anda telah selesai diunduh!</string>
+    <string name="app_nf_pop_guide2">Video tren baru saja diperbarui—Anda pasti akan menyukainya!</string>
+    <string name="app_nf_pop_guide3">Aktifkan notifikasi</string>
+    <string name="app_x_tips_1">Buka "X" dan klik "Bagikan"</string>
+    <string name="app_x_tips_2">Buka "X" dan klik "Salin tautan"</string>
 </resources>

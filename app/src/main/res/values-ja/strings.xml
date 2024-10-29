@@ -159,5 +159,13 @@
     <string name="app_search_guide">共有URLをここに貼り付け</string>
     <string name="app_video_downlod">動画ダウンローダー</string>
     <string name="app_confirm">確定する</string>
-
+    <string name="app_ins_tips_1">「Instagram」を開いて「共有」をクリック</string>
+    <string name="app_ins_tips_2">「Instagram」を開いて「リンクをコピー」をクリック</string>
+    <string name="app_search_video">ビデオを検索</string>
+    <string name="app_guide_title">スムーズなダウンロード、即時更新。</string>
+    <string name="app_nf_pop_guide1">動画のダウンロードが完了しました！</string>
+    <string name="app_nf_pop_guide2">新しいトレンド動画が更新されました。気に入るはずです！</string>
+    <string name="app_nf_pop_guide3">通知をオンにする</string>
+    <string name="app_x_tips_1">「X」を開いて「共有」をクリック</string>
+    <string name="app_x_tips_2">「X」を開いて「リンクをコピー」をクリック</string>
 </resources>

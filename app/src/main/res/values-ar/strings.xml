@@ -159,5 +159,13 @@
     <string name="app_search_guide">الصق رابط المشاركة هنا</string>
     <string name="app_video_downlod">برنامج تحميل الفيديو</string>
     <string name="app_confirm">التأكد</string>
-
+    <string name="app_ins_tips_1">افتح "Instagram" واضغط على "مشاركة"</string>
+    <string name="app_ins_tips_2">افتح "Instagram" واضغط على "نسخ الرابط"</string>
+    <string name="app_search_video">البحث عن فيديو</string>
+    <string name="app_guide_title">تنزيلات سلسة، تحديثات فورية.</string>
+    <string name="app_nf_pop_guide1">تم تنزيل الفيديو الخاص بك بنجاح!</string>
+    <string name="app_nf_pop_guide2">تم تحديث مقاطع الفيديو الشائعة الجديدة — ستحبها!</string>
+    <string name="app_nf_pop_guide3">تفعيل الإشعارات</string>
+    <string name="app_x_tips_1">افتح "X" واضغط على "مشاركة"</string>
+    <string name="app_x_tips_2">افتح "X" واضغط على "نسخ الرابط"</string>
 </resources>

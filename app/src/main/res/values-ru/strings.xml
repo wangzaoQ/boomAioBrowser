@@ -160,5 +160,13 @@
     <string name="app_search_guide">Вставьте URL для обмена здесь</string>
     <string name="app_video_downlod">Загрузчик видео</string>
     <string name="app_confirm">подтверждать</string>
-
+    <string name="app_ins_tips_1">Откройте "Instagram" и нажмите "Поделиться"</string>
+    <string name="app_ins_tips_2">Откройте "Instagram" и нажмите "Копировать ссылку"</string>
+    <string name="app_search_video">Поиск видео</string>
+    <string name="app_guide_title">Плавные загрузки, мгновенные обновления.</string>
+    <string name="app_nf_pop_guide1">Ваше видео успешно загружено!</string>
+    <string name="app_nf_pop_guide2">Новые трендовые видео только что обновлены — вам понравится!</string>
+    <string name="app_nf_pop_guide3">Включить уведомления</string>
+    <string name="app_x_tips_1">Откройте "X" и нажмите "Поделиться"</string>
+    <string name="app_x_tips_2">Откройте "X" и нажмите "Копировать ссылку"</string>
 </resources>

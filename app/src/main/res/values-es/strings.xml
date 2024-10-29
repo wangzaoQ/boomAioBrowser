@@ -164,6 +164,14 @@
     <string name="app_video_downlod">Descargador de videos</string>
 
     <string name="app_confirm">Confirmar</string>
-
+    <string name="app_ins_tips_1">Abre "Instagram" y haz clic en "Compartir"</string>
+    <string name="app_ins_tips_2">Abre "Instagram" y haz clic en "Copiar enlace"</string>
+    <string name="app_search_video">Buscar video</string>
+    <string name="app_guide_title">Descargas fluidas, actualizaciones instantáneas.</string>
+    <string name="app_nf_pop_guide1">¡Tu video ha terminado de descargarse!</string>
+    <string name="app_nf_pop_guide2">Nuevos videos de tendencias actualizados: ¡te encantarán!</string>
+    <string name="app_nf_pop_guide3">Activar notificaciones</string>
+    <string name="app_x_tips_1">Abre "X" y haz clic en "Compartir"</string>
+    <string name="app_x_tips_2">Abre "X" y haz clic en "Copiar enlace"</string>
 
 </resources>

@@ -160,5 +160,13 @@
     <string name="app_search_guide">Dán URL chia sẻ tại đây</string>
     <string name="app_video_downlod">Trình tải video</string>
     <string name="app_confirm">xác định</string>
-
+    <string name="app_ins_tips_1">Mở "Instagram" và nhấp vào "Chia sẻ"</string>
+    <string name="app_ins_tips_2">Mở "Instagram" và nhấp vào "Sao chép liên kết"</string>
+    <string name="app_search_video">Tìm kiếm video</string>
+    <string name="app_guide_title">Tải xuống mượt mà, cập nhật ngay lập tức.</string>
+    <string name="app_nf_pop_guide1">Video của bạn đã được tải xuống!</string>
+    <string name="app_nf_pop_guide2">Video trending mới vừa được cập nhật—bạn sẽ thích nó!</string>
+    <string name="app_nf_pop_guide3">Bật thông báo</string>
+    <string name="app_x_tips_1">Mở "X" và nhấp vào "Chia sẻ"</string>
+    <string name="app_x_tips_2">Mở "X" và nhấp vào "Sao chép liên kết"</string>
 </resources>

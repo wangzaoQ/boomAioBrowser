@@ -13,6 +13,7 @@ object NetParams {
 
     var FOR_YOU = "forYou"
     var FOR_YOU_PUSH = "forYouPush"
+    var WIDGET = "widget"
 
     suspend fun getParamsMap(key:String):HashMap<String,String>{
         var needLocation = false
@@ -20,7 +21,7 @@ object NetParams {
         var isPush = false
         var map = HashMap<String,String>()
         when (key) {
-            FOR_YOU,FOR_YOU_PUSH -> {
+            FOR_YOU,FOR_YOU_PUSH,WIDGET -> {
                 needLocation = true
                 if (key == FOR_YOU_PUSH){
                     isPush = true

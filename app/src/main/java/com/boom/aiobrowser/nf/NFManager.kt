@@ -17,8 +17,10 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValue
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.ui.JumpConfig
+import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.isAndroid12
 import com.boom.aiobrowser.ui.isAndroid14
 import com.hjq.permissions.OnPermissionCallback
@@ -169,6 +171,9 @@ object NFManager {
                     }
                 }
             }
+            ParamsConfig.WIDGET->{
+
+            }
             else -> {}
         }
 
@@ -214,5 +219,16 @@ object NFManager {
             this.nId = Random.nextInt(1000000)
         }
         NFShow.showNewsNF(data,NFEnum.NF_NEWS_FCM)
+    }
+
+    fun needRefreshData(key:String): Boolean {
+        var oldTime = CacheManager.getLastRefreshTime(key)
+        var limit = 3 * 60 * 60 * 1000
+        var refresh = (System.currentTimeMillis() - oldTime) > limit
+        AppLogs.dLog(
+            NFManager.TAG,
+            "name:${key} 判断是否需要强制刷新数据/refresh:${refresh}"
+        )
+        return refresh
     }
 }

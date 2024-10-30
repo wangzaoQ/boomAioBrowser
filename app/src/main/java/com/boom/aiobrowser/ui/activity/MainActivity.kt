@@ -308,15 +308,30 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 }
                 NFEnum.NF_NEWS.menuName,NFEnum.NF_NEWS_FCM.menuName->{
                     var data = getBeanByGson(nfData,NewsData::class.java)
-                    var jumpData = JumpDataManager.getCurrentJumpData(tag="新闻跳转")
+                    var jumpData = JumpDataManager.getCurrentJumpData(tag="首页通知新闻跳转")
                     jumpData.apply {
                         jumpUrl= data?.uweek?:""
                         jumpType = JumpConfig.JUMP_WEB
                         jumpTitle = data?.tconsi?:""
                         isJumpClick = true
                     }
-                    JumpDataManager.updateCurrentJumpData(jumpData,tag="新闻跳转")
+                    JumpDataManager.updateCurrentJumpData(jumpData,tag="首页通知新闻跳转")
 //                    APP.jumpLiveData.postValue(jumpData)
+                }
+                ParamsConfig.WIDGET->{
+                    if (nfTo == 0){
+                        var data = getBeanByGson(nfData,NewsData::class.java)
+                        var jumpData = JumpDataManager.getCurrentJumpData(tag="首页widget新闻跳转")
+                        jumpData.apply {
+                            jumpUrl= data?.uweek?:""
+                            jumpType = JumpConfig.JUMP_WEB
+                            jumpTitle = data?.tconsi?:""
+                            isJumpClick = true
+                        }
+                        JumpDataManager.updateCurrentJumpData(jumpData,tag="首页widget新闻跳转")
+                    }else if (nfTo == 1){
+                        jumpActivity<SearchActivity>()
+                    }
                 }
                 else -> {}
             }

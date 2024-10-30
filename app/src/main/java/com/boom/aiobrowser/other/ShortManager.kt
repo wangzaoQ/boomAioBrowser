@@ -98,8 +98,8 @@ object ShortManager {
 
 
 
-    fun widgetUpdate(context: Context) {
-        AppLogs.dLog(APP_WIDGET_UPDATE,"widgetUpdate")
+    fun widgetUpdate(context: Context,tag:String) {
+        AppLogs.dLog(APP_WIDGET_UPDATE,tag)
         context.sendBroadcast(Intent(APP_WIDGET_UPDATE, null, context, WidgetProvider::class.java))
     }
 

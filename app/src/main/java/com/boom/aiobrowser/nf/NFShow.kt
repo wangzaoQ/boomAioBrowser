@@ -39,15 +39,7 @@ object NFShow {
             var refreshSession = false
             var count = 0
             var newsList: MutableList<NewsData>? = null
-            var oldTime = CacheManager.getLastRefreshTime(enum.menuName)
-//        var limit = if (NewsAPP.isDebug)1*60*1000 else 12*60*60*1000
-            var limit = 3 * 60 * 60 * 1000
-            var refresh = (System.currentTimeMillis() - oldTime) > limit
-            AppLogs.dLog(
-                NFManager.TAG,
-                "name:${enum.menuName} 判断是否需要强制刷新数据/refresh:${refresh}"
-            )
-            if (refresh) {
+            if (NFManager.needRefreshData(enum.menuName)) {
                 CacheManager.saveNFNewsList(enum.menuName, mutableListOf())
             }
             newsList = CacheManager.getNFNewsList(enum.menuName)

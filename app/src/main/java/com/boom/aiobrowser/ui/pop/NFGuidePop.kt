@@ -5,17 +5,12 @@ import android.os.Build
 import android.view.View
 import android.view.animation.Animation
 import com.boom.aiobrowser.APP
-import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
-import com.boom.aiobrowser.data.VideoDownloadData
-import com.boom.aiobrowser.databinding.BrowserPopDefaultBinding
 import com.boom.aiobrowser.databinding.BrowserPopNfGuideBinding
 import com.boom.aiobrowser.nf.NFManager
-import com.boom.aiobrowser.nf.NFShow
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
-import com.boom.aiobrowser.tools.BrowserManager
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import pop.basepopup.BasePopupWindow
@@ -64,12 +59,14 @@ class NFGuidePop(context: Context) : BasePopupWindow(context) {
         }
         showPopupWindow()
         PointEvent.posePoint(PointEventKey.noti_confirm_pop)
+        APP.instance.showPopLevel = 1
     }
 
     override fun onDismiss() {
         if (isComplete.not()){
             PointEvent.posePoint(PointEventKey.noti_confirm_pop_skip)
         }
+        APP.instance.showPopLevel = 0
         super.onDismiss()
     }
 

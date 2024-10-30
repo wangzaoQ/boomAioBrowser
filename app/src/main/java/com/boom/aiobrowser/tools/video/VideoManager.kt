@@ -6,12 +6,15 @@ import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.APP.Companion.videoLiveData
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.nf.NFShow
+import com.boom.aiobrowser.other.ShortManager
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.web.WebScan
 import com.boom.video.cache.CacheFactory
@@ -29,6 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.File
+import java.lang.ref.WeakReference
 
 
 object VideoManager {
@@ -172,6 +176,20 @@ object VideoManager {
                     putString(PointValueKey.video_source,source)
                     putString(PointValueKey.video_url,item.url)
                 })
+                var isDownload = CacheManager.isFirstDownloadVideoSuccess
+                var activity:BaseActivity<*>?=null
+                var stackList = APP.instance.lifecycleApp.stack
+                if (stackList.size>0){
+                    for (i in stackList.size-1 downTo 0){
+                        if (stackList.get(i) is BaseActivity<*>){
+                            activity = stackList.get(i) as BaseActivity<*>
+                            break
+                        }
+                    }
+                }
+                if (isDownload && activity!=null){
+                    ShortManager.addRate(WeakReference(activity))
+                }
             }
         })
 

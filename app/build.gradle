@@ -231,7 +231,12 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
     implementation 'com.google.android.gms:play-services-appset:16.0.2'
 //    implementation("com.google.firebase:firebase-crashlytics-ktx")
-
+    // === 应用评分 start
+    // This dependency is downloaded from the Google’s Maven repository.
+    // Make sure you also include that repository in your project's build.gradle file.
+    implementation("com.google.android.play:review:2.0.1")
+    // For Kotlin users, also import the Kotlin extensions library for Play In-App Review:
+    implementation("com.google.android.play:review-ktx:2.0.1")
 
     implementation 'com.facebook.android:facebook-android-sdk:12.3.0'
     implementation 'com.adjust.sdk:adjust-android:4.33.5'

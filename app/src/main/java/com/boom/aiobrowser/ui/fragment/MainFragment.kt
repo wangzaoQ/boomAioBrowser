@@ -19,6 +19,7 @@ import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.BrowserFragmentMainBinding
 import com.boom.aiobrowser.model.NewsViewModel
+import com.boom.aiobrowser.other.ShortManager
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -38,6 +39,7 @@ import com.boom.aiobrowser.ui.adapter.HomeHistoryAdapter
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.EngineGuidePop
+import com.boom.aiobrowser.ui.pop.RatePop
 import com.boom.aiobrowser.ui.pop.SearchPop
 import com.boom.aiobrowser.ui.view.ShareImageView.dp2px
 import com.boom.base.adapter4.QuickAdapterHelper
@@ -243,6 +245,11 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             fBinding.rlEmptyHistory.visibility = View.GONE
             historyAdapter.submitList(historyList)
         }
+        APP.instance.showPopLevel = 0
+        fBinding.root.postDelayed(Runnable {
+            ShortManager.addWidgetToLaunch(APP.instance)
+            ShortManager.addPinShortcut(WeakReference(rootActivity))
+        },1000)
     }
 
     private fun updateEngine(type: Int) {

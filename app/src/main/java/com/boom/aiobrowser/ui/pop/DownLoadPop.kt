@@ -17,6 +17,7 @@ import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.VideoPopDownloadBinding
 import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.nf.NFShow
+import com.boom.aiobrowser.other.ShortManager
 import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
@@ -210,6 +211,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
 
 
         downloadAdapter.addOnDebouncedChildClick(R.id.ivDownload) { adapter, view, position ->
+            CacheManager.dayDownloadCount += 1
             if (CacheManager.isDisclaimerFirst) {
                 CacheManager.isDisclaimerFirst = false
                 DisclaimerPop(context).createPop {
@@ -220,6 +222,13 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                     clickDownload(position)
                 }
             }
+            if (ShortManager.allowRate()){
+                var count = CacheManager.dayDownloadCount
+                if (count == 3 || count == 5 || count == 10 || count == 15){
+                    ShortManager.addRate(WeakReference(context as BaseActivity<*>))
+                }
+            }
+
             PointEvent.posePoint(PointEventKey.webpage_download_pop_dl)
         }
         downloadAdapter.setOnDebouncedItemClick { adapter, view, position ->

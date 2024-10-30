@@ -45,6 +45,12 @@ class DefaultPop(context: Context) : BasePopupWindow(context){
         }
         showPopupWindow()
         PointEvent.posePoint(PointEventKey.default_pop)
+        APP.instance.showPopLevel = 1
+    }
+
+    override fun onDismiss() {
+        APP.instance.showPopLevel = 0
+        super.onDismiss()
     }
 
     override fun onCreateShowAnimation(): Animation {

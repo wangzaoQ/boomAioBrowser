@@ -23,8 +23,13 @@ object CacheManager {
     const val KV_FIRST_START = "KV_FIRST_START"
     const val KV_INSTALL_REFER = "KV_INSTALL_REFER"
     const val KV_FIRST_CLICK_DOWNLOAD_BUTTON = "KV_FIRST_CLICK_DOWNLOAD_BUTTON"
+    const val KV_FIRST_DOWNLOAD_VIDEO_SUCCESS = "KV_FIRST_DOWNLOAD_VIDEO_SUCCESS"
+    const val KV_DAY_DOWNLOAD_COUNT = "KV_DAY_DOWNLOAD_COUNT"
+    const val KV_DAY_FEEDBACK_COUNT = "KV_DAY_FEEDBACK_COUNT"
+    const val KV_DAY_SHOW_ADD_SHORT = "KV_DAY_SHOW_ADD_SHORT"
     const val KV_FIRST_VIDEO = "KV_FIRST_VIDEO"
     const val KV_FIRST_DISCLAIMER = "KV_FIRST_DISCLAIMER"
+    const val KV_RATE5 = "KV_RATE5"
     const val KV_ENGINE_GUIDE_FIRST = "KV_ENGINE_GUIDE_FIRST"
     const val KV_FIRST_SHOW_CLEAR = "KV_FIRST_SHOW_CLEAR"
     const val KV_FIRST_SHOW_BROWSER_DEFAULT = "KV_FIRST_SHOW_BROWSER_DEFAULT"
@@ -86,6 +91,38 @@ object CacheManager {
             mmkv.encode(KV_FIRST_CLICK_DOWNLOAD_BUTTON, value)
         }
 
+    var isFirstDownloadVideoSuccess: Boolean
+        get() {
+            return mmkv.decodeBool(KV_FIRST_DOWNLOAD_VIDEO_SUCCESS, false)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_DOWNLOAD_VIDEO_SUCCESS, value)
+        }
+
+    var dayDownloadCount:Int
+        get() {
+            return mmkv.decodeInt(KV_DAY_DOWNLOAD_COUNT, 0)
+        }
+        set(value) {
+            mmkv.encode(KV_DAY_DOWNLOAD_COUNT, value)
+        }
+
+    var dayFeedBackCount:Int
+        get() {
+            return mmkv.decodeInt(KV_DAY_FEEDBACK_COUNT, 0)
+        }
+        set(value) {
+            mmkv.encode(KV_DAY_FEEDBACK_COUNT, value)
+        }
+
+    var dayShowAddShort: Boolean
+        get() {
+            return mmkv.decodeBool(KV_DAY_SHOW_ADD_SHORT, true)
+        }
+        set(value) {
+            mmkv.encode(KV_DAY_SHOW_ADD_SHORT, value)
+        }
+
     var isFirstShowDownload: Boolean
         get() {
             return mmkv.decodeBool(KV_FIRST_SHOW_DOWNLOAD, true)
@@ -107,6 +144,13 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_FIRST_DISCLAIMER, value)
+        }
+    var isRate5: Boolean
+        get() {
+            return mmkv.decodeBool(KV_RATE5, false)
+        }
+        set(value) {
+            mmkv.encode(KV_RATE5, value)
         }
 
 

@@ -195,6 +195,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     private fun showDownloadPop() {
         popDown = DownLoadPop(rootActivity)
         popDown?.createPop(){}
+        CacheManager.isFirstClickDownloadButton = false
     }
 
     var popDown: DownLoadPop?=null

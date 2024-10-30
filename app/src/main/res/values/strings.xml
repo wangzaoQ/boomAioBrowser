@@ -171,4 +171,11 @@
     <string name="app_nf_pop_guide3">Turn on notifications</string>
     <string name="app_x_tips_1">Open\" X \" and click \"Share\"</string>
     <string name="app_x_tips_2">Open\" X \" and click copy link</string>
+
+    <string name="app_rate_title">Five-Star Review</string>
+    <string name="app_rate_title5">Rate the browser</string>
+    <string name="app_rate_content">Your encouragement makes us better!</string>
+    <string name="app_rate_content5">Your encouragement makes us better!</string>
+
+    <string name="app_submit">Submit</string>
 </resources>

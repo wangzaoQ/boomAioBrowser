@@ -12,18 +12,26 @@ import android.os.Build
 import android.os.Bundle
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.nf.NFJump.getFlags
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.activity.MainActivity
+import com.boom.aiobrowser.ui.pop.RatePop
 import java.lang.ref.WeakReference
 
 
 object ShortManager {
+    val APP_WIDGET_UPDATE = "aio.widget_update"
 
-    var TAG = "ShortManager"
+    var TAG = APP_WIDGET_UPDATE
 
-    fun addPinShortcut(weakReference: WeakReference<MainActivity>) {
+    fun addPinShortcut(weakReference: WeakReference<BaseActivity<*>>) {
+        if (APP.instance.showPopLevel>0){
+            AppLogs.dLog(TAG,"short添加失败 当前有更高等级弹窗")
+            return
+        }
         runCatching {
             weakReference.get()?.apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -79,6 +87,7 @@ object ShortManager {
                             pinShortcutInfo,
                             successCallback.intentSender
                         )
+                        APP.instance.showPopLevel = 3
                     }
                 }
             }
@@ -88,7 +97,6 @@ object ShortManager {
     }
 
 
-    val APP_WIDGET_UPDATE = "aio.widget_update"
 
     fun widgetUpdate(context: Context) {
         AppLogs.dLog(APP_WIDGET_UPDATE,"widgetUpdate")
@@ -96,6 +104,19 @@ object ShortManager {
     }
 
     fun addWidgetToLaunch(context: Context) { // 添加组件到桌面
+        if (CacheManager.isFirstClickDownloadButton){
+            AppLogs.dLog(TAG,"Widget添加失败 新用户未使用下载功能")
+            return
+        }
+        if (CacheManager.dayShowAddShort.not()){
+            AppLogs.dLog(TAG,"Widget添加失败 当日只能展示一次")
+            return
+        }
+        if (APP.instance.showPopLevel>0){
+            AppLogs.dLog(TAG,"Widget添加失败 当前有更高等级弹窗")
+            return
+        }
+        CacheManager.dayShowAddShort = false
         runCatching {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val appWidgetManager: AppWidgetManager? = context.getSystemService(AppWidgetManager::class.java) as AppWidgetManager
@@ -112,12 +133,38 @@ object ShortManager {
 //                    PendingIntent.FLAG_UPDATE_CURRENT
                         )
                         appWidgetManager.requestPinAppWidget(myProvider, Bundle().apply { putString("add_widget", "add_widget") }, successCallback)
+                        APP.instance.showPopLevel = 2
                     }
                 }
             }
         }.onFailure {
             AppLogs.eLog(TAG,it.stackTraceToString())
         }
+    }
+
+    fun addRate(weakReference: WeakReference<BaseActivity<*>>) {
+        var activity: BaseActivity<*> = weakReference.get() ?: return
+        CacheManager.isFirstDownloadVideoSuccess = false
+        if (allowRate()){
+            RatePop(activity).createPop()
+        }
+    }
+
+    fun allowRate(): Boolean {
+        if (CacheManager.isRate5){
+            AppLogs.dLog(TAG,"评分弹窗已经点击反馈")
+            return false
+        }
+        var count = CacheManager.dayFeedBackCount
+        if (count == 3){
+            AppLogs.dLog(TAG,"未点击 feedBack 超过3次")
+            return false
+        }
+        if (APP.instance.showPopLevel>0){
+            AppLogs.dLog(TAG,"评分弹窗添加失败 当前有更高等级弹窗")
+            return false
+        }
+        return true
     }
 
 }

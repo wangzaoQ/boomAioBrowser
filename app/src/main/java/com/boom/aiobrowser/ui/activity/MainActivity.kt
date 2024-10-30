@@ -328,7 +328,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }else{
 
         }
-        ShortManager.addPinShortcut(WeakReference(this@MainActivity))
 
         if (isNormal.not()){
             finish()

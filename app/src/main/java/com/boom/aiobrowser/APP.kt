@@ -19,10 +19,8 @@ import com.boom.aiobrowser.ad.AioADDataManager.initAD
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.NFEnum
-import com.boom.aiobrowser.data.WebConfigData
 import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
 import com.boom.aiobrowser.model.AppViewModel
-import com.boom.aiobrowser.net.NetController
 import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.nf.NFReceiver
 import com.boom.aiobrowser.nf.NFWorkManager
@@ -31,7 +29,6 @@ import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
-import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.event.ProtectedUnPeekLiveData
 import com.boom.aiobrowser.tools.isOtherPkg
@@ -70,6 +67,9 @@ class APP: Application(), ViewModelStoreOwner {
     val appModel by lazy {
         ViewModelProvider(APP.instance).get(AppViewModel::class.java)
     }
+
+    // 0 未默认未弹窗弹窗
+    var showPopLevel = 0
 
     companion object{
         lateinit var instance:APP

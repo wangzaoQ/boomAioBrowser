@@ -151,6 +151,8 @@ fun appDataReset(){
         CacheManager.showEveryDay = 0
         CacheManager.saveDay = tmpDate
         CacheManager.adLastTime = 0
+        CacheManager.dayShowAddShort = true
+        CacheManager.dayDownloadCount = 0
     }
 }
 

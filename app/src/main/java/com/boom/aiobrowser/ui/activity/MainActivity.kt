@@ -281,7 +281,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     // 0 进度中点击 1 失败点击 2成功点击  3 成功点击观看视频
                     if (nfTo == 3){
                         jumpActivity<VideoPreActivity>(Bundle().apply {
-                            putString("video_path", toJson(nfData))
+                            putString("video_path", toJson(data))
                         })
                     }else{
                         startActivity(Intent(this,DownloadActivity::class.java).apply {

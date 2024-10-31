@@ -142,12 +142,9 @@ object ShortManager {
         }
     }
 
-    fun addRate(weakReference: WeakReference<BaseActivity<*>>) {
+    fun addRate(weakReference: WeakReference<BaseActivity<*>>,allowShowAddTask:Boolean = false) {
         var activity: BaseActivity<*> = weakReference.get() ?: return
-        CacheManager.isFirstDownloadVideoSuccess = false
-        if (allowRate()){
-            RatePop(activity).createPop()
-        }
+        RatePop(activity).createPop(allowShowAddTask)
     }
 
     fun allowRate(): Boolean {

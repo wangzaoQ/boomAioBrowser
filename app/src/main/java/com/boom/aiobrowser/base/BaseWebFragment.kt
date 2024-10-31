@@ -175,7 +175,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                         }
                     }
                     if (index == -1){
-                        list.add(videoDownloadData)
+                        list.add(0,videoDownloadData)
                         CacheManager.videoDownloadTempList = list
                         APP.videoScanLiveData.postValue(videoDownloadData)
                     }
@@ -322,6 +322,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
         override fun onPageStarted(view: WebView?, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
+            CacheManager.videoDownloadTempList = mutableListOf()
             AppLogs.dLog(
                 fragmentTAG,
                 "mUrl:" + url + " onPageStarted  target:" + getUrl()

@@ -178,4 +178,7 @@
     <string name="app_rate_content5">Your encouragement makes us better!</string>
 
     <string name="app_submit">Submit</string>
+    <string name="app_all">All</string>
+    <string name="app_task_add">Task Added</string>
+    <string name="app_view">View</string>
 </resources>

@@ -153,6 +153,7 @@ fun appDataReset(){
         CacheManager.adLastTime = 0
         CacheManager.dayShowAddShort = true
         CacheManager.dayDownloadCount = 0
+        CacheManager.dayFirstDownloadVideoSuccess = true
     }
 }
 

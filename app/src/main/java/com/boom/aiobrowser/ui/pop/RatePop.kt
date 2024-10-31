@@ -5,17 +5,14 @@ import android.content.Intent
 import android.net.Uri
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
-import com.boom.aiobrowser.databinding.BrowserPopDefaultBinding
 import com.boom.aiobrowser.databinding.BrowserPopRateBinding
 import com.boom.aiobrowser.other.ShortManager
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
-import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.ui.adapter.RateAdapter
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import com.google.android.play.core.review.ReviewException
@@ -42,7 +39,11 @@ class RatePop(context: Context) : BasePopupWindow(context) {
 
     var isClickFeedBack = false
 
-    fun createPop(){
+    var allowShowAddTask = false
+
+    fun createPop(allowShowAddTask:Boolean = false){
+        this.allowShowAddTask = allowShowAddTask
+        CacheManager.dayFirstDownloadVideoSuccess = false
         APP.instance.showPopLevel = 4
         defaultBinding?.apply {
             rvRate.apply {
@@ -80,6 +81,7 @@ class RatePop(context: Context) : BasePopupWindow(context) {
                 CacheManager.isRate5 = true
             }
         }
+        setBackground(R.color.color_70_black)
         showPopupWindow()
     }
 
@@ -99,8 +101,7 @@ class RatePop(context: Context) : BasePopupWindow(context) {
                 flow.addOnCompleteListener { _ ->
                     dismiss()
                 }
-            }
-            else {// 如果应用内拉评分弹框失败，就去商店
+            } else {// 如果应用内拉评分弹框失败，就去商店
                 runCatching {
                     @ReviewErrorCode
                     val reviewErrorCode = (task.exception as ReviewException).errorCode
@@ -131,6 +132,9 @@ class RatePop(context: Context) : BasePopupWindow(context) {
         APP.instance.showPopLevel = 0
         if (isClickFeedBack.not()){
             CacheManager.dayFeedBackCount+=1
+        }
+        if (allowShowAddTask){
+            TaskAddPop(context).createPop()
         }
         super.onDismiss()
     }

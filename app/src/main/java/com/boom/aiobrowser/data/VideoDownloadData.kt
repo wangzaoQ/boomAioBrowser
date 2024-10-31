@@ -37,6 +37,8 @@ class VideoDownloadData {
 
     var isShow = false
 
+    var videoChecked = false
+
     var nfId = 0
 
 

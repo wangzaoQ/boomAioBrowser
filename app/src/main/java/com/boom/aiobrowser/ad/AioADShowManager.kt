@@ -165,7 +165,7 @@ class AioADShowManager(
         }
     }
 
-    private fun showADBanner(parent:ViewGroup, data: ADResultData,tTag:String) {
+    fun showADBanner(parent:ViewGroup, data: ADResultData,tTag:String) {
         if (data?.adAny == null) {
             loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag)
             return

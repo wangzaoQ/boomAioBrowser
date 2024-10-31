@@ -10,6 +10,7 @@ import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.nf.NFShow
 import com.boom.aiobrowser.other.ShortManager
+import com.boom.aiobrowser.other.ShortManager.allowRate
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -89,6 +90,7 @@ object VideoManager {
                         model.downloadType = VideoDownloadData.DOWNLOAD_LOADING
                         model.size = item.totalSize
                         DownloadCacheManager.updateModel(model)
+                        CacheManager.updateTempList(model)
                         NFShow.showDownloadNF(VideoDownloadData().createVideoDownloadData(model))
                     }
                     AppLogs.dLog(TAG, "收到进度消息 :${model?.downloadSize} url:${model?.url}")
@@ -109,6 +111,7 @@ object VideoManager {
                         model.downloadSize = item.downloadSize
                         model.downloadType = VideoDownloadData.DOWNLOAD_PAUSE
                         DownloadCacheManager.updateModel(model)
+                        CacheManager.updateTempList(model)
                         NFShow.showDownloadNF(VideoDownloadData().createVideoDownloadData(model))
                     }
                     videoLiveData.postValue(HashMap<Int, VideoTaskItem>().apply {
@@ -137,6 +140,7 @@ object VideoManager {
                         model.downloadSize = 0
                         model.downloadType = VideoDownloadData.DOWNLOAD_ERROR
                         DownloadCacheManager.updateModel(model)
+                        CacheManager.updateTempList(model)
                         NFShow.showDownloadNF(VideoDownloadData().createVideoDownloadData(model),true)
                     }
                     videoLiveData.postValue(HashMap<Int, VideoTaskItem>().apply {
@@ -160,6 +164,7 @@ object VideoManager {
                         model.downloadType = VideoDownloadData.DOWNLOAD_SUCCESS
                         model.size = item.totalSize
                         DownloadCacheManager.updateModel(model)
+                        CacheManager.updateTempList(model)
                         NFShow.showDownloadNF(VideoDownloadData().createVideoDownloadData(model),true)
                     }
                     videoLiveData.postValue(HashMap<Int, VideoTaskItem>().apply {
@@ -176,7 +181,7 @@ object VideoManager {
                     putString(PointValueKey.video_source,source)
                     putString(PointValueKey.video_url,item.url)
                 })
-                var isDownload = CacheManager.isFirstDownloadVideoSuccess
+                var isDownload = CacheManager.dayFirstDownloadVideoSuccess
                 var activity:BaseActivity<*>?=null
                 var stackList = APP.instance.lifecycleApp.stack
                 if (stackList.size>0){
@@ -187,7 +192,7 @@ object VideoManager {
                         }
                     }
                 }
-                if (isDownload && activity!=null){
+                if (isDownload && activity!=null && allowRate()){
                     ShortManager.addRate(WeakReference(activity))
                 }
             }

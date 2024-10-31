@@ -1,37 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="bottom"
-    android:background="@drawable/shape_10r_white">
+    android:orientation="vertical"
+    android:background="@drawable/shape_pop_bg">
     <RelativeLayout
         android:id="@+id/rlTop"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="37dp"
         android:layout_marginTop="7dp"
         >
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvClear"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/app_downloading"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/app_all"
             android:layout_centerInParent="true"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            android:textStyle="bold"
+            android:layout_alignParentEnd="true"
+            android:paddingHorizontal="14dp"
+            android:textColor="#FF0066FF"
+            android:textSize="14sp"
             ></androidx.appcompat.widget.AppCompatTextView>
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvDownload"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="@string/app_record"
-            android:textColor="#007AFF"
-            android:textSize="11sp"
+            android:textColor="@color/black"
+            android:textSize="15sp"
             android:paddingHorizontal="13dp"
             android:gravity="center"
             android:textStyle="bold"
             android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
             ></androidx.appcompat.widget.AppCompatTextView>
     </RelativeLayout>
     <com.boom.aiobrowser.ui.view.MaxRecyclerView
@@ -41,4 +45,24 @@
         android:layout_height="wrap_content"
         app:maxHeight="400dp"
         ></com.boom.aiobrowser.ui.view.MaxRecyclerView>
-</RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFF5F5F5"
+        android:layout_marginTop="12dp"
+        ></View>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnDownloadAll"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/shape_commit"
+        android:layout_marginHorizontal="14dp"
+        android:layout_marginTop="14dp"
+        android:textSize="15sp"
+        android:layout_marginBottom="14dp"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        tools:text="t1t3" />
+</androidx.appcompat.widget.LinearLayoutCompat>

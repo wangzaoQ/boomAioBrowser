@@ -25,7 +25,6 @@ object NFWorkManager {
             (FirebaseConfig.pushData?.time_interval?:360)*60*1000
         }
         start(APP.instance,NormalNewsWork::class.java,NFEnum.NF_NEWS.menuName,time.toLong(),time.toLong())
-
     }
 
     fun start(context: Context, clazz: Class<out BaseNotifyWork>, workTag:String, delayMilli: Long, time:Long) {
@@ -48,7 +47,6 @@ object NFWorkManager {
 //            .setInputData(inputData) //传输数据
                 .addTag(workTag) //设置tag标签
                 .build()
-
 
         //开始执行任务
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(workUniqueName, ExistingPeriodicWorkPolicy.KEEP, workRequest);

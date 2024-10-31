@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
@@ -24,14 +23,13 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
-import com.boom.aiobrowser.tools.download.DownloadControlManager
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.tools.video.VideoManager
 import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.VideoPreActivity
-import com.boom.aiobrowser.ui.adapter.VideoDownloadAdapter
-import com.boom.base.adapter4.util.addOnDebouncedChildClick
+import com.boom.aiobrowser.ui.adapter.DownloadAdapter
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import com.boom.downloader.VideoDownloadManager
 import com.boom.downloader.model.VideoTaskItem
@@ -49,7 +47,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
     }
 
     private val downloadAdapter by lazy {
-        VideoDownloadAdapter(true)
+        DownloadAdapter(true)
     }
 
     var defaultBinding: VideoPopDownloadBinding? = null
@@ -96,8 +94,6 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                     }
                 }
             }
-            //2.找到adapter 中的这一条
-
             var index = -1
             for (i in 0 until downloadAdapter.items.size) {
                 var data = downloadAdapter.items.get(i)
@@ -108,7 +104,6 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                     break
                 }
             }
-
             withContext(Dispatchers.Main) {
                 if (index >= 0) {
                     downloadAdapter.notifyItemChanged(index)
@@ -117,8 +112,6 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 }
             }
         }, failBack = {})
-
-
     }
 
     fun updateData() {
@@ -144,12 +137,54 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                     endList.add(data)
                 }
             }
-//            https://cv-h.phncdn.com/hls/videos/202403/29/450295781/720P_4000K_450295781.mp4/master.m3u8?QaCiO5Bzg6BTFRoBus2eSVuz8wzBYxlR7tfu7LRNzTsUi0V1YeayzwFnKZtEkEpUnDTcqQ9YCLE-wAPtDNn7s6u_nTTLimIVMQ__B05X4auO40cH8UPPzY6x9So6IE0zQabTkhZcQvFOuJ5X0wVeyYsZeHvCDLYy8ht0bkbGmZjR0seYLgOuD215SYvEM--0aeZBLpVk-YY
-//            https://ev-h.phncdn.com/hls/videos/202403/29/450295781/720P_4000K_450295781.mp4/master.m3u8?validfrom=1728381435&validto=1728388635&ipa=35.212.235.107&hdl=-1&hash=L%2F0SzVQqsviZDjj4JDrDhkI%2F3ys%3D
+            for (i in 0 until endList.size){
+                endList.get(i).videoChecked = false
+            }
+            for (i in 0 until endList.size){
+                var data = endList.get(i)
+                if (allowCheckStatus(data)){
+                    data.videoChecked = true
+                    break
+                }
+            }
             withContext(Dispatchers.Main) {
                 downloadAdapter.submitList(endList)
+                updateBottomSize()
             }
         }, failBack = {})
+    }
+
+    private fun updateBottomSize() {
+        //未下载完成的个数
+        var defaultSize = 0
+        for (i in 0 until downloadAdapter.items.size){
+            var downloadType = downloadAdapter.items.get(i).downloadType
+            if (downloadType != VideoDownloadData.DOWNLOAD_SUCCESS){
+                defaultSize++
+            }
+        }
+        var sizeGone = defaultSize <=1
+        defaultBinding!!.tvClear.visibility =  if (sizeGone) View.GONE else View.VISIBLE
+        var allSize = 0L
+        downloadAdapter.items.forEach {
+            if (it.videoChecked){
+                allSize += it?.size ?: 0
+            }
+        }
+        defaultBinding?.apply {
+            if (allSize == 0L){
+                if (defaultSize == 0){
+                    btnDownloadAll.text =
+                        "${context.getString(R.string.app_open)}"
+                }else{
+                    btnDownloadAll.text =
+                        "${context.getString(R.string.app_download)}"
+                }
+            }else{
+                btnDownloadAll.text =
+                    "${context.getString(R.string.app_download)}(${if (sizeGone) "" else context.getString(R.string.app_all)} ${allSize.formatSize()})"
+            }
+        }
     }
 
     fun updateStatus(
@@ -195,7 +230,9 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         }
     }
 
-    fun createPop(callBack: (data: VideoDownloadData) -> Unit) {
+    var isSelectedAll = false
+
+    fun createPop(callBack: () -> Unit) {
         defaultBinding?.apply {
             rv.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -207,99 +244,126 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 })
                 PointEvent.posePoint(PointEventKey.webpage_download_pop_record)
             }
-        }
-
-
-        downloadAdapter.addOnDebouncedChildClick(R.id.ivDownload) { adapter, view, position ->
-            CacheManager.dayDownloadCount += 1
-            if (CacheManager.isDisclaimerFirst) {
-                CacheManager.isDisclaimerFirst = false
-                DisclaimerPop(context).createPop {
-                    clickDownload(position)
+            tvClear.setOnClickListener {
+                if (isSelectedAll) {
+                    downloadAdapter.items.forEach {
+                        it.videoChecked = false
+                    }
+                    for (i in 0 until downloadAdapter.items.size){
+                        var data = downloadAdapter.items.get(i)
+                        if (allowCheckStatus(data)){
+                            data.videoChecked = true
+                            break
+                        }
+                    }
+                    isSelectedAll = false
+                    tvClear.text = context.getString(R.string.app_all)
+                } else {
+                    downloadAdapter.items.forEach {
+                        it.videoChecked = true
+                    }
+                    isSelectedAll = true
+                    tvClear.text = context.getString(R.string.app_clear_all)
                 }
-            } else {
-                showDownloadAD {
-                    clickDownload(position)
+                updateBottomSize()
+                downloadAdapter.notifyDataSetChanged()
+            }
+            btnDownloadAll.setOnClickListener {
+                PointEvent.posePoint(PointEventKey.webpage_download_pop_dl)
+                CacheManager.dayDownloadCount += 1
+                if (CacheManager.isDisclaimerFirst) {
+                    CacheManager.isDisclaimerFirst = false
+                    DisclaimerPop(context).createPop {
+                        download(callBack)
+                    }
+                } else {
+                    showDownloadAD {
+                        download(callBack)
+                    }
                 }
             }
-            if (ShortManager.allowRate()){
-                var count = CacheManager.dayDownloadCount
-                if (count == 3 || count == 5 || count == 10 || count == 15){
-                    ShortManager.addRate(WeakReference(context as BaseActivity<*>))
-                }
-            }
-
-            PointEvent.posePoint(PointEventKey.webpage_download_pop_dl)
         }
+
         downloadAdapter.setOnDebouncedItemClick { adapter, view, position ->
             var data = downloadAdapter.getItem(position)
             data?.apply {
-                if (downloadType == VideoDownloadData.DOWNLOAD_PAUSE) {
-                    if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
-                        ToastUtils.showShort(context.getString(R.string.app_download_no_net))
-                        return@setOnDebouncedItemClick
-                    }
-                    downloadType = VideoDownloadData.DOWNLOAD_LOADING
-                    NFManager.requestNotifyPermission(
-                        WeakReference((context as BaseActivity<*>)),
-                        onSuccess = {
-                            NFShow.showDownloadNF(data, true)
-                        },
-                        onFail = {})
-                    var success = VideoDownloadManager.getInstance().resumeDownload(url)
-                    if (success.not()) {
-                        AppLogs.dLog(VideoManager.TAG, "从pause 恢复失败 重新下载")
-                        var headerMap = HashMap<String, String>()
-                        paramsMap?.forEach {
-                            headerMap.put(it.key, it.value.toString())
-                        }
-                        VideoDownloadManager.getInstance()
-                            .startDownload(data.createDownloadData(data), headerMap)
-                    }
-                } else if (downloadType == VideoDownloadData.DOWNLOAD_LOADING) {
-                    downloadType = VideoDownloadData.DOWNLOAD_PAUSE
-                    NFManager.requestNotifyPermission(
-                        WeakReference((context as BaseActivity<*>)),
-                        onSuccess = {
-                            NFShow.showDownloadNF(data, true)
-                        },
-                        onFail = {})
-                    VideoDownloadManager.getInstance().pauseDownloadTask(url)
-                } else if (downloadType == VideoDownloadData.DOWNLOAD_ERROR) {
-                    if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
-                        return@setOnDebouncedItemClick
-                    }
-                    downloadType = VideoDownloadData.DOWNLOAD_LOADING
-                    var success = VideoDownloadManager.getInstance().resumeDownload(url)
-                    if (success.not()) {
-                        var headerMap = HashMap<String, String>()
-                        paramsMap?.forEach {
-                            headerMap.put(it.key, it.value.toString())
-                        }
-                        VideoDownloadManager.getInstance()
-                            .startDownload(data.createDownloadData(data), headerMap)
-                    }
-                } else if (downloadType == VideoDownloadData.DOWNLOAD_SUCCESS) {
+                if (downloadType == VideoDownloadData.DOWNLOAD_SUCCESS) {
                     context.jumpActivity<VideoPreActivity>(Bundle().apply {
                         putString("video_path", toJson(data))
                     })
+                } else{
+                    if (getCurrentCheckSize() <= 1 && data.videoChecked){
+
+                    }else{
+                        data.videoChecked = data.videoChecked.not()
+                        updateBottomSize()
+                        downloadAdapter.notifyItemChanged(position, "updateLoading")
+                    }
                 }
-                downloadAdapter.notifyItemChanged(position, "updateLoading")
             }
-        }
-        downloadAdapter.addOnDebouncedChildClick(R.id.ivVideoClose) { adapter, view, position ->
-            var item = downloadAdapter.getItem(position) ?: return@addOnDebouncedChildClick
-            downloadAdapter.remove(item)
-            DownloadControlManager.videoDelete(item!!)
-            if (downloadAdapter.items.isNullOrEmpty()) {
-                dismiss()
-            }
-            callBack.invoke(item)
         }
         updateData()
         setOutSideDismiss(true)
+        setBackground(R.color.color_70_black)
         showPopupWindow()
         PointEvent.posePoint(PointEventKey.webpage_download_pop)
+    }
+
+    private fun allowCheckStatus(data: VideoDownloadData): Boolean {
+        return data.downloadType != VideoDownloadData.DOWNLOAD_SUCCESS
+    }
+
+    private fun getCurrentCheckSize(): Int {
+        var checkSize = 0
+        for (i in 0 until downloadAdapter.items.size){
+            if (downloadAdapter.items.get(i).videoChecked){
+                checkSize++
+            }
+        }
+        return checkSize
+    }
+
+    private fun download(callBack: () -> Unit) {
+        var downloadList = mutableListOf<VideoDownloadData>()
+        var clearlist = mutableListOf<VideoDownloadData>()
+
+        var list = CacheManager.videoDownloadTempList
+        var realDownload = false
+        for (i in 0 until downloadAdapter.items.size){
+            var data = downloadAdapter.items.get(i)
+            if (data.videoChecked) {
+                realDownload = true
+                clickDownload(i)
+                downloadList.add(data)
+            }
+            for (k in 0 until list.size){
+                var cacheData = list.get(k)
+                if (cacheData.videoId == data.videoId){
+                    cacheData.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
+                    break
+                }
+            }
+        }
+//        list.removeAll(clearlist)
+        CacheManager.videoDownloadTempList = list
+        callBack.invoke()
+        downloadAdapter.mutableItems.removeAll(downloadList)
+        downloadAdapter.notifyDataSetChanged()
+        if (ShortManager.allowRate()) {
+            var count = CacheManager.dayDownloadCount
+            if (count == 3 || count == 5 || count == 10 || count == 15) {
+                ShortManager.addRate(WeakReference(context as BaseActivity<*>),realDownload)
+            }else{
+                if (realDownload){
+                    TaskAddPop(context).createPop()
+                }
+            }
+        }else{
+            if (realDownload){
+                TaskAddPop(context).createPop()
+            }
+        }
+        dismiss()
     }
 
     private fun clickDownload(position: Int) {
@@ -308,6 +372,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
 //            return
 //        }
         data?.apply {
+            if (data.downloadType!=VideoDownloadData.DOWNLOAD_NOT)return
             NFManager.requestNotifyPermission(
                 WeakReference((context as BaseActivity<*>)),
                 onSuccess = {
@@ -317,7 +382,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                             data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
                             DownloadCacheManager.addDownLoadPrepare(data)
                             withContext(Dispatchers.Main) {
-                                downloadAdapter.notifyItemChanged(position, "updateStatus")
+//                                downloadAdapter.notifyItemChanged(position, "updateStatus")
                                 var headerMap = HashMap<String, String>()
                                 paramsMap?.forEach {
                                     headerMap.put(it.key, it.value.toString())
@@ -334,8 +399,6 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                     }, failBack = {})
                 },
                 onFail = {})
-
-
         }
     }
 

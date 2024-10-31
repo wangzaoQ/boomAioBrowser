@@ -140,7 +140,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
         APP.videoScanLiveData.observe(this){
             popDown?.updateDataByScan(it,true)
-            updateDownloadButtonStatus(true)
+            updateDownloadButtonStatus(true,0)
         }
         APP.videoNFLiveData.observe(this){
             popDown?.updateDataByScan(it,false)
@@ -151,8 +151,12 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                 popDown?.updateStatus(rootActivity,it,map.get(it)){
 //                    itemRemoveData(it)
                 }
+                if (it == VideoDownloadData.DOWNLOAD_SUCCESS){
+                    updateDownloadButtonStatus(true,1)
+                }
             }
         }
+
         APP.videoUpdateLiveData.observe(this){
             var list = CacheManager.videoDownloadTempList
             if (popDown?.isShowing == true && list.isNotEmpty()){
@@ -170,17 +174,29 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     }
 
 
-    open fun updateDownloadButtonStatus(status: Boolean) {
-        var size = CacheManager.videoDownloadTempList.size
+    open fun updateDownloadButtonStatus(status: Boolean,type:Int=0) {
+        var size = 0
+        for (i in 0 until CacheManager.videoDownloadTempList.size){
+            var data = CacheManager.videoDownloadTempList.get(i)
+            if (data.downloadType != VideoDownloadData.DOWNLOAD_SUCCESS){
+                size++
+            }
+        }
         fBinding.apply {
-            if (status && size>0){
+            if (type == 1 ||(status && size>0)){
                 ivDownload.visibility = View.GONE
                 ivDownload2.visibility = View.VISIBLE
-                tvDownload.visibility = View.VISIBLE
-                tvDownload.text = "$size"
-                ivDownload2.apply {
-                    setAnimation("download.json")
-                    playAnimation()
+                if (size>0){
+                    tvDownload.visibility = View.VISIBLE
+                    tvDownload.text = "$size"
+                }else{
+                    tvDownload.visibility = View.GONE
+                }
+                if (type != 1){
+                    ivDownload2.apply {
+                        setAnimation("download.json")
+                        playAnimation()
+                    }
                 }
             }else{
                 ivDownload.visibility = View.VISIBLE
@@ -194,7 +210,14 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
     private fun showDownloadPop() {
         popDown = DownLoadPop(rootActivity)
-        popDown?.createPop(){}
+        popDown?.createPop(){
+            updateDownloadButtonStatus(true,1)
+        }
+        popDown?.setOnDismissListener(object : OnDismissListener() {
+            override fun onDismiss() {
+                updateDownloadButtonStatus(true,1)
+            }
+        })
         CacheManager.isFirstClickDownloadButton = false
     }
 

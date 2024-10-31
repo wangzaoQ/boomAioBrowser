@@ -9,6 +9,7 @@ import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.WebConfigData
+import com.boom.aiobrowser.data.model.DownloadModel
 import com.boom.aiobrowser.net.NetRequest
 import com.boom.aiobrowser.ui.JumpConfig
 import com.tencent.mmkv.MMKV
@@ -91,7 +92,7 @@ object CacheManager {
             mmkv.encode(KV_FIRST_CLICK_DOWNLOAD_BUTTON, value)
         }
 
-    var isFirstDownloadVideoSuccess: Boolean
+    var dayFirstDownloadVideoSuccess: Boolean
         get() {
             return mmkv.decodeBool(KV_FIRST_DOWNLOAD_VIDEO_SUCCESS, false)
         }
@@ -422,5 +423,16 @@ object CacheManager {
         mmkv.encode(KV_CLEAN_TIME,System.currentTimeMillis())
     }
 
+    fun updateTempList(model: DownloadModel) {
+        var list = videoDownloadTempList
+        for (i in 0 until list.size){
+            var data = list.get(i)
+            if (data.videoId == model.videoId){
+                data.downloadType = model.downloadType?:0
+                break
+            }
+        }
+        videoDownloadTempList = list
+    }
 
 }

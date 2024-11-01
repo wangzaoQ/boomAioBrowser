@@ -69,6 +69,7 @@ class MorePop(context: Context) : BasePopupWindow(context) {
                 dismiss()
             }
             llWidget.setOnClickListener {
+                PointEvent.posePoint(PointEventKey.profile_add_widget)
                 ShortManager.addWidgetToLaunch(context,true)
             }
             llAbout.setOnClickListener {

@@ -55,7 +55,7 @@ class TaskAddPop (context: Context) : BasePopupWindow(context){
                 dismiss()
             }
         }
-        setBackground(R.color.color_70_black)
+        setBackground(R.color.tran)
         showPopupWindow()
         PointEvent.posePoint(PointEventKey.download_task)
     }

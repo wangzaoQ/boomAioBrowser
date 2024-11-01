@@ -99,6 +99,7 @@ class HomeGuideActivity : BaseActivity<BrowserActivityHomeGuideBinding>() {
                 guideList.add(1)
                 guideList.add(2)
                 guideList.add(3)
+                acBinding.ivJump.setImageResource(R.mipmap.ic_instagram)
             }
             else -> {}
         }

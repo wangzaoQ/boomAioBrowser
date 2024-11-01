@@ -176,13 +176,16 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 if (defaultSize == 0){
                     btnDownloadAll.text =
                         "${context.getString(R.string.app_open)}"
+                    rlTop.visibility =View.GONE
                 }else{
                     btnDownloadAll.text =
                         "${context.getString(R.string.app_download)}"
+                    rlTop.visibility =View.VISIBLE
                 }
             }else{
                 btnDownloadAll.text =
                     "${context.getString(R.string.app_download)}(${if (sizeGone) "" else context.getString(R.string.app_all)} ${allSize.formatSize()})"
+                rlTop.visibility =View.VISIBLE
             }
         }
     }
@@ -310,7 +313,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         }
         updateData()
         setOutSideDismiss(true)
-        setBackground(R.color.color_70_black)
+        setBackground(R.color.tran)
         showPopupWindow()
         PointEvent.posePoint(PointEventKey.webpage_download_pop)
     }

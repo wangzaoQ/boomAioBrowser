@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.boom.aiobrowser.APP
@@ -53,7 +54,7 @@ import java.lang.ref.WeakReference
 class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 
     private val viewModel by lazy {
-        rootActivity.viewModels<NewsViewModel>()
+        viewModels<NewsViewModel>()
     }
 
 
@@ -195,11 +196,15 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 
     override fun onResume() {
         super.onResume()
+        AppLogs.dLog(fragmentTAG,"onResume")
         jump()
     }
 
     open fun jump() {
+        AppLogs.dLog(fragmentTAG,"jump 触发")
         if (APP.instance.isHideSplash.not())return
+        AppLogs.dLog(fragmentTAG,"jump 跳过限制")
+        AppLogs.dLog(fragmentTAG,"onResume")
         PointEvent.posePoint(PointEventKey.home_page)
         var jumpData:JumpData
         if (firstLoad){
@@ -245,7 +250,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             fBinding.rlEmptyHistory.visibility = View.GONE
             historyAdapter.submitList(historyList)
         }
-        APP.instance.showPopLevel = 0
         fBinding.root.postDelayed(Runnable {
             ShortManager.addWidgetToLaunch(APP.instance)
             ShortManager.addPinShortcut(WeakReference(rootActivity))
@@ -401,6 +405,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             fBinding.ivPrivate.visibility = View.VISIBLE
             fBinding.topSearch.binding.ivPrivate.visibility = View.VISIBLE
         }
+        loadNews()
 //        APP.bottomLiveData.postValue(0)
     }
 
@@ -423,10 +428,12 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         return newsBeans?:ArrayList()
     }
 
+    fun loadNews(){
+        viewModel.value.getNewsData()
+    }
+
     private fun loadData() {
-        if (rootActivity is MainActivity){
-            (rootActivity as MainActivity).loadNews()
-        }
+        loadNews()
         PointEvent.posePoint(PointEventKey.home_page_refresh,Bundle().apply {
             putString(PointValueKey.refresh_type,if (page == 1)"down" else "up")
         })

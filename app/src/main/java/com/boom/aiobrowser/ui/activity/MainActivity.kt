@@ -38,6 +38,7 @@ import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
+import com.boom.aiobrowser.ui.fragment.MainRootFragment
 import com.boom.aiobrowser.ui.fragment.StartFragment
 import com.boom.aiobrowser.ui.fragment.WebFragment
 import com.boom.aiobrowser.ui.isAndroid12
@@ -58,7 +59,6 @@ import java.util.LinkedList
 class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
 
-    private val viewModel by viewModels<NewsViewModel>()
 
 
     val fManager by lazy {
@@ -72,42 +72,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         return BrowserActivityMainBinding.inflate(layoutInflater)
     }
 
-    var navController :NavController?=null
 
     override fun setListener() {
-        APP.jumpLiveData.observe(this){
-            // 通过Action进行导航，跳转到secondFragment
-            when (it.jumpType) {
-                JumpConfig.JUMP_WEB -> {
-                    if (it.isJumpClick){
-                        it.isJumpClick = false
-                        CacheManager.linkedUrlList = LinkedList()
-                    }
-                    val navOptions = NavOptions.Builder()
-                        .setEnterAnim(R.anim.in_alpha)
-                        .setExitAnim(R.anim.out_alpha)
-                        .build()
 
-                    navController?.navigate(R.id.fragmentWeb, Bundle().apply {
-                        putString(ParamsConfig.JSON_PARAMS, toJson(it))
-                    },navOptions)
-                    if (CacheManager.browserStatus == 0){
-                        CacheManager.saveRecentSearchData(it)
-                    }
-                }
-                JumpConfig.JUMP_HOME ->{
-                    val navOptions = NavOptions.Builder()
-                        .setEnterAnim(R.anim.in_alpha)
-                        .setExitAnim(R.anim.out_alpha)
-//                        .setPopUpTo(R.id.fragmentFile, true) // 将目标Fragment从Back Stack中移除
-                        .build()
-                    navController?.navigate(R.id.fragmentMain, Bundle().apply {
-                        putString(ParamsConfig.JSON_PARAMS, toJson(it))
-                    },navOptions)
-                }
-                else -> {}
-            }
-        }
 //        APP.bottomLiveData.observe(this){
 //            updateBottomClick(it)
 //        }
@@ -168,10 +135,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         morePop?.updateUI()
     }
 
-    fun loadNews(){
-        viewModel.getNewsData()
-    }
-
 
     var nfTo = 0
     var nfData:String =""
@@ -217,7 +180,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }, failBack = {
 
         })
-        navController = Navigation.findNavController(this@MainActivity,R.id.fragment_view)
         nfTo = intent.getIntExtra(ParamsConfig.NF_TO,0)
         nfData = intent.getStringExtra(ParamsConfig.NF_DATA)?:""
         enumName = intent.getStringExtra(ParamsConfig.NF_ENUM_NAME)?:""
@@ -234,13 +196,12 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 CacheManager.browserStatus = 0
             }
             if (count == 1){
-                loadNews()
+                fManager.addFragmentTag(supportFragmentManager,MainRootFragment(),R.id.fragmentMain,"MainFragment")
             }
 //            CacheManager.videoDownloadTempList = mutableListOf()
         },500)
         startFragment = StartFragment()
         startFragment?.apply {
-            APP.instance.isHideSplash = false
 //            fManager.showFragment(supportFragmentManager,this)
             intent.data?.apply {
                 if (this.toString().isNotEmpty()){
@@ -421,6 +382,11 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }
         AppLogs.dLog(acTAG,"返回 activity super.onKeyDown")
         return super.onKeyDown(keyCode, event)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        AppLogs.dLog(acTAG,"onActivityResult  requestCode:${requestCode}  resultCode:${resultCode}")
     }
 
 }

@@ -177,6 +177,11 @@ object PointEventKey {
     const val download_task = "download_task"
     //下载任务查看点击
     const val download_task_view = "download_task_view"
+    //更多-添加小组件点击
+    const val profile_add_widget = "profile_add_widget"
+    //推送配置
+    const val aio_push = "aio_push"
+
 
 
 
@@ -206,6 +211,7 @@ object PointValueKey{
 
     const val ponit_action = "ponit_action"
     const val push_type = "push_type"
+    const val source_from = "source_from"
 
 }
 

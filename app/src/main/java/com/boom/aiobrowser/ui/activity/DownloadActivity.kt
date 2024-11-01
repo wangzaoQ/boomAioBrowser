@@ -171,6 +171,9 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
 
         }.showNativeAD(acBinding.flRoot,AD_POINT.aobws_download_one)
         updateBottomUI(1)
+        if (fromPage == "webpage_download_pop"){
+            acBinding.vpRoot.currentItem = 1
+        }
     }
 
     private fun updateUI(position: Int) {

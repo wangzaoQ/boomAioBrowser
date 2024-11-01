@@ -102,7 +102,7 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
                         delay(1000)
                     }
                 }
-
+                APP.instance.isHideSplash = false
                 isBackstage = true
                 runCatching {
                     val temp = mutableListOf<Activity>()

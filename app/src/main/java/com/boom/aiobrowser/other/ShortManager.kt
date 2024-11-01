@@ -16,6 +16,7 @@ import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.nf.NFJump.getFlags
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.ui.ParamsConfig
@@ -145,7 +146,9 @@ object ShortManager {
                         )
                         appWidgetManager.requestPinAppWidget(myProvider, Bundle().apply { putString("add_widget", "add_widget") }, successCallback)
 //                        APP.instance.showPopLevel = 2
-                        PointEvent.posePoint(PointEventKey.widget_pop)
+                        PointEvent.posePoint(PointEventKey.widget_pop,Bundle().apply {
+                            putString(PointValueKey.source_from,if(continueFilter)"profile_pop" else "other" )
+                        })
                     }
                 }
             }

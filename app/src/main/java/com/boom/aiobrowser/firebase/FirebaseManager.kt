@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.firebase
 
 import android.app.Application
+import android.os.Bundle
 import android.util.Base64
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.ad.AioADDataManager
@@ -11,6 +12,9 @@ import com.boom.aiobrowser.data.PushData
 import com.boom.aiobrowser.firebase.FirebaseConfig.AD_DEFAULT_JSON
 import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.nf.NFWorkManager
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.google.firebase.FirebaseApp
@@ -87,6 +91,9 @@ object FirebaseManager {
         runCatching {
             var aioPush = firebaseRemoteConfig?.getString("aio_push")
             FirebaseConfig.pushData = getBeanByGson(aioPush,PushData::class.java)
+            PointEvent.posePoint(PointEventKey.aio_push, Bundle().apply {
+                putInt(PointValueKey.type,FirebaseConfig.pushData?.time_interval?:0)
+            })
         }
     }
 

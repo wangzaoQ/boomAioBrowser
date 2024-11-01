@@ -166,26 +166,28 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         var sizeGone = defaultSize <=1
         defaultBinding!!.tvClear.visibility =  if (sizeGone) View.GONE else View.VISIBLE
         var allSize = 0L
+        var downSize = 0
         downloadAdapter.items.forEach {
             if (it.videoChecked){
                 allSize += it?.size ?: 0
+                downSize++
             }
         }
+
         defaultBinding?.apply {
+            rlTop.visibility = if (downSize == 1) View.GONE else View.VISIBLE
             if (allSize == 0L){
                 if (defaultSize == 0){
                     btnDownloadAll.text =
                         "${context.getString(R.string.app_open)}"
-                    rlTop.visibility =View.GONE
+
                 }else{
                     btnDownloadAll.text =
                         "${context.getString(R.string.app_download)}"
-                    rlTop.visibility =View.VISIBLE
                 }
             }else{
                 btnDownloadAll.text =
                     "${context.getString(R.string.app_download)}(${if (sizeGone) "" else context.getString(R.string.app_all)} ${allSize.formatSize()})"
-                rlTop.visibility =View.VISIBLE
             }
         }
     }

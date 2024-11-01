@@ -43,74 +43,76 @@ class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
     override fun setShowView() {
        var data  = getBeanByGson(intent.getStringExtra("video_path"),VideoDownloadData::class.java)
         gsyVideoPlayer = acBinding.videoItemPlayer
-        var file = File(data?.downloadFilePath)
-        gsyVideoOptionBuilder!!
-            .setIsTouchWiget(false) //.setThumbImageView(imageView)
-            .setUrl(data?.downloadFilePath)
-            .setVideoTitle(file.name)
+        runCatching {
+            var file = File(data?.downloadFilePath?:"")
+            gsyVideoOptionBuilder!!
+                .setIsTouchWiget(false) //.setThumbImageView(imageView)
+                .setUrl(data?.downloadFilePath)
+                .setVideoTitle(file.name)
 //            .setCacheWithPlay(true)
-            .setRotateViewAuto(false)
-            .setLockLand(false)
-            .setPlayTag("videoplay")
+                .setRotateViewAuto(false)
+                .setLockLand(false)
+                .setPlayTag("videoplay")
 //            .setMapHeadData(header)
-            .setShowFullAnimation(true)
-            .setNeedLockFull(true)
-            .setCacheWithPlay(false)
-            .setVideoAllCallBack(object : GSYSampleCallBack() {
-                override fun onPrepared(url: String, vararg objects: Any) {
-                    super.onPrepared(url, *objects)
-                }
+                .setShowFullAnimation(true)
+                .setNeedLockFull(true)
+                .setCacheWithPlay(false)
+                .setVideoAllCallBack(object : GSYSampleCallBack() {
+                    override fun onPrepared(url: String, vararg objects: Any) {
+                        super.onPrepared(url, *objects)
+                    }
 
-                override fun onQuitFullscreen(url: String, vararg objects: Any) {
-                    super.onQuitFullscreen(url, *objects)
-                    //全屏不静音
+                    override fun onQuitFullscreen(url: String, vararg objects: Any) {
+                        super.onQuitFullscreen(url, *objects)
+                        //全屏不静音
 //                    GSYVideoManager.instance().isNeedMute = true
-                }
+                    }
 
-                override fun onEnterFullscreen(url: String, vararg objects: Any) {
-                    super.onEnterFullscreen(url, *objects)
-                    GSYVideoManager.instance().isNeedMute = false
+                    override fun onEnterFullscreen(url: String, vararg objects: Any) {
+                        super.onEnterFullscreen(url, *objects)
+                        GSYVideoManager.instance().isNeedMute = false
 
-                }
+                    }
 
-                override fun onAutoComplete(url: String?, vararg objects: Any?) {
-                    super.onAutoComplete(url, *objects)
-                    gsyVideoPlayer?.startPlayLogic()
-                }
+                    override fun onAutoComplete(url: String?, vararg objects: Any?) {
+                        super.onAutoComplete(url, *objects)
+                        gsyVideoPlayer?.startPlayLogic()
+                    }
+                })
+                .build(gsyVideoPlayer)
+            //设置返回按键功能
+            gsyVideoPlayer?.getBackButton()?.setOnClickListener(View.OnClickListener {
+                back()
             })
-            .build(gsyVideoPlayer)
-        //设置返回按键功能
-        gsyVideoPlayer?.getBackButton()?.setOnClickListener(View.OnClickListener {
-            back()
-        })
 
 
-        //设置旋转
-        orientationUtils = OrientationUtils(this, gsyVideoPlayer)
+            //设置旋转
+            orientationUtils = OrientationUtils(this, gsyVideoPlayer)
 
-        //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
-        gsyVideoPlayer?.getFullscreenButton()?.setOnClickListener(View.OnClickListener { // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+            //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
+            gsyVideoPlayer?.getFullscreenButton()?.setOnClickListener(View.OnClickListener { // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
                 // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
                 orientationUtils?.resolveByClick();
             })
 
-        //增加title
-        gsyVideoPlayer!!.getTitleTextView().setVisibility(View.GONE)
+            //增加title
+            gsyVideoPlayer!!.getTitleTextView().setVisibility(View.GONE)
 
 
-        //设置返回键
+            //设置返回键
 //        gsyVideoPlayer!!.getBackButton().setVisibility(View.GONE)
-        gsyVideoPlayer!!.loadCoverImage(file.absolutePath)
-        gsyVideoPlayer?.startPlayLogic()
-        PointEvent.posePoint(PointEventKey.video_playback_page)
-        gsyVideoPlayer!!.setSourceIcon(getUrlIcon(data?.url?:"")){
-            var jumpData = getCurrentJumpData(tag = "视频页点击来源").apply {
-                jumpType = JumpConfig.JUMP_WEB
-                jumpUrl = getUrlSource(data?.url?:"")
+            gsyVideoPlayer!!.loadCoverImage(file.absolutePath)
+            gsyVideoPlayer?.startPlayLogic()
+            PointEvent.posePoint(PointEventKey.video_playback_page)
+            gsyVideoPlayer!!.setSourceIcon(getUrlIcon(data?.url?:"")){
+                var jumpData = getCurrentJumpData(tag = "视频页点击来源").apply {
+                    jumpType = JumpConfig.JUMP_WEB
+                    jumpUrl = getUrlSource(data?.url?:"")
+                }
+                updateCurrentJumpData(jumpData,tag = "视频页点击来源")
+                APP.jumpLiveData.postValue(jumpData)
+                JumpDataManager.closeAll()
             }
-            updateCurrentJumpData(jumpData,tag = "视频页点击来源")
-            APP.jumpLiveData.postValue(jumpData)
-            JumpDataManager.closeAll()
         }
     }
 

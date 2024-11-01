@@ -181,12 +181,13 @@ object NFShow {
         }
     }
 
-    fun getForegroundNF(){
+    fun getForegroundNF(): Notification? {
         val smallRemote = NFViews.getForegroundRemoteView(NFEnum.NF_SEARCH_VIDEO)
         val largeRemote = NFViews.getForegroundRemoteView(NFEnum.NF_SEARCH_VIDEO, true)
         var bulider = createBuilder(NFEnum.NF_SEARCH_VIDEO,smallRemote,largeRemote)
         bulider.setOngoing(true)
         NFManager.nfForeground = bulider.build()
+        return NFManager.nfForeground
     }
 
     fun createBuilder(enum: NFEnum, smallRemote: RemoteViews, largeRemote: RemoteViews):NotificationCompat.Builder{

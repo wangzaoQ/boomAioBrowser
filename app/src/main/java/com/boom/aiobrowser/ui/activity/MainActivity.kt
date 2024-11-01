@@ -319,7 +319,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 //                    APP.jumpLiveData.postValue(jumpData)
                 }
                 ParamsConfig.WIDGET->{
-                    if (nfTo == 0){
+                    if (nfTo == 1){
                         var data = getBeanByGson(nfData,NewsData::class.java)
                         var jumpData = JumpDataManager.getCurrentJumpData(tag="首页widget新闻跳转")
                         jumpData.apply {
@@ -329,7 +329,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                             isJumpClick = true
                         }
                         JumpDataManager.updateCurrentJumpData(jumpData,tag="首页widget新闻跳转")
-                    }else if (nfTo == 1){
+                    }else if (nfTo == 0){
                         jumpActivity<SearchActivity>()
                     }
                 }

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="wrap_content"
+    android:background="@drawable/shape_17r_white"
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
@@ -57,6 +58,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="title"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="@color/black"
                 style="@style/app_text_bold"
                 />
@@ -66,6 +69,8 @@
                 android:layout_height="wrap_content"
                 tools:text="Paul Pelosi attacker David DePape sentenced to life term on state charges"
                 android:textColor="#80000000"
+                android:maxLines="2"
+                android:ellipsize="end"
                 android:textSize="10sp"
                 android:layout_marginTop="4dp"
                 android:lineSpacingMultiplier="0.9"

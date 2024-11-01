@@ -27,7 +27,8 @@ object CacheManager {
     const val KV_FIRST_DOWNLOAD_VIDEO_SUCCESS = "KV_FIRST_DOWNLOAD_VIDEO_SUCCESS"
     const val KV_DAY_DOWNLOAD_COUNT = "KV_DAY_DOWNLOAD_COUNT"
     const val KV_DAY_FEEDBACK_COUNT = "KV_DAY_FEEDBACK_COUNT"
-    const val KV_DAY_SHOW_ADD_SHORT = "KV_DAY_SHOW_ADD_SHORT"
+    const val KV_DAY_SHOW_ADD_SHORT = "KV_DAY_SHOW_ADD_SHORT2"
+    const val KV_DAY_SHOW_ADD_WIDGET = "KV_DAY_SHOW_ADD_SHORT"
     const val KV_FIRST_VIDEO = "KV_FIRST_VIDEO"
     const val KV_FIRST_DISCLAIMER = "KV_FIRST_DISCLAIMER"
     const val KV_RATE5 = "KV_RATE5"
@@ -114,6 +115,14 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_DAY_FEEDBACK_COUNT, value)
+        }
+
+    var dayShowAddWidget: Boolean
+        get() {
+            return mmkv.decodeBool(KV_DAY_SHOW_ADD_WIDGET, true)
+        }
+        set(value) {
+            mmkv.encode(KV_DAY_SHOW_ADD_WIDGET, value)
         }
 
     var dayShowAddShort: Boolean

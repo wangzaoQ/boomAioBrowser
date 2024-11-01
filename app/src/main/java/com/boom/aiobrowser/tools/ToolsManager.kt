@@ -151,6 +151,7 @@ fun appDataReset(){
         CacheManager.showEveryDay = 0
         CacheManager.saveDay = tmpDate
         CacheManager.adLastTime = 0
+        CacheManager.dayShowAddWidget = true
         CacheManager.dayShowAddShort = true
         CacheManager.dayDownloadCount = 0
         CacheManager.dayFirstDownloadVideoSuccess = true

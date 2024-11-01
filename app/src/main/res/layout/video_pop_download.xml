@@ -34,6 +34,7 @@
             android:textSize="15sp"
             android:paddingHorizontal="13dp"
             android:gravity="center"
+            android:visibility="gone"
             android:textStyle="bold"
             android:layout_centerVertical="true"
             ></androidx.appcompat.widget.AppCompatTextView>

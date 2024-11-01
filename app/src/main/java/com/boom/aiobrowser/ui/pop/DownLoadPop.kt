@@ -270,16 +270,21 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             }
             btnDownloadAll.setOnClickListener {
                 PointEvent.posePoint(PointEventKey.download_click)
-
                 CacheManager.dayDownloadCount += 1
-                if (CacheManager.isDisclaimerFirst) {
-                    CacheManager.isDisclaimerFirst = false
-                    DisclaimerPop(context).createPop {
-                        download(callBack)
-                    }
-                } else {
-                    showDownloadAD {
-                        download(callBack)
+                if (btnDownloadAll.text.toString() == context.getString(R.string.app_open)){
+                    context.startActivity(Intent(context, DownloadActivity::class.java).apply {
+                        putExtra("fromPage", "webpage_download_pop")
+                    })
+                }else{
+                    if (CacheManager.isDisclaimerFirst) {
+                        CacheManager.isDisclaimerFirst = false
+                        DisclaimerPop(context).createPop {
+                            download(callBack)
+                        }
+                    } else {
+                        showDownloadAD {
+                            download(callBack)
+                        }
                     }
                 }
             }
@@ -375,32 +380,33 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         data?.apply {
             if (data.downloadType!=VideoDownloadData.DOWNLOAD_NOT)return
             PointEvent.posePoint(PointEventKey.webpage_download_pop_dl)
-            NFManager.requestNotifyPermission(
-                WeakReference((context as BaseActivity<*>)),
-                onSuccess = {
-                    (context as BaseActivity<*>).addLaunch(success = {
-                        var model = DownloadCacheManager.queryDownloadModel(data)
-                        if (model == null) {
-                            data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
-                            DownloadCacheManager.addDownLoadPrepare(data)
-                            withContext(Dispatchers.Main) {
+            (context as BaseActivity<*>).addLaunch(success = {
+                var model = DownloadCacheManager.queryDownloadModel(data)
+                if (model == null) {
+                    data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
+                    DownloadCacheManager.addDownLoadPrepare(data)
+                    withContext(Dispatchers.Main) {
 //                                downloadAdapter.notifyItemChanged(position, "updateStatus")
-                                var headerMap = HashMap<String, String>()
-                                paramsMap?.forEach {
-                                    headerMap.put(it.key, it.value.toString())
-                                }
-                                VideoDownloadManager.getInstance()
-                                    .startDownload(data.createDownloadData(data), headerMap)
-                                NFShow.showDownloadNF(data, true)
-                            }
-                        } else {
-                            withContext(Dispatchers.Main) {
-                                ToastUtils.showLong(APP.instance.getString(R.string.app_already_download))
-                            }
+                        var headerMap = HashMap<String, String>()
+                        paramsMap?.forEach {
+                            headerMap.put(it.key, it.value.toString())
                         }
-                    }, failBack = {})
-                },
-                onFail = {})
+                        VideoDownloadManager.getInstance()
+                            .startDownload(data.createDownloadData(data), headerMap)
+                        NFManager.requestNotifyPermission(
+                            WeakReference((context as BaseActivity<*>)),
+                            onSuccess = {
+                                NFShow.showDownloadNF(data, true)
+                            },
+                            onFail = {})
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        ToastUtils.showLong(APP.instance.getString(R.string.app_already_download))
+                    }
+                }
+            }, failBack = {})
+
         }
     }
 

@@ -5,7 +5,8 @@
     <style name="app_home_tab_text" parent="app_text_bold">
         <item name="android:layout_marginTop">6dp</item>
         <item name="android:textColor">#801C274C</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:gravity">center</item>
     </style>
     <style name="app_text_bold">
         <item name="android:textStyle">bold</item>

@@ -19,6 +19,7 @@ import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.GlideManager
+import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.activity.MainActivity
 import kotlinx.coroutines.CoroutineScope
@@ -102,7 +103,7 @@ class WidgetProvider : AppWidgetProvider() {
                         withContext(Dispatchers.Main) {
                             // logsi(FJST, "onReceive()222 intent=" + intent)
                             val appWidgetManager = AppWidgetManager.getInstance(context)
-                            val appWidgetIds = appWidgetManager.getAppWidgetIds(ComponentName(context, ShortManager::class.java))
+                            val appWidgetIds = appWidgetManager.getAppWidgetIds(ComponentName(context, WidgetProvider::class.java))
                             appWidgetIds.forEach { idlist.add(it) }
                             idlist.forEach {
                                 val rView = upadateView(context, appWidgetManager, it,data)
@@ -127,8 +128,8 @@ class WidgetProvider : AppWidgetProvider() {
         val view = RemoteViews(context.packageName, R.layout.browser_widget_default)
         view.setTextViewText(R.id.tvTitle,data?.tconsi?:"")
         view.setTextViewText(R.id.tvContent,data?.sissue?:"")
-        view.setOnClickPendingIntent(R.id.newsRoot, getDetailsIntent(context,1))
-        view.setOnClickPendingIntent(R.id.llRoot, getDetailsIntent(context,0))
+        view.setOnClickPendingIntent(R.id.newsRoot, getDetailsIntent(context,1,data))
+        view.setOnClickPendingIntent(R.id.llRoot, getDetailsIntent(context,0,data))
         view.setImageViewResource(R.id.ivNews, R.mipmap.bg_news_default)
         var width = dp2px(68f)
         var height = dp2px(51f)
@@ -140,13 +141,14 @@ class WidgetProvider : AppWidgetProvider() {
         return view
     }
 
-    private fun getDetailsIntent(context: Context, nfTo: Int): PendingIntent {
+    private fun getDetailsIntent(context: Context, nfTo: Int, data: NewsData?): PendingIntent {
         // logsi(FJST, "startPager() index=" + index)
         val intent = Intent().apply {
             setClass(context, MainActivity::class.java)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra(ParamsConfig.NF_ENUM_NAME, ParamsConfig.WIDGET)
             putExtra(ParamsConfig.NF_TO, nfTo)
+            putExtra(ParamsConfig.NF_DATA, toJson(data))
         }
         return PendingIntent.getActivity(context, requestCode(), intent, PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
     }
@@ -175,6 +177,7 @@ class WidgetProvider : AppWidgetProvider() {
         if (newsList.isNotEmpty()){
             data = newsList.removeFirstOrNull()
         }
+        CacheManager.saveNFNewsList(NetParams.WIDGET, newsList)
         return data
     }
 

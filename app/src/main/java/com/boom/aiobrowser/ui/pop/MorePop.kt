@@ -10,6 +10,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserPopMoreBinding
+import com.boom.aiobrowser.other.ShortManager
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.BrowserManager
@@ -66,6 +67,9 @@ class MorePop(context: Context) : BasePopupWindow(context) {
                 }
                 PointEvent.posePoint(PointEventKey.profile_history)
                 dismiss()
+            }
+            llWidget.setOnClickListener {
+                ShortManager.addWidgetToLaunch(context,true)
             }
             llAbout.setOnClickListener {
                 if (context is BaseActivity<*>){

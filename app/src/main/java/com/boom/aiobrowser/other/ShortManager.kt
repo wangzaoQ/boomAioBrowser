@@ -34,6 +34,12 @@ object ShortManager {
             AppLogs.dLog(TAG,"short添加失败 当前有更高等级弹窗 showPopLevel:${APP.instance.showPopLevel}")
             return
         }
+        if (CacheManager.dayShowAddShort.not()){
+            AppLogs.dLog(TAG,"short添加失败 当日只能展示一次")
+            return
+        }
+        CacheManager.dayShowAddShort = false
+
         runCatching {
             weakReference.get()?.apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -59,7 +65,7 @@ object ShortManager {
                                 .setIcon(
                                     Icon.createWithResource(
                                         APP.instance,
-                                        R.mipmap.ic_start_logo
+                                        R.mipmap.ic_add_short
                                     )
                                 )
                                 .setShortLabel(APP.instance.getString(R.string.app_name))
@@ -89,7 +95,7 @@ object ShortManager {
                             pinShortcutInfo,
                             successCallback.intentSender
                         )
-                        APP.instance.showPopLevel = 3
+//                        APP.instance.showPopLevel = 3
                         PointEvent.posePoint(PointEventKey.shoetcut)
                     }
                 }
@@ -106,20 +112,22 @@ object ShortManager {
         context.sendBroadcast(Intent(APP_WIDGET_UPDATE, null, context, WidgetProvider::class.java))
     }
 
-    fun addWidgetToLaunch(context: Context) { // 添加组件到桌面
-        if (CacheManager.isFirstClickDownloadButton){
-            AppLogs.dLog(TAG,"Widget添加失败 新用户未使用下载功能")
-            return
+    fun addWidgetToLaunch(context: Context,continueFilter:Boolean=false) { // 添加组件到桌面
+        if (continueFilter.not()){
+            if (CacheManager.isFirstClickDownloadButton){
+                AppLogs.dLog(TAG,"Widget添加失败 新用户未使用下载功能")
+                return
+            }
+            if (CacheManager.dayShowAddWidget.not()){
+                AppLogs.dLog(TAG,"Widget添加失败 当日只能展示一次")
+                return
+            }
+            if (APP.instance.showPopLevel>0){
+                AppLogs.dLog(TAG,"Widget添加失败 当前有更高等级弹窗 showPopLevel:${APP.instance.showPopLevel}")
+                return
+            }
         }
-        if (CacheManager.dayShowAddShort.not()){
-            AppLogs.dLog(TAG,"Widget添加失败 当日只能展示一次")
-            return
-        }
-        if (APP.instance.showPopLevel>0){
-            AppLogs.dLog(TAG,"Widget添加失败 当前有更高等级弹窗 showPopLevel:${APP.instance.showPopLevel}")
-            return
-        }
-        CacheManager.dayShowAddShort = false
+        CacheManager.dayShowAddWidget = false
         runCatching {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val appWidgetManager: AppWidgetManager? = context.getSystemService(AppWidgetManager::class.java) as AppWidgetManager
@@ -136,7 +144,7 @@ object ShortManager {
 //                    PendingIntent.FLAG_UPDATE_CURRENT
                         )
                         appWidgetManager.requestPinAppWidget(myProvider, Bundle().apply { putString("add_widget", "add_widget") }, successCallback)
-                        APP.instance.showPopLevel = 2
+//                        APP.instance.showPopLevel = 2
                         PointEvent.posePoint(PointEventKey.widget_pop)
                     }
                 }

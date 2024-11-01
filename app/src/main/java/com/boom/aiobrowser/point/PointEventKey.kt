@@ -127,7 +127,10 @@ object PointEventKey {
     //一键即焚
     const val webpage_delete = "webpage_delete"
 
+    //每一条下载任务
     const val webpage_download_pop_dl = "webpage_download_pop_dl"
+    //下载按钮点击
+    const val download_click = "download_click"
 
     const val webpage_download_show = "webpage_download_show"
     const val clipboard = "clipboard"
@@ -155,6 +158,25 @@ object PointEventKey {
     const val noti_req_refuse = "noti_req_refuse"
     //通知二次开启页面跳过
     const val noti_confirm_pop_skip = "noti_confirm_pop_skip"
+    //添加快捷方式弹窗展示
+    const val shoetcut = "shoetcut"
+    //添加小组件弹窗展示
+    const val widget_pop = "widget_pop"
+    //widget搜索点击
+    const val widget_search = "widget_search"
+    //widget点击某条新闻
+    const val widget_click = "widget_click"
+    //评价我们弹窗展示
+    const val rate_us_pop = "rate_us_pop"
+    //评价我们弹窗点击喜欢
+    const val rate_us_submit = "rate_us_submit"
+    const val rate_send_feedback = "rate_send_feedback"
+    //好评弹窗无操作关闭
+    const val rate_us_pop_close = "rate_us_pop_close"
+    //下载任务弹窗展示
+    const val download_task = "download_task"
+    //下载任务查看点击
+    const val download_task_view = "download_task_view"
 
 
 

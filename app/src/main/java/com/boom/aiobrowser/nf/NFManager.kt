@@ -109,8 +109,11 @@ object NFManager {
     }
 
     fun clickPoint(nfData: String, nfTo: Int,enumName: String) {
+
+        var from = ""
         when (enumName) {
             NFEnum.NF_DOWNLOAD_VIDEO.menuName -> {
+                from = "push"
                 var data = getBeanByGson(nfData,VideoDownloadData::class.java)
                 // 0 进度中点击 1 失败点击 2成功点击  3 成功点击观看视频
                 when (nfTo) {
@@ -136,6 +139,7 @@ object NFManager {
                 }
             }
             NFEnum.NF_SEARCH_VIDEO.menuName -> {
+                from = "push"
                 // 0 暂无 1 点击search  2-4 右侧按钮
                 var type = ""
                 if (nfTo == 0){
@@ -154,6 +158,7 @@ object NFManager {
                 })
             }
             NFEnum.NF_NEWS.menuName -> {
+                from = "push"
                 PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
                     putString(PointValueKey.push_type, enumName)
                 })
@@ -162,6 +167,7 @@ object NFManager {
                 }
             }
             NFEnum.NF_NEWS_FCM.menuName->{
+                from = "push"
                 PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
                     putString(PointValueKey.push_type, enumName)
                 })
@@ -172,11 +178,24 @@ object NFManager {
                 }
             }
             ParamsConfig.WIDGET->{
-
+                from = "widget"
+                if (nfTo == 1){
+                    PointEvent.posePoint(PointEventKey.widget_click)
+                }else{
+                    PointEvent.posePoint(PointEventKey.widget_search)
+                }
+            }
+            ParamsConfig.SHORT->{
+                from = "shoetcut"
             }
             else -> {}
         }
-
+        if (from.isNotEmpty()){
+            PointEvent.posePoint(PointEventKey.launch_page, Bundle().apply {
+                putInt(PointValueKey.open_type,if (CacheManager.isFirstStart) 0 else 1)
+                putString(PointValueKey.type,from)
+            })
+        }
     }
 
     fun startForeground(tag: String) {

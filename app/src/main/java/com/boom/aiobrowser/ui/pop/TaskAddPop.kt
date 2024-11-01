@@ -48,6 +48,7 @@ class TaskAddPop (context: Context) : BasePopupWindow(context){
                 }
             }
             llRoot.setOnClickListener {
+                PointEvent.posePoint(PointEventKey.download_task_view)
                 context.startActivity(Intent(context, DownloadActivity::class.java).apply {
                     putExtra("fromPage", "webpage_download_task_pop")
                 })
@@ -56,6 +57,7 @@ class TaskAddPop (context: Context) : BasePopupWindow(context){
         }
         setBackground(R.color.color_70_black)
         showPopupWindow()
+        PointEvent.posePoint(PointEventKey.download_task)
     }
 
     override fun onCreateShowAnimation(): Animation {

@@ -269,7 +269,8 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 downloadAdapter.notifyDataSetChanged()
             }
             btnDownloadAll.setOnClickListener {
-                PointEvent.posePoint(PointEventKey.webpage_download_pop_dl)
+                PointEvent.posePoint(PointEventKey.download_click)
+
                 CacheManager.dayDownloadCount += 1
                 if (CacheManager.isDisclaimerFirst) {
                     CacheManager.isDisclaimerFirst = false
@@ -373,6 +374,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
 //        }
         data?.apply {
             if (data.downloadType!=VideoDownloadData.DOWNLOAD_NOT)return
+            PointEvent.posePoint(PointEventKey.webpage_download_pop_dl)
             NFManager.requestNotifyPermission(
                 WeakReference((context as BaseActivity<*>)),
                 onSuccess = {

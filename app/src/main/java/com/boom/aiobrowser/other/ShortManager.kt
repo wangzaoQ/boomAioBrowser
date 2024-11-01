@@ -14,6 +14,8 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.nf.NFJump.getFlags
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.ui.ParamsConfig
@@ -49,7 +51,7 @@ object ShortManager {
                         //具体点的是当前通知哪一个区域 状态各有不同
 //                intent.putExtra(ParamsConfig.NF_TO, nfTo)
                         //点击的是哪一种通知
-                        intent.putExtra(ParamsConfig.NF_ENUM_NAME,"short")
+                        intent.putExtra(ParamsConfig.NF_ENUM_NAME,ParamsConfig.SHORT)
 
                         // Enable the existing shortcut with the ID "my-shortcut".
                         val pinShortcutInfo =
@@ -88,6 +90,7 @@ object ShortManager {
                             successCallback.intentSender
                         )
                         APP.instance.showPopLevel = 3
+                        PointEvent.posePoint(PointEventKey.shoetcut)
                     }
                 }
             }
@@ -134,6 +137,7 @@ object ShortManager {
                         )
                         appWidgetManager.requestPinAppWidget(myProvider, Bundle().apply { putString("add_widget", "add_widget") }, successCallback)
                         APP.instance.showPopLevel = 2
+                        PointEvent.posePoint(PointEventKey.widget_pop)
                     }
                 }
             }

@@ -20,6 +20,7 @@ object JumpConfig{
 
 object ParamsConfig{
     const val WIDGET: String = "widget"
+    const val SHORT: String = "short"
     const val NF_DATA = "nf_data"
     const val NF_TO = "nf_to"
     const val NF_ENUM_NAME = "nf_enum_name"

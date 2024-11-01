@@ -3,6 +3,7 @@ package com.boom.aiobrowser.ui.pop
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.boom.aiobrowser.APP
@@ -11,6 +12,9 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserPopRateBinding
 import com.boom.aiobrowser.other.ShortManager
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.ui.adapter.RateAdapter
@@ -40,6 +44,8 @@ class RatePop(context: Context) : BasePopupWindow(context) {
     var isClickFeedBack = false
 
     var allowShowAddTask = false
+
+    var submit = false
 
     fun createPop(allowShowAddTask:Boolean = false){
         this.allowShowAddTask = allowShowAddTask
@@ -72,17 +78,23 @@ class RatePop(context: Context) : BasePopupWindow(context) {
                 commit.setBackgroundResource(R.drawable.shape_commit)
             }
             commit.setOnClickListener {
+                submit = true
+                CacheManager.isRate5 = true
+                PointEvent.posePoint(PointEventKey.rate_us_submit, Bundle().apply {
+                    putInt(PointValueKey.type,rateAdapter.index+1)
+                })
                 if (rateAdapter.index == -1)return@setOnClickListener
                 if (rateAdapter.index == 4){
                     showGoogleStar()
                 }else{
                     isClickFeedBack = true
+                    dismiss()
                 }
-                CacheManager.isRate5 = true
             }
         }
         setBackground(R.color.color_70_black)
         showPopupWindow()
+        PointEvent.posePoint(PointEventKey.rate_us_pop)
     }
 
 
@@ -110,6 +122,7 @@ class RatePop(context: Context) : BasePopupWindow(context) {
                 toAppShop()
             }
         }
+        PointEvent.posePoint(PointEventKey.rate_send_feedback)
     }
 
     fun toAppShop(){
@@ -135,6 +148,9 @@ class RatePop(context: Context) : BasePopupWindow(context) {
         }
         if (allowShowAddTask){
             TaskAddPop(context).createPop()
+        }
+        if (submit.not()){
+            PointEvent.posePoint(PointEventKey.rate_us_pop_close)
         }
         super.onDismiss()
     }

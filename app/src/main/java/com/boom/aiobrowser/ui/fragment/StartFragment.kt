@@ -180,9 +180,6 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         AioADDataManager.preloadAD(ADEnum.INT_AD,"app启动")
         PointEvent.session()
         PointEvent.posePoint(PointEventKey.nn_session)
-        PointEvent.posePoint(PointEventKey.launch_page, Bundle().apply {
-            putInt(PointValueKey.open_type,if (CacheManager.isFirstStart) 0 else 1)
-        })
         APP.instance.getWebConfig()
         NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
             NFShow.showForegroundNF()

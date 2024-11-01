@@ -182,4 +182,5 @@
     <string name="app_task_add">Task Added</string>
     <string name="app_view">View</string>
     <string name="app_add_widget">Add Widget</string>
+    <string name="app_rate_feedback">Thanks for feedback</string>
 </resources>

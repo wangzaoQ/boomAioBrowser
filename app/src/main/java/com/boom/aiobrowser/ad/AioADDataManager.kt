@@ -64,6 +64,9 @@ object AioADDataManager {
                 NATIVE_DOWNLOAD_AD ->{
                     it.adRequestList = bean.aobws_download_bnat ?: mutableListOf()
                 }
+                BANNER_AD ->{
+                    it.adRequestList = bean.aobws_ban_one ?: mutableListOf()
+                }
                 else -> {}
             }
             it.adRequestList.sortByDescending { it.npxotusg }

@@ -65,7 +65,7 @@ object ShortManager {
                                 .setIcon(
                                     Icon.createWithResource(
                                         APP.instance,
-                                        R.mipmap.ic_add_short
+                                        R.mipmap.ic_start_logo
                                     )
                                 )
                                 .setShortLabel(APP.instance.getString(R.string.app_name))

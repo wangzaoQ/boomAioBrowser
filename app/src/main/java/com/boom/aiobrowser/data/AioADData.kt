@@ -19,7 +19,8 @@ data class AioADData(
     val aobws_launch: MutableList<AioRequestData>?=null,
     val aobws_main_one: MutableList<AioRequestData>?=null,
     val aobws_detail_bnat: MutableList<AioRequestData>?=null,
-    val aobws_download_bnat: MutableList<AioRequestData>?=null
+    val aobws_download_bnat: MutableList<AioRequestData>?=null,
+    val aobws_ban_one: MutableList<AioRequestData>?=null
 )
 
 data class AioRequestData(

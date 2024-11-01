@@ -107,7 +107,7 @@ class HomeGuideActivity : BaseActivity<BrowserActivityHomeGuideBinding>() {
         acBinding.vpGuide.apply {
             setOrientation(ViewPager2.ORIENTATION_HORIZONTAL)
             adapter = homeGuideAdapter
-            homeGuideAdapter.setFromAPP(getString(R.string.app_tt))
+            homeGuideAdapter.setFromAPP(fromApp)
         }
         acBinding.indicator.apply {
             setSliderColor(

@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
+import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
@@ -66,28 +67,29 @@ class RatePop(context: Context) : BasePopupWindow(context) {
                 rateAdapter.updateIndex(position)
                 if (position == 4){
                     ivRate.setImageResource(R.mipmap.ic_rate5)
-                    commit.text = context.getString(R.string.app_feedback)
+                    commit.text = context.getString(R.string.app_submit)
 //                    tvRateTitle.text = context.getString(R.string.app_rate_title)
 //                    tvRateContent.text = context.getString(R.string.app_rate_content)
                 }else{
                     ivRate.setImageResource(R.mipmap.ic_rate_other)
-                    commit.text = context.getString(R.string.app_submit)
+                    commit.text = context.getString(R.string.app_feedback)
 //                    tvRateTitle.text = context.getString(R.string.app_rate_title)
 //                    tvRateContent.text = context.getString(R.string.app_rate_content)
                 }
                 commit.setBackgroundResource(R.drawable.shape_commit)
             }
             commit.setOnClickListener {
+                if (rateAdapter.index == -1)return@setOnClickListener
                 submit = true
                 CacheManager.isRate5 = true
                 PointEvent.posePoint(PointEventKey.rate_us_submit, Bundle().apply {
                     putInt(PointValueKey.type,rateAdapter.index+1)
                 })
-                if (rateAdapter.index == -1)return@setOnClickListener
                 if (rateAdapter.index == 4){
                     showGoogleStar()
                 }else{
                     isClickFeedBack = true
+                    ToastUtils.showLong(context.getString(R.string.app_rate_feedback))
                     dismiss()
                 }
             }

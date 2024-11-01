@@ -275,6 +275,10 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+            AppLogs.dLog(
+                fragmentTAG,
+                "mWebViewClient shouldOverrideUrlLoading:${request?.url}"
+            )
             return super.shouldOverrideUrlLoading(view, request)
         }
 

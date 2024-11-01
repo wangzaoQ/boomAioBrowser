@@ -6,7 +6,7 @@
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen"
-    android:previewImage="@mipmap/bg_video_guide"
+    android:previewImage="@mipmap/bg_widget"
     >
 
 </appwidget-provider>

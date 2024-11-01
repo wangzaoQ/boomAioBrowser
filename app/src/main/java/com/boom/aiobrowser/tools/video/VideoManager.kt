@@ -32,6 +32,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.lang.ref.WeakReference
 
@@ -170,30 +171,32 @@ object VideoManager {
                     videoLiveData.postValue(HashMap<Int, VideoTaskItem>().apply {
                         put(VideoDownloadData.DOWNLOAD_SUCCESS, item)
                     })
-                }
-                PointEvent.posePoint(PointEventKey.download_success, Bundle().apply {
-                    var source = ""
-                    if (WebScan.isTikTok(item.url)) {
-                        source = "tiktok"
-                    } else if (WebScan.isPornhub(item.url)) {
-                        source = "pornhub"
-                    }
-                    putString(PointValueKey.video_source,source)
-                    putString(PointValueKey.video_url,item.url)
-                })
-                var isDownload = CacheManager.dayFirstDownloadVideoSuccess
-                var activity:BaseActivity<*>?=null
-                var stackList = APP.instance.lifecycleApp.stack
-                if (stackList.size>0){
-                    for (i in stackList.size-1 downTo 0){
-                        if (stackList.get(i) is BaseActivity<*>){
-                            activity = stackList.get(i) as BaseActivity<*>
-                            break
+                    withContext(Dispatchers.Main){
+                        PointEvent.posePoint(PointEventKey.download_success, Bundle().apply {
+                            var source = ""
+                            if (WebScan.isTikTok(item.url)) {
+                                source = "tiktok"
+                            } else if (WebScan.isPornhub(item.url)) {
+                                source = "pornhub"
+                            }
+                            putString(PointValueKey.video_source,source)
+                            putString(PointValueKey.video_url,item.url)
+                        })
+                        var isDownload = CacheManager.dayFirstDownloadVideoSuccess
+                        var activity:BaseActivity<*>?=null
+                        var stackList = APP.instance.lifecycleApp.stack
+                        if (stackList.size>0){
+                            for (i in stackList.size-1 downTo 0){
+                                if (stackList.get(i) is BaseActivity<*>){
+                                    activity = stackList.get(i) as BaseActivity<*>
+                                    break
+                                }
+                            }
+                        }
+                        if (isDownload && activity!=null && allowRate()){
+                            ShortManager.addRate(WeakReference(activity))
                         }
                     }
-                }
-                if (isDownload && activity!=null && allowRate()){
-                    ShortManager.addRate(WeakReference(activity))
                 }
             }
         })

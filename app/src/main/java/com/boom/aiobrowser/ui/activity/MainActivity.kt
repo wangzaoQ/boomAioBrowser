@@ -349,7 +349,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             return
         }
         fManager.hideFragment(supportFragmentManager, startFragment!!)
-        APP.jumpResumeData.postValue(0)
         acBinding.llMainControl.visibility = View.VISIBLE
         if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault){
             CacheManager.isFirstShowBrowserDefault = false
@@ -370,7 +369,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             }
         }else{
         }
-
+        APP.jumpResumeData.postValue(0)
     }
 
     private fun showTips() {

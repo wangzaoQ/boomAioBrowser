@@ -29,7 +29,7 @@ object ShortManager {
 
     fun addPinShortcut(weakReference: WeakReference<BaseActivity<*>>) {
         if (APP.instance.showPopLevel>0){
-            AppLogs.dLog(TAG,"short添加失败 当前有更高等级弹窗")
+            AppLogs.dLog(TAG,"short添加失败 当前有更高等级弹窗 showPopLevel:${APP.instance.showPopLevel}")
             return
         }
         runCatching {
@@ -113,7 +113,7 @@ object ShortManager {
             return
         }
         if (APP.instance.showPopLevel>0){
-            AppLogs.dLog(TAG,"Widget添加失败 当前有更高等级弹窗")
+            AppLogs.dLog(TAG,"Widget添加失败 当前有更高等级弹窗 showPopLevel:${APP.instance.showPopLevel}")
             return
         }
         CacheManager.dayShowAddShort = false
@@ -158,7 +158,7 @@ object ShortManager {
             return false
         }
         if (APP.instance.showPopLevel>0){
-            AppLogs.dLog(TAG,"评分弹窗添加失败 当前有更高等级弹窗")
+            AppLogs.dLog(TAG,"评分弹窗添加失败 当前有更高等级弹窗 showPopLevel:${APP.instance.showPopLevel}")
             return false
         }
         return true

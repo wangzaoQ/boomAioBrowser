@@ -27,6 +27,7 @@ class DefaultPop(context: Context) : BasePopupWindow(context){
     }
 
     fun createPop(){
+        APP.instance.showPopLevel = 1
         defaultBinding?.rlTabRoot?.addScrollBack {
             if (it>200){
                 dismiss()
@@ -45,7 +46,6 @@ class DefaultPop(context: Context) : BasePopupWindow(context){
         }
         showPopupWindow()
         PointEvent.posePoint(PointEventKey.default_pop)
-        APP.instance.showPopLevel = 1
     }
 
     override fun onDismiss() {

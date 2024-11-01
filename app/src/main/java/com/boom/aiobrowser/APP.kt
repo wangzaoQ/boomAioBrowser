@@ -69,6 +69,7 @@ class APP: Application(), ViewModelStoreOwner {
     }
 
     // 0 未默认未弹窗弹窗
+    @Volatile
     var showPopLevel = 0
 
     companion object{

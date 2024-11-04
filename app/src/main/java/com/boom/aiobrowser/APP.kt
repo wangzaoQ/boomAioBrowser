@@ -69,6 +69,14 @@ class APP: Application(), ViewModelStoreOwner {
         ViewModelProvider(APP.instance).get(AppViewModel::class.java)
     }
 
+    val installTime: Long by lazy {
+        try {
+            instance.packageManager.getPackageInfo(APP.instance.packageName, 0).firstInstallTime
+        } catch (e: Exception) {
+            0L
+        }
+    }
+
     // 0 未默认未弹窗弹窗
     @Volatile
     var showPopLevel = 0
@@ -132,13 +140,6 @@ class APP: Application(), ViewModelStoreOwner {
                 Install.requestRefer(instance,0,{})
             }
         }
-        CoroutineScope(Dispatchers.IO).launch{
-            while (true){
-                delay(60*60*1000)
-                //session_st
-                PointEvent.posePoint(PointEventKey.session_st)
-            }
-        }
         registerAny()
         initNFConfig()
         if (isDebug){
@@ -146,6 +147,7 @@ class APP: Application(), ViewModelStoreOwner {
             NFManager.showFCM(stringToMap(map5))
             AppLogs.dLog(NFManager.TAG,"language:${Locale.getDefault().language}  country:${Locale.getDefault().country}")
         }
+        NFManager.notifyByTimerTask()
     }
 
     private fun initNFConfig() {

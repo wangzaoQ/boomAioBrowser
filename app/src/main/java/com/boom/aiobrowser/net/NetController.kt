@@ -13,6 +13,14 @@ object NetController {
         return service.getNewsList(map)
     }
 
+    suspend fun getEditorNewsList(map: HashMap<String, String>): NetResponse<MutableList<NewsData>> {
+        return service.getEditorNewsList(map)
+    }
+
+    suspend fun getHotNewsList(map: HashMap<String, String>): NetResponse<MutableList<NewsData>> {
+        return service.getHotNewsList(map)
+    }
+
     suspend fun getLocation(lcommu: Double,ldrawi: Double): NetResponse<AreaData> {
         return service.getLocation(lcommu,ldrawi)
     }

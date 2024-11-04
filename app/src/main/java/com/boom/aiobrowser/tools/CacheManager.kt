@@ -7,14 +7,17 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.data.NewsData
+import com.boom.aiobrowser.data.NewsTempData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.WebConfigData
 import com.boom.aiobrowser.data.model.DownloadModel
 import com.boom.aiobrowser.net.NetRequest
+import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.ui.JumpConfig
 import com.tencent.mmkv.MMKV
 import java.util.LinkedList
 import java.util.UUID
+import java.util.Vector
 
 object CacheManager {
 
@@ -58,6 +61,9 @@ object CacheManager {
     const val KV_LAST_LAUNCH_TIME = "KV_LAST_LAUNCH_TIME"
     const val KV_CLEAN_TIME = "KV_CLEAN_TIME"
     const val KV_FIRST_SHOW_DOWNLOAD = "KV_FIRST_SHOW_DOWNLOAD"
+    const val KV_NEWS_NF_HISTORY = "KV_NEWS_NF_HISTORY"
+    const val KV_NF_SHOW_LAST_TIME = "KV_NF_SHOW_LAST_TIME"
+    const val KV_DAY_NF_SHOW_COUNT = "KV_DAY_NF_SHOW_COUNT"
 //    const val KV_FIRST_OPEN_APP = "KV_FIRST_OPEN_APP"
 
 
@@ -393,9 +399,11 @@ object CacheManager {
     }
 
     fun getLastRefreshTime(key:String):Long{
+        AppLogs.dLog(NFManager.TAG,"getLastRefreshTime key:${key}")
         return mmkv.decodeLong(key,0L)
     }
     fun saveLastRefreshTime(key:String){
+        AppLogs.dLog(NFManager.TAG,"saveLastRefreshTime key:${key}")
         mmkv.encode(key,System.currentTimeMillis())
     }
 
@@ -442,6 +450,61 @@ object CacheManager {
             }
         }
         videoDownloadTempList = list
+    }
+
+    var newsListHistoryData: String
+        get() {
+            return mmkv.decodeString(KV_NEWS_NF_HISTORY)?:""
+        }
+        set(value) {
+            mmkv.encode(KV_NEWS_NF_HISTORY, value)
+        }
+
+
+    fun saveNewsListHistory(list: Vector<NewsTempData>){
+        newsListHistoryData = gson.toJson(list)
+    }
+
+    fun saveNewsDataHistory(data:NewsData,tag:String){
+        AppLogs.dLog(NFManager.TAG,"更新通知展示历史 tag:${tag}")
+        getNewsListHistory()?.apply {
+            AppLogs.dLog(NFManager.TAG,"原有历史 size: ${size}")
+            var index = -1
+            for (i in 0 until size){
+                if (get(i).newsId == data.itackl){
+                    index = i
+                    break
+                }
+            }
+            if (index == -1){
+                add(NewsTempData().apply {
+                    newsId = data.itackl?:""
+                })
+            }
+            saveNewsListHistory(this)
+        }
+        if (APP.isDebug){
+            AppLogs.dLog(NFManager.TAG,"更新后通知历史 size: ${getNewsListHistory()?.size}")
+        }
+    }
+    fun getNewsListHistory(): Vector<NewsTempData>? {
+        return getVectorByGson(newsListHistoryData,NewsTempData::class.java)
+    }
+
+    fun getNFShowLastTime(action: String): Long {
+        return  mmkv.decodeLong("${KV_NF_SHOW_LAST_TIME}_$action",0)
+    }
+
+    fun saveNFShowLastTime(action: String,time:Long){
+        mmkv.encode("${KV_NF_SHOW_LAST_TIME}_$action", time)
+    }
+
+    fun saveDayNFShowCount(action: String,count:Int=-1){
+        mmkv.encode("${KV_DAY_NF_SHOW_COUNT}_$action", count)
+    }
+
+    fun getDayNFShowCount(action: String):Int{
+        return mmkv.decodeInt("${KV_DAY_NF_SHOW_COUNT}_$action", 0)
     }
 
 }

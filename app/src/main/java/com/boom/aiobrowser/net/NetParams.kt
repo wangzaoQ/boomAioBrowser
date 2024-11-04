@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.net
 
 import com.boom.aiobrowser.data.LocationData
+import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import okhttp3.OkHttpClient
@@ -12,20 +13,35 @@ object NetParams {
     var TAG = "NetParams"
 
     var FOR_YOU = "forYou"
-    var FOR_YOU_PUSH = "forYouPush"
+
     var WIDGET = "widget"
 
     suspend fun getParamsMap(key:String):HashMap<String,String>{
         var needLocation = false
         var needSession = true
         var isPush = false
+//        var fallback = true
         var map = HashMap<String,String>()
         when (key) {
-            FOR_YOU,FOR_YOU_PUSH,WIDGET -> {
+            FOR_YOU,NFEnum.NF_NEWS.menuName,WIDGET -> {
                 needLocation = true
-                if (key == FOR_YOU_PUSH){
-                    isPush = true
+                isPush = true
+                if (key == NFEnum.NF_NEWS.menuName ||key == WIDGET){
+                    map.put("fit","3:AIOPUSH")
+                }else if (key == FOR_YOU){
+                    map.put("fit","3:BROWSER")
                 }
+            }
+            NFEnum.NF_EDITOR.menuName->{
+
+            }
+            NFEnum.NF_NEW_USER.menuName->{
+                isPush = true
+                map.put("ftie","false")
+            }
+            NFEnum.NF_LOCAL.menuName->{
+                needLocation = true
+                isPush = true
             }
             else -> {}
         }

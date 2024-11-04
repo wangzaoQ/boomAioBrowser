@@ -7,6 +7,7 @@ import android.net.Uri
 import android.text.TextUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.tools.web.WebScan
 import com.boom.aiobrowser.ui.isAndroid11
 import com.google.gson.Gson
@@ -23,6 +24,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.LinkedList
 import java.util.Locale
+import java.util.Vector
 
 
 val gson: Gson by lazy {
@@ -43,6 +45,22 @@ fun <T> getListByGson(json: String?, cls: Class<T>?): MutableList<T>? {
         return mList
     }.onFailure {
         AppLogs.eLog("gson", it.stackTraceToString())
+    }
+    return null
+}
+
+fun <T> getVectorByGson(json: String?, cls: Class<T>?): Vector<T>? {
+    runCatching {
+        val mList = Vector<T>()
+        val array = JsonParser().parse(json).asJsonArray
+        if (array != null && array.size() > 0) {
+            for (elem in array) {
+                mList.add(gson.fromJson(elem, cls))
+            }
+        }
+        return mList
+    }.onFailure {
+        AppLogs.eLog("gson",it.stackTraceToString())
     }
     return null
 }
@@ -155,6 +173,10 @@ fun appDataReset(){
         CacheManager.dayShowAddShort = true
         CacheManager.dayDownloadCount = 0
         CacheManager.dayFirstDownloadVideoSuccess = true
+        NFEnum.values().forEach {
+            CacheManager.saveNFShowLastTime(it.menuName,0)
+            CacheManager.saveDayNFShowCount(it.menuName,0)
+        }
     }
 }
 

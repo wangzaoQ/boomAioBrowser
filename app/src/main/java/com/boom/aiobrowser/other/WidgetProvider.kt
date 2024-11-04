@@ -168,7 +168,7 @@ class WidgetProvider : AppWidgetProvider() {
         var refreshSession = false
         while (count < 10 && newsList.isNullOrEmpty()) {
             AppLogs.dLog(NFManager.TAG, "name:${NetParams.WIDGET} 获取数据来源次数count:${count + 1}")
-            newsList = NFData.getWidgetData(refreshSession)
+            newsList = NFData.getNFData(refreshSession,NetParams.WIDGET)
             count++
             if (count == 7) {
                 refreshSession = true

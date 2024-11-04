@@ -4,6 +4,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.ad.ADEnum.*
 import com.boom.aiobrowser.data.ADResultData
 import com.boom.aiobrowser.data.AioADData
+import com.boom.aiobrowser.data.AioNFData
 import com.boom.aiobrowser.data.AioRequestData
 import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.tools.AppLogs

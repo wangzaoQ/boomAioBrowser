@@ -9,6 +9,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.base.BaseActivity
+import com.boom.aiobrowser.data.AioNFData
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
@@ -18,6 +19,7 @@ import com.boom.aiobrowser.point.PointValue
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.appDataReset
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
@@ -26,6 +28,10 @@ import com.boom.aiobrowser.ui.isAndroid14
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 import java.util.Objects
 import kotlin.random.Random
@@ -33,6 +39,8 @@ import kotlin.random.Random
 object NFManager {
 
     var TAG = "NFManager"
+
+    var nfRootBean: AioNFData? = null
 
     val videoNFMap = LinkedHashMap<String,Int>()
 
@@ -201,7 +209,10 @@ object NFManager {
     fun startForeground(tag: String) {
         AppLogs.dLog(NFManager.TAG,"前台服务 触发 ${tag}-${Build.VERSION.SDK_INT}")
         if (nfAllow().not())return
-        if (isAndroid12() && APP.instance.lifecycleApp.isBackGround())return
+        if (isAndroid12() && APP.instance.lifecycleApp.isBackGround()){
+            AppLogs.dLog(NFManager.TAG,"大于12 不允许后台展示前台服务${Build.VERSION.SDK_INT}")
+            return
+        }
         if (isAndroid14()){
 //            if (XXPermissions.isGranted(APP.instance, Permissions.FOREGROUND_SERVICE_DATA_SYNC, Permission.ACCESS_COARSE_LOCATION).not())return
         }
@@ -246,8 +257,46 @@ object NFManager {
         var refresh = (System.currentTimeMillis() - oldTime) > limit
         AppLogs.dLog(
             NFManager.TAG,
-            "name:${key} 判断是否需要强制刷新数据/refresh:${refresh}"
+            "name:${key} 判断是否需要强制刷新数据/refresh:${refresh} key:${key} oldTime:${oldTime}"
         )
         return refresh
     }
+
+    var showCount = 0
+
+    fun notifyByTimerTask() {
+       CoroutineScope(Dispatchers.IO).launch{
+            startForeground("APP")
+            while (true) {
+                appDataReset()
+                showNFByCount()
+                showCount++
+                delay((if (APP.isDebug)1 else 10)*60*1000L)
+            }
+        }
+    }
+
+    private suspend fun showNFByCount() {
+        var count = showCount%5
+        when (count) {
+            0 -> {
+                NFShow.showNewsNFFilter(NFEnum.NF_NEWS)
+            }
+            1 -> {
+                NFShow.showNewsNFFilter(NFEnum.NF_NEW_USER)
+            }
+            2 -> {
+                NFShow.showNewsNFFilter(NFEnum.NF_EDITOR)
+            }
+            3->{
+                NFShow.showNewsNFFilter(NFEnum.NF_LOCAL)
+            }
+            4->{
+                NFShow.showNewsNFFilter(NFEnum.NF_HOT)
+                PointEvent.posePoint(PointEventKey.session_st)
+            }
+            else -> {}
+        }
+    }
+
 }

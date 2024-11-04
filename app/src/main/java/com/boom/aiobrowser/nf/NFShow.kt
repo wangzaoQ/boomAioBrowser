@@ -1,14 +1,11 @@
 package com.boom.aiobrowser.nf
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Notification
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.RemoteViews
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
@@ -26,14 +23,11 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.GlideManager
 import com.boom.aiobrowser.tools.web.WebScan
-import com.boom.aiobrowser.ui.isAndroid12
-import com.hjq.permissions.Permission
-import com.hjq.permissions.XXPermissions
 import kotlin.random.Random
 
 object NFShow {
 
-    suspend fun showNewsNFFilter(enum: NFEnum) {
+    suspend fun showNewsNFFilter(enum: NFEnum,sourceType:String = "timer") {
         if (nfAllow().not())return
         runCatching {
             var refreshSession = false
@@ -42,12 +36,27 @@ object NFShow {
             if (NFManager.needRefreshData(enum.menuName)) {
                 CacheManager.saveNFNewsList(enum.menuName, mutableListOf())
             }
+            if (NFData.filterList1(enum, sourceType).not())return
+            var limit = Random.nextInt(0, 3)
             newsList = CacheManager.getNFNewsList(enum.menuName)
+            if (newsList.size > limit) {
+                AppLogs.dLog(
+                    NFManager.TAG,
+                    "enum:${enum.menuName} sourceType:${sourceType} 使用缓存 当前缓存大小list.size:${newsList.size} 本次跳过的数量:${limit}"
+                )
+                newsList = NFData.filterList2(enum, sourceType, newsList)
+                newsList = NFData.filterList3(enum, sourceType, newsList)
+                if (newsList.isNullOrEmpty()){
+                    CacheManager.saveNFNewsList(enum.menuName, mutableListOf())
+                    AppLogs.dLog(NFManager.TAG,"经过 图片+历史过滤后 无数据")
+                }
+            }
+
             while (count < 10 && newsList.isNullOrEmpty()) {
                 AppLogs.dLog(NFManager.TAG, "name:${enum.menuName} 获取数据来源次数count:${count + 1}")
-                if (enum == NFEnum.NF_NEWS) {
-                    newsList = NFData.getNFForYou(refreshSession)
-                }
+                newsList = NFData.getNFData(refreshSession,enum.menuName)
+                newsList = NFData.filterList2(enum, sourceType, newsList)
+                newsList = NFData.filterList3(enum, sourceType, newsList)
                 count++
                 if (count == 7) {
                     refreshSession = true
@@ -55,16 +64,15 @@ object NFShow {
             }
             AppLogs.dLog(
                 NFManager.TAG,
-                "name:${enum.menuName} 已经过判断当前缓存已有数量:${newsList?.size}"
+                "name:${enum.menuName} sourceType:${sourceType} 获取数据成功 新闻总size=${newsList?.size}"
             )
             newsList?.removeFirstOrNull()?.apply {
                 showNewsNF(this, enum)
             }
-            AppLogs.dLog(
-                NFManager.TAG,
-                "name:${enum.menuName} 已经过判断移除当前通知后缓存已有数量:${newsList?.size}"
-            )
             CacheManager.saveNFNewsList(enum.menuName, newsList ?: mutableListOf())
+            if (APP.isDebug){
+                AppLogs.dLog(NFManager.TAG, "name:${enum.menuName} 移除第一条后 新闻总size=${CacheManager.getNFNewsList(enum.menuName).size}")
+            }
         }.onFailure {
             AppLogs.eLog(NFManager.TAG,it.stackTraceToString())
         }
@@ -176,6 +184,9 @@ object NFShow {
                 }
             })
             CacheManager.saveLastRefreshTime(enum.menuName)
+            CacheManager.saveNewsDataHistory(data,enum.menuName)
+            CacheManager.saveNFShowLastTime(enum.menuName,System.currentTimeMillis())
+            CacheManager.saveDayNFShowCount(enum.menuName,(CacheManager.getDayNFShowCount(enum.menuName)+1))
         }.onFailure {
             AppLogs.eLog(NFManager.TAG,it.stackTraceToString())
         }

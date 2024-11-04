@@ -7,10 +7,12 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.ad.AioADDataManager.adRootBean
 import com.boom.aiobrowser.data.AioADData
+import com.boom.aiobrowser.data.AioNFData
 import com.boom.aiobrowser.data.AioRequestData
 import com.boom.aiobrowser.data.PushData
 import com.boom.aiobrowser.firebase.FirebaseConfig.AD_DEFAULT_JSON
 import com.boom.aiobrowser.nf.NFManager
+import com.boom.aiobrowser.nf.NFManager.nfRootBean
 import com.boom.aiobrowser.nf.NFWorkManager
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
@@ -85,6 +87,7 @@ object FirebaseManager {
     private fun initFirebaseConfig(tag: String) {
         AppLogs.dLog(APP.instance.TAG,"tag:${tag}")
         getADConfig()
+        getNFConfig()
         runCatching {
             FirebaseConfig.AD_CD_ALL = firebaseRemoteConfig?.getString("aobws_cd")?.toInt()?:if (APP.isDebug)10 else 60
         }
@@ -94,6 +97,20 @@ object FirebaseManager {
             PointEvent.posePoint(PointEventKey.aio_push, Bundle().apply {
                 putInt(PointValueKey.type,FirebaseConfig.pushData?.time_interval?:0)
             })
+        }
+    }
+
+    private fun getNFConfig() {
+        runCatching {
+            var nfJson = ""
+            runCatching {
+                //ad
+                nfJson = firebaseRemoteConfig?.getString("aobws_nf_config")?:""
+            }
+            nfRootBean = getBeanByGson(nfJson, AioNFData::class.java)
+            if (nfRootBean == null){
+                nfRootBean =getBeanByGson(FirebaseConfig.NF_JSON, AioNFData::class.java)
+            }
         }
     }
 

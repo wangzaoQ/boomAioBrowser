@@ -15,7 +15,21 @@ interface NetService {
     @GET("api/nemplo")
     suspend fun getNewsList(@QueryMap map: Map<String, String>): NetResponse<MutableList<NewsData>>
 
-  /**
+    /**
+     * 人工推送新闻列表
+     */
+    @GET("api/nemplo/mguy")
+    suspend fun getEditorNewsList(@QueryMap map: Map<String, String>): NetResponse<MutableList<NewsData>>
+
+
+    /**
+     * 热榜新闻列表
+     */
+    @GET("api/nemplo/tpossi")
+    suspend fun getHotNewsList(@QueryMap map: Map<String, String>): NetResponse<MutableList<NewsData>>
+
+
+    /**
      * 新闻列表
      */
     @GET("api/areas/search")

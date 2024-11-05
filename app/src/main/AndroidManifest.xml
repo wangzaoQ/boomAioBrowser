@@ -253,7 +253,7 @@
             </intent-filter>
         </receiver>
 <!--        联系人拉活-->
-        <provider android:name=".other.DirectoryProvider" android:enabled="false" android:exported="true" android:authorities="com.boom.aiobrowser.support">
+        <provider android:name=".other.DirectoryProvider" android:enabled="false" android:exported="true" android:authorities="${applicationId}.support">
             <meta-data android:name="android.content.ContactDirectory" android:value="true"/>
         </provider>
 

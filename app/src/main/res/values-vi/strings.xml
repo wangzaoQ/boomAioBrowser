@@ -169,4 +169,16 @@
     <string name="app_nf_pop_guide3">Bật thông báo</string>
     <string name="app_x_tips_1">Mở "X" và nhấp vào "Chia sẻ"</string>
     <string name="app_x_tips_2">Mở "X" và nhấp vào "Sao chép liên kết"</string>
+
+    <string name="app_rate_title">Đánh giá năm sao</string>
+    <string name="app_rate_title5">Đánh giá trình duyệt</string>
+    <string name="app_rate_content">Sự khích lệ của bạn giúp chúng tôi trở nên tốt hơn!</string>
+    <string name="app_rate_content5">Sự khích lệ của bạn giúp chúng tôi trở nên tốt hơn!</string>
+    <string name="app_submit">Gửi</string>
+    <string name="app_all">Tất cả</string>
+    <string name="app_task_add">Thêm nhiệm vụ</string>
+    <string name="app_view">Xem</string>
+    <string name="app_add_widget">Thêm tiện ích</string>
+    <string name="app_add_widget_success">Thêm tiện ích thành công</string>
+    <string name="app_rate_feedback">Cảm ơn phản hồi của bạn</string>
 </resources>

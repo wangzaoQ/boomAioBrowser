@@ -169,4 +169,16 @@
     <string name="app_nf_pop_guide3">Attiva le notifiche</string>
     <string name="app_x_tips_1">Apri "X" e fai clic su "Condividi"</string>
     <string name="app_x_tips_2">Apri "X" e fai clic su "Copia link"</string>
+
+    <string name="app_rate_title">Recensione a cinque stelle</string>
+    <string name="app_rate_title5">Valuta il browser</string>
+    <string name="app_rate_content">Il tuo incoraggiamento ci rende migliori!</string>
+    <string name="app_rate_content5">Il tuo incoraggiamento ci rende migliori!</string>
+    <string name="app_submit">Invia</string>
+    <string name="app_all">Tutti</string>
+    <string name="app_task_add">Attività aggiunta</string>
+    <string name="app_view">Visualizza</string>
+    <string name="app_add_widget">Aggiungi widget</string>
+    <string name="app_add_widget_success">Widget aggiunto con successo</string>
+    <string name="app_rate_feedback">Grazie per il feedback</string>
 </resources>

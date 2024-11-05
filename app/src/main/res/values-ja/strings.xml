@@ -168,4 +168,16 @@
     <string name="app_nf_pop_guide3">通知をオンにする</string>
     <string name="app_x_tips_1">「X」を開いて「共有」をクリック</string>
     <string name="app_x_tips_2">「X」を開いて「リンクをコピー」をクリック</string>
+
+    <string name="app_rate_title">五つ星のレビュー</string>
+    <string name="app_rate_title5">ブラウザを評価する</string>
+    <string name="app_rate_content">あなたの応援が私たちをより良くします！</string>
+    <string name="app_rate_content5">あなたの応援が私たちをより良くします！</string>
+    <string name="app_submit">送信</string>
+    <string name="app_all">すべて</string>
+    <string name="app_task_add">タスクが追加されました</string>
+    <string name="app_view">表示</string>
+    <string name="app_add_widget">ウィジェットを追加</string>
+    <string name="app_add_widget_success">ウィジェットが正常に追加されました</string>
+    <string name="app_rate_feedback">フィードバックありがとうございます</string>
 </resources>

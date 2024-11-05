@@ -170,4 +170,16 @@
     <string name="app_nf_pop_guide3">เปิดการแจ้งเตือน</string>
     <string name="app_x_tips_1">เปิด "X" และคลิก "แชร์"</string>
     <string name="app_x_tips_2">เปิด "X" และคลิก "คัดลอกลิงก์"</string>
+
+    <string name="app_rate_title">รีวิวห้าดาว</string>
+    <string name="app_rate_title5">ให้คะแนนเบราว์เซอร์</string>
+    <string name="app_rate_content">กำลังใจของคุณทำให้เราดีขึ้น!</string>
+    <string name="app_rate_content5">กำลังใจของคุณทำให้เราดีขึ้น!</string>
+    <string name="app_submit">ส่ง</string>
+    <string name="app_all">ทั้งหมด</string>
+    <string name="app_task_add">เพิ่มงานแล้ว</string>
+    <string name="app_view">ดู</string>
+    <string name="app_add_widget">เพิ่มวิจเจ็ต</string>
+    <string name="app_add_widget_success">เพิ่มวิจเจ็ตสำเร็จ</string>
+    <string name="app_rate_feedback">ขอบคุณสำหรับความคิดเห็น</string>
 </resources>

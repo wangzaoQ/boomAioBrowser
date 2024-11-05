@@ -167,4 +167,16 @@
     <string name="app_nf_pop_guide3">알림 켜기</string>
     <string name="app_x_tips_1">"X"을 열고 "공유"를 클릭하세요</string>
     <string name="app_x_tips_2">"X"을 열고 "링크 복사"를 클릭하세요</string>
+
+    <string name="app_rate_title">별 다섯 개 리뷰</string>
+    <string name="app_rate_title5">브라우저 평가하기</string>
+    <string name="app_rate_content">여러분의 응원이 저희를 더 나아지게 합니다!</string>
+    <string name="app_rate_content5">여러분의 응원이 저희를 더 나아지게 합니다!</string>
+    <string name="app_submit">제출</string>
+    <string name="app_all">전체</string>
+    <string name="app_task_add">작업 추가됨</string>
+    <string name="app_view">보기</string>
+    <string name="app_add_widget">위젯 추가</string>
+    <string name="app_add_widget_success">위젯이 성공적으로 추가되었습니다</string>
+    <string name="app_rate_feedback">피드백 감사합니다</string>
 </resources>

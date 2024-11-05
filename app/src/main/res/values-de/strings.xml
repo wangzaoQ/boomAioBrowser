@@ -170,4 +170,16 @@
     <string name="app_nf_pop_guide3">Benachrichtigungen aktivieren</string>
     <string name="app_x_tips_1">Öffne "X" und klicke auf "Teilen"</string>
     <string name="app_x_tips_2">Öffne "X" und klicke auf "Link kopieren"</string>
+
+    <string name="app_rate_title">Fünf-Sterne-Bewertung</string>
+    <string name="app_rate_title5">Bewerten Sie den Browser</string>
+    <string name="app_rate_content">Ihre Unterstützung macht uns besser!</string>
+    <string name="app_rate_content5">Ihre Unterstützung macht uns besser!</string>
+    <string name="app_submit">Absenden</string>
+    <string name="app_all">Alle</string>
+    <string name="app_task_add">Aufgabe hinzugefügt</string>
+    <string name="app_view">Anzeigen</string>
+    <string name="app_add_widget">Widget hinzufügen</string>
+    <string name="app_add_widget_success">Widget erfolgreich hinzugefügt</string>
+    <string name="app_rate_feedback">Danke für Ihr Feedback</string>
 </resources>

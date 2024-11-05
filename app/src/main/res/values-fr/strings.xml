@@ -169,4 +169,16 @@
     <string name="app_nf_pop_guide3">Activer les notifications</string>
     <string name="app_x_tips_1">Ouvrez \"X\" et cliquez sur \"Partager\"</string>
     <string name="app_x_tips_2">Ouvrez \"X\" et cliquez sur \"Copier le lien\"</string>
+
+    <string name="app_rate_title">Évaluation cinq étoiles</string>
+    <string name="app_rate_title5">Évaluez le navigateur</string>
+    <string name="app_rate_content">Votre soutien nous rend meilleurs !</string>
+    <string name="app_rate_content5">Votre soutien nous rend meilleurs !</string>
+    <string name="app_submit">Soumettre</string>
+    <string name="app_all">Tous</string>
+    <string name="app_task_add">Tâche ajoutée</string>
+    <string name="app_view">Voir</string>
+    <string name="app_add_widget">Ajouter un widget</string>
+    <string name="app_add_widget_success">Widget ajouté avec succès</string>
+    <string name="app_rate_feedback">Merci pour vos retours</string>
 </resources>

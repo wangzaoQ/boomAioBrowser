@@ -164,7 +164,7 @@ object NFShow {
                 NFManager.manager.notify(NFManager.nfNewsId, bulider.build())
             }else{
                 NFManager.manager.cancel(data.tag,0)
-                NFManager.manager.notify(data.tag,data.nId,bulider.build())
+                NFManager.manager.notify(data.nId,bulider.build())
             }
             var width = dp2px(331f)
             var height = dp2px(181f)
@@ -176,8 +176,7 @@ object NFShow {
                 if (data.tag.isNullOrEmpty()){
                     NFManager.manager.notify(NFManager.nfNewsId, bulider.build())
                 }else{
-                    NFManager.manager.cancel(data.tag,0)
-                    NFManager.manager.notify(data.tag,data.nId,bulider.build())
+                    NFManager.manager.notify(data.nId,bulider.build())
                 }
             },callFail ={
                 smallRemote?.setImageViewResource(R.id.ivPic, R.mipmap.bg_news_default)
@@ -185,8 +184,7 @@ object NFShow {
                 if (data.tag.isNullOrEmpty()){
                     NFManager.manager.notify(NFManager.nfNewsId, bulider.build())
                 }else{
-                    NFManager.manager.cancel(data.tag,0)
-                    NFManager.manager.notify(data.tag,data.nId,bulider.build())
+                    NFManager.manager.notify(data.nId,bulider.build())
                 }
             })
             CacheManager.saveLastRefreshTime(enum.menuName)

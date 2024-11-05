@@ -10,6 +10,7 @@ import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.os.Bundle
+import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
@@ -149,6 +150,7 @@ object ShortManager {
                         PointEvent.posePoint(PointEventKey.widget_pop,Bundle().apply {
                             putString(PointValueKey.source_from,if(continueFilter)"profile_pop" else "other" )
                         })
+                        ToastUtils.showLong(APP.instance.getString(R.string.app_add_widget_success))
                     }
                 }
             }

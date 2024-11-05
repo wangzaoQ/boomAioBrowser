@@ -14,6 +14,7 @@ import com.boom.aiobrowser.data.AioNFData
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
+import com.boom.aiobrowser.other.ShortManager
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValue
@@ -186,7 +187,7 @@ object NFManager {
                 })
                 getBeanByGson(nfData,NewsData::class.java)?.apply {
                     runCatching {
-                        manager.cancel(tag,nId)
+                        manager.cancel(nId)
                     }
                 }
             }
@@ -194,6 +195,7 @@ object NFManager {
                 from = "widget"
                 if (nfTo == 1){
                     PointEvent.posePoint(PointEventKey.widget_click)
+                    ShortManager.widgetUpdate(APP.instance,"widgetClick")
                 }else{
                     PointEvent.posePoint(PointEventKey.widget_search)
                 }
@@ -249,8 +251,8 @@ object NFManager {
             itackl = newsId
             uweek = url
             sissue = body
-            this.tag = tag
             this.channel = chanel
+            this.tag = tag
             this.nId = Random.nextInt(1000000)
         }
         NFShow.showNewsNF(data,NFEnum.NF_NEWS_FCM)
@@ -277,7 +279,7 @@ object NFManager {
             startForeground("APP")
             while (true) {
                 appDataReset()
-//                showNFByCount()
+                showNFByCount()
                 showCount++
                 delay((if (APP.isDebug)1 else 10)*60*1000L)
             }

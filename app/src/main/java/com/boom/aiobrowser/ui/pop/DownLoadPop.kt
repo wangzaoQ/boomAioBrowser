@@ -164,7 +164,6 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             }
         }
         var sizeGone = defaultSize <=1
-        defaultBinding!!.tvClear.visibility =  if (sizeGone) View.GONE else View.VISIBLE
         var allSize = 0L
         var downSize = 0
         downloadAdapter.items.forEach {
@@ -175,7 +174,6 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         }
 
         defaultBinding?.apply {
-            rlTop.visibility = if (downSize == 1) View.GONE else View.VISIBLE
             if (allSize == 0L){
                 if (defaultSize == 0){
                     btnDownloadAll.text =

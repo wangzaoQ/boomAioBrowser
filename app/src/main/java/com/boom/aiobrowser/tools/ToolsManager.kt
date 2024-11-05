@@ -2,9 +2,11 @@ package com.boom.aiobrowser.tools
 
 import android.app.ActivityManager
 import android.content.ClipboardManager
+import android.content.ComponentName
 import android.content.Context
 import android.net.Uri
 import android.text.TextUtils
+import androidx.annotation.NonNull
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.NFEnum
@@ -308,6 +310,22 @@ fun clearClipboard() {
         } catch (e: Exception) {
 
         }
+    }
+}
+
+fun registerDirectory(@NonNull context: Context, cls: Class<*>?, z: Boolean) {
+    val packageManager = context.packageManager
+    val componentName = ComponentName(context, cls!!)
+    val i2 = if (z) {
+        1
+    } else {
+        2
+    }
+    try {
+        if (i2 != packageManager.getComponentEnabledSetting(componentName)) {
+            packageManager.setComponentEnabledSetting(componentName, i2, 1)
+        }
+    } catch (unused: RuntimeException) {
     }
 }
 

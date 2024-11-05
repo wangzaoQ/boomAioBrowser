@@ -36,12 +36,12 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/llMainControl"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="64dp"
             android:orientation="horizontal"
             android:clickable="true"
             android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             >
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -51,8 +51,8 @@
                 android:layout_weight="1"
                 >
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     app:srcCompat="@drawable/selector_main_home"
                     ></androidx.appcompat.widget.AppCompatImageView>
                 <androidx.appcompat.widget.AppCompatTextView
@@ -61,6 +61,7 @@
                     android:text="@string/app_home"
                     android:textSize="9sp"
                     android:layout_marginTop="3dp"
+                    style="@style/app_text_bold"
                     android:textColor="@drawable/selector_tab_text"
                     ></androidx.appcompat.widget.AppCompatTextView>
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -72,8 +73,8 @@
                 android:layout_weight="1"
                 >
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     app:srcCompat="@drawable/selector_main_download"
                     ></androidx.appcompat.widget.AppCompatImageView>
                 <androidx.appcompat.widget.AppCompatTextView
@@ -82,6 +83,7 @@
                     android:text="@string/app_download"
                     android:textSize="9sp"
                     android:layout_marginTop="3dp"
+                    style="@style/app_text_bold"
                     android:textColor="@drawable/selector_tab_text"
                     ></androidx.appcompat.widget.AppCompatTextView>
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -93,8 +95,8 @@
                 android:layout_weight="1"
                 >
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     app:srcCompat="@mipmap/ic_home_setting"
                     ></androidx.appcompat.widget.AppCompatImageView>
                 <androidx.appcompat.widget.AppCompatTextView
@@ -103,6 +105,7 @@
                     android:text="@string/app_me"
                     android:textSize="9sp"
                     android:layout_marginTop="3dp"
+                    style="@style/app_text_bold"
                     android:textColor="@drawable/selector_tab_text"
                     ></androidx.appcompat.widget.AppCompatTextView>
             </androidx.appcompat.widget.LinearLayoutCompat>

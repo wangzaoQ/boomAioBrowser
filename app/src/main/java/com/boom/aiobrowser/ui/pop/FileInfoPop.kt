@@ -29,6 +29,7 @@ class FileInfoPop(context: Context): BasePopupWindow(context) {
 
     fun createPop(videoData: VideoDownloadData) {
         setOutSideDismiss(true)
+        setBackground(R.color.color_70_black)
         showPopupWindow()
         defaultBinding?.apply {
             GlideManager.loadImg(

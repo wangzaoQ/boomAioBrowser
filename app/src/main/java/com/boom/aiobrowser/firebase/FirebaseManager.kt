@@ -73,16 +73,29 @@ object FirebaseManager {
             var topic = if (APP.isDebug){
                 "test~ALL2"
             }else{
-                "${Locale.getDefault().country}~ALL"
+                "${matchCountry()}~ALL"
             }
-            AppLogs.dLog(NFManager.TAG,"message topic:${topic} country:${Locale.getDefault().country}")
+            if (APP.isDebug){
+                AppLogs.dLog(NFManager.TAG,"message topic:${topic} country:${Locale.getDefault().country}")
+            }
             Firebase.messaging.subscribeToTopic(topic)
                 .addOnCompleteListener { task ->
+                    var country = "dCountry"
+                    var language = "dLanguage"
+                    runCatching {
+                        country = Locale.getDefault().country
+                    }
+                    runCatching {
+                        language = Locale.getDefault().language
+                    }
+                    PointEvent.posePoint(PointEventKey.fcm_subscription,Bundle().apply {
+                        putString("fcm_conuntry",country)
+                        putString("fcm_language",language)
+                    })
                     AppLogs.dLog(NFManager.TAG,"message 初始化成功")
                 }
         }
     }
-
 
     private fun initFirebaseConfig(tag: String) {
         AppLogs.dLog(APP.instance.TAG,"tag:${tag}")
@@ -129,6 +142,38 @@ object FirebaseManager {
             }
             adRootBean?.apply {
                 AioADDataManager.initADConfig(this)
+            }
+        }
+    }
+
+    fun matchCountry(): String {
+        var language = ""
+        runCatching {
+            language = Locale.getDefault().language
+        }
+        return when (language) {
+            "pt" -> {
+                "BR"
+            }
+
+            "ja" -> {
+                "JP"
+            }
+
+            "in" -> {
+                "ID"
+            }
+
+            "ko" -> {
+                "KR"
+            }
+
+            "es" ->{
+                "MX"
+            }
+
+            else -> {
+                "US"
             }
         }
     }

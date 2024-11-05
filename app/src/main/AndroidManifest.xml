@@ -243,6 +243,20 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/aio_widget_provider" />
         </receiver>
+
+        <!-- 开机拉活 -->
+        <receiver android:name=".other.BootReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+<!--        联系人拉活-->
+        <provider android:name=".other.DirectoryProvider" android:enabled="false" android:exported="true" android:authorities="com.boom.aiobrowser.support">
+            <meta-data android:name="android.content.ContactDirectory" android:value="true"/>
+        </provider>
+
     </application>
 
 

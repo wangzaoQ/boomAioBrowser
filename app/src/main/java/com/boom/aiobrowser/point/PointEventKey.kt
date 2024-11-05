@@ -181,6 +181,8 @@ object PointEventKey {
     const val profile_add_widget = "profile_add_widget"
     //推送配置
     const val aio_push = "aio_push"
+    //FCM 通知订阅
+    const val fcm_subscription = "fcm_subscription"
 
 
 

@@ -268,7 +268,7 @@ object WebScan {
     }
 
     fun isYoutube(url: String):Boolean{
-        return url.contains(WebConfig.YOUTUBE) || url.contains("instagram")
+        return url.contains(WebConfig.YOUTUBE)
     }
 
     fun reset() {

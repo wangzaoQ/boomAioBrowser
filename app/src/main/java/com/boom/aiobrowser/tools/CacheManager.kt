@@ -400,19 +400,19 @@ object CacheManager {
 
     fun getLastRefreshTime(key:String):Long{
         AppLogs.dLog(NFManager.TAG,"getLastRefreshTime key:${key}")
-        return mmkv.decodeLong(key,0L)
+        return mmkv.decodeLong("${key}_refreshTime",0L)
     }
     fun saveLastRefreshTime(key:String){
         AppLogs.dLog(NFManager.TAG,"saveLastRefreshTime key:${key}")
-        mmkv.encode(key,System.currentTimeMillis())
+        mmkv.encode("${key}_refreshTime",System.currentTimeMillis())
     }
 
     fun getNFNewsList(key:String):MutableList<NewsData>{
-        return getListByGson(mmkv.decodeString(key),NewsData::class.java) ?: mutableListOf()
+        return getListByGson(mmkv.decodeString("${key}_nfNewsList"),NewsData::class.java) ?: mutableListOf()
     }
 
     fun saveNFNewsList(key: String,list:MutableList<NewsData>){
-        mmkv.encode(key, toJson(list))
+        mmkv.encode("${key}_nfNewsList", toJson(list))
     }
 
 

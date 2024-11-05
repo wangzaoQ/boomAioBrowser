@@ -16,4 +16,5 @@ enum class NFEnum(val menuName: String, val channelId:String, val channelPriorit
     NF_LOCAL("local_push","Local", NotificationManager.IMPORTANCE_MAX,NotificationCompat.PRIORITY_MAX,position = 5),
     NF_HOT("hot_push","Hot", NotificationManager.IMPORTANCE_MAX,NotificationCompat.PRIORITY_MAX,position = 6),
     NF_NEW_USER("new_user_push","NewUser", NotificationManager.IMPORTANCE_MAX,NotificationCompat.PRIORITY_MAX,position = 7),
+    NF_UNLOCK("unlock_push","Unlock", NotificationManager.IMPORTANCE_MAX,NotificationCompat.PRIORITY_MAX,position = 8),
 }

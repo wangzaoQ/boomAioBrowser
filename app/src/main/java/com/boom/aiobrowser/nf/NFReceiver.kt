@@ -18,6 +18,9 @@ import com.boom.aiobrowser.tools.video.VideoManager
 import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.activity.VideoPreActivity
 import com.boom.downloader.VideoDownloadManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class NFReceiver: BroadcastReceiver()  {
 
@@ -66,6 +69,11 @@ class NFReceiver: BroadcastReceiver()  {
                             putExtra("video_path", toJson(data))
                         })
                     }
+                }
+            }
+            Intent.ACTION_USER_PRESENT ->{
+                CoroutineScope(Dispatchers.IO).launch{
+                    NFShow.showNewsNFFilter(NFEnum.NF_UNLOCK,NFManager.FROM_UNLOCK)
                 }
             }
             else -> {}

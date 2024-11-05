@@ -151,9 +151,7 @@ class APP: Application(), ViewModelStoreOwner {
     }
 
     private fun initNFConfig() {
-        if (isDebug){
-            NFWorkManager.startNF()
-        }
+
     }
 
     private fun initAdjust() {
@@ -187,9 +185,7 @@ class APP: Application(), ViewModelStoreOwner {
 
     var nfReceiver: NFReceiver? = null
     fun registerNotifyReceiver(context: Context) {
-        // logsi(FJST, "registerNotifyReceiver()111")
         nfReceiver = NFReceiver()
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.registerReceiver(nfReceiver, IntentFilter().apply {
                 addAction(Intent.ACTION_SCREEN_OFF)

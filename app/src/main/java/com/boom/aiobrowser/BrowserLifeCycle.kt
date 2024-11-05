@@ -49,10 +49,10 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
             startTime = System.currentTimeMillis()
         }
         cancelJob?.cancel()
-        var wakeUtils = WakeManager()
+
         var allowContinue = false
         runCatching {
-            allowContinue = wakeUtils.isScreenOn()&& wakeUtils.isDeviceLocked().not()
+            allowContinue = WakeManager.isScreenOn()&& WakeManager.isDeviceLocked().not()
         }
         if (allowContinue.not()){
             return

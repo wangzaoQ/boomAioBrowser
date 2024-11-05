@@ -8,6 +8,7 @@ import android.os.Bundle
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.APP.Companion.isDebug
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.AioNFData
 import com.boom.aiobrowser.data.NFEnum
@@ -39,6 +40,10 @@ import kotlin.random.Random
 object NFManager {
 
     var TAG = "NFManager"
+
+    const val FROM_TIMER: String = "timer"
+    const val FROM_WORK: String = "work"
+    const val FROM_UNLOCK: String = "unlock"
 
     var nfRootBean: AioNFData? = null
 
@@ -265,11 +270,14 @@ object NFManager {
     var showCount = 0
 
     fun notifyByTimerTask() {
+        if (isDebug){
+            NFWorkManager.startNF()
+        }
        CoroutineScope(Dispatchers.IO).launch{
             startForeground("APP")
             while (true) {
                 appDataReset()
-                showNFByCount()
+//                showNFByCount()
                 showCount++
                 delay((if (APP.isDebug)1 else 10)*60*1000L)
             }

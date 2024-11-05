@@ -6,11 +6,11 @@ import androidx.work.WorkerParameters
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.tools.AppLogs
 
-class NormalNewsWork(appContext: Context, params: WorkerParameters) : BaseNotifyWork(appContext, params) {
+class LocalNewsWork(appContext: Context, params: WorkerParameters) : BaseNotifyWork(appContext, params) {
     override suspend fun doWork(): Result {
-        AppLogs.dLog(NFManager.TAG,"NormalNewsWork doWork")
+        AppLogs.dLog(NFManager.TAG,"LocalNewsWork doWork")
         if (System.currentTimeMillis() > getStartTime() && System.currentTimeMillis() < getEndTime()) {
-            NFShow.showNewsNFFilter(NFEnum.NF_NEWS,NFManager.FROM_WORK)
+            NFShow.showNewsNFFilter(NFEnum.NF_LOCAL,NFManager.FROM_WORK)
         }
         return Result.success()
     }

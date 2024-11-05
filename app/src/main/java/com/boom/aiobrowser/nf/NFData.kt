@@ -37,7 +37,7 @@ object NFData {
 
                 }
 
-                NFEnum.NF_EDITOR.menuName -> {
+                NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName -> {
                     // 人工
                     list = NetRequest.request(HashMap<String, Any>().apply {
                         put("sessionKey", key)
@@ -69,6 +69,7 @@ object NFData {
         var limitContent = ""
         //如果上一次触发和这次触发为同一时间段 则不触发（为了防止FCM/本地/work 同一时间段触发都进行）
         var allow = true
+
         runCatching {
             var lastTime = CacheManager.getNFShowLastTime(enum.menuName)
             var count = CacheManager.getDayNFShowCount(enum.menuName)
@@ -165,7 +166,7 @@ object NFData {
                 AppLogs.dLog(NFManager.TAG, "现有缓存 size=${list.size}")
                 AppLogs.dLog(NFManager.TAG, "过期缓存 size=${removeHistoryList.size}")
                 list.removeAll(removeHistoryList)
-                AppLogs.dLog(NFManager.TAG, "移除后过期缓存后 size=${list.size}")
+                AppLogs.dLog(NFManager.TAG, "移除过期缓存后 size=${list.size}")
                 CacheManager.saveNewsListHistory(list)
                 AppLogs.dLog(NFManager.TAG, "需要过滤的数据 size=${newsList.size}")
                 newsList.removeAll(removeNewsList)
@@ -193,6 +194,9 @@ object NFData {
             NFEnum.NF_NEW_USER.menuName-> {
                 NFManager.nfRootBean?.aio_newuser?.times?:0
             }
+            NFEnum.NF_UNLOCK.menuName->{
+                NFManager.nfRootBean?.aio_unlock?.times?:0
+            }
             else -> {
                 NFManager.nfRootBean?.aio_for_you?.times?:0
             }
@@ -213,6 +217,9 @@ object NFData {
             NFEnum.NF_NEW_USER.menuName-> {
                 NFManager.nfRootBean?.aio_newuser?.first_time?:0
             }
+            NFEnum.NF_UNLOCK.menuName->{
+                NFManager.nfRootBean?.aio_unlock?.first_time?:0
+            }
             else -> {
                 NFManager.nfRootBean?.aio_for_you?.first_time?:0
             }
@@ -231,6 +238,9 @@ object NFData {
             }
             NFEnum.NF_NEW_USER.menuName-> {
                 NFManager.nfRootBean?.aio_newuser?.in_time?:0
+            }
+            NFEnum.NF_UNLOCK.menuName->{
+                NFManager.nfRootBean?.aio_unlock?.in_time?:0
             }
             else -> {
                 NFManager.nfRootBean?.aio_for_you?.in_time?:0

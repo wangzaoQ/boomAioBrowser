@@ -22,12 +22,13 @@ import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.GlideManager
+import com.boom.aiobrowser.tools.WakeManager
 import com.boom.aiobrowser.tools.web.WebScan
 import kotlin.random.Random
 
 object NFShow {
 
-    suspend fun showNewsNFFilter(enum: NFEnum,sourceType:String = "timer") {
+    suspend fun showNewsNFFilter(enum: NFEnum,sourceType:String = NFManager.FROM_TIMER) {
         if (nfAllow().not())return
         runCatching {
             var refreshSession = false
@@ -55,8 +56,10 @@ object NFShow {
             while (count < 10 && newsList.isNullOrEmpty()) {
                 AppLogs.dLog(NFManager.TAG, "name:${enum.menuName} 获取数据来源次数count:${count + 1}")
                 newsList = NFData.getNFData(refreshSession,enum.menuName)
-                newsList = NFData.filterList2(enum, sourceType, newsList)
-                newsList = NFData.filterList3(enum, sourceType, newsList)
+                if (newsList.isNullOrEmpty().not()){
+                    newsList = NFData.filterList2(enum, sourceType, newsList)
+                    newsList = NFData.filterList3(enum, sourceType, newsList)
+                }
                 count++
                 if (count == 7) {
                     refreshSession = true
@@ -150,6 +153,9 @@ object NFShow {
         PointEvent.posePoint(PointEventKey.all_noti_t,Bundle().apply {
             putString(PointValueKey.push_type, enum.menuName)
         })
+        if (enum == NFEnum.NF_NEWS || enum == NFEnum.NF_NEWS_FCM){
+            WakeManager.wwakeUp()
+        }
         runCatching {
             val smallRemote = NFViews.getNewsRemoteView(enum,data)
             val largeRemote = NFViews.getNewsRemoteView(enum,data, true)

@@ -18,13 +18,20 @@ object NFWorkManager {
 
     fun startNF(){
         AppLogs.dLog(NFManager.TAG,"WorkManager start")
-        WorkManager.getInstance(APP.instance).cancelAllWork();
-        var time = if (APP.isDebug){
-           60*1000
+        WorkManager.getInstance(APP.instance).cancelAllWork()
+        if (APP.isDebug){
+            start(APP.instance,NormalNewsWork::class.java,NFEnum.NF_NEWS.menuName,1*60*1000,15*60*1000)
+            start(APP.instance,EditorNewsWork::class.java,NFEnum.NF_EDITOR.menuName,2*60*1000,15*60*1000)
+            start(APP.instance,LocalNewsWork::class.java,NFEnum.NF_LOCAL.menuName,3*60*1000,15*60*1000)
+            start(APP.instance,HotNewsWork::class.java,NFEnum.NF_HOT.menuName,30*60*1000,15*60*1000)
+            start(APP.instance,NewUserNewsWork::class.java,NFEnum.NF_NEW_USER.menuName,5*60*1000,15*60*1000)
         }else{
-            (FirebaseConfig.pushData?.time_interval?:360)*60*1000
+            start(APP.instance,NormalNewsWork::class.java,NFEnum.NF_NEWS.menuName,15*60*1000,15*60*1000)
+            start(APP.instance,EditorNewsWork::class.java,NFEnum.NF_EDITOR.menuName,10*60*1000,60*60*1000)
+            start(APP.instance,LocalNewsWork::class.java,NFEnum.NF_LOCAL.menuName,20*60*1000,60*60*1000)
+            start(APP.instance,HotNewsWork::class.java,NFEnum.NF_HOT.menuName,30*60*1000,3*60*60*1000)
+            start(APP.instance,NewUserNewsWork::class.java,NFEnum.NF_NEW_USER.menuName,40*60*1000,60*60*1000)
         }
-        start(APP.instance,NormalNewsWork::class.java,NFEnum.NF_NEWS.menuName,time.toLong(),time.toLong())
     }
 
     fun start(context: Context, clazz: Class<out BaseNotifyWork>, workTag:String, delayMilli: Long, time:Long) {

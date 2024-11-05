@@ -6,6 +6,7 @@ class AioNFData {
     var aio_local:Data?=null
     var aio_hot:Data?=null
     var aio_newuser:Data?=null
+    var aio_unlock:Data?=null
 }
 
 class Data{

@@ -37,7 +37,7 @@ object NetParams {
             }
             NFEnum.NF_NEW_USER.menuName->{
                 isPush = true
-                map.put("ftie","false")
+                map.put("opop","1800")
             }
             NFEnum.NF_LOCAL.menuName->{
                 needLocation = true

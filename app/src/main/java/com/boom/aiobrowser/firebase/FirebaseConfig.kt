@@ -9,12 +9,14 @@ object FirebaseConfig {
 
     const val NF_JSON = """
 {
-"aio_for_you": { "in_time": 0, "times": 99, "first_time": 0 } ,
-"aio_editor": { "in_time": 0, "times": 99, "first_time": 0 } ,
-"aio_local": { "in_time": 0, "times": 99, "first_time": 0 } ,
-"aio_hot": { "in_time": 0, "times": 99, "first_time": 0 } ,
-"aio_newuser": { "in_time": 0, "times": 99, "first_time": 0 }
-}
+"aio_for_you": { "in_time": 30, "times": 99, "first_time": 2 } ,
+"aio_editor": { "in_time": 30, "times": 99, "first_time": 10 } ,
+"aio_local": { "in_time": 30, "times": 99, "first_time": 20 } ,
+"aio_hot": { "in_time": 30, "times": 99, "first_time": 30 } ,
+"aio_newuser": { "in_time": 30, "times": 99, "first_time": 40 },
+"aio_unlock": { "in_time": 5, "times": 99, "first_time": 0 },
+"notify_gap":30 
+ }
 """
 
     //控制应用内所有广告间的间隔的广告cd，本地默认60s

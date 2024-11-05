@@ -212,8 +212,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             jumpData = JumpDataManager.getCurrentJumpData(tag = "MainFragment onResume 首次")
             if (jumpData.jumpType == JumpConfig.JUMP_WEB){
                 APP.jumpLiveData.postValue(jumpData)
-            }else{
-
             }
         }else{
             jumpData = JumpDataManager.getCurrentJumpData(isReset = true,tag = "MainFragment onResume 非首次")

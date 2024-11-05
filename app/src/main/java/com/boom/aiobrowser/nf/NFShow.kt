@@ -140,7 +140,7 @@ object NFShow {
         if (nfAllow().not())return
         runCatching {
             getForegroundNF()
-            NFManager.manager.notify(NFManager.nfForegroundId,NFManager.nfForeground!!)
+            NFManager.manager.notify(NFEnum.NF_SEARCH_VIDEO.position,NFManager.nfForeground!!)
             NFManager.startForeground("showForegroundNF")
         }.onFailure {
             AppLogs.eLog(NFManager.TAG,it.stackTraceToString())
@@ -161,7 +161,7 @@ object NFShow {
             val largeRemote = NFViews.getNewsRemoteView(enum,data, true)
             var bulider = createBuilder(enum,smallRemote,largeRemote)
             if (data.tag.isNullOrEmpty()){
-                NFManager.manager.notify(NFManager.nfNewsId, bulider.build())
+                NFManager.manager.notify(enum.position, bulider.build())
             }else{
                 NFManager.manager.cancel(data.tag,0)
                 NFManager.manager.notify(data.nId,bulider.build())
@@ -174,7 +174,7 @@ object NFShow {
                 largeRemote.setViewVisibility(R.id.ivBg,View.VISIBLE)
                 smallRemote.setViewVisibility(R.id.ivBg,View.VISIBLE)
                 if (data.tag.isNullOrEmpty()){
-                    NFManager.manager.notify(NFManager.nfNewsId, bulider.build())
+                    NFManager.manager.notify(enum.position, bulider.build())
                 }else{
                     NFManager.manager.notify(data.nId,bulider.build())
                 }
@@ -182,7 +182,7 @@ object NFShow {
                 smallRemote?.setImageViewResource(R.id.ivPic, R.mipmap.bg_news_default)
                 largeRemote?.setImageViewResource(R.id.ivPic, R.mipmap.bg_news_default)
                 if (data.tag.isNullOrEmpty()){
-                    NFManager.manager.notify(NFManager.nfNewsId, bulider.build())
+                    NFManager.manager.notify(enum.position, bulider.build())
                 }else{
                     NFManager.manager.notify(data.nId,bulider.build())
                 }

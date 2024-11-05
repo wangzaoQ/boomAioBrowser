@@ -45,7 +45,9 @@ class TestWebFragment: BaseWebFragment<BrowserFragmentTempBinding>() {
             if (uri.host?.contains(fetchData.cUrl)?:false){
                 script = fetchData.cDetail
                 script = script.replace("__INPUT_URL__",URLEncoder.encode(webUrl))
-                AppLogs.dLog("webReceive","fetch 模式执行特定脚本")
+                if (APP.isDebug){
+                    AppLogs.dLog("webReceive","fetch 模式执行特定脚本:${script}")
+                }
                 mAgentWeb!!.getWebCreator().getWebView().evaluateJavascript(script) {
                     AppLogs.dLog("webReceive", "evaluateJavascript 接收:$it thread:${Thread.currentThread()}")
                 }

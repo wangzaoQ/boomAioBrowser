@@ -50,8 +50,6 @@ object NFManager {
 
     val videoNFMap = LinkedHashMap<String,Int>()
 
-    val nfForegroundId = 95000
-    val nfNewsId = 94000
     var nfForeground:Notification?=null
 
 
@@ -171,13 +169,32 @@ object NFManager {
                     putString(PointValueKey.type,type)
                 })
             }
-            NFEnum.NF_NEWS.menuName -> {
+            NFEnum.NF_NEWS.menuName,NFEnum.NF_LOCAL.menuName,NFEnum.NF_HOT.menuName,NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName,NFEnum.NF_NEW_USER.menuName -> {
                 from = "push"
                 PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
                     putString(PointValueKey.push_type, enumName)
                 })
+                var id = NFEnum.NF_NEWS.position
+                when (enumName) {
+                    NFEnum.NF_LOCAL.menuName -> {
+                        id = NFEnum.NF_LOCAL.position
+                    }
+                    NFEnum.NF_HOT.menuName -> {
+                        id = NFEnum.NF_HOT.position
+                    }
+                    NFEnum.NF_EDITOR.menuName -> {
+                        id = NFEnum.NF_EDITOR.position
+                    }
+                    NFEnum.NF_UNLOCK.menuName -> {
+                        id = NFEnum.NF_UNLOCK.position
+                    }
+                    NFEnum.NF_NEW_USER.menuName -> {
+                        id = NFEnum.NF_NEW_USER.position
+                    }
+                    else -> {}
+                }
                 runCatching {
-                    manager.cancel(nfNewsId)
+                    manager.cancel(id)
                 }
             }
             NFEnum.NF_NEWS_FCM.menuName->{

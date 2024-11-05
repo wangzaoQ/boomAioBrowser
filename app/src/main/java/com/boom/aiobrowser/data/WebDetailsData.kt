@@ -26,7 +26,7 @@ class WebDetailsData {
     var id:String? = ""
     var description:String? = ""
     var thumbnail:String? = ""
-    var duration:Int?= 0
+    var duration:Double?= 0.0
     var formats:MutableList<DetailsData>?=null
     var headers:HeadersData?=null
 }

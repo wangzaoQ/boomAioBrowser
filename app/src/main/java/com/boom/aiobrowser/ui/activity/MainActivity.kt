@@ -141,6 +141,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     var enumName:String =""
 
     override fun setShowView() {
+        APP.instance.isHideSplash = false
         APP.instance.shareText = ""
         val action = intent.action //获取Intent的Action
         val type = intent.type //获取Intent的Type
@@ -267,7 +268,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                         })
                     }
                 }
-                NFEnum.NF_NEWS.menuName,NFEnum.NF_NEWS_FCM.menuName->{
+                NFEnum.NF_NEWS.menuName,NFEnum.NF_HOT.menuName,NFEnum.NF_NEW_USER.menuName,NFEnum.NF_LOCAL.menuName,NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName,NFEnum.NF_NEWS_FCM.menuName->{
                     var data = getBeanByGson(nfData,NewsData::class.java)
                     var jumpData = JumpDataManager.getCurrentJumpData(tag="首页通知新闻跳转")
                     jumpData.apply {

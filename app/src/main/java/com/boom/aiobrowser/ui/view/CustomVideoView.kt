@@ -61,6 +61,7 @@ class CustomVideoView @JvmOverloads constructor(
     }
 
     fun setSourceIcon(iconId:Any,clickSource: () -> Unit){
+        return
         var sourceIv: ImageView = findViewById(R.id.ivSource)
         GlideManager.loadImg(null,sourceIv,iconId)
         sourceIv.setOnClickListener {

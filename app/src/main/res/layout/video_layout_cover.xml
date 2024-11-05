@@ -134,6 +134,7 @@
             android:layout_height="48dp"
             android:paddingEnd="10dp"
             android:src="@mipmap/ic_tt"
+            android:visibility="gone"
             android:scaleType="centerCrop"
             android:layout_alignParentEnd="true"
             ></ImageView>

@@ -6,6 +6,7 @@ import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
 import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
 import android.os.IBinder
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.ui.isAndroid12
 import com.boom.aiobrowser.ui.isAndroid14
 
@@ -31,11 +32,11 @@ class NFService : Service() {
             NFShow.getForegroundNF()
         }
         if (isAndroid14()){
-            startForeground(NFManager.nfForegroundId,
+            startForeground(NFEnum.NF_SEARCH_VIDEO.position,
                 NFManager.nfForeground!!, FOREGROUND_SERVICE_TYPE_DATA_SYNC
             )
         }else{
-            startForeground(NFManager.nfForegroundId, NFManager.nfForeground!!)
+            startForeground(NFEnum.NF_SEARCH_VIDEO.position, NFManager.nfForeground!!)
         }
     }
 

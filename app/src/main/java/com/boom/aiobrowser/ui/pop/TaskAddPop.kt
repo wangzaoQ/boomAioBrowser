@@ -16,11 +16,13 @@ import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
+import com.boom.aiobrowser.tools.BatteryUtil
 import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.adapter.DownloadAdapter
 import pop.basepopup.BasePopupWindow
 import pop.util.animation.AnimationHelper
 import pop.util.animation.TranslationConfig
+import java.lang.ref.WeakReference
 
 class TaskAddPop (context: Context) : BasePopupWindow(context){
 
@@ -35,6 +37,8 @@ class TaskAddPop (context: Context) : BasePopupWindow(context){
         defaultBinding = VideoPopTaskAddBinding.bind(contentView)
     }
 
+    var clickOther = true
+
     fun createPop(){
         defaultBinding?.apply {
             if (AioADDataManager.adFilter1().not()) {
@@ -48,6 +52,7 @@ class TaskAddPop (context: Context) : BasePopupWindow(context){
                 }
             }
             llRoot.setOnClickListener {
+                clickOther = false
                 PointEvent.posePoint(PointEventKey.download_task_view)
                 context.startActivity(Intent(context, DownloadActivity::class.java).apply {
                     putExtra("fromPage", "webpage_download_task_pop")
@@ -58,6 +63,11 @@ class TaskAddPop (context: Context) : BasePopupWindow(context){
         setBackground(R.color.tran)
         showPopupWindow()
         PointEvent.posePoint(PointEventKey.download_task)
+    }
+
+    override fun onDismiss() {
+        if (clickOther) BatteryUtil(WeakReference(context as BaseActivity<*>)).requestIgnoreBatteryOptimizations()
+        super.onDismiss()
     }
 
     override fun onCreateShowAnimation(): Animation {

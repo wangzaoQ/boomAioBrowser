@@ -173,6 +173,7 @@ fun appDataReset(){
         CacheManager.adLastTime = 0
         CacheManager.dayShowAddWidget = true
         CacheManager.dayShowAddShort = true
+        CacheManager.dayShowBattery = true
         CacheManager.dayDownloadCount = 0
         CacheManager.dayFirstDownloadVideoSuccess = true
         NFEnum.values().forEach {

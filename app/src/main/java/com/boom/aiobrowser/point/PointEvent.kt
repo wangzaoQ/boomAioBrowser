@@ -11,6 +11,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.data.AioRequestData
 import com.boom.aiobrowser.point.Install.isLoading
+import com.boom.aiobrowser.point.PointManager.NET_TAG
 import com.boom.aiobrowser.point.PointManager.PointCallback
 import com.boom.aiobrowser.point.PointManager.postEvent
 import com.boom.aiobrowser.tools.AppLogs
@@ -25,6 +26,7 @@ object PointEvent {
     private val fb by lazy { AppEventsLogger.newLogger(APP.instance) }
 
     fun posePoint(key:String, bundle: Bundle?=null) {
+        AppLogs.dLog(NET_TAG,"posePoint tag:${key}")
         val jsonObject = GeneralParams.getGenericParams()
         jsonObject.put("tahoe",key)
         bundle?.keySet()?.forEach {

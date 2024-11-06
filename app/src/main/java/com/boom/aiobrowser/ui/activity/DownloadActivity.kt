@@ -20,6 +20,7 @@ import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
+import com.boom.aiobrowser.tools.BatteryUtil
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.ui.fragment.DownloadFragment
@@ -27,6 +28,7 @@ import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.MorePop
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.lang.ref.WeakReference
 
 class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
 
@@ -173,6 +175,8 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
         updateBottomUI(1)
         if (fromPage == "webpage_download_pop"){
             acBinding.vpRoot.currentItem = 1
+        }else if (fromPage == "webpage_download_task_pop"){
+            BatteryUtil(WeakReference(this)).requestIgnoreBatteryOptimizations()
         }
     }
 

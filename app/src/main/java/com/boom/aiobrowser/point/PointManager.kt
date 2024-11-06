@@ -101,14 +101,14 @@ object PointManager {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                if (response.code == 200) callback?.onSuccess(response) else tbaFailedTry(jsonObject,tag,defaultTryCount,callback)
+                if (response.code == 200) callback?.onSuccess(response) else tbaFailedTry(jsonObject,tag,defaultTryCount,callback,"onResponse")
             }
         })
     }
 
 
-    private fun tbaFailedTry(jsonObject: JSONObject?, tag:String?=null, defaultTryCount:Int,callback: PointCallback?=null) {
-        AppLogs.dLog(NET_TAG,"tbaFailedTry tag:${tag} defaultTryCount:${defaultTryCount}")
+    private fun tbaFailedTry(jsonObject: JSONObject?, tag:String?=null, defaultTryCount:Int,callback: PointCallback?=null,from:String="onFailure") {
+        AppLogs.dLog(NET_TAG,"tbaFailedTry tag:${tag} defaultTryCount:${defaultTryCount} from:${from}")
         var tempCount = defaultTryCount-1
         if (tempCount > 0) {
             CoroutineScope(Dispatchers.IO).launch {
@@ -123,7 +123,7 @@ object PointManager {
     }
 
     fun postEvent(jsonObject: JSONObject, tag:String?="", callback: PointCallback?=null) {
-        AppLogs.dLog("event_tag",tag?:"")
+        AppLogs.dLog(NET_TAG,"postEvent tag:${tag}")
         sendValue(jsonObject,tag,3,callback)
     }
 

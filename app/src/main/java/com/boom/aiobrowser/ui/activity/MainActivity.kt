@@ -43,6 +43,7 @@ import com.boom.aiobrowser.ui.fragment.StartFragment
 import com.boom.aiobrowser.ui.fragment.WebFragment
 import com.boom.aiobrowser.ui.isAndroid12
 import com.boom.aiobrowser.ui.pop.DefaultPop
+import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.MorePop
 import com.boom.aiobrowser.ui.pop.NFGuidePop
 import com.boom.aiobrowser.ui.pop.ProcessingTextPop
@@ -312,26 +313,45 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }
         fManager.hideFragment(supportFragmentManager, startFragment!!)
         acBinding.llMainControl.visibility = View.VISIBLE
+        var showPopCount = 0
         if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault){
             CacheManager.isFirstShowBrowserDefault = false
             var pop = DefaultPop(this@MainActivity)
             pop.setOnDismissListener(object :OnDismissListener(){
                 override fun onDismiss() {
-                    showTips()
+                    showPopCount++
+                    showDownloadGuide(showPopCount)
                 }
             })
             pop.createPop()
         }else{
-            showTips()
+            showPopCount++
+            showDownloadGuide(showPopCount)
         }
         if (XXPermissions.isGranted(APP.instance, Permission.POST_NOTIFICATIONS).not()){
             //无通知权限
-            NFGuidePop(this@MainActivity).createPop {
+            var guidePop = NFGuidePop(this@MainActivity)
+            guidePop.createPop {
                 showForeground()
             }
+            guidePop.setOnDismissListener(object :OnDismissListener(){
+                override fun onDismiss() {
+                    showPopCount++
+                    showDownloadGuide(showPopCount)
+                }
+            })
         }else{
+            showPopCount++
+            showDownloadGuide(showPopCount)
         }
+
         APP.jumpResumeData.postValue(0)
+    }
+
+    private fun showDownloadGuide(showPopCount:Int) {
+        if (showPopCount == 2){
+            DownloadVideoGuidePop(this).createPop {  }
+        }
     }
 
     private fun showTips() {

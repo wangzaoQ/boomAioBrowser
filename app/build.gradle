@@ -62,11 +62,16 @@ android {
 
         debug {
             debuggable true
-            minifyEnabled true
+            minifyEnabled false
             signingConfig signingConfigs.release
-            shrinkResources true
-            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+//            debuggable true
+//            minifyEnabled true
+//            signingConfig signingConfigs.release
+//            shrinkResources true
+//            zipAlignEnabled true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 

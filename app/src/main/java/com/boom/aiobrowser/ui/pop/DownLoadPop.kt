@@ -234,9 +234,17 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
     }
 
     var isSelectedAll = false
+    var tips2 :FirstDownloadTips?=null
 
     fun createPop(callBack: () -> Unit) {
         defaultBinding?.apply {
+            root.postDelayed({
+                if (CacheManager.isFirstDownloadTips2) {
+//                    CacheManager.isFirstDownloadTips2 = false
+                    tips2 = FirstDownloadTips(context)
+                    tips2?.createPop(btnDownloadAll,2)
+                }
+            },500)
             rv.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                 adapter = downloadAdapter
@@ -290,6 +298,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                         }
                     }
                 }
+                tips2?.dismiss()
             }
         }
 
@@ -316,6 +325,11 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         setBackground(R.color.tran)
         showPopupWindow()
         PointEvent.posePoint(PointEventKey.webpage_download_pop)
+    }
+
+    override fun dismiss() {
+        tips2?.dismiss()
+        super.dismiss()
     }
 
     private fun allowCheckStatus(data: VideoDownloadData): Boolean {

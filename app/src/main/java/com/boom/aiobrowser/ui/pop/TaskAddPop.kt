@@ -17,6 +17,7 @@ import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.BatteryUtil
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.adapter.DownloadAdapter
 import pop.basepopup.BasePopupWindow
@@ -57,13 +58,32 @@ class TaskAddPop (context: Context) : BasePopupWindow(context){
                 context.startActivity(Intent(context, DownloadActivity::class.java).apply {
                     putExtra("fromPage", "webpage_download_task_pop")
                 })
+                tips3?.dismiss()
                 dismiss()
             }
         }
         setBackground(R.color.tran)
         showPopupWindow()
         PointEvent.posePoint(PointEventKey.download_task)
+        defaultBinding?.apply {
+            root.postDelayed({
+                if (CacheManager.isFirstDownloadTips3){
+//                    CacheManager.isFirstDownloadTips3 = false
+                    tips3 = FirstDownloadTips(context)
+                    tips3?.createPop(tvView,3)
+                }
+            },500)
+        }
     }
+
+
+    override fun dismiss() {
+        tips3?.dismiss()
+        super.dismiss()
+    }
+
+    var tips3 :FirstDownloadTips?=null
+
 
     override fun onDismiss() {
         if (clickOther) BatteryUtil(WeakReference(context as BaseActivity<*>)).requestIgnoreBatteryOptimizations()

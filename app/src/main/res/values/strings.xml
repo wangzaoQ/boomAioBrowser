@@ -183,5 +183,9 @@
     <string name="app_add_widget">Add Widget</string>
     <string name="app_add_widget_success">Widget added successfully</string>
     <string name="app_rate_feedback">Thanks for feedback</string>
-    <string name="app_try_now">Try now</string>
+    <string name="app_try_now">Try Now</string>
+    <string name="app_download_tips1">Click the download button</string>
+    <string name="app_download_tips2">Confirm Download</string>
+    <string name="app_download_tips3">Can view download tasks</string>
+    <string name="app_download_tips4">Download video here</string>
 </resources>

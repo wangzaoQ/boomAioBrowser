@@ -20,6 +20,7 @@ import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.getBeanByGson
@@ -28,6 +29,7 @@ import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.pop.ClearPop
 import com.boom.aiobrowser.ui.pop.DownLoadPop
+import com.boom.aiobrowser.ui.pop.FirstDownloadTips
 import com.boom.aiobrowser.ui.pop.TabPop
 import com.boom.aiobrowser.ui.pop.TipsPop
 import com.boom.aiobrowser.ui.pop.VideoPop2
@@ -168,6 +170,11 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                         setAnimation("download.json")
                         playAnimation()
                     }
+                    if (CacheManager.isFirstDownloadTips){
+//                        CacheManager.isFirstDownloadTips = false
+                        tips1 = FirstDownloadTips(rootActivity)
+                        tips1?.createPop(dragBiding.root,1)
+                    }
                 }
             }else{
                 ivDownload.visibility = View.VISIBLE
@@ -305,7 +312,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
             dragX
         }
         startY = if (dragY == 0){
-            DisplayUtils.getScreenHeight(rootActivity)-dp2px(85f)-dp2px(28f)
+            DisplayUtils.getScreenHeight(rootActivity)-(BigDecimalUtils.div(DisplayUtils.getScreenWidth(rootActivity).toDouble(),3.0).toInt()*2)
         }else{
             dragY
         }
@@ -337,6 +344,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                     })
                 }
                 dragBiding.ivDownload2.setOneClick {
+                    tips1?.dismiss()
                     dragBiding.ivDownload2.cancelAnimation()
                     rootActivity.addLaunch(success = {
                         delay(500)
@@ -407,10 +415,9 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                 }
             }
             .show()
-//        dragBiding.root.postDelayed({
-//            dragBiding.root.visibility = View.VISIBLE
-//        },500)
     }
+
+    var tips1 :FirstDownloadTips?=null
 
     override fun onResume() {
         super.onResume()

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="5dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTips"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:paddingHorizontal="15dp"
+        android:background="@drawable/shape_first_download"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        tools:text="@string/app_download_tips1"
+        ></androidx.appcompat.widget.AppCompatTextView>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="14dp"
+        android:layout_height="6dp"
+        app:srcCompat="@mipmap/ic_first_download_tips_arrow"
+        android:layout_gravity="end"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="-1dp"
+        ></androidx.appcompat.widget.AppCompatImageView>
+</androidx.appcompat.widget.LinearLayoutCompat>

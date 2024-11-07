@@ -68,6 +68,9 @@ object CacheManager {
     const val KV_DAY_NF_SHOW_COUNT = "KV_DAY_NF_SHOW_COUNT"
     const val KV_DRAG_X = "KV_DRAG_X"
     const val KV_DRAG_Y = "KV_DRAG_Y"
+    const val KV_FIRST_DOWNLOAD_TIPS = "KV_FIRST_DOWNLOAD_TIPS"
+    const val KV_FIRST_DOWNLOAD_TIPS2 = "KV_FIRST_DOWNLOAD_TIPS2"
+    const val KV_FIRST_DOWNLOAD_TIPS3 = "KV_FIRST_DOWNLOAD_TIPS3"
 //    const val KV_FIRST_OPEN_APP = "KV_FIRST_OPEN_APP"
 
 
@@ -206,6 +209,30 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_FIRST_SHOW_BROWSER_DEFAULT, value)
+        }
+
+    var isFirstDownloadTips:Boolean
+        get() {
+            return mmkv.decodeBool(KV_FIRST_DOWNLOAD_TIPS, true)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_DOWNLOAD_TIPS, value)
+        }
+
+    var isFirstDownloadTips2:Boolean
+        get() {
+            return mmkv.decodeBool(KV_FIRST_DOWNLOAD_TIPS2, true)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_DOWNLOAD_TIPS2, value)
+        }
+
+    var isFirstDownloadTips3:Boolean
+        get() {
+            return mmkv.decodeBool(KV_FIRST_DOWNLOAD_TIPS3, true)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_DOWNLOAD_TIPS3, value)
         }
 
     // 0 normal 1 private

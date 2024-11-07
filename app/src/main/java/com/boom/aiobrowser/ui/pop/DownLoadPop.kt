@@ -240,7 +240,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         defaultBinding?.apply {
             root.postDelayed({
                 if (CacheManager.isFirstDownloadTips2) {
-//                    CacheManager.isFirstDownloadTips2 = false
+                    CacheManager.isFirstDownloadTips2 = false
                     tips2 = FirstDownloadTips(context)
                     tips2?.createPop(btnDownloadAll,2)
                 }

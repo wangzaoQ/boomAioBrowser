@@ -68,7 +68,7 @@ class TaskAddPop (context: Context) : BasePopupWindow(context){
         defaultBinding?.apply {
             root.postDelayed({
                 if (CacheManager.isFirstDownloadTips3){
-//                    CacheManager.isFirstDownloadTips3 = false
+                    CacheManager.isFirstDownloadTips3 = false
                     tips3 = FirstDownloadTips(context)
                     tips3?.createPop(tvView,3)
                 }

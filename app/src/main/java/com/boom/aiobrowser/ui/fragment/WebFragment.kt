@@ -171,7 +171,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                         playAnimation()
                     }
                     if (CacheManager.isFirstDownloadTips){
-//                        CacheManager.isFirstDownloadTips = false
+                        CacheManager.isFirstDownloadTips = false
                         tips1 = FirstDownloadTips(rootActivity)
                         tips1?.createPop(dragBiding.root,1)
                     }

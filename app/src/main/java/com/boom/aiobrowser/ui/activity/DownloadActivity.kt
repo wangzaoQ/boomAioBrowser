@@ -61,6 +61,7 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
             finish()
         }
         if (CacheManager.isFirstDownloadTips4){
+            CacheManager.isFirstDownloadTips4 = false
             var tips4 = FirstDownloadTips(this)
             tips4?.createPop(acBinding.tvDone,4)
         }

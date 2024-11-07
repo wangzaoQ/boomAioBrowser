@@ -44,6 +44,7 @@ import com.boom.aiobrowser.ui.fragment.WebFragment
 import com.boom.aiobrowser.ui.isAndroid12
 import com.boom.aiobrowser.ui.pop.DefaultPop
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
+import com.boom.aiobrowser.ui.pop.HomeGuidePop
 import com.boom.aiobrowser.ui.pop.MorePop
 import com.boom.aiobrowser.ui.pop.NFGuidePop
 import com.boom.aiobrowser.ui.pop.ProcessingTextPop
@@ -350,7 +351,10 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
     private fun showDownloadGuide(showPopCount:Int) {
         if (showPopCount == 2){
-            DownloadVideoGuidePop(this).createPop {  }
+            if (CacheManager.isFirstShowDownload){
+//                CacheManager.isFirstShowDownload = false
+                HomeGuidePop(this@MainActivity).createPop()
+            }
         }
     }
 

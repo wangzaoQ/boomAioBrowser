@@ -183,6 +183,14 @@ object PointEventKey {
     const val aio_push = "aio_push"
     //FCM 通知订阅
     const val fcm_subscription = "fcm_subscription"
+    //挂件教程说明展示
+    const val tutorial_download = "tutorial_download"
+    //任务选择说明展示
+    const val tutorial_pop = "tutorial_pop"
+    //教程创建弹窗说明展示
+    const val tutorial_task = "tutorial_task"
+    //教程列表页说明展示
+    const val tutorial_download_page = "tutorial_download_page"
 
 
 

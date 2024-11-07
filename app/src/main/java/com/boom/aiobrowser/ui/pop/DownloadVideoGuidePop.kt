@@ -85,15 +85,16 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
                 PointEvent.posePoint(PointEventKey.download_tutorial_skip, Bundle().apply {
                     putInt(PointValueKey.page,vp.currentItem)
                 })
+                dismiss()
+            }
+            btnCommit.setOnClickListener {
+                PointEvent.posePoint(PointEventKey.download_tutorial_try)
                 var data = JumpDataManager.getCurrentJumpData(tag = "DownloadVideoGuidePop guide")
                 data.jumpType = JumpConfig.JUMP_WEB
                 data.jumpUrl = "https://mixkit.co/free-stock-video/young-people-dancing-intensely-4606/"
                 JumpDataManager.updateCurrentJumpData(data,tag = "DownloadVideoGuidePop guide")
                 APP.jumpLiveData.postValue(data)
-                dismiss()
-            }
-            btnCommit.setOnClickListener {
-                PointEvent.posePoint(PointEventKey.download_tutorial_try)
+                JumpDataManager.closeAll()
                 dismiss()
             }
         }

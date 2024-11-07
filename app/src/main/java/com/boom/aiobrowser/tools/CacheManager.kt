@@ -71,6 +71,7 @@ object CacheManager {
     const val KV_FIRST_DOWNLOAD_TIPS = "KV_FIRST_DOWNLOAD_TIPS"
     const val KV_FIRST_DOWNLOAD_TIPS2 = "KV_FIRST_DOWNLOAD_TIPS2"
     const val KV_FIRST_DOWNLOAD_TIPS3 = "KV_FIRST_DOWNLOAD_TIPS3"
+    const val KV_FIRST_DOWNLOAD_TIPS4 = "KV_FIRST_DOWNLOAD_TIPS4"
 //    const val KV_FIRST_OPEN_APP = "KV_FIRST_OPEN_APP"
 
 
@@ -233,6 +234,14 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_FIRST_DOWNLOAD_TIPS3, value)
+        }
+
+    var isFirstDownloadTips4:Boolean
+        get() {
+            return mmkv.decodeBool(KV_FIRST_DOWNLOAD_TIPS4, true)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_DOWNLOAD_TIPS4, value)
         }
 
     // 0 normal 1 private

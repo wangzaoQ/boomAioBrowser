@@ -25,6 +25,7 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.ui.fragment.DownloadFragment
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
+import com.boom.aiobrowser.ui.pop.FirstDownloadTips
 import com.boom.aiobrowser.ui.pop.MorePop
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -58,6 +59,10 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
         }
         APP.jumpLiveData.observe(this){
             finish()
+        }
+        if (CacheManager.isFirstDownloadTips4){
+            var tips4 = FirstDownloadTips(this)
+            tips4?.createPop(acBinding.tvDone,4)
         }
     }
 
@@ -186,7 +191,7 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         APP.jumpLiveData.removeObservers(this)
+        super.onDestroy()
     }
 }

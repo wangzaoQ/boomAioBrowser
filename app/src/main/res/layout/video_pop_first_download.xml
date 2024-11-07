@@ -8,6 +8,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
         xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivTop"
+        android:layout_width="14dp"
+        android:layout_height="6dp"
+        app:srcCompat="@mipmap/ic_top_arrow"
+        android:layout_gravity="end"
+        android:layout_marginEnd="24dp"
+        android:visibility="gone"
+        ></androidx.appcompat.widget.AppCompatImageView>
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvTips"
         android:layout_width="wrap_content"
@@ -20,11 +29,13 @@
         tools:text="@string/app_download_tips1"
         ></androidx.appcompat.widget.AppCompatTextView>
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivBottom"
         android:layout_width="14dp"
         android:layout_height="6dp"
-        app:srcCompat="@mipmap/ic_first_download_tips_arrow"
+        app:srcCompat="@mipmap/ic_bottom_arrow"
         android:layout_gravity="end"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="-1dp"
+        android:visibility="gone"
         ></androidx.appcompat.widget.AppCompatImageView>
 </androidx.appcompat.widget.LinearLayoutCompat>

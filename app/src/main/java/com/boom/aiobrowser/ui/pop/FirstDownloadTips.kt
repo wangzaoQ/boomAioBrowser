@@ -13,6 +13,8 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserVideoFeedbackBinding
 import com.boom.aiobrowser.databinding.VideoPopFirstDownloadBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -44,21 +46,38 @@ class FirstDownloadTips(context: Context) : BasePopupWindow(context) {
             setBackgroundColor(Color.TRANSPARENT)
             defaultBinding?.apply {
                 tvTips.text = context.getString(R.string.app_download_tips1)
+                ivBottom.visibility = View.VISIBLE
             }
+            PointEvent.posePoint(PointEventKey.tutorial_download)
         }else if (type == 2){
 //            setPopupGravityMode(GravityMode.RELATIVE_TO_ANCHOR, GravityMode.RELATIVE_TO_ANCHOR)
             setPopupGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL)
             setBackgroundColor(Color.TRANSPARENT)
             defaultBinding?.apply {
                 tvTips.text = context.getString(R.string.app_download_tips2)
+                ivBottom.visibility = View.VISIBLE
             }
+            PointEvent.posePoint(PointEventKey.tutorial_pop)
+
         }else if (type == 3){
             setPopupGravityMode(GravityMode.RELATIVE_TO_ANCHOR, GravityMode.RELATIVE_TO_ANCHOR)
             setPopupGravity(Gravity.TOP)
             setBackgroundColor(Color.TRANSPARENT)
             defaultBinding?.apply {
                 tvTips.text = context.getString(R.string.app_download_tips3)
+                ivBottom.visibility = View.VISIBLE
             }
+            PointEvent.posePoint(PointEventKey.tutorial_task)
+        }else if (type == 4){
+            setOffsetX(SizeUtils.dp2px(-40f))
+            setPopupGravityMode(GravityMode.RELATIVE_TO_ANCHOR, GravityMode.RELATIVE_TO_ANCHOR)
+            setPopupGravity(Gravity.BOTTOM)
+            setBackgroundColor(Color.TRANSPARENT)
+            defaultBinding?.apply {
+                tvTips.text = context.getString(R.string.app_download_tips4)
+                ivTop.visibility = View.VISIBLE
+            }
+            PointEvent.posePoint(PointEventKey.tutorial_download_page)
         }
 
         setTouchable(false)

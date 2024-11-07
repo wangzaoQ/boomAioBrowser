@@ -2,18 +2,20 @@ package com.boom.aiobrowser.ui.fragment
 
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import com.blankj.utilcode.util.SizeUtils
+import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
-import com.boom.aiobrowser.ad.ADEnum
-import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseWebFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.VideoDownloadData
+import com.boom.aiobrowser.databinding.BrowserDragLayoutBinding
 import com.boom.aiobrowser.databinding.BrowserFragmentWebBinding
-import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -24,19 +26,18 @@ import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.web.WebScan
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
-import com.boom.aiobrowser.ui.activity.WebDetailsActivity
 import com.boom.aiobrowser.ui.pop.ClearPop
 import com.boom.aiobrowser.ui.pop.DownLoadPop
-import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.TabPop
 import com.boom.aiobrowser.ui.pop.TipsPop
 import com.boom.aiobrowser.ui.pop.VideoPop2
+import com.lzf.easyfloat.EasyFloat
+import com.lzf.easyfloat.enums.SidePattern
+import com.lzf.easyfloat.utils.DisplayUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import org.jsoup.Jsoup
 import pop.basepopup.BasePopupWindow.OnDismissListener
-import java.lang.ref.WeakReference
 
 
 class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
@@ -108,38 +109,6 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
             })
         }
 
-        fBinding.ivDownload.setOneClick {
-            if (WebScan.isYoutube(jumpData?.jumpUrl?:"")){
-                TipsPop(rootActivity).createPop {  }
-                return@setOneClick
-            }
-            rootActivity.addLaunch(success = {
-                delay(500)
-                withContext(Dispatchers.Main){
-                    VideoPop2(rootActivity).createPop(getRealParseUrl()) {  }
-                }
-            }, failBack = {})
-            PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
-                putString(PointValueKey.type,"no_have")
-                putString(PointValueKey.url,jumpData?.jumpUrl)
-                putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
-            })
-        }
-        fBinding.ivDownload2.setOneClick {
-            fBinding.ivDownload2.cancelAnimation()
-            rootActivity.addLaunch(success = {
-                delay(500)
-                withContext(Dispatchers.Main){
-                    showDownloadPop()
-                }
-            }, failBack = {})
-            PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
-                putString(PointValueKey.type,"have")
-                putString(PointValueKey.url,jumpData?.jumpUrl)
-                putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
-            })
-        }
-
         APP.videoScanLiveData.observe(this){
             popDown?.updateDataByScan(it,true)
             updateDownloadButtonStatus(true,0)
@@ -184,7 +153,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                 size++
             }
         }
-        fBinding.apply {
+        dragBiding.apply {
             if (type == 1 ||(status && size>0)){
                 ivDownload.visibility = View.GONE
                 ivDownload2.visibility = View.VISIBLE
@@ -309,6 +278,9 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     }
 
 
+    val dragBiding by lazy {
+        BrowserDragLayoutBinding.inflate(layoutInflater)
+    }
 
     /**
      * 进入
@@ -319,10 +291,125 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         updateTabCount()
         CacheManager.videoDownloadTempList = mutableListOf()
         updateDownloadButtonStatus(false)
-        fBinding.ivDownload.visibility = View.VISIBLE
+//        fBinding.ivDownload.visibility = View.VISIBLE
         PointEvent.posePoint(PointEventKey.webpage_page,Bundle().apply {
             putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
         })
+        var startX = 0
+        var startY = 0
+        var dragX = CacheManager.dragX
+        var dragY = CacheManager.dragY
+        startX = if (dragX == 0){
+            DisplayUtils.getScreenWidth(rootActivity) - dp2px(85f)-dp2px(28f)
+        }else{
+            dragX
+        }
+        startY = if (dragY == 0){
+            DisplayUtils.getScreenHeight(rootActivity)-dp2px(85f)-dp2px(28f)
+        }else{
+            dragY
+        }
+        AppLogs.dLog("dragParams","startX:${startX} startY:${startY}")
+
+        EasyFloat.with(rootActivity)
+            .setSidePattern(SidePattern.RESULT_HORIZONTAL)
+            .setImmersionStatusBar(true)
+            .setGravity(Gravity.START or Gravity.BOTTOM, offsetX = startX, offsetY = startY)
+            .setLocation(startX, startY)
+            .setTag("webPop")
+            // 传入View，传入布局文件皆可，如：MyCustomView(this)、R.layout.float_custom
+            .setLayout(dragBiding.root) {
+                dragBiding.ivDownload.setOneClick {
+                    if (WebScan.isYoutube(jumpData?.jumpUrl?:"")){
+                        TipsPop(rootActivity).createPop {  }
+                        return@setOneClick
+                    }
+                    rootActivity.addLaunch(success = {
+                        delay(500)
+                        withContext(Dispatchers.Main){
+                            VideoPop2(rootActivity).createPop(getRealParseUrl()) {  }
+                        }
+                    }, failBack = {})
+                    PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
+                        putString(PointValueKey.type,"no_have")
+                        putString(PointValueKey.url,jumpData?.jumpUrl)
+                        putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+                    })
+                }
+                dragBiding.ivDownload2.setOneClick {
+                    dragBiding.ivDownload2.cancelAnimation()
+                    rootActivity.addLaunch(success = {
+                        delay(500)
+                        withContext(Dispatchers.Main){
+                            showDownloadPop()
+                        }
+                    }, failBack = {})
+                    PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
+                        putString(PointValueKey.type,"have")
+                        putString(PointValueKey.url,jumpData?.jumpUrl)
+                        putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+                    })
+                }
+
+            }
+//            .setTag(TAG_1)
+            .registerCallback {
+                // 在此处设置view也可以，建议在setLayout进行view操作
+                createResult { isCreated, msg, _ ->
+//                    toast("isCreated: $isCreated")
+//                    logger.e("DSL:  $isCreated   $msg")
+                }
+                show {
+                }
+                hide {
+                }
+                dismiss {
+                }
+
+                touchEvent { view, event ->
+                    if (event.action == MotionEvent.ACTION_DOWN) {
+
+                    }
+                }
+
+                drag { view, motionEvent ->
+//                    view.findViewById<TextView>(R.id.textView).apply {
+//                        text = "我被拖拽..."
+//                        setBackgroundResource(R.drawable.corners_red)
+//                    }
+//                    DragUtils.registerDragClose(motionEvent, object : OnTouchRangeListener {
+//                        override fun touchInRange(inRange: Boolean, view: BaseSwitchView) {
+//                            setVibrator(inRange)
+//                        }
+//
+//                        override fun touchUpInRange() {
+//                            EasyFloat.dismiss(tag, true)
+//                        }
+//                    })
+                }
+
+                dragEnd {
+                    dragBiding.root?.apply {
+                        val location = IntArray(2)
+                        this.getLocationOnScreen(location)
+                        val x = location[0] // view距离 屏幕左边的距离（即x轴方向）
+                        val y = location[1] // view距离 屏幕顶边的距离（即y轴方向）
+                        CacheManager.dragX = x
+                        CacheManager.dragY = y
+                        AppLogs.dLog("dragParams","拖拽后x:${x} 拖拽后y:${y}")
+                    }
+//                    it.findViewById<TextView>(R.id.textView).apply {
+//                        text = "拖拽结束"
+//                        val location = IntArray(2)
+//                        getLocationOnScreen(location)
+//                        setBackgroundResource(if (location[0] > 10) R.drawable.corners_left else R.drawable.corners_right)
+//                    }
+                }
+            }
+            .show()
+//        dragBiding.root.postDelayed({
+//            dragBiding.root.visibility = View.VISIBLE
+//        },500)
     }
 
     override fun onResume() {
@@ -346,7 +433,6 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
     override fun onDestroy() {
         APP.engineLiveData.removeObservers(this)
-
         super.onDestroy()
     }
 }

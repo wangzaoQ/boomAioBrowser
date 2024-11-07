@@ -12,6 +12,8 @@ import com.boom.aiobrowser.databinding.BrowserFragmentTempBinding
 import com.boom.aiobrowser.databinding.BrowserFragmentWebBinding
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.pop.DisclaimerPop
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -85,7 +87,7 @@ class TestWebFragment: BaseWebFragment<BrowserFragmentTempBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
-
+    @Volatile
     var allowDownload = false
 
     var webUrl = ""
@@ -99,9 +101,43 @@ class TestWebFragment: BaseWebFragment<BrowserFragmentTempBinding>() {
         rootActivity.addLaunch(success = {
             delay(6000)
             if (allowDownload.not()){
+                var list = CacheManager.pageList
+                var index = -1
+                for (i in 0 until list.size){
+                    var pageData = list.get(i)
+                    var uri = Uri.parse(webUrl)
+                    if (uri.host?.contains(pageData.cUrl)?:false){
+                        if (APP.isDebug){
+                            AppLogs.dLog("webReceive","fetch 模式失败 可转 page 模式执行特定脚本:${pageData.cDetail}")
+                        }
+                        index = i
+                        break
+                    }
+                }
+//                if (index == -1){
+//                    //通用
+//                    for (i in 0 until list.size){
+//                        var pageData = list.get(i)
+//                        if (pageData.cUrl == "*"){
+//                            AppLogs.dLog("webReceive","page 模式执行通用脚本")
+//                            mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${pageData.cDetail}");
+//                            break
+//                        }
+//                    }
+//                }
                 withContext(Dispatchers.Main){
-                    ToastUtils.showLong(getString(R.string.app_dead_linked))
-                    rootActivity.finish()
+                    if (index == -1){
+                        ToastUtils.showLong(getString(R.string.app_dead_linked))
+                        rootActivity.finish()
+                    }else{
+                        var jumpData = JumpDataManager.getCurrentJumpData(tag = "fetch 模式跳转").apply {
+                            jumpType = JumpConfig.JUMP_WEB
+                            jumpUrl = webUrl
+                        }
+                        JumpDataManager.updateCurrentJumpData(jumpData,tag = "fetch 模式跳转")
+                        APP.jumpLiveData.postValue(jumpData)
+                        JumpDataManager.closeAll()
+                    }
                 }
             }
         }, failBack = {})

@@ -156,6 +156,7 @@ dependencies {
     implementation project(':pop')
     implementation project(':web')
     implementation project(':videoDownload')
+    implementation project(':dragpop')
     implementation project(':gsyVideoPlayer-java')
     implementation project(':gsyVideoPlayer-exo_player2')
     implementation 'com.github.zhpanvip:viewpagerindicator:1.2.3'

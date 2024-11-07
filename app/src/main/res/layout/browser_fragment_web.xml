@@ -73,56 +73,5 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"></FrameLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="27dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
-        <FrameLayout
-            android:layout_width="85dp"
-            android:layout_height="85dp"
-            android:layout_gravity="center"
-            >
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivDownload"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:srcCompat="@mipmap/ic_default_download_video"
-                android:scaleType="centerInside"
-                ></androidx.appcompat.widget.AppCompatImageView>
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/ivDownload2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:lottie_autoPlay="false"
-                app:lottie_fileName="download.json"
-                android:scaleType="fitXY"
-                app:lottie_loop="true"
-                android:visibility="gone"
-                ></com.airbnb.lottie.LottieAnimationView>
-
-        </FrameLayout>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvDownload"
-            android:layout_width="13dp"
-            android:layout_height="13dp"
-            android:background="@drawable/shape_download_tips3"
-            android:layout_gravity="end"
-            android:elevation="3dp"
-            android:layout_marginEnd="17dp"
-            android:layout_marginTop="17dp"
-            android:textColor="@color/white"
-            tools:text="12"
-            android:textSize="9sp"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:maxLength="2"
-            android:visibility="gone"
-            ></androidx.appcompat.widget.AppCompatTextView>
-    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

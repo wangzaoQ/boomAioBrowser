@@ -18,6 +18,7 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
+import com.lzf.easyfloat.EasyFloat
 import java.util.LinkedList
 
 class MainRootFragment :BaseFragment<BrowserFragmentMainRootBinding>() {
@@ -59,6 +60,7 @@ class MainRootFragment :BaseFragment<BrowserFragmentMainRootBinding>() {
                     navController?.navigate(R.id.fragmentMain, Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
                     },navOptions)
+                    EasyFloat.dismiss(tag = "webPop")
                 }
                 else -> {}
             }

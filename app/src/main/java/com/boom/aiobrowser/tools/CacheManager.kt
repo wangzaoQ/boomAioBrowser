@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.tools
 
 import android.provider.Settings
+import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
@@ -65,6 +66,8 @@ object CacheManager {
     const val KV_NEWS_NF_HISTORY = "KV_NEWS_NF_HISTORY"
     const val KV_NF_SHOW_LAST_TIME = "KV_NF_SHOW_LAST_TIME"
     const val KV_DAY_NF_SHOW_COUNT = "KV_DAY_NF_SHOW_COUNT"
+    const val KV_DRAG_X = "KV_DRAG_X"
+    const val KV_DRAG_Y = "KV_DRAG_Y"
 //    const val KV_FIRST_OPEN_APP = "KV_FIRST_OPEN_APP"
 
 
@@ -515,5 +518,22 @@ object CacheManager {
     fun getDayNFShowCount(action: String):Int{
         return mmkv.decodeInt("${KV_DAY_NF_SHOW_COUNT}_$action", 0)
     }
+
+    var dragX: Int
+        get() {
+            return mmkv.decodeInt(KV_DRAG_X,0)
+        }
+        set(value) {
+            mmkv.encode(KV_DRAG_X,value )
+        }
+    var dragY: Int
+        get() {
+            return mmkv.decodeInt(KV_DRAG_Y,0)
+        }
+        set(value) {
+            mmkv.encode(KV_DRAG_Y,value )
+        }
+
+
 
 }

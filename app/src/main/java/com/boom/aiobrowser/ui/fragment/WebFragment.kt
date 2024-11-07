@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import com.blankj.utilcode.util.SizeUtils
 import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
@@ -33,9 +32,9 @@ import com.boom.aiobrowser.ui.pop.FirstDownloadTips
 import com.boom.aiobrowser.ui.pop.TabPop
 import com.boom.aiobrowser.ui.pop.TipsPop
 import com.boom.aiobrowser.ui.pop.VideoPop2
-import com.lzf.easyfloat.EasyFloat
-import com.lzf.easyfloat.enums.SidePattern
-import com.lzf.easyfloat.utils.DisplayUtils
+import com.boom.drag.EasyFloat
+import com.boom.drag.enums.SidePattern
+import com.boom.drag.utils.DisplayUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext

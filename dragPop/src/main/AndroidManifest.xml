@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        package="com.lzf.easyfloat">
+        package="com.boom.drag">
 
 <!--    <application>-->
 <!--        <provider-->

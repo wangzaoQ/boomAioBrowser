@@ -61,17 +61,17 @@ android {
 
 
         debug {
-            debuggable true
-            minifyEnabled false
-            signingConfig signingConfigs.release
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
 //            debuggable true
-//            minifyEnabled true
+//            minifyEnabled false
 //            signingConfig signingConfigs.release
-//            shrinkResources true
-//            zipAlignEnabled true
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            debuggable true
+            minifyEnabled true
+            signingConfig signingConfigs.release
+            shrinkResources true
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -122,7 +122,7 @@ stringfog {
     // 可选：加密开关，默认开启。
     enable true
     // 可选：指定需加密的代码包路径，可配置多个，未指定将默认全部加密。
-    fogPackages = ['com.boom.aiobrowser', 'pop','com.boom.web','com.boom.video','com.boom.videocache',"com.boom.downloader"]
+    fogPackages = ['com.boom.aiobrowser', 'pop','com.boom.web','com.boom.video','com.boom.videocache',"com.boom.downloader","com.boom.drag"]
     // 可选（3.0版本新增）：指定密钥生成器，默认使用长度8的随机密钥（每个字符串均有不同随机密钥）,
     // 也可以指定一个固定的密钥：HardCodeKeyGenerator("This is a key")
 //        kg new RandomKeyGenerator()

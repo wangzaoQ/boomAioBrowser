@@ -3,22 +3,18 @@ package com.boom.aiobrowser.ui.fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.databinding.BrowserFragmentMainRootBinding
-import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
-import com.lzf.easyfloat.EasyFloat
+import com.boom.drag.EasyFloat
 import java.util.LinkedList
 
 class MainRootFragment :BaseFragment<BrowserFragmentMainRootBinding>() {

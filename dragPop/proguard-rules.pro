@@ -21,7 +21,7 @@
 #-renamesourcefileattribute SourceFile
 
 # 保持配置类 config 不被混淆
--keep class com.lzf.easyfloat.data.FloatConfig {*;}
+-keep class com.boom.drag.data.FloatConfig {*;}
 
 # 保持自定义控件、ContentProvider 不被混淆
 -keep public class * extends android.view.View

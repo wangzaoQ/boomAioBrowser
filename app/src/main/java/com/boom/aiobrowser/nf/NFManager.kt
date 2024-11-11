@@ -146,6 +146,9 @@ object NFManager {
                             putString(PointValueKey.ponit_action, PointValue.click)
                             putString(PointValueKey.video_url, data?.url?:"")
                         })
+//                        runCatching {
+//                            manager.cancel(data?.nfId?:0)
+//                        }
                     }
                     else -> {}
                 }
@@ -307,10 +310,10 @@ object NFManager {
         var count = showCount%5
         when (count) {
             0 -> {
-                NFShow.showNewsNFFilter(NFEnum.NF_NEWS)
+                NFShow.showNewsNFFilter(NFEnum.NF_NEW_USER)
             }
             1 -> {
-                NFShow.showNewsNFFilter(NFEnum.NF_NEW_USER)
+                NFShow.showNewsNFFilter(NFEnum.NF_NEWS)
             }
             2 -> {
                 NFShow.showNewsNFFilter(NFEnum.NF_EDITOR)

@@ -7,13 +7,7 @@
     android:orientation="horizontal"
     android:gravity="center_vertical"
     >
-    <ImageView
-        android:layout_width="29dp"
-        android:layout_height="29dp"
-        android:src="@mipmap/ic_nf_logo"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="7dp"
-        ></ImageView>
+
     <TextView
         android:id="@+id/tvSearch"
         android:layout_width="match_parent"

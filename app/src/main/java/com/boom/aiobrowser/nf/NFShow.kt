@@ -93,14 +93,15 @@ object NFShow {
     fun showDownloadNF(data: VideoDownloadData, posePoint:Boolean = false) {
         if (nfAllow().not())return
         runCatching {
-            val smallRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data)
-            val largeRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data, true)
-            var bulider = createBuilder(NFEnum.NF_DOWNLOAD_VIDEO,smallRemote,largeRemote)
-            bulider.setOngoing(true)
             var nfId = videoNFMap.get(data.videoId)
             if (data.videoId.isNullOrEmpty().not()){
                 if (nfId == null){
-                    nfId = Random.nextInt(0,999999)
+                    nfId = Random.nextInt(1,999999)
+                    data.nfId = nfId
+                    val smallRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data)
+                    val largeRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data, true)
+                    var bulider = createBuilder(NFEnum.NF_DOWNLOAD_VIDEO,smallRemote,largeRemote)
+                    bulider.setOngoing(true)
                     videoNFMap.put(data.videoId!!,nfId)
                     if (posePoint){
                         if (data.downloadType == VideoDownloadData.DOWNLOAD_LOADING || data.downloadType == VideoDownloadData.DOWNLOAD_PREPARE){
@@ -116,6 +117,14 @@ object NFShow {
                             })
                         }
                     }
+                    NFManager.manager.notify(nfId, bulider.build())
+                }else{
+                    data.nfId = nfId
+                    val smallRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data)
+                    val largeRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data, true)
+                    var bulider = createBuilder(NFEnum.NF_DOWNLOAD_VIDEO,smallRemote,largeRemote)
+                    bulider.setOngoing(true)
+                    NFManager.manager.notify(nfId, bulider.build())
                 }
                 if (posePoint){
                     if (data.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
@@ -128,7 +137,6 @@ object NFShow {
                         })
                     }
                 }
-                NFManager.manager.notify(nfId, bulider.build())
             }
         }.onFailure {
             AppLogs.eLog(NFManager.TAG,it.stackTraceToString())

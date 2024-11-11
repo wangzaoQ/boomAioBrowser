@@ -40,6 +40,9 @@ class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
 
     var orientationUtils: OrientationUtils? = null
 
+    /**
+     * /storage/emulated/0/Android/data/com.boom.aiobrowser/files/Video/Download/tiktok_1731163898235/tiktok_1731163898235.video
+     */
     override fun setShowView() {
        var data  = getBeanByGson(intent.getStringExtra("video_path"),VideoDownloadData::class.java)
         gsyVideoPlayer = acBinding.videoItemPlayer

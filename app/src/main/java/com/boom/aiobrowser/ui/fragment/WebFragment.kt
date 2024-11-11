@@ -131,7 +131,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
         APP.videoUpdateLiveData.observe(this){
             var list = CacheManager.videoDownloadTempList
-            if (popDown?.isShowing == true && list.isNotEmpty()){
+            if (list.isNotEmpty()){
                 for (i in 0 until list!!.size){
                     var data = list.get(i)
                     if (data.videoId == it){

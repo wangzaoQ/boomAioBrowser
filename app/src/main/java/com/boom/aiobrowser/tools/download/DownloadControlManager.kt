@@ -27,7 +27,11 @@ object DownloadControlManager {
         VideoDownloadManager.getInstance().deleteVideoTask(data!!.url,false)
         if (deleteTemp){
             var list = CacheManager.videoDownloadTempList
-            list.remove(data)
+            var deleteList = mutableListOf<VideoDownloadData>()
+            for ( i in 0 until list.size){
+                deleteList.add(list.get(i))
+            }
+            list.removeAll(deleteList)
             CacheManager.videoDownloadTempList = list
         }
     }

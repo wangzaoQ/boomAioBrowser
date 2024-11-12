@@ -7,6 +7,7 @@ import com.boom.aiobrowser.data.PManageData
 import com.boom.aiobrowser.data.PVideoData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.VideoDownloadData.Companion.TYPE_M3U8
+import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.net.WebNet
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
@@ -128,11 +129,11 @@ object WebScan {
                         var allow = true
                         var videoId = "video_${url}"
                         var list = CacheManager.videoDownloadTempList
-                        for (i in 0 until list.size) {
-                            var data = list.get(i)
-                            if (data.videoId == videoId) {
-                                allow = false
-                                break
+                        list.forEach {
+                            it.formatsList.forEach {
+                                if (it.videoId == videoId) {
+                                    allow = false
+                                }
                             }
                         }
                         if (allow.not())return@addLaunch
@@ -142,6 +143,8 @@ object WebScan {
                                 " 视频播放地址" +videoUrl+"-"+
                                 " 视频播放时长" +"${pData?.video_duration?:0}"+"-"+
                                 " 耗时:${System.currentTimeMillis()-startTime}")
+                        var uiData = VideoUIData()
+
                         var map = HashMap<String, Any>()
                         var data = VideoDownloadData().createDefault(
                             videoId = videoId,
@@ -150,12 +153,18 @@ object WebScan {
                             imageUrl = pData?.image_url?:"",
                             paramsMap = map,
                             size = size,
-                            videoType = TYPE_M3U8
+                            videoType = TYPE_M3U8,
+                            resolution = ""
                         )
-                        list.add(0, data)
+                        uiData.formatsList.add(data)
+                        uiData.videoResultId = videoId+"_parent"
+                        uiData.source = "page"
+                        uiData.thumbnail = pData?.image_url?:""
+                        uiData.description = pData?.video_title?:""
+                        list.add(0, uiData)
                         CacheManager.videoDownloadTempList = list
                         AppLogs.dLog(TAG, "filterUri 发送数据变化 id:${data.videoId}")
-                        APP.videoScanLiveData.postValue(data)
+                        APP.videoScanLiveData.postValue(uiData)
                     }
                 }, failBack = {})
             }else{

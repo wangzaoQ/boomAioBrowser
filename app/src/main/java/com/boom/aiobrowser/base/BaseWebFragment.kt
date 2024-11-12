@@ -174,7 +174,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                     )
                     uiData.formatsList.add(videoDownloadData)
                     uiData.videoResultId =  "${fileStart}_${id}"
-                    uiData.source = this.thumbnail?:""
+                    uiData.source = fromSource
                     uiData.thumbnail = this.thumbnail?:""
                     uiData.description = fileStart
                 }

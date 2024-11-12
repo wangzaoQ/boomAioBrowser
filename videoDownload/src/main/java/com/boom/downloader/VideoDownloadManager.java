@@ -350,10 +350,10 @@ public class VideoDownloadManager {
                         taskItem.setPercent(100f);
                         if (taskItem.isHlsType()) {
                             taskItem.setFilePath(taskItem.getSaveDir() + File.separator + taskItem.getFileName() + "_" + VideoDownloadUtils.LOCAL_M3U8);
-                            taskItem.setFileName(taskItem.getFileName() + "_" + VideoDownloadUtils.LOCAL_M3U8);
+                            taskItem.setFileName(taskItem.getFileName());
                         } else {
                             taskItem.setFilePath(taskItem.getSaveDir() + File.separator + taskItem.getFileName() + VideoDownloadUtils.VIDEO_SUFFIX);
-                            taskItem.setFileName(taskItem.getFileName() + VideoDownloadUtils.VIDEO_SUFFIX);
+                            taskItem.setFileName(taskItem.getFileName());
                         }
                         mVideoDownloadHandler.obtainMessage(DownloadConstants.MSG_DOWNLOAD_SUCCESS, taskItem).sendToTarget();
                         mVideoDownloadHandler.removeMessages(DownloadConstants.MSG_DOWNLOAD_PROCESSING);
@@ -620,15 +620,17 @@ public class VideoDownloadManager {
         removeDownloadQueue(taskItem);
 
         LogUtils.i(DownloadConstants.TAG, "handleOnDownloadSuccess shouldM3U8Merged="+mConfig.shouldM3U8Merged() + ", isHlsType="+taskItem.isHlsType());
-        if (mConfig.shouldM3U8Merged() && taskItem.isHlsType()) {
-            doMergeTs(taskItem, taskItem1 -> {
-                mGlobalDownloadListener.onDownloadSuccess(taskItem1);
-                markDownloadFinishEvent(taskItem1);
-            });
-        } else {
-            mGlobalDownloadListener.onDownloadSuccess(taskItem);
-            markDownloadFinishEvent(taskItem);
-        }
+//        if (mConfig.shouldM3U8Merged() && taskItem.isHlsType()) {
+//            doMergeTs(taskItem, taskItem1 -> {
+//                mGlobalDownloadListener.onDownloadSuccess(taskItem1);
+//                markDownloadFinishEvent(taskItem1);
+//            });
+//        } else {
+//            mGlobalDownloadListener.onDownloadSuccess(taskItem);
+//            markDownloadFinishEvent(taskItem);
+//        }
+        mGlobalDownloadListener.onDownloadSuccess(taskItem);
+        markDownloadFinishEvent(taskItem);
     }
 
     private void doMergeTs(VideoTaskItem taskItem, IM3U8MergeResultListener listener) {

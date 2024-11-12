@@ -36,6 +36,7 @@ class DetailsData{
     var url :String?=""
     var format :String?=""
     var cookie :Boolean?=false
+    var resolution:String? = ""
 }
 
 

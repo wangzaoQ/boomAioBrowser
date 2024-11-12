@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E9EBF0"
+        android:layout_marginHorizontal="9dp"
+        ></View>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:orientation="horizontal"
+        >
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_centerVertical="true"
+            style="@style/app_text_bold"
+            android:textColor="@color/black"
+            android:layout_marginStart="9dp"
+            tools:text="1080" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_centerVertical="true"
+            style="@style/app_text_normal"
+            android:layout_toEndOf="@+id/tvText"
+            android:textColor="@color/black"
+            android:layout_marginStart="2dp"
+            tools:text="(AD)"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#333333"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/ivSelected"
+            android:layout_marginEnd="14dp"
+            ></androidx.appcompat.widget.AppCompatTextView>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivSelected"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            app:srcCompat="@mipmap/ic_video_selected"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="9dp"
+            ></androidx.appcompat.widget.AppCompatImageView>
+
+    </RelativeLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

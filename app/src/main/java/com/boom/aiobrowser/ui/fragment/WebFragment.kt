@@ -87,6 +87,10 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         }
     }
 
+    override fun getFromSource():String{
+        return "page"
+    }
+
     override fun startLoadData() {
     }
 
@@ -111,11 +115,11 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         }
 
         APP.videoScanLiveData.observe(this){
-            popDown?.updateDataByScan(it,true)
+            popDown?.updateDataByScan(it)
             updateDownloadButtonStatus(true,0)
         }
         APP.videoNFLiveData.observe(this){
-            popDown?.updateDataByScan(it,false)
+            popDown?.updateDataByNF(it)
         }
         APP.videoLiveData.observe(this){
             var map = it
@@ -130,18 +134,23 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         }
 
         APP.videoUpdateLiveData.observe(this){
-            var list = CacheManager.videoDownloadTempList
-            if (list.isNotEmpty()){
-                for (i in 0 until list!!.size){
-                    var data = list.get(i)
-                    if (data.videoId == it){
-                        data.downloadType = VideoDownloadData.DOWNLOAD_NOT
-                        CacheManager.videoDownloadTempList = list
-                        popDown?.updateItem()
-                        break
+            var updateId = it
+            rootActivity.addLaunch(success = {
+                var list = CacheManager.videoDownloadTempList
+                if (list.isNotEmpty()){
+                    list.forEach {
+                        it.formatsList.forEach {
+                            if (it.videoId == updateId){
+                                it.downloadType = VideoDownloadData.DOWNLOAD_NOT
+                                CacheManager.videoDownloadTempList = list
+                            }
+                        }
                     }
                 }
-            }
+                withContext(Dispatchers.Main){
+                    popDown?.updateItem()
+                }
+            }, failBack = {})
         }
     }
 
@@ -149,8 +158,13 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     open fun updateDownloadButtonStatus(status: Boolean,type:Int=0) {
         var size = 0
         for (i in 0 until CacheManager.videoDownloadTempList.size){
-            var data = CacheManager.videoDownloadTempList.get(i)
-            if (data.downloadType != VideoDownloadData.DOWNLOAD_SUCCESS){
+            var allow = false
+            CacheManager.videoDownloadTempList.get(i).formatsList.forEach {
+                if (it.downloadType != VideoDownloadData.DOWNLOAD_SUCCESS){
+                    allow = true
+                }
+            }
+            if (allow){
                 size++
             }
         }

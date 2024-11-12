@@ -18,6 +18,7 @@ import androidx.annotation.RequiresApi
 import androidx.viewbinding.ViewBinding
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.data.VideoDownloadData
+import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.data.WebDetailsData
 import com.boom.aiobrowser.net.WebNet
 import com.boom.aiobrowser.point.PointEvent
@@ -28,8 +29,8 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getMapByGson
 import com.boom.aiobrowser.tools.toJson
-import com.boom.aiobrowser.tools.web.WebConfig
 import com.boom.aiobrowser.tools.web.WebScan
+import com.boom.downloader.utils.VideoDownloadUtils
 import com.boom.web.AbsAgentWebSettings
 import com.boom.web.AgentWeb
 import com.boom.web.AgentWebConfig
@@ -40,7 +41,6 @@ import com.boom.web.WebViewClient
 import com.google.gson.Gson
 import okhttp3.Request
 import okhttp3.Response
-import org.jsoup.Jsoup
 import java.lang.ref.WeakReference
 
 
@@ -78,7 +78,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 //            .additionalHttpHeader(getUrl(), "cookie", "41bc7ddf04a26b91803f6b11817a5a1c")
 //            .useMiddlewareWebClient(getMiddlewareWebClient()) //设置WebViewClient中间件，支持多个WebViewClient， AgentWeb 3.0.0 加入。
                     .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK) //打开其他页面时，弹窗质询用户前往其他应用 AgentWeb 3.0.0 加入。
-                    .addJavascriptInterface("${"$"}__",MyJavaScriptInterface(rootActivity,getRealParseUrl()))
+                    .addJavascriptInterface("${"$"}__",MyJavaScriptInterface(rootActivity,getRealParseUrl(),getFromSource()))
                     .interceptUnkownUrl() //拦截找不到相关页面的Url AgentWeb 3.0.0 加入。
                     .createAgentWeb() //创建AgentWeb。
                     .ready() //设置 WebSettings。
@@ -105,8 +105,9 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
     abstract fun getInsertParent(): ViewGroup
 
-    class MyJavaScriptInterface(context: BaseActivity<*>,var  url: String) {
+    class MyJavaScriptInterface(context: BaseActivity<*>,var  url: String,var fromSource:String) {
         var mContext = context
+
 
         @JavascriptInterface
         fun result(kind: String, detail: String){
@@ -121,64 +122,76 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                 })
             }
             getBeanByGson(detail,WebDetailsData::class.java)?.apply {
-                if (this.formats.isNullOrEmpty().not()){
-                    var data = formats!!.get(0)
-//                        var doc = Jsoup.connect(url).get()
+                var uiData = VideoUIData()
+                var description = description?:""
+                formats?.forEach {
                     var map = HashMap<String,Any>()
-                    if (data.cookie == true){
+                    if (it.cookie == true){
                         var cookie = CookieManager.getInstance().getCookie(url)?:""
                         map.put("Cookie", cookie)
                     }
-                    var pageList = CacheManager.pageList
+                    var sourceList = if (fromSource == "page") CacheManager.pageList else  CacheManager.fetchList
                     var fileStart = ""
-                    runCatching {
-                        for (i in 0 until pageList.size){
-                            var pageData = pageList.get(i)
-                            var uri = Uri.parse(url)
-                            if (uri.host?.contains(pageData.cUrl)?:false){
-                                var split = pageData.cUrl.split(".")
-                                if (split.size>0){
-                                    fileStart = split[0]
+//                    if (description.startsWith("http").not()){
+//                        fileStart = description
+//                    }
+                    if (fileStart.isNullOrEmpty()){
+                        runCatching {
+                            for (i in 0 until sourceList.size){
+                                var pageData = sourceList.get(i)
+                                var uri = Uri.parse(url)
+                                if (uri.host?.contains(pageData.cUrl)?:false){
+                                    var split = pageData.cUrl.split(".")
+                                    if (split.size>0){
+                                        fileStart = "${split[0]}_${System.currentTimeMillis()}"
+                                    }
+                                    break
                                 }
-                                break
                             }
                         }
-                    }
-                    runCatching {
-                        if (fileStart.isNullOrEmpty()){
-                            var uri = Uri.parse(url)
-                            var split = uri.host?.split(".")
-                            if (split!!.size>0){
-                                fileStart = split[0]
+                        runCatching {
+                            if (fileStart.isNullOrEmpty()){
+                                var uri = Uri.parse(url)
+                                var split = uri.host?.split(".")
+                                if (split!!.size>0){
+                                    fileStart = "${split[0]}_${System.currentTimeMillis()}"
+                                }
                             }
                         }
                     }
                     if (fileStart.isNullOrEmpty()){
-                        fileStart = ""
+                        fileStart = "${System.currentTimeMillis()}"
                     }
                     var videoDownloadData = VideoDownloadData().createDefault(
-                        videoId = "${fileStart}_${id}",
-                        fileName = "${fileStart}_${System.currentTimeMillis()}",
-                        url = data.url?:"",
+                        videoId = "${VideoDownloadUtils.computeMD5(id)}_${it.resolution}",
+                        fileName = fileStart,
+                        url = it.url?:"",
                         imageUrl = this.thumbnail?:"",
                         paramsMap = map,
-                        size = data.size?.toLong()?:0,
-                        videoType = data.format?:""
+                        size = it.size?.toLong()?:0,
+                        videoType = it.format?:"",
+                        resolution = it.resolution?:""
                     )
-                    var index = -1
-                    var list =  CacheManager.videoDownloadTempList
-                    for (i in 0 until list.size){
-                        var data = list.get(i)
-                        if (data.videoId == videoDownloadData.videoId){
-                            index = i
-                            break
-                        }
+                    uiData.formatsList.add(videoDownloadData)
+                    uiData.videoResultId =  "${fileStart}_${id}"
+                    uiData.source = this.thumbnail?:""
+                    uiData.thumbnail = this.thumbnail?:""
+                    uiData.description = fileStart
+                }
+                var index = -1
+                var list =  CacheManager.videoDownloadTempList
+                for (i in 0 until list.size){
+                    var data = list.get(i)
+                    AppLogs.dLog("webReceive","data.videoResultId:${data.videoResultId} uiData.videoResultId:${uiData.videoResultId}")
+                    if (data.videoResultId == uiData.videoResultId){
+                        index = i
+                        break
                     }
-                    if (index == -1){
-                        list.add(0,videoDownloadData)
-                        CacheManager.videoDownloadTempList = list
-                        APP.videoScanLiveData.postValue(videoDownloadData)
-                    }
+                }
+                if (index == -1){
+                    list.add(0,uiData)
+                    CacheManager.videoDownloadTempList = list
+                    APP.videoScanLiveData.postValue(uiData)
                 }
             }
         }
@@ -370,6 +383,9 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             isPageFinished = true
         }
     }
+
+
+    abstract fun getFromSource():String
 
     abstract fun loadWebOnPageStared(url: String)
 

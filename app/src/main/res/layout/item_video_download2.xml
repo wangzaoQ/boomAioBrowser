@@ -7,62 +7,61 @@
     android:layout_marginHorizontal="13.5dp"
     android:layout_marginTop="13.5dp"
     android:orientation="vertical"
+    android:background="@drawable/shape_bg_video_download"
     >
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="67dp"
-        android:background="@drawable/shape_bg_video_download"
         >
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/ivVideo"
-        android:layout_width="54dp"
-        android:scaleType="centerCrop"
-        android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="h,1:1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:shapeAppearance="@style/style_RoundStyle_8r"
-        android:layout_marginStart="7dp"
-        android:src="@mipmap/ic_default_download"
-        ></com.google.android.material.imageview.ShapeableImageView>
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ivVideo"
-        app:layout_constraintEnd_toStartOf="@+id/ivSelected"
-        android:layout_marginStart="13dp"
-        android:layout_marginEnd="10dp"
-        android:orientation="vertical"
-        android:clickable="false"
-        >
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvName"
-            android:layout_width="match_parent"
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivVideo"
+            android:layout_width="54dp"
+            android:scaleType="centerCrop"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:shapeAppearance="@style/style_RoundStyle_8r"
+            android:layout_marginStart="7dp"
+            android:src="@mipmap/ic_default_download"
+            ></com.google.android.material.imageview.ShapeableImageView>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="video.mp4"
-            android:singleLine="true"
-            android:ellipsize="middle"
-            android:textStyle="bold"
-            android:textSize="13sp"
-            android:textColor="@color/black"
-            />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivVideo"
+            app:layout_constraintEnd_toStartOf="@+id/ivSelected"
+            android:layout_marginStart="13dp"
+            android:layout_marginEnd="10dp"
+            android:orientation="vertical"
+            android:clickable="false"
+            >
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#80000000"
-            android:textSize="11sp"
-            tools:text="204M/287M"
-            android:layout_marginTop="2.5dp"
-            ></androidx.appcompat.widget.AppCompatTextView>
-    </androidx.appcompat.widget.LinearLayoutCompat>
-        
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="video.mp4"
+                android:singleLine="true"
+                android:ellipsize="middle"
+                android:textStyle="bold"
+                android:textSize="13sp"
+                android:textColor="@color/black"
+                />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#80000000"
+                android:textSize="11sp"
+                tools:text="204M/287M"
+                android:layout_marginTop="2.5dp"
+                ></androidx.appcompat.widget.AppCompatTextView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivSelected"
             android:layout_width="21dp"
@@ -86,4 +85,11 @@
             ></androidx.appcompat.widget.AppCompatImageView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvFormats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible"
+        ></androidx.recyclerview.widget.RecyclerView>
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -2,6 +2,7 @@ package com.boom.aiobrowser.tools.download
 
 import com.blankj.utilcode.util.FileUtils
 import com.boom.aiobrowser.data.VideoDownloadData
+import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.downloader.VideoDownloadManager
@@ -27,7 +28,7 @@ object DownloadControlManager {
         VideoDownloadManager.getInstance().deleteVideoTask(data!!.url,false)
         if (deleteTemp){
             var list = CacheManager.videoDownloadTempList
-            var deleteList = mutableListOf<VideoDownloadData>()
+            var deleteList = mutableListOf<VideoUIData>()
             for ( i in 0 until list.size){
                 deleteList.add(list.get(i))
             }

@@ -19,6 +19,7 @@ import com.boom.aiobrowser.ad.AioADDataManager.initAD
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.VideoDownloadData
+import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
 import com.boom.aiobrowser.model.AppViewModel
 import com.boom.aiobrowser.nf.NFManager
@@ -91,7 +92,7 @@ class APP: Application(), ViewModelStoreOwner {
         val jumpWebLiveData  by lazy { ProtectedUnPeekLiveData<JumpData>() }
         val engineLiveData  by lazy { ProtectedUnPeekLiveData<Int>() }
         val bottomLiveData  by lazy { ProtectedUnPeekLiveData<String>() }
-        val videoScanLiveData by lazy { ProtectedUnPeekLiveData<VideoDownloadData>() }
+        val videoScanLiveData by lazy { ProtectedUnPeekLiveData<VideoUIData>() }
         val videoNFLiveData by lazy { ProtectedUnPeekLiveData<VideoDownloadData>() }
 
         val videoLiveData by lazy { ProtectedUnPeekLiveData<HashMap<Int, VideoTaskItem>>() }

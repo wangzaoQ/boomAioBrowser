@@ -74,12 +74,16 @@ class TestWebFragment: BaseWebFragment<BrowserFragmentTempBinding>() {
         }
     }
 
+    override fun getFromSource():String{
+        return "fetch"
+    }
+
+
     override fun startLoadData() {
     }
 
     override fun setListener() {
         APP.videoScanLiveData.observe(this){
-            if ((it.size?:0L) <= 0L)return@observe
             allowDownload = true
         }
     }

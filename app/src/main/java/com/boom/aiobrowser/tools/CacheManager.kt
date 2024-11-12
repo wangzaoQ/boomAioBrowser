@@ -1,7 +1,6 @@
 package com.boom.aiobrowser.tools
 
 import android.provider.Settings
-import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
@@ -9,7 +8,7 @@ import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.NewsTempData
-import com.boom.aiobrowser.data.VideoDownloadData
+import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.data.WebConfigData
 import com.boom.aiobrowser.data.model.DownloadModel
 import com.boom.aiobrowser.net.NetRequest
@@ -43,7 +42,7 @@ object CacheManager {
     const val KV_ENGINE_TYPE = "KV_ENGINE_TYPE"
     const val KV_TAB_DATA_NORMAL = "KV_TAB_DATA_NORMAL"
     const val KV_TAB_DATA_PRIVATE = "KV_TAB_DATA_PRIVATE"
-    const val KV_VIDEO_DOWNLOAD = "KV_VIDEO_DOWNLOAD"
+    const val KV_VIDEO_DOWNLOAD = "KV_VIDEO_DOWNLOAD_2"
     const val KV_NEWS_LIST = "KV_NEWS_LIST"
     const val KV_WEB_PAGE_LIST = "KV_WEB_PAGE_LIST"
     const val KV_WEB_FETCH_LIST = "KV_WEB_FETCH_LIST"
@@ -76,9 +75,9 @@ object CacheManager {
 //    const val KV_FIRST_OPEN_APP = "KV_FIRST_OPEN_APP"
 
 
-    var videoDownloadTempList :MutableList<VideoDownloadData>
+    var videoDownloadTempList :MutableList<VideoUIData>
         get() {
-            var list = getListByGson(mmkv.decodeString(KV_VIDEO_DOWNLOAD),VideoDownloadData::class.java)?: mutableListOf()
+            var list = getListByGson(mmkv.decodeString(KV_VIDEO_DOWNLOAD),VideoUIData::class.java)?: mutableListOf()
             return list
         }
         set(value) {
@@ -497,12 +496,15 @@ object CacheManager {
 
     fun updateTempList(model: DownloadModel) {
         var list = videoDownloadTempList
+        var needBreak = false
         for (i in 0 until list.size){
-            var data = list.get(i)
-            if (data.videoId == model.videoId){
-                data.downloadType = model.downloadType?:0
-                break
+            list.get(i).formatsList.forEach {
+                if (it.videoId == model.videoId){
+                    it.downloadType = model.downloadType?:0
+                    needBreak = true
+                }
             }
+            if (needBreak)break
         }
         videoDownloadTempList = list
     }

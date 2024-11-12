@@ -41,6 +41,8 @@ class VideoDownloadData {
 
     var nfId = 0
 
+    var resolution:String?=""
+
 
     fun createDefault(
         videoId: String,
@@ -49,7 +51,8 @@ class VideoDownloadData {
         imageUrl: String,
         paramsMap: HashMap<String, Any>,
         size: Long,
-        videoType: String
+        videoType: String,
+        resolution: String,
     ): VideoDownloadData {
         this.fileName = fileName
         this.url = url
@@ -60,6 +63,7 @@ class VideoDownloadData {
         this.downloadType = DOWNLOAD_NOT
         this.isShow = false
         this.videoId = videoId
+        this.resolution = resolution
         return this
     }
 

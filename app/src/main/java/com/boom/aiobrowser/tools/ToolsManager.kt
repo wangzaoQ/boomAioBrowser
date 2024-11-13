@@ -336,7 +336,7 @@ fun Context.shareToShop(title: String? = "") {
     runCatching {
         var shareText =
             if (TextUtils.isEmpty(title).not()) {
-                "${title}\n${"https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"}"
+                "${title}\n${"https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"}\n${APP.instance.getString(R.string.app_share_end)}"
             } else {
                 "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
             }

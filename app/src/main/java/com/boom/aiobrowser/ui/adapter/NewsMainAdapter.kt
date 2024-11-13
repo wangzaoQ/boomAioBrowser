@@ -352,7 +352,8 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                     override fun onBind(holder: TopImgItem, position: Int, item: NewsData?) {
                         if (item == null) return
                         holder.viewBinding?.apply {
-                            GlideManager.loadImg(fragment = null, iv = ivTopImg, url = item.iassum)
+                            GlideManager.loadImg(fragment = null, iv = ivTopImg, url = item.iassum,loadId = R.mipmap.bg_news_default,
+                                R.mipmap.bg_news_default)
                         }
                     }
                 })
@@ -447,7 +448,8 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                     override fun onBind(holder: ImgItem, position: Int, item: NewsData?) {
                         if (item == null) return
                         holder.viewBinding?.apply {
-                            GlideManager.loadImg(fragment = null, iv = ivImg, url = item.iassum)
+                            GlideManager.loadImg(fragment = null, iv = ivImg, url = item.iassum,loadId = R.mipmap.bg_news_default,
+                                R.mipmap.bg_news_default)
                         }
                     }
                 })

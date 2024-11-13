@@ -55,12 +55,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="@drawable/shape_default_1"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="34dp"
-                    android:layout_height="34dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:scaleType="centerInside"
+                    android:layout_marginStart="50dp"
                     app:srcCompat="@mipmap/ic_default_icon1"></androidx.appcompat.widget.AppCompatImageView>
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -78,17 +80,19 @@
                 android:layout_height="60dp"
                 android:background="@drawable/shape_default_2"
                 android:layout_marginTop="13dp"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="34dp"
-                    android:layout_height="34dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:scaleType="centerInside"
+                    android:layout_marginStart="50dp"
                     app:srcCompat="@mipmap/ic_default_icon2"></androidx.appcompat.widget.AppCompatImageView>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     style="@style/app_text_bold"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="25dp"
                     android:text="@string/app_security_features"
@@ -101,17 +105,19 @@
                 android:layout_height="60dp"
                 android:background="@drawable/shape_default_3"
                 android:layout_marginTop="13dp"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="34dp"
-                    android:layout_height="34dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:scaleType="centerInside"
+                    android:layout_marginStart="50dp"
                     app:srcCompat="@mipmap/ic_default_icon3"></androidx.appcompat.widget.AppCompatImageView>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     style="@style/app_text_bold"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="25dp"
                     android:text="@string/app_video_downlod"

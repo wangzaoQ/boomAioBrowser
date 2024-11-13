@@ -170,7 +170,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                         paramsMap = map,
                         size = it.size?.toLong()?:0,
                         videoType = it.format?:"",
-                        resolution = it.resolution?:""
+                        resolution = if (it.resolution.isNullOrEmpty()) "--" else it.resolution?:""
                     )
                     uiData.formatsList.add(videoDownloadData)
                     uiData.videoResultId =  "${fileStart}_${id}"

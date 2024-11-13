@@ -28,6 +28,9 @@ class HomeGuidePop(context: Context) : BasePopupWindow(context) {
                 DownloadVideoGuidePop(context).createPop {  }
                 dismiss()
             }
+            ivClose.setOnClickListener {
+                dismiss()
+            }
         }
         showPopupWindow()
     }

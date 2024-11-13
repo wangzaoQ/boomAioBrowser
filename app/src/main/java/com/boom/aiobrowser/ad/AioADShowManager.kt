@@ -73,7 +73,7 @@ class AioADShowManager(
                             AioADDataManager.TAG,
                             "admob 广告展示:${adEnum.adName}-id:${adResultData.adRequestData?.ktygzdzn}"
                         )
-                        adShowFullScreen(adResultData, adEnum, tag = "admob 广告展示")
+                        adShowFullScreen(adResultData, adEnum, tag = "admob 广告展示",tTag)
                     }
 
                     override fun onAdClicked() {
@@ -260,13 +260,13 @@ class AioADShowManager(
         setADDismissTime()
     }
 
-    private fun adShowFullScreen(adResultData: ADResultData, adEnum: ADEnum, tag: String) {
+    private fun adShowFullScreen(adResultData: ADResultData, adEnum: ADEnum, tag: String,pointTag:String) {
         AppLogs.dLog(AioADDataManager.TAG, "tag:${tag} 位置:${adEnum.adName}")
         AioADDataManager.addShowNumber(tag)
         AioADDataManager.preloadAD(adEnum,"广告展示时")
         APP.instance.lifecycleApp.adScreenType = 0
         PointEvent.posePoint(PointEventKey.aobws_ad_impression,Bundle().apply {
-            putString(PointValueKey.ad_pos_id,adEnum.adName)
+            putString(PointValueKey.ad_pos_id,pointTag)
         })
     }
 

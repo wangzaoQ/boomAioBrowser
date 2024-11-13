@@ -51,12 +51,12 @@ class MainRootFragment :BaseFragment<BrowserFragmentMainRootBinding>() {
                     if (CacheManager.browserStatus == 0){
                         CacheManager.saveRecentSearchData(it)
                     }
-                    if (CacheManager.dayShowBattery){
-                        rootActivity.addLaunch(success = {
-                            delay(2000)
-                            BatteryUtil(WeakReference(context as BaseActivity<*>)).requestIgnoreBatteryOptimizations()
-                        }, failBack = {})
-                    }
+//                    if (CacheManager.dayShowBattery){
+//                        rootActivity.addLaunch(success = {
+//                            delay(2000)
+//                            BatteryUtil(WeakReference(context as BaseActivity<*>)).requestIgnoreBatteryOptimizations()
+//                        }, failBack = {})
+//                    }
                 }
                 JumpConfig.JUMP_HOME ->{
                     val navOptions = NavOptions.Builder()

@@ -291,14 +291,24 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                             it.videoChecked = false
                         }
                     }
+                    var parentIndex = -1
+                    var childIndex = -1
                     for (i in 0 until downloadAdapter.items.size){
                         var data = downloadAdapter.items.get(i)
-                        data.formatsList.forEach {
-                            if (allowCheckStatus(it)){
-                                it.videoChecked = true
+                        for (j in 0 until data.formatsList.size){
+                            var childData = data.formatsList.get(j)
+                            if (allowCheckStatus(childData)){
+                                childData.videoChecked = true
+                                parentIndex = i
+                                childIndex = j
+                                break
                             }
                         }
+                        if (parentIndex!=-1 && childIndex!=-1){
+                            break
+                        }
                     }
+                    downloadAdapter.notifyDataSetChanged()
                     isSelectedAll = false
                     tvClear.text = context.getString(R.string.app_all)
                 } else {

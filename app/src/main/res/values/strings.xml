@@ -190,4 +190,5 @@
     <string name="app_download_tips4">Download video here</string>
     <string name="app_home_guide_title">How to download videos from websites</string>
     <string name="app_home_guide_content">Just two simple steps to download videos from the website</string>
+    <string name="app_read_source">Read Source</string>
 </resources>

@@ -392,20 +392,37 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }
     }
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-
-        var mMainNavFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_view)
-//再获取当前的Fragment
-        var currentFragmentInstance = mMainNavFragment?.getChildFragmentManager()?.getPrimaryNavigationFragment();
-        if (currentFragmentInstance != null && currentFragmentInstance is WebFragment) {
-            return if (currentFragmentInstance.goBack(keyCode, event)) {
-                AppLogs.dLog(acTAG,"返回 fragment goBack")
+        if (isFinishing) {
+            return super.onKeyDown(keyCode, event)
+        }
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            var mainFragment = supportFragmentManager.findFragmentByTag("MainFragment")
+            if (mainFragment!=null){
+                var mMainNavFragment = mainFragment.childFragmentManager.findFragmentById(R.id.fragment_view)
+                var currentFragmentInstance = mMainNavFragment?.getChildFragmentManager()?.getPrimaryNavigationFragment();
+                if (currentFragmentInstance != null && currentFragmentInstance is WebFragment) {
+                    return if (currentFragmentInstance.goBack(keyCode, event)) {
+                        AppLogs.dLog(acTAG,"返回 fragment goBack")
+                        true
+                    } else {
+                        AppLogs.dLog(acTAG,"返回 HomeFragment")
+                        JumpDataManager.toMain(true)
+                        true
+                    }
+                }
+                AppLogs.dLog(acTAG,"返回 activity super.onKeyDown")
+            }
+            return try {
+                val intent = Intent(Intent.ACTION_MAIN)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                intent.addCategory(Intent.CATEGORY_HOME)
+                this.startActivity(intent)
                 true
-            } else {
-                AppLogs.dLog(acTAG,"返回 fragment super.onKeyDown")
+            } catch (e: Throwable) {
+                e.printStackTrace()
                 super.onKeyDown(keyCode, event)
             }
         }
-        AppLogs.dLog(acTAG,"返回 activity super.onKeyDown")
         return super.onKeyDown(keyCode, event)
     }
 

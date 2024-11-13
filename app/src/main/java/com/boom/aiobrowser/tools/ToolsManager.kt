@@ -4,10 +4,12 @@ import android.app.ActivityManager
 import android.content.ClipboardManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.text.TextUtils
 import androidx.annotation.NonNull
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.tools.web.WebScan
@@ -327,6 +329,22 @@ fun registerDirectory(@NonNull context: Context, cls: Class<*>?, z: Boolean) {
             packageManager.setComponentEnabledSetting(componentName, i2, 1)
         }
     } catch (unused: RuntimeException) {
+    }
+}
+
+fun Context.shareToShop(title: String? = "") {
+    runCatching {
+        var shareText =
+            if (TextUtils.isEmpty(title).not()) {
+                "${title}\n${"https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"}"
+            } else {
+                "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
+            }
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, shareText)
+        }
+        this.startActivity(intent)
     }
 }
 

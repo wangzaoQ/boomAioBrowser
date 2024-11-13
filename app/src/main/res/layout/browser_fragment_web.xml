@@ -19,7 +19,7 @@
             android:id="@+id/ivHome"
             android:layout_width="37dp"
             android:layout_height="37dp"
-            app:srcCompat="@mipmap/ic_home"
+            app:srcCompat="@mipmap/ic_back"
             android:layout_marginEnd="7dp"
             ></androidx.appcompat.widget.AppCompatImageView>
 

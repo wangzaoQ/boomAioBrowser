@@ -29,6 +29,7 @@ import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.SearchConfig
@@ -36,6 +37,7 @@ import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.HomeGuideActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.SearchActivity
+import com.boom.aiobrowser.ui.activity.WebDetailsActivity
 import com.boom.aiobrowser.ui.adapter.HomeHistoryAdapter
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
@@ -97,7 +99,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 } else {
                     var div = BigDecimalUtils.div(offset.toDouble(), 255.0, 2)
                     AppLogs.dLog("onOffsetChanged", "div=$div")
-                    if (div<0.1){
+                    if (div<0.3){
                         div = 0.0
                     }
                     fBinding.mainToolBar.alpha = div.toFloat()
@@ -317,14 +319,17 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 adapter = adapterHelper.adapter
                 newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
                     var data = newsAdapter.items.get(position)
-                    var jumpData = JumpDataManager.getCurrentJumpData(tag="点击新闻item")
-                    jumpData.apply {
-                        jumpUrl= data.uweek?:""
-                        jumpType = JumpConfig.JUMP_WEB
-                        jumpTitle = data.tconsi?:""
-                        isJumpClick = true
-                    }
-                    APP.jumpLiveData.postValue(jumpData)
+                    rootActivity.jumpActivity<WebDetailsActivity>(Bundle().apply {
+                        putString(ParamsConfig.JSON_PARAMS, toJson(data))
+                    })
+//                    var jumpData = JumpDataManager.getCurrentJumpData(tag="点击新闻item")
+//                    jumpData.apply {
+//                        jumpUrl= data.uweek?:""
+//                        jumpType = JumpConfig.JUMP_WEB
+//                        jumpTitle = data.tconsi?:""
+//                        isJumpClick = true
+//                    }
+//                    APP.jumpLiveData.postValue(jumpData)
                     PointEvent.posePoint(PointEventKey.home_page_feeds,Bundle().apply {
                         putString(PointValueKey.news_id,data.itackl)
                     })

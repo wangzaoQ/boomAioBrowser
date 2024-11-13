@@ -35,6 +35,7 @@ class MainRootFragment :BaseFragment<BrowserFragmentMainRootBinding>() {
             // 通过Action进行导航，跳转到secondFragment
             when (it.jumpType) {
                 JumpConfig.JUMP_WEB -> {
+                    CacheManager.videoDownloadTempList = mutableListOf()
                     if (it.isJumpClick){
                         it.isJumpClick = false
                         CacheManager.linkedUrlList = LinkedList()

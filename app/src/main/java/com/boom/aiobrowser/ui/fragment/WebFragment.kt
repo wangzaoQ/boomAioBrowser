@@ -3,6 +3,7 @@ package com.boom.aiobrowser.ui.fragment
 import android.net.Uri
 import android.os.Bundle
 import android.view.Gravity
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -26,6 +27,7 @@ import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.web.WebScan
 import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.ParamsConfig
+import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.pop.ClearPop
 import com.boom.aiobrowser.ui.pop.DownLoadPop
 import com.boom.aiobrowser.ui.pop.FirstDownloadTips
@@ -108,10 +110,13 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
             clearData()
         }
         fBinding.ivHome.setOneClick {
-            JumpDataManager.toMain()
-            PointEvent.posePoint(PointEventKey.webpage_home, Bundle().apply {
-                putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
-            })
+//            JumpDataManager.toMain()
+//            PointEvent.posePoint(PointEventKey.webpage_home, Bundle().apply {
+//                putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+//            })
+            if (rootActivity is MainActivity) {
+                rootActivity.onKeyDown(KeyEvent.KEYCODE_BACK,null)
+            }
         }
 
         APP.videoScanLiveData.observe(this){
@@ -168,7 +173,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                 size++
             }
         }
-        dragBiding.apply {
+        dragBiding?.apply {
             if (type == 1 ||(status && size>0)){
                 ivDownload.visibility = View.GONE
                 ivDownload2.visibility = View.VISIBLE
@@ -186,7 +191,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                     if (CacheManager.isFirstDownloadTips){
                         CacheManager.isFirstDownloadTips = false
                         tips1 = FirstDownloadTips(rootActivity)
-                        tips1?.createPop(dragBiding.root,1)
+                        tips1?.createPop(root,1)
                     }
                 }
             }else{
@@ -298,19 +303,18 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     }
 
 
-    val dragBiding by lazy {
-        BrowserDragLayoutBinding.inflate(layoutInflater)
-    }
+    var dragBiding :BrowserDragLayoutBinding?=null
 
     /**
      * 进入
      */
 
     override fun setShowView() {
+        EasyFloat.dismiss(tag = "webPop",true)
+        dragBiding = BrowserDragLayoutBinding.inflate(layoutInflater,null,false)
         updateData(getBeanByGson(arguments?.getString(ParamsConfig.JSON_PARAMS)?:"",JumpData::class.java))
         updateTabCount()
         CacheManager.videoDownloadTempList = mutableListOf()
-        updateDownloadButtonStatus(false)
 //        fBinding.ivDownload.visibility = View.VISIBLE
         PointEvent.posePoint(PointEventKey.webpage_page,Bundle().apply {
             putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
@@ -330,16 +334,16 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
             dragY
         }
         AppLogs.dLog("dragParams","startX:${startX} startY:${startY}")
-
-        EasyFloat.with(rootActivity)
+        updateDownloadButtonStatus(false)
+        dragBiding?.apply {     EasyFloat.with(rootActivity)
             .setSidePattern(SidePattern.RESULT_HORIZONTAL)
             .setImmersionStatusBar(true)
             .setGravity(Gravity.START or Gravity.BOTTOM, offsetX = startX, offsetY = startY)
             .setLocation(startX, startY)
             .setTag("webPop")
             // 传入View，传入布局文件皆可，如：MyCustomView(this)、R.layout.float_custom
-            .setLayout(dragBiding.root) {
-                dragBiding.ivDownload.setOneClick {
+            .setLayout(root) {
+                ivDownload.setOneClick {
                     if (WebScan.isYoutube(jumpData?.jumpUrl?:"")){
                         TipsPop(rootActivity).createPop {  }
                         return@setOneClick
@@ -356,9 +360,9 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                         putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
                     })
                 }
-                dragBiding.ivDownload2.setOneClick {
+                ivDownload2.setOneClick {
                     tips1?.dismiss()
-                    dragBiding.ivDownload2.cancelAnimation()
+                    ivDownload2.cancelAnimation()
                     rootActivity.addLaunch(success = {
                         delay(500)
                         withContext(Dispatchers.Main){
@@ -381,6 +385,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 //                    logger.e("DSL:  $isCreated   $msg")
                 }
                 show {
+
                 }
                 hide {
                 }
@@ -410,7 +415,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                 }
 
                 dragEnd {
-                    dragBiding.root?.apply {
+                    root?.apply {
                         val location = IntArray(2)
                         this.getLocationOnScreen(location)
                         val x = location[0] // view距离 屏幕左边的距离（即x轴方向）
@@ -427,7 +432,8 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 //                    }
                 }
             }
-            .show()
+            .show() }
+
     }
 
     var tips1 :FirstDownloadTips?=null

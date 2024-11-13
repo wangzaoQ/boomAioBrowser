@@ -2,6 +2,7 @@ package com.boom.aiobrowser.net
 
 import com.boom.aiobrowser.data.AreaData
 import com.boom.aiobrowser.data.NewsData
+import com.boom.aiobrowser.data.NewsDetailsData
 import com.boom.aiobrowser.data.WebData
 
 object NetController {
@@ -31,6 +32,10 @@ object NetController {
 
     suspend fun getWebDetail(dsurpr:String,kdepen:String): NetResponse<String> {
         return service.getWebDetail(dsurpr,kdepen)
+    }
+
+    suspend fun getNewsDetails(id:String): NetResponse<NewsData> {
+        return service.getNewDetails(id)
     }
 
 }

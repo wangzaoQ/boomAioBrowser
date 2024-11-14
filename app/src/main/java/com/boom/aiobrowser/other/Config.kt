@@ -1,4 +1,4 @@
-package com.boom.aiobrowser.ui
+package com.boom.aiobrowser.other
 
 import android.os.Build
 
@@ -34,6 +34,42 @@ object ParamsConfig{
 object UrlConfig{
     const val PRIVATE_URL = "https://sites.google.com/view/aiobrowser-privacy-policy/home"
     const val SERVICE_URL = "https://sites.google.com/view/aio-browser-service/home"
+}
+
+object TopicConfig{
+    const val TOPIC_PUBLIC_SAFETY = "Public Safety"
+    const val TOPIC_ENTERTAINMENT = "Entertainment"
+    const val TOPIC_POLITICS = "Politics"
+    const val TOPIC_LOCAL = "Local"
+    const val TOPIC_FOR_YOU = "For You"
+
+}
+
+object NewsConfig{
+    var LOCAL_TOPIC_JSON= """
+[
+  {
+    "nsand":"For You",
+    "lscrat":[
+      {
+        "nsand":"pt",
+        "tchoic":"Para Você"
+      },
+      {
+        "lcompl":"ja",
+        "tchoic":"あなたのために"
+      },
+      {
+        "lcompl":"ko",
+        "tchoic":"당신을 위해"
+      },{
+        "lcompl":"es",
+        "tchoic":"Para ti"
+      }
+    ]
+  }
+]
+"""
 }
 
 

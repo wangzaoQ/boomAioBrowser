@@ -1,20 +1,16 @@
 package com.boom.aiobrowser.ui.activity
 
-import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
-import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserActivityHomeGuideBinding
-import com.boom.aiobrowser.databinding.VideoActivityDownloadBinding
 import com.boom.aiobrowser.tools.JumpDataManager
-import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
-import com.boom.aiobrowser.ui.JumpConfig
-import com.boom.aiobrowser.ui.ParamsConfig
+import com.boom.aiobrowser.other.JumpConfig
+import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.ui.adapter.HomeGuideAdapter
 import com.zhpan.indicator.enums.IndicatorSlideMode
 import com.zhpan.indicator.enums.IndicatorStyle

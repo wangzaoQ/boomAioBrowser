@@ -1,8 +1,5 @@
 package com.boom.aiobrowser.nf
 
-import android.app.PendingIntent
-import android.content.Intent
-import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
 import com.boom.aiobrowser.APP
@@ -14,12 +11,6 @@ import com.boom.aiobrowser.nf.NFJump.getJumpIntent
 import com.boom.aiobrowser.nf.NFJump.getRefreshIntent
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
-import com.boom.aiobrowser.tools.clean.formatLength
-import com.boom.aiobrowser.tools.toJson
-import com.boom.aiobrowser.ui.JumpConfig
-import com.boom.aiobrowser.ui.ParamsConfig
-import com.boom.aiobrowser.ui.activity.MainActivity
-import kotlin.random.Random
 
 object NFViews {
 

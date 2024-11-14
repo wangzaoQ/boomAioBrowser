@@ -2,7 +2,6 @@ package com.boom.aiobrowser.ui.fragment
 
 import android.animation.ValueAnimator
 import android.content.Intent
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,10 +19,9 @@ import com.boom.aiobrowser.nf.NFShow
 import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
-import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
-import com.boom.aiobrowser.ui.UrlConfig
+import com.boom.aiobrowser.other.UrlConfig
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.WebActivity
 import com.google.android.ump.ConsentRequestParameters

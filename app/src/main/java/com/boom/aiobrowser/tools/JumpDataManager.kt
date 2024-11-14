@@ -6,11 +6,9 @@ import android.content.Intent
 import android.os.Bundle
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
-import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.JumpData
-import com.boom.aiobrowser.ui.JumpConfig
+import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.ui.activity.MainActivity
-import java.lang.ref.WeakReference
 
 object JumpDataManager {
 

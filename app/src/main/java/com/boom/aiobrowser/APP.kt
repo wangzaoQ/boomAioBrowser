@@ -18,6 +18,7 @@ import com.blankj.utilcode.util.NetworkUtils.OnNetworkStatusChangedListener
 import com.boom.aiobrowser.ad.AioADDataManager.initAD
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.NFEnum
+import com.boom.aiobrowser.data.TopicBean
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
@@ -97,6 +98,7 @@ class APP: Application(), ViewModelStoreOwner {
 
         val videoLiveData by lazy { ProtectedUnPeekLiveData<HashMap<Int, VideoTaskItem>>() }
         val videoUpdateLiveData by lazy { ProtectedUnPeekLiveData<String>() }
+        val topicLiveData by lazy { ProtectedUnPeekLiveData<MutableList<TopicBean>>() }
 
 
     }
@@ -230,6 +232,7 @@ class APP: Application(), ViewModelStoreOwner {
 
     fun getWebConfig() {
         appModel.getWebConfig()
+        appModel.getTopic()
     }
 
     var netBack = object : OnNetworkStatusChangedListener {

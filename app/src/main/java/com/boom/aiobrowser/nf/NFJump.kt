@@ -7,8 +7,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.tools.toJson
-import com.boom.aiobrowser.ui.JumpConfig
-import com.boom.aiobrowser.ui.ParamsConfig
+import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.ui.activity.MainActivity
 import kotlin.random.Random
 

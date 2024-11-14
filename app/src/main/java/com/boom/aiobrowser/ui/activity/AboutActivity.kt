@@ -2,12 +2,11 @@ package com.boom.aiobrowser.ui.activity
 
 import android.content.Intent
 import android.view.LayoutInflater
-import androidx.recyclerview.widget.ConcatAdapter.Config
 import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserActivityAboutBinding
-import com.boom.aiobrowser.ui.UrlConfig
+import com.boom.aiobrowser.other.UrlConfig
 
 class AboutActivity: BaseActivity<BrowserActivityAboutBinding>()  {
     override fun getBinding(inflater: LayoutInflater): BrowserActivityAboutBinding {

@@ -8,12 +8,13 @@ import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.NewsTempData
+import com.boom.aiobrowser.data.TopicBean
 import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.data.WebConfigData
 import com.boom.aiobrowser.data.model.DownloadModel
 import com.boom.aiobrowser.net.NetRequest
 import com.boom.aiobrowser.nf.NFManager
-import com.boom.aiobrowser.ui.JumpConfig
+import com.boom.aiobrowser.other.JumpConfig
 import com.tencent.mmkv.MMKV
 import java.util.LinkedList
 import java.util.UUID
@@ -55,6 +56,7 @@ object CacheManager {
     const val KV_HISTORY_DATA = "KV_HISTORY_DATA"
     const val KV_HISTORY_DATA_JUMP = "KV_HISTORY_DATA_JUMP"
     const val KV_URL_LIST = "KV_URL_LIST"
+    const val KV_TOPIC_LIST = "KV_URL_LIST"
     const val KV_SAVE_DAY = "KV_SAVE_DAY"
     const val KV_GID = "KV_GID"
     const val KV_CLICK_EVERY_DAY = "KV_CLICK_EVERY_DAY"
@@ -476,6 +478,14 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_URL_LIST, toJson(value))
+        }
+
+    var defaultTopicList :MutableList<TopicBean>
+        get() {
+            return getListByGson(mmkv.decodeString(KV_TOPIC_LIST,""),TopicBean::class.java)?: mutableListOf()
+        }
+        set(value) {
+            mmkv.encode(KV_TOPIC_LIST, toJson(value))
         }
 
     fun clearAll() {

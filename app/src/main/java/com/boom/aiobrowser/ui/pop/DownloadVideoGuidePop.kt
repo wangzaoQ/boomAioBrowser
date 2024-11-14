@@ -8,14 +8,13 @@ import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
-import com.boom.aiobrowser.databinding.BrowserPopClearBinding
 import com.boom.aiobrowser.databinding.BrowserPopDownloadVideoGuideBinding
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
-import com.boom.aiobrowser.ui.JumpConfig
+import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.ui.adapter.PopGuideAdapter
 import com.zhpan.indicator.enums.IndicatorSlideMode
 import com.zhpan.indicator.enums.IndicatorStyle

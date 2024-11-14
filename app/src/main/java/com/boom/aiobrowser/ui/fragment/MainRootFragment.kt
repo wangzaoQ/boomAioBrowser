@@ -8,17 +8,13 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
-import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.databinding.BrowserFragmentMainRootBinding
-import com.boom.aiobrowser.tools.BatteryUtil
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.toJson
-import com.boom.aiobrowser.ui.JumpConfig
-import com.boom.aiobrowser.ui.ParamsConfig
+import com.boom.aiobrowser.other.JumpConfig
+import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.drag.EasyFloat
-import kotlinx.coroutines.delay
-import java.lang.ref.WeakReference
 import java.util.LinkedList
 
 class MainRootFragment :BaseFragment<BrowserFragmentMainRootBinding>() {

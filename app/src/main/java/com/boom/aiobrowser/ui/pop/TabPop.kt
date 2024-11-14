@@ -2,7 +2,6 @@ package com.boom.aiobrowser.ui.pop
 
 import android.content.Context
 import android.graphics.Canvas
-import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -14,7 +13,6 @@ import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.BrowserPopTabBinding
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
-import com.boom.aiobrowser.ui.JumpConfig
 import com.boom.aiobrowser.ui.activity.WebDetailsActivity
 import com.boom.aiobrowser.ui.adapter.TabAdapter
 import com.boom.base.adapter4.QuickAdapterHelper

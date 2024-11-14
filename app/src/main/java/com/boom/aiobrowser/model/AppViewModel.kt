@@ -1,12 +1,13 @@
 package com.boom.aiobrowser.model
 
+import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.data.TopicBean
 import com.boom.aiobrowser.data.WebConfigData
 import com.boom.aiobrowser.net.NetController
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.boom.aiobrowser.tools.getTopicDataLan
+import com.boom.aiobrowser.other.TopicConfig
 
 class AppViewModel : BaseDataModel() {
 
@@ -38,5 +39,36 @@ class AppViewModel : BaseDataModel() {
         }, failBack = {
             AppLogs.eLog(TAG,it.stackTraceToString())
         },1)
+    }
+
+    fun getTopic() {
+        var list = CacheManager.defaultTopicList
+        if (list.isNullOrEmpty()){
+            var topString = mutableListOf<String>(
+                TopicConfig.TOPIC_FOR_YOU,
+                TopicConfig.TOPIC_LOCAL,
+                TopicConfig.TOPIC_POLITICS,
+                TopicConfig.TOPIC_ENTERTAINMENT,
+                TopicConfig.TOPIC_PUBLIC_SAFETY
+            )
+            loadData(loadBack = {
+                var data = NetController.getTopic().data
+                topString.forEachIndexed { index, s ->
+                    data?.forEachIndexed { index, nowTopicData ->
+                        if (s == nowTopicData.nsand) {
+                            list.add(TopicBean().apply {
+                                topic = getTopicDataLan(nowTopicData)
+                                id = nowTopicData.nsand ?: ""
+                            })
+                        }
+                    }
+                }
+                CacheManager.defaultTopicList = list
+                APP.topicLiveData.postValue(list)
+            }, failBack = {
+            }, 1)
+        }else{
+            APP.topicLiveData.postValue(list)
+        }
     }
 }

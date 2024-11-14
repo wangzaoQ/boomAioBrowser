@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
-import android.text.TextUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.LayoutInflater
@@ -15,15 +14,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.ad.AioADShowManager
-import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.NewsData
-import com.boom.aiobrowser.data.ScanData
 import com.boom.aiobrowser.data.ViewItem
 import com.boom.aiobrowser.databinding.BrowserItemHomeAdBinding
 import com.boom.aiobrowser.databinding.BrowserItemMainNewsBinding
@@ -38,22 +34,12 @@ import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.GlideManager
-import com.boom.aiobrowser.tools.JumpDataManager
-import com.boom.aiobrowser.tools.JumpDataManager.getCurrentJumpData
-import com.boom.aiobrowser.tools.JumpDataManager.updateCurrentJumpData
 import com.boom.aiobrowser.tools.TimeManager
-import com.boom.aiobrowser.tools.getUrlIcon
-import com.boom.aiobrowser.tools.getUrlSource
-import com.boom.aiobrowser.ui.JumpConfig
-import com.boom.aiobrowser.ui.UrlConfig
 import com.boom.aiobrowser.ui.activity.WebActivity
 import com.boom.base.adapter4.BaseMultiItemAdapter
 import com.boom.video.GSYVideoManager
 import com.boom.video.builder.GSYVideoOptionBuilder
 import com.boom.video.listener.GSYSampleCallBack
-import com.boom.video.utils.OrientationUtils
-import java.io.File
-import java.lang.ref.WeakReference
 
 class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapter<NewsData>() {
 

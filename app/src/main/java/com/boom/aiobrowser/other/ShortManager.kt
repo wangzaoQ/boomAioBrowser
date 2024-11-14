@@ -20,7 +20,6 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
-import com.boom.aiobrowser.ui.ParamsConfig
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.pop.RatePop
 import java.lang.ref.WeakReference
@@ -59,7 +58,7 @@ object ShortManager {
                         //具体点的是当前通知哪一个区域 状态各有不同
 //                intent.putExtra(ParamsConfig.NF_TO, nfTo)
                         //点击的是哪一种通知
-                        intent.putExtra(ParamsConfig.NF_ENUM_NAME,ParamsConfig.SHORT)
+                        intent.putExtra(ParamsConfig.NF_ENUM_NAME, ParamsConfig.SHORT)
 
                         // Enable the existing shortcut with the ID "my-shortcut".
                         val pinShortcutInfo =

@@ -9,25 +9,19 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.RelativeLayout
 import com.blankj.utilcode.util.KeyboardUtils
-import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.LayoutTopBinding
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
-import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.tools.toJson
-import com.boom.aiobrowser.ui.JumpConfig
-import com.boom.aiobrowser.ui.ParamsConfig
-import com.boom.aiobrowser.ui.SearchConfig
+import com.boom.aiobrowser.other.JumpConfig
+import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.other.SearchConfig
 import com.boom.aiobrowser.ui.activity.SearchActivity
 import com.boom.aiobrowser.ui.pop.SearchPop
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import java.lang.ref.WeakReference
 
 class TopTitleView : FrameLayout {

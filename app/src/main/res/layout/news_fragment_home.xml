@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/rlTop"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_height="94dp">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_news"
+            android:layout_marginTop="45dp"
+            android:layout_marginStart="14dp"
+            android:textColor="@color/black"
+            android:textSize="29sp"
+            style="@style/app_text_bold"
+            ></androidx.appcompat.widget.AppCompatTextView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#F5F5F5"
+            android:layout_alignParentBottom="true"
+            ></View>
+    </RelativeLayout>
+    <com.google.android.material.tabs.TabLayout
+        app:layout_constraintTop_toBottomOf="@+id/rlTop"
+        android:id="@+id/tabLayout"
+        android:layout_marginTop="13dp"
+        android:layout_width="match_parent"
+        android:layout_height="31dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorHeight="0dp"
+        app:tabMaxWidth="0dp"
+        app:tabMinWidth="0dp"
+        app:tabMode="scrollable"
+        android:paddingHorizontal="10dp"
+        app:tabBackground="@color/tran"
+        app:tabRippleColor="@color/tran"
+        app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+        app:tabTextColor="#B8B8B8" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout"
+        ></androidx.viewpager.widget.ViewPager>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,10 +23,9 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.appDataReset
 import com.boom.aiobrowser.tools.getBeanByGson
-import com.boom.aiobrowser.ui.JumpConfig
-import com.boom.aiobrowser.ui.ParamsConfig
-import com.boom.aiobrowser.ui.isAndroid12
-import com.boom.aiobrowser.ui.isAndroid14
+import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.other.isAndroid12
+import com.boom.aiobrowser.other.isAndroid14
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions

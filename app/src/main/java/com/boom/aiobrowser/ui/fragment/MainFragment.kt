@@ -1,13 +1,10 @@
 package com.boom.aiobrowser.ui.fragment
 
-import android.animation.Animator
-import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,10 +27,9 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.toJson
-import com.boom.aiobrowser.ui.JumpConfig
-import com.boom.aiobrowser.ui.ParamsConfig
-import com.boom.aiobrowser.ui.SearchConfig
-import com.boom.aiobrowser.ui.activity.DownloadActivity
+import com.boom.aiobrowser.other.JumpConfig
+import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.other.SearchConfig
 import com.boom.aiobrowser.ui.activity.HomeGuideActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.SearchActivity
@@ -42,9 +38,7 @@ import com.boom.aiobrowser.ui.adapter.HomeHistoryAdapter
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.EngineGuidePop
-import com.boom.aiobrowser.ui.pop.RatePop
 import com.boom.aiobrowser.ui.pop.SearchPop
-import com.boom.aiobrowser.ui.view.ShareImageView.dp2px
 import com.boom.base.adapter4.QuickAdapterHelper
 import com.boom.base.adapter4.loadState.LoadState
 import com.boom.base.adapter4.loadState.trailing.TrailingLoadStateAdapter

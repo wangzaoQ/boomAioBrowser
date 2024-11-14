@@ -1,0 +1,16 @@
+<androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tvCustomTab"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:paddingHorizontal="13.5dp"
+    android:paddingTop="7.5dp"
+    android:paddingBottom="7.5dp"
+    android:textColor="@drawable/selector_custom_tab_text"
+    style="@style/app_text_normal"
+    tools:text="poli"
+    android:background="@drawable/selector_custom_tab_bg"
+    android:orientation="horizontal">
+
+</androidx.appcompat.widget.AppCompatTextView>

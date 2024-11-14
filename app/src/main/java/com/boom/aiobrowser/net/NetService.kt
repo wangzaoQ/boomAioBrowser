@@ -3,6 +3,7 @@ package com.boom.aiobrowser.net
 import com.boom.aiobrowser.data.AreaData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.NewsDetailsData
+import com.boom.aiobrowser.data.TopicData
 import com.boom.aiobrowser.data.WebData
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -49,7 +50,15 @@ interface NetService {
     @GET("api/ssuck")
     suspend fun getWebDetail(@Query("dsurpr") dsurpr: String,@Query("kdepen") kdepen: String): NetResponse<String>
 
+    /**
+     * 新闻详情
+     */
     @GET("api/nemplo/dtie")
     suspend fun getNewDetails(@Query("itackl") id: String): NetResponse<NewsData>
 
+    /**
+     * topic
+     */
+    @GET("api/nemplo/tdetai")
+    suspend fun getTopics(@Query("tmouth") tmouth:String): NetResponse<MutableList<TopicData>>
 }

@@ -3,7 +3,6 @@ package com.boom.aiobrowser.nf
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
@@ -11,11 +10,10 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.tools.AppLogs
-import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.tools.video.VideoManager
-import com.boom.aiobrowser.ui.ParamsConfig
+import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.ui.activity.VideoPreActivity
 import com.boom.downloader.VideoDownloadManager
 import kotlinx.coroutines.CoroutineScope

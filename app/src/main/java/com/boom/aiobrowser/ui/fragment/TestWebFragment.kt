@@ -9,12 +9,10 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseWebFragment
 import com.boom.aiobrowser.databinding.BrowserFragmentTempBinding
-import com.boom.aiobrowser.databinding.BrowserFragmentWebBinding
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
-import com.boom.aiobrowser.ui.JumpConfig
-import com.boom.aiobrowser.ui.pop.DisclaimerPop
+import com.boom.aiobrowser.other.JumpConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext

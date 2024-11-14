@@ -10,11 +10,7 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.navigation.NavController
-import androidx.navigation.NavOptions
-import androidx.navigation.Navigation
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
@@ -22,9 +18,7 @@ import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
-import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.nf.NFManager
-import com.boom.aiobrowser.other.ShortManager
 import com.boom.aiobrowser.point.PointValue
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BrowserManager
@@ -36,26 +30,23 @@ import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.inputStream2Byte
 import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.tools.toJson
-import com.boom.aiobrowser.ui.JumpConfig
-import com.boom.aiobrowser.ui.ParamsConfig
+import com.boom.aiobrowser.other.JumpConfig
+import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.ui.fragment.MainRootFragment
+import com.boom.aiobrowser.ui.fragment.NewsHomeFragment
 import com.boom.aiobrowser.ui.fragment.StartFragment
 import com.boom.aiobrowser.ui.fragment.WebFragment
-import com.boom.aiobrowser.ui.isAndroid12
+import com.boom.aiobrowser.other.isAndroid12
 import com.boom.aiobrowser.ui.pop.DefaultPop
-import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.HomeGuidePop
 import com.boom.aiobrowser.ui.pop.MorePop
 import com.boom.aiobrowser.ui.pop.NFGuidePop
 import com.boom.aiobrowser.ui.pop.ProcessingTextPop
-import com.boom.aiobrowser.ui.pop.TabPop
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import pop.basepopup.BasePopupWindow.OnDismissListener
-import java.lang.ref.WeakReference
-import java.util.LinkedList
 
 
 class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
@@ -69,6 +60,13 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
 
     var startFragment :StartFragment?=null
+
+    val mainRootFragment by lazy {
+        MainRootFragment()
+    }
+    val newsHomeFragment by lazy {
+        NewsHomeFragment()
+    }
 
     override fun getBinding(inflater: LayoutInflater): BrowserActivityMainBinding {
         return BrowserActivityMainBinding.inflate(layoutInflater)
@@ -96,9 +94,14 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 //                    jumpType = JumpConfig.JUMP_HOME
 //                    jumpTitle = APP.instance.getString(R.string.app_home)
 //                })
+                fManager.switchFragment(supportFragmentManager,R.id.fragmentMain,newsHomeFragment,mainRootFragment,"MainFragment")
                 updateUI(index)
             }
-            1 ->{
+            1->{
+                fManager.switchFragment(supportFragmentManager,R.id.fragmentMain,mainRootFragment,newsHomeFragment,"NewsHomeFragment")
+                updateUI(index)
+            }
+            2 ->{
 //                APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "点击 file tab").apply {
 //                    jumpType = JumpConfig.JUMP_FILE
 //                    jumpTitle = APP.instance.getString(R.string.app_files)
@@ -107,7 +110,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     putExtra("fromPage","home_tab")
                 })
             }
-            2 ->{
+            3 ->{
                 morePop = MorePop(this@MainActivity)
                 morePop?.createPop()
             }
@@ -199,7 +202,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 CacheManager.browserStatus = 0
             }
             if (count == 1){
-                fManager.addFragmentTag(supportFragmentManager,MainRootFragment(),R.id.fragmentMain,"MainFragment")
+                fManager.addFragmentTag(supportFragmentManager,mainRootFragment,R.id.fragmentMain,"MainFragment")
             }
 //            CacheManager.videoDownloadTempList = mutableListOf()
         },500)

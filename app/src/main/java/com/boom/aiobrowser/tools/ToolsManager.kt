@@ -12,8 +12,9 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.NFEnum
+import com.boom.aiobrowser.data.TopicData
 import com.boom.aiobrowser.tools.web.WebScan
-import com.boom.aiobrowser.ui.isAndroid11
+import com.boom.aiobrowser.other.isAndroid11
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
@@ -348,6 +349,19 @@ fun Context.shareToShop(title: String? = "") {
     }
 }
 
+fun getTopicDataLan(data: TopicData): String {
+    var topic = ""
+    var language = Locale.getDefault().language
+    data.lscrat?.forEachIndexed { index, data ->
+        if (data.lperfo == language){
+            topic = data.tcry?:""
+        }
+    }
+    if (topic.isNullOrEmpty()){
+        topic = data.nsand?:""
+    }
+    return topic
+}
 
 
 

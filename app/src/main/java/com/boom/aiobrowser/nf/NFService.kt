@@ -3,12 +3,11 @@ package com.boom.aiobrowser.nf
 import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
-import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
 import android.os.IBinder
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.data.NFEnum
-import com.boom.aiobrowser.ui.isAndroid12
-import com.boom.aiobrowser.ui.isAndroid14
+import com.boom.aiobrowser.other.isAndroid12
+import com.boom.aiobrowser.other.isAndroid14
 
 class NFService : Service() {
 

@@ -4,7 +4,6 @@ import android.content.pm.ActivityInfo
 import android.view.LayoutInflater
 import android.view.View
 import com.boom.aiobrowser.APP
-import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
@@ -19,7 +18,7 @@ import com.boom.aiobrowser.tools.JumpDataManager.updateCurrentJumpData
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getUrlIcon
 import com.boom.aiobrowser.tools.getUrlSource
-import com.boom.aiobrowser.ui.JumpConfig
+import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.ui.view.CustomVideoView
 import com.boom.video.GSYVideoManager
 import com.boom.video.builder.GSYVideoOptionBuilder

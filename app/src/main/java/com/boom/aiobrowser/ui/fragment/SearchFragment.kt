@@ -13,7 +13,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
-import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.BrowserFragmentSearchBinding
@@ -26,11 +25,9 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.jobCancel
-import com.boom.aiobrowser.ui.JumpConfig
-import com.boom.aiobrowser.ui.ParamsConfig
-import com.boom.aiobrowser.ui.activity.WebDetailsActivity
+import com.boom.aiobrowser.other.JumpConfig
+import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.ui.adapter.HomeGuideAdapter
-import com.boom.aiobrowser.ui.adapter.PopGuideAdapter
 import com.boom.aiobrowser.ui.adapter.RecentSearchAdapter
 import com.boom.aiobrowser.ui.adapter.SearchResultAdapter
 import com.boom.base.adapter4.QuickAdapterHelper
@@ -38,9 +35,7 @@ import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import com.zhpan.indicator.enums.IndicatorSlideMode
 import com.zhpan.indicator.enums.IndicatorStyle
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 
 class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
 

@@ -17,8 +17,7 @@ import com.boom.aiobrowser.tools.clean.CleanConfig
 import com.boom.aiobrowser.tools.clean.CleanConfig.cacheFiles
 import com.boom.aiobrowser.tools.clean.CleanToolsManager
 import com.boom.aiobrowser.tools.clean.formatSize
-import com.boom.aiobrowser.ui.isAndroid11
-import com.boom.aiobrowser.ui.isAndroid12
+import com.boom.aiobrowser.other.isAndroid12
 import com.boom.base.adapter4.BaseMultiItemAdapter
 
 class ScanAdapter2(var updateBack: () -> Unit) : BaseMultiItemAdapter<ViewItem>() {

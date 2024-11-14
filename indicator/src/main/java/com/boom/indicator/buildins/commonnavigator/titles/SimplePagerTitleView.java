@@ -7,8 +7,9 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.widget.TextView;
 
-import com.boom.indicator.buildins.commonnavigator.abs.IMeasurablePagerTitleView;
+import com.boom.indicator.R;
 import com.boom.indicator.buildins.UIUtil;
+import com.boom.indicator.buildins.commonnavigator.abs.IMeasurablePagerTitleView;
 
 
 /**
@@ -36,11 +37,13 @@ public class SimplePagerTitleView extends TextView implements IMeasurablePagerTi
     @Override
     public void onSelected(int index, int totalCount) {
         setTextColor(mSelectedColor);
+        setBackgroundResource(R.drawable.shape_custom_tab_unable);
     }
 
     @Override
     public void onDeselected(int index, int totalCount) {
         setTextColor(mNormalColor);
+        setBackgroundResource(R.drawable.shape_custom_tab_enable);
     }
 
     @Override

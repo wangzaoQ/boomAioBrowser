@@ -1,6 +1,7 @@
 package com.boom.indicator.buildins.commonnavigator;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,15 +10,17 @@ import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
-import com.boom.indicator.R;
-import com.boom.indicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
-import com.boom.indicator.buildins.commonnavigator.abs.IPagerIndicator;
-import com.boom.indicator.buildins.commonnavigator.model.PositionData;
 import com.boom.indicator.NavigatorHelper;
+import com.boom.indicator.R;
 import com.boom.indicator.ScrollState;
 import com.boom.indicator.abs.IPagerNavigator;
+
+
+import com.boom.indicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
 import com.boom.indicator.buildins.commonnavigator.abs.IMeasurablePagerTitleView;
+import com.boom.indicator.buildins.commonnavigator.abs.IPagerIndicator;
 import com.boom.indicator.buildins.commonnavigator.abs.IPagerTitleView;
+import com.boom.indicator.buildins.commonnavigator.model.PositionData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,6 +140,11 @@ public class CommonNavigator extends FrameLayout implements IPagerNavigator, Nav
         initTitlesAndIndicator();
     }
 
+    public static int dp2px(final float dpValue) {
+        final float scale = Resources.getSystem().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
     /**
      * 初始化title和indicator
      */
@@ -151,13 +159,15 @@ public class CommonNavigator extends FrameLayout implements IPagerNavigator, Nav
                     lp.weight = mAdapter.getTitleWeight(getContext(), i);
                 } else {
                     lp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+                    lp.leftMargin = dp2px(5f);
+                    lp.rightMargin = dp2px(5f);
                 }
                 mTitleContainer.addView(view, lp);
             }
         }
         if (mAdapter != null) {
             mIndicator = mAdapter.getIndicator(getContext());
-            if (mIndicator instanceof View) {
+            if (mIndicator!=null && mIndicator instanceof View) {
                 LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 mIndicatorContainer.addView((View) mIndicator, lp);
             }

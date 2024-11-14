@@ -46,6 +46,9 @@ object TopicConfig{
 }
 
 object NewsConfig{
+
+    const val TOPIC_TAG="topic_"
+
     var LOCAL_TOPIC_JSON= """
 [
   {

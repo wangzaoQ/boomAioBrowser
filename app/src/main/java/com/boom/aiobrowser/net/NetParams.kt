@@ -2,6 +2,7 @@ package com.boom.aiobrowser.net
 
 import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.data.NFEnum
+import com.boom.aiobrowser.other.NewsConfig
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import okhttp3.OkHttpClient
@@ -12,9 +13,12 @@ object NetParams {
 
     var TAG = "NetParams"
 
-    var FOR_YOU = "forYou"
+    var FOR_YOU = "For you"
 
     var WIDGET = "widget"
+
+    var LOCAL = "local"
+    var PUBLIC_SAFETY = "Public Safety"
 
     suspend fun getParamsMap(key:String):HashMap<String,String>{
         var needLocation = false
@@ -22,13 +26,19 @@ object NetParams {
         var isPush = false
 //        var fallback = true
         var map = HashMap<String,String>()
-        when (key) {
+        var endKey = key
+        var isTopic = false
+        if (endKey.startsWith(NewsConfig.TOPIC_TAG)){
+            endKey = endKey.substringAfter(NewsConfig.TOPIC_TAG)
+            isTopic = true
+        }
+        when (endKey) {
             FOR_YOU,NFEnum.NF_NEWS.menuName,WIDGET -> {
                 needLocation = true
                 isPush = true
-                if (key == NFEnum.NF_NEWS.menuName ||key == WIDGET){
+                if (endKey == NFEnum.NF_NEWS.menuName ||endKey == WIDGET){
                     map.put("fit","3:AIOPUSH")
-                }else if (key == FOR_YOU){
+                }else if (endKey == FOR_YOU){
                     map.put("fit","3:BROWSER")
                 }
             }
@@ -43,10 +53,21 @@ object NetParams {
                 needLocation = true
                 isPush = true
             }
-            else -> {}
+            LOCAL->{
+                needLocation = true
+            }
+            PUBLIC_SAFETY->{
+                needLocation = true
+            }
+
+            else -> {
+            }
         }
         filterLocation(needLocation, map)
-        filterSession(needSession,key,map)
+        filterSession(needSession,endKey,map)
+        if (isTopic){
+            map.put("tearth",endKey)
+        }
         if (isPush){
             map.put("cinvit","push")
         }

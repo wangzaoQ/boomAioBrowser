@@ -29,23 +29,14 @@
             android:layout_alignParentBottom="true"
             ></View>
     </RelativeLayout>
-    <com.google.android.material.tabs.TabLayout
-        app:layout_constraintTop_toBottomOf="@+id/rlTop"
+    <com.boom.indicator.MagicIndicator
         android:id="@+id/tabLayout"
-        android:layout_marginTop="13dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rlTop"
         android:layout_width="match_parent"
         android:layout_height="31dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:tabIndicatorFullWidth="false"
-        app:tabIndicatorHeight="0dp"
-        app:tabMaxWidth="0dp"
-        app:tabMinWidth="0dp"
-        app:tabMode="scrollable"
-        android:paddingHorizontal="10dp"
-        app:tabBackground="@color/tran"
-        app:tabRippleColor="@color/tran"
-        app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-        app:tabTextColor="#B8B8B8" />
+        android:layout_marginTop="13dp"
+        />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/vp"

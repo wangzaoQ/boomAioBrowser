@@ -6,8 +6,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.View;
 
-import com.boom.indicator.buildins.commonnavigator.abs.IMeasurablePagerTitleView;
 import com.boom.indicator.buildins.UIUtil;
+import com.boom.indicator.buildins.commonnavigator.abs.IMeasurablePagerTitleView;
 
 /**
  * 类似今日头条切换效果的指示器标题

@@ -20,7 +20,7 @@ class NewsViewModel : BaseDataModel() {
 
 
 
-    fun getNewsData() {
+    fun getNewsData(topic:String) {
         var middleTime = System.currentTimeMillis()-CacheManager.newsSaveTime
         if (middleTime>5*60*1000){
             CacheManager.newsList = mutableListOf()
@@ -31,7 +31,7 @@ class NewsViewModel : BaseDataModel() {
         }else{
             loadData(loadBack = {
                 var list = NetRequest.request(HashMap<String, Any>().apply {
-                    put("sessionKey", NetParams.FOR_YOU)
+                    put("sessionKey",topic )
                 }) { NetController.getNewsList(NetParams.getParamsMap(NetParams.FOR_YOU)) }.data?: mutableListOf()
                 newsLiveData.postValue(list)
             }, failBack = {

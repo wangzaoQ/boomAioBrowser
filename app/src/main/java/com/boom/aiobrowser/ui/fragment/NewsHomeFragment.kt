@@ -1,14 +1,14 @@
 package com.boom.aiobrowser.ui.fragment
 
+import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
@@ -16,6 +16,13 @@ import com.boom.aiobrowser.data.TopicBean
 import com.boom.aiobrowser.databinding.NewsFragmentHomeBinding
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.ui.adapter.NewsPagerStateAdapter
+import com.boom.indicator.ViewPagerHelper
+import com.boom.indicator.buildins.commonnavigator.CommonNavigator
+import com.boom.indicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
+import com.boom.indicator.buildins.commonnavigator.abs.IPagerIndicator
+import com.boom.indicator.buildins.commonnavigator.abs.IPagerTitleView
+import com.boom.indicator.buildins.commonnavigator.indicators.WrapPagerIndicator
+import com.boom.indicator.buildins.commonnavigator.titles.SimplePagerTitleView
 import com.google.android.material.tabs.TabLayout
 
 class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
@@ -39,6 +46,41 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
 
     private fun updateNewsHome(list: MutableList<TopicBean>) {
         fBinding.apply {
+//            tabLayout.setBackgroundColor(Color.WHITE)
+            val commonNavigator: CommonNavigator = CommonNavigator(rootActivity)
+//            commonNavigator.setScrollPivotX(0.35f)
+            commonNavigator.rightPadding = dp2px(9f)
+            commonNavigator.leftPadding = dp2px(9f)
+            commonNavigator.isIndicatorOnTop = true
+            commonNavigator.setAdapter(object : CommonNavigatorAdapter() {
+                override fun getCount(): Int {
+                    return list.size
+                }
+
+                override fun getTitleView(context: Context?, index: Int): IPagerTitleView {
+                    val simplePagerTitleView: SimplePagerTitleView = SimplePagerTitleView(context)
+                    simplePagerTitleView.setText(list.get(index).topic)
+                    simplePagerTitleView.setNormalColor(Color.BLACK)
+                    simplePagerTitleView.setSelectedColor(Color.WHITE)
+                    simplePagerTitleView.setOnClickListener(View.OnClickListener {
+                        vp.setCurrentItem(
+                            index
+                        )
+                    })
+                    return simplePagerTitleView
+                }
+//
+//                override fun getIndicator(context: Context?): IPagerIndicator {
+//                    val indicator: WrapPagerIndicator = WrapPagerIndicator(context)
+//                    indicator.setFillColor(R.color.tran)
+//                    return indicator
+//                }
+                override fun getIndicator(context: Context?): IPagerIndicator? {
+                    return null
+                }
+            })
+            tabLayout.setNavigator(commonNavigator)
+
             vp.apply {
                 fragmentAdapter = NewsPagerStateAdapter(
                     list,
@@ -62,39 +104,9 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
                     }
                 })
             }
-            tabLayout.setupWithViewPager(fBinding.vp)
-            tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabReselected(tab: TabLayout.Tab?) {
-                }
+            ViewPagerHelper.bind(tabLayout, vp)
 
-                override fun onTabUnselected(tab: TabLayout.Tab?) {
-                    updateTabTextView(tab, true)
-                }
-
-                override fun onTabSelected(tab: TabLayout.Tab?) {
-                    updateTabTextView(tab, false)
-                }
-            })
             vp.currentItem = 1
-            for (i in 0..list.size - 1) {
-                var newTab = fBinding.tabLayout.getTabAt(i)
-                val view: View =
-                    LayoutInflater.from(context).inflate(R.layout.news_view_custom_tab, null)
-                var textView = view.findViewById<AppCompatTextView>(R.id.tvCustomTab)
-                textView.text = list.get(i).topic
-                newTab?.setCustomView(view)
-            }
-            updateTabTextView(
-                fBinding.tabLayout.getTabAt(fBinding.tabLayout.selectedTabPosition),
-                false
-            )
-        }
-    }
-
-    fun updateTabTextView(tab: TabLayout.Tab?, isEnable: Boolean) {
-        tab?.customView?.findViewById<AppCompatTextView>(R.id.tvCustomTab)?.apply {
-            isEnabled = isEnable
-            setText(text)
         }
     }
 

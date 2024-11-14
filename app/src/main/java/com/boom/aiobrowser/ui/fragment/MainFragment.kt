@@ -17,6 +17,7 @@ import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.BrowserFragmentMainBinding
 import com.boom.aiobrowser.model.NewsViewModel
+import com.boom.aiobrowser.net.NetParams
 import com.boom.aiobrowser.other.ShortManager
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
@@ -426,7 +427,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     }
 
     fun loadNews(){
-        viewModel.value.getNewsData()
+        viewModel.value.getNewsData(NetParams.FOR_YOU)
     }
 
     private fun loadData() {

@@ -167,11 +167,10 @@ object NFShow {
         runCatching {
             val smallRemote = NFViews.getNewsRemoteView(enum,data)
             val largeRemote = NFViews.getNewsRemoteView(enum,data, true)
-            var bulider = createBuilder(enum,smallRemote,largeRemote)
+            var bulider = createBuilder(enum,smallRemote,largeRemote,data.channel?:"")
             if (data.tag.isNullOrEmpty()){
                 NFManager.manager.notify(enum.position, bulider.build())
             }else{
-                NFManager.manager.cancel(data.tag,0)
                 NFManager.manager.notify(data.nId,bulider.build())
             }
             var width = dp2px(331f)
@@ -213,9 +212,9 @@ object NFShow {
         return NFManager.nfForeground
     }
 
-    fun createBuilder(enum: NFEnum, smallRemote: RemoteViews, largeRemote: RemoteViews):NotificationCompat.Builder{
-        NFManager.newChannel(enum)
-        val nfBuilder = NotificationCompat.Builder(APP.instance, enum.channelId)
+    fun createBuilder(enum: NFEnum, smallRemote: RemoteViews, largeRemote: RemoteViews,channel:String=""):NotificationCompat.Builder{
+        NFManager.newChannel(enum,channel)
+        val nfBuilder = NotificationCompat.Builder(APP.instance, if (channel.isNullOrEmpty()) enum.channelId else channel)
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 //            nfBuilder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
 //        }

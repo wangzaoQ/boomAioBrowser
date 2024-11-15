@@ -13,7 +13,15 @@ class FCMService : FirebaseMessagingService() {
     val TAG: String = "FCMService:"
 
     /**
-     * {"a":"b","tag":"tg_a","body":"从 Android 7.0（API 级别 24）开始，您可以在一个组中显示相关通知。例如，如果您的应用针对收到的电子邮件显示通知，请将有关新电子邮件的所有通知放入同一个群组中，以便它们收起来。","image":"https://clevertap.com/wp-content/uploads/2021/05/Push-Notification-Header.png?w\u003d1024","title":"Hello - ck_a - ch_a - lbl_a - tg_a - 44","channel":"ch_a","news_url":"https://www.baidu.com/"}
+     *     {
+     *         "channel_id": "ch_a",
+     *         "NEWS_ID": "8993843577094145",
+     *         "tag": "tg_a",
+     *         "body": "33.A driver was brutally attacked by a large group of people after having his vehicle damaged in downtown Los Angeles.",
+     *         "image": "https://clevertap.com/wp-content/uploads/2021/05/Push-Notification-Header.png?w\u003d1024",
+     *         "title": "33-ck_a-ch_a-lbl_a-tg_a",
+     *         "KEY_NOW_NAV_TYPE": "3"
+     *     }
      */
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)

@@ -10,7 +10,7 @@ enum class NFEnum(val menuName: String, val channelId:String, val channelPriorit
     NF_DOWNLOAD_VIDEO("nf_down_load", "DOWNLOAD_VIDEO", NotificationManager.IMPORTANCE_DEFAULT, NotificationCompat.PRIORITY_DEFAULT,position = 0),
     NF_SEARCH_VIDEO("nf_foreground","SEARCH_VIDEO", NotificationManager.IMPORTANCE_DEFAULT,NotificationCompat.PRIORITY_DEFAULT,position = 95000),
     //fcm channelId 无效通过
-    NF_NEWS_FCM("fcm","xxx", NotificationManager.IMPORTANCE_MAX,NotificationCompat.PRIORITY_MAX,position = 2),
+    NF_NEWS_FCM("fcm","FCM", NotificationManager.IMPORTANCE_MAX,NotificationCompat.PRIORITY_MAX,position = 93999),
     NF_NEWS("for_you_push","ForYou", NotificationManager.IMPORTANCE_MAX,NotificationCompat.PRIORITY_MAX,position = 94000),
     NF_EDITOR("editor_push","Editor", NotificationManager.IMPORTANCE_MAX,NotificationCompat.PRIORITY_MAX,position = 94001),
     NF_LOCAL("local_push","Local", NotificationManager.IMPORTANCE_MAX,NotificationCompat.PRIORITY_MAX,position = 94002),

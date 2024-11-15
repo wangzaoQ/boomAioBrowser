@@ -56,11 +56,11 @@ object NFManager {
         NotificationManagerCompat.from(APP.instance)
     }
 
-    fun newChannel(enum: NFEnum) {
+    fun newChannel(enum: NFEnum,defaultChannel:String="") {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel: NotificationChannel? = manager.getNotificationChannel(enum.channelId)
+            val channel: NotificationChannel? = manager.getNotificationChannel(if (defaultChannel.isNullOrEmpty()) enum.channelId else defaultChannel)
             if (Objects.isNull(channel)) {
-                val channelNew: NotificationChannel = NotificationChannel(enum.channelId, enum.channelId, enum.channelPriority)
+                val channelNew: NotificationChannel = NotificationChannel(if (defaultChannel.isNullOrEmpty()) enum.channelId else defaultChannel, if (defaultChannel.isNullOrEmpty()) enum.channelId else defaultChannel, enum.channelPriority)
                 channelNew.setSound(null,null)
                 channelNew.setShowBadge(true)
                 channelNew.lockscreenVisibility = Notification.VISIBILITY_PUBLIC;
@@ -256,14 +256,31 @@ object NFManager {
         }
     }
 
+    /**
+     *     {
+     *         "channel_id": "ch_a",
+     *         "NEWS_ID": "8993843577094145",
+     *         "tag": "tg_a",
+     *         "body": "33.A driver was brutally attacked by a large group of people after having his vehicle damaged in downtown Los Angeles.",
+     *         "image": "https://clevertap.com/wp-content/uploads/2021/05/Push-Notification-Header.png?w\u003d1024",
+     *         "title": "33-ck_a-ch_a-lbl_a-tg_a",
+     *         "KEY_NOW_NAV_TYPE": "3"
+     *     }
+     */
     fun showFCM(map: Map<String, String>) {
-        var chanel = map.get("channel")?:""
+        var chanel = map.get("channel_id")?:""
         var tag = map.get("tag")?:""
         var body = map.get("body")?:""
         var image = map.get("image")?:""
         var newsId = map.get("NEWS_ID")?:""
         var title = map.get("title")?:""
         var url = map.get("news_url")?:""
+        if (tag.isNullOrEmpty()){
+            tag = "fcm"
+        }
+        if (chanel.isNullOrEmpty()){
+            chanel = NFEnum.NF_NEWS_FCM.channelId
+        }
         var data = NewsData().apply {
             tconsi = title
             iassum = image
@@ -272,7 +289,7 @@ object NFManager {
             sissue = body
             this.channel = chanel
             this.tag = tag
-            this.nId = Random.nextInt(1000000)
+            this.nId = Random.nextInt(300000 - 200000 + 1) + 200000
         }
         NFShow.showNewsNF(data,NFEnum.NF_NEWS_FCM)
     }

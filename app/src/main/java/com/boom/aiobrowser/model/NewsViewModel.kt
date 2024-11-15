@@ -20,13 +20,13 @@ class NewsViewModel : BaseDataModel() {
 
 
 
-    fun getNewsData(topic:String) {
+    fun getNewsData(topic:String,refresh:Boolean=false) {
         var middleTime = System.currentTimeMillis()-CacheManager.newsSaveTime
         if (middleTime>5*60*1000){
             CacheManager.newsList = mutableListOf()
         }
         var newsList = CacheManager.newsList
-        if (newsList.isNotEmpty()){
+        if (newsList.isNotEmpty() && refresh.not()){
             newsLiveData.postValue(newsList)
         }else{
             loadData(loadBack = {

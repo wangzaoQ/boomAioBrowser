@@ -10,7 +10,15 @@ import com.boom.aiobrowser.databinding.NewsFragmentBinding
 import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.net.NetParams
 import com.boom.aiobrowser.other.NewsConfig
+import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
+import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.toJson
+import com.boom.aiobrowser.ui.activity.WebDetailsActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
+import com.boom.base.adapter4.util.setOnDebouncedItemClick
 
 class NewsFragment: BaseFragment<NewsFragmentBinding>() {
 
@@ -38,12 +46,22 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
             }else{
                 newsAdapter.addAll(it)
             }
+            fBinding.newsSmart.finishRefresh()
+            fBinding.newsSmart.finishLoadMore()
         }
         fBinding.newsSmart.setOnRefreshListener{
+            viewModel.value.getNewsData("${NewsConfig.TOPIC_TAG}${topic}",true)
             page = 1
         }
         fBinding.newsSmart.setOnLoadMoreListener{
+            viewModel.value.getNewsData("${NewsConfig.TOPIC_TAG}${topic}",true)
             page++
+        }
+        newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
+            var data = newsAdapter.items.get(position)
+            rootActivity.jumpActivity<WebDetailsActivity>(Bundle().apply {
+                putString(ParamsConfig.JSON_PARAMS, toJson(data))
+            })
         }
     }
 

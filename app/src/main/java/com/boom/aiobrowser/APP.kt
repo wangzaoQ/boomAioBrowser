@@ -39,6 +39,9 @@ import com.boom.aiobrowser.tools.stringToMap
 import com.boom.aiobrowser.tools.video.VideoManager.initVideo
 import com.boom.downloader.VideoDownloadManager
 import com.boom.downloader.model.VideoTaskItem
+import com.boom.refresh.layout.SmartRefreshLayout
+import com.boom.refresh.layout.header.ClassicsFooter
+import com.boom.refresh.layout.header.ClassicsHeader
 import com.facebook.FacebookSdk
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.tencent.mmkv.MMKV
@@ -134,6 +137,17 @@ class APP: Application(), ViewModelStoreOwner {
             //1. mmkv
             runCatching {
                 initFirebase()
+                runCatching {
+                    //设置全局的Header构建器
+                    SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, layout ->
+                        layout.setPrimaryColorsId(R.color.white, R.color.black) //全局设置主题颜色
+                        ClassicsHeader(context) //.setTimeFormat(new DynamicTimeFormat("更新于 %s"));//指定为经典Header
+                    }
+                    //设置全局的Footer构建器
+                    SmartRefreshLayout.setDefaultRefreshFooterCreator { context, layout -> //指定为经典Footer，默认是 BallPulseFooter
+                        ClassicsFooter(context).setDrawableSize(20f)
+                    }
+                }
                 initAD()
                 PointEvent.posePoint(PointEventKey.session_st)
 //                CleanConfig.initCleanConfig()

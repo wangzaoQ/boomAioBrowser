@@ -123,4 +123,55 @@
         <!--<item name="srlFixedFooterViewId" format="reference"/>-->
     </style>
 
+
+    <declare-styleable name="ClassicsHeader">
+        <attr name="srlClassicsSpinnerStyle"/>
+        <attr name="srlPrimaryColor"/>
+        <attr name="srlAccentColor"/>
+        <attr name="srlFinishDuration"/>
+        <attr name="srlDrawableArrow"/>
+        <attr name="srlDrawableProgress"/>
+        <attr name="srlDrawableMarginRight"/>
+        <attr name="srlDrawableSize"/>
+        <attr name="srlDrawableArrowSize"/>
+        <attr name="srlDrawableProgressSize"/>
+        <attr name="srlTextSizeTitle"/>
+        <attr name="srlTextSizeTime"/>
+        <attr format="dimension" name="srlTextTimeMarginTop"/>
+        <attr format="boolean" name="srlEnableLastTime"/>
+
+        <attr name="srlTextPulling"/>
+        <attr name="srlTextLoading"/>
+        <attr name="srlTextRelease"/>
+        <attr name="srlTextFinish"/>
+        <attr name="srlTextFailed"/>
+        <attr name="srlTextUpdate"/>
+        <attr name="srlTextSecondary"/>
+        <attr name="srlTextRefreshing"/>
+
+    </declare-styleable>
+
+    <declare-styleable name="ClassicsFooter">
+        <attr name="srlClassicsSpinnerStyle"/>
+        <attr name="srlPrimaryColor"/>
+        <attr name="srlAccentColor"/>
+        <attr name="srlFinishDuration"/>
+        <attr name="srlTextSizeTitle"/>
+        <attr name="srlDrawableArrow"/>
+        <attr name="srlDrawableProgress"/>
+        <attr name="srlDrawableMarginRight"/>
+        <attr name="srlDrawableSize"/>
+        <attr name="srlDrawableArrowSize"/>
+        <attr name="srlDrawableProgressSize"/>
+
+        <attr name="srlTextPulling"/>
+        <attr name="srlTextRelease"/>
+        <attr name="srlTextLoading"/>
+        <attr name="srlTextRefreshing"/>
+        <attr name="srlTextFinish"/>
+        <attr name="srlTextFailed"/>
+        <attr name="srlTextNothing"/>
+
+    </declare-styleable>
+
 </resources>

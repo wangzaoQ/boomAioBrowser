@@ -192,4 +192,17 @@
     <string name="app_home_guide_content">Just two simple steps to download videos from the website</string>
     <string name="app_read_source">Read Source</string>
     <string name="app_share_end">Information at your fingertips: one-click sharing makes every moment full of the latest information</string>
+    <string name="app_web_store">Web Store</string>
+    <string name="app_social">Social</string>
+    <string name="app_film">Film</string>
+    <string name="app_entertainment">Entertainment</string>
+    <string name="app_tools">Tools</string>
+    <string name="app_health">Health</string>
+    <string name="app_travel">Travel</string>
+    <string name="app_shopping">Shopping</string>
+    <string name="app_sports">Sports</string>
+    <string name="app_video">Video</string>
+    <string name="app_reddit">Reddit</string>
+    <string name="app_orkut">Orkut</string>
+    <string name="app_snapchat">Snapchat</string>
 </resources>

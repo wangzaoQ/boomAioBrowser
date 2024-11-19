@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tvCategory"
+    android:layout_width="match_parent"
+    style="@style/app_text_bold"
+    android:textColor="#010101"
+    android:textSize="14sp"
+    tools:text="133"
+    android:gravity="center_vertical"
+    android:layout_marginStart="13dp"
+    android:layout_height="41dp">
+
+</androidx.appcompat.widget.AppCompatTextView>

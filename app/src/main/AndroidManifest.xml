@@ -180,6 +180,10 @@
             android:theme="@style/AppTheme.Dialog"
             android:launchMode="singleTop"
             ></activity>
+        <activity android:name=".ui.activity.WebSourceActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            ></activity>
         <service android:name=".nf.NFService"
             android:exported="true"
             android:enabled="true"

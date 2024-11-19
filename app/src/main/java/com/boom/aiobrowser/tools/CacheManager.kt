@@ -42,6 +42,7 @@ object CacheManager {
     const val KV_FIRST_SHOW_BROWSER_DEFAULT = "KV_FIRST_SHOW_BROWSER_DEFAULT"
     const val KV_ENGINE_TYPE = "KV_ENGINE_TYPE"
     const val KV_TAB_DATA_NORMAL = "KV_TAB_DATA_NORMAL"
+    const val KV_HOME_TAB = "KV_HOME_TAB"
     const val KV_TAB_DATA_PRIVATE = "KV_TAB_DATA_PRIVATE"
     const val KV_VIDEO_DOWNLOAD = "KV_VIDEO_DOWNLOAD_2"
     const val KV_NEWS_LIST = "KV_NEWS_LIST"
@@ -326,6 +327,19 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_LOCATION_DATA, toJson(value))
+        }
+
+    var homeTabList:MutableList<JumpData>
+        get() {
+            var list = getListByGson(mmkv.decodeString(KV_HOME_TAB),JumpData::class.java)
+            if (list.isNullOrEmpty()){
+                list = WebSourceManager.getDefaultTabJump()
+                mmkv.encode(KV_HOME_TAB, toJson(list))
+            }
+            return list
+        }
+        set(value) {
+            mmkv.encode(KV_HOME_TAB, toJson(value))
         }
 
     // 网页tab数据 normal

@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
@@ -18,6 +20,9 @@ import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.BrowserFragmentMainBinding
 import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.net.NetParams
+import com.boom.aiobrowser.other.JumpConfig
+import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.other.SearchConfig
 import com.boom.aiobrowser.other.ShortManager
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
@@ -27,17 +32,13 @@ import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.partitionList
 import com.boom.aiobrowser.tools.toJson
-import com.boom.aiobrowser.other.JumpConfig
-import com.boom.aiobrowser.other.ParamsConfig
-import com.boom.aiobrowser.other.SearchConfig
-import com.boom.aiobrowser.ui.activity.HomeGuideActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.SearchActivity
 import com.boom.aiobrowser.ui.activity.WebDetailsActivity
-import com.boom.aiobrowser.ui.adapter.HomeHistoryAdapter
+import com.boom.aiobrowser.ui.adapter.HomeTabAdapter
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
-import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.EngineGuidePop
 import com.boom.aiobrowser.ui.pop.SearchPop
 import com.boom.base.adapter4.QuickAdapterHelper
@@ -45,6 +46,8 @@ import com.boom.base.adapter4.loadState.LoadState
 import com.boom.base.adapter4.loadState.trailing.TrailingLoadStateAdapter
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import com.google.android.material.appbar.AppBarLayout
+import com.zhpan.indicator.enums.IndicatorSlideMode
+import com.zhpan.indicator.enums.IndicatorStyle
 import java.lang.ref.WeakReference
 
 
@@ -102,51 +105,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 }
             }
         })
-        for (i in 0 until fBinding.llRoot.childCount){
-            fBinding.llRoot.getChildAt(i).setOnClickListener {
-                var title = ""
-                var url = ""
-                var jumpGuide = false
-                when(i){
-                    0 ->{
-                        title = getString(R.string.app_vimeo)
-                        url = "https://vimeo.com/"
-                    }
-                    1 ->{
-                        jumpGuide = true
-                        title = getString(R.string.app_tt)
-                        url = "https://www.tiktok.com/"
-                    }
-                    2 ->{
-                        jumpGuide = true
-                        title = getString(R.string.app_x)
-                        url = "https://x.com/"
-                    }
-                    3 ->{
-                        title = getString(R.string.app_fb)
-                        url = "https://www.facebook.com/"
-                    }
-                    4 ->{
-                        title = getString(R.string.app_whats)
-                        url = "https://www.whatsapp.com/"
-                    }
-                }
-                if (jumpGuide){
-                    rootActivity.jumpActivity<HomeGuideActivity>(Bundle().apply {
-                        putString(ParamsConfig.JUMP_FROM,title)
-                    })
-                }else{
-                    APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "mainFragment 点击热们功能").apply {
-                        jumpType = JumpConfig.JUMP_WEB
-                        jumpTitle = title
-                        jumpUrl = url
-                    })
-                }
-                PointEvent.posePoint(PointEventKey.home_page_tool_c,Bundle().apply {
-                    putString(PointValueKey.type,title)
-                })
-            }
-        }
         fBinding.rlSearch.setOneClick {
             JumpDataManager.getCurrentJumpData(isReset = true,tag = "mainFragment 点击搜索").apply {
                 jumpType = JumpConfig.JUMP_SEARCH
@@ -186,9 +144,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 //                })
 //            }
 //        }
-        fBinding.tvGuide.setOneClick {
-            DownloadVideoGuidePop(rootActivity).createPop {  }
-        }
+//        fBinding.tvGuide.setOneClick {
+//            DownloadVideoGuidePop(rootActivity).createPop {  }
+//        }
     }
 
     override fun onResume() {
@@ -236,15 +194,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         }else{
             fBinding.tips.visibility = View.GONE
         }
-        var historyList = CacheManager.recentSearchDataList
-        if (historyList.isNullOrEmpty()){
-            fBinding.rvHistory.visibility = View.GONE
-            fBinding.rlEmptyHistory.visibility = View.VISIBLE
-        }else{
-            fBinding.rvHistory.visibility = View.VISIBLE
-            fBinding.rlEmptyHistory.visibility = View.GONE
-            historyAdapter.submitList(historyList)
-        }
+
         fBinding.root.postDelayed(Runnable {
             ShortManager.addWidgetToLaunch(APP.instance)
             ShortManager.addPinShortcut(WeakReference(rootActivity))
@@ -272,8 +222,8 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         NewsMainAdapter(this)
     }
 
-    val historyAdapter by lazy {
-        HomeHistoryAdapter(this)
+    val tabAdapter by lazy {
+
     }
 
     val adapterHelper  by lazy {
@@ -303,9 +253,11 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     var nativeInterval = 3
     var firstShowAD = true
 
+
     override fun setShowView() {
         fBinding.refreshLayout.isRefreshing = true
         fBinding.apply {
+            updateTopTab()
             adapterHelper.trailingLoadState = LoadState.NotLoading(false)
             rv.apply {
                 layoutManager = LinearLayoutManager(rootActivity,LinearLayoutManager.VERTICAL,false)
@@ -384,15 +336,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 adapterHelper.trailingLoadState = LoadState.None
                 loadData()
             }
-
-            rvHistory.apply {
-                layoutManager = LinearLayoutManager(rootActivity,LinearLayoutManager.HORIZONTAL,false)
-                adapter = historyAdapter
-                historyAdapter.setOnDebouncedItemClick{adapter, view, position ->
-                    var data = historyAdapter.items.get(position)
-                    APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag="首页点击", updateData = data))
-                }
-            }
         }
         updateEngine(CacheManager.engineType)
         fBinding.topSearch.updateEngine(CacheManager.engineType)
@@ -405,6 +348,68 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         }
         loadNews()
 //        APP.bottomLiveData.postValue(0)
+    }
+
+    private fun updateTopTab() {
+        var tabList = CacheManager.homeTabList
+
+        // 将集合按每 8 个分割
+        val partitionSize = 8
+        val dataList: MutableList<MutableList<JumpData>> = partitionList(tabList, partitionSize) as MutableList<MutableList<JumpData>>
+        var endList = dataList.get(dataList.size-1)
+        if (endList.size<8){
+            endList.add(JumpData().apply {
+                jumpType = JumpConfig.JUMP_WEB_TYPE
+                jumpUrl = ""
+                jumpTitle = ""
+            })
+        }
+        fBinding.vp2.apply {
+            adapter = HomeTabAdapter(dataList,rootActivity)
+        }
+//        var params = fBinding.rlHistory.layoutParams as ConstraintLayout.LayoutParams
+        if (dataList.size>1){
+            fBinding.indicator.visibility = View.VISIBLE
+            var width = dp2px(7f).toFloat()
+            fBinding.indicator.apply {
+                setSliderColor(
+                    context.getColor(R.color.color_tab_DAE5EC),
+                    context.getColor(R.color.color_tab_5755D9)
+                )
+                setSliderWidth(width)
+                setSliderHeight(width)
+                setSlideMode(IndicatorSlideMode.SMOOTH)
+                setIndicatorStyle(IndicatorStyle.CIRCLE)
+                setPageSize(dataList.size)
+                notifyDataChanged()
+                fBinding.vp2.registerOnPageChangeCallback(object :
+                    ViewPager2.OnPageChangeCallback() {
+                    override fun onPageScrolled(
+                        position: Int,
+                        positionOffset: Float,
+                        positionOffsetPixels: Int
+                    ) {
+                        super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+                        fBinding.indicator.onPageScrolled(
+                            position,
+                            positionOffset,
+                            positionOffsetPixels
+                        )
+                    }
+
+                    override fun onPageSelected(position: Int) {
+                        super.onPageSelected(position)
+                        fBinding.indicator.onPageSelected(position)
+                    }
+                })
+                fBinding.rlHistory.setPadding(0,dp2px(11f),0, dp2px(16f))
+            }
+
+        }else{
+            fBinding.indicator.visibility = View.GONE
+            fBinding.rlHistory.setPadding(0,dp2px(11f),0, dp2px(20f))
+        }
+
     }
 
     fun addADData(newsBeans: List<NewsData>?):List<NewsData> {

@@ -15,6 +15,7 @@ object JumpConfig{
     const val JUMP_HOME="JUMP_HOME"
     const val JUMP_WEB="JUMP_WEB"
     const val JUMP_SEARCH="JUMP_SEARCH"
+    const val JUMP_WEB_TYPE="JUMP_WEB_TYPE"
 
 }
 
@@ -43,6 +44,17 @@ object TopicConfig{
     const val TOPIC_LOCAL = "Local"
     const val TOPIC_FOR_YOU = "For You"
 
+}
+
+object WebConfig{
+    var FB_URL = "https://www.facebook.com/"
+    var INS_URL = "https://www.instagram.com/"
+    var X_URL = "https://x.com/"
+    var WhatsApp_URL = "https://www.whatsapp.com/"
+    var Reddit_URL = "https://www.reddit.com/"
+    var Snapchat_URL = "https://www.snapchat.com/"
+    var Orkut_URL = "https://www.orkut.com/"
+    var Tiktok_URL = "https://www.tiktok.com/"
 }
 
 object NewsConfig{

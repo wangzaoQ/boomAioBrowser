@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_weight="1"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingTop="10dp"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivBrowser"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_centerHorizontal="true"
+        app:srcCompat="@mipmap/ic_default_browser_icon"></androidx.appcompat.widget.AppCompatImageView>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvBrowser"
+        style="@style/app_text_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:layout_marginTop="6dp"
+        tools:text="12312313131313131313112313112313"
+        android:textColor="#C90B132F"
+        android:textSize="10sp"
+        android:textStyle="bold"></androidx.appcompat.widget.AppCompatTextView>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

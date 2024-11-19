@@ -13,8 +13,8 @@ import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.TopicData
-import com.boom.aiobrowser.tools.web.WebScan
 import com.boom.aiobrowser.other.isAndroid11
+import com.boom.aiobrowser.tools.web.WebScan
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
@@ -30,6 +30,7 @@ import java.util.Date
 import java.util.LinkedList
 import java.util.Locale
 import java.util.Vector
+import kotlin.math.min
 
 
 val gson: Gson by lazy {
@@ -361,6 +362,24 @@ fun getTopicDataLan(data: TopicData): String {
         topic = data.nsand?:""
     }
     return topic
+}
+
+fun <T> partitionList(list: List<T>, size: Int): List<List<T>> {
+    val totalSize = list.size
+    val numPartitions = (totalSize + size - 1) / size // 计算分割后的子集合数量
+    val partitions: MutableList<List<T>> = ArrayList(numPartitions) // 提前分配空间
+
+    var i = 0
+    while (i < totalSize) {
+        partitions.add(
+            list.subList(
+                i,
+                min((i + size).toDouble(), totalSize.toDouble()).toInt()
+            )
+        )
+        i += size
+    }
+    return partitions
 }
 
 

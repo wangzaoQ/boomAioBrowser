@@ -11,6 +11,9 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
@@ -37,6 +40,7 @@ import com.boom.aiobrowser.ui.fragment.NewsHomeFragment
 import com.boom.aiobrowser.ui.fragment.StartFragment
 import com.boom.aiobrowser.ui.fragment.WebFragment
 import com.boom.aiobrowser.other.isAndroid12
+import com.boom.aiobrowser.ui.fragment.MeFragment
 import com.boom.aiobrowser.ui.pop.DefaultPop
 import com.boom.aiobrowser.ui.pop.HomeGuidePop
 import com.boom.aiobrowser.ui.pop.MorePop
@@ -51,13 +55,9 @@ import pop.basepopup.BasePopupWindow.OnDismissListener
 
 class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
-
-
-
     val fManager by lazy {
         FragmentManager()
     }
-
 
     var startFragment :StartFragment?=null
 
@@ -67,6 +67,11 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     val newsHomeFragment by lazy {
         NewsHomeFragment()
     }
+    val meFragment by lazy {
+        MeFragment()
+    }
+
+    private var fragments = ArrayList<Fragment>()
 
     override fun getBinding(inflater: LayoutInflater): BrowserActivityMainBinding {
         return BrowserActivityMainBinding.inflate(layoutInflater)
@@ -74,10 +79,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
 
     override fun setListener() {
-
-//        APP.bottomLiveData.observe(this){
-//            updateBottomClick(it)
-//        }
         for ( i in 0 until acBinding.llMainControl.childCount){
             acBinding.llMainControl.getChildAt(i).setOneClick {
                 clickIndex(i)
@@ -94,11 +95,14 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 //                    jumpType = JumpConfig.JUMP_HOME
 //                    jumpTitle = APP.instance.getString(R.string.app_home)
 //                })
-                fManager.switchFragment(supportFragmentManager,R.id.fragmentMain,newsHomeFragment,mainRootFragment,"MainFragment")
+//                fManager.switchFragment(supportFragmentManager,R.id.fragmentMain,newsHomeFragment,mainRootFragment,"MainFragment")
+                acBinding.fragmentMain.setCurrentItem(index, false)
                 updateUI(index)
             }
             1->{
-                fManager.switchFragment(supportFragmentManager,R.id.fragmentMain,mainRootFragment,newsHomeFragment,"NewsHomeFragment")
+                acBinding.fragmentMain.setCurrentItem(index, false)
+
+//                fManager.switchFragment(supportFragmentManager,R.id.fragmentMain,mainRootFragment,newsHomeFragment,"NewsHomeFragment")
                 updateUI(index)
             }
             2 ->{
@@ -111,8 +115,10 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 })
             }
             3 ->{
-                morePop = MorePop(this@MainActivity)
-                morePop?.createPop()
+                acBinding.fragmentMain.setCurrentItem(index, false)
+
+//                fManager.switchFragment(supportFragmentManager,R.id.fragmentMain,mainRootFragment,meFragment,"MeFragment")
+                updateUI(index)
             }
             else -> {}
         }
@@ -121,7 +127,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
 
     private fun updateUI(index: Int) {
-        if (index == 2 || index == 3){
+        if (index == 2 ){
             return
         }
         for ( start in 0 until acBinding.llMainControl.childCount){
@@ -194,15 +200,53 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             var count = 0
             for ( i in 0 until APP.instance.lifecycleApp.stack.size){
                 var activity = APP.instance.lifecycleApp.stack.get(i)
-                if (activity is MainActivity){
+                if (activity is MainActivity && activity.isFinishing.not() && activity.isDestroyed.not()){
                     count++
+                    AppLogs.dLog("testAPP","MainActivity setView 当前count:${count} MainActivity.status  isDestroyed:${activity.isDestroyed}  activity.isFinished:${activity.isFinishing}")
                 }
             }
             if (CacheManager.browserStatus == 1){
                 CacheManager.browserStatus = 0
             }
-            fManager.addFragmentTag(supportFragmentManager,mainRootFragment,R.id.fragmentMain,"MainFragment")
-//            CacheManager.videoDownloadTempList = mutableListOf()
+            AppLogs.dLog("testAPP","MainActivity setView MainActivity.最终count:${count}")
+
+            if (count == 1){
+                acBinding.fragmentMain.apply {
+                    fragments.apply {
+                        add(mainRootFragment)
+                        add(newsHomeFragment)
+                        add(meFragment)
+                    }
+                    offscreenPageLimit = fragments.size
+                    adapter = object : FragmentPagerAdapter(
+                        supportFragmentManager,
+                        BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+                    ) {
+                        override fun getItem(position: Int): Fragment {
+                            return fragments[position]
+                        }
+
+                        override fun getCount(): Int {
+                            return fragments.size
+                        }
+                    }
+                    addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                        override fun onPageScrolled(
+                            position: Int,
+                            positionOffset: Float,
+                            positionOffsetPixels: Int
+                        ) {
+                        }
+
+                        override fun onPageSelected(position: Int) {
+                            updateUI(position)
+                        }
+
+                        override fun onPageScrollStateChanged(state: Int) {
+                        }
+                    })
+                }
+            }
         },500)
         startFragment = StartFragment()
         startFragment?.apply {
@@ -395,9 +439,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             return super.onKeyDown(keyCode, event)
         }
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            var mainFragment = supportFragmentManager.findFragmentByTag("MainFragment")
-            if (mainFragment!=null){
-                var mMainNavFragment = mainFragment.childFragmentManager.findFragmentById(R.id.fragment_view)
+            var currentItem = acBinding.fragmentMain.currentItem
+            if (currentItem == 0 && fragments.isNotEmpty()){
+                var mMainNavFragment = fragments.get(0).childFragmentManager.findFragmentById(R.id.fragment_view)
                 var currentFragmentInstance = mMainNavFragment?.getChildFragmentManager()?.getPrimaryNavigationFragment();
                 if (currentFragmentInstance != null && currentFragmentInstance is WebFragment) {
                     return if (currentFragmentInstance.goBack(keyCode, event)) {

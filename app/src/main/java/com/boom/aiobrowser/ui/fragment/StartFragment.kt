@@ -82,7 +82,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         var count = 0
         for ( i in 0 until APP.instance.lifecycleApp.stack.size){
             var activity = APP.instance.lifecycleApp.stack.get(i)
-            if (activity is MainActivity){
+            if (activity is MainActivity && activity.isFinishing.not() && activity.isDestroyed.not()){
                 count++
             }
         }
@@ -104,13 +104,13 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             })
 
         if (count>1){
-            AppLogs.dLog(APP.instance.TAG,"启动页 关闭")
+            AppLogs.dLog("testAPP","启动页 关闭")
             (rootActivity as MainActivity).hideStart(false)
         }else{
             (rootActivity as MainActivity).apply {
                 (rootActivity as MainActivity).hideStart(true)
                 CacheManager.isFirstStart = false
-                AppLogs.dLog(APP.instance.TAG,"启动页 隐藏")
+                AppLogs.dLog("testAPP","启动页 隐藏")
             }
         }
     }

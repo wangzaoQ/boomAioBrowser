@@ -334,4 +334,6 @@
     <!-- 巴西视频平台标题 -->
     <string name="video_kwai">Kwai</string>
     <string name="video_globoplay">Globoplay</string>
+
+    <string name="app_login">Login</string>
 </resources>

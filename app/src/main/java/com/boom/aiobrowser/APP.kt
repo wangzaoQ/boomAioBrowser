@@ -102,6 +102,7 @@ class APP: Application(), ViewModelStoreOwner {
         val videoLiveData by lazy { ProtectedUnPeekLiveData<HashMap<Int, VideoTaskItem>>() }
         val videoUpdateLiveData by lazy { ProtectedUnPeekLiveData<String>() }
         val topicLiveData by lazy { ProtectedUnPeekLiveData<MutableList<TopicBean>>() }
+        val homeTabLiveData by lazy { ProtectedUnPeekLiveData<MutableList<JumpData>>() }
 
 
     }

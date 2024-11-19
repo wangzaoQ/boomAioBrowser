@@ -76,6 +76,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         APP.jumpResumeData.observe(this){
             jump()
         }
+        APP.homeTabLiveData.observe(this){
+            updateTopTab()
+        }
         fBinding.topSearch.binding.ivRefresh.visibility = View.GONE
         fBinding.mainAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
@@ -352,20 +355,22 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 
     private fun updateTopTab() {
         var tabList = CacheManager.homeTabList
-
+        tabList.add(JumpData().apply {
+            jumpType = JumpConfig.JUMP_WEB_TYPE
+            jumpUrl = ""
+            jumpTitle = ""
+        })
         // 将集合按每 8 个分割
         val partitionSize = 8
         val dataList: MutableList<MutableList<JumpData>> = partitionList(tabList, partitionSize) as MutableList<MutableList<JumpData>>
-        var endList = dataList.get(dataList.size-1)
-        if (endList.size<8){
-            endList.add(JumpData().apply {
-                jumpType = JumpConfig.JUMP_WEB_TYPE
-                jumpUrl = ""
-                jumpTitle = ""
-            })
-        }
         fBinding.vp2.apply {
-            adapter = HomeTabAdapter(dataList,rootActivity)
+            offscreenPageLimit = dataList.size
+            var homeTabAdapter:HomeTabAdapter?=null
+            if (adapter == null){
+                homeTabAdapter = HomeTabAdapter(rootActivity)
+                adapter = homeTabAdapter
+            }
+            (adapter as HomeTabAdapter)?.update(dataList)
         }
 //        var params = fBinding.rlHistory.layoutParams as ConstraintLayout.LayoutParams
         if (dataList.size>1){
@@ -490,6 +495,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         APP.engineLiveData.removeObservers(this)
         APP.bottomLiveData.removeObservers(this)
         APP.jumpResumeData.removeObservers(this)
+        APP.homeTabLiveData.removeObservers(this)
         super.onDestroy()
     }
 }

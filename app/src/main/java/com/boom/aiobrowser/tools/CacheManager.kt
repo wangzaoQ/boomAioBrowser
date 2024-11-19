@@ -342,6 +342,22 @@ object CacheManager {
             mmkv.encode(KV_HOME_TAB, toJson(value))
         }
 
+    fun addHomeTab(data:JumpData){
+        var list = homeTabList
+        var index = -1
+        for (i in 0 until list.size){
+            if (list.get(i).jumpUrl == data.jumpUrl){
+                index = i
+                break
+            }
+        }
+        if (index == -1){
+            list.add(data)
+        }
+        homeTabList = list
+    }
+
+
     // 网页tab数据 normal
     var tabDataListNormal:MutableList<JumpData>
         get() {

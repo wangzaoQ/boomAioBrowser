@@ -4,10 +4,9 @@ import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.JumpData
-import com.boom.aiobrowser.databinding.BrowserItemWebCategoryBinding
 import com.boom.aiobrowser.databinding.BrowserItemWebCategoryChildBinding
 import com.boom.aiobrowser.tools.GlideManager
 import com.boom.base.adapter4.BaseQuickAdapter
@@ -33,6 +32,34 @@ class WebSourceChildAdapter : BaseQuickAdapter<JumpData, WebSourceChildAdapter.V
             var uri = Uri.parse(item.jumpUrl)
             var iconUrl = "https://www.google.com/s2/favicons?sz=128&domain=${uri.host}"
             GlideManager.loadImg(fragment = null,ivSource,iconUrl)
+            if (item.isCurrent){
+                ivSourceType.setImageResource(R.mipmap.ic_add_success)
+            }else{
+                ivSourceType.setImageResource(R.mipmap.ic_add_web_source)
+            }
+        }
+    }
+
+    override fun onBindViewHolder(
+        holder: WebSourceChildAdapter.VH,
+        position: Int,
+        item: JumpData?,
+        payloads: List<Any>
+    ) {
+        if (payloads.isNullOrEmpty()){
+            onBindViewHolder(holder,position,item)
+        }else{
+            val payload = payloads[0].toString()
+            if (payload == "updateCheck"){
+                if (item == null) return
+                holder.viewBinding.apply {
+                    if (item.isCurrent){
+                        ivSourceType.setImageResource(R.mipmap.ic_add_success)
+                    }else{
+                        ivSourceType.setImageResource(R.mipmap.ic_add_web_source)
+                    }
+                }
+            }
         }
     }
 }

@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
+import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.NewsFragmentHomeTabBinding
+import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.getListByGson
 import com.boom.aiobrowser.tools.toJson
@@ -24,7 +27,13 @@ class HomeTabFragment : BaseFragment<NewsFragmentHomeTabBinding>(){
 
     override fun setListener() {
         homeTabChildAdapter.setOnDebouncedItemClick{adapter, view, position ->
-            rootActivity.jumpActivity<WebSourceActivity>()
+            var data = homeTabChildAdapter.items.get(position)
+            if (data.jumpType == JumpConfig.JUMP_WEB_TYPE){
+                rootActivity.jumpActivity<WebSourceActivity>()
+            }else{
+                var jumpData = JumpDataManager.getCurrentJumpData(tag="homeTab点击", updateData = data)
+                APP.jumpLiveData.postValue(jumpData)
+            }
         }
     }
 

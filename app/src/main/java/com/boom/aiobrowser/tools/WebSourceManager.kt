@@ -34,13 +34,6 @@ object WebSourceManager {
             jumpUrl = "https://www.facebook.com/"
             jumpTitle = APP.instance.getString(R.string.app_fb)
         })
-        for (i in 0 until 20){
-            defaultList.add(JumpData().apply {
-                jumpType = JumpConfig.JUMP_WEB
-                jumpUrl = "https://www.facebook.com/"
-                jumpTitle = APP.instance.getString(R.string.app_fb)
-            })
-        }
         return defaultList
     }
 

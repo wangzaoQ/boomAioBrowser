@@ -201,9 +201,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             if (CacheManager.browserStatus == 1){
                 CacheManager.browserStatus = 0
             }
-            if (count == 1){
-                fManager.addFragmentTag(supportFragmentManager,mainRootFragment,R.id.fragmentMain,"MainFragment")
-            }
+            fManager.addFragmentTag(supportFragmentManager,mainRootFragment,R.id.fragmentMain,"MainFragment")
 //            CacheManager.videoDownloadTempList = mutableListOf()
         },500)
         startFragment = StartFragment()

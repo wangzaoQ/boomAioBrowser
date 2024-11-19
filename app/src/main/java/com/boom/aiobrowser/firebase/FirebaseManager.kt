@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.Bundle
 import android.util.Base64
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.APP.Companion.instance
 import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.ad.AioADDataManager.adRootBean
 import com.boom.aiobrowser.data.AioADData
@@ -14,6 +15,7 @@ import com.boom.aiobrowser.firebase.FirebaseConfig.AD_DEFAULT_JSON
 import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.nf.NFManager.nfRootBean
 import com.boom.aiobrowser.nf.NFWorkManager
+import com.boom.aiobrowser.point.Install
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -44,6 +46,7 @@ object FirebaseManager {
         runCatching {
             AppLogs.dLog(APP.instance.TAG,"firebase 初始化")
             FirebaseApp.initializeApp(this)
+            Install.requestRefer(instance,0,{})
             firebaseRemoteConfig = Firebase.remoteConfig.apply {
                 setConfigSettingsAsync(remoteConfigSettings {
                     minimumFetchIntervalInSeconds = 3600L

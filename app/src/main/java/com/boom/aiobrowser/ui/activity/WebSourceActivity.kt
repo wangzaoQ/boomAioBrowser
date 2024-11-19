@@ -11,7 +11,10 @@ import com.boom.aiobrowser.ui.adapter.CategoryNewsAdapter
 import com.boom.aiobrowser.ui.adapter.SafeFlexboxLayoutManager
 import com.boom.aiobrowser.ui.adapter.WebSourceAdapter
 import com.boom.aiobrowser.ui.adapter.custom.MySmooth
+import com.boom.aiobrowser.ui.adapter.custom.MySmooth2
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.JustifyContent
 
 class WebSourceActivity: BaseActivity<NewsActivityWebSourceBinding>() {
@@ -34,12 +37,28 @@ class WebSourceActivity: BaseActivity<NewsActivityWebSourceBinding>() {
             if (acBinding.rvCategory.layoutManager is SafeFlexboxLayoutManager){
                 switchUI()
             }
-            categorySmallAdapter.notifyDataSetChanged()
+            acBinding.rvCategory.requestLayout()
             acBinding.rvCategory.postDelayed({
+                categorySmallAdapter.notifyDataSetChanged()
                 val smooth = MySmooth(this@WebSourceActivity)
                 smooth.targetPosition = position;
-                acBinding.rvCategory.layoutManager?.startSmoothScroll(smooth);
-//                smoothMoveToPosition(position,acBinding.rvCategory)
+                acBinding.rvCategory.layoutManager?.startSmoothScroll(smooth)
+                var listTo = -1
+                for (i in 0 until listAdapter.items.size){
+                    var data = listAdapter.items.get(i)
+                    if (data.titleRes == categorySmallAdapter.items.get(position).titleRes){
+                        listTo = i
+                        break
+                    }
+                }
+                if(listTo >=0){
+                    acBinding.rvContent.postDelayed({
+                    val smooth2 = MySmooth2(this@WebSourceActivity)
+                    smooth2.targetPosition = listTo;
+                    acBinding.rvContent.layoutManager?.startSmoothScroll(smooth2)
+                    },0)
+                }
+
             },0)
         }
     }
@@ -47,8 +66,11 @@ class WebSourceActivity: BaseActivity<NewsActivityWebSourceBinding>() {
     private fun switchUI() {
         if (acBinding.rvCategory.layoutManager is LinearLayoutManager){
             acBinding.rvCategory.layoutManager = SafeFlexboxLayoutManager(this@WebSourceActivity).apply {
-                justifyContent = JustifyContent.FLEX_START
-//                    flexWrap = FlexWrap.WRAP
+//                justifyContent = JustifyContent.FLEX_START
+////                    flexWrap = FlexWrap.WRAP
+//                flexDirection = FlexDirection.ROW; // 设置主轴方向为行
+                flexDirection = FlexDirection.ROW
+                setFlexWrap(FlexWrap.WRAP)
             }
         }else{
             acBinding.rvCategory.layoutManager = LinearLayoutManager(this@WebSourceActivity,LinearLayoutManager.HORIZONTAL,false)
@@ -105,39 +127,4 @@ class WebSourceActivity: BaseActivity<NewsActivityWebSourceBinding>() {
     }
 
     var move = false
-
-    private fun smoothMoveToPosition(n: Int,rv:RecyclerView) {
-        mIndex = n
-        val firstItem: Int = (rv.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-        val lastItem: Int = (rv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-        if (n <= firstItem) {
-            rv.smoothScrollToPosition(n)
-        } else if (n <= lastItem) {
-            val top: Int = rv.getChildAt(n - firstItem).right
-            rv.smoothScrollBy(0, top)
-        } else {
-            rv.smoothScrollToPosition(n)
-            move = true
-        }
-    }
-
-    private fun moveToPosition(n: Int,rv:RecyclerView) {
-        //先从RecyclerView的LayoutManager中获取第一项和最后一项的Position
-        val firstItem: Int = (rv.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-        val lastItem: Int = (rv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-        //然后区分情况
-        if (n <= firstItem) {
-            //当要置顶的项在当前显示的第一个项的前面时
-            rv.scrollToPosition(n)
-        } else if (n <= lastItem) {
-            //当要置顶的项已经在屏幕上显示时
-            val top: Int = rv.getChildAt(n - firstItem).getTop()
-            rv.scrollBy(0, top)
-        } else {
-            //当要置顶的项在当前显示的最后一项的后面时
-            rv.scrollToPosition(n)
-            //这里这个变量是用在RecyclerView滚动监听里面的
-            move = true
-        }
-    }
 }

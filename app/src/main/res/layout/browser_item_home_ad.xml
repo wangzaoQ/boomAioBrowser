@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="1dp"
     android:orientation="vertical"
+    android:paddingBottom="15dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <FrameLayout
         android:id="@+id/flRoot"
@@ -13,7 +14,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#D9D6EF"
+        android:background="#F7F7F9"
         android:layout_marginHorizontal="13dp"
         android:layout_marginTop="13dp"
         android:layout_gravity="bottom"

@@ -29,21 +29,27 @@
             android:layout_alignParentBottom="true"
             ></View>
     </RelativeLayout>
-    <com.boom.indicator.MagicIndicator
-        android:id="@+id/tabLayout"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rlTop"
+    <RelativeLayout
+        android:id="@+id/rlTabRoot"
         android:layout_width="match_parent"
-        android:layout_height="31dp"
-        android:layout_marginTop="13dp"
-        />
+        android:layout_height="57dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rlTop">
+        <com.boom.indicator.MagicIndicator
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_marginTop="13dp"
+            />
+    </RelativeLayout>
+
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/vp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabLayout"
+        app:layout_constraintTop_toBottomOf="@+id/rlTabRoot"
         ></androidx.viewpager.widget.ViewPager>
 
 

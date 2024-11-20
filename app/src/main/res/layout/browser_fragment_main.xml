@@ -32,7 +32,6 @@
                         android:id="@+id/llTopRoot"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="13.5dp"
                         android:orientation="vertical"
                         app:layout_constraintTop_toTopOf="parent">
 
@@ -320,6 +319,38 @@
 
 <!--                        </androidx.appcompat.widget.LinearLayoutCompat>-->
                     </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        app:layout_constraintTop_toBottomOf="@+id/rlHistory"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        >
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/app_news"
+                            android:textSize="14sp"
+                            android:textColor="#1C274C"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="13.5dp"
+                            style="@style/app_text_bold"
+                            ></androidx.appcompat.widget.AppCompatTextView>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvMore"
+                            android:gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="13.5dp"
+                            android:text="@string/app_more"
+                            android:textSize="14sp"
+                            android:textColor="#0066FF"
+                            style="@style/app_text_normal"
+                            android:layout_alignParentEnd="true"
+                            ></androidx.appcompat.widget.AppCompatTextView>
+                    </RelativeLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.appcompat.widget.Toolbar

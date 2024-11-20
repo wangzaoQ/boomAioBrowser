@@ -354,7 +354,7 @@ object CacheManager {
             }
         }
         if (index == -1){
-            list.add(data)
+            list.add(0,data)
         }
         homeTabList = list
     }

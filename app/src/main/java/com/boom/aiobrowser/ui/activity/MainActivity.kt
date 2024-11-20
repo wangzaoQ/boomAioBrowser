@@ -87,6 +87,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             }
         }
         updateUI(0)
+        APP.homeJumpLiveData.observe(this){
+            acBinding.fragmentMain.setCurrentItem(it,true)
+        }
     }
 
 
@@ -478,5 +481,10 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         if (requestCode == SIGN_LOGIN || resultCode == SIGN_LOGIN_ONE_TAP && fragments.size>2 && fragments.get(2) is MeFragment ){
             (fragments.get(2) as MeFragment).result(requestCode, resultCode, data)
         }
+    }
+
+    override fun onDestroy() {
+        APP.homeJumpLiveData.removeObservers(this)
+        super.onDestroy()
     }
 }

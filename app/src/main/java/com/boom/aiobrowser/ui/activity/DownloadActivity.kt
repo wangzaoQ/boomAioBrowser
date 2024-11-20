@@ -78,14 +78,17 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
 
     private fun clickIndex(index: Int) {
         when (index) {
-            0 -> {
+            2->{
+
+            }
+            else -> {
+                if (index>2){
+                    APP.homeJumpLiveData.postValue(2)
+                }else{
+                    APP.homeJumpLiveData.postValue(index)
+                }
                 finish()
             }
-            2 ->{
-                morePop = MorePop(this@DownloadActivity)
-                morePop?.createPop()
-            }
-            else -> {}
         }
     }
 
@@ -178,7 +181,7 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
         AioADShowManager(this,ADEnum.NATIVE_DOWNLOAD_AD,"下载页原生"){
 
         }.showNativeAD(acBinding.flRoot,AD_POINT.aobws_download_one)
-        updateBottomUI(1)
+        updateBottomUI(2)
         if (fromPage == "webpage_download_pop"){
             acBinding.vpRoot.currentItem = 1
         }else if (fromPage == "webpage_download_task_pop"){

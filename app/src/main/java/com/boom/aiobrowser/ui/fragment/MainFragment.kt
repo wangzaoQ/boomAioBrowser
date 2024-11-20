@@ -79,6 +79,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         APP.homeTabLiveData.observe(this){
             updateTopTab()
         }
+        fBinding.tvMore.setOneClick {
+            APP.homeJumpLiveData.postValue(1)
+        }
         fBinding.topSearch.binding.ivRefresh.visibility = View.GONE
         fBinding.mainAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
@@ -223,10 +226,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 
     val newsAdapter by lazy {
         NewsMainAdapter(this)
-    }
-
-    val tabAdapter by lazy {
-
     }
 
     val adapterHelper  by lazy {

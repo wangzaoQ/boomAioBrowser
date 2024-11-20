@@ -29,11 +29,11 @@ object WebSourceManager {
             jumpUrl = "https://x.com/"
             jumpTitle = APP.instance.getString(R.string.app_x)
         })
-        defaultList.add(JumpData().apply {
-            jumpType = JumpConfig.JUMP_WEB
-            jumpUrl = "https://www.facebook.com/"
-            jumpTitle = APP.instance.getString(R.string.app_fb)
-        })
+//        defaultList.add(JumpData().apply {
+//            jumpType = JumpConfig.JUMP_WEB
+//            jumpUrl = "https://www.facebook.com/"
+//            jumpTitle = APP.instance.getString(R.string.app_fb)
+//        })
         return defaultList
     }
 

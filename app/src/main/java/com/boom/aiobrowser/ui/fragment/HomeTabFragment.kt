@@ -32,6 +32,7 @@ class HomeTabFragment : BaseFragment<NewsFragmentHomeTabBinding>(){
                 rootActivity.jumpActivity<WebSourceActivity>()
             }else{
                 var jumpData = JumpDataManager.getCurrentJumpData(tag="homeTab点击", updateData = data)
+                jumpData.jumpType = JumpConfig.JUMP_WEB
                 APP.jumpLiveData.postValue(jumpData)
             }
         }

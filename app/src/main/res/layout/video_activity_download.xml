@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <RelativeLayout
         android:id="@+id/rlTop"
         android:layout_width="match_parent"
@@ -123,11 +124,13 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/llMainControl"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="65dp"
         android:orientation="horizontal"
         android:clickable="true"
-        android:layout_alignParentBottom="true"
         android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         >
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -138,8 +141,8 @@
             android:layout_weight="1"
             >
             <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 app:srcCompat="@drawable/selector_main_home"
                 ></androidx.appcompat.widget.AppCompatImageView>
             <androidx.appcompat.widget.AppCompatTextView
@@ -160,8 +163,31 @@
             android:layout_weight="1"
             >
             <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:srcCompat="@drawable/selector_main_news"
+                ></androidx.appcompat.widget.AppCompatImageView>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_news"
+                android:textSize="9sp"
+                android:layout_marginTop="3dp"
+                style="@style/app_text_bold"
+                android:textColor="@drawable/selector_tab_text"
+                ></androidx.appcompat.widget.AppCompatTextView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1"
+            >
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 app:srcCompat="@drawable/selector_main_download"
                 ></androidx.appcompat.widget.AppCompatImageView>
             <androidx.appcompat.widget.AppCompatTextView
@@ -182,9 +208,9 @@
             android:layout_weight="1"
             >
             <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                app:srcCompat="@mipmap/ic_home_setting"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:srcCompat="@drawable/selector_main_download"
                 ></androidx.appcompat.widget.AppCompatImageView>
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"

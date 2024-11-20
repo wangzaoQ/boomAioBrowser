@@ -12,8 +12,10 @@ import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADDataManager
@@ -202,6 +204,8 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                             ivImg.visibility = View.GONE
                             tvNewsContent.visibility = View.VISIBLE
                             tvNewsContent.text = item.sissue
+                            var params =(tvNewsTitle.layoutParams as ConstraintLayout.LayoutParams)
+                            params.topMargin = dp2px(0f)
                         } else {
                             ivImg.visibility = View.VISIBLE
                             tvNewsContent.visibility = View.GONE
@@ -212,6 +216,8 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                 loadId = R.mipmap.bg_news_default,
                                 R.mipmap.bg_news_default
                             )
+                            var params =(tvNewsTitle.layoutParams as ConstraintLayout.LayoutParams)
+                            params.topMargin = dp2px(13f)
                         }
                         tvNewsTitle.text = item.tconsi
                         GlideManager.loadImg(fragmet, ivSource, item.sschem)

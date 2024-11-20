@@ -25,7 +25,7 @@ object PointEvent {
 
     private val fb by lazy { AppEventsLogger.newLogger(APP.instance) }
 
-    fun posePoint(key:String, bundle: Bundle?=null) {
+    fun posePoint(key:String, bundle: Bundle?=null,callback: PointCallback?=null) {
         AppLogs.dLog(NET_TAG,"posePoint tag:${key}")
         val jsonObject = GeneralParams.getGenericParams()
         jsonObject.put("tahoe",key)

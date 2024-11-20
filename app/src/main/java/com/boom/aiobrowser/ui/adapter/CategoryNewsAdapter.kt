@@ -40,11 +40,11 @@ class CategoryNewsAdapter: BaseQuickAdapter<WebCategoryData, CategoryNewsAdapter
             if (item.uiCheck){
                 tvJumpTitle.setTextColor(ContextCompat.getColor(context,R.color.white))
                 llRoot.setBackgroundResource(com.boom.indicator.R.drawable.shape_custom_tab_unable)
-                ivSource.setImageResource(item.checkRes)
+                ivSource.setImageResource(item.unCheckRes)
             }else{
                 tvJumpTitle.setTextColor(ContextCompat.getColor(context,R.color.color_black_1c274c))
                 llRoot.setBackgroundResource(com.boom.indicator.R.drawable.shape_custom_tab_enable)
-                ivSource.setImageResource(item.unCheckRes)
+                ivSource.setImageResource(item.checkRes)
             }
 
             when (position) {

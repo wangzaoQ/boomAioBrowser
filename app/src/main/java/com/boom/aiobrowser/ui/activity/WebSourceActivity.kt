@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.NewsActivityWebSourceBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.WebSourceManager.getSourceDetailsList
 import com.boom.aiobrowser.tools.WebSourceManager.getSourceList
 import com.boom.aiobrowser.ui.adapter.CategoryNewsAdapter
@@ -127,6 +129,7 @@ class WebSourceActivity: BaseActivity<NewsActivityWebSourceBinding>() {
                 listAdapter.submitList(sourceDetailsList)
             }
         }
+        PointEvent.posePoint(PointEventKey.web_store)
     }
 
     var move = false

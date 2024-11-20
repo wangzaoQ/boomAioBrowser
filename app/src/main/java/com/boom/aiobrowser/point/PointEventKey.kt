@@ -191,8 +191,19 @@ object PointEventKey {
     const val tutorial_task = "tutorial_task"
     //教程列表页说明展示
     const val tutorial_download_page = "tutorial_download_page"
+    //新闻承接页曝光
+    const val news_page = "news_page"
+    //web store页面曝光
+    const val web_store = "web_store"
+    //登录成功
+    const val login_suc = "login_suc"
+    //登录失败
+    const val login_fail = "login_fail"
 
-
+    //登录成功
+    const val login_suc_net = "login_suc_net"
+    //登录失败
+    const val login_fail_net = "login_fail_net"
 
 
 }
@@ -222,6 +233,8 @@ object PointValueKey{
     const val ponit_action = "ponit_action"
     const val push_type = "push_type"
     const val source_from = "source_from"
+    const val from_type = "from_type"
+    const val web_store = "web_store"
 
 }
 

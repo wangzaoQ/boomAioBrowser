@@ -108,6 +108,8 @@ class APP: Application(), ViewModelStoreOwner {
 
     }
 
+    var toNewsFrom = 0
+
     override fun onCreate() {
         super.onCreate()
         instance = this

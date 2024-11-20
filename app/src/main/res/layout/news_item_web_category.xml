@@ -29,7 +29,7 @@
             android:id="@+id/ivSource"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:scaleType="centerInside"
+            android:scaleType="centerCrop"
             app:srcCompat="@mipmap/ic_file"></androidx.appcompat.widget.AppCompatImageView>
 
         <androidx.appcompat.widget.AppCompatTextView

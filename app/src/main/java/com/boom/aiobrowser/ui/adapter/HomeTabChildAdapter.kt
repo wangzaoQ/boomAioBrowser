@@ -35,6 +35,8 @@ class HomeTabChildAdapter() : BaseQuickAdapter<JumpData, HomeTabChildAdapter.VH>
             if (item.jumpType == JumpConfig.JUMP_WEB_TYPE){
                 tvBrowser.text = context.getString(R.string.app_more)
                 ivBrowser.setImageResource(R.mipmap.ic_news_catrgory_more)
+            }else if (item.imgRes!=0){
+                ivBrowser.setImageResource(item.imgRes?:0)
             }else{
                 var uri = Uri.parse(item.jumpUrl)
                 var iconUrl = "https://www.google.com/s2/favicons?sz=128&domain=${uri.host}"

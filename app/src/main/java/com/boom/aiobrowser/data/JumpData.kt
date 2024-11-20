@@ -13,5 +13,6 @@ class JumpData : BaseData() {
     var nextJumpType:String?=""
 
     var isJumpClick = false
+    var imgRes:Int?=0
 
 }

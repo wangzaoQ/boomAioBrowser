@@ -42,6 +42,10 @@ import com.boom.aiobrowser.ui.fragment.NewsHomeFragment
 import com.boom.aiobrowser.ui.fragment.StartFragment
 import com.boom.aiobrowser.ui.fragment.WebFragment
 import com.boom.aiobrowser.other.isAndroid12
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointManager.PointCallback
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.ui.fragment.MeFragment
 import com.boom.aiobrowser.ui.pop.DefaultPop
 import com.boom.aiobrowser.ui.pop.HomeGuidePop
@@ -52,6 +56,7 @@ import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import okhttp3.Response
 import pop.basepopup.BasePopupWindow.OnDismissListener
 
 
@@ -246,6 +251,15 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
                         override fun onPageSelected(position: Int) {
                             updateUI(position)
+                            if (position == 1){
+                                PointEvent.posePoint(PointEventKey.news_page,Bundle().apply {
+                                    putString(PointValueKey.from_type,if (APP.instance.toNewsFrom == 1)"home_news_more" else "news")
+                                },object : PointCallback{
+                                    override fun onSuccess(response: Response) {
+                                        APP.instance.toNewsFrom = 0
+                                    }
+                                })
+                            }
                         }
 
                         override fun onPageScrollStateChanged(state: Int) {

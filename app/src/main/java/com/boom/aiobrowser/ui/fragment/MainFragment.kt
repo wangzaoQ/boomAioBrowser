@@ -80,6 +80,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             updateTopTab()
         }
         fBinding.tvMore.setOneClick {
+            APP.instance.toNewsFrom = 0
             APP.homeJumpLiveData.postValue(1)
         }
         fBinding.topSearch.binding.ivRefresh.visibility = View.GONE

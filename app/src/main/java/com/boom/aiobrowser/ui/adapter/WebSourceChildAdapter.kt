@@ -31,7 +31,11 @@ class WebSourceChildAdapter : BaseQuickAdapter<JumpData, WebSourceChildAdapter.V
             tvSource.text = item.jumpTitle
             var uri = Uri.parse(item.jumpUrl)
             var iconUrl = "https://www.google.com/s2/favicons?sz=128&domain=${uri.host}"
-            GlideManager.loadImg(fragment = null,ivSource,iconUrl)
+            if (item.imgRes!=0){
+                ivSource.setImageResource(item.imgRes?:0)
+            }else{
+                GlideManager.loadImg(fragment = null,ivSource,iconUrl)
+            }
             if (item.isCurrent){
                 ivSourceType.setImageResource(R.mipmap.ic_add_success)
             }else{

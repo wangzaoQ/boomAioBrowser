@@ -28,6 +28,7 @@ object WebSourceManager {
             jumpType = JumpConfig.JUMP_WEB
             jumpUrl = "https://x.com/"
             jumpTitle = APP.instance.getString(R.string.app_x)
+            imgRes = R.mipmap.ic_x
         })
 //        defaultList.add(JumpData().apply {
 //            jumpType = JumpConfig.JUMP_WEB
@@ -57,8 +58,8 @@ object WebSourceManager {
         })
         sourceList.add(WebCategoryData().apply {
             titleRes = R.string.app_entertainment
-            checkRes = R.mipmap.ic_film_unable
-            unCheckRes = R.mipmap.ic_film_enable
+            checkRes = R.mipmap.ic_entertainment_unable
+            unCheckRes = R.mipmap.ic_entertainment_enable
         })
         sourceList.add(WebCategoryData().apply {
             titleRes = R.string.app_tools
@@ -119,6 +120,10 @@ object WebSourceManager {
         sourceDetailsList.add(WebSourceData().apply {
             titleRes = R.string.app_tools
             sourceList = getOnlineToolsSources()
+        })
+        sourceDetailsList.add(WebSourceData().apply {
+            titleRes = R.string.app_health
+            sourceList = getHealthSources()
         })
         sourceDetailsList.add(WebSourceData().apply {
             titleRes = R.string.app_travel
@@ -210,6 +215,7 @@ object WebSourceManager {
         list.add(JumpData().apply {
             jumpUrl = WebConfig.FB_URL
             jumpTitle = APP.instance.getString(R.string.app_fb)
+            imgRes = R.mipmap.ic_fb
         })
         list.add(JumpData().apply {
             jumpUrl = WebConfig.INS_URL
@@ -218,6 +224,7 @@ object WebSourceManager {
         list.add(JumpData().apply {
             jumpUrl = WebConfig.X_URL
             jumpTitle = APP.instance.getString(R.string.app_x)
+            imgRes = R.mipmap.ic_x
         })
         list.add(JumpData().apply {
             jumpUrl = WebConfig.WhatsApp_URL
@@ -702,6 +709,54 @@ object WebSourceManager {
                 list.add(JumpData().apply {
                     jumpUrl = WebConfig.URL_TikTok
                     jumpTitle = APP.instance.getString(R.string.video_tiktok)
+                })
+            }
+        }
+        return list
+    }
+
+    private fun getHealthSources(): MutableList<JumpData> {
+        val list = mutableListOf<JumpData>()
+        val local = Locale.getDefault()
+        when (local.language) {
+            "pt" -> {
+                list.add(JumpData().apply {
+                    jumpUrl = WebConfig.URL_MinhaVida
+                    jumpTitle = APP.instance.getString(R.string.health_minha_vida)
+                })
+                list.add(JumpData().apply {
+                    jumpUrl = WebConfig.URL_HospitalEinstein
+                    jumpTitle = APP.instance.getString(R.string.health_hospital_einstein)
+                })
+                list.add(JumpData().apply {
+                    jumpUrl = WebConfig.URL_Hipocentro
+                    jumpTitle = APP.instance.getString(R.string.health_hipocentro)
+                })
+                list.add(JumpData().apply {
+                    jumpUrl = WebConfig.URL_SaudeAbril
+                    jumpTitle = APP.instance.getString(R.string.health_saude_abril)
+                })
+            }
+            else -> {
+                list.add(JumpData().apply {
+                    jumpUrl = WebConfig.URL_WebMD
+                    jumpTitle = APP.instance.getString(R.string.health_webmd)
+                })
+                list.add(JumpData().apply {
+                    jumpUrl = WebConfig.URL_MayoClinic
+                    jumpTitle = APP.instance.getString(R.string.health_mayo_clinic)
+                })
+                list.add(JumpData().apply {
+                    jumpUrl = WebConfig.URL_Healthline
+                    jumpTitle = APP.instance.getString(R.string.health_healthline)
+                })
+                list.add(JumpData().apply {
+                    jumpUrl = WebConfig.URL_MedlinePlus
+                    jumpTitle = APP.instance.getString(R.string.health_medlineplus)
+                })
+                list.add(JumpData().apply {
+                    jumpUrl = WebConfig.URL_EverydayHealth
+                    jumpTitle = APP.instance.getString(R.string.health_everyday_health)
                 })
             }
         }

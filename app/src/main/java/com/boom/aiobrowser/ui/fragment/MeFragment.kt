@@ -151,10 +151,12 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
         viewModel.value.uerLiveData.observe(this){
             pop?.dismiss()
             updateUI()
+            PointEvent.posePoint(PointEventKey.login_suc_net)
         }
         viewModel.value.failLiveData.observe(this){
             pop?.dismiss()
             updateUI()
+            PointEvent.posePoint(PointEventKey.login_fail_net)
         }
     }
 
@@ -286,6 +288,7 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
 //            val displayName = user.displayName
 //            val email = user.email
 //            NowLogs.dLog(acTAG,"saveUser_uid:${uid} displayName:${displayName} email:${email}")
+            PointEvent.posePoint(PointEventKey.login_suc)
             viewModel.value.createUser(UserData().apply {
                 from = "Google"
                 otherId = user.uid
@@ -412,7 +415,7 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
 
     private fun loginError() {
         pop?.dismiss()
-
+        PointEvent.posePoint(PointEventKey.login_fail)
     }
 
     override fun getBinding(

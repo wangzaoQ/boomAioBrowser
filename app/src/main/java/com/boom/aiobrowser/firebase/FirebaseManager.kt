@@ -10,9 +10,11 @@ import com.boom.aiobrowser.ad.AioADDataManager.adRootBean
 import com.boom.aiobrowser.data.AioADData
 import com.boom.aiobrowser.data.AioNFData
 import com.boom.aiobrowser.data.AioRequestData
+import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.PushData
 import com.boom.aiobrowser.firebase.FirebaseConfig.AD_DEFAULT_JSON
 import com.boom.aiobrowser.nf.NFManager
+import com.boom.aiobrowser.nf.NFManager.defaultNewsList
 import com.boom.aiobrowser.nf.NFManager.nfRootBean
 import com.boom.aiobrowser.nf.NFWorkManager
 import com.boom.aiobrowser.point.Install
@@ -21,6 +23,7 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.getBeanByGson
+import com.boom.aiobrowser.tools.getListByGson
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.ktx.Firebase
@@ -104,6 +107,7 @@ object FirebaseManager {
         AppLogs.dLog(APP.instance.TAG,"tag:${tag}")
         getADConfig()
         getNFConfig()
+        getDefaultConfig()
         runCatching {
             FirebaseConfig.AD_CD_ALL = firebaseRemoteConfig?.getString("aobws_cd")?.toInt()?:if (APP.isDebug)10 else 60
         }
@@ -113,6 +117,20 @@ object FirebaseManager {
             PointEvent.posePoint(PointEventKey.aio_push, Bundle().apply {
                 putInt(PointValueKey.type,FirebaseConfig.pushData?.time_interval?:0)
             })
+        }
+    }
+
+    private fun getDefaultConfig() {
+        runCatching {
+            var newsJson = ""
+            runCatching {
+                //ad
+                newsJson = firebaseRemoteConfig?.getString("aobws_default_news_config")?:""
+            }
+            defaultNewsList = getListByGson(newsJson, NewsData::class.java)
+            if (defaultNewsList.isNullOrEmpty()){
+                defaultNewsList = getListByGson(FirebaseConfig.DEFAULT_NEWS_JSON, NewsData::class.java)
+            }
         }
     }
 

@@ -106,7 +106,7 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
             }
             ViewPagerHelper.bind(tabLayout, vp)
 
-            vp.currentItem = 1
+            vp.currentItem = 0
         }
     }
 

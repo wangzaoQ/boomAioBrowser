@@ -12,7 +12,7 @@ object FirebaseConfig {
 	"aio_for_you": {
 		"in_time": 30,
 		"times": 99,
-		"first_time": 2
+		"first_time": 0
 	},
 	"aio_editor": {
 		"in_time": 30,
@@ -41,6 +41,28 @@ object FirebaseConfig {
 	},
 	"notify_gap": 30
 }
+"""
+
+    const val DEFAULT_NEWS_JSON = """
+[{
+	"itackl": "11255382774120449",
+	"tconsi": "Downloads gratuitos e instantâneos de vídeos",
+	"uweek": "https://variety.com/?p=1236214866"
+},
+{
+	"itackl": "11245891313467393",
+	"tconsi": "Local breaking news",
+	"iassum": "https://i.dailymail.co.uk/1s/2024/11/19/16/92244343-14098119-A_Florida_couple_created_their_dream_home_by_converting_a_former-a-13_1732035149723.jpg"
+},
+{
+	"itackl": "11255327741444097",
+	"tconsi": "See What is Happening",
+	"iassum": "https://deadline.com/wp-content/uploads/2024/11/hard-knocks-in-season-afc-north-hbo-max.jpg"
+},{
+	"itackl": "11255327741444097",
+	"tconsi": "Private videos, incognito browsing and downloading",
+	"iassum": "https://deadline.com/wp-content/uploads/2024/11/hard-knocks-in-season-afc-north-hbo-max.jpg"
+}]
 """
 
     //控制应用内所有广告间的间隔的广告cd，本地默认60s

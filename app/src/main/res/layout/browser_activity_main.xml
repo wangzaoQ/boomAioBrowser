@@ -121,7 +121,7 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    app:srcCompat="@mipmap/ic_home_setting"
+                    app:srcCompat="@drawable/selector_main_download"
                     ></androidx.appcompat.widget.AppCompatImageView>
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"

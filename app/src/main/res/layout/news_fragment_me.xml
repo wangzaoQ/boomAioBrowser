@@ -35,12 +35,15 @@
             ></View>
     </RelativeLayout>
     <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivUser"
         android:layout_width="92dp"
         android:layout_height="92dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="40dp"
+        app:shapeAppearance="@style/style_CircleStyle"
         ></com.google.android.material.imageview.ShapeableImageView>
     <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -49,13 +52,16 @@
         android:layout_marginTop="13dp"
         >
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_login"
             android:textSize="17sp"
             android:textColor="@color/black"
+            style="@style/app_text_bold"
             ></androidx.appcompat.widget.AppCompatTextView>
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivLogin"
             android:layout_width="25dp"
             android:layout_height="25dp"
             app:srcCompat="@mipmap/ic_google_login"
@@ -63,11 +69,36 @@
             ></androidx.appcompat.widget.AppCompatImageView>
     </androidx.appcompat.widget.LinearLayoutCompat>
     <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="6dp"
+        >
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            app:srcCompat="@mipmap/ic_user_location"
+            android:layout_marginStart="5dp"
+            ></androidx.appcompat.widget.AppCompatImageView>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_location"
+            android:textSize="11sp"
+            android:layout_marginStart="2dp"
+            android:textColor="@color/black_33"
+            ></androidx.appcompat.widget.AppCompatTextView>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/llBrowser"
         android:layout_width="match_parent"
         android:layout_height="53dp"
         android:orientation="horizontal"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="42dp"
         android:gravity="center_vertical"
         android:paddingHorizontal="13dp"
         android:layout_marginHorizontal="13dp"

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Aio Browser</string>
     <string name="facebook_app_id"></string>
+    <string name="your_web_client_id">802063703014-69pdjvdd1le3qhrrksagicrinek2uovj.apps.googleusercontent.com</string>
 
     <string name="app_start">Start</string>
     <string name="app_loading">Safe Loading In Progress...</string>
@@ -336,4 +337,9 @@
     <string name="video_globoplay">Globoplay</string>
 
     <string name="app_login">Login</string>
+    <string name="app_location">Location</string>
+
+    <string name="app_logout_title">Are you sure you want to log out?</string>
+    <string name="app_logout_clear">Logout and clear all data</string>
+    <string name="app_logout">Logout</string>
 </resources>

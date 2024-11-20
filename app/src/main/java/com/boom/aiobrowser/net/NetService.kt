@@ -4,8 +4,13 @@ import com.boom.aiobrowser.data.AreaData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.NewsDetailsData
 import com.boom.aiobrowser.data.TopicData
+import com.boom.aiobrowser.data.UserData
 import com.boom.aiobrowser.data.WebData
+import com.google.gson.JsonObject
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Headers
+import retrofit2.http.POST
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
 
@@ -61,4 +66,12 @@ interface NetService {
      */
     @GET("api/nemplo/tdetai")
     suspend fun getTopics(@Query("tmouth") tmouth:String): NetResponse<MutableList<TopicData>>
+
+
+    /**
+     * 创建用户
+     */
+    @Headers("Content-Type: application/json")
+    @POST("api/uconve/tsafet")
+    suspend fun createUser(@Body body: JsonObject): NetResponse<UserData>
 }

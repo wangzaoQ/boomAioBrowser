@@ -46,6 +46,11 @@ object TopicConfig{
 
 }
 
+object LoginConfig{
+    const val SIGN_LOGIN = 1011
+    const val SIGN_LOGIN_ONE_TAP = 1013
+}
+
 object WebConfig{
     var FB_URL = "https://www.facebook.com/"
     var INS_URL = "https://www.instagram.com/"

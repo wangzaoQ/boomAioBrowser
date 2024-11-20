@@ -34,6 +34,8 @@ import com.boom.aiobrowser.tools.inputStream2Byte
 import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.other.JumpConfig
+import com.boom.aiobrowser.other.LoginConfig.SIGN_LOGIN
+import com.boom.aiobrowser.other.LoginConfig.SIGN_LOGIN_ONE_TAP
 import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.ui.fragment.MainRootFragment
 import com.boom.aiobrowser.ui.fragment.NewsHomeFragment
@@ -127,13 +129,14 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
 
     private fun updateUI(index: Int) {
+        var endIndex = index
         if (index == 2 ){
-            return
+            endIndex = index+1
         }
         for ( start in 0 until acBinding.llMainControl.childCount){
             var ll = acBinding.llMainControl.getChildAt(start) as LinearLayoutCompat
             for (i in 0 until ll.childCount){
-                ll.getChildAt(i).isEnabled = (start == index).not()
+                ll.getChildAt(i).isEnabled = (start == endIndex).not()
             }
         }
     }
@@ -472,6 +475,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         AppLogs.dLog(acTAG,"onActivityResult  requestCode:${requestCode}  resultCode:${resultCode}")
+        if (requestCode == SIGN_LOGIN || resultCode == SIGN_LOGIN_ONE_TAP && fragments.size>2 && fragments.get(2) is MeFragment ){
+            (fragments.get(2) as MeFragment).result(requestCode, resultCode, data)
+        }
     }
-
 }

@@ -9,6 +9,7 @@ import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.NewsTempData
 import com.boom.aiobrowser.data.TopicBean
+import com.boom.aiobrowser.data.UserData
 import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.data.WebConfigData
 import com.boom.aiobrowser.data.model.DownloadModel
@@ -75,6 +76,7 @@ object CacheManager {
     const val KV_FIRST_DOWNLOAD_TIPS2 = "KV_FIRST_DOWNLOAD_TIPS2"
     const val KV_FIRST_DOWNLOAD_TIPS3 = "KV_FIRST_DOWNLOAD_TIPS3"
     const val KV_FIRST_DOWNLOAD_TIPS4 = "KV_FIRST_DOWNLOAD_TIPS4"
+    const val KV_USER_DATA = "KV_USER_DATA"
 //    const val KV_FIRST_OPEN_APP = "KV_FIRST_OPEN_APP"
 
 
@@ -619,6 +621,12 @@ object CacheManager {
             mmkv.encode(KV_DRAG_Y,value )
         }
 
+    fun saveUser(user:UserData?){
+        mmkv.encode(KV_USER_DATA, toJson(user))
+    }
 
+    fun getUser():UserData?{
+        return getBeanByGson(mmkv.decodeString(KV_USER_DATA,""),UserData::class.java)
+    }
 
 }

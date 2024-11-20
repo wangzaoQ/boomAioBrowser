@@ -29,6 +29,9 @@ class WebSourceActivity: BaseActivity<NewsActivityWebSourceBinding>() {
         acBinding.flExpand.setOneClick {
             switchUI()
         }
+        acBinding.ivBack.setOneClick {
+            finish()
+        }
         categorySmallAdapter.setOnDebouncedItemClick{adapter, view, position ->
             if (oldCheck == position || oldCheck<0)return@setOnDebouncedItemClick
             categorySmallAdapter.items.get(oldCheck).uiCheck = false

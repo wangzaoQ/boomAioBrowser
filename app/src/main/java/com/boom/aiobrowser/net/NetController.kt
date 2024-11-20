@@ -4,7 +4,9 @@ import com.boom.aiobrowser.data.AreaData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.NewsDetailsData
 import com.boom.aiobrowser.data.TopicData
+import com.boom.aiobrowser.data.UserData
 import com.boom.aiobrowser.data.WebData
+import com.google.gson.JsonObject
 
 object NetController {
     private val service: NetService by lazy {
@@ -40,6 +42,10 @@ object NetController {
     }
     suspend fun getTopic(tmouth:String="exposed"): NetResponse<MutableList<TopicData>> {
         return service.getTopics(tmouth)
+    }
+
+    suspend fun createUser(body: JsonObject): NetResponse<UserData> {
+        return service.createUser(body)
     }
 
 }

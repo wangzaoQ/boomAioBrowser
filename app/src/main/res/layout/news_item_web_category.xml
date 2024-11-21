@@ -7,13 +7,6 @@
     android:layout_margin="5dp"
     android:orientation="horizontal">
 
-    <View
-        android:id="@+id/startTemp"
-        android:layout_width="8dp"
-        android:layout_height="1dp"
-        android:visibility="gone"
-        ></View>
-
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/llRoot"
         android:layout_width="match_parent"
@@ -42,10 +35,13 @@
             tools:text="film" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <View
-        android:id="@+id/endTemp"
-        android:layout_width="8dp"
-        android:layout_height="1dp"
-        android:visibility="gone"
-        ></View>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/arrow2"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleType="centerInside"
+        app:srcCompat="@mipmap/ic_web_source_arrow2"
+        android:layout_gravity="center_vertical"
+        android:paddingHorizontal="14dp"
+        ></androidx.appcompat.widget.AppCompatImageView>
 </androidx.appcompat.widget.LinearLayoutCompat>

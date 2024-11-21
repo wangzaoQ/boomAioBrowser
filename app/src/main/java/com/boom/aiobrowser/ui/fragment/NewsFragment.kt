@@ -11,6 +11,7 @@ import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.net.NetParams
 import com.boom.aiobrowser.other.NewsConfig
 import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.other.TopicConfig
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -36,7 +37,11 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
     var page = 1
 
     override fun startLoadData() {
-        viewModel.value.getNewsData("${NewsConfig.TOPIC_TAG}${topic}")
+        if (topic == TopicConfig.TOPIC_FOR_YOU){
+            viewModel.value.getNewsData(topic)
+        }else{
+            viewModel.value.getNewsData("${NewsConfig.TOPIC_TAG}${topic}")
+        }
     }
 
     override fun setListener() {

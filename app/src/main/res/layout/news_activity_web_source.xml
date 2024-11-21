@@ -59,7 +59,7 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
-            app:srcCompat="@mipmap/ic_clean_arrow"
+            app:srcCompat="@mipmap/ic_web_source_arrow1"
             android:layout_gravity="center"
             ></androidx.appcompat.widget.AppCompatImageView>
     </FrameLayout>

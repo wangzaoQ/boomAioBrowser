@@ -207,7 +207,7 @@
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        app:srcCompat="@mipmap/ic_x"></androidx.appcompat.widget.AppCompatImageView>
+                        app:srcCompat="@mipmap/ic_search_x"></androidx.appcompat.widget.AppCompatImageView>
 
                     <androidx.appcompat.widget.AppCompatTextView
                         style="@style/app_text_bold"

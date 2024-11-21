@@ -66,7 +66,6 @@ object FirebaseManager {
                     firebaseRemoteConfig?.fetchAndActivate()?.addOnCompleteListener {
                         if (it.isSuccessful) {
                             initFirebaseConfig("firebase 获取最新配置")
-                            NFWorkManager.startNF()
                         }
                     }
                     delay(60*60*1000)

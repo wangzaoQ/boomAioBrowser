@@ -46,22 +46,18 @@ class CategoryNewsAdapter: BaseQuickAdapter<WebCategoryData, CategoryNewsAdapter
                 llRoot.setBackgroundResource(com.boom.indicator.R.drawable.shape_custom_tab_enable)
                 ivSource.setImageResource(item.checkRes)
             }
-
-            when (position) {
-                0 -> {
-                    startTemp.visibility = View.VISIBLE
-                    endTemp.visibility = View.GONE
-                }
-                items.size-1 -> {
-                    startTemp.visibility = View.GONE
-                    endTemp.visibility = View.VISIBLE
-                }
-                else -> {
-                    startTemp.visibility = View.GONE
-                    endTemp.visibility = View.GONE
-                }
+            if (type ==1 && position == items.size-1){
+                arrow2.visibility = View.VISIBLE
+            }else{
+                arrow2.visibility = View.GONE
             }
         }
+    }
+
+    var type:Int=0
+
+    fun setLayoutManagerType(type: Int) {
+        this.type = type
     }
 
 }

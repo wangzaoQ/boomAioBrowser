@@ -48,7 +48,6 @@ class WebSourceAdapter : BaseQuickAdapter<WebSourceData, WebSourceAdapter.VH>() 
                     adapter = childAdapter
                 }
                 childAdapter.submitList(item.sourceList)
-                childRv.setTag(R.id.childRv,item.sourceList)
                 childAdapter.setOnDebouncedItemClick{adapter, view, position ->
                     if (position>item.sourceList!!.size-1)return@setOnDebouncedItemClick
                     var data = item.sourceList!!.get(position)
@@ -61,6 +60,7 @@ class WebSourceAdapter : BaseQuickAdapter<WebSourceData, WebSourceAdapter.VH>() 
                     })
                     APP.homeTabLiveData.postValue(CacheManager.homeTabList)
                 }
+                childRv.setTag(R.id.childRv,item.sourceList)
             }
         }
     }

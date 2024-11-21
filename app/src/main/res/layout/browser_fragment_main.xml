@@ -379,7 +379,6 @@
             android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="13.5dp"
             android:layout_marginTop="13dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 

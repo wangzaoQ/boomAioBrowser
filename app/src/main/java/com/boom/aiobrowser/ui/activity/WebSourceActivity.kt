@@ -2,19 +2,24 @@ package com.boom.aiobrowser.ui.activity
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.NewsActivityWebSourceBinding
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.WebSourceManager.getSourceDetailsList
 import com.boom.aiobrowser.tools.WebSourceManager.getSourceList
+import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.ui.adapter.CategoryNewsAdapter
 import com.boom.aiobrowser.ui.adapter.SafeFlexboxLayoutManager
 import com.boom.aiobrowser.ui.adapter.WebSourceAdapter
 import com.boom.aiobrowser.ui.adapter.custom.MySmooth
 import com.boom.aiobrowser.ui.adapter.custom.MySmooth2
+import com.boom.aiobrowser.ui.pop.VideoMorePop
+import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -67,6 +72,10 @@ class WebSourceActivity: BaseActivity<NewsActivityWebSourceBinding>() {
 
             },0)
         }
+
+        categorySmallAdapter.addOnDebouncedChildClick(R.id.arrow2) { adapter, view, position ->
+            switchUI()
+        }
     }
 
     private fun switchUI() {
@@ -78,8 +87,12 @@ class WebSourceActivity: BaseActivity<NewsActivityWebSourceBinding>() {
                 flexDirection = FlexDirection.ROW
                 setFlexWrap(FlexWrap.WRAP)
             }
+            categorySmallAdapter.setLayoutManagerType(1)
+            acBinding.flExpand.visibility = View.GONE
         }else{
             acBinding.rvCategory.layoutManager = LinearLayoutManager(this@WebSourceActivity,LinearLayoutManager.HORIZONTAL,false)
+            categorySmallAdapter.setLayoutManagerType(0)
+            acBinding.flExpand.visibility = View.VISIBLE
         }
     }
 

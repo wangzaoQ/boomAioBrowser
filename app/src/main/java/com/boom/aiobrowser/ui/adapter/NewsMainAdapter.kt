@@ -271,42 +271,44 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                     override fun onBind(holder: TopVideoItem, position: Int, item: NewsData?) {
                         if (item == null) return
                         holder.viewBinding?.apply {
-                            runCatching {
-                                var gsyVideoOptionBuilder =  GSYVideoOptionBuilder()
-                                gsyVideoOptionBuilder!!
-                                    .setIsTouchWiget(false) //.setThumbImageView(imageView)
-                                    .setUrl(item?.vbreas?:"")
-                                    .setVideoTitle("")
-                                    .setRotateViewAuto(false)
-                                    .setLockLand(false)
-                                    .setPlayTag("videoplay")
-                                    .setShowFullAnimation(true)
-                                    .setNeedLockFull(true)
-                                    .setCacheWithPlay(true)
-                                    .setVideoAllCallBack(object : GSYSampleCallBack() {
-                                        override fun onPrepared(url: String, vararg objects: Any) {
-                                            super.onPrepared(url, *objects)
-                                        }
+                            var tag = clRoot.getTag(R.id.clRoot) as?NewsData
+                            if (tag!=item){
+                                runCatching {
+                                    var gsyVideoOptionBuilder =  GSYVideoOptionBuilder()
+                                    gsyVideoOptionBuilder!!
+                                        .setIsTouchWiget(false) //.setThumbImageView(imageView)
+                                        .setUrl(item?.vbreas?:"")
+                                        .setVideoTitle("")
+                                        .setRotateViewAuto(false)
+                                        .setLockLand(false)
+                                        .setPlayTag("videoplay")
+                                        .setShowFullAnimation(true)
+                                        .setNeedLockFull(true)
+                                        .setCacheWithPlay(true)
+                                        .setVideoAllCallBack(object : GSYSampleCallBack() {
+                                            override fun onPrepared(url: String, vararg objects: Any) {
+                                                super.onPrepared(url, *objects)
+                                            }
 
-                                        override fun onQuitFullscreen(url: String, vararg objects: Any) {
-                                            super.onQuitFullscreen(url, *objects)
-                                            //全屏不静音
+                                            override fun onQuitFullscreen(url: String, vararg objects: Any) {
+                                                super.onQuitFullscreen(url, *objects)
+                                                //全屏不静音
 //                    GSYVideoManager.instance().isNeedMute = true
-                                        }
+                                            }
 
-                                        override fun onEnterFullscreen(url: String, vararg objects: Any) {
-                                            super.onEnterFullscreen(url, *objects)
-                                            GSYVideoManager.instance().isNeedMute = false
-                                        }
+                                            override fun onEnterFullscreen(url: String, vararg objects: Any) {
+                                                super.onEnterFullscreen(url, *objects)
+                                                GSYVideoManager.instance().isNeedMute = false
+                                            }
 
-                                        override fun onAutoComplete(url: String?, vararg objects: Any?) {
-                                            super.onAutoComplete(url, *objects)
-                                            player?.startPlayLogic()
-                                        }
-                                    })
-                                    .build(player)
-                                player?.apply {
-                                    //设置返回按键功能
+                                            override fun onAutoComplete(url: String?, vararg objects: Any?) {
+                                                super.onAutoComplete(url, *objects)
+                                                player?.startPlayLogic()
+                                            }
+                                        })
+                                        .build(player)
+                                    player?.apply {
+                                        //设置返回按键功能
 //                                    backButton?.setOnClickListener(View.OnClickListener {
 ////                                        back()
 //                                    })
@@ -317,12 +319,14 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
 //                                        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
 //                                        orientationUtils?.resolveByClick();
 //                                    })
-                                    backButton.visibility = View.GONE
-                                    titleTextView.visibility = View.GONE
-                                    loadCoverImage(if (item.iassum.isNullOrEmpty()) item.vbreas?:"" else item.iassum?:"")
-                                    startPlayLogic()
+                                        backButton.visibility = View.GONE
+                                        titleTextView.visibility = View.GONE
+                                        loadCoverImage(if (item.iassum.isNullOrEmpty()) item.vbreas?:"" else item.iassum?:"")
+                                        startPlayLogic()
+                                    }
+                                    PointEvent.posePoint(PointEventKey.video_playback_page)
                                 }
-                                PointEvent.posePoint(PointEventKey.video_playback_page)
+                                clRoot.setTag(R.id.clRoot,item)
                             }
                         }
                     }

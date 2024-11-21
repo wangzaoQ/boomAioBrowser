@@ -24,15 +24,17 @@ class HomeGuidePop(context: Context) : BasePopupWindow(context) {
         defaultBinding = BrowserPopHomeGuideBinding.bind(contentView)
     }
 
+    var clickConfirm = false
+
     fun createPop(){
         defaultBinding?.apply {
             tvConfirm.setOnClickListener {
+                clickConfirm = true
                 PointEvent.posePoint(PointEventKey.guide_view)
                 DownloadVideoGuidePop(context).createPop {  }
                 dismiss()
             }
             ivClose.setOnClickListener {
-                PointEvent.posePoint(PointEventKey.home_page_first)
                 dismiss()
             }
         }
@@ -42,6 +44,9 @@ class HomeGuidePop(context: Context) : BasePopupWindow(context) {
 
     override fun dismiss() {
         PointEvent.posePoint(PointEventKey.guide_close)
+        if (clickConfirm.not()){
+            PointEvent.posePoint(PointEventKey.home_page_first)
+        }
         super.dismiss()
     }
 

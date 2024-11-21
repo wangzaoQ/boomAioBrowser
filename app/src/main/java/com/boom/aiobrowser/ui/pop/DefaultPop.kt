@@ -50,6 +50,7 @@ class DefaultPop(context: Context) : BasePopupWindow(context){
 
     override fun onDismiss() {
         APP.instance.showPopLevel = 0
+        PointEvent.posePoint(PointEventKey.default_pop_close)
         super.onDismiss()
     }
 

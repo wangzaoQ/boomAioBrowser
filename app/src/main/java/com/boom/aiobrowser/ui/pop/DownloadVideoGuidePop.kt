@@ -84,6 +84,7 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
                 PointEvent.posePoint(PointEventKey.download_tutorial_skip, Bundle().apply {
                     putInt(PointValueKey.page,vp.currentItem)
                 })
+                PointEvent.posePoint(PointEventKey.home_page_first)
                 dismiss()
             }
             btnCommit.setOnClickListener {
@@ -94,6 +95,8 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
                 JumpDataManager.updateCurrentJumpData(data,tag = "DownloadVideoGuidePop guide")
                 APP.jumpLiveData.postValue(data)
                 JumpDataManager.closeAll()
+                PointEvent.posePoint(PointEventKey.tutorial_webpage)
+                PointEvent.posePoint(PointEventKey.home_page_first)
                 dismiss()
             }
         }

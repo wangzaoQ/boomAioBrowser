@@ -381,7 +381,17 @@ fun <T> partitionList(list: List<T>, size: Int): List<List<T>> {
     }
     return partitions
 }
-
+fun MutableList<String>.getNewsTopic():String{
+    var builder = StringBuilder()
+    forEach {
+        builder.append(it).append(",")
+    }
+    var topic = builder.toString()
+    if (topic.isNullOrEmpty().not()){
+        topic = topic.substring(0, topic.length - 1)
+    }
+    return topic
+}
 
 
 

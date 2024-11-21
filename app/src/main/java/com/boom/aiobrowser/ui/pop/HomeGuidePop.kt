@@ -5,6 +5,8 @@ import android.view.View
 import android.view.animation.Animation
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.databinding.BrowserPopHomeGuideBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import pop.basepopup.BasePopupWindow
 import pop.util.animation.AnimationHelper
 import pop.util.animation.TranslationConfig
@@ -25,14 +27,22 @@ class HomeGuidePop(context: Context) : BasePopupWindow(context) {
     fun createPop(){
         defaultBinding?.apply {
             tvConfirm.setOnClickListener {
+                PointEvent.posePoint(PointEventKey.guide_view)
                 DownloadVideoGuidePop(context).createPop {  }
                 dismiss()
             }
             ivClose.setOnClickListener {
+                PointEvent.posePoint(PointEventKey.home_page_first)
                 dismiss()
             }
         }
+        PointEvent.posePoint(PointEventKey.guide_pop)
         showPopupWindow()
+    }
+
+    override fun dismiss() {
+        PointEvent.posePoint(PointEventKey.guide_close)
+        super.dismiss()
     }
 
     override fun onCreateShowAnimation(): Animation {

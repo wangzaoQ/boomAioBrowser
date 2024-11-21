@@ -252,7 +252,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                         override fun onPageSelected(position: Int) {
                             updateUI(position)
                             if (position == 1){
-                                PointEvent.posePoint(PointEventKey.news_page,Bundle().apply {
+                                PointEvent.posePoint(PointEventKey.news,Bundle().apply {
                                     putString(PointValueKey.from_type,if (APP.instance.toNewsFrom == 1)"home_news_more" else "news")
                                 },object : PointCallback{
                                     override fun onSuccess(response: Response) {
@@ -335,7 +335,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                         })
                     }
                 }
-                NFEnum.NF_NEWS.menuName,NFEnum.NF_HOT.menuName,NFEnum.NF_NEW_USER.menuName,NFEnum.NF_LOCAL.menuName,NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName,NFEnum.NF_NEWS_FCM.menuName->{
+                NFEnum.NF_NEWS.menuName,NFEnum.NF_HOT.menuName,NFEnum.NF_NEW_USER.menuName,NFEnum.NF_LOCAL.menuName,NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName,NFEnum.NF_NEWS_FCM.menuName,NFEnum.NF_DEFAULT.menuName->{
                     var data = getBeanByGson(nfData,NewsData::class.java)
 //                    var jumpData = JumpDataManager.getCurrentJumpData(tag="首页通知新闻跳转")
 //                    jumpData.apply {
@@ -416,7 +416,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         if (showPopCount == 2){
             if (CacheManager.isFirstShowDownload){
 //                CacheManager.isFirstShowDownload = false
-                HomeGuidePop(this@MainActivity).createPop()
+                var homeGuidePop = HomeGuidePop(this@MainActivity)
+                homeGuidePop.createPop()
             }
         }
     }

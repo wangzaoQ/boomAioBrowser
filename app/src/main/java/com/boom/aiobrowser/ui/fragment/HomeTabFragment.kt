@@ -10,6 +10,9 @@ import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.NewsFragmentHomeTabBinding
 import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.getListByGson
@@ -34,6 +37,9 @@ class HomeTabFragment : BaseFragment<NewsFragmentHomeTabBinding>(){
                 var jumpData = JumpDataManager.getCurrentJumpData(tag="homeTab点击", updateData = data)
                 jumpData.jumpType = JumpConfig.JUMP_WEB
                 APP.jumpLiveData.postValue(jumpData)
+                PointEvent.posePoint(PointEventKey.home_navigation_click,Bundle().apply {
+                    putString(PointValueKey.click_source,data.jumpTitle)
+                })
             }
         }
     }

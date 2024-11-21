@@ -32,7 +32,7 @@ class NewsViewModel : BaseDataModel() {
             loadData(loadBack = {
                 var list = NetRequest.request(HashMap<String, Any>().apply {
                     put("sessionKey",topic )
-                }) { NetController.getNewsList(NetParams.getParamsMap(NetParams.FOR_YOU)) }.data?: mutableListOf()
+                }) { NetController.getNewsList(NetParams.getParamsMap(topic)) }.data?: mutableListOf()
                 newsLiveData.postValue(list)
             }, failBack = {
 

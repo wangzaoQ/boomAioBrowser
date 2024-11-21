@@ -10,7 +10,6 @@
     android:paddingEnd="6dp"
     android:paddingBottom="6.5dp"
     android:clickable="true"
-    android:background="@drawable/shape_ripple"
     >
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivSearchEngine"

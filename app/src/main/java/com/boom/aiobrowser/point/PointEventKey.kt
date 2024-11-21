@@ -16,6 +16,8 @@ object PointEventKey {
     const val app_stay = "app_stay"
     //设置默认弹窗展示
     const val default_pop = "default_pop"
+    //默认浏览器设置通知关闭
+    const val default_pop_close = "default_pop_close"
     //设置默认弹窗设置按钮点击
     const val default_pop_set = "default_pop_set"
     //设置默认弹窗成功
@@ -25,6 +27,7 @@ object PointEventKey {
 
 
     const val home_page = "home_page"
+    const val home_page_first = "home_page_first"
     //首页搜索输入框点击
     const val home_page_search = "home_page_search"
 
@@ -187,14 +190,19 @@ object PointEventKey {
     const val tutorial_download = "tutorial_download"
     //任务选择说明展示
     const val tutorial_pop = "tutorial_pop"
+    const val tutorial_webpage = "tutorial_webpage"
     //教程创建弹窗说明展示
     const val tutorial_task = "tutorial_task"
     //教程列表页说明展示
     const val tutorial_download_page = "tutorial_download_page"
     //新闻承接页曝光
+    const val news = "news"
+    //新闻正文
     const val news_page = "news_page"
     //web store页面曝光
     const val web_store = "web_store"
+    //web store页添加网站
+    const val web_store_add = "web_store_add"
     //登录成功
     const val login_suc = "login_suc"
     //登录失败
@@ -204,6 +212,14 @@ object PointEventKey {
     const val login_suc_net = "login_suc_net"
     //登录失败
     const val login_fail_net = "login_fail_net"
+    //新手引导弹窗
+    const val guide_pop = "guide_pop"
+    //新手引导弹窗按钮点击
+    const val guide_view = "guide_view"
+    //新手引导弹窗关闭
+    const val guide_close = "guide_close"
+    //首页导航点击
+    const val home_navigation_click = "home_navigation_click"
 
 
 }
@@ -214,6 +230,7 @@ object PointValueKey{
     const val input_text = "input_text"
     const val click_source = "click_source"
     const val news_id = "news_id"
+    const val news_topic = "news_topic"
     const val refresh_type = "refresh_type"
     const val type = "type"
     const val url = "url"

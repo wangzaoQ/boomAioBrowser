@@ -65,6 +65,7 @@ class NewsData {
 
     var cvehic :MutableList<NewsDetailsData>?=null
     var lcousi : MutableList<LinkData>?=null
+    var tdetai: MutableList<String>? = null
 
     var nfSource:String?=""
 

@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.ui.activity
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView

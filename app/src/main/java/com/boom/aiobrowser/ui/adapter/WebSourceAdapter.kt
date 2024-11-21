@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.ui.adapter
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
@@ -12,6 +13,9 @@ import com.boom.aiobrowser.data.FilesData
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.WebSourceData
 import com.boom.aiobrowser.databinding.BrowserItemWebCategoryBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.base.adapter4.BaseMultiItemAdapter
 import com.boom.base.adapter4.BaseQuickAdapter
@@ -52,6 +56,9 @@ class WebSourceAdapter : BaseQuickAdapter<WebSourceData, WebSourceAdapter.VH>() 
                     data.isCurrent = true
                     childAdapter.notifyItemChanged(position,"updateCheck")
                     CacheManager.addHomeTab(data)
+                    PointEvent.posePoint(PointEventKey.web_store_add, Bundle().apply {
+                        putString(PointValueKey.type,data.jumpTitle)
+                    })
                     APP.homeTabLiveData.postValue(CacheManager.homeTabList)
                 }
             }

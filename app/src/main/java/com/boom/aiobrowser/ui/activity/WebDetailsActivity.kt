@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.ui.activity
 
 import android.annotation.SuppressLint
+import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,10 @@ import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.shareToShop
 import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
+import com.boom.aiobrowser.tools.getNewsTopic
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 
 class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
@@ -73,6 +78,10 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         newData?.apply {
             viewModel.value.getNewsDetails(this)
         }
+        PointEvent.posePoint(PointEventKey.news_page, Bundle().apply {
+            putString(PointValueKey.news_id,newData?.itackl)
+            putString(PointValueKey.news_topic,newData?.tdetai?.getNewsTopic())
+        })
     }
 
     override fun onDestroy() {

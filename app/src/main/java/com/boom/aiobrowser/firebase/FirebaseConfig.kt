@@ -17,22 +17,22 @@ object FirebaseConfig {
 	"aio_editor": {
 		"in_time": 30,
 		"times": 99,
-		"first_time": 10
+		"first_time" : 0
 	},
 	"aio_local": {
 		"in_time": 30,
 		"times": 99,
-		"first_time": 20
+		"first_time": 0
 	},
 	"aio_hot": {
 		"in_time": 30,
 		"times": 99,
-		"first_time": 30
+		"first_time": 0
 	},
 	"aio_newuser": {
 		"in_time": 30,
 		"times": 99,
-		"first_time": 40
+		"first_time": 0
 	},
 	"aio_unlock": {
 		"in_time": 5,

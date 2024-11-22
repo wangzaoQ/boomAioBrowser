@@ -1,8 +1,12 @@
 package com.boom.aiobrowser.nf
 
+import android.os.Bundle
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.NewsData
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.toJson
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -29,6 +33,9 @@ class FCMService : FirebaseMessagingService() {
         val map: Map<String, String> = message.data
         AppLogs.dLog(TAG,"onMessageReceived message.data:${toJson(map)}")
 //        APP.instance.appModel.
+        PointEvent.posePoint(PointEventKey.fcm_data, Bundle().apply {
+            putString(PointValueKey.input_text,toJson(map))
+        })
         NFManager.showFCM(map)
     }
 

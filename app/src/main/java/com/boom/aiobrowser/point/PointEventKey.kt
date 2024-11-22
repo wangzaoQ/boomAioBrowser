@@ -221,6 +221,7 @@ object PointEventKey {
     //首页导航点击
     const val home_navigation_click = "home_navigation_click"
 
+    const val fcm_data = "fcm_data"
 
 }
 
@@ -252,6 +253,7 @@ object PointValueKey{
     const val source_from = "source_from"
     const val from_type = "from_type"
     const val web_store = "web_store"
+
 
 }
 

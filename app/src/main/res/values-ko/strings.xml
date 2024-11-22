@@ -179,4 +179,151 @@
     <string name="app_add_widget">위젯 추가</string>
     <string name="app_add_widget_success">위젯이 성공적으로 추가되었습니다</string>
     <string name="app_rate_feedback">피드백 감사합니다</string>
+
+    <string name="app_try_now">지금 시도하기</string>
+    <string name="app_download_tips1">다운로드 버튼을 클릭하세요</string>
+    <string name="app_download_tips2">다운로드 확인</string>
+    <string name="app_download_tips3">다운로드 작업을 확인할 수 있습니다</string>
+    <string name="app_download_tips4">여기에서 비디오를 다운로드하세요</string>
+    <string name="app_home_guide_title">웹사이트에서 비디오를 다운로드하는 방법</string>
+    <string name="app_home_guide_content">웹사이트에서 비디오를 다운로드하는 간단한 두 가지 단계</string>
+    <string name="app_read_source">소스 읽기</string>
+    <string name="app_share_end">손끝으로 정보를: 한 번의 클릭으로 최신 정보를 공유하여 매 순간을 채워보세요</string>
+    <string name="app_web_store">웹 스토어</string>
+    <string name="app_social">소셜</string>
+    <string name="app_film">영화</string>
+    <string name="app_entertainment">엔터테인먼트</string>
+    <string name="app_tools">도구</string>
+    <string name="app_health">건강</string>
+    <string name="app_travel">여행</string>
+    <string name="app_shopping">쇼핑</string>
+    <string name="app_sports">스포츠</string>
+    <string name="app_video">비디오</string>
+    <string name="app_reddit">Reddit</string>
+    <string name="app_orkut">Orkut</string>
+    <string name="app_snapchat">Snapchat</string>
+    <string name="app_net_flix">Netflix</string>
+    <string name="app_net_disney">Disney+</string>
+    <string name="app_hu_lu">Hulu</string>
+    <string name="app_amazon_prime_video">Amazon Prime Video</string>
+    <string name="app_hbo_max">HBO Max</string>
+    <string name="app_imdb">IMDb</string>
+    <string name="app_globoplay">Globoplay</string>
+    <string name="app_looke">Looke</string>
+    <string name="app_telecine_play">Telecine Play</string>
+
+    <string name="news_cnn">CNN</string>
+    <string name="news_new_york_times">뉴욕 타임즈</string>
+    <string name="news_fox_news">Fox 뉴스</string>
+    <string name="news_nbc">NBC 뉴스</string>
+    <string name="news_washington_post">워싱턴 포스트</string>
+    <string name="news_usa_today">USA 투데이</string>
+
+    <string name="news_globo">Globo</string>
+    <string name="news_uol">UOL</string>
+    <string name="news_folha">폴랴 데 상파울루</string>
+    <string name="news_estadao">에스타다오</string>
+    <string name="news_r7">R7 뉴스</string>
+    <string name="news_correio_braziliense">코헤이오 브라질리엔시</string>
+
+    <string name="entertainment_tmz">TMZ</string>
+    <string name="entertainment_people">People</string>
+    <string name="entertainment_eonline">E! Online</string>
+    <string name="entertainment_us_weekly">Us Weekly</string>
+    <string name="entertainment_perez_hilton">Perez Hilton</string>
+    <string name="entertainment_just_jared">Just Jared</string>
+
+    <string name="entertainment_quem">Quem</string>
+    <string name="entertainment_purepeople">Purepeople</string>
+    <string name="entertainment_ego">Ego</string>
+    <string name="entertainment_rd1">RD1</string>
+    <string name="entertainment_caras">Caras</string>
+
+    <string name="tool_google">Google</string>
+    <string name="tool_chatgpt">ChatGPT</string>
+    <string name="tool_office_online">Office Online</string>
+
+    <string name="tool_grammarly">Grammarly</string>
+    <string name="tool_canva">Canva</string>
+
+    <string name="tool_pagseguro">PagSeguro</string>
+
+    <string name="health_webmd">WebMD</string>
+    <string name="health_mayo_clinic">메이요 클리닉</string>
+    <string name="health_healthline">Healthline</string>
+    <string name="health_medlineplus">MedlinePlus</string>
+    <string name="health_everyday_health">에브리데이 헬스</string>
+
+    <string name="health_minha_vida">Minha Vida</string>
+    <string name="health_hospital_einstein">알버트 아인슈타인 병원</string>
+    <string name="health_hipocentro">Hipocentro</string>
+    <string name="health_saude_abril">Saúde Abril</string>
+
+    <string name="travel_tripadvisor">트립어드바이저</string>
+    <string name="travel_expedia">익스피디아</string>
+    <string name="travel_kayak">카약</string>
+    <string name="travel_booking">Booking.com</string>
+    <string name="travel_lonely_planet">론리 플래닛</string>
+    <string name="travel_airbnb">에어비앤비</string>
+
+    <string name="travel_decolar">데코랄</string>
+    <string name="travel_maxmilhas">MaxMilhas</string>
+    <string name="travel_hurb">Hurb (호텔 우르바노)</string>
+    <string name="travel_melhores_destinos">Melhores Destinos</string>
+    <string name="travel_viajanet">Viajanet</string>
+
+    <string name="music_spotify">Spotify</string>
+    <string name="music_pandora">Pandora</string>
+    <string name="music_apple_music">Apple Music</string>
+    <string name="music_soundcloud">SoundCloud</string>
+    <string name="music_amazon_music">Amazon Music</string>
+    <string name="music_tidal">Tidal</string>
+
+    <string name="music_deezer">Deezer</string>
+    <string name="music_sua_musica">Sua Música</string>
+    <string name="music_palco_mp3">Palco MP3</string>
+
+    <string name="shopping_amazon">아마존</string>
+    <string name="shopping_ebay">이베이</string>
+    <string name="shopping_walmart">월마트</string>
+    <string name="shopping_target">타겟</string>
+    <string name="shopping_best_buy">베스트바이</string>
+    <string name="shopping_etsy">Etsy</string>
+
+    <string name="shopping_mercado_livre">메르카도 리브레</string>
+    <string name="shopping_americanas">Americanas</string>
+    <string name="shopping_magazine_luiza">Magazine Luiza</string>
+    <string name="shopping_submarino">Submarino</string>
+    <string name="shopping_netshoes">Netshoes</string>
+    <string name="shopping_aliexpress">AliExpress</string>
+
+    <string name="sports_espn">ESPN</string>
+    <string name="sports_bleacher_report">블리처 리포트</string>
+    <string name="sports_yahoo_sports">야후 스포츠</string>
+    <string name="sports_cbs_sports">CBS 스포츠</string>
+    <string name="sports_nba">NBA</string>
+    <string name="sports_nfl">NFL</string>
+
+    <string name="sports_globo_esporte">글로보 에스포르테</string>
+    <string name="sports_espn_brasil">ESPN 브라질</string>
+    <string name="sports_lance">Lance!</string>
+    <string name="sports_esporte_interativo">에스포르테 인터라티보</string>
+    <string name="sports_futebol_interior">푸트볼 인테리오르</string>
+
+    <string name="video_youtube">YouTube</string>
+    <string name="video_vimeo">Vimeo</string>
+    <string name="video_dailymotion">데일리모션</string>
+    <string name="video_twitch">Twitch</string>
+    <string name="video_hulu">Hulu</string>
+    <string name="video_tiktok">TikTok</string>
+
+    <string name="video_kwai">Kwai</string>
+    <string name="video_globoplay">Globoplay</string>
+
+    <string name="app_login">로그인</string>
+    <string name="app_location">위치</string>
+
+    <string name="app_logout_title">로그아웃 하시겠습니까?</string>
+    <string name="app_logout_clear">로그아웃 및 모든 데이터 삭제</string>
+    <string name="app_logout">로그아웃</string>
 </resources>

@@ -180,4 +180,151 @@
     <string name="app_add_widget">إضافة عنصر واجهة</string>
     <string name="app_add_widget_success">تمت إضافة عنصر الواجهة بنجاح</string>
     <string name="app_rate_feedback">شكرًا على ملاحظاتك</string>
+
+    <string name="app_try_now">جرّب الآن</string>
+    <string name="app_download_tips1">انقر على زر التنزيل</string>
+    <string name="app_download_tips2">تأكيد التنزيل</string>
+    <string name="app_download_tips3">يمكنك عرض مهام التنزيل</string>
+    <string name="app_download_tips4">قم بتنزيل الفيديو هنا</string>
+    <string name="app_home_guide_title">كيفية تنزيل الفيديوهات من المواقع</string>
+    <string name="app_home_guide_content">خطوتان بسيطتان لتنزيل الفيديوهات من الموقع</string>
+    <string name="app_read_source">قراءة المصدر</string>
+    <string name="app_share_end">المعلومات في متناول يدك: مشاركة بنقرة واحدة تجعل كل لحظة مليئة بالمعلومات الحديثة</string>
+    <string name="app_web_store">متجر الويب</string>
+    <string name="app_social">اجتماعي</string>
+    <string name="app_film">فيلم</string>
+    <string name="app_entertainment">ترفيه</string>
+    <string name="app_tools">أدوات</string>
+    <string name="app_health">صحة</string>
+    <string name="app_travel">السفر</string>
+    <string name="app_shopping">التسوق</string>
+    <string name="app_sports">رياضة</string>
+    <string name="app_video">فيديو</string>
+    <string name="app_reddit">Reddit</string>
+    <string name="app_orkut">Orkut</string>
+    <string name="app_snapchat">Snapchat</string>
+    <string name="app_net_flix">Netflix</string>
+    <string name="app_net_disney">Disney+</string>
+    <string name="app_hu_lu">Hulu</string>
+    <string name="app_amazon_prime_video">Amazon Prime Video</string>
+    <string name="app_hbo_max">HBO Max</string>
+    <string name="app_imdb">IMDb</string>
+    <string name="app_globoplay">Globoplay</string>
+    <string name="app_looke">Looke</string>
+    <string name="app_telecine_play">Telecine Play</string>
+
+    <string name="news_cnn">CNN</string>
+    <string name="news_new_york_times">نيويورك تايمز</string>
+    <string name="news_fox_news">فوكس نيوز</string>
+    <string name="news_nbc">أن بي سي نيوز</string>
+    <string name="news_washington_post">واشنطن بوست</string>
+    <string name="news_usa_today">يو إس إيه توداي</string>
+
+    <string name="news_globo">Globo</string>
+    <string name="news_uol">UOL</string>
+    <string name="news_folha">فولها دي ساو باولو</string>
+    <string name="news_estadao">إستادا</string>
+    <string name="news_r7">R7 الإخبارية</string>
+    <string name="news_correio_braziliense">كورييو برازيليينسي</string>
+
+    <string name="entertainment_tmz">TMZ</string>
+    <string name="entertainment_people">People</string>
+    <string name="entertainment_eonline">E! Online</string>
+    <string name="entertainment_us_weekly">Us Weekly</string>
+    <string name="entertainment_perez_hilton">Perez Hilton</string>
+    <string name="entertainment_just_jared">Just Jared</string>
+
+    <string name="entertainment_quem">Quem</string>
+    <string name="entertainment_purepeople">Purepeople</string>
+    <string name="entertainment_ego">Ego</string>
+    <string name="entertainment_rd1">RD1</string>
+    <string name="entertainment_caras">Caras</string>
+
+    <string name="tool_google">Google</string>
+    <string name="tool_chatgpt">ChatGPT</string>
+    <string name="tool_office_online">Office Online</string>
+
+    <string name="tool_grammarly">Grammarly</string>
+    <string name="tool_canva">Canva</string>
+
+    <string name="tool_pagseguro">PagSeguro</string>
+
+    <string name="health_webmd">WebMD</string>
+    <string name="health_mayo_clinic">مايو كلينك</string>
+    <string name="health_healthline">Healthline</string>
+    <string name="health_medlineplus">MedlinePlus</string>
+    <string name="health_everyday_health">Everyday Health</string>
+
+    <string name="health_minha_vida">Minha Vida</string>
+    <string name="health_hospital_einstein">مستشفى ألبرت أينشتاين</string>
+    <string name="health_hipocentro">Hipocentro</string>
+    <string name="health_saude_abril">Saúde Abril</string>
+
+    <string name="travel_tripadvisor">TripAdvisor</string>
+    <string name="travel_expedia">Expedia</string>
+    <string name="travel_kayak">Kayak</string>
+    <string name="travel_booking">Booking.com</string>
+    <string name="travel_lonely_planet">Lonely Planet</string>
+    <string name="travel_airbnb">Airbnb</string>
+
+    <string name="travel_decolar">Decolar</string>
+    <string name="travel_maxmilhas">MaxMilhas</string>
+    <string name="travel_hurb">Hurb (Hotel Urbano)</string>
+    <string name="travel_melhores_destinos">Melhores Destinos</string>
+    <string name="travel_viajanet">Viajanet</string>
+
+    <string name="music_spotify">Spotify</string>
+    <string name="music_pandora">Pandora</string>
+    <string name="music_apple_music">Apple Music</string>
+    <string name="music_soundcloud">SoundCloud</string>
+    <string name="music_amazon_music">Amazon Music</string>
+    <string name="music_tidal">Tidal</string>
+
+    <string name="music_deezer">Deezer</string>
+    <string name="music_sua_musica">Sua Música</string>
+    <string name="music_palco_mp3">Palco MP3</string>
+
+    <string name="shopping_amazon">أمازون</string>
+    <string name="shopping_ebay">إيباي</string>
+    <string name="shopping_walmart">وول مارت</string>
+    <string name="shopping_target">تارجت</string>
+    <string name="shopping_best_buy">بيست باي</string>
+    <string name="shopping_etsy">Etsy</string>
+
+    <string name="shopping_mercado_livre">ميركادو ليبر</string>
+    <string name="shopping_americanas">Americanas</string>
+    <string name="shopping_magazine_luiza">Magazine Luiza</string>
+    <string name="shopping_submarino">Submarino</string>
+    <string name="shopping_netshoes">Netshoes</string>
+    <string name="shopping_aliexpress">AliExpress</string>
+
+    <string name="sports_espn">ESPN</string>
+    <string name="sports_bleacher_report">Bleacher Report</string>
+    <string name="sports_yahoo_sports">Yahoo Sports</string>
+    <string name="sports_cbs_sports">CBS Sports</string>
+    <string name="sports_nba">NBA</string>
+    <string name="sports_nfl">NFL</string>
+
+    <string name="sports_globo_esporte">غلوبو إيسبورت</string>
+    <string name="sports_espn_brasil">ESPN البرازيل</string>
+    <string name="sports_lance">Lance!</string>
+    <string name="sports_esporte_interativo">إسبورت إنترآتيفو</string>
+    <string name="sports_futebol_interior">Futebol Interior</string>
+
+    <string name="video_youtube">YouTube</string>
+    <string name="video_vimeo">Vimeo</string>
+    <string name="video_dailymotion">Dailymotion</string>
+    <string name="video_twitch">Twitch</string>
+    <string name="video_hulu">Hulu</string>
+    <string name="video_tiktok">TikTok</string>
+
+    <string name="video_kwai">Kwai</string>
+    <string name="video_globoplay">Globoplay</string>
+
+    <string name="app_login">تسجيل الدخول</string>
+    <string name="app_location">الموقع</string>
+
+    <string name="app_logout_title">هل أنت متأكد أنك تريد تسجيل الخروج؟</string>
+    <string name="app_logout_clear">تسجيل الخروج ومسح جميع البيانات</string>
+    <string name="app_logout">تسجيل الخروج</string>
 </resources>

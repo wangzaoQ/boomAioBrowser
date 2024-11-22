@@ -184,6 +184,7 @@
     <string name="app_add_widget">Add Widget</string>
     <string name="app_add_widget_success">Widget added successfully</string>
     <string name="app_rate_feedback">Thanks for feedback</string>
+
     <string name="app_try_now">Try Now</string>
     <string name="app_download_tips1">Click the download button</string>
     <string name="app_download_tips2">Confirm Download</string>
@@ -252,20 +253,17 @@
 
     <string name="tool_pagseguro">PagSeguro</string>
 
-    <!-- 美国健康信息标题 -->
     <string name="health_webmd">WebMD</string>
     <string name="health_mayo_clinic">Mayo Clinic</string>
     <string name="health_healthline">Healthline</string>
     <string name="health_medlineplus">MedlinePlus</string>
     <string name="health_everyday_health">Everyday Health</string>
 
-    <!-- 巴西健康信息标题 -->
     <string name="health_minha_vida">Minha Vida</string>
     <string name="health_hospital_einstein">Hospital Israelita Albert Einstein</string>
     <string name="health_hipocentro">Hipocentro</string>
     <string name="health_saude_abril">Saúde Abril</string>
 
-    <!-- 美国旅游网站标题 -->
     <string name="travel_tripadvisor">TripAdvisor</string>
     <string name="travel_expedia">Expedia</string>
     <string name="travel_kayak">Kayak</string>
@@ -273,14 +271,12 @@
     <string name="travel_lonely_planet">Lonely Planet</string>
     <string name="travel_airbnb">Airbnb</string>
 
-    <!-- 巴西旅游网站标题 -->
     <string name="travel_decolar">Decolar</string>
     <string name="travel_maxmilhas">MaxMilhas</string>
     <string name="travel_hurb">Hurb (Hotel Urbano)</string>
     <string name="travel_melhores_destinos">Melhores Destinos</string>
     <string name="travel_viajanet">Viajanet</string>
 
-    <!-- 美国音乐平台标题 -->
     <string name="music_spotify">Spotify</string>
     <string name="music_pandora">Pandora</string>
     <string name="music_apple_music">Apple Music</string>
@@ -288,12 +284,10 @@
     <string name="music_amazon_music">Amazon Music</string>
     <string name="music_tidal">Tidal</string>
 
-    <!-- 巴西音乐平台标题 -->
     <string name="music_deezer">Deezer</string>
     <string name="music_sua_musica">Sua Música</string>
     <string name="music_palco_mp3">Palco MP3</string>
 
-    <!-- 美国购物网站标题 -->
     <string name="shopping_amazon">Amazon</string>
     <string name="shopping_ebay">eBay</string>
     <string name="shopping_walmart">Walmart</string>
@@ -301,7 +295,6 @@
     <string name="shopping_best_buy">Best Buy</string>
     <string name="shopping_etsy">Etsy</string>
 
-    <!-- 巴西购物网站标题 -->
     <string name="shopping_mercado_livre">Mercado Livre</string>
     <string name="shopping_americanas">Americanas</string>
     <string name="shopping_magazine_luiza">Magazine Luiza</string>
@@ -309,7 +302,6 @@
     <string name="shopping_netshoes">Netshoes</string>
     <string name="shopping_aliexpress">AliExpress</string>
 
-    <!-- 美国体育网站标题 -->
     <string name="sports_espn">ESPN</string>
     <string name="sports_bleacher_report">Bleacher Report</string>
     <string name="sports_yahoo_sports">Yahoo Sports</string>
@@ -317,14 +309,12 @@
     <string name="sports_nba">NBA</string>
     <string name="sports_nfl">NFL</string>
 
-    <!-- 巴西体育网站标题 -->
     <string name="sports_globo_esporte">Globo Esporte</string>
     <string name="sports_espn_brasil">ESPN Brasil</string>
     <string name="sports_lance">Lance!</string>
     <string name="sports_esporte_interativo">Esporte Interativo</string>
     <string name="sports_futebol_interior">Futebol Interior</string>
 
-    <!-- 美国视频平台标题 -->
     <string name="video_youtube">YouTube</string>
     <string name="video_vimeo">Vimeo</string>
     <string name="video_dailymotion">Dailymotion</string>
@@ -332,7 +322,6 @@
     <string name="video_hulu">Hulu</string>
     <string name="video_tiktok">TikTok</string>
 
-    <!-- 巴西视频平台标题 -->
     <string name="video_kwai">Kwai</string>
     <string name="video_globoplay">Globoplay</string>
 
@@ -342,4 +331,6 @@
     <string name="app_logout_title">Are you sure you want to log out?</string>
     <string name="app_logout_clear">Logout and clear all data</string>
     <string name="app_logout">Logout</string>
+
+
 </resources>

@@ -110,6 +110,16 @@ object FirebaseManager {
         runCatching {
             FirebaseConfig.AD_CD_ALL = firebaseRemoteConfig?.getString("aobws_cd")?.toInt()?:if (APP.isDebug)10 else 60
         }
+        var show_tutorial = 0
+        runCatching {
+            show_tutorial = firebaseRemoteConfig?.getString("show_tutorial")?.toInt()?:0
+        }
+        FirebaseConfig.switchDownloadGuidePop = show_tutorial != 0
+        var show_default = 0
+        runCatching {
+            show_default = firebaseRemoteConfig?.getString("show_default")?.toInt()?:0
+        }
+        FirebaseConfig.switchDefaultPop = show_default != 0
         runCatching {
             var aioPush = firebaseRemoteConfig?.getString("aio_push")
             FirebaseConfig.pushData = getBeanByGson(aioPush,PushData::class.java)

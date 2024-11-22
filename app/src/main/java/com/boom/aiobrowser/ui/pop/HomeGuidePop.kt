@@ -31,7 +31,7 @@ class HomeGuidePop(context: Context) : BasePopupWindow(context) {
             tvConfirm.setOnClickListener {
                 clickConfirm = true
                 PointEvent.posePoint(PointEventKey.guide_view)
-                DownloadVideoGuidePop(context).createPop {  }
+                DownloadVideoGuidePop(context).createPop(0) {  }
                 dismiss()
             }
             ivClose.setOnClickListener {
@@ -44,9 +44,7 @@ class HomeGuidePop(context: Context) : BasePopupWindow(context) {
 
     override fun dismiss() {
         PointEvent.posePoint(PointEventKey.guide_close)
-        if (clickConfirm.not()){
-            PointEvent.posePoint(PointEventKey.home_page_first)
-        }
+        PointEvent.posePoint(PointEventKey.home_page_first)
         super.dismiss()
     }
 

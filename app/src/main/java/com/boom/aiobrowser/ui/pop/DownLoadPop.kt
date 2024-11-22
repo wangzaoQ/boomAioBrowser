@@ -377,7 +377,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         }
         updateData()
         setOutSideDismiss(true)
-        setBackground(R.color.tran)
+        setBackground(R.color.color_70_black)
         showPopupWindow()
         PointEvent.posePoint(PointEventKey.webpage_download_pop)
     }

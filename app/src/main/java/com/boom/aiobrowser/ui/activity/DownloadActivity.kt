@@ -168,7 +168,7 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
                 if (list.isNullOrEmpty()){
                     acBinding.llGuide.visibility = View.VISIBLE
                     acBinding.llGuide.setOnClickListener {
-                        DownloadVideoGuidePop(this@DownloadActivity).createPop {  }
+                        DownloadVideoGuidePop(this@DownloadActivity).createPop(1) {  }
                     }
                 }
             }

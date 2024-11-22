@@ -31,6 +31,11 @@ object ShortManager {
     var TAG = APP_WIDGET_UPDATE
 
     fun addPinShortcut(weakReference: WeakReference<BaseActivity<*>>) {
+        if (CacheManager.firstAddShortcut){
+            CacheManager.firstAddShortcut = false
+            AppLogs.dLog(TAG,"short添加失败 第一次不添加")
+            return
+        }
         if (APP.instance.showPopLevel>0){
             AppLogs.dLog(TAG,"short添加失败 当前有更高等级弹窗 showPopLevel:${APP.instance.showPopLevel}")
             return

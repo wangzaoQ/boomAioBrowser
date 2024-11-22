@@ -69,8 +69,25 @@ object NFShow {
                 NFManager.TAG,
                 "name:${enum.menuName} sourceType:${sourceType} 获取数据成功 新闻总size=${newsList?.size}"
             )
-            newsList?.removeFirstOrNull()?.apply {
-                showNewsNF(this, enum)
+//            //TODO:TEST
+//            newsList = mutableListOf()
+
+            var data = newsList?.removeFirstOrNull()
+            if (data == null){
+                AppLogs.dLog(NFManager.TAG,"name:${enum.menuName} sourceType:${sourceType} NFManager.defaultNewsList.size:${NFManager.defaultNewsList?.size}获取数据来源失败走本地通知")
+                if (NFManager.defaultNewsList.isNullOrEmpty().not()){
+                    var index = Random.nextInt(0,NFManager.defaultNewsList!!.size)
+                    if (index>NFManager.defaultNewsList!!.size-1){
+                        index = 0
+                    }
+                    data = NFManager.defaultNewsList!!.get(index)
+                    //原始来源
+                    data.nfSource = enum.menuName
+                    showNewsNF(data, NFEnum.NF_DEFAULT)
+                }
+            }else{
+                data.nfSource = enum.menuName
+                showNewsNF(data, enum)
             }
             CacheManager.saveNFNewsList(enum.menuName, newsList ?: mutableListOf())
             if (APP.isDebug){
@@ -160,8 +177,11 @@ object NFShow {
         if (nfAllow().not())return
         PointEvent.posePoint(PointEventKey.all_noti_t,Bundle().apply {
             putString(PointValueKey.push_type, enum.menuName)
+            if (enum == NFEnum.NF_DEFAULT && data.nfSource.isNullOrEmpty().not()){
+                putString(PointValueKey.source_from, data.nfSource)
+            }
         })
-        if (enum == NFEnum.NF_NEWS || enum == NFEnum.NF_NEWS_FCM){
+        if (data.nfSource == NFEnum.NF_NEWS.menuName || data.nfSource == NFEnum.NF_NEW_USER.menuName || data.nfSource == NFEnum.NF_NEWS_FCM.menuName){
             WakeManager.wwakeUp()
         }
         runCatching {
@@ -194,10 +214,15 @@ object NFShow {
                     NFManager.manager.notify(data.nId,bulider.build())
                 }
             })
-            CacheManager.saveLastRefreshTime(enum.menuName)
-            CacheManager.saveNewsDataHistory(data,enum.menuName)
-            CacheManager.saveNFShowLastTime(enum.menuName,System.currentTimeMillis())
-            CacheManager.saveDayNFShowCount(enum.menuName,(CacheManager.getDayNFShowCount(enum.menuName)+1))
+            var key = data.nfSource
+            if (key.isNullOrEmpty()){
+                key = enum.menuName
+            }
+            CacheManager.saveLastRefreshTime(key)
+            CacheManager.saveNewsDataHistory(data,key)
+            CacheManager.saveNFShowLastTime(key,System.currentTimeMillis())
+            CacheManager.saveDayNFShowCount(key,(CacheManager.getDayNFShowCount(key)+1))
+            AppLogs.dLog(NFManager.TAG,"最终展示通知:nfSource:${key} enumName:${enum.menuName}")
         }.onFailure {
             AppLogs.eLog(NFManager.TAG,it.stackTraceToString())
         }

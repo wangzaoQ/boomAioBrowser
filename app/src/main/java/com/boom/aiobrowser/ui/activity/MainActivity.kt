@@ -21,6 +21,7 @@ import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
+import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.point.PointValue
 import com.boom.aiobrowser.tools.AppLogs
@@ -94,6 +95,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         updateUI(0)
         APP.homeJumpLiveData.observe(this){
             acBinding.fragmentMain.setCurrentItem(it,true)
+        }
+        APP.jumpLiveData.observe(this){
+            acBinding.fragmentMain.setCurrentItem(0,true)
         }
     }
 
@@ -303,6 +307,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
     fun hideStart(isNormal: Boolean) {
         APP.instance.isHideSplash = true
+        var allowShowPop = true
         if (enumName.isNullOrEmpty().not()){
             when (enumName) {
                 NFEnum.NF_DOWNLOAD_VIDEO.menuName -> {
@@ -317,6 +322,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                             putExtra("fromPage","nf_download")
                         })
                     }
+                    allowShowPop = false
                 }
                 NFEnum.NF_SEARCH_VIDEO.menuName->{
                     if (nfTo == 1){
@@ -334,6 +340,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                             putString(ParamsConfig.JUMP_FROM,getString(R.string.app_instagram))
                         })
                     }
+                    allowShowPop = false
                 }
                 NFEnum.NF_NEWS.menuName,NFEnum.NF_HOT.menuName,NFEnum.NF_NEW_USER.menuName,NFEnum.NF_LOCAL.menuName,NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName,NFEnum.NF_NEWS_FCM.menuName,NFEnum.NF_DEFAULT.menuName->{
                     var data = getBeanByGson(nfData,NewsData::class.java)
@@ -349,6 +356,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     jumpActivity<WebDetailsActivity>(Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(data))
                     })
+                    allowShowPop = false
                 }
                 ParamsConfig.WIDGET->{
                     if (nfTo == 1){
@@ -359,11 +367,12 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     }else if (nfTo == 0){
                         jumpActivity<SearchActivity>()
                     }
+                    allowShowPop = false
                 }
                 else -> {}
             }
         }
-        if (APP.instance.shareText.isNotEmpty()){
+        if (APP.instance.shareText.isNotEmpty() && allowShowPop){
             ProcessingTextPop(this).createPop(APP.instance.shareText, PointValue.share){
                 WebParseActivity.toWebParseActivity(this@MainActivity,1,APP.instance.shareText)
             }
@@ -378,19 +387,24 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         fManager.hideFragment(supportFragmentManager, startFragment!!)
         acBinding.llMainControl.visibility = View.VISIBLE
         var showPopCount = 0
-        if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault){
+        if (APP.isDebug){
+            AppLogs.dLog(acTAG,"首页弹窗判断 isDefaultBrowser：:${BrowserManager.isDefaultBrowser()} " +
+                    "isFirstShowBrowserDefault:${CacheManager.isFirstShowBrowserDefault} switchDefaultPop:${FirebaseConfig.switchDefaultPop} allowShowPop:${allowShowPop}")
+        }
+        if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault && FirebaseConfig.switchDefaultPop && allowShowPop){
+            AppLogs.dLog(acTAG,"shouw browser pop")
             CacheManager.isFirstShowBrowserDefault = false
             var pop = DefaultPop(this@MainActivity)
             pop.setOnDismissListener(object :OnDismissListener(){
                 override fun onDismiss() {
                     showPopCount++
-                    showDownloadGuide(showPopCount)
+                    showDownloadGuide(showPopCount,allowShowPop)
                 }
             })
             pop.createPop()
         }else{
             showPopCount++
-            showDownloadGuide(showPopCount)
+            showDownloadGuide(showPopCount, allowShowPop)
         }
         if (XXPermissions.isGranted(APP.instance, Permission.POST_NOTIFICATIONS).not()){
             //无通知权限
@@ -401,23 +415,28 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             guidePop.setOnDismissListener(object :OnDismissListener(){
                 override fun onDismiss() {
                     showPopCount++
-                    showDownloadGuide(showPopCount)
+                    showDownloadGuide(showPopCount, allowShowPop)
                 }
             })
         }else{
             showPopCount++
-            showDownloadGuide(showPopCount)
+            showDownloadGuide(showPopCount, allowShowPop)
         }
 
         APP.jumpResumeData.postValue(0)
     }
 
-    private fun showDownloadGuide(showPopCount:Int) {
+    private fun showDownloadGuide(showPopCount: Int, allowShowPop: Boolean) {
         if (showPopCount == 2){
-            if (CacheManager.isFirstShowDownload){
-//                CacheManager.isFirstShowDownload = false
-                var homeGuidePop = HomeGuidePop(this@MainActivity)
-                homeGuidePop.createPop()
+            if (FirebaseConfig.switchDownloadGuidePop && allowShowPop){
+                AppLogs.dLog(acTAG,"允许开启引导弹窗")
+                if (CacheManager.isFirstShowDownload){
+                    var homeGuidePop = HomeGuidePop(this@MainActivity)
+                    homeGuidePop.createPop()
+                }
+            }else{
+                AppLogs.dLog(acTAG,"不允许开启引导弹窗")
+                PointEvent.posePoint(PointEventKey.home_page_first)
             }
         }
     }

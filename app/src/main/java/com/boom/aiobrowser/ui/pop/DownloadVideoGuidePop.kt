@@ -9,6 +9,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserPopDownloadVideoGuideBinding
+import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -34,7 +35,7 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
     }
 
 
-    fun createPop(callBack: () -> Unit){
+    fun createPop(fromType:Int,callBack: () -> Unit){
         defaultBinding?.apply {
             vp.apply {
                 setOrientation(ViewPager2.ORIENTATION_HORIZONTAL)
@@ -84,7 +85,6 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
                 PointEvent.posePoint(PointEventKey.download_tutorial_skip, Bundle().apply {
                     putInt(PointValueKey.page,vp.currentItem)
                 })
-                PointEvent.posePoint(PointEventKey.home_page_first)
                 dismiss()
             }
             btnCommit.setOnClickListener {
@@ -96,7 +96,6 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
                 APP.jumpLiveData.postValue(data)
                 JumpDataManager.closeAll()
                 PointEvent.posePoint(PointEventKey.tutorial_webpage)
-                PointEvent.posePoint(PointEventKey.home_page_first)
                 dismiss()
             }
         }

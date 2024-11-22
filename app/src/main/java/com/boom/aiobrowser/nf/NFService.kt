@@ -13,6 +13,7 @@ class NFService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        APP.instance.showForeground = true
         showNF()
     }
 

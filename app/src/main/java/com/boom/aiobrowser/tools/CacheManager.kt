@@ -78,6 +78,7 @@ object CacheManager {
     const val KV_FIRST_DOWNLOAD_TIPS4 = "KV_FIRST_DOWNLOAD_TIPS4"
     const val KV_USER_DATA = "KV_USER_DATA"
 //    const val KV_FIRST_OPEN_APP = "KV_FIRST_OPEN_APP"
+    const val KV_FIRST_ADD_SHORTCUT = "KV_FIRST_ADD_SHORTCUT"
 
 
     var videoDownloadTempList :MutableList<VideoUIData>
@@ -150,6 +151,14 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_DAY_SHOW_ADD_SHORT, value)
+        }
+
+    var firstAddShortcut: Boolean
+        get() {
+            return mmkv.decodeBool(KV_FIRST_ADD_SHORTCUT, true)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_ADD_SHORTCUT, value)
         }
 
     var dayShowBattery: Boolean

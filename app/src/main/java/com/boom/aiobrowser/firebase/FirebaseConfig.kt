@@ -69,4 +69,6 @@ object FirebaseConfig {
     var AD_CD_ALL = if (APP.isDebug)10 else 60
 
     var pushData: PushData?=null
+    var switchDefaultPop: Boolean = false
+    var switchDownloadGuidePop: Boolean = false
 }

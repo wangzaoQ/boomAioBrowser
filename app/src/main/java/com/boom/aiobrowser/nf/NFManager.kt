@@ -26,11 +26,13 @@ import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.other.isAndroid12
 import com.boom.aiobrowser.other.isAndroid14
+import com.boom.aiobrowser.tools.jobCancel
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
@@ -50,18 +52,29 @@ object NFManager {
     val videoNFMap = LinkedHashMap<String,Int>()
 
     var nfForeground:Notification?=null
+    var defaultNewsList:MutableList<NewsData>?=null
 
 
     val manager: NotificationManagerCompat by lazy {
         NotificationManagerCompat.from(APP.instance)
     }
 
+    /**
+     * fcm 用 defaultChannel
+     * 正常通知 用 enum.channelId
+     */
     fun newChannel(enum: NFEnum,defaultChannel:String="") {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel: NotificationChannel? = manager.getNotificationChannel(if (defaultChannel.isNullOrEmpty()) enum.channelId else defaultChannel)
+            var endChannel = if (defaultChannel.isNullOrEmpty()) enum.channelId else defaultChannel
+            val channel: NotificationChannel? = manager.getNotificationChannel(endChannel)
             if (Objects.isNull(channel)) {
-                val channelNew: NotificationChannel = NotificationChannel(if (defaultChannel.isNullOrEmpty()) enum.channelId else defaultChannel, if (defaultChannel.isNullOrEmpty()) enum.channelId else defaultChannel, enum.channelPriority)
-                channelNew.setSound(null,null)
+                val channelNew: NotificationChannel = NotificationChannel(endChannel, endChannel, enum.channelPriority)
+                if (endChannel == NFEnum.NF_NEW_USER.channelId || endChannel == NFEnum.NF_NEWS.channelId || endChannel == defaultChannel){
+                    channelNew!!.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 600) //设置震动频率
+                    channelNew!!.enableVibration(true) //设置是否绕过免打扰模式
+                }else{
+                    channelNew.setSound(null,null)
+                }
                 channelNew.setShowBadge(true)
                 channelNew.lockscreenVisibility = Notification.VISIBILITY_PUBLIC;
                 manager.createNotificationChannel(channelNew)
@@ -171,10 +184,14 @@ object NFManager {
                     putString(PointValueKey.type,type)
                 })
             }
-            NFEnum.NF_NEWS.menuName,NFEnum.NF_LOCAL.menuName,NFEnum.NF_HOT.menuName,NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName,NFEnum.NF_NEW_USER.menuName -> {
+            NFEnum.NF_NEWS.menuName,NFEnum.NF_LOCAL.menuName,NFEnum.NF_HOT.menuName,NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName,NFEnum.NF_NEW_USER.menuName,NFEnum.NF_DEFAULT.menuName -> {
+                var data = getBeanByGson(nfData,NewsData::class.java)
                 from = "push"
                 PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
                     putString(PointValueKey.push_type, enumName)
+                    if (enumName == NFEnum.NF_DEFAULT.menuName && data!=null){
+                        putString(PointValueKey.source_from, data.nfSource)
+                    }
                 })
                 var id = NFEnum.NF_NEWS.position
                 when (enumName) {
@@ -192,6 +209,9 @@ object NFManager {
                     }
                     NFEnum.NF_NEW_USER.menuName -> {
                         id = NFEnum.NF_NEW_USER.position
+                    }
+                    NFEnum.NF_DEFAULT.menuName -> {
+                        id = NFEnum.NF_DEFAULT.position
                     }
                     else -> {}
                 }
@@ -307,13 +327,15 @@ object NFManager {
 
     var showCount = 0
 
+    var timerJob: Job?=null
+
     fun notifyByTimerTask() {
-        if (isDebug){
-            NFWorkManager.startNF()
-        }
-       CoroutineScope(Dispatchers.IO).launch{
+        NFWorkManager.startNF()
+        timerJob.jobCancel()
+        timerJob = CoroutineScope(Dispatchers.IO).launch{
             startForeground("APP")
-            while (true) {
+           delay(10*1000)
+           while (true) {
                 appDataReset()
                 showNFByCount()
                 showCount++

@@ -37,6 +37,10 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
     var page = 1
 
     override fun startLoadData() {
+        loadData()
+    }
+
+    private fun loadData() {
         if (topic == TopicConfig.TOPIC_FOR_YOU){
             viewModel.value.getNewsData(topic)
         }else{
@@ -55,11 +59,11 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
             fBinding.newsSmart.finishLoadMore()
         }
         fBinding.newsSmart.setOnRefreshListener{
-            viewModel.value.getNewsData("${NewsConfig.TOPIC_TAG}${topic}",true)
+            loadData()
             page = 1
         }
         fBinding.newsSmart.setOnLoadMoreListener{
-            viewModel.value.getNewsData("${NewsConfig.TOPIC_TAG}${topic}",true)
+            loadData()
             page++
         }
         newsAdapter.setOnDebouncedItemClick{adapter, view, position ->

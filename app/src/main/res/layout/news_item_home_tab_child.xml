@@ -9,12 +9,13 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivBrowser"
         android:layout_width="34dp"
         android:layout_height="34dp"
         android:layout_centerHorizontal="true"
-        app:srcCompat="@mipmap/ic_default_browser_icon"></androidx.appcompat.widget.AppCompatImageView>
+        app:shapeAppearance="@style/style_RoundStyle_8r"
+        app:srcCompat="@mipmap/ic_default_browser_icon"></com.google.android.material.imageview.ShapeableImageView>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvBrowser"

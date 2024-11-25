@@ -353,7 +353,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                     var downloadData = data.formatsList.get(0)
                     if (downloadData.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS) {
                         context.jumpActivity<VideoPreActivity>(Bundle().apply {
-                            putString("video_path", toJson(data))
+                            putString("video_path", toJson(downloadData))
                         })
                     } else{
                         if (allowCheckStatus(downloadData) && !downloadData.videoChecked){

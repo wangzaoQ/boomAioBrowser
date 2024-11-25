@@ -19,7 +19,7 @@ import java.text.DecimalFormat;
 public class VideoDownloadUtils {
     public static final long DEFAULT_CONTENT_LENGTH = -1;
     public static final int DEFAULT_BUFFER_SIZE = 8 * 1024;
-    public static final String VIDEO_SUFFIX = ".video";
+    public static final String VIDEO_SUFFIX = "";
     public static final String VIDEO_SUFFIX_MP4 = ".mp4";
     public static final String LOCAL_M3U8 = "local.m3u8";
     public static final String LOCAL_M3U8_WITH_KEY = "local_key_url.m3u8";

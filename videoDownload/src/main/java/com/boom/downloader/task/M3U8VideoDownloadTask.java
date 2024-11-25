@@ -408,7 +408,7 @@ public class M3U8VideoDownloadTask extends VideoDownloadTask {
             bfw.flush();
             bfw.close();
 
-            File localM3U8File = new File(mSaveDir, mSaveName + "_" + VideoDownloadUtils.LOCAL_M3U8);
+            File localM3U8File = new File(mSaveDir, mSaveName );
             if (localM3U8File.exists()) {
                 localM3U8File.delete();
             }

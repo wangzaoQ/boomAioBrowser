@@ -41,6 +41,8 @@ import com.boom.web.PermissionInterceptor
 import com.boom.web.WebChromeClient
 import com.boom.web.WebViewClient
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.Request
 import okhttp3.Response
 import java.lang.ref.WeakReference
@@ -107,97 +109,107 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
     abstract fun getInsertParent(): ViewGroup
 
-    class MyJavaScriptInterface(fragmentWebReference: WeakReference<BaseWebFragment<*>>,var fromSource:String) {
-        var mWebFragment = fragmentWebReference.get()
-        var mAgentWeb = fragmentWebReference.get()?.mAgentWeb
-
+    class MyJavaScriptInterface(var fragmentWebReference: WeakReference<BaseWebFragment<*>>,var fromSource:String) {
 
         @JavascriptInterface
         fun result(kind: String, detail: String){
             AppLogs.dLog("webReceive","结果类型:${kind} thread:${Thread.currentThread()} detail:${detail}")
-            if (kind == "ERROR"){
-                PointEvent.posePoint(PointEventKey.webpage_download_show, Bundle().apply {
-                    putString(PointValueKey.type,"no_have")
-                })
-            }else{
-                PointEvent.posePoint(PointEventKey.webpage_download_show, Bundle().apply {
-                    putString(PointValueKey.type,"have")
-                })
-            }
-            if (mWebFragment?.allowShowTips() == true)return
-            getBeanByGson(detail,WebDetailsData::class.java)?.apply {
-                var uiData = VideoUIData()
-                var description = description?:""
-                formats?.forEach {
-                    var map = HashMap<String,Any>()
-                    if (it.cookie == true){
-                        var cookie = CookieManager.getInstance().getCookie(mAgentWeb?.webCreator?.webView?.url?:"")?:""
-                        map.put("Cookie", cookie)
+            fragmentWebReference.get()?.rootActivity?.addLaunch(success = {
+                if (kind == "ERROR"){
+                    PointEvent.posePoint(PointEventKey.webpage_download_show, Bundle().apply {
+                        putString(PointValueKey.type,"no_have")
+                    })
+                }else{
+                    PointEvent.posePoint(PointEventKey.webpage_download_show, Bundle().apply {
+                        putString(PointValueKey.type,"have")
+                    })
+                }
+                var url = ""
+                withContext(Dispatchers.Main){
+                    if (fragmentWebReference.get()?.allowShowTips() == true){
+                        return@withContext
                     }
-                    var sourceList = if (fromSource == "page") CacheManager.pageList else  CacheManager.fetchList
-                    var fileStart = ""
+                    url = fragmentWebReference.get()?.mAgentWeb?.webCreator?.webView?.url?:""
+                }
+                getBeanByGson(detail,WebDetailsData::class.java)?.apply {
+                    var uiData = VideoUIData()
+                    var description = description?:""
+                    formats?.forEach {
+                        var map = HashMap<String,Any>()
+                        if (it.cookie == true){
+                            withContext(Dispatchers.Main){
+                                var cookie = CookieManager.getInstance().getCookie(url)?:""
+                                map.put("Cookie", cookie)
+                            }
+
+                        }
+                        var sourceList = if (fromSource == "page") CacheManager.pageList else  CacheManager.fetchList
+                        var fileStart = ""
 //                    if (description.startsWith("http").not()){
 //                        fileStart = description
 //                    }
-                    if (fileStart.isNullOrEmpty()){
-                        runCatching {
-                            for (i in 0 until sourceList.size){
-                                var pageData = sourceList.get(i)
-                                var uri = Uri.parse(mAgentWeb?.webCreator?.webView?.url?:"")
-                                if (uri.host?.contains(pageData.cUrl)?:false){
-                                    var split = pageData.cUrl.split(".")
-                                    if (split.size>0){
+                        if (fileStart.isNullOrEmpty()){
+                            runCatching {
+                                for (i in 0 until sourceList.size){
+                                    var pageData = sourceList.get(i)
+                                    var uri = Uri.parse(url)
+                                    if (uri.host?.contains(pageData.cUrl)?:false){
+                                        var split = pageData.cUrl.split(".")
+                                        if (split.size>0){
+                                            fileStart = "${split[0]}_${System.currentTimeMillis()}"
+                                        }
+                                        break
+                                    }
+                                }
+
+                            }
+                            runCatching {
+                                if (fileStart.isNullOrEmpty()){
+                                    var uri = Uri.parse(url)
+                                    var split = uri.host?.split(".")
+                                    if (split!!.size>0){
                                         fileStart = "${split[0]}_${System.currentTimeMillis()}"
                                     }
-                                    break
                                 }
                             }
                         }
-                        runCatching {
-                            if (fileStart.isNullOrEmpty()){
-                                var uri = Uri.parse(mAgentWeb?.webCreator?.webView?.url?:"")
-                                var split = uri.host?.split(".")
-                                if (split!!.size>0){
-                                    fileStart = "${split[0]}_${System.currentTimeMillis()}"
-                                }
-                            }
+                        if (fileStart.isNullOrEmpty()){
+                            fileStart = "${System.currentTimeMillis()}"
+                        }
+                        var videoDownloadData = VideoDownloadData().createDefault(
+                            videoId = "${VideoDownloadUtils.computeMD5(id)}_${it.resolution}",
+                            fileName = "${fileStart}.${it.format}",
+                            url = it.url?:"",
+                            imageUrl = this.thumbnail?:"",
+                            paramsMap = map,
+                            size = it.size?.toLong()?:0,
+                            videoType = it.format?:"",
+                            resolution = if (it.resolution.isNullOrEmpty()) "--" else it.resolution?:""
+                        )
+                        uiData.formatsList.add(videoDownloadData)
+                        uiData.videoResultId = "${id}"
+                        uiData.source = fromSource
+                        uiData.thumbnail = this.thumbnail?:""
+                        uiData.description = "${fileStart}.${it.format}"
+                    }
+                    var index = -1
+                    var list =  CacheManager.videoDownloadTempList
+                    for (i in 0 until list.size){
+                        var data = list.get(i)
+                        AppLogs.dLog("webReceive","data.videoResultId:${data.videoResultId} uiData.videoResultId:${uiData.videoResultId}")
+                        if (data.videoResultId == uiData.videoResultId){
+                            index = i
+                            break
                         }
                     }
-                    if (fileStart.isNullOrEmpty()){
-                        fileStart = "${System.currentTimeMillis()}"
-                    }
-                    var videoDownloadData = VideoDownloadData().createDefault(
-                        videoId = "${VideoDownloadUtils.computeMD5(id)}_${it.resolution}",
-                        fileName = fileStart,
-                        url = it.url?:"",
-                        imageUrl = this.thumbnail?:"",
-                        paramsMap = map,
-                        size = it.size?.toLong()?:0,
-                        videoType = it.format?:"",
-                        resolution = if (it.resolution.isNullOrEmpty()) "--" else it.resolution?:""
-                    )
-                    uiData.formatsList.add(videoDownloadData)
-                    uiData.videoResultId = "${id}"
-                    uiData.source = fromSource
-                    uiData.thumbnail = this.thumbnail?:""
-                    uiData.description = fileStart
-                }
-                var index = -1
-                var list =  CacheManager.videoDownloadTempList
-                for (i in 0 until list.size){
-                    var data = list.get(i)
-                    AppLogs.dLog("webReceive","data.videoResultId:${data.videoResultId} uiData.videoResultId:${uiData.videoResultId}")
-                    if (data.videoResultId == uiData.videoResultId){
-                        index = i
-                        break
+                    if (index == -1){
+                        list.add(0,uiData)
+                        CacheManager.videoDownloadTempList = list
+                        APP.videoScanLiveData.postValue(uiData)
                     }
                 }
-                if (index == -1){
-                    list.add(0,uiData)
-                    CacheManager.videoDownloadTempList = list
-                    APP.videoScanLiveData.postValue(uiData)
-                }
-            }
+            }, failBack = {})
+
         }
 
         @JavascriptInterface
@@ -259,7 +271,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             var index = -1
             for (i in 0 until FirebaseConfig.switchOpenFilterList.size){
                 var filterWeb = FirebaseConfig.switchOpenFilterList.get(i)
-                if (host.contains(filterWeb) || filterWeb.contains(host)){
+                if (host.contains(filterWeb)){
                     index = i
                 }
             }

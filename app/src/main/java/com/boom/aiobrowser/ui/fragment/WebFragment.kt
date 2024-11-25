@@ -288,12 +288,12 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
     override fun loadWebFinished() {
         super.loadWebFinished()
-        if (allowShowTips()){
-            showTipsPop()
-        }
+//        if (allowShowTips()){
+//            showTipsPop()
+//        }
         fBinding.flTop.binding.tvToolbarSearch.text = "${jumpData?.jumpTitle} ${getSearchTitle()}"
         fBinding.refreshLayout.isRefreshing = false
-        var key = mAgentWeb?.webCreator?.webView?.url?:""
+//        var key = mAgentWeb?.webCreator?.webView?.url?:""
     }
 
     fun getSearchTitle():String{

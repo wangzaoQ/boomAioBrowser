@@ -349,10 +349,10 @@ public class VideoDownloadManager {
                         taskItem.setIsCompleted(true);
                         taskItem.setPercent(100f);
                         if (taskItem.isHlsType()) {
-                            taskItem.setFilePath(taskItem.getSaveDir() + File.separator + taskItem.getFileName() + "_" + VideoDownloadUtils.LOCAL_M3U8);
+                            taskItem.setFilePath(taskItem.getSaveDir() + File.separator + taskItem.getFileName() );
                             taskItem.setFileName(taskItem.getFileName());
                         } else {
-                            taskItem.setFilePath(taskItem.getSaveDir() + File.separator + taskItem.getFileName() + VideoDownloadUtils.VIDEO_SUFFIX);
+                            taskItem.setFilePath(taskItem.getSaveDir() + File.separator + taskItem.getFileName());
                             taskItem.setFileName(taskItem.getFileName());
                         }
                         mVideoDownloadHandler.obtainMessage(DownloadConstants.MSG_DOWNLOAD_SUCCESS, taskItem).sendToTarget();

@@ -79,7 +79,7 @@ public class SingleVideoCacheThread implements Runnable {
     private void downloadVideo() {
         File videoFile;
         try {
-            videoFile = new File(mSaveDir, mTaskItem.getFileName() + VideoDownloadUtils.VIDEO_SUFFIX);
+            videoFile = new File(mSaveDir, mTaskItem.getFileName());
             if (!videoFile.exists()) {
                 videoFile.createNewFile();
             }

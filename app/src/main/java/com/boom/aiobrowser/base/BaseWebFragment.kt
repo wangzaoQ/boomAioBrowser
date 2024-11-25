@@ -111,10 +111,15 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
     class MyJavaScriptInterface(var fragmentWebReference: WeakReference<BaseWebFragment<*>>,var fromSource:String) {
 
+        @Volatile
+        var allow = true
+
+
         @JavascriptInterface
         fun result(kind: String, detail: String){
             AppLogs.dLog("webReceive","结果类型:${kind} thread:${Thread.currentThread()} detail:${detail}")
             fragmentWebReference.get()?.rootActivity?.addLaunch(success = {
+                allow = true
                 if (kind == "ERROR"){
                     PointEvent.posePoint(PointEventKey.webpage_download_show, Bundle().apply {
                         putString(PointValueKey.type,"no_have")
@@ -127,10 +132,12 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                 var url = ""
                 withContext(Dispatchers.Main){
                     if (fragmentWebReference.get()?.allowShowTips() == true){
+                        allow = false
                         return@withContext
                     }
                     url = fragmentWebReference.get()?.mAgentWeb?.webCreator?.webView?.url?:""
                 }
+                if (allow.not())return@addLaunch
                 getBeanByGson(detail,WebDetailsData::class.java)?.apply {
                     var uiData = VideoUIData()
                     var description = description?:""

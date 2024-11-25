@@ -11,11 +11,14 @@ import android.view.ViewGroup
 import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseWebFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserDragLayoutBinding
 import com.boom.aiobrowser.databinding.BrowserFragmentWebBinding
+import com.boom.aiobrowser.nf.NFManager
+import com.boom.aiobrowser.nf.NFShow
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -27,6 +30,7 @@ import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.web.WebScan
 import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.pop.ClearPop
 import com.boom.aiobrowser.ui.pop.DownLoadPop
@@ -34,6 +38,7 @@ import com.boom.aiobrowser.ui.pop.FirstDownloadTips
 import com.boom.aiobrowser.ui.pop.TabPop
 import com.boom.aiobrowser.ui.pop.TipsPop
 import com.boom.aiobrowser.ui.pop.VideoPop2
+import com.boom.downloader.VideoDownloadManager
 import com.boom.drag.EasyFloat
 import com.boom.drag.enums.SidePattern
 import com.boom.drag.utils.DisplayUtils
@@ -41,6 +46,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import pop.basepopup.BasePopupWindow.OnDismissListener
+import java.lang.ref.WeakReference
 
 
 class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
@@ -120,6 +126,35 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         }
 
         APP.videoScanLiveData.observe(this){
+            if (jumpData?.autoDownload == true){
+                it?.apply {
+                    (context as BaseActivity<*>).addLaunch(success = {
+                        if (it.formatsList.isNotEmpty()){
+                            var data = it.formatsList.get(0)
+                            var model = DownloadCacheManager.queryDownloadModel(data)
+                            if (model == null) {
+                                data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
+                                DownloadCacheManager.addDownLoadPrepare(data)
+                                withContext(Dispatchers.Main) {
+                                    var headerMap = HashMap<String, String>()
+                                    data.paramsMap?.forEach {
+                                        headerMap.put(it.key, it.value.toString())
+                                    }
+                                    VideoDownloadManager.getInstance()
+                                        .startDownload(data.createDownloadData(data), headerMap)
+                                    NFManager.requestNotifyPermission(
+                                        WeakReference((context as BaseActivity<*>)),
+                                        onSuccess = {
+                                            NFShow.showDownloadNF(data, true)
+                                        },
+                                        onFail = {})
+                                }
+                            }
+                        }
+                    }, failBack = {})
+                }
+                jumpData?.autoDownload = false
+            }
             popDown?.updateDataByScan(it)
             updateDownloadButtonStatus(true,0)
         }
@@ -251,13 +286,10 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         }
     }
 
-    var isFirstYoutube = true
-
     override fun loadWebFinished() {
         super.loadWebFinished()
-        if (WebScan.isYoutube(jumpData?.jumpUrl?:"")&&isFirstYoutube){
-            isFirstYoutube = false
-            TipsPop(rootActivity).createPop {  }
+        if (allowShowTips()){
+            showTipsPop()
         }
         fBinding.flTop.binding.tvToolbarSearch.text = "${jumpData?.jumpTitle} ${getSearchTitle()}"
         fBinding.refreshLayout.isRefreshing = false
@@ -344,8 +376,8 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
             // 传入View，传入布局文件皆可，如：MyCustomView(this)、R.layout.float_custom
             .setLayout(root) {
                 ivDownload.setOneClick {
-                    if (WebScan.isYoutube(jumpData?.jumpUrl?:"")){
-                        TipsPop(rootActivity).createPop {  }
+                    if (allowShowTips()){
+                        showTipsPop()
                         return@setOneClick
                     }
                     rootActivity.addLaunch(success = {

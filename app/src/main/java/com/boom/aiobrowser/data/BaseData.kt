@@ -8,6 +8,7 @@ open class BaseData {
     var jumpUrl = ""
     //是否选中
     var isCurrent = false
+    var autoDownload = false
 
     var updateTime = System.currentTimeMillis()
 

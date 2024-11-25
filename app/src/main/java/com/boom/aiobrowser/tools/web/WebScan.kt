@@ -269,15 +269,19 @@ object WebScan {
     }
 
     fun isTikTok(url: String): Boolean {
-        return url.contains(WebConfig.TIKTOK)
+        return url.contains(WebConfig.TIKTOK,true)
     }
 
     fun isPornhub(url: String):Boolean{
-        return url.contains(WebConfig.PORNHUB)
+        return url.contains(WebConfig.PORNHUB,true)
     }
 
     fun isYoutube(url: String):Boolean{
-        return url.contains(WebConfig.YOUTUBE)
+        return url.contains(WebConfig.YOUTUBE,true)
+    }
+
+    fun isVimeo(url: String):Boolean{
+        return url.contains(WebConfig.VIMEO,true)
     }
 
     fun reset() {

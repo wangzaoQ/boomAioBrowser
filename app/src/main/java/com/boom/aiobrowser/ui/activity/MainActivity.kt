@@ -376,6 +376,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             ProcessingTextPop(this).createPop(APP.instance.shareText, PointValue.share){
                 WebParseActivity.toWebParseActivity(this@MainActivity,1,APP.instance.shareText)
             }
+//            var index = APP.instance.shareText.indexOf("http")
+//            APP.instance.shareText = APP.instance.shareText.substring(index,APP.instance.shareText.length)
+//            APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(APP.instance.shareText,"分享网页"))
         }else{
 
         }

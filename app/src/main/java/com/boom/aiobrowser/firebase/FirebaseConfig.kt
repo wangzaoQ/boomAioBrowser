@@ -65,6 +65,7 @@ object FirebaseConfig {
 	"iassum": "https://cdn.dol.com.br/img/Categoria-Destaque/880000/0x0/CasalPudor_00881365_0_-t.webp?fallback=https%3A%2F%2Fcdn.dol.com.br%2Fimg%2FCategoria-Destaque%2F880000%2FCasalPudor_00881365_0_.jpg%3Fxid%3D2953450&xid=2953450"
 }]
 """
+    const val FILTER_DEFAULT_WEB = "facebook,instagram,x,whatsapp,reddit,snapchat,orkut,tiktok,netflix,disneyplus,hulu,primevideo,hbomax,imdb,globoplay,looke,telecineplay,cnn,nytimes,foxnews,nbcnews,washingtonpost,usatoday,globo,uol,folha,uol,estadao,r7,correiobraziliense,tmz,people,eonline,usmagazine,perezhilton,justjared,quem,purepeople,ego,rd1,caras,google,chatgpt,office,grammarly,canva,pagseguro,webmd,mayoclinic,healthline,medlineplus,everydayhealth,minhavida,einstein,hipocentro,saude,tripadvisor,expedia,kayak,airbnb,booking,lonelyplanet,decolar,maxmilhas,hurb,melhoresdestinos,viajanet,spotify,pandora,apple,soundcloud,amazon,tidal,deezer,suamusica,palcomp3,mercadolivre,americanas,magazineluiza,submarino,netshoes,aliexpress,espn,bleacherreport,yahoosports,cbssports,nba,nfl,globo,esporte,lance,esporteinterativo,futebolinterior,youtube,vimeo,dailymotion,twitch,kwai"
 
     //控制应用内所有广告间的间隔的广告cd，本地默认60s
     var AD_CD_ALL = if (APP.isDebug)10 else 60
@@ -72,4 +73,6 @@ object FirebaseConfig {
     var pushData: PushData?=null
     var switchDefaultPop: Boolean = false
     var switchDownloadGuidePop: Boolean = false
+    var switchOpenFilter1: Boolean = true
+    var switchOpenFilterList: MutableList<String> = mutableListOf()
 }

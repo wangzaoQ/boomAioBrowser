@@ -7,5 +7,6 @@ object WebConfig {
     const val TIKTOK = "tiktok"
     const val PORNHUB = "pornhub"
     const val YOUTUBE = "youtube"
+    const val VIMEO = "vimeo"
 
 }

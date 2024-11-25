@@ -20,6 +20,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.data.WebDetailsData
+import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.net.WebNet
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
@@ -30,6 +31,7 @@ import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getMapByGson
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.tools.web.WebScan
+import com.boom.aiobrowser.ui.pop.TipsPop
 import com.boom.downloader.utils.VideoDownloadUtils
 import com.boom.web.AbsAgentWebSettings
 import com.boom.web.AgentWeb
@@ -78,7 +80,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 //            .additionalHttpHeader(getUrl(), "cookie", "41bc7ddf04a26b91803f6b11817a5a1c")
 //            .useMiddlewareWebClient(getMiddlewareWebClient()) //设置WebViewClient中间件，支持多个WebViewClient， AgentWeb 3.0.0 加入。
                     .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK) //打开其他页面时，弹窗质询用户前往其他应用 AgentWeb 3.0.0 加入。
-                    .addJavascriptInterface("${"$"}__",MyJavaScriptInterface(rootActivity,getRealParseUrl(),getFromSource()))
+                    .addJavascriptInterface("${"$"}__",MyJavaScriptInterface(WeakReference(this@BaseWebFragment),getFromSource()))
                     .interceptUnkownUrl() //拦截找不到相关页面的Url AgentWeb 3.0.0 加入。
                     .createAgentWeb() //创建AgentWeb。
                     .ready() //设置 WebSettings。
@@ -105,8 +107,9 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
     abstract fun getInsertParent(): ViewGroup
 
-    class MyJavaScriptInterface(context: BaseActivity<*>,var  url: String,var fromSource:String) {
-        var mContext = context
+    class MyJavaScriptInterface(fragmentWebReference: WeakReference<BaseWebFragment<*>>,var fromSource:String) {
+        var mWebFragment = fragmentWebReference.get()
+        var mAgentWeb = fragmentWebReference.get()?.mAgentWeb
 
 
         @JavascriptInterface
@@ -121,13 +124,14 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                     putString(PointValueKey.type,"have")
                 })
             }
+            if (mWebFragment?.allowShowTips() == true)return
             getBeanByGson(detail,WebDetailsData::class.java)?.apply {
                 var uiData = VideoUIData()
                 var description = description?:""
                 formats?.forEach {
                     var map = HashMap<String,Any>()
                     if (it.cookie == true){
-                        var cookie = CookieManager.getInstance().getCookie(url)?:""
+                        var cookie = CookieManager.getInstance().getCookie(mAgentWeb?.webCreator?.webView?.url?:"")?:""
                         map.put("Cookie", cookie)
                     }
                     var sourceList = if (fromSource == "page") CacheManager.pageList else  CacheManager.fetchList
@@ -139,7 +143,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                         runCatching {
                             for (i in 0 until sourceList.size){
                                 var pageData = sourceList.get(i)
-                                var uri = Uri.parse(url)
+                                var uri = Uri.parse(mAgentWeb?.webCreator?.webView?.url?:"")
                                 if (uri.host?.contains(pageData.cUrl)?:false){
                                     var split = pageData.cUrl.split(".")
                                     if (split.size>0){
@@ -151,7 +155,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                         }
                         runCatching {
                             if (fileStart.isNullOrEmpty()){
-                                var uri = Uri.parse(url)
+                                var uri = Uri.parse(mAgentWeb?.webCreator?.webView?.url?:"")
                                 var split = uri.host?.split(".")
                                 if (split!!.size>0){
                                     fileStart = "${split[0]}_${System.currentTimeMillis()}"
@@ -173,7 +177,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                         resolution = if (it.resolution.isNullOrEmpty()) "--" else it.resolution?:""
                     )
                     uiData.formatsList.add(videoDownloadData)
-                    uiData.videoResultId =  "${fileStart}_${id}"
+                    uiData.videoResultId = "${id}"
                     uiData.source = fromSource
                     uiData.thumbnail = this.thumbnail?:""
                     uiData.description = fileStart
@@ -232,6 +236,40 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
         }
     }
 
+    var tipsPop:TipsPop?=null
+
+    fun showTipsPop(){
+        if (tipsPop == null){
+            tipsPop = TipsPop(rootActivity)
+        }
+        if (tipsPop!!.isShowing.not()){
+            tipsPop!!.createPop {  }
+        }
+    }
+
+    fun allowShowTips(): Boolean {
+        var showTask = false
+        var host = Uri.parse(mAgentWeb?.webCreator?.webView?.url?:"")?.host?:""
+        AppLogs.dLog(fragmentTAG,"当前加载Url:${mAgentWeb?.webCreator?.webView?.url?:""} host:${host}")
+        if (WebScan.isVimeo(host))
+        else if (FirebaseConfig.switchOpenFilter1){
+            AppLogs.dLog(fragmentTAG,"命中filter1")
+            showTask = true
+        }else{
+            var index = -1
+            for (i in 0 until FirebaseConfig.switchOpenFilterList.size){
+                var filterWeb = FirebaseConfig.switchOpenFilterList.get(i)
+                if (host.contains(filterWeb) || filterWeb.contains(host)){
+                    index = i
+                }
+            }
+            if (index>=0){
+                AppLogs.dLog(fragmentTAG,"命中filter2 indexUrl:${FirebaseConfig.switchOpenFilterList.get(index)}")
+                showTask = true
+            }
+        }
+        return showTask
+    }
 
     fun goBack(keyCode:Int , event: KeyEvent?):Boolean {
         back.invoke()
@@ -344,7 +382,6 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                 fragmentTAG,
                 "mUrl:" + url + " onPageStarted  target:" + getUrl()
             )
-            isPageFinished = false
             loadWebOnPageStared(url)
             timer[url] = System.currentTimeMillis()
 //            if (url == getUrl()) {
@@ -353,8 +390,6 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 //                pageNavigator(View.VISIBLE)
 //            }
         }
-
-        var isPageFinished = false
 
 
         override fun onPageFinished(view: WebView?, url: String) {
@@ -367,20 +402,19 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                     "  page mUrl:" + url + "  used time:" + (overTime - startTime!!)
                 )
                 timer.remove(url)
-            }
-            loadWebFinished()
-            var cookieManager = CookieManager.getInstance()
-            var cookie = cookieManager.getCookie(url)?:""
-            AppLogs.dLog(fragmentTAG,"onPageFinished page mUrl:${url}  cookie:${cookie}")
-            if (WebScan.isTikTok(url)){
+                loadWebFinished()
+                var cookieManager = CookieManager.getInstance()
+                var cookie = cookieManager.getCookie(url)?:""
+                AppLogs.dLog(fragmentTAG,"onPageFinished page mUrl:${url}  cookie:${cookie}")
+                if (WebScan.isTikTok(url)){
 //                CacheManager.pageList.get(0).cDetail
 //                mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${CacheManager.pageList.get(0).cDetail}");
-            }else if (WebScan.isPornhub(url)){
-                WebScan.filterUri(url, WeakReference(rootActivity))
-            }
+                }else if (WebScan.isPornhub(url)){
+                    WebScan.filterUri(url, WeakReference(rootActivity))
+                }
 //            evaluateHTML(view!!)
-            WebScan.reset()
-            isPageFinished = true
+                WebScan.reset()
+            }
         }
     }
 

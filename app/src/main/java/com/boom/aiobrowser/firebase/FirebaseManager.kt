@@ -127,21 +127,22 @@ object FirebaseManager {
                 putInt(PointValueKey.type,FirebaseConfig.pushData?.time_interval?:0)
             })
         }
-        var config_filter1 = 0
+        var config_filter1 = 1
         runCatching {
             config_filter1 = firebaseRemoteConfig?.getString("alldownload_switch")?.toInt()?:1
         }
         FirebaseConfig.switchOpenFilter1=config_filter1!=0
         var config_filter2 = ""
         runCatching {
-            config_filter2= firebaseRemoteConfig?.getString("config_filter")?:""
+            config_filter2 = firebaseRemoteConfig?.getString("config_filter")?:""
         }
         var splits = config_filter2.split(",")
         if (config_filter2.isNullOrEmpty()||splits.isNullOrEmpty()||splits.get(0).isNullOrEmpty()){
             config_filter2 = FirebaseConfig.FILTER_DEFAULT_WEB
             splits = config_filter2.split(",")
         }
-        if (splits.isNullOrEmpty().not()){
+        if (splits.isNullOrEmpty().not() && splits.get(0).isNullOrEmpty().not()){
+            FirebaseConfig.switchOpenFilterList.clear()
             FirebaseConfig.switchOpenFilterList.addAll(splits)
         }
     }

@@ -9,7 +9,7 @@
     <com.boom.aiobrowser.ui.view.TopTitleView
         android:id="@+id/topRoot"
         android:layout_width="match_parent"
-        android:layout_height="37dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="13dp"
         android:layout_marginTop="50dp"
         android:background="@drawable/shape_top_search"
@@ -20,7 +20,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="7dp"
         android:background="#0A000000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topRoot"></View>

@@ -21,5 +21,7 @@
         android:id="@+id/topSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="52dp"
+        android:background="@color/white"
         ></com.boom.aiobrowser.ui.view.TopTitleView>
 </FrameLayout>

@@ -396,7 +396,9 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
     }
 
     private fun toWebDetailsActivity(data:JumpData){
-        APP.jumpLiveData.postValue(data)
+//        APP.jumpLiveData.postValue(data)
+//        rootActivity.finish()
+        APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(data.jumpUrl,"点击网页"))
         rootActivity.finish()
     }
 

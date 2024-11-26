@@ -18,9 +18,12 @@ import com.blankj.utilcode.util.KeyboardUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.point.PointValue
+import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.clearClipboard
 import com.boom.aiobrowser.tools.getClipContent
+import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.WebParseActivity
 import com.boom.aiobrowser.ui.pop.ProcessingTextPop
 import com.boom.newsnow.view.statusbar.StatusBarHelper
@@ -67,22 +70,24 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
             while (APP.instance.isHideSplash.not()){
                 delay(1000)
             }
+            delay(1000)
             if (APP.instance.shareText.isEmpty()){
                 var copy = getClipContent()
-                if (copy.isNullOrEmpty().not()){
-                    var index = -1
-                    for (i in 0 until APP.instance.lifecycleApp.stack.size){
-                        var activity = APP.instance.lifecycleApp.stack.get(i)
-                        if (activity is WebParseActivity){
-                            index = i
-                            break
-                        }
-                    }
-                    if (index==-1){
-                        withContext(Dispatchers.Main){
-                            ProcessingTextPop(this@BaseActivity).createPop(copy?:"", PointValue.clipboard){
-                                clearClipboard()
-                                WebParseActivity.toWebParseActivity(this@BaseActivity,2,copy)
+                AppLogs.dLog(acTAG,"copy:${copy} APP.instance.copyText:${APP.instance.copyText}")
+                if (copy.isNullOrEmpty().not() && APP.instance.copyText != copy){
+                    APP.instance.copyText = copy
+                    if (APP.instance.lifecycleApp.stack.size>0){
+                       var topActivity =  APP.instance.lifecycleApp.stack.get(APP.instance.lifecycleApp.stack.size-1)
+                        AppLogs.dLog(acTAG,"is MainActivity:${topActivity is MainActivity}")
+                        if (topActivity is MainActivity){
+                            withContext(Dispatchers.Main){
+                                ProcessingTextPop(this@BaseActivity).createPop(copy?:"", PointValue.clipboard){
+                                    var index = copy.indexOf("http")
+                                    if (index>=0){
+                                        copy = copy.substring(index,copy.length)
+                                    }
+                                    APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(copy,"分享网页"))
+                                }
                             }
                         }
                     }

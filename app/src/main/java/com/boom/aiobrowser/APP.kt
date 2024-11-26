@@ -69,6 +69,7 @@ class APP: Application(), ViewModelStoreOwner {
 
     @Volatile
     var shareText = ""
+    var copyText = ""
 
     var showForeground = false
     val appModel by lazy {

@@ -24,7 +24,7 @@ import java.lang.ref.WeakReference
 class SearchPop(context: Context) : BasePopupWindow(context) {
 
     companion object{
-        fun showPop(reference:WeakReference<BaseActivity<*>>,view: AppCompatImageView) {
+        fun showPop(reference:WeakReference<BaseActivity<*>>,view: View) {
             var activity: BaseActivity<*>? = reference.get() ?: return
             var searchPop = SearchPop(activity!!)
             searchPop.createPop(activity,view)

@@ -124,7 +124,6 @@ object NFViews {
         var remoteViews = RemoteViews(APP.instance.packageName, layoutId)
         remoteViews.apply {
             setTextViewText(R.id.tvTitle,data.tconsi)
-            setTextViewText(R.id.tvContent,data.sissue)
             setOnClickPendingIntent(
                 R.id.llRoot,
                 getJumpIntent(0,data,enum)

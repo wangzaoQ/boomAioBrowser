@@ -17,25 +17,16 @@
         >
         <TextView
             android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="title"
+            tools:text="titletitletitletitletitletitletitletitletitletitletitletitletitletitletitle"
             style="@style/app_text_bold"
             android:textSize="14sp"
-            android:singleLine="true"
+            android:maxLines="2"
             android:ellipsize="end"
             android:textColor="@color/black"
             ></TextView>
-        <TextView
-            android:id="@+id/tvContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Taxad, o consórcio de mídia e o capitalismo de conveniência"
-            android:textSize="11sp"
-            android:textColor="#80000000"
-            android:maxLines="2"
-            android:ellipsize="end"
-            ></TextView>
+
     </LinearLayout>
     <ImageView
         android:id="@+id/ivPic"

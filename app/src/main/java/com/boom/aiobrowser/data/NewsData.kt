@@ -74,6 +74,7 @@ class NewsData {
         var TYPE_NEWS = 0
         var TYPE_AD = 1
 
+        var TYPE_HOME_NEWS_TOP = 90
         var TYPE_DETAILS_NEWS_TITLE = 100
         var TYPE_DETAILS_NEWS_TOP_VIDEO = 101
         var TYPE_DETAILS_NEWS_TOP_IMG = 102

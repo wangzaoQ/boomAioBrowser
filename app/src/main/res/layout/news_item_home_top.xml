@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="52dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llTopRoot"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/rlSearch"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginHorizontal="13.5dp"
+            android:layout_marginTop="13dp"
+            android:background="@drawable/shape_home_search"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="13dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivSearchEngine"
+                    app:srcCompat="@mipmap/ic_search_gg"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"></androidx.appcompat.widget.AppCompatImageView>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    app:srcCompat="@mipmap/ic_engine_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"></androidx.appcompat.widget.AppCompatImageView>
+            </FrameLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivPrivate"
+                tools:visibility="visible"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                android:src="@mipmap/ic_private"
+                android:visibility="gone"></androidx.appcompat.widget.AppCompatImageView>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="3dp"
+                android:text="@string/app_search_hint"
+                android:textColor="#801C274C"></androidx.appcompat.widget.AppCompatTextView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/cleanLlRoot"
+        app:layout_constraintTop_toBottomOf="@+id/llTopRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="13dp"
+        android:layout_marginTop="13dp"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/rlProcess"
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="7dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_bg_home_process"
+            android:visibility="gone">
+
+            <FrameLayout
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="7dp"
+                android:background="@drawable/shape_oval_process">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    app:srcCompat="@mipmap/ic_scan_clean"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:tint="@color/white"></androidx.appcompat.widget.AppCompatImageView>
+            </FrameLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="47dp"
+                android:text="@string/app_process"
+                android:textColor="#80000000"
+                android:textStyle="bold"></androidx.appcompat.widget.AppCompatTextView>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                app:srcCompat="@mipmap/ic_clean_arrow"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="7dp"></androidx.appcompat.widget.AppCompatImageView>
+        </RelativeLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/rlHistory"
+        app:layout_constraintTop_toBottomOf="@+id/cleanLlRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="13.5dp"
+        android:background="@drawable/shape_ll_main_top"
+        android:orientation="vertical">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="13dp"></androidx.viewpager2.widget.ViewPager2>
+
+        <com.zhpan.indicator.IndicatorView
+            android:id="@+id/indicator"
+            app:vpi_orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <RelativeLayout
+        app:layout_constraintTop_toBottomOf="@+id/rlHistory"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/app_text_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="13.5dp"
+            android:text="@string/app_news"
+            android:textColor="#1C274C"
+            android:textSize="14sp"></androidx.appcompat.widget.AppCompatTextView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvMore"
+            style="@style/app_text_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:paddingHorizontal="13.5dp"
+            android:text="@string/app_more"
+            android:textColor="#0066FF"
+            android:textSize="14sp"></androidx.appcompat.widget.AppCompatTextView>
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.ui.fragment
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -32,6 +33,7 @@ import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.download.DownloadControlManager
 import com.boom.aiobrowser.tools.partitionList
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.activity.MainActivity
@@ -44,6 +46,7 @@ import com.boom.aiobrowser.ui.pop.SearchPop
 import com.boom.base.adapter4.QuickAdapterHelper
 import com.boom.base.adapter4.loadState.LoadState
 import com.boom.base.adapter4.loadState.trailing.TrailingLoadStateAdapter
+import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import com.google.android.material.appbar.AppBarLayout
 import com.zhpan.indicator.enums.IndicatorSlideMode
@@ -79,48 +82,59 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         APP.homeTabLiveData.observe(this){
             updateTopTab()
         }
-        fBinding.tvMore.setOneClick {
+//        fBinding.topSearch.binding.ivRefresh.visibility = View.GONE
+//        fBinding.mainAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+//            override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
+//                absVerticalOffset = Math.abs(verticalOffset) //AppBarLayout竖直方向偏移距离px
+//                if (absVerticalOffset == 0)return
+//                val totalScrollRange = appBarLayout!!.totalScrollRange //AppBarLayout总的距离px
+//                val scrollPercentage = absVerticalOffset.toDouble() / totalScrollRange.toDouble()
+//                var offset = (scrollPercentage * 255).toInt()
+////                if (offset > 255) {
+////                    offset = 255
+////                } else if (offset < 0) {
+////                    offset = 0
+////                }
+//
+////                var offset = BigDecimalUtils.mul(BigDecimalUtils.div(255.toDouble(), totalScrollRange.toDouble(),10),absVerticalOffset.toDouble()).toInt()
+////                var offset = absVerticalOffset / 2
+////                offset = 255 - offset
+//                AppLogs.dLog("onOffsetChanged", "offset=$offset")
+//                if (offset > 255) {
+//                    offset = 255
+//                } else if (offset <= 0) {
+//                    offset = 0
+//                }
+//                if (offset <100) {
+//                    fBinding.mainCl.alpha = 1f
+//                    fBinding.mainToolBar.alpha = 0f
+//                    fBinding.refreshLayout.isEnabled = true
+//                } else {
+//                    fBinding.refreshLayout.isEnabled = false
+//                    var div = (offset.toDouble() / 255.0)
+//                    AppLogs.dLog("onOffsetChanged", "div=$div")
+//                    if (div<0.3){
+//                        div = 0.0
+//                    }
+//                    fBinding.mainToolBar.alpha = div.toFloat()
+//                    fBinding.mainCl.alpha = 1-div.toFloat()
+//                }
+//            }
+//        })
+        newsAdapter.addOnDebouncedChildClick(R.id.tvMore) { adapter, view, position ->
             APP.instance.toNewsFrom = 0
             APP.homeJumpLiveData.postValue(1)
         }
-        fBinding.topSearch.binding.ivRefresh.visibility = View.GONE
-        fBinding.mainAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
-            override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
-                absVerticalOffset = Math.abs(verticalOffset) //AppBarLayout竖直方向偏移距离px
-                if (absVerticalOffset == 0)return
-                val totalScrollRange = appBarLayout!!.totalScrollRange //AppBarLayout总的距离px
-                var offset = BigDecimalUtils.mul(BigDecimalUtils.div(255.toDouble(), totalScrollRange.toDouble(),10),absVerticalOffset.toDouble()).toInt()
-//                var offset = absVerticalOffset / 2
-//                offset = 255 - offset
-                AppLogs.dLog("onOffsetChanged", "offset=$offset")
-                if (offset > 255) {
-                    offset = 255
-                } else if (offset <= 0) {
-                    offset = 0
-                }
-                if (offset <10) {
-                    fBinding.mainCl.alpha = 1f
-                    fBinding.mainToolBar.alpha = 0f
-                } else {
-                    var div = BigDecimalUtils.div(offset.toDouble(), 255.0, 2)
-                    AppLogs.dLog("onOffsetChanged", "div=$div")
-                    if (div<0.3){
-                        div = 0.0
-                    }
-                    fBinding.mainToolBar.alpha = div.toFloat()
-                    fBinding.mainCl.alpha = 1-div.toFloat()
-                }
-            }
-        })
-        fBinding.rlSearch.setOneClick {
+        newsAdapter.addOnDebouncedChildClick(R.id.rlSearch) { adapter, view, position ->
             JumpDataManager.getCurrentJumpData(isReset = true,tag = "mainFragment 点击搜索").apply {
                 jumpType = JumpConfig.JUMP_SEARCH
             }
             startActivity(Intent(rootActivity,SearchActivity::class.java))
             PointEvent.posePoint(PointEventKey.home_page_search)
         }
-        fBinding.ivSearchEngine.setOneClick {
-            SearchPop.showPop(WeakReference(rootActivity),fBinding.ivSearchEngine)
+
+        newsAdapter.addOnDebouncedChildClick(R.id.ivSearchEngine) { adapter, view, position ->
+            SearchPop.showPop(WeakReference(rootActivity),view)
             PointEvent.posePoint(PointEventKey.home_page_searchengine, Bundle().apply {
                 putString(PointValueKey.click_source,"home")
             })
@@ -129,7 +143,13 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         viewModel.value.newsLiveData.observe(rootActivity){
             var list = addADData(it)
             if (page == 1){
-                newsAdapter.submitList(list)
+                newsAdapter.mutableItems.clear()
+                newsAdapter.submitList(mutableListOf<NewsData>().apply {
+                    add(NewsData().apply {
+                        dataType = NewsData.TYPE_HOME_NEWS_TOP
+                    })
+                    addAll(it)
+                })
                 fBinding.rv.scrollToPosition(0)
             }else{
                 newsAdapter.addAll(list)
@@ -178,10 +198,10 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         }else{
             jumpData = JumpDataManager.getCurrentJumpData(isReset = true,tag = "MainFragment onResume 非首次")
             JumpDataManager.updateCurrentJumpData(jumpData,"MainFragment onResume 更新 jumpData")
-            if (CacheManager.engineGuideFirst){
-                CacheManager.engineGuideFirst = false
-                EngineGuidePop(rootActivity).createPop(fBinding.ivSearchEngine)
-            }
+//            if (CacheManager.engineGuideFirst){
+//                CacheManager.engineGuideFirst = false
+//                EngineGuidePop(rootActivity).createPop(fBinding.ivSearchEngine)
+//            }
             if (fBinding.refreshLayout.isRefreshing == true){
                 fBinding.refreshLayout.isRefreshing = false
             }
@@ -196,11 +216,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 }
             }
         }
-        if (CacheManager.isAllowShowCleanTips()){
-            fBinding.tips.visibility = View.VISIBLE
-        }else{
-            fBinding.tips.visibility = View.GONE
-        }
 
         fBinding.root.postDelayed(Runnable {
             ShortManager.addWidgetToLaunch(APP.instance)
@@ -209,20 +224,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     }
 
     private fun updateEngine(type: Int) {
-        when (type) {
-            SearchConfig.SEARCH_ENGINE_GOOGLE->{
-                fBinding.ivSearchEngine.setImageResource(R.mipmap.ic_search_gg)
-            }
-            SearchConfig.SEARCH_ENGINE_BING->{
-                fBinding.ivSearchEngine.setImageResource(R.mipmap.ic_search_bing)
-            }
-            SearchConfig.SEARCH_ENGINE_YAHOO->{
-                fBinding.ivSearchEngine.setImageResource(R.mipmap.ic_search_yahoo)
-            }
-            SearchConfig.SEARCH_ENGINE_PERPLEXITY->{
-                fBinding.ivSearchEngine.setImageResource(R.mipmap.ic_search_perplexity)
-            }
-        }
+        newsAdapter.notifyItemChanged(0,"updateEngine")
     }
 
     val newsAdapter by lazy {
@@ -259,6 +261,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 
     override fun setShowView() {
         fBinding.refreshLayout.isRefreshing = true
+        fBinding.refreshLayout.setProgressViewOffset(true,-200,200)
         fBinding.apply {
             updateTopTab()
             adapterHelper.trailingLoadState = LoadState.NotLoading(false)
@@ -284,6 +287,11 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                         putString(PointValueKey.news_id,data.itackl)
                     })
                 }
+                newsAdapter.submitList(mutableListOf<NewsData>().apply {
+                    add(NewsData().apply {
+                        dataType = NewsData.TYPE_HOME_NEWS_TOP
+                    })
+                })
                 addOnScrollListener(object : RecyclerView.OnScrollListener(){
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         super.onScrollStateChanged(recyclerView, newState)
@@ -329,7 +337,25 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                                 }
                             }
                             hideShareImage()
+                            var firstPosition = (fBinding.rv.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                            if (firstPosition>0 && topSearch.visibility == View.GONE){
+                                topSearch.visibility = View.VISIBLE
+                                var animator = ObjectAnimator.ofFloat(topSearch, "translationY",-topSearch.height.toFloat(),0f );
+                                animator.setDuration(500L)
+                                animator.start()
+                            }else if (firstPosition == 0 && topSearch.visibility == View.VISIBLE){
+                                var animator = ObjectAnimator.ofFloat(topSearch, "translationY",0f,-topSearch.height.toFloat());
+                                animator.setDuration(500L)
+                                animator.start()
+                                topSearch.postDelayed({
+                                    topSearch.visibility = View.GONE
+                                },500)
+                            }
                         }
+                    }
+
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
                     }
                 })
             }
@@ -343,78 +369,19 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         updateEngine(CacheManager.engineType)
         fBinding.topSearch.updateEngine(CacheManager.engineType)
         if (CacheManager.browserStatus == 0){
-            fBinding.ivPrivate.visibility = View.GONE
             fBinding.topSearch.binding.ivPrivate.visibility = View.GONE
         }else{
-            fBinding.ivPrivate.visibility = View.VISIBLE
             fBinding.topSearch.binding.ivPrivate.visibility = View.VISIBLE
         }
         loadNews()
+        fBinding.root.postDelayed({
+            fBinding.topSearch.visibility = View.GONE
+        },0)
 //        APP.bottomLiveData.postValue(0)
     }
 
     private fun updateTopTab() {
-        var tabList = CacheManager.homeTabList
-        tabList.add(JumpData().apply {
-            jumpType = JumpConfig.JUMP_WEB_TYPE
-            jumpUrl = ""
-            jumpTitle = ""
-        })
-        // 将集合按每 8 个分割
-        val partitionSize = 8
-        val dataList: MutableList<MutableList<JumpData>> = partitionList(tabList, partitionSize) as MutableList<MutableList<JumpData>>
-        fBinding.vp2.apply {
-            offscreenPageLimit = dataList.size
-            var homeTabAdapter:HomeTabAdapter?=null
-            if (adapter == null){
-                homeTabAdapter = HomeTabAdapter(rootActivity)
-                adapter = homeTabAdapter
-            }
-            (adapter as HomeTabAdapter)?.update(dataList)
-        }
-//        var params = fBinding.rlHistory.layoutParams as ConstraintLayout.LayoutParams
-        if (dataList.size>1){
-            fBinding.indicator.visibility = View.VISIBLE
-            var width = dp2px(7f).toFloat()
-            fBinding.indicator.apply {
-                setSliderColor(
-                    context.getColor(R.color.color_tab_DAE5EC),
-                    context.getColor(R.color.color_tab_5755D9)
-                )
-                setSliderWidth(width)
-                setSliderHeight(width)
-                setSlideMode(IndicatorSlideMode.SMOOTH)
-                setIndicatorStyle(IndicatorStyle.CIRCLE)
-                setPageSize(dataList.size)
-                notifyDataChanged()
-                fBinding.vp2.registerOnPageChangeCallback(object :
-                    ViewPager2.OnPageChangeCallback() {
-                    override fun onPageScrolled(
-                        position: Int,
-                        positionOffset: Float,
-                        positionOffsetPixels: Int
-                    ) {
-                        super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-                        fBinding.indicator.onPageScrolled(
-                            position,
-                            positionOffset,
-                            positionOffsetPixels
-                        )
-                    }
-
-                    override fun onPageSelected(position: Int) {
-                        super.onPageSelected(position)
-                        fBinding.indicator.onPageSelected(position)
-                    }
-                })
-                fBinding.rlHistory.setPadding(0,dp2px(11f),0, dp2px(16f))
-            }
-
-        }else{
-            fBinding.indicator.visibility = View.GONE
-            fBinding.rlHistory.setPadding(0,dp2px(11f),0, dp2px(20f))
-        }
-
+        newsAdapter.notifyItemChanged(0)
     }
 
     fun addADData(newsBeans: List<NewsData>?):List<NewsData> {

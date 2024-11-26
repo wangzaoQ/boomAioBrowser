@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
@@ -18,6 +19,7 @@ import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.getNewsTopic
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 
@@ -69,6 +71,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
 
     var newData: NewsData? = null
 
+    var allowShowRate = false
 
     override fun setShowView() {
         newData = getBeanByGson(
@@ -82,9 +85,17 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
             putString(PointValueKey.news_id,newData?.itackl)
             putString(PointValueKey.news_topic,newData?.tdetai?.getNewsTopic())
         })
+        CacheManager.newsReadCount += 1
+        var readCount = CacheManager.newsReadCount
+        if (readCount == 2 || readCount == 5 || readCount == 10 || readCount == 20){
+            allowShowRate = true
+        }
     }
 
     override fun onDestroy() {
+        if (allowShowRate){
+            APP.showRateLiveData.postValue(0)
+        }
         super.onDestroy()
     }
 }

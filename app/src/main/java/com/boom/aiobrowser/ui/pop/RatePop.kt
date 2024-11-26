@@ -145,9 +145,6 @@ class RatePop(context: Context) : BasePopupWindow(context) {
 
     override fun onDismiss() {
         APP.instance.showPopLevel = 0
-        if (isClickFeedBack.not()){
-            CacheManager.dayFeedBackCount+=1
-        }
         if (allowShowAddTask){
             TaskAddPop(context).createPop()
         }

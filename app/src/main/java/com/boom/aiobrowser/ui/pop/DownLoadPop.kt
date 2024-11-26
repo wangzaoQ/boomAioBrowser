@@ -429,7 +429,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         callBack.invoke()
         if (ShortManager.allowRate()) {
             var count = CacheManager.dayDownloadCount
-            if (count == 3 || count == 5 || count == 10 || count == 15) {
+            if (count == 2) {
                 ShortManager.addRate(WeakReference(context as BaseActivity<*>),realDownload)
             }else{
                 if (realDownload){

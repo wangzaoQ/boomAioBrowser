@@ -38,6 +38,7 @@ import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.LoginConfig.SIGN_LOGIN
 import com.boom.aiobrowser.other.LoginConfig.SIGN_LOGIN_ONE_TAP
 import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.other.ShortManager
 import com.boom.aiobrowser.ui.fragment.MainRootFragment
 import com.boom.aiobrowser.ui.fragment.NewsHomeFragment
 import com.boom.aiobrowser.ui.fragment.StartFragment
@@ -59,6 +60,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import okhttp3.Response
 import pop.basepopup.BasePopupWindow.OnDismissListener
+import java.lang.ref.WeakReference
 
 
 class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
@@ -98,6 +100,11 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }
         APP.jumpLiveData.observe(this){
             acBinding.fragmentMain.setCurrentItem(0,true)
+        }
+        APP.showRateLiveData.observe(this){
+            if (ShortManager.allowRate()){
+                ShortManager.addRate(WeakReference(this@MainActivity))
+            }
         }
     }
 
@@ -524,6 +531,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
     override fun onDestroy() {
         APP.homeJumpLiveData.removeObservers(this)
+        APP.showRateLiveData.removeObservers(this)
+        APP.jumpLiveData.removeObservers(this)
         super.onDestroy()
     }
 }

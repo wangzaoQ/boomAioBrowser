@@ -173,11 +173,6 @@ object ShortManager {
             AppLogs.dLog(TAG,"评分弹窗已经点击反馈")
             return false
         }
-        var count = CacheManager.dayFeedBackCount
-        if (count == 3){
-            AppLogs.dLog(TAG,"未点击 feedBack 超过3次")
-            return false
-        }
         if (APP.instance.showPopLevel>0){
             AppLogs.dLog(TAG,"评分弹窗添加失败 当前有更高等级弹窗 showPopLevel:${APP.instance.showPopLevel}")
             return false

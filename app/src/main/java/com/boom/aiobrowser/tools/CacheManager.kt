@@ -31,7 +31,7 @@ object CacheManager {
     const val KV_FIRST_CLICK_DOWNLOAD_BUTTON = "KV_FIRST_CLICK_DOWNLOAD_BUTTON"
     const val KV_FIRST_DOWNLOAD_VIDEO_SUCCESS = "KV_FIRST_DOWNLOAD_VIDEO_SUCCESS"
     const val KV_DAY_DOWNLOAD_COUNT = "KV_DAY_DOWNLOAD_COUNT"
-    const val KV_DAY_FEEDBACK_COUNT = "KV_DAY_FEEDBACK_COUNT"
+    const val KV_NEWS_READ_COUNT = "KV_NEWS_READ_COUNT"
     const val KV_DAY_SHOW_ADD_SHORT = "KV_DAY_SHOW_ADD_SHORT2"
     const val KV_DAY_SHOW_BATTERY = "KV_DAY_SHOW_BATTERY"
     const val KV_DAY_SHOW_ADD_WIDGET = "KV_DAY_SHOW_ADD_SHORT"
@@ -129,12 +129,12 @@ object CacheManager {
             mmkv.encode(KV_DAY_DOWNLOAD_COUNT, value)
         }
 
-    var dayFeedBackCount:Int
+    var newsReadCount:Int
         get() {
-            return mmkv.decodeInt(KV_DAY_FEEDBACK_COUNT, 0)
+            return mmkv.decodeInt(KV_NEWS_READ_COUNT, 0)
         }
         set(value) {
-            mmkv.encode(KV_DAY_FEEDBACK_COUNT, value)
+            mmkv.encode(KV_NEWS_READ_COUNT, value)
         }
 
     var dayShowAddWidget: Boolean

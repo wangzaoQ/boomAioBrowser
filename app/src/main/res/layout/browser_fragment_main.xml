@@ -23,5 +23,6 @@
         android:layout_height="wrap_content"
         android:paddingTop="52dp"
         android:background="@color/white"
+        android:paddingBottom="10dp"
         ></com.boom.aiobrowser.ui.view.TopTitleView>
 </FrameLayout>

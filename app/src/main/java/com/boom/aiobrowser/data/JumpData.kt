@@ -7,6 +7,8 @@ class JumpData : BaseData() {
         this.jumpUrl = currentData.jumpUrl
         this.nextJumpUrl = currentData.nextJumpUrl
         this.nextJumpType = currentData.nextJumpType
+        this.isCurrent = currentData.isCurrent
+        this.autoDownload = currentData.autoDownload
     }
 
     var nextJumpUrl:String?=""

@@ -119,14 +119,12 @@ class DownloadAdapter(): BaseQuickAdapter<VideoUIData, DownloadAdapter.VH>() {
                                     putString("video_path", toJson(data))
                                 })
                             } else{
-                                if (!videoChecked){
-                                    item.formatsList.forEach {
-                                        it.videoChecked = false
-                                    }
-                                    videoChecked = videoChecked.not()
-                                    childAdapter.notifyDataSetChanged()
-                                    downLoadPop?.updateBottomSize()
+                                item.formatsList.forEach {
+                                    it.videoChecked = false
                                 }
+                                videoChecked = true
+                                childAdapter.notifyDataSetChanged()
+                                downLoadPop?.updateBottomSize()
                             }
                         }
                     }

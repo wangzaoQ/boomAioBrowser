@@ -11,12 +11,12 @@
     <RelativeLayout
         android:id="@+id/rlTop"
         android:layout_width="match_parent"
-        android:layout_height="37dp"
+        android:layout_height="wrap_content"
         >
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvClear"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="37dp"
             android:gravity="center_vertical"
             android:text="@string/app_all"
             android:layout_centerInParent="true"

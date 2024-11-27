@@ -100,56 +100,63 @@ object WebSourceManager {
     }
 
     fun getSourceDetailsList():MutableList<WebSourceData>{
+        var homeTabList = CacheManager.homeTabList
+        var titleList = mutableListOf<String>()
+        homeTabList.forEach {
+            if (it.jumpTitle.isNullOrEmpty().not()){
+                titleList.add(it.jumpTitle)
+            }
+        }
         var sourceDetailsList = mutableListOf<WebSourceData>()
         sourceDetailsList.add(WebSourceData().apply {
             titleRes = R.string.app_social
-            sourceList = getSocialSource()
+            sourceList = getSocialSource(titleList)
         })
         sourceDetailsList.add(WebSourceData().apply {
             titleRes = R.string.app_film
-            sourceList = getFilmSource()
+            sourceList = getFilmSource(titleList)
         })
         sourceDetailsList.add(WebSourceData().apply {
             titleRes = R.string.app_news
-            sourceList = getNewsSource()
+            sourceList = getNewsSource(titleList)
         })
         sourceDetailsList.add(WebSourceData().apply {
             titleRes = R.string.app_entertainment
-            sourceList = getEntertainmentSources()
+            sourceList = getEntertainmentSources(titleList)
         })
         sourceDetailsList.add(WebSourceData().apply {
             titleRes = R.string.app_tools
-            sourceList = getOnlineToolsSources()
+            sourceList = getOnlineToolsSources(titleList)
         })
         sourceDetailsList.add(WebSourceData().apply {
             titleRes = R.string.app_health
-            sourceList = getHealthSources()
+            sourceList = getHealthSources(titleList)
         })
         sourceDetailsList.add(WebSourceData().apply {
             titleRes = R.string.app_travel
-            sourceList = getTravelSources()
+            sourceList = getTravelSources(titleList)
         })
         sourceDetailsList.add(WebSourceData().apply {
             titleRes = R.string.app_music
-            sourceList = getMusicSources()
+            sourceList = getMusicSources(titleList)
         })
         sourceDetailsList.add(WebSourceData().apply {
             titleRes = R.string.app_shopping
-            sourceList = getShoppingSources()
+            sourceList = getShoppingSources(titleList)
         })
         sourceDetailsList.add(WebSourceData().apply {
             titleRes = R.string.app_sports
-            sourceList = getSportsSources()
+            sourceList = getSportsSources(titleList)
         })
         sourceDetailsList.add(WebSourceData().apply {
             titleRes = R.string.app_video
-            sourceList = getVideoPlatformSources()
+            sourceList = getVideoPlatformSources(titleList)
         })
         return sourceDetailsList
     }
 
 
-    private fun getFilmSource(): MutableList<JumpData>{
+    private fun getFilmSource(titleList: MutableList<String>): MutableList<JumpData>{
         var list = mutableListOf<JumpData>()
         var local = Locale.getDefault()
         when (local.language) {
@@ -206,10 +213,14 @@ object WebSourceManager {
                 })
             }
         }
+        list.forEach {
+            it.isCurrent = titleList.contains(it.jumpTitle)
+        }
         return list
     }
 
-    private fun getSocialSource(): MutableList<JumpData> {
+    private fun getSocialSource(titleList: MutableList<String>): MutableList<JumpData> {
+
         var list = mutableListOf<JumpData>()
         var local = Locale.getDefault()
         list.add(JumpData().apply {
@@ -252,10 +263,13 @@ object WebSourceManager {
                 })
             }
         }
+        list.forEach {
+            it.isCurrent = titleList.contains(it.jumpTitle)
+        }
         return list
     }
 
-    private fun getNewsSource(): MutableList<JumpData> {
+    private fun getNewsSource(titleList: MutableList<String>): MutableList<JumpData> {
         val list = mutableListOf<JumpData>()
         val local = Locale.getDefault()
         when (local.language) {
@@ -312,10 +326,13 @@ object WebSourceManager {
                 })
             }
         }
+        list.forEach {
+            it.isCurrent = titleList.contains(it.jumpTitle)
+        }
         return list
     }
 
-    private fun getEntertainmentSources(): MutableList<JumpData> {
+    private fun getEntertainmentSources(titleList: MutableList<String>): MutableList<JumpData> {
         val list = mutableListOf<JumpData>()
         val local = Locale.getDefault()
         when (local.language) {
@@ -368,11 +385,14 @@ object WebSourceManager {
                 })
             }
         }
+        list.forEach {
+            it.isCurrent = titleList.contains(it.jumpTitle)
+        }
         return list
     }
 
 
-    private fun getOnlineToolsSources(): MutableList<JumpData> {
+    private fun getOnlineToolsSources(titleList: MutableList<String>): MutableList<JumpData> {
         val list = mutableListOf<JumpData>()
         val local = Locale.getDefault()
         when (local.language) {
@@ -417,10 +437,13 @@ object WebSourceManager {
                 })
             }
         }
+        list.forEach {
+            it.isCurrent = titleList.contains(it.jumpTitle)
+        }
         return list
     }
 
-    private fun getTravelSources(): MutableList<JumpData> {
+    private fun getTravelSources(titleList: MutableList<String>): MutableList<JumpData> {
         val list = mutableListOf<JumpData>()
         val local = Locale.getDefault()
         when (local.language) {
@@ -477,10 +500,13 @@ object WebSourceManager {
                 })
             }
         }
+        list.forEach {
+            it.isCurrent = titleList.contains(it.jumpTitle)
+        }
         return list
     }
 
-    private fun getMusicSources(): MutableList<JumpData> {
+    private fun getMusicSources(titleList: MutableList<String>): MutableList<JumpData> {
         val list = mutableListOf<JumpData>()
         val local = Locale.getDefault()
         when (local.language) {
@@ -537,9 +563,12 @@ object WebSourceManager {
                 })
             }
         }
+        list.forEach {
+            it.isCurrent = titleList.contains(it.jumpTitle)
+        }
         return list
     }
-    private fun getShoppingSources(): MutableList<JumpData> {
+    private fun getShoppingSources(titleList: MutableList<String>): MutableList<JumpData> {
         val list = mutableListOf<JumpData>()
         val local = Locale.getDefault()
         when (local.language) {
@@ -596,9 +625,12 @@ object WebSourceManager {
                 })
             }
         }
+        list.forEach {
+            it.isCurrent = titleList.contains(it.jumpTitle)
+        }
         return list
     }
-    private fun getSportsSources(): MutableList<JumpData> {
+    private fun getSportsSources(titleList: MutableList<String>): MutableList<JumpData> {
         val list = mutableListOf<JumpData>()
         val local = Locale.getDefault()
         when (local.language) {
@@ -651,11 +683,14 @@ object WebSourceManager {
                 })
             }
         }
+        list.forEach {
+            it.isCurrent = titleList.contains(it.jumpTitle)
+        }
         return list
     }
 
 
-    private fun getVideoPlatformSources(): MutableList<JumpData> {
+    private fun getVideoPlatformSources(titleList: MutableList<String>): MutableList<JumpData> {
         val list = mutableListOf<JumpData>()
         val local = Locale.getDefault()
         when (local.language) {
@@ -712,10 +747,13 @@ object WebSourceManager {
                 })
             }
         }
+        list.forEach {
+            it.isCurrent = titleList.contains(it.jumpTitle)
+        }
         return list
     }
 
-    private fun getHealthSources(): MutableList<JumpData> {
+    private fun getHealthSources(titleList: MutableList<String>): MutableList<JumpData> {
         val list = mutableListOf<JumpData>()
         val local = Locale.getDefault()
         when (local.language) {
@@ -759,6 +797,9 @@ object WebSourceManager {
                     jumpTitle = APP.instance.getString(R.string.health_everyday_health)
                 })
             }
+        }
+        list.forEach {
+            it.isCurrent = titleList.contains(it.jumpTitle)
         }
         return list
     }

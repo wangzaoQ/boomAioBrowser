@@ -85,6 +85,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                 }
             }
         }
+        updateDownloadButtonStatus(false)
     }
 
     private fun addLast(url: String) {
@@ -153,7 +154,10 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                         }
                     }, failBack = {})
                 }
-                jumpData?.autoDownload = false
+                jumpData?.apply {
+                    autoDownload = false
+                    JumpDataManager.updateCurrentJumpData(this,"自动下载后重置")
+                }
             }
             popDown?.updateDataByScan(it)
             updateDownloadButtonStatus(true,0)

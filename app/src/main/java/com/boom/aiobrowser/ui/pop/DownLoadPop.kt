@@ -184,36 +184,44 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         }, failBack = {})
     }
 
+    /**
+     *   - 未下载/下载中时，弹窗全选，下载按钮总计文件大小，如果都是已下载完成的展示open
+     *   - 已下载+未下载/下载中视频，共存展示全选时，下载按钮总计需排除已下载视频大小
+     *   - 已下载完成的视频取消选择按钮
+     *   - 下载窗中如果有未下载完成的视频，最少选择一个，可多选
+     */
     fun updateBottomSize() {
         //未下载完成的个数
-        var defaultSize = 0
-        var sizeGone = defaultSize <=1
-        var allSize = 0L
-        var downSize = 0
+        var sizeGone = false
+        var downSize = 0L
+        var allowDownCount = 0
         for (i in 0 until downloadAdapter.items.size){
+            var allowDownload = false
            downloadAdapter.items.get(i).formatsList.forEach {
                if (it.downloadType != VideoDownloadData.DOWNLOAD_SUCCESS){
-                   defaultSize++
-               }
-               if (it.videoChecked){
-                   allSize += it?.size ?: 0
-                   downSize++
+                   if (it.videoChecked){
+                       downSize+=it.size?:0
+                   }
+                   allowDownload = true
                }
            }
+            if (allowDownload){
+                allowDownCount++
+            }
         }
-        defaultBinding?.apply {
-            if (allSize == 0L){
-                if (defaultSize == 0){
-                    btnDownloadAll.text =
-                        "${context.getString(R.string.app_open)}"
 
-                }else{
-                    btnDownloadAll.text =
-                        "${context.getString(R.string.app_download)}"
-                }
+        defaultBinding?.apply {
+            if (downSize == 0L){
+                btnDownloadAll.text =
+                    "${context.getString(R.string.app_open)}"
             }else{
                 btnDownloadAll.text =
-                    "${context.getString(R.string.app_download)}(${if (sizeGone) "" else context.getString(R.string.app_all)} ${allSize.formatSize()})"
+                    "${context.getString(R.string.app_download)}(${if (sizeGone) "" else context.getString(R.string.app_all)} ${downSize.formatSize()})"
+            }
+            if (allowDownCount>1){
+                tvClear.visibility = View.VISIBLE
+            }else{
+                tvClear.visibility = View.GONE
             }
         }
     }
@@ -349,6 +357,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         downloadAdapter.setOnDebouncedItemClick { adapter, view, position ->
             var data = downloadAdapter.getItem(position)
             data?.apply {
+                //1.如果只有当前这个item是选中的不可取消
                 if (data.formatsList.size == 1){
                     var downloadData = data.formatsList.get(0)
                     if (downloadData.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS) {
@@ -356,21 +365,29 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                             putString("video_path", toJson(downloadData))
                         })
                     } else{
-                        if (allowCheckStatus(downloadData) && !downloadData.videoChecked){
-                            downloadAdapter.items.forEach {
-                                it.formatsList.forEach {
-                                    it.videoChecked = false
+                        if (downloadData.videoChecked){
+                            var allowCancel = false
+                            for (i in 0 until downloadAdapter.mutableItems.size){
+                                if (i == position)continue
+                                var otherData = downloadAdapter.mutableItems.get(i)
+                                otherData.formatsList.forEach {
+                                    if (it.videoChecked){
+                                        allowCancel = true
+                                    }
+                                }
+                                if (allowCancel){
+                                    break
                                 }
                             }
-                            downloadData.videoChecked = downloadData.videoChecked.not()
-                            updateBottomSize()
-                            downloadAdapter.notifyDataSetChanged()
+                            if (allowCancel){
+                                downloadData.videoChecked = false
+                            }
+                        }else{
+                            downloadData.videoChecked = true
                         }
-//                        if (getCurrentCheckSize() <= 1 ){
-//
-//                        }else{
-//
-//                        }
+                        updateBottomSize()
+
+                        downloadAdapter.notifyItemChanged(position,"updateLoading")
                     }
                 }
             }

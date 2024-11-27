@@ -33,13 +33,21 @@
         android:textColor="#0B132F"
         android:textSize="14sp"
         ></androidx.appcompat.widget.AppCompatTextView>
+    <FrameLayout
+        android:id="@+id/flAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="10dp"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
+        >
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivSourceType"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="8dp"
         app:srcCompat="@mipmap/ic_add_web_source"
         android:scaleType="centerInside"
+        android:layout_gravity="center"
         ></androidx.appcompat.widget.AppCompatImageView>
+    </FrameLayout>
 </androidx.appcompat.widget.LinearLayoutCompat>

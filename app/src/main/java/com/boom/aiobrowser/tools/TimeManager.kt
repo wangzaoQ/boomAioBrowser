@@ -38,6 +38,7 @@ object TimeManager {
         return SimpleDateFormat("yyyy.MM.dd").format(Date(time?:System.currentTimeMillis()))
     }
 
+
     fun getHistoryDay(time:Long): String {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = time

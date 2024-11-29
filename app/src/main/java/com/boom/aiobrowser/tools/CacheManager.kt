@@ -47,6 +47,7 @@ object CacheManager {
     const val KV_TAB_DATA_PRIVATE = "KV_TAB_DATA_PRIVATE"
     const val KV_VIDEO_DOWNLOAD = "KV_VIDEO_DOWNLOAD_2"
     const val KV_NEWS_LIST = "KV_NEWS_LIST"
+    const val KV_TREND_NEWS_LIST = "KV_TREND_NEWS_LIST"
     const val KV_WEB_PAGE_LIST = "KV_WEB_PAGE_LIST"
     const val KV_WEB_FETCH_LIST = "KV_WEB_FETCH_LIST"
     const val KV_BROWSER_STATUS = "KV_BROWSER_STATUS"
@@ -427,6 +428,14 @@ object CacheManager {
         set(value) {
             mmkv.encode(KV_NEWS_LIST, toJson(value))
         }
+    var trendNews:MutableList<NewsData>
+        get() {
+
+            return getListByGson(mmkv.decodeString(KV_TREND_NEWS_LIST),NewsData::class.java) ?: mutableListOf()
+        }
+        set(value) {
+            mmkv.encode(KV_TREND_NEWS_LIST, toJson(value))
+        }
 
     var pageList:MutableList<WebConfigData>
         get() {
@@ -446,6 +455,7 @@ object CacheManager {
 
 
     fun saveRecentSearchData(data: JumpData){
+        if (data.jumpTitle.isNullOrEmpty())return
         var list = recentSearchDataList
         var index = -1
         for (i in 0 until list.size){

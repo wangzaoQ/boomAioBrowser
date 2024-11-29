@@ -86,7 +86,7 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
                                     if (index>=0){
                                         copy = copy.substring(index,copy.length)
                                     }
-                                    APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(copy,"分享网页"))
+                                    APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(copy, title = "","分享网页"))
                                 }
                             }
                         }

@@ -133,4 +133,19 @@ class AppViewModel : BaseDataModel() {
         }
         return topicBean
     }
+
+    fun getTrendsNews(){
+        loadData(loadBack = {
+            var language = Locale.getDefault().language
+//            var target =  if (language == "pt"){
+//               "GTR-4"
+//            } else{
+//               "GTR-US-4"
+//            }
+            var list = NetController.getTrendNews("GTR-4").data
+            CacheManager.trendNews = list?: mutableListOf()
+        }, failBack = {
+            AppLogs.eLog(TAG, it.stackTraceToString())
+        }, 1)
+    }
 }

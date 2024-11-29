@@ -21,6 +21,10 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="style_RoundStyle_4r">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
+    </style>
     <style name="style_RoundStyle_13r">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">13dp</item>

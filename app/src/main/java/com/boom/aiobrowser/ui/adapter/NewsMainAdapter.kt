@@ -3,15 +3,19 @@ package com.boom.aiobrowser.ui.adapter
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -25,10 +29,11 @@ import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.NewsData
-import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.data.ViewItem
+import com.boom.aiobrowser.databinding.BrowserItemFilmNewsBinding
 import com.boom.aiobrowser.databinding.BrowserItemHomeAdBinding
 import com.boom.aiobrowser.databinding.BrowserItemMainNewsBinding
+import com.boom.aiobrowser.databinding.BrowserItemSearchNewsBinding
 import com.boom.aiobrowser.databinding.NewsDetailsItemImgBinding
 import com.boom.aiobrowser.databinding.NewsDetailsItemReadSourceBinding
 import com.boom.aiobrowser.databinding.NewsDetailsItemTextBinding
@@ -47,13 +52,15 @@ import com.boom.aiobrowser.tools.GlideManager
 import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.partitionList
 import com.boom.aiobrowser.ui.activity.WebActivity
-import com.boom.aiobrowser.ui.adapter.DownloadAdapter.VH
 import com.boom.base.adapter4.BaseMultiItemAdapter
 import com.boom.video.GSYVideoManager
 import com.boom.video.builder.GSYVideoOptionBuilder
 import com.boom.video.listener.GSYSampleCallBack
 import com.zhpan.indicator.enums.IndicatorSlideMode
 import com.zhpan.indicator.enums.IndicatorStyle
+import java.text.SimpleDateFormat
+import java.util.Date
+
 
 class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapter<NewsData>() {
 
@@ -84,6 +91,40 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
 
         constructor(parent: ViewGroup) : this(
             BrowserItemMainNewsBinding.inflate(
+                LayoutInflater.from(
+                    parent.context
+                ), parent, false
+            )
+        )
+    }
+
+    internal class NewsItemSearch(viewBinding: BrowserItemSearchNewsBinding) :
+        RecyclerView.ViewHolder(viewBinding.getRoot()) {
+        var viewBinding: BrowserItemSearchNewsBinding? = null
+
+        init {
+            this.viewBinding = viewBinding
+        }
+
+        constructor(parent: ViewGroup) : this(
+            BrowserItemSearchNewsBinding.inflate(
+                LayoutInflater.from(
+                    parent.context
+                ), parent, false
+            )
+        )
+    }
+
+    internal class NewsItemFilm(viewBinding: BrowserItemFilmNewsBinding) :
+        RecyclerView.ViewHolder(viewBinding.getRoot()) {
+        var viewBinding: BrowserItemFilmNewsBinding? = null
+
+        init {
+            this.viewBinding = viewBinding
+        }
+
+        constructor(parent: ViewGroup) : this(
+            BrowserItemFilmNewsBinding.inflate(
                 LayoutInflater.from(
                     parent.context
                 ), parent, false
@@ -252,6 +293,88 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                         GlideManager.loadImg(fragmet, ivSource, item.sschem)
                         tvSourceName.text = "${item.sfindi}"
                         tvNewsTime.text = TimeManager.getNewsTime(item.pphilo ?: 0)
+                    }
+                }
+            })
+            .addItemType(
+            NewsData.TYPE_DETAILS_NEWS_SEARCH,
+            object : OnMultiItemAdapterListener<NewsData,NewsItemSearch > {
+
+                override fun onCreate(
+                    context: Context,
+                    parent: ViewGroup,
+                    viewType: Int
+                ): NewsItemSearch {
+                    return NewsItemSearch(
+                        parent
+                    );
+                }
+
+                override fun onBind(holder: NewsItemSearch, position: Int, item: NewsData?) {
+                    if (item == null) return
+                    holder.viewBinding?.apply {
+                        GlideManager.loadImg(
+                            fragmet,
+                            ivImg,
+                            item.iassum,
+                            loadId = R.mipmap.bg_news_default,
+                            R.mipmap.bg_news_default
+                        )
+                        tvNewsTitle.text = item.tconsi
+                        GlideManager.loadImg(fragmet, ivSource, item.sschem)
+                        tvSourceName.text = "${item.sfindi}"
+                    }
+                }
+            })
+            .addItemType(
+            NewsData.TYPE_DETAILS_NEWS_SEARCH_FILM,
+            object : OnMultiItemAdapterListener<NewsData,NewsItemFilm > {
+
+                override fun onCreate(
+                    context: Context,
+                    parent: ViewGroup,
+                    viewType: Int
+                ): NewsItemFilm {
+                    return NewsItemFilm(
+                        parent
+                    );
+                }
+
+                override fun onBind(holder: NewsItemFilm, position: Int, item: NewsData?) {
+                    if (item == null) return
+                    holder.viewBinding?.apply {
+                        GlideManager.loadImg(
+                            fragmet,
+                            ivImg,
+                            item.iassum,
+                            loadId = R.mipmap.bg_news_default,
+                            R.mipmap.bg_news_default
+                        )
+                        var movieTitle = context.getString(R.string.app_movie_title)
+                        tvNewsTitle.text = "${movieTitle}:${item.tconsi}"
+
+                        extracted(movieTitle,tvNewsTitle)
+
+                        var splits=item.sissue?.split("_")
+                        var size = splits?.size?:0
+                        if (size>0){
+                            var rate = splits!!.get(0)
+                            tvRate.text = rate
+                        }
+                        if (size>1){
+                            var country = splits!!.get(1)
+                            var movieCountry = context.getString(R.string.app_movie_country)
+                            tvNewsCountry.text = "${movieCountry}:${country}"
+                            extracted(movieCountry,tvNewsCountry)
+                        }
+                        var releaseDate = context.getString(R.string.app_movie_release_date)
+
+                        tvNewsDate.text = "${releaseDate}:${
+                            SimpleDateFormat("yyyy-MM-dd").format(
+                                Date(item.pphilo?:System.currentTimeMillis())
+                            )}"
+                        val stringBuilderDate = SpannableStringBuilder(tvNewsDate.text?.trim()?:"")
+                        extracted(releaseDate,tvNewsDate)
                     }
                 }
             })
@@ -564,7 +687,7 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                             val partitionSize = 8
                             val dataList: MutableList<MutableList<JumpData>> = partitionList(tabList, partitionSize) as MutableList<MutableList<JumpData>>
                             var tag = vp2.getTag(R.id.vp2) as?MutableList<MutableList<JumpData>>
-                            if(tag==null || tag.size != dataList.size){
+                            if(true){
                                 vp2.apply {
                                     offscreenPageLimit = dataList.size
                                     var homeTabAdapter:HomeTabAdapter?=null
@@ -640,6 +763,23 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                     }
                 })
             .onItemViewType { position, list -> list.get(position).dataType }
+    }
+
+    private fun extracted(movieTitle: String,textView:TextView) {
+        val stringBuilderTitle = SpannableStringBuilder(textView.text?.trim() ?: "")
+        stringBuilderTitle.setSpan(
+            ForegroundColorSpan(context.getColor(R.color.black)),
+            movieTitle.length + 1,
+            textView.text.trim().length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        stringBuilderTitle.setSpan(
+            StyleSpan(Typeface.BOLD),
+            movieTitle.length + 1,
+            textView.text.trim().length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        textView.setText(stringBuilderTitle)
     }
 
 

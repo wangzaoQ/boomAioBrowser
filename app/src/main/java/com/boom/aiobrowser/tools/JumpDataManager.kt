@@ -33,11 +33,11 @@ object JumpDataManager {
         return data
     }
 
-    fun addTabToOtherWeb(url:String,tag:String): JumpData{
+    fun addTabToOtherWeb(url:String,title:String="",tag:String): JumpData{
         AppLogs.dLog(TAG, "addTab $tag")
         var data = JumpData().apply {
             jumpType = JumpConfig.JUMP_WEB
-            jumpTitle = ""
+            jumpTitle = title
             jumpUrl = url
             isCurrent = true
             autoDownload = true

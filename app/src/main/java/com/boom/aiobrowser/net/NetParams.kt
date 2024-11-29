@@ -1,5 +1,7 @@
 package com.boom.aiobrowser.net
 
+import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.other.NewsConfig
@@ -18,26 +20,37 @@ object NetParams {
     var WIDGET = "widget"
 
     var LOCAL = "local"
+    var MOVIE = "11370735975268352"
     var PUBLIC_SAFETY = "Public Safety"
 
-    suspend fun getParamsMap(key:String):HashMap<String,String>{
+    suspend fun getParamsMap(key:String,currentPage:Int=0):HashMap<String,String>{
         var needLocation = false
-        var needSession = true
+        var sessionType = 0
         var isPush = false
 //        var fallback = true
         var map = HashMap<String,String>()
         var endKey = key
+        var sessionKey = key
         var isTopic = false
+        var isSource = false
         if (endKey.startsWith(NewsConfig.TOPIC_TAG)){
             endKey = endKey.substringAfter(NewsConfig.TOPIC_TAG)
-            isTopic = true
+            if (endKey == APP.instance.getString(R.string.app_local_brief)){
+                endKey = LOCAL
+            }
+            if (endKey == APP.instance.getString(R.string.app_movie)){
+                isSource = true
+                endKey = MOVIE
+            }else{
+                isTopic = true
+            }
         }
         when (endKey) {
             FOR_YOU,NFEnum.NF_NEWS.menuName,WIDGET -> {
                 needLocation = true
-                isPush = true
                 if (endKey == NFEnum.NF_NEWS.menuName ||endKey == WIDGET){
                     map.put("fit","3:AIOPUSH")
+                    isPush = true
                 }else if (endKey == FOR_YOU){
                     map.put("fit","3:BROWSER")
                 }
@@ -59,14 +72,20 @@ object NetParams {
             PUBLIC_SAFETY->{
                 needLocation = true
             }
+            MOVIE->{
+                sessionType = 1
+            }
 
             else -> {
             }
         }
         filterLocation(needLocation, map)
-        filterSession(needSession,endKey,map)
+        filterSession(sessionType,sessionKey,map,currentPage)
         if (isTopic){
             map.put("tearth",endKey)
+        }
+        if (isSource){
+            map.put("sfindi",endKey)
         }
         if (isPush){
             map.put("cinvit","push")
@@ -74,12 +93,17 @@ object NetParams {
         return map
     }
 
-    private fun filterSession(needSession: Boolean,key:String, map: java.util.HashMap<String, String>) {
-        if (needSession){
+    private fun filterSession(sessionType: Int,key:String, map: java.util.HashMap<String, String>,currentPage:Int=0) {
+        if (sessionType == 0 || sessionType == 1){
             var session = CacheManager.getSession(key)
             map.put("smessa", "CS")
-            if (session.isNotEmpty()){
-                map.put("sstop", session)
+            if (sessionType == 1 && currentPage == 1){
+                map.put("sstop", "")
+                CacheManager.saveSession(key,"")
+            }else{
+                if (session.isNotEmpty()){
+                    map.put("sstop", session)
+                }
             }
         }
     }

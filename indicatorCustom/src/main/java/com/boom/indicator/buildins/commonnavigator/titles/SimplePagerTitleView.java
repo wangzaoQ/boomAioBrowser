@@ -37,14 +37,31 @@ public class SimplePagerTitleView extends TextView implements IMeasurablePagerTi
     @Override
     public void onSelected(int index, int totalCount) {
         setTextColor(mSelectedColor);
-        setBackgroundResource(R.drawable.shape_custom_tab_unable);
+        if (selectedBg>0){
+            setBackgroundResource(selectedBg);
+        }
+    }
+
+
+    int selectedBg=0;
+    int unSelectedBg=0;
+    public void setSelectedBg(int bg) {
+        selectedBg = bg;
+    }
+
+    public void setUnSelectedBg(int bg) {
+        unSelectedBg = bg;
     }
 
     @Override
     public void onDeselected(int index, int totalCount) {
         setTextColor(mNormalColor);
-        setBackgroundResource(R.drawable.shape_custom_tab_enable);
+        if (unSelectedBg>0){
+            setBackgroundResource(unSelectedBg);
+        }
     }
+
+
 
     @Override
     public void onLeave(int index, int totalCount, float leavePercent, boolean leftToRight) {

@@ -254,6 +254,7 @@ class APP: Application(), ViewModelStoreOwner {
     fun getWebConfig() {
         appModel.getWebConfig()
         appModel.getTopic()
+        appModel.getTrendsNews()
     }
 
     var netBack = object : OnNetworkStatusChangedListener {

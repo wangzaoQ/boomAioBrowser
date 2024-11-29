@@ -1,6 +1,8 @@
 package com.boom.aiobrowser.model
 
 import androidx.lifecycle.MutableLiveData
+import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.NewsDetailsData
@@ -8,6 +10,7 @@ import com.boom.aiobrowser.net.Net
 import com.boom.aiobrowser.net.NetController
 import com.boom.aiobrowser.net.NetParams
 import com.boom.aiobrowser.net.NetRequest
+import com.boom.aiobrowser.other.NewsConfig
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import okhttp3.OkHttpClient
@@ -20,7 +23,7 @@ class NewsViewModel : BaseDataModel() {
 
 
 
-    fun getNewsData(topic:String,refresh:Boolean=false) {
+    fun getNewsData(topic:String,page:Int,refresh:Boolean=false) {
         var middleTime = System.currentTimeMillis()-CacheManager.newsSaveTime
         if (middleTime>5*60*1000){
             CacheManager.newsList = mutableListOf()
@@ -30,9 +33,29 @@ class NewsViewModel : BaseDataModel() {
             newsLiveData.postValue(newsList)
         }else{
             loadData(loadBack = {
-                var list = NetRequest.request(HashMap<String, Any>().apply {
-                    put("sessionKey",topic )
-                }) { NetController.getNewsList(NetParams.getParamsMap(topic)) }.data?: mutableListOf()
+                var list :MutableList<NewsData>
+                if (topic =="${NewsConfig.TOPIC_TAG}${APP.instance.getString(R.string.app_trending_today)}"){
+                    list = NetRequest.request(HashMap<String, Any>().apply {
+                        put("sessionKey", APP.instance.getString(R.string.app_trending_today))
+                    }) { NetController.getHotNewsList(HashMap()) }.data
+                        ?: mutableListOf()
+                    list.forEach {
+                        it.dataType = NewsData.TYPE_DETAILS_NEWS_SEARCH
+                    }
+                }else{
+                    list = NetRequest.request(HashMap<String, Any>().apply {
+                        put("sessionKey",topic )
+                    }) { NetController.getNewsList(NetParams.getParamsMap(topic,page)) }.data?: mutableListOf()
+                    if (topic == "${NewsConfig.TOPIC_TAG}${APP.instance.getString(R.string.app_local_brief)}"){
+                        list.forEach {
+                            it.dataType = NewsData.TYPE_DETAILS_NEWS_SEARCH
+                        }
+                    }else if (topic == "${NewsConfig.TOPIC_TAG}${APP.instance.getString(R.string.app_movie)}"){
+                        list.forEach {
+                            it.dataType = NewsData.TYPE_DETAILS_NEWS_SEARCH_FILM
+                        }
+                    }
+                }
                 newsLiveData.postValue(list)
             }, failBack = {
 

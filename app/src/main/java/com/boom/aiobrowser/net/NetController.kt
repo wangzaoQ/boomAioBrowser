@@ -48,4 +48,7 @@ object NetController {
         return service.createUser(body)
     }
 
+    suspend fun getTrendNews(tguest:String): NetResponse<MutableList<NewsData>>{
+        return service.getTrendNews(tguest)
+    }
 }

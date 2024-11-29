@@ -62,6 +62,8 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
                     simplePagerTitleView.setText(list.get(index).topic)
                     simplePagerTitleView.setNormalColor(Color.BLACK)
                     simplePagerTitleView.setSelectedColor(Color.WHITE)
+                    simplePagerTitleView.setSelectedBg(com.boom.indicator.R.drawable.shape_custom_tab_unable)
+                    simplePagerTitleView.setUnSelectedBg(com.boom.indicator.R.drawable.shape_custom_tab_enable)
                     simplePagerTitleView.setOnClickListener(View.OnClickListener {
                         vp.setCurrentItem(
                             index

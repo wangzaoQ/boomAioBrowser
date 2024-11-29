@@ -14,6 +14,7 @@ import com.boom.aiobrowser.data.FilesData
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.WebSourceData
 import com.boom.aiobrowser.databinding.BrowserItemWebCategoryBinding
+import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -56,7 +57,7 @@ class WebSourceAdapter : BaseQuickAdapter<WebSourceData, WebSourceAdapter.VH>() 
                 childAdapter.setOnDebouncedItemClick{adapter, view, position ->
                     if (position>item.sourceList!!.size-1)return@setOnDebouncedItemClick
                     var data = item.sourceList!!.get(position)
-                    APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(data.jumpUrl,"webStore"))
+                    APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(data.jumpUrl, title = "","webStore"))
                     (context as BaseActivity<*>).finish()
                 }
 
@@ -65,6 +66,7 @@ class WebSourceAdapter : BaseQuickAdapter<WebSourceData, WebSourceAdapter.VH>() 
                     var data = item.sourceList!!.get(position)
                     data.isCurrent = data.isCurrent.not()
                     childAdapter.notifyItemChanged(position,"updateCheck")
+                    data.jumpType = JumpConfig.JUMP_WEB
                     if (data.isCurrent){
                         CacheManager.addHomeTab(data)
                     }else{

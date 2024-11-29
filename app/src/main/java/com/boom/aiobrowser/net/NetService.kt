@@ -69,6 +69,12 @@ interface NetService {
 
 
     /**
+     * 趋势
+     */
+    @GET("api/nemplo/tguest")
+    suspend fun getTrendNews(@Query("tguest") tguest:String): NetResponse<MutableList<NewsData>>
+
+    /**
      * 创建用户
      */
     @Headers("Content-Type: application/json")

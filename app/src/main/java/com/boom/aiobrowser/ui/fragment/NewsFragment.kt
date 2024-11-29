@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.base.BaseFragment
+import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.NewsFragmentBinding
 import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.net.NetParams
@@ -17,6 +18,7 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.toJson
+import com.boom.aiobrowser.ui.activity.WebActivity
 import com.boom.aiobrowser.ui.activity.WebDetailsActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
@@ -37,14 +39,14 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
     var page = 1
 
     override fun startLoadData() {
-        loadData()
+        fBinding.newsSmart.autoRefresh()
     }
 
     private fun loadData() {
         if (topic == TopicConfig.TOPIC_FOR_YOU){
-            viewModel.value.getNewsData(topic)
+            viewModel.value.getNewsData(topic,page)
         }else{
-            viewModel.value.getNewsData("${NewsConfig.TOPIC_TAG}${topic}")
+            viewModel.value.getNewsData("${NewsConfig.TOPIC_TAG}${topic}",page)
         }
     }
 
@@ -53,24 +55,42 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
             if (page == 1){
                 newsAdapter.submitList(it)
             }else{
+                var oldList = newsAdapter.mutableItems
+                var removeList = mutableListOf<NewsData>()
+                it.forEach {
+                    for (j in 0 until newsAdapter.mutableItems.size){
+                        if (newsAdapter.mutableItems.get(j).itackl == it.itackl){
+                            removeList.add(it)
+                            break
+                        }
+                    }
+                }
+                (it as MutableList<NewsData>).removeAll(removeList)
                 newsAdapter.addAll(it)
             }
             fBinding.newsSmart.finishRefresh()
             fBinding.newsSmart.finishLoadMore()
         }
         fBinding.newsSmart.setOnRefreshListener{
-            loadData()
             page = 1
+            loadData()
         }
         fBinding.newsSmart.setOnLoadMoreListener{
-            loadData()
             page++
+            loadData()
         }
         newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
+            if (position>newsAdapter.items.size-1)return@setOnDebouncedItemClick
             var data = newsAdapter.items.get(position)
-            rootActivity.jumpActivity<WebDetailsActivity>(Bundle().apply {
-                putString(ParamsConfig.JSON_PARAMS, toJson(data))
-            })
+            if (data.dataType == NewsData.TYPE_DETAILS_NEWS_SEARCH_FILM){
+                rootActivity.jumpActivity<WebActivity>(Bundle().apply {
+                    putString("url", data.uweek)
+                })
+            }else{
+                rootActivity.jumpActivity<WebDetailsActivity>(Bundle().apply {
+                    putString(ParamsConfig.JSON_PARAMS, toJson(data))
+                })
+            }
         }
     }
 

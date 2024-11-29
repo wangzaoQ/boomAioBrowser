@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_recent_history"
+    android:orientation="horizontal"
+    android:paddingHorizontal="8dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvRecentHistory"
+        style="@style/app_text_normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingTop="4.5dp"
+        android:paddingBottom="4.5dp"
+        android:textColor="#333333"
+        android:textSize="14sp"
+        android:singleLine="true"
+        android:ellipsize="end"
+        tools:text="youtuyoutuyoutuyoutuyoutuyoutuyoutuyoutu" />
+
+ </androidx.appcompat.widget.LinearLayoutCompat>

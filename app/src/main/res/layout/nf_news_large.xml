@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="29dp"
             android:gravity="center_vertical"
-            tools:text="title"
+            android:text="@string/app_name"
             style="@style/app_text_bold"
             android:textSize="14sp"
             android:singleLine="true"
@@ -35,7 +35,7 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:layout_marginHorizontal="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         >
 
         <ImageView
@@ -55,20 +55,21 @@
             android:layout_marginBottom="7dp"
             android:visibility="gone"
             ></ImageView>
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Taxad, o consórcio de mídia e o capitalismo de conveniência"
-            android:textSize="14sp"
-            android:textColor="@color/white"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:layout_marginHorizontal="15dp"
-            android:layout_alignBottom="@+id/ivPic"
-            android:layout_marginBottom="14dp"
-            ></TextView>
+
 
     </RelativeLayout>
-
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Taxad, o consórcio de mídia e o capitalismo de conveniência"
+        android:textSize="14sp"
+        style="@style/app_text_bold"
+        android:textColor="@color/black"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_marginHorizontal="15dp"
+        android:layout_alignBottom="@+id/ivPic"
+        android:layout_marginBottom="10dp"
+        ></TextView>
 </LinearLayout>

@@ -1,16 +1,20 @@
 package com.boom.aiobrowser.ui.fragment
 
 import android.app.AlertDialog
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager2.widget.ViewPager2
-import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
@@ -18,23 +22,31 @@ import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.BrowserFragmentSearchBinding
 import com.boom.aiobrowser.model.SearchViewModel
 import com.boom.aiobrowser.net.SearchNet
+import com.boom.aiobrowser.other.JumpConfig
+import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.jobCancel
-import com.boom.aiobrowser.other.JumpConfig
-import com.boom.aiobrowser.other.ParamsConfig
-import com.boom.aiobrowser.ui.adapter.HomeGuideAdapter
+import com.boom.aiobrowser.tools.toJson
+import com.boom.aiobrowser.ui.activity.WebDetailsActivity
 import com.boom.aiobrowser.ui.adapter.RecentSearchAdapter
 import com.boom.aiobrowser.ui.adapter.SearchResultAdapter
 import com.boom.base.adapter4.QuickAdapterHelper
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
-import com.zhpan.indicator.enums.IndicatorSlideMode
-import com.zhpan.indicator.enums.IndicatorStyle
+import com.boom.indicator.ViewPagerHelper
+import com.boom.indicator.buildins.UIUtil
+import com.boom.indicator.buildins.commonnavigator.CommonNavigator
+import com.boom.indicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
+import com.boom.indicator.buildins.commonnavigator.abs.IPagerIndicator
+import com.boom.indicator.buildins.commonnavigator.abs.IPagerTitleView
+import com.boom.indicator.buildins.commonnavigator.indicators.LinePagerIndicator
+import com.boom.indicator.buildins.commonnavigator.titles.SimplePagerTitleView
 import kotlinx.coroutines.Job
 
 class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
@@ -58,14 +70,13 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
         if (status == 1)return
         var title = fBinding.topRoot.binding.etToolBarSearch.text.toString().trim()
         if (title.isNotEmpty()){
-            //进入就有数据
-            fBinding.searchGuideRoot.visibility = View.GONE
-            fBinding.recentSearchRoot.visibility = View.GONE
             fBinding.searchRv.visibility = View.VISIBLE
+            fBinding.searchEmptyRoot.visibility = View.GONE
+            //进入就有数据
             viewModel.searchResult(title)
         }else{
             fBinding.searchRv.visibility = View.GONE
-            fBinding.recentSearchRoot.visibility = View.VISIBLE
+            fBinding.searchEmptyRoot.visibility = View.VISIBLE
             var searchist = CacheManager.recentSearchDataList
             if (searchist.isNotEmpty()){
                 fBinding.recentSearchRoot.visibility = View.VISIBLE
@@ -87,62 +98,36 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 }
             }else{
                 fBinding.recentSearchRoot.visibility = View.GONE
-                showGuideRoot()
+            }
+        }
+        var trendNews = CacheManager.trendNews
+        if (trendNews.isNullOrEmpty()){
+            fBinding.tvGuessTitle.visibility = View.VISIBLE
+            APP.instance.appModel.getTrendsNews()
+        }else{
+            fBinding.tvGuessTitle.visibility = View.GONE
+            fBinding.guessShrinkRoot.removeAllViews()
+            fBinding.guessShrinkRoot.heightLimit = false
+            fBinding.guessShrinkRoot.maxLimit = false
+            for (i in 0 until trendNews.size){
+                var data = trendNews.get(i)
+
+                if (data.tdetai.isNullOrEmpty().not()){
+                    var content = data.tdetai!!.get(0)
+                    var recentView = LayoutInflater.from(context).inflate(R.layout.item_guess_recent,null,false)
+                    var tv = recentView.findViewById<AppCompatTextView>(R.id.tvRecentHistory)
+                    recentView.setOneClick {
+                        rootActivity.jumpActivity<WebDetailsActivity>(Bundle().apply {
+                            putString(ParamsConfig.JSON_PARAMS, toJson(data))
+                        })
+                    }
+                    tv.text = "#${content}"
+                    fBinding.guessShrinkRoot.addView(recentView)
+                }
             }
         }
     }
 
-
-    private fun showGuideRoot() {
-        fBinding.searchGuideRoot.visibility = View.VISIBLE
-        guideList.clear()
-        guideList.add(0)
-        guideList.add(1)
-        var width = dp2px(7f).toFloat()
-        fBinding.indicator.apply {
-            setSliderColor(context.getColor(R.color.color_tab_DAE5EC), context.getColor(R.color.color_tab_5755D9))
-            setSliderWidth(width)
-            setSliderHeight(width)
-            setSlideMode(IndicatorSlideMode.SMOOTH)
-            setIndicatorStyle(IndicatorStyle.CIRCLE)
-            setPageSize(guideList.size)
-            notifyDataChanged()
-            fBinding.vpGuide.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageScrolled(
-                    position: Int,
-                    positionOffset: Float,
-                    positionOffsetPixels: Int
-                ) {
-                    super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-                    fBinding.indicator.onPageScrolled(
-                        position,
-                        positionOffset,
-                        positionOffsetPixels
-                    )
-                }
-
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    fBinding.indicator.onPageSelected(position)
-                    setGuideIvByPosition(position,guideList)
-                }
-            })
-        }
-        homeGuideAdapter.submitList(guideList)
-    }
-
-    private fun setGuideIvByPosition(position: Int,dataList: MutableList<Int>) {
-        fBinding.ivRight.setImageResource(if (position == dataList.size-1) R.mipmap.ic_guide_right1 else R.mipmap.ic_guide_right2)
-        fBinding.ivLeft.setImageResource(if (position == 0) R.mipmap.ic_guide_left1 else R.mipmap.ic_guide_left2)
-        fBinding.ivRight.setOneClick {
-            if (position == dataList.size-1)return@setOneClick
-            fBinding.vpGuide.setCurrentItem(position+1,true)
-        }
-        fBinding.ivLeft.setOneClick {
-            if (position == 0)return@setOneClick
-            fBinding.vpGuide.setCurrentItem(position-1,true)
-        }
-    }
 
     var allowRecentDelete = false
 
@@ -189,48 +174,12 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
     // 0 默认 1 clean 状态
     var cleanType = 0
 
-    var currentPosition = 0
-
     override fun setListener() {
-        for (i in 0 until fBinding.llRoot.childCount){
-            fBinding.llRoot.getChildAt(i).setOneClick {
-                var title = ""
-                var url = ""
-                var jumpGuide = false
-                when(i){
-                    0 ->{
-                        jumpGuide = true
-                        title = getString(R.string.app_tt)
-                        url = "https://www.tiktok.com/"
-                    }
-                    1 ->{
-                        title = getString(R.string.app_vimeo)
-                        url = "https://vimeo.com/"
-                    }
-                    2 ->{
-                        title = getString(R.string.app_x)
-                        url = "https://x.com/"
-                    }
-                }
-                PointEvent.posePoint(PointEventKey.search_page_qb,Bundle().apply {
-                    putString(PointValueKey.type,title)
-                })
-                if (i !=1 && i!=currentPosition){
-                    homeGuideAdapter.setFromAPP(title)
-                    homeGuideAdapter.notifyDataSetChanged()
-                    currentPosition = i
-                    fBinding.vpGuide.currentItem = 0
-                }else{
-                    toWebDetailsActivity(JumpDataManager.getCurrentJumpData(tag = "searchFragment 点击推荐").apply {
-                        jumpType = JumpConfig.JUMP_WEB
-                        jumpTitle = title
-                        jumpUrl = url
-                    })
-                }
-            }
-        }
         APP.engineLiveData.observe(this){
             fBinding.topRoot.updateEngine(it)
+        }
+        fBinding.ivBack.setOneClick {
+            rootActivity.finish()
         }
         fBinding.ivClean.setOneClick {
             cleanType = 1
@@ -299,14 +248,6 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
         SearchResultAdapter()
     }
 
-    val homeGuideAdapter by lazy {
-        HomeGuideAdapter()
-    }
-
-    val guideList by lazy {
-        mutableListOf<Int>()
-    }
-
     var changeJob: Job? = null
 
     override fun setShowView() {
@@ -369,12 +310,70 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 clickHistory(jumpData)
             }
         }
-        fBinding.vpGuide.apply {
-            setOrientation(ViewPager2.ORIENTATION_HORIZONTAL)
-            adapter = homeGuideAdapter
-        }
-
         PointEvent.posePoint(PointEventKey.search_page)
+        initVp()
+    }
+
+    var fragmentList = mutableListOf<BaseFragment<*>>()
+    var titleList = mutableListOf<String>()
+
+    private fun initVp() {
+        titleList.add(getString(R.string.app_local_brief))
+        titleList.add(getString(R.string.app_trending_today))
+        titleList.add(getString(R.string.app_film))
+        fragmentList.add(NewsFragment.newInstance(getString(R.string.app_local_brief)))
+        fragmentList.add(NewsFragment.newInstance(getString(R.string.app_trending_today)))
+        fragmentList.add(NewsFragment.newInstance(getString(R.string.app_movie)))
+        fBinding.vpNews.apply {
+            adapter = object : FragmentPagerAdapter(
+                childFragmentManager,
+                BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+            ) {
+                override fun getItem(position: Int): Fragment {
+                    return fragmentList[position]
+                }
+
+                override fun getCount(): Int {
+                    return fragmentList.size
+                }
+            }
+        }
+        val commonNavigator7: CommonNavigator = CommonNavigator(rootActivity)
+        commonNavigator7.setScrollPivotX(0.65f)
+        commonNavigator7.setAdapter(object : CommonNavigatorAdapter() {
+
+            override fun getCount(): Int {
+                return fragmentList.size
+            }
+
+            override fun getTitleView(context: Context?, index: Int): IPagerTitleView {
+                val simplePagerTitleView: SimplePagerTitleView = SimplePagerTitleView(context)
+                simplePagerTitleView.setText(titleList.get(index))
+                simplePagerTitleView.setNormalColor(Color.parseColor("#FF666666"))
+                simplePagerTitleView.setSelectedColor(Color.parseColor("#FF000000"))
+                simplePagerTitleView.setOnClickListener(View.OnClickListener {
+                    fBinding.vpNews.setCurrentItem(
+                        index
+                    )
+                })
+                return simplePagerTitleView
+            }
+
+            override fun getIndicator(context: Context?): IPagerIndicator {
+                val indicator: LinePagerIndicator = LinePagerIndicator(context)
+                indicator.setMode(LinePagerIndicator.MODE_EXACTLY)
+                indicator.setLineHeight(UIUtil.dip2px(context, 3.3).toFloat())
+                indicator.setLineWidth(UIUtil.dip2px(context, 24.0).toFloat())
+                indicator.setRoundRadius(UIUtil.dip2px(context, 12.0).toFloat())
+                indicator.setStartInterpolator(AccelerateInterpolator())
+                indicator.setEndInterpolator(DecelerateInterpolator(2.0f))
+                indicator.setColors(Color.parseColor("#FF5B5ADB"))
+                return indicator
+            }
+        })
+        fBinding.indicator.setNavigator(commonNavigator7)
+        ViewPagerHelper.bind(fBinding.indicator, fBinding.vpNews)
+
     }
 
     private fun clickDelete(position: Int) {
@@ -398,7 +397,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
     private fun toWebDetailsActivity(data:JumpData){
 //        APP.jumpLiveData.postValue(data)
 //        rootActivity.finish()
-        APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(data.jumpUrl,"点击网页"))
+        APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(data.jumpUrl, title = data.jumpTitle,"点击网页"))
         rootActivity.finish()
     }
 

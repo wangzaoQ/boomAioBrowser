@@ -404,7 +404,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     }
 
     fun loadNews(){
-        viewModel.value.getNewsData(NetParams.FOR_YOU)
+        viewModel.value.getNewsData(NetParams.FOR_YOU, page = page)
     }
 
     private fun loadData() {

@@ -98,7 +98,6 @@ object NetParams {
             var session = CacheManager.getSession(key)
             map.put("smessa", "CS")
             if (sessionType == 1 && currentPage == 1){
-                map.put("sstop", "")
                 CacheManager.saveSession(key,"")
             }else{
                 if (session.isNotEmpty()){

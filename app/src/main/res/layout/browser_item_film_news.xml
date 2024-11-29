@@ -81,6 +81,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvNewsContent"
             app:shapeAppearance="@style/style_CircleStyle"
+            app:srcCompat="@mipmap/ic_film_hot"
             >
 
         </androidx.appcompat.widget.AppCompatImageView>

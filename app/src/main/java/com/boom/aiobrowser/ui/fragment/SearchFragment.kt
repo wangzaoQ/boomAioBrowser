@@ -102,14 +102,15 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
         }
         var trendNews = CacheManager.trendNews
         if (trendNews.isNullOrEmpty()){
-            fBinding.tvGuessTitle.visibility = View.VISIBLE
+            fBinding.tvGuessTitle.visibility = View.GONE
             APP.instance.appModel.getTrendsNews()
         }else{
-            fBinding.tvGuessTitle.visibility = View.GONE
+            fBinding.tvGuessTitle.visibility = View.VISIBLE
             fBinding.guessShrinkRoot.removeAllViews()
             fBinding.guessShrinkRoot.heightLimit = false
             fBinding.guessShrinkRoot.maxLimit = false
             for (i in 0 until trendNews.size){
+                if (i == 6)break
                 var data = trendNews.get(i)
 
                 if (data.tdetai.isNullOrEmpty().not()){
@@ -119,6 +120,10 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                     recentView.setOneClick {
                         rootActivity.jumpActivity<WebDetailsActivity>(Bundle().apply {
                             putString(ParamsConfig.JSON_PARAMS, toJson(data))
+                        })
+                        PointEvent.posePoint(PointEventKey.search_page_gtr,Bundle().apply {
+                            putString(PointValueKey.type,content)
+                            putString(PointValueKey.news_id,data.itackl)
                         })
                     }
                     tv.text = "#${content}"

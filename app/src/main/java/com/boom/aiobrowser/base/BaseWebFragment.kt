@@ -193,7 +193,30 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                             videoType = it.format?:"",
                             resolution = if (it.resolution.isNullOrEmpty()) "--" else it.resolution?:""
                         )
-                        uiData.formatsList.add(videoDownloadData)
+                        if (uiData.formatsList.isNullOrEmpty()){
+                            uiData.formatsList.add(videoDownloadData)
+                        }else{
+                            runCatching {
+                                var oldData = uiData.formatsList.get(uiData.formatsList.size-1)
+                                var oldResolution = oldData.resolution?:""
+                                var newResolution = it.resolution?:""
+                                if (oldResolution.contains("p",true) && newResolution.contains("p",true)){
+                                    runCatching {
+                                        oldResolution = oldResolution.substring(0,oldResolution.indexOf("p", startIndex = 0, ignoreCase=true))
+                                        newResolution = newResolution.substring(0,newResolution.indexOf("p", startIndex = 0, ignoreCase=true))
+                                        if (newResolution.toInt()>oldResolution.toInt()){
+                                            uiData.formatsList.add(0,videoDownloadData)
+                                        }else{
+                                            uiData.formatsList.add(videoDownloadData)
+                                        }
+                                    }.onFailure {
+                                        uiData.formatsList.add(videoDownloadData)
+                                    }
+                                }else{
+                                    uiData.formatsList.add(0,videoDownloadData)
+                                }
+                            }
+                        }
                         uiData.videoResultId = "${id}"
                         uiData.source = fromSource
                         uiData.thumbnail = this.thumbnail?:""
@@ -486,6 +509,22 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
     }
 
+
+    override fun onPause() {
+        super.onPause()
+        runCatching {
+            mAgentWeb!!.getWebCreator().getWebView()?.onPause()
+            mAgentWeb!!.getWebCreator().getWebView()?.pauseTimers()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        runCatching {
+            mAgentWeb!!.getWebCreator().getWebView()?.onResume()
+            mAgentWeb!!.getWebCreator().getWebView()?.resumeTimers()
+        }
+    }
 
 
     private fun evaluateHTML(webView: WebView) {

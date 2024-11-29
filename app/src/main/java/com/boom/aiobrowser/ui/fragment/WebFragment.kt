@@ -128,38 +128,46 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
         APP.videoScanLiveData.observe(this){
             if (jumpData?.autoDownload == true){
-                it?.apply {
-                    (context as BaseActivity<*>).addLaunch(success = {
-                        if (it.formatsList.isNotEmpty()){
-                            var data = it.formatsList.get(0)
-                            var model = DownloadCacheManager.queryDownloadModel(data)
-                            if (model == null) {
-                                data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
-                                DownloadCacheManager.addDownLoadPrepare(data)
-                                withContext(Dispatchers.Main) {
-                                    var headerMap = HashMap<String, String>()
-                                    data.paramsMap?.forEach {
-                                        headerMap.put(it.key, it.value.toString())
+                if (it.formatsList.size == 1){
+                    it?.apply {
+                        (context as BaseActivity<*>).addLaunch(success = {
+                            if (it.formatsList.isNotEmpty()){
+                                var data = it.formatsList.get(0)
+                                var model = DownloadCacheManager.queryDownloadModel(data)
+                                if (model == null) {
+                                    data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
+                                    DownloadCacheManager.addDownLoadPrepare(data)
+                                    withContext(Dispatchers.Main) {
+                                        var headerMap = HashMap<String, String>()
+                                        data.paramsMap?.forEach {
+                                            headerMap.put(it.key, it.value.toString())
+                                        }
+                                        VideoDownloadManager.getInstance()
+                                            .startDownload(data.createDownloadData(data), headerMap)
+                                        NFManager.requestNotifyPermission(
+                                            WeakReference((context as BaseActivity<*>)),
+                                            onSuccess = {
+                                                NFShow.showDownloadNF(data, true)
+                                            },
+                                            onFail = {})
                                     }
-                                    VideoDownloadManager.getInstance()
-                                        .startDownload(data.createDownloadData(data), headerMap)
-                                    NFManager.requestNotifyPermission(
-                                        WeakReference((context as BaseActivity<*>)),
-                                        onSuccess = {
-                                            NFShow.showDownloadNF(data, true)
-                                        },
-                                        onFail = {})
                                 }
                             }
-                        }
-                    }, failBack = {})
+                        }, failBack = {})
+                    }
+                }else{
+                    var status = popDown?.isShowing?:false
+                    if (!status && it.formatsList.size>1){
+                        showDownloadPop()
+                    }
                 }
                 jumpData?.apply {
                     autoDownload = false
                     JumpDataManager.updateCurrentJumpData(this,"自动下载后重置")
                 }
+            }else{
+                popDown?.updateDataByScan(it)
             }
-            popDown?.updateDataByScan(it)
             updateDownloadButtonStatus(true,0)
         }
         APP.videoNFLiveData.observe(this){

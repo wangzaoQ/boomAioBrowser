@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.NewsFragmentBinding
@@ -89,6 +90,11 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
             }else{
                 rootActivity.jumpActivity<WebDetailsActivity>(Bundle().apply {
                     putString(ParamsConfig.JSON_PARAMS, toJson(data))
+                })
+            }
+            if (topic == rootActivity.getString(R.string.app_movie)){
+                PointEvent.posePoint(PointEventKey.search_page_movie, Bundle().apply {
+                    putString(PointValueKey.type,data?.tconsi)
                 })
             }
         }

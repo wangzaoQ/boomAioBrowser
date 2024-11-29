@@ -12,6 +12,7 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
+import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.databinding.VideoPopDownloadBinding
@@ -132,14 +133,22 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 //如果库里有数据更新临时缓存
                 for (i in 0 until list.size) {
                     var data = list.get(i)
+                    var successData:VideoDownloadData?=null
                     data.formatsList.forEach {
                         for (k in 0 until modelList.size) {
                             var bean = modelList.get(k)
                             if (bean.videoId == it.videoId) {
                                 it.covertByDbData(bean)
+                                if (bean.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
+                                    successData = it
+                                }
                                 break
                             }
                         }
+                    }
+                    if (successData!=null){
+                        data.formatsList = mutableListOf()
+                        data.formatsList.add(successData!!)
                     }
                     endList.add(data)
                 }
@@ -211,12 +220,15 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         }
 
         defaultBinding?.apply {
-            if (downSize == 0L){
+            if (allowDownCount == 0){
                 btnDownloadAll.text =
                     "${context.getString(R.string.app_open)}"
             }else{
-                btnDownloadAll.text =
-                    "${context.getString(R.string.app_download)}(${if (sizeGone) "" else context.getString(R.string.app_all)} ${downSize.formatSize()})"
+                if (downSize>0){
+                    btnDownloadAll.text = "${context.getString(R.string.app_download)}(${if (sizeGone) "" else context.getString(R.string.app_all)} ${downSize.formatSize()})"
+                }else{
+                    btnDownloadAll.text = context.getString(R.string.app_download)
+                }
             }
             if (allowDownCount>1){
                 tvClear.visibility = View.VISIBLE

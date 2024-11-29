@@ -222,6 +222,10 @@ object PointEventKey {
     const val home_navigation_click = "home_navigation_click"
 
     const val fcm_data = "fcm_data"
+    //搜索页面点击趋势词
+    const val search_page_gtr = "search_page_gtr"
+    //搜索页面点击电影
+    const val search_page_movie = "search_page_movie"
 
 }
 

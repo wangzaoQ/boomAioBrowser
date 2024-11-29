@@ -53,8 +53,10 @@ object GlideManager {
             .load(url)
             .override(width,height)
             .placeholder(R.mipmap.bg_news_default)
-            .transform(RoundedCorners(dp2px(15f)))
+//            .transform(RoundedCorners(dp2px(15f)))
 //            .apply { options }
+//            .apply(RequestOptions.bitmapTransform(RoundedCorners(20))) // 设置圆角大小为20dp
+
             .into(object : CustomTarget<Drawable?>() {
                 override fun onResourceReady(resource: Drawable, transition: com.bumptech.glide.request.transition.Transition<in Drawable?>?) {
                     runCatching {

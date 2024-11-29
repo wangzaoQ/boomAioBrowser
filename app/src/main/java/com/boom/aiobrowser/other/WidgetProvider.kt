@@ -129,7 +129,7 @@ class WidgetProvider : AppWidgetProvider() {
         view.setTextViewText(R.id.tvContent,data?.sissue?:"")
         view.setOnClickPendingIntent(R.id.newsRoot, getDetailsIntent(context,1,data))
         view.setOnClickPendingIntent(R.id.llRoot, getDetailsIntent(context,0,data))
-        view.setImageViewResource(R.id.ivNews, R.mipmap.bg_news_default)
+        view.setImageViewResource(R.id.ivNews, R.mipmap.ic_default_nf)
         var width = dp2px(68f)
         var height = dp2px(51f)
         GlideManager.loadNFBitmap(

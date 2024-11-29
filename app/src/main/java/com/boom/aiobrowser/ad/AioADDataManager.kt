@@ -133,7 +133,7 @@ object AioADDataManager {
         if (data != null) {
             AppLogs.dLog(TAG, "开始加载 ${adEnum}:-id:${data?.ktygzdzn}-sort:${data?.npxotusg}")
             adEnum.adLoadStatus = LOAD_STATUS_LOADING
-            AppLogs.dLog(TAG, "加载成功 ${adEnum}:-id:${data.ktygzdzn}-sort:${data.npxotusg}")
+//            AppLogs.dLog(TAG, "加载成功 ${adEnum}:-id:${data.ktygzdzn}-sort:${data.npxotusg}")
             AioADLoader(data,adEnum, successCallBack = {
                 AppLogs.dLog(
                     TAG,

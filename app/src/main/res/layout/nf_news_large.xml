@@ -23,6 +23,7 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:layout_marginBottom="7dp"
+            android:src="@mipmap/ic_default_nf"
             ></ImageView>
 
         <ImageView

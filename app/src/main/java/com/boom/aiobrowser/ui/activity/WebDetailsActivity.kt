@@ -22,6 +22,7 @@ import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.getNewsTopic
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
+import com.boom.video.GSYVideoManager
 
 class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
 
@@ -62,6 +63,16 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        GSYVideoManager.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        GSYVideoManager.onResume()
+    }
+
 
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
@@ -96,6 +107,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         if (allowShowRate){
             APP.showRateLiveData.postValue(0)
         }
+        GSYVideoManager.releaseAllVideos()
         super.onDestroy()
     }
 }

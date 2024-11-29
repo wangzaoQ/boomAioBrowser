@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
@@ -206,8 +207,8 @@ object NFShow {
                     NFManager.manager.notify(data.nId,bulider.build())
                 }
             },callFail ={
-                smallRemote?.setImageViewResource(R.id.ivPic, R.mipmap.bg_news_default)
-                largeRemote?.setImageViewResource(R.id.ivPic, R.mipmap.bg_news_default)
+                smallRemote?.setImageViewResource(R.id.ivPic, R.mipmap.ic_default_nf)
+                largeRemote?.setImageViewResource(R.id.ivPic, R.mipmap.ic_default_nf)
                 if (data.tag.isNullOrEmpty()){
                     NFManager.manager.notify(enum.position, bulider.build())
                 }else{
@@ -245,8 +246,8 @@ object NFShow {
 //        }
 
         nfBuilder
-            .setSmallIcon(R.mipmap.ic_start_logo)
-//            .setColor(ContextCompat.getColor(App.ins, R.color.red_ff4b54))
+            .setSmallIcon(R.mipmap.ic_nf_logo_show)
+            .setColor(ContextCompat.getColor(APP.instance, R.color.color_blue_nf))
             .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
             .setCategory(Notification.CATEGORY_CALL)
             .setOngoing(false)

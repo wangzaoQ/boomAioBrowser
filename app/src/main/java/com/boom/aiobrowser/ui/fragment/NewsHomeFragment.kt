@@ -2,6 +2,7 @@ package com.boom.aiobrowser.ui.fragment
 
 import android.content.Context
 import android.graphics.Color
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,8 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.TopicBean
 import com.boom.aiobrowser.databinding.NewsFragmentHomeBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.ui.adapter.NewsPagerStateAdapter
 import com.boom.indicator.ViewPagerHelper
@@ -99,7 +102,9 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
                     }
 
                     override fun onPageSelected(position: Int) {
-
+                        PointEvent.posePoint(PointEventKey.news_tab, Bundle().apply {
+                            putString(PointEventKey.news_tab,list.get(position).id)
+                        })
                     }
 
                     override fun onPageScrollStateChanged(state: Int) {

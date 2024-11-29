@@ -226,6 +226,8 @@ object PointEventKey {
     const val search_page_gtr = "search_page_gtr"
     //搜索页面点击电影
     const val search_page_movie = "search_page_movie"
+    //news_tab
+    const val news_tab = "news_tab"
 
 }
 

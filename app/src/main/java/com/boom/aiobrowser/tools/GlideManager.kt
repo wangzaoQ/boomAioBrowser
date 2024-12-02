@@ -52,7 +52,7 @@ object GlideManager {
         Glide.with(mContext)
             .load(url)
             .override(width,height)
-            .placeholder(R.mipmap.ic_default_nf)
+//            .placeholder(R.mipmap.ic_default_nf)
 //            .transform(RoundedCorners(dp2px(15f)))
 //            .apply { options }
 //            .apply(RequestOptions.bitmapTransform(RoundedCorners(20))) // 设置圆角大小为20dp

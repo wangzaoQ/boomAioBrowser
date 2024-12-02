@@ -283,8 +283,8 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                 fragmet,
                                 ivImg,
                                 item.iassum,
-                                loadId = R.mipmap.bg_news_default,
-                                R.mipmap.bg_news_default
+                                loadId = R.mipmap.ic_default_nf,
+                                R.mipmap.ic_default_nf
                             )
                             var params =(tvNewsTitle.layoutParams as ConstraintLayout.LayoutParams)
                             params.topMargin = dp2px(13f)
@@ -317,8 +317,8 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                             fragmet,
                             ivImg,
                             item.iassum,
-                            loadId = R.mipmap.bg_news_default,
-                            R.mipmap.bg_news_default
+                            loadId = R.mipmap.ic_default_nf_small,
+                            R.mipmap.ic_default_nf_small
                         )
                         tvNewsTitle.text = item.tconsi
                         GlideManager.loadImg(fragmet, ivSource, item.sschem)
@@ -500,8 +500,8 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                     override fun onBind(holder: TopImgItem, position: Int, item: NewsData?) {
                         if (item == null) return
                         holder.viewBinding?.apply {
-                            GlideManager.loadImg(fragment = null, iv = ivTopImg, url = item.iassum,loadId = R.mipmap.bg_news_default,
-                                R.mipmap.bg_news_default)
+                            GlideManager.loadImg(fragment = null, iv = ivTopImg, url = item.iassum,loadId = R.mipmap.ic_default_nf,
+                                R.mipmap.ic_default_nf)
                         }
                     }
                 })
@@ -596,8 +596,8 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                     override fun onBind(holder: ImgItem, position: Int, item: NewsData?) {
                         if (item == null) return
                         holder.viewBinding?.apply {
-                            GlideManager.loadImg(fragment = null, iv = ivImg, url = item.iassum,loadId = R.mipmap.bg_news_default,
-                                R.mipmap.bg_news_default)
+                            GlideManager.loadImg(fragment = null, iv = ivImg, url = item.iassum,loadId = R.mipmap.ic_default_nf,
+                                R.mipmap.ic_default_nf)
                         }
                     }
                 })

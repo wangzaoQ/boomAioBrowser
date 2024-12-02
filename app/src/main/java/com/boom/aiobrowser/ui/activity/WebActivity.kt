@@ -210,18 +210,18 @@ class WebActivity : BaseActivity<BrowserActivityWebBinding>() {
 
     override fun onPause() {
         super.onPause()
-        runCatching {
-            mAgentWeb!!.getWebCreator().getWebView()?.onPause()
-            mAgentWeb!!.getWebCreator().getWebView()?.pauseTimers()
-        }
+//        runCatching {
+//            mAgentWeb!!.getWebCreator().getWebView()?.onPause()
+//            mAgentWeb!!.getWebCreator().getWebView()?.pauseTimers()
+//        }
     }
 
     override fun onResume() {
         super.onResume()
-        runCatching {
-            mAgentWeb!!.getWebCreator().getWebView()?.onResume()
-            mAgentWeb!!.getWebCreator().getWebView()?.resumeTimers()
-        }
+//        runCatching {
+//            mAgentWeb!!.getWebCreator().getWebView()?.onResume()
+//            mAgentWeb!!.getWebCreator().getWebView()?.resumeTimers()
+//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

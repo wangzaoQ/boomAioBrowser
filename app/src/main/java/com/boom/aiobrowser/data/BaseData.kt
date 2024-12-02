@@ -6,9 +6,10 @@ open class BaseData {
     var jumpType = ""
     var jumpTitle = ""
     var jumpUrl = ""
-    //是否选中
+    //是否选中 切换tab
     var isCurrent = false
     var autoDownload = false
+    var isSelected = false
 
     var updateTime = System.currentTimeMillis()
 

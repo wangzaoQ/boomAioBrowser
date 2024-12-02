@@ -26,9 +26,9 @@ class HomeGuideActivity : BaseActivity<BrowserActivityHomeGuideBinding>() {
         }
         var url = ""
         acBinding.ivJump.setOneClick {
-            var title = getString(R.string.app_tt)
+            var title = getString(R.string.video_tiktok)
             when (fromApp) {
-                getString(R.string.app_tt) -> {
+                getString(R.string.video_tiktok) -> {
                     url = "https://www.tiktok.com/"
                 }
                 getString(R.string.app_x)->{
@@ -78,7 +78,7 @@ class HomeGuideActivity : BaseActivity<BrowserActivityHomeGuideBinding>() {
     private fun showGuideRoot() {
         guideList.clear()
         when (fromApp) {
-            getString(R.string.app_tt) -> {
+            getString(R.string.video_tiktok) -> {
                 guideList.add(0)
                 guideList.add(1)
                 acBinding.ivJump.setImageResource(R.mipmap.ic_tt)

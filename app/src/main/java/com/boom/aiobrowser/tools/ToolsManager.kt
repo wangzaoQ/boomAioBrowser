@@ -393,6 +393,36 @@ fun MutableList<String>.getNewsTopic():String{
     return topic
 }
 
+var hostList = mutableListOf("com", "org", "net", "co.uk", "gov.uk", "org.cn", "com.au");
+fun extractDomain(host: String?): String {
+
+    if (host == null || host.isEmpty()) {
+        return ""
+    }
+
+    // 通过 "." 拆分域名
+    val hostParts = host.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }
+        .toTypedArray()
+
+    // 如果域名只有一部分，不进行处理
+    if (hostParts.size < 2) {
+        return host
+    }
+
+    // 检查顶级域名部分，处理多段顶级域名的情况
+    val topLevelDomain = hostParts[hostParts.size - 1]
+    val secondLevelDomain = hostParts[hostParts.size - 2]
+
+    // 处理顶级域名是否在常见列表中，如 "co.uk" 或 "com.au"
+    if (hostList.contains("$secondLevelDomain.$topLevelDomain")) {
+        if (hostParts.size >= 3) {
+            return hostParts[hostParts.size - 3] // 返回倒数第三个部分
+        }
+    }
+
+    // 默认返回倒数第二个部分（主域名）
+    return secondLevelDomain
+}
 
 
 

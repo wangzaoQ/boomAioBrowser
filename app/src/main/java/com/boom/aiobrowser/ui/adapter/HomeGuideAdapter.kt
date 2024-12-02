@@ -29,7 +29,7 @@ class HomeGuideAdapter() : BaseQuickAdapter<Int, HomeGuideAdapter.VH>() {
             tvTitle.text = "${context.getString(R.string.app_method)} ${item+1}"
 
             when (fromApp) {
-                context.getString(R.string.app_tt) -> {
+                context.getString(R.string.video_tiktok) -> {
                     when (item) {
                         0 -> {
                             tvContent.text = context.getString(R.string.app_tt_tips_1)

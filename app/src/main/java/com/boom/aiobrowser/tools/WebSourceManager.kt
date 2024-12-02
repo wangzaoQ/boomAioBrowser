@@ -22,7 +22,7 @@ object WebSourceManager {
         defaultList.add(JumpData().apply {
             jumpType = JumpConfig.JUMP_WEB
             jumpUrl = "https://www.tiktok.com/"
-            jumpTitle = APP.instance.getString(R.string.app_tt)
+            jumpTitle = APP.instance.getString(R.string.video_tiktok)
         })
         defaultList.add(JumpData().apply {
             jumpType = JumpConfig.JUMP_WEB
@@ -214,7 +214,7 @@ object WebSourceManager {
             }
         }
         list.forEach {
-            it.isCurrent = titleList.contains(it.jumpTitle)
+            it.isSelected = titleList.contains(it.jumpTitle)
         }
         return list
     }
@@ -249,7 +249,7 @@ object WebSourceManager {
                 })
                 list.add(JumpData().apply {
                     jumpUrl = WebConfig.Tiktok_URL
-                    jumpTitle = APP.instance.getString(R.string.app_tt)
+                    jumpTitle = APP.instance.getString(R.string.video_tiktok)
                 })
             }
             else -> {
@@ -264,7 +264,7 @@ object WebSourceManager {
             }
         }
         list.forEach {
-            it.isCurrent = titleList.contains(it.jumpTitle)
+            it.isSelected = titleList.contains(it.jumpTitle)
         }
         return list
     }
@@ -327,7 +327,7 @@ object WebSourceManager {
             }
         }
         list.forEach {
-            it.isCurrent = titleList.contains(it.jumpTitle)
+            it.isSelected = titleList.contains(it.jumpTitle)
         }
         return list
     }
@@ -386,7 +386,7 @@ object WebSourceManager {
             }
         }
         list.forEach {
-            it.isCurrent = titleList.contains(it.jumpTitle)
+            it.isSelected = titleList.contains(it.jumpTitle)
         }
         return list
     }
@@ -438,7 +438,7 @@ object WebSourceManager {
             }
         }
         list.forEach {
-            it.isCurrent = titleList.contains(it.jumpTitle)
+            it.isSelected = titleList.contains(it.jumpTitle)
         }
         return list
     }
@@ -501,7 +501,7 @@ object WebSourceManager {
             }
         }
         list.forEach {
-            it.isCurrent = titleList.contains(it.jumpTitle)
+            it.isSelected = titleList.contains(it.jumpTitle)
         }
         return list
     }
@@ -564,7 +564,7 @@ object WebSourceManager {
             }
         }
         list.forEach {
-            it.isCurrent = titleList.contains(it.jumpTitle)
+            it.isSelected = titleList.contains(it.jumpTitle)
         }
         return list
     }
@@ -626,7 +626,7 @@ object WebSourceManager {
             }
         }
         list.forEach {
-            it.isCurrent = titleList.contains(it.jumpTitle)
+            it.isSelected = titleList.contains(it.jumpTitle)
         }
         return list
     }
@@ -684,7 +684,7 @@ object WebSourceManager {
             }
         }
         list.forEach {
-            it.isCurrent = titleList.contains(it.jumpTitle)
+            it.isSelected = titleList.contains(it.jumpTitle)
         }
         return list
     }
@@ -748,7 +748,7 @@ object WebSourceManager {
             }
         }
         list.forEach {
-            it.isCurrent = titleList.contains(it.jumpTitle)
+            it.isSelected = titleList.contains(it.jumpTitle)
         }
         return list
     }
@@ -799,7 +799,7 @@ object WebSourceManager {
             }
         }
         list.forEach {
-            it.isCurrent = titleList.contains(it.jumpTitle)
+            it.isSelected = titleList.contains(it.jumpTitle)
         }
         return list
     }

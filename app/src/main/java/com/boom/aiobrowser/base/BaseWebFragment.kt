@@ -27,6 +27,7 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.extractDomain
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getMapByGson
 import com.boom.aiobrowser.tools.toJson
@@ -301,12 +302,14 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             var index = -1
             for (i in 0 until FirebaseConfig.switchOpenFilterList.size){
                 var filterWeb = FirebaseConfig.switchOpenFilterList.get(i)
-                if (host.contains(filterWeb)){
+                filterWeb.trim()
+                host = extractDomain(host)
+                if (host == filterWeb){
                     index = i
                 }
             }
             if (index>=0){
-                AppLogs.dLog(fragmentTAG,"命中filter2 indexUrl:${FirebaseConfig.switchOpenFilterList.get(index)}")
+                AppLogs.dLog(fragmentTAG,"命中filter2 indexUrl:${FirebaseConfig.switchOpenFilterList.get(index) } host:${host}")
                 showTask = true
             }
         }

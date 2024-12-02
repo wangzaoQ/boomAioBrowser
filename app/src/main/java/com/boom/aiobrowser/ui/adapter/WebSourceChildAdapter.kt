@@ -36,7 +36,7 @@ class WebSourceChildAdapter : BaseQuickAdapter<JumpData, WebSourceChildAdapter.V
             }else{
                 GlideManager.loadImg(fragment = null,ivSource,iconUrl)
             }
-            if (item.isCurrent){
+            if (item.isSelected){
                 ivSourceType.setImageResource(R.mipmap.ic_add_success)
             }else{
                 ivSourceType.setImageResource(R.mipmap.ic_add_web_source)
@@ -57,7 +57,7 @@ class WebSourceChildAdapter : BaseQuickAdapter<JumpData, WebSourceChildAdapter.V
             if (payload == "updateCheck"){
                 if (item == null) return
                 holder.viewBinding.apply {
-                    if (item.isCurrent){
+                    if (item.isSelected){
                         ivSourceType.setImageResource(R.mipmap.ic_add_success)
                     }else{
                         ivSourceType.setImageResource(R.mipmap.ic_add_web_source)

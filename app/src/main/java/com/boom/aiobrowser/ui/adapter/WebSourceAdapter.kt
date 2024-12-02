@@ -64,10 +64,10 @@ class WebSourceAdapter : BaseQuickAdapter<WebSourceData, WebSourceAdapter.VH>() 
                 childAdapter.addOnDebouncedChildClick(R.id.flAdd) { adapter, view, position ->
                     if (position>item.sourceList!!.size-1)return@addOnDebouncedChildClick
                     var data = item.sourceList!!.get(position)
-                    data.isCurrent = data.isCurrent.not()
+                    data.isSelected = data.isSelected.not()
                     childAdapter.notifyItemChanged(position,"updateCheck")
                     data.jumpType = JumpConfig.JUMP_WEB
-                    if (data.isCurrent){
+                    if (data.isSelected){
                         CacheManager.addHomeTab(data)
                     }else{
                         CacheManager.removeHomeTab(data)

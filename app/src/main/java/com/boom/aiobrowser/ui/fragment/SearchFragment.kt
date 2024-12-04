@@ -103,7 +103,6 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
         var trendNews = CacheManager.trendNews
         if (trendNews.isNullOrEmpty()){
             fBinding.tvGuessTitle.visibility = View.GONE
-            APP.instance.appModel.getTrendsNews()
         }else{
             fBinding.tvGuessTitle.visibility = View.VISIBLE
             fBinding.guessShrinkRoot.removeAllViews()
@@ -131,6 +130,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 }
             }
         }
+        APP.instance.appModel.getTrendsNews()
     }
 
 

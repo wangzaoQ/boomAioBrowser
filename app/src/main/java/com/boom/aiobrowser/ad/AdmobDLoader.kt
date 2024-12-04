@@ -23,25 +23,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AioADLoader(
-    val requestBean: AioRequestData,
-    val adEnum: ADEnum,
-    val successCallBack: (ADResultData) -> Unit,
-    val failedCallBack: (String) -> Unit
-) {
-    private fun loadFailed(msg: String, failed: (String) -> Unit) {
-        failed(msg)
-    }
-    init {
-        when (requestBean.pxdtzgho) {
-            AioADDataManager.AD_TYPE_OPEN -> openAD()
-            AioADDataManager.AD_TYPE_INT -> intAD()
-            AioADDataManager.AD_TYPE_NATIVE -> nativeAD()
-            AioADDataManager.AD_TYPE_BANNER -> banner()
-        }
-    }
+class AdmobDLoader(
+     requestBean: AioRequestData,
+     adEnum: ADEnum
+) :BaseLoader(requestBean,adEnum){
 
-    private fun openAD() {
+    override fun openAD() {
         var startTime = System.currentTimeMillis()
         CoroutineScope(Dispatchers.IO).launch{
             val build = AdRequest.Builder().build()
@@ -73,7 +60,7 @@ class AioADLoader(
         }
     }
 
-    private fun intAD(){
+    override fun intAD(){
         var startTime = System.currentTimeMillis()
         CoroutineScope(Dispatchers.IO).launch{
             val build = AdRequest.Builder().build()
@@ -116,7 +103,7 @@ class AioADLoader(
         })
     }
 
-    private fun nativeAD() {
+    override fun nativeAD() {
         var startTime = System.currentTimeMillis()
         CoroutineScope(Dispatchers.IO).launch{
             val request = AdRequest.Builder().build()
@@ -136,7 +123,7 @@ class AioADLoader(
                         nativePoint(startTime)
                     }.withAdListener(object : AdListener() {
                         override fun onAdImpression() {
-                            AioADDataManager.preloadAD(adEnum)
+//                            AioADDataManager.preloadAD(adEnum)
                         }
 
                         override fun onAdClicked() {
@@ -151,15 +138,9 @@ class AioADLoader(
         }
     }
 
-    private fun nativePoint(startTime: Long) {
-        PointEvent.posePoint(PointEventKey.aobws_ad_load, Bundle().apply {
-            putString(PointValueKey.ad_pos_id,ADEnum.NATIVE_AD.adName)
-            putString(PointValueKey.ad_key,requestBean.ktygzdzn)
-            putLong(PointValueKey.ad_time, (System.currentTimeMillis() - startTime) / 1000)
-        })
-    }
 
-    private fun banner(){
+
+    override fun banner(){
         var startTime = System.currentTimeMillis()
         CoroutineScope(Dispatchers.IO).launch{
             val adView = AdView(APP.instance)
@@ -200,11 +181,5 @@ class AioADLoader(
         }
     }
 
-    private fun bannerPoint(startTime: Long) {
-        PointEvent.posePoint(PointEventKey.aobws_ad_load, Bundle().apply {
-            putString(PointValueKey.ad_pos_id,adEnum.adName)
-            putString(PointValueKey.ad_key,requestBean.ktygzdzn)
-            putLong(PointValueKey.ad_time, (System.currentTimeMillis() - startTime) / 1000)
-        })
-    }
+
 }

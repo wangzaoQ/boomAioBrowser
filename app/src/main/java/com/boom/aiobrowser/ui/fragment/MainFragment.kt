@@ -148,7 +148,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                     add(NewsData().apply {
                         dataType = NewsData.TYPE_HOME_NEWS_TOP
                     })
-                    addAll(it)
+                    addAll(list)
                 })
                 fBinding.rv.scrollToPosition(0)
             }else{
@@ -303,19 +303,20 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                                 isScroll = false
                                 PointEvent.posePoint(PointEventKey.home_page_slide)
                             }
-                            if (lastPosition!=-1 &&firstShowAD && nativeADAlive.not()){
-                                firstShowAD = false
-                                AppLogs.dLog(fragmentTAG,"滑动停止刷新插入广告 刷新位置:${lastPosition}")
-                            }
+//                            if (lastPosition!=-1 &&firstShowAD && nativeADAlive.not() && AioADDataManager.getCacheAD(ADEnum.NATIVE_AD)!=null){
+//                                firstShowAD = false
+//                                AppLogs.dLog(fragmentTAG,"滑动停止刷新插入广告 刷新位置:${lastPosition}")
+//                            }
                             showShareImage()
                         }
                         if (newState !=RecyclerView.SCROLL_STATE_SETTLING){
                             //不是惯性滑动
                             lastPosition = (fBinding.rv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                             if (lastPosition == -1)return
-                            if (nativeADAlive.not()){
+                            if (nativeADAlive.not() && AioADDataManager.getCacheAD(ADEnum.NATIVE_AD)!=null){
                                 if (APP.instance.firstInsertHomeAD && AioADDataManager.adFilter1().not()){
                                     APP.instance.firstInsertHomeAD = false
+                                    nativeADAlive = true
                                     if (lastPosition<=newsAdapter.items.size){
                                         newsAdapter.mutableItems.add(lastPosition, NewsData().apply {
                                             dataType = NewsData.TYPE_AD

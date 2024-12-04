@@ -1,10 +1,17 @@
 package com.boom.aiobrowser.ad
 
+import com.applovin.sdk.AppLovinMediationProvider
+import com.applovin.sdk.AppLovinSdk
+import com.applovin.sdk.AppLovinSdkInitializationConfiguration
+import com.applovin.sdk.AppLovinSdkSettings
 import com.boom.aiobrowser.APP
-import com.boom.aiobrowser.ad.ADEnum.*
+import com.boom.aiobrowser.ad.ADEnum.BANNER_AD
+import com.boom.aiobrowser.ad.ADEnum.INT_AD
+import com.boom.aiobrowser.ad.ADEnum.LAUNCH_AD
+import com.boom.aiobrowser.ad.ADEnum.NATIVE_AD
+import com.boom.aiobrowser.ad.ADEnum.NATIVE_DOWNLOAD_AD
 import com.boom.aiobrowser.data.ADResultData
 import com.boom.aiobrowser.data.AioADData
-import com.boom.aiobrowser.data.AioNFData
 import com.boom.aiobrowser.data.AioRequestData
 import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.tools.AppLogs
@@ -13,6 +20,10 @@ import com.boom.aiobrowser.tools.CacheManager.adLastTime
 import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.appDataReset
 import com.google.android.gms.ads.MobileAds
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 
 object AioADDataManager {
 
@@ -40,12 +51,28 @@ object AioADDataManager {
 
     var isShowAD = false
 
+    @Volatile
+    var applovinSdk :AppLovinSdk?=null
+
 
     fun initAD(){
-        runCatching {
-            AppLogs.dLog(APP.instance.TAG,"admob初始化")
-            MobileAds.initialize(APP.instance)
-            AppLogs.dLog(APP.instance.TAG,"admob初始化结束")
+        AppLogs.dLog(APP.instance.TAG,"max 初始化")
+        MobileAds.initialize(APP.instance){
+            AppLogs.dLog(APP.instance.TAG,"admob 初始化结束")
+        }
+        // Create the initialization configuration
+        val initConfig = AppLovinSdkInitializationConfiguration.builder("9Aoo-xD1yqU_6ut1GkUtMgMK3r7KCRfQoVUUO_sdl6idKtF_d1Tz7_Zs4rk0ESL1O31oO8ygDloEzMIMgBbKFT", APP.instance)
+            .setMediationProvider(AppLovinMediationProvider.MAX)
+            .build()
+
+        // Initialize the SDK with the configuration
+        applovinSdk = AppLovinSdk.getInstance(APP.instance)
+        applovinSdk!!.initialize(initConfig){
+            // Start loading ads
+            AppLogs.dLog(APP.instance.TAG,"max 初始化结束")
+//            if (APP.isDebug){
+//                AppLovinSdk.getInstance(APP.instance).showMediationDebugger()
+//            }
         }
     }
 
@@ -118,7 +145,9 @@ object AioADDataManager {
     fun preloadAD(enum: ADEnum, tag: String = "") {
         AppLogs.dLog(TAG, "预加载位置:${tag} 加载类型:${enum.adName}")
         if (adFilter1()) return
-        if (getCacheAD(enum) !=null)return
+        if (enum != NATIVE_AD){
+            if (getCacheAD(enum) !=null)return
+        }
         loadAD(enum)
     }
 
@@ -128,24 +157,41 @@ object AioADDataManager {
         load(enum, mutableListOf<AioRequestData>().apply { addAll(enum.adRequestList) })
     }
 
+
+    var platformAdmob = "admob"
+    var platformMax = "max"
+
     private fun load(adEnum: ADEnum, list: MutableList<AioRequestData>) {
         val data = list.removeFirstOrNull()
         if (data != null) {
             AppLogs.dLog(TAG, "开始加载 ${adEnum}:-id:${data?.ktygzdzn}-sort:${data?.npxotusg}")
             adEnum.adLoadStatus = LOAD_STATUS_LOADING
-//            AppLogs.dLog(TAG, "加载成功 ${adEnum}:-id:${data.ktygzdzn}-sort:${data.npxotusg}")
-            AioADLoader(data,adEnum, successCallBack = {
-                AppLogs.dLog(
-                    TAG,
-                    "LoadSuccess:${adEnum}-id:${data.ktygzdzn}-time:${it.adRequestTime}"
-                )
-                adEnum.adLoadStatus = AD_LOAD_SUCCESS
-                saveCacheAD(adEnum, it)
-            }, failedCallBack = {
-                adEnum.adLoadStatus = AD_LOAD_FAIL
-                AppLogs.dLog(TAG, "loadFail:${adEnum}-id:${data.ktygzdzn}-message:${it}")
-                load(adEnum, list)
-            })
+            var adLoader :BaseLoader?=null
+            when (data.tybxumpn) {
+                platformMax-> {
+                    adLoader = MaxDLoader(data,adEnum)
+                }
+                else -> {
+                    adLoader = AdmobDLoader(data,adEnum)
+                }
+            }
+            adLoader?.apply {
+                setSuccessCall {
+                    AppLogs.dLog(
+                        TAG,
+                        "adLoader:${adLoader.javaClass.simpleName} LoadSuccess:${adEnum}-id:${data.ktygzdzn}-time:${it.adRequestTime}"
+                    )
+                    adEnum.adLoadStatus = AD_LOAD_SUCCESS
+                    saveCacheAD(adEnum, it)
+                }
+                setFailedCall {
+                    adEnum.adLoadStatus = AD_LOAD_FAIL
+                    AppLogs.dLog(TAG, "adLoader:${adLoader.javaClass.simpleName} loadFail:${adEnum}-id:${data.ktygzdzn}-message:${it}")
+                    load(adEnum, list)
+                }
+                startLoadAD()
+            }
+
         } else {
             adEnum.adLoadStatus = AD_LOAD_FAIL
         }

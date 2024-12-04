@@ -81,6 +81,10 @@
         <meta-data
             android:name="com.google.android.gms.ads.AD_MANAGER_APP"
             android:value="true" />
+
+<!--        <meta-data-->
+<!--            android:name="applovin.sdk.key"-->
+<!--            android:value="9Aoo-xD1yqU_6ut1GkUtMgMK3r7KCRfQoVUUO_sdl6idKtF_d1Tz7_Zs4rk0ESL1O31oO8ygDloEzMIMgBbKFT" />-->
         <meta-data
             android:name="android.max_aspect"
             android:value="2.4" />

@@ -123,7 +123,7 @@ class MaxDLoader(
             .setIconImageViewId(R.id.is_icon)
             .setMediaContentViewGroupId(R.id.is_media)
             .setCallToActionButtonId(R.id.is_call).build()
-        var loader = MaxNativeAdLoader(requestBean.ktygzdzn, APP.instance)
+        var loader = MaxNativeAdLoader(requestBean.ktygzdzn,applovinSdk,APP.instance)
         loader?.run {
             setNativeAdListener(object : MaxNativeAdListener() {
                 override fun onNativeAdLoaded(maxAdView: MaxNativeAdView?, p1: MaxAd) {
@@ -161,7 +161,7 @@ class MaxDLoader(
 
     override fun banner(){
         var startTime = System.currentTimeMillis()
-        var adView = MaxAdView(requestBean.ktygzdzn, APP.instance)
+        var adView = MaxAdView(requestBean.ktygzdzn,applovinSdk, APP.instance)
         adView?.setListener(object : MaxAdViewAdListener {
 
             override fun onAdLoaded(p0: MaxAd) {

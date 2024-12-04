@@ -3,6 +3,7 @@ package com.boom.aiobrowser.ui.adapter
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Rect
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.SpannableStringBuilder
@@ -18,6 +19,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.blankj.utilcode.util.SizeUtils.dp2px
@@ -41,7 +43,9 @@ import com.boom.aiobrowser.databinding.NewsDetailsItemTitleBinding
 import com.boom.aiobrowser.databinding.NewsDetailsItemTopImgBinding
 import com.boom.aiobrowser.databinding.NewsDetailsItemTopVideoBinding
 import com.boom.aiobrowser.databinding.NewsItemHomeTopBinding
+import com.boom.aiobrowser.databinding.NewsItemTrendingBinding
 import com.boom.aiobrowser.other.JumpConfig
+import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.other.SearchConfig
 import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
@@ -49,10 +53,15 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.GlideManager
+import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.partitionList
+import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.activity.WebActivity
+import com.boom.aiobrowser.ui.activity.WebDetailsActivity
 import com.boom.base.adapter4.BaseMultiItemAdapter
+import com.boom.base.adapter4.util.setOnDebouncedItemClick
+import com.boom.drag.utils.DisplayUtils
 import com.boom.video.GSYVideoManager
 import com.boom.video.builder.GSYVideoOptionBuilder
 import com.boom.video.listener.GSYSampleCallBack
@@ -63,7 +72,7 @@ import java.util.Date
 
 
 class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapter<NewsData>() {
-
+    //home 顶部
     internal class NewsHomeItem(viewBinding: NewsItemHomeTopBinding) :
         RecyclerView.ViewHolder(viewBinding.getRoot()) {
         var viewBinding: NewsItemHomeTopBinding? = null
@@ -81,6 +90,7 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
         )
     }
 
+    //home 新闻列表
     internal class NewsItem(viewBinding: BrowserItemMainNewsBinding) :
         RecyclerView.ViewHolder(viewBinding.getRoot()) {
         var viewBinding: BrowserItemMainNewsBinding? = null
@@ -98,6 +108,24 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
         )
     }
 
+    internal class NewsTrendingItem(viewBinding: NewsItemTrendingBinding) :
+        RecyclerView.ViewHolder(viewBinding.getRoot()) {
+        var viewBinding: NewsItemTrendingBinding? = null
+
+        init {
+            this.viewBinding = viewBinding
+        }
+
+        constructor(parent: ViewGroup) : this(
+            NewsItemTrendingBinding.inflate(
+                LayoutInflater.from(
+                    parent.context
+                ), parent, false
+            )
+        )
+    }
+
+    //search 新闻列表
     internal class NewsItemSearch(viewBinding: BrowserItemSearchNewsBinding) :
         RecyclerView.ViewHolder(viewBinding.getRoot()) {
         var viewBinding: BrowserItemSearchNewsBinding? = null
@@ -115,6 +143,7 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
         )
     }
 
+    // search film 新闻列表
     internal class NewsItemFilm(viewBinding: BrowserItemFilmNewsBinding) :
         RecyclerView.ViewHolder(viewBinding.getRoot()) {
         var viewBinding: BrowserItemFilmNewsBinding? = null
@@ -216,6 +245,7 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
             )
         )
     }
+
     internal class TopImgItem(viewBinding: NewsDetailsItemTopImgBinding) :
         RecyclerView.ViewHolder(viewBinding.getRoot()) {
         var viewBinding: NewsDetailsItemTopImgBinding? = null
@@ -232,6 +262,7 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
             )
         )
     }
+
     internal class ReadSourceItem(viewBinding: NewsDetailsItemReadSourceBinding) :
         RecyclerView.ViewHolder(viewBinding.getRoot()) {
         var viewBinding: NewsDetailsItemReadSourceBinding? = null
@@ -248,8 +279,6 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
             )
         )
     }
-
-
 
 
     init {
@@ -274,7 +303,7 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                             ivImg.visibility = View.GONE
                             tvNewsContent.visibility = View.VISIBLE
                             tvNewsContent.text = item.sissue
-                            var params =(tvNewsTitle.layoutParams as ConstraintLayout.LayoutParams)
+                            var params = (tvNewsTitle.layoutParams as ConstraintLayout.LayoutParams)
                             params.topMargin = dp2px(0f)
                         } else {
                             ivImg.visibility = View.VISIBLE
@@ -286,7 +315,7 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                 loadId = R.mipmap.ic_default_nf,
                                 R.mipmap.ic_default_nf
                             )
-                            var params =(tvNewsTitle.layoutParams as ConstraintLayout.LayoutParams)
+                            var params = (tvNewsTitle.layoutParams as ConstraintLayout.LayoutParams)
                             params.topMargin = dp2px(13f)
                         }
                         tvNewsTitle.text = item.tconsi
@@ -297,87 +326,132 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                 }
             })
             .addItemType(
-            NewsData.TYPE_DETAILS_NEWS_SEARCH,
-            object : OnMultiItemAdapterListener<NewsData,NewsItemSearch > {
+                NewsData.TYPE_DETAILS_NEWS_SEARCH,
+                object : OnMultiItemAdapterListener<NewsData, NewsItemSearch> {
 
-                override fun onCreate(
-                    context: Context,
-                    parent: ViewGroup,
-                    viewType: Int
-                ): NewsItemSearch {
-                    return NewsItemSearch(
-                        parent
-                    );
-                }
-
-                override fun onBind(holder: NewsItemSearch, position: Int, item: NewsData?) {
-                    if (item == null) return
-                    holder.viewBinding?.apply {
-                        GlideManager.loadImg(
-                            fragmet,
-                            ivImg,
-                            item.iassum,
-                            loadId = R.mipmap.ic_default_nf_small,
-                            R.mipmap.ic_default_nf_small
-                        )
-                        tvNewsTitle.text = item.tconsi
-                        GlideManager.loadImg(fragmet, ivSource, item.sschem)
-                        tvSourceName.text = "${item.sfindi}"
+                    override fun onCreate(
+                        context: Context,
+                        parent: ViewGroup,
+                        viewType: Int
+                    ): NewsItemSearch {
+                        return NewsItemSearch(
+                            parent
+                        );
                     }
-                }
-            })
+
+                    override fun onBind(holder: NewsItemSearch, position: Int, item: NewsData?) {
+                        if (item == null) return
+                        holder.viewBinding?.apply {
+                            GlideManager.loadImg(
+                                fragmet,
+                                ivImg,
+                                item.iassum,
+                                loadId = R.mipmap.ic_default_nf_small,
+                                R.mipmap.ic_default_nf_small
+                            )
+                            tvNewsTitle.text = item.tconsi
+                            GlideManager.loadImg(fragmet, ivSource, item.sschem)
+                            tvSourceName.text = "${item.sfindi}"
+                        }
+                    }
+                })
             .addItemType(
-            NewsData.TYPE_DETAILS_NEWS_SEARCH_FILM,
-            object : OnMultiItemAdapterListener<NewsData,NewsItemFilm > {
+                NewsData.TYPE_HOME_NEWS_TRENDING,
+                object : OnMultiItemAdapterListener<NewsData, NewsTrendingItem> {
 
-                override fun onCreate(
-                    context: Context,
-                    parent: ViewGroup,
-                    viewType: Int
-                ): NewsItemFilm {
-                    return NewsItemFilm(
-                        parent
-                    );
-                }
-
-                override fun onBind(holder: NewsItemFilm, position: Int, item: NewsData?) {
-                    if (item == null) return
-                    holder.viewBinding?.apply {
-                        GlideManager.loadImg(
-                            fragmet,
-                            ivImg,
-                            item.iassum,
-                            loadId = R.mipmap.bg_news_default,
-                            R.mipmap.bg_news_default
-                        )
-                        var movieTitle = context.getString(R.string.app_movie_title)
-                        tvNewsTitle.text = "${movieTitle}:${item.tconsi}"
-
-                        extracted(movieTitle,tvNewsTitle)
-
-                        var splits=item.sissue?.split("_")
-                        var size = splits?.size?:0
-                        if (size>0){
-                            var rate = splits!!.get(0)
-                            tvRate.text = rate
-                        }
-                        if (size>1){
-                            var country = splits!!.get(1)
-                            var movieCountry = context.getString(R.string.app_movie_country)
-                            tvNewsCountry.text = "${movieCountry}:${country}"
-                            extracted(movieCountry,tvNewsCountry)
-                        }
-                        var releaseDate = context.getString(R.string.app_movie_release_date)
-
-                        tvNewsDate.text = "${releaseDate}:${
-                            SimpleDateFormat("yyyy-MM-dd").format(
-                                Date(item.pphilo?:System.currentTimeMillis())
-                            )}"
-                        val stringBuilderDate = SpannableStringBuilder(tvNewsDate.text?.trim()?:"")
-                        extracted(releaseDate,tvNewsDate)
+                    override fun onCreate(
+                        context: Context,
+                        parent: ViewGroup,
+                        viewType: Int
+                    ): NewsTrendingItem {
+                        return NewsTrendingItem(
+                            parent
+                        );
                     }
-                }
-            })
+
+                    override fun onBind(holder: NewsTrendingItem, position: Int, item: NewsData?) {
+                        if (item == null) return
+                        holder.viewBinding?.apply {
+                            rvList.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
+                            var newsAdapter = TrendingNewsAdapter()
+                            rvList.adapter = newsAdapter
+                            rvList.addItemDecoration(object : RecyclerView.ItemDecoration() {
+
+                                override fun getItemOffsets(
+                                    outRect: Rect,
+                                    view: View,
+                                    parent: RecyclerView,
+                                    state: RecyclerView.State
+                                ) {
+                                    super.getItemOffsets(outRect, view, parent, state)
+                                    outRect.bottom =
+                                        DisplayUtils.dp2px(context, 8f)
+                                }
+                            })
+                            newsAdapter.submitList(item.trendList)
+                            newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
+                                var data = newsAdapter.items.get(position)
+                                (context as BaseActivity<*>).jumpActivity<WebDetailsActivity>(Bundle().apply {
+                                    putString(ParamsConfig.JSON_PARAMS, toJson(data))
+                                })
+                            }
+                        }
+                    }
+                })
+            .addItemType(
+                NewsData.TYPE_DETAILS_NEWS_SEARCH_FILM,
+                object : OnMultiItemAdapterListener<NewsData, NewsItemFilm> {
+
+                    override fun onCreate(
+                        context: Context,
+                        parent: ViewGroup,
+                        viewType: Int
+                    ): NewsItemFilm {
+                        return NewsItemFilm(
+                            parent
+                        );
+                    }
+
+                    override fun onBind(holder: NewsItemFilm, position: Int, item: NewsData?) {
+                        if (item == null) return
+                        holder.viewBinding?.apply {
+                            GlideManager.loadImg(
+                                fragmet,
+                                ivImg,
+                                item.iassum,
+                                loadId = R.mipmap.bg_news_default,
+                                R.mipmap.bg_news_default
+                            )
+                            var movieTitle = context.getString(R.string.app_movie_title)
+                            tvNewsTitle.text = "${movieTitle}:${item.tconsi}"
+
+                            extracted(movieTitle, tvNewsTitle)
+
+                            var splits = item.sissue?.split("_")
+                            var size = splits?.size ?: 0
+                            if (size > 0) {
+                                var rate = splits!!.get(0)
+                                tvRate.text = rate
+                            }
+                            if (size > 1) {
+                                var country = splits!!.get(1)
+                                var movieCountry = context.getString(R.string.app_movie_country)
+                                tvNewsCountry.text = "${movieCountry}:${country}"
+                                extracted(movieCountry, tvNewsCountry)
+                            }
+                            var releaseDate = context.getString(R.string.app_movie_release_date)
+
+                            tvNewsDate.text = "${releaseDate}:${
+                                SimpleDateFormat("yyyy-MM-dd").format(
+                                    Date(item.pphilo ?: System.currentTimeMillis())
+                                )
+                            }"
+                            val stringBuilderDate =
+                                SpannableStringBuilder(tvNewsDate.text?.trim() ?: "")
+                            extracted(releaseDate, tvNewsDate)
+                        }
+                    }
+                })
             .addItemType(
                 ViewItem.TYPE_CHILD,
                 object : OnMultiItemAdapterListener<NewsData, ADItem> {
@@ -423,13 +497,13 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                     override fun onBind(holder: TopVideoItem, position: Int, item: NewsData?) {
                         if (item == null) return
                         holder.viewBinding?.apply {
-                            var tag = clRoot.getTag(R.id.clRoot) as?NewsData
-                            if (tag!=item){
+                            var tag = clRoot.getTag(R.id.clRoot) as? NewsData
+                            if (tag != item) {
                                 runCatching {
-                                    var gsyVideoOptionBuilder =  GSYVideoOptionBuilder()
+                                    var gsyVideoOptionBuilder = GSYVideoOptionBuilder()
                                     gsyVideoOptionBuilder!!
                                         .setIsTouchWiget(false) //.setThumbImageView(imageView)
-                                        .setUrl(item?.vbreas?:"")
+                                        .setUrl(item?.vbreas ?: "")
                                         .setVideoTitle("")
                                         .setRotateViewAuto(false)
                                         .setLockLand(false)
@@ -438,22 +512,34 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                         .setNeedLockFull(true)
                                         .setCacheWithPlay(true)
                                         .setVideoAllCallBack(object : GSYSampleCallBack() {
-                                            override fun onPrepared(url: String, vararg objects: Any) {
+                                            override fun onPrepared(
+                                                url: String,
+                                                vararg objects: Any
+                                            ) {
                                                 super.onPrepared(url, *objects)
                                             }
 
-                                            override fun onQuitFullscreen(url: String, vararg objects: Any) {
+                                            override fun onQuitFullscreen(
+                                                url: String,
+                                                vararg objects: Any
+                                            ) {
                                                 super.onQuitFullscreen(url, *objects)
                                                 //全屏不静音
 //                    GSYVideoManager.instance().isNeedMute = true
                                             }
 
-                                            override fun onEnterFullscreen(url: String, vararg objects: Any) {
+                                            override fun onEnterFullscreen(
+                                                url: String,
+                                                vararg objects: Any
+                                            ) {
                                                 super.onEnterFullscreen(url, *objects)
                                                 GSYVideoManager.instance().isNeedMute = false
                                             }
 
-                                            override fun onAutoComplete(url: String?, vararg objects: Any?) {
+                                            override fun onAutoComplete(
+                                                url: String?,
+                                                vararg objects: Any?
+                                            ) {
                                                 super.onAutoComplete(url, *objects)
                                                 player?.startPlayLogic()
                                             }
@@ -473,12 +559,15 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
 //                                    })
                                         backButton.visibility = View.GONE
                                         titleTextView.visibility = View.GONE
-                                        loadCoverImage(if (item.iassum.isNullOrEmpty()) item.vbreas?:"" else item.iassum?:"")
+                                        loadCoverImage(
+                                            if (item.iassum.isNullOrEmpty()) item.vbreas
+                                                ?: "" else item.iassum ?: ""
+                                        )
                                         startPlayLogic()
                                     }
                                     PointEvent.posePoint(PointEventKey.video_playback_page)
                                 }
-                                clRoot.setTag(R.id.clRoot,item)
+                                clRoot.setTag(R.id.clRoot, item)
                             }
                         }
                     }
@@ -500,8 +589,13 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                     override fun onBind(holder: TopImgItem, position: Int, item: NewsData?) {
                         if (item == null) return
                         holder.viewBinding?.apply {
-                            GlideManager.loadImg(fragment = null, iv = ivTopImg, url = item.iassum,loadId = R.mipmap.ic_default_nf,
-                                R.mipmap.ic_default_nf)
+                            GlideManager.loadImg(
+                                fragment = null,
+                                iv = ivTopImg,
+                                url = item.iassum,
+                                loadId = R.mipmap.ic_default_nf,
+                                R.mipmap.ic_default_nf
+                            )
                         }
                     }
                 })
@@ -546,20 +640,28 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                     override fun onBind(holder: TextItem, position: Int, item: NewsData?) {
                         if (item == null) return
                         holder.viewBinding?.apply {
-                            val stringBuilder = SpannableStringBuilder(item.tconsi?.trim()?:"")
+                            val stringBuilder = SpannableStringBuilder(item.tconsi?.trim() ?: "")
                             runCatching {
                                 item.lcousi?.apply {
                                     forEachIndexed { index, linkData ->
                                         var start = linkData.slong!!.get(0)
-                                        var end = linkData.slong!!.get(1)+1
-                                        var clickSpan = object : ClickableSpan(){
+                                        var end = linkData.slong!!.get(1) + 1
+                                        var clickSpan = object : ClickableSpan() {
                                             override fun onClick(widget: View) {
-                                                context.startActivity(Intent(context, WebActivity::class.java).putExtra("url",linkData.lsong))
+                                                context.startActivity(
+                                                    Intent(
+                                                        context,
+                                                        WebActivity::class.java
+                                                    ).putExtra("url", linkData.lsong)
+                                                )
                                             }
 
                                             override fun updateDrawState(ds: TextPaint) {
                                                 super.updateDrawState(ds)
-                                                ds.color = ContextCompat.getColor(context, R.color.color_blue_0066FF)
+                                                ds.color = ContextCompat.getColor(
+                                                    context,
+                                                    R.color.color_blue_0066FF
+                                                )
                                                 ds.isUnderlineText = false;//去掉下划线
                                             }
 
@@ -596,8 +698,13 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                     override fun onBind(holder: ImgItem, position: Int, item: NewsData?) {
                         if (item == null) return
                         holder.viewBinding?.apply {
-                            GlideManager.loadImg(fragment = null, iv = ivImg, url = item.iassum,loadId = R.mipmap.ic_default_nf,
-                                R.mipmap.ic_default_nf)
+                            GlideManager.loadImg(
+                                fragment = null,
+                                iv = ivImg,
+                                url = item.iassum,
+                                loadId = R.mipmap.ic_default_nf,
+                                R.mipmap.ic_default_nf
+                            )
                         }
                     }
                 })
@@ -619,7 +726,12 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                         if (item == null) return
                         holder.viewBinding?.apply {
                             tvReadSource.setOnClickListener {
-                                context.startActivity(Intent(context, WebActivity::class.java).putExtra("url",item.uweek))
+                                context.startActivity(
+                                    Intent(
+                                        context,
+                                        WebActivity::class.java
+                                    ).putExtra("url", item.uweek)
+                                )
                             }
                         }
                     }
@@ -645,29 +757,32 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                         payloads: List<Any>
                     ) {
                         super.onBind(holder, position, item, payloads)
-                        if (payloads.isNullOrEmpty()){
-                            onBindViewHolder(holder,position,item)
-                        }else{
+                        if (payloads.isNullOrEmpty()) {
+                            onBindViewHolder(holder, position, item)
+                        } else {
                             val payload = payloads[0].toString()
-                            if (payload == "updateEngine"){
-                                if (item == null)return
+                            if (payload == "updateEngine") {
+                                if (item == null) return
                                 holder.viewBinding?.apply {
                                     when (CacheManager.engineType) {
-                                        SearchConfig.SEARCH_ENGINE_GOOGLE->{
+                                        SearchConfig.SEARCH_ENGINE_GOOGLE -> {
                                             ivSearchEngine.setImageResource(R.mipmap.ic_search_gg)
                                         }
-                                        SearchConfig.SEARCH_ENGINE_BING->{
+
+                                        SearchConfig.SEARCH_ENGINE_BING -> {
                                             ivSearchEngine.setImageResource(R.mipmap.ic_search_bing)
                                         }
-                                        SearchConfig.SEARCH_ENGINE_YAHOO->{
+
+                                        SearchConfig.SEARCH_ENGINE_YAHOO -> {
                                             ivSearchEngine.setImageResource(R.mipmap.ic_search_yahoo)
                                         }
-                                        SearchConfig.SEARCH_ENGINE_PERPLEXITY->{
+
+                                        SearchConfig.SEARCH_ENGINE_PERPLEXITY -> {
                                             ivSearchEngine.setImageResource(R.mipmap.ic_search_perplexity)
                                         }
                                     }
                                 }
-                            }else if (payload == "updateTopTab"){
+                            } else if (payload == "updateTopTab") {
 
                             }
                         }
@@ -685,19 +800,22 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                             })
                             // 将集合按每 8 个分割
                             val partitionSize = 8
-                            val dataList: MutableList<MutableList<JumpData>> = partitionList(tabList, partitionSize) as MutableList<MutableList<JumpData>>
-                            var tag = vp2.getTag(R.id.vp2) as?MutableList<MutableList<JumpData>>
-                            if(true){
+                            val dataList: MutableList<MutableList<JumpData>> = partitionList(
+                                tabList,
+                                partitionSize
+                            ) as MutableList<MutableList<JumpData>>
+                            var tag = vp2.getTag(R.id.vp2) as? MutableList<MutableList<JumpData>>
+                            if (true) {
                                 vp2.apply {
                                     offscreenPageLimit = dataList.size
-                                    var homeTabAdapter:HomeTabAdapter?=null
-                                    if (adapter == null){
+                                    var homeTabAdapter: HomeTabAdapter? = null
+                                    if (adapter == null) {
                                         homeTabAdapter = HomeTabAdapter(context as BaseActivity<*>)
                                         adapter = homeTabAdapter
                                     }
                                     (adapter as HomeTabAdapter)?.update(dataList)
                                 }
-                                if (dataList.size>1){
+                                if (dataList.size > 1) {
                                     indicator.visibility = View.VISIBLE
                                     var width = dp2px(7f).toFloat()
                                     indicator.apply {
@@ -718,7 +836,11 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                                 positionOffset: Float,
                                                 positionOffsetPixels: Int
                                             ) {
-                                                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+                                                super.onPageScrolled(
+                                                    position,
+                                                    positionOffset,
+                                                    positionOffsetPixels
+                                                )
                                                 indicator.onPageScrolled(
                                                     position,
                                                     positionOffset,
@@ -731,31 +853,34 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                                 indicator.onPageSelected(position)
                                             }
                                         })
-                                        rlHistory.setPadding(0,dp2px(11f),0, dp2px(16f))
+                                        rlHistory.setPadding(0, dp2px(11f), 0, dp2px(16f))
                                     }
 
-                                }else{
+                                } else {
                                     indicator.visibility = View.GONE
-                                    rlHistory.setPadding(0,dp2px(11f),0, dp2px(20f))
+                                    rlHistory.setPadding(0, dp2px(11f), 0, dp2px(20f))
                                 }
-                                vp2.setTag(R.id.vp2,dataList)
+                                vp2.setTag(R.id.vp2, dataList)
                             }
-                            if (CacheManager.browserStatus == 0){
+                            if (CacheManager.browserStatus == 0) {
                                 ivPrivate.visibility = View.GONE
-                            }else{
+                            } else {
                                 ivPrivate.visibility = View.VISIBLE
                             }
                             when (CacheManager.engineType) {
-                                SearchConfig.SEARCH_ENGINE_GOOGLE->{
+                                SearchConfig.SEARCH_ENGINE_GOOGLE -> {
                                     ivSearchEngine.setImageResource(R.mipmap.ic_search_gg)
                                 }
-                                SearchConfig.SEARCH_ENGINE_BING->{
+
+                                SearchConfig.SEARCH_ENGINE_BING -> {
                                     ivSearchEngine.setImageResource(R.mipmap.ic_search_bing)
                                 }
-                                SearchConfig.SEARCH_ENGINE_YAHOO->{
+
+                                SearchConfig.SEARCH_ENGINE_YAHOO -> {
                                     ivSearchEngine.setImageResource(R.mipmap.ic_search_yahoo)
                                 }
-                                SearchConfig.SEARCH_ENGINE_PERPLEXITY->{
+
+                                SearchConfig.SEARCH_ENGINE_PERPLEXITY -> {
                                     ivSearchEngine.setImageResource(R.mipmap.ic_search_perplexity)
                                 }
                             }
@@ -765,7 +890,7 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
             .onItemViewType { position, list -> list.get(position).dataType }
     }
 
-    private fun extracted(movieTitle: String,textView:TextView) {
+    private fun extracted(movieTitle: String, textView: TextView) {
         val stringBuilderTitle = SpannableStringBuilder(textView.text?.trim() ?: "")
         stringBuilderTitle.setSpan(
             ForegroundColorSpan(context.getColor(R.color.black)),

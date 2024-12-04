@@ -3,19 +3,12 @@ package com.boom.aiobrowser.model
 import androidx.lifecycle.MutableLiveData
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
-import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.data.NewsData
-import com.boom.aiobrowser.data.NewsDetailsData
-import com.boom.aiobrowser.net.Net
 import com.boom.aiobrowser.net.NetController
 import com.boom.aiobrowser.net.NetParams
 import com.boom.aiobrowser.net.NetRequest
 import com.boom.aiobrowser.other.NewsConfig
-import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import org.json.JSONObject
 
 class NewsViewModel : BaseDataModel() {
     var newsLiveData = MutableLiveData<List<NewsData>>()
@@ -30,7 +23,7 @@ class NewsViewModel : BaseDataModel() {
         }
         var newsList = CacheManager.newsList
         if (newsList.isNotEmpty() && refresh.not()){
-            newsLiveData.postValue(newsList)
+            newsLiveData.postValue(addHomeData(topic,page,newsList))
         }else{
             loadData(loadBack = {
                 var list :MutableList<NewsData>
@@ -56,11 +49,42 @@ class NewsViewModel : BaseDataModel() {
                         }
                     }
                 }
-                newsLiveData.postValue(list)
+                newsLiveData.postValue(addHomeData(topic,page,list))
             }, failBack = {
 
             }, 1)
         }
+    }
+
+    private fun addHomeData(topic:String,page:Int,list:MutableList<NewsData>) :MutableList<NewsData>{
+        if (NetParams.FOR_YOU == topic && page == 1){
+            list.add(0,NewsData().apply {
+                dataType = NewsData.TYPE_HOME_NEWS_TRENDING
+                var trendNews = CacheManager.trendNews
+                if (trendNews.isNullOrEmpty()){
+                    trendList = mutableListOf<NewsData>().apply {
+                        add(NewsData().apply {
+                            isLoading = true
+                        })
+                        add(NewsData().apply {
+                            isLoading = true
+                        })
+                        add(NewsData().apply {
+                            isLoading = true
+                        })
+                    }
+                }else{
+                    if (trendNews.size>3){
+                        trendNews = trendNews.subList(0,3)
+                    }
+                    trendList = trendNews
+                }
+            })
+            list.add(0,NewsData().apply {
+                dataType = NewsData.TYPE_HOME_NEWS_TOP
+            })
+        }
+        return list
     }
 
 

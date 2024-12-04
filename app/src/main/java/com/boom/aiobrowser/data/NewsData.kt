@@ -66,6 +66,9 @@ class NewsData {
     var cvehic :MutableList<NewsDetailsData>?=null
     var lcousi : MutableList<LinkData>?=null
     var tdetai: MutableList<String>? = null
+    var trendList:MutableList<NewsData>? = null
+    var isTrendTop = false
+    var isLoading = false
 
     var nfSource:String?=""
 
@@ -75,6 +78,7 @@ class NewsData {
         var TYPE_AD = 1
 
         var TYPE_HOME_NEWS_TOP = 90
+        var TYPE_HOME_NEWS_TRENDING = 91
         var TYPE_DETAILS_NEWS_TITLE = 100
         var TYPE_DETAILS_NEWS_TOP_VIDEO = 101
         var TYPE_DETAILS_NEWS_TOP_IMG = 102

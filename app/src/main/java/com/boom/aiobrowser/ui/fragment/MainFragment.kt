@@ -38,6 +38,7 @@ import com.boom.aiobrowser.tools.partitionList
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.SearchActivity
+import com.boom.aiobrowser.ui.activity.TrendingNewsListActivity
 import com.boom.aiobrowser.ui.activity.WebDetailsActivity
 import com.boom.aiobrowser.ui.adapter.HomeTabAdapter
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
@@ -121,9 +122,12 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 //                }
 //            }
 //        })
-        newsAdapter.addOnDebouncedChildClick(R.id.tvMore) { adapter, view, position ->
+        newsAdapter.addOnDebouncedChildClick(R.id.tvMoreNews) { adapter, view, position ->
             APP.instance.toNewsFrom = 0
             APP.homeJumpLiveData.postValue(1)
+        }
+        newsAdapter.addOnDebouncedChildClick(R.id.tvMore) { adapter, view, position ->
+            rootActivity.jumpActivity<TrendingNewsListActivity>()
         }
         newsAdapter.addOnDebouncedChildClick(R.id.rlSearch) { adapter, view, position ->
             JumpDataManager.getCurrentJumpData(isReset = true,tag = "mainFragment 点击搜索").apply {
@@ -144,12 +148,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             var list = addADData(it)
             if (page == 1){
                 newsAdapter.mutableItems.clear()
-                newsAdapter.submitList(mutableListOf<NewsData>().apply {
-                    add(NewsData().apply {
-                        dataType = NewsData.TYPE_HOME_NEWS_TOP
-                    })
-                    addAll(list)
-                })
+                newsAdapter.submitList(list)
                 fBinding.rv.scrollToPosition(0)
             }else{
                 newsAdapter.addAll(list)
@@ -202,9 +201,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 //                CacheManager.engineGuideFirst = false
 //                EngineGuidePop(rootActivity).createPop(fBinding.ivSearchEngine)
 //            }
-            if (fBinding.refreshLayout.isRefreshing == true){
-                fBinding.refreshLayout.isRefreshing = false
-            }
+//            if (fBinding.refreshLayout.isRefreshing == true){
+//                fBinding.refreshLayout.isRefreshing = false
+//            }
             if (jumpData.jumpType != JumpConfig.JUMP_HOME ){
                 APP.bottomLiveData.postValue(JumpConfig.JUMP_HOME)
             }else{
@@ -264,7 +263,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         fBinding.refreshLayout.setProgressViewOffset(true,-200,200)
         fBinding.apply {
             updateTopTab()
-            adapterHelper.trailingLoadState = LoadState.NotLoading(false)
+            adapterHelper.trailingLoadState = LoadState.None
             rv.apply {
                 layoutManager = LinearLayoutManager(rootActivity,LinearLayoutManager.VERTICAL,false)
                 // 设置预加载，请调用以下方法
@@ -291,6 +290,25 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                     add(NewsData().apply {
                         dataType = NewsData.TYPE_HOME_NEWS_TOP
                     })
+                    add(NewsData().apply {
+                        dataType = NewsData.TYPE_HOME_NEWS_TRENDING
+                        trendList = mutableListOf<NewsData>().apply {
+                            add(NewsData().apply {
+                                isLoading = true
+                            })
+                            add(NewsData().apply {
+                                isLoading = true
+                            })
+                            add(NewsData().apply {
+                                isLoading = true
+                            })
+                        }
+                    })
+//                    for (i in 0 until 8){
+//                        add(NewsData().apply {
+//                            isLoading = true
+//                        })
+//                    }
                 })
                 addOnScrollListener(object : RecyclerView.OnScrollListener(){
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -363,7 +381,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             refreshLayout.setOnRefreshListener {
                 fBinding.refreshLayout.isRefreshing = true
                 page = 1
-                adapterHelper.trailingLoadState = LoadState.None
                 loadData()
             }
         }
@@ -409,6 +426,11 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     }
 
     private fun loadData() {
+        if (page>1){
+            adapterHelper.trailingLoadState = LoadState.Loading
+        }else {
+            adapterHelper.trailingLoadState = LoadState.None
+        }
         loadNews()
         PointEvent.posePoint(PointEventKey.home_page_refresh,Bundle().apply {
             putString(PointValueKey.refresh_type,if (page == 1)"down" else "up")

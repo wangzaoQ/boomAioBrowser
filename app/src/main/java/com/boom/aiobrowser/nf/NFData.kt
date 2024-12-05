@@ -14,48 +14,61 @@ import java.util.Vector
 object NFData {
 
     suspend fun getNFData(refreshSession: Boolean, key: String): MutableList<NewsData> {
-        if (refreshSession) {
-            AppLogs.dLog(
-                NFManager.TAG,
-                "${key}推送 强制刷新session 原始值为 :${CacheManager.getSession(key)}"
-            )
-            CacheManager.saveSession(key, "")
-            AppLogs.dLog(
-                NFManager.TAG,
-                "${key}推送 强制刷新session 刷新后为 :${CacheManager.getSession(key)}"
-            )
-        }
-        var list = mutableListOf<NewsData>()
-        runCatching {
-            when (key) {
-                NFEnum.NF_HOT.menuName -> {
-                    // 热榜
-                    list = NetRequest.request(HashMap<String, Any>().apply {
-                        put("sessionKey", key)
-                    }) { NetController.getHotNewsList(NetParams.getParamsMap(key)) }.data
-                        ?: mutableListOf()
-
+        if (key == NFEnum.NF_TREND.menuName){
+            var newsList = CacheManager.trendNews
+            if (newsList.isNullOrEmpty().not()){
+                if (newsList.size>3){
+                    newsList = newsList.subList(0,3)
                 }
-
-                NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName -> {
-                    // 人工
-                    list = NetRequest.request(HashMap<String, Any>().apply {
-                        put("sessionKey", key)
-                    }) { NetController.getEditorNewsList(NetParams.getParamsMap(key)) }.data
-                        ?: mutableListOf()
-                }
-
-                else -> {
-                    list = NetRequest.request(HashMap<String, Any>().apply {
-                        put("sessionKey", key)
-                    }) { NetController.getNewsList(NetParams.getParamsMap(key)) }.data
-                        ?: mutableListOf()
-                }
+            }else{
+                APP.instance.appModel.getTrendsNews()
+                newsList = CacheManager.trendNews
             }
-        }.onFailure {
-            AppLogs.eLog(NFManager.TAG, "${key}推送" + it.stackTraceToString())
+            return newsList
+        }else{
+            if (refreshSession) {
+                AppLogs.dLog(
+                    NFManager.TAG,
+                    "${key}推送 强制刷新session 原始值为 :${CacheManager.getSession(key)}"
+                )
+                CacheManager.saveSession(key, "")
+                AppLogs.dLog(
+                    NFManager.TAG,
+                    "${key}推送 强制刷新session 刷新后为 :${CacheManager.getSession(key)}"
+                )
+            }
+            var list = mutableListOf<NewsData>()
+            runCatching {
+                when (key) {
+                    NFEnum.NF_HOT.menuName -> {
+                        // 热榜
+                        list = NetRequest.request(HashMap<String, Any>().apply {
+                            put("sessionKey", key)
+                        }) { NetController.getHotNewsList(NetParams.getParamsMap(key)) }.data
+                            ?: mutableListOf()
+
+                    }
+
+                    NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName -> {
+                        // 人工
+                        list = NetRequest.request(HashMap<String, Any>().apply {
+                            put("sessionKey", key)
+                        }) { NetController.getEditorNewsList(NetParams.getParamsMap(key)) }.data
+                            ?: mutableListOf()
+                    }
+
+                    else -> {
+                        list = NetRequest.request(HashMap<String, Any>().apply {
+                            put("sessionKey", key)
+                        }) { NetController.getNewsList(NetParams.getParamsMap(key)) }.data
+                            ?: mutableListOf()
+                    }
+                }
+            }.onFailure {
+                AppLogs.eLog(NFManager.TAG, "${key}推送" + it.stackTraceToString())
+            }
+            return list
         }
-        return list
     }
 
 

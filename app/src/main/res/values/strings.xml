@@ -337,6 +337,10 @@
     <string name="app_movie_country">Country</string>
     <string name="app_movie_release_date">Release Date</string>
     <string name="app_movie">movie</string>
+    <string name="app_break_news">Breaking News</string>
+    <string name="app_guide_top_title">Keep Information Synchronized Keeping You One Step Ahead</string>
+    <string name="app_latest_breaking_news">Latest Breaking News</string>
+    <string name="app_download_progress">Download Progress</string>
 
 
 </resources>

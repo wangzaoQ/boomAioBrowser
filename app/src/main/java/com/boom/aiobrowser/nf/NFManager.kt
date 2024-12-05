@@ -361,6 +361,9 @@ object NFManager {
             }
             4->{
                 NFShow.showNewsNFFilter(NFEnum.NF_HOT)
+            }
+            5->{
+                NFShow.showNewsNFFilter(NFEnum.NF_TREND)
                 PointEvent.posePoint(PointEventKey.session_st)
             }
             else -> {}

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:layout_marginEnd="7dp"
+    android:layoutAnimation="@anim/anim_nf">
+
+    <TextView
+        android:layout_width="111dp"
+        android:layout_height="29dp"
+        android:background="@drawable/shape_nf_btn"
+        android:gravity="center"
+        android:text="@string/app_view"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="12sp"></TextView>
+
+    <ImageView
+        android:id="@+id/ivAnimal"
+        android:layout_width="33dp"
+        android:layout_height="29dp"
+        android:src="@mipmap/bg_nf_anim"></ImageView>
+</RelativeLayout>

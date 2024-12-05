@@ -1,9 +1,12 @@
 package com.boom.aiobrowser.model
 
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.TopicBean
 import com.boom.aiobrowser.data.WebConfigData
 import com.boom.aiobrowser.net.NetController
+import com.boom.aiobrowser.nf.NFManager
+import com.boom.aiobrowser.nf.NFShow
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.getTopicDataLan
@@ -144,6 +147,9 @@ class AppViewModel : BaseDataModel() {
 //            }
             var list = NetController.getTrendNews("GTR-4").data
             CacheManager.trendNews = list?: mutableListOf()
+            if (APP.isDebug){
+                NFShow.showNewsNFFilter(NFEnum.NF_TREND)
+            }
         }, failBack = {
             AppLogs.eLog(TAG, it.stackTraceToString())
         }, 1)

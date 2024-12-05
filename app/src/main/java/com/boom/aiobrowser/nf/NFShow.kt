@@ -35,10 +35,21 @@ object NFShow {
             var refreshSession = false
             var count = 0
             var newsList: MutableList<NewsData>? = null
+            if (NFData.filterList1(enum, sourceType).not())return
+            if (enum == NFEnum.NF_TREND){
+                newsList = NFData.getNFData(refreshSession,enum.menuName)
+                if (newsList.size>3){
+                    newsList = newsList.subList(0,3)
+                }
+                showNewsNF(NewsData().apply {
+                    nfSource = enum.menuName
+                    trendList = newsList
+                },enum)
+                return
+            }
             if (NFManager.needRefreshData(enum.menuName)) {
                 CacheManager.saveNFNewsList(enum.menuName, mutableListOf())
             }
-            if (NFData.filterList1(enum, sourceType).not())return
             var limit = Random.nextInt(0, 3)
             newsList = CacheManager.getNFNewsList(enum.menuName)
             if (newsList.size > limit) {
@@ -194,27 +205,60 @@ object NFShow {
             }else{
                 NFManager.manager.notify(data.nId,bulider.build())
             }
-            var width = dp2px(331f)
-            var height = dp2px(181f)
-            GlideManager.loadNFBitmap(APP.instance,data.iassum?:"",width,height, bitmapCall ={
-                smallRemote?.setImageViewBitmap(R.id.ivPic, it)
-                largeRemote?.setImageViewBitmap(R.id.ivPic, it)
-                largeRemote.setViewVisibility(R.id.ivBg,View.VISIBLE)
-                smallRemote.setViewVisibility(R.id.ivBg,View.VISIBLE)
-                if (data.tag.isNullOrEmpty()){
-                    NFManager.manager.notify(enum.position, bulider.build())
-                }else{
-                    NFManager.manager.notify(data.nId,bulider.build())
+            if (enum == NFEnum.NF_TREND){
+                var width = dp2px(68f)
+                var height = dp2px(51f)
+                var list = data.trendList?: mutableListOf()
+                if (list.size>0 && list[0].iassum.isNullOrEmpty().not()){
+                    GlideManager.loadNFBitmap(APP.instance,list[0].iassum?:"",width,height, bitmapCall ={
+                        largeRemote?.setImageViewBitmap(R.id.ivImg, it)
+                        NFManager.manager.notify(enum.position, bulider.build())
+                    },callFail ={
+                        largeRemote?.setImageViewResource(R.id.ivImg, R.mipmap.ic_default_nf_small)
+                        NFManager.manager.notify(enum.position, bulider.build())
+                    })
                 }
-            },callFail ={
-                smallRemote?.setImageViewResource(R.id.ivPic, R.mipmap.ic_default_nf)
-                largeRemote?.setImageViewResource(R.id.ivPic, R.mipmap.ic_default_nf)
-                if (data.tag.isNullOrEmpty()){
-                    NFManager.manager.notify(enum.position, bulider.build())
-                }else{
-                    NFManager.manager.notify(data.nId,bulider.build())
+                if (list.size>1 && list[1].iassum.isNullOrEmpty().not()){
+                    GlideManager.loadNFBitmap(APP.instance,list[1].iassum?:"",width,height, bitmapCall ={
+                        largeRemote?.setImageViewBitmap(R.id.ivImg2, it)
+                        NFManager.manager.notify(enum.position, bulider.build())
+                    },callFail ={
+                        largeRemote?.setImageViewResource(R.id.ivImg2, R.mipmap.ic_default_nf_small)
+                        NFManager.manager.notify(enum.position, bulider.build())
+                    })
                 }
-            })
+                if (list.size>2 && list[2].iassum.isNullOrEmpty().not()){
+                    GlideManager.loadNFBitmap(APP.instance,list[2].iassum?:"",width,height, bitmapCall ={
+                        largeRemote?.setImageViewBitmap(R.id.ivImg3, it)
+                        NFManager.manager.notify(enum.position, bulider.build())
+                    },callFail ={
+                        largeRemote?.setImageViewResource(R.id.ivImg3, R.mipmap.ic_default_nf_small)
+                        NFManager.manager.notify(enum.position, bulider.build())
+                    })
+                }
+            }else{
+                var width = dp2px(331f)
+                var height = dp2px(181f)
+                GlideManager.loadNFBitmap(APP.instance,data.iassum?:"",width,height, bitmapCall ={
+                    smallRemote?.setImageViewBitmap(R.id.ivPic, it)
+                    largeRemote?.setImageViewBitmap(R.id.ivPic, it)
+                    largeRemote.setViewVisibility(R.id.ivBg,View.VISIBLE)
+                    smallRemote.setViewVisibility(R.id.ivBg,View.VISIBLE)
+                    if (data.tag.isNullOrEmpty()){
+                        NFManager.manager.notify(enum.position, bulider.build())
+                    }else{
+                        NFManager.manager.notify(data.nId,bulider.build())
+                    }
+                },callFail ={
+                    smallRemote?.setImageViewResource(R.id.ivPic, R.mipmap.ic_default_nf)
+                    largeRemote?.setImageViewResource(R.id.ivPic, R.mipmap.ic_default_nf)
+                    if (data.tag.isNullOrEmpty()){
+                        NFManager.manager.notify(enum.position, bulider.build())
+                    }else{
+                        NFManager.manager.notify(data.nId,bulider.build())
+                    }
+                })
+            }
             var key = data.nfSource
             if (key.isNullOrEmpty()){
                 key = enum.menuName
@@ -270,9 +314,9 @@ object NFShow {
                 .setCustomBigContentView(largeRemote)
         } else {
             nfBuilder
-                .setCustomHeadsUpContentView(largeRemote)
-                .setCustomContentView(largeRemote)
-                .setCustomBigContentView(largeRemote)
+                .setCustomHeadsUpContentView(smallRemote)
+                .setCustomContentView(smallRemote)
+                .setCustomBigContentView(smallRemote)
         }
         return nfBuilder
     }

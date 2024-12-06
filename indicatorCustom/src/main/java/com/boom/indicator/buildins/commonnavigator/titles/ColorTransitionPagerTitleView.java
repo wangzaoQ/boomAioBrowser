@@ -1,6 +1,7 @@
 package com.boom.indicator.buildins.commonnavigator.titles;
 
 import android.content.Context;
+import android.graphics.Typeface;
 
 import com.boom.indicator.buildins.ArgbEvaluatorHolder;
 
@@ -30,9 +31,15 @@ public class ColorTransitionPagerTitleView extends SimplePagerTitleView {
 
     @Override
     public void onSelected(int index, int totalCount) {
+        if (selectedStyle>=0){
+            setTypeface(null, Typeface.BOLD);
+        }
     }
 
     @Override
     public void onDeselected(int index, int totalCount) {
+        if (normalStyle>=0){
+            setTypeface(null, Typeface.NORMAL);
+        }
     }
 }

@@ -33,6 +33,8 @@ object NetParams {
         var sessionKey = key
         var isTopic = false
         var isSource = false
+        // local 作为topic area 只传当前选中的local 不传自己定位的
+        var isLocalTopic = false
         if (endKey.startsWith(NewsConfig.TOPIC_TAG)){
             endKey = endKey.substringAfter(NewsConfig.TOPIC_TAG)
             if (endKey == APP.instance.getString(R.string.app_local_brief)){
@@ -44,6 +46,9 @@ object NetParams {
             }else{
                 isTopic = true
             }
+        }else if (endKey.startsWith(NewsConfig.LOCAL_TAG)){
+            endKey = endKey.substringAfter(NewsConfig.LOCAL_TAG)
+            isLocalTopic = true
         }
         when (endKey) {
             FOR_YOU,NFEnum.NF_NEWS.menuName,WIDGET -> {
@@ -79,7 +84,7 @@ object NetParams {
             else -> {
             }
         }
-        filterLocation(needLocation, map)
+        filterLocation(needLocation,isLocalTopic,endKey, map)
         filterSession(sessionType,sessionKey,map,currentPage)
         if (isTopic){
             map.put("tearth",endKey)
@@ -107,8 +112,20 @@ object NetParams {
         }
     }
 
-    suspend fun filterLocation(need:Boolean,map:HashMap<String,String>){
-        if (need){
+    suspend fun filterLocation(needLocation:Boolean,isLocalTopic:Boolean,endKey:String,map:HashMap<String,String>){
+        if (isLocalTopic){
+            var list = CacheManager.cityList
+            for (i in 0 until list.size){
+                if (list.get(i).locationCity == endKey){
+                    var data = list.get(i)
+                    map.put("csuck",data.locationCity)
+                    if (data.locationArea.isNullOrEmpty().not()) {
+                        map.put("asilve", data.locationArea)
+                    }
+                    break
+                }
+            }
+        }else if (needLocation){
             var locationData = getLocation()
             if (locationData != null) {
                 if (locationData.locationCity.isNullOrEmpty().not()) {
@@ -134,7 +151,7 @@ object NetParams {
         var locationData: LocationData? = null
         runCatching {
             var request = Request.Builder().get().url("https://ipinfo.io/json").build()
-            val response = OkHttpClient.Builder().build().newCall(request)?.execute()
+            val response = WebNet.netClient.newCall(request)?.execute()
             val bodyStr = response?.body?.string() ?: ""
             JSONObject(bodyStr).apply {
                 var city = getString("city")

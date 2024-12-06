@@ -52,7 +52,7 @@ object CacheManager {
     const val KV_WEB_FETCH_LIST = "KV_WEB_FETCH_LIST"
     const val KV_BROWSER_STATUS = "KV_BROWSER_STATUS"
     const val KV_RECENT_SEARCH_DATA = "KV_RECENT_SEARCH_DATA"
-    const val KV_LAST_JUMP_DATA = "KV_LAST_JUMP_DATA"
+    const val KV_CITY_LIST = "KV_CITY_LIST"
     const val KV_LOCATION_DATA = "KV_LOCATION_DATA"
     const val KV_PHONE_ID = "KV_PHONE_ID"
     const val KV_NEWS_SAVE_TIME = "KV_NEWS_SAVE_TIME"
@@ -478,6 +478,47 @@ object CacheManager {
         set(value) {
             mmkv.encode(KV_RECENT_SEARCH_DATA, toJson(value))
         }
+
+    var cityList:MutableList<LocationData>
+        get() {
+            return getListByGson(mmkv.decodeString(KV_CITY_LIST),LocationData::class.java) ?: mutableListOf()
+        }
+        set(value) {
+            mmkv.encode(KV_CITY_LIST, toJson(value))
+        }
+
+    fun addCityList(data:LocationData?){
+        if (data==null)return
+        var list = cityList
+        var index = -1
+        for (i in 0 until list.size){
+            var area = list.get(i)
+            if (area.locationCity == data.locationCity){
+                index = i
+                break
+            }
+        }
+        if (index == -1){
+            list.add(data)
+        }
+        cityList = list
+    }
+
+    fun removeCityList(data:LocationData){
+        var list = cityList
+        var index = -1
+        for (i in 0 until list.size){
+            var area = list.get(i)
+            if (area.locationCity == data.locationCity){
+                index = i
+                break
+            }
+        }
+        if (index>=0){
+            list.removeAt(index)
+        }
+        cityList = list
+    }
 
 //
 //    var firstOpenApp:Boolean

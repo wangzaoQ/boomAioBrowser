@@ -3,6 +3,7 @@ package com.boom.indicator.buildins.commonnavigator.titles;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.widget.TextView;
@@ -20,6 +21,8 @@ import com.boom.indicator.buildins.commonnavigator.abs.IMeasurablePagerTitleView
 public class SimplePagerTitleView extends TextView implements IMeasurablePagerTitleView {
     protected int mSelectedColor;
     protected int mNormalColor;
+    protected int normalStyle= -1;
+    protected int selectedStyle= -1;
 
     public SimplePagerTitleView(Context context) {
         super(context, null);
@@ -40,6 +43,9 @@ public class SimplePagerTitleView extends TextView implements IMeasurablePagerTi
         if (selectedBg>0){
             setBackgroundResource(selectedBg);
         }
+        if (selectedStyle>=0){
+            setTypeface(null, Typeface.BOLD);
+        }
     }
 
 
@@ -58,6 +64,9 @@ public class SimplePagerTitleView extends TextView implements IMeasurablePagerTi
         setTextColor(mNormalColor);
         if (unSelectedBg>0){
             setBackgroundResource(unSelectedBg);
+        }
+        if (normalStyle>=0){
+            setTypeface(null, Typeface.NORMAL);
         }
     }
 
@@ -133,5 +142,13 @@ public class SimplePagerTitleView extends TextView implements IMeasurablePagerTi
 
     public void setNormalColor(int normalColor) {
         mNormalColor = normalColor;
+    }
+
+    public void setNormalStyle(int normalStyle) {
+        this.normalStyle = normalStyle;
+    }
+
+    public void setSelectedStyle(int selectedStyle) {
+        this.selectedStyle = selectedStyle;
     }
 }

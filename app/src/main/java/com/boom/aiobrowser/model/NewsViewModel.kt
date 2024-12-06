@@ -83,6 +83,26 @@ class NewsViewModel : BaseDataModel() {
             list.add(0,NewsData().apply {
                 dataType = NewsData.TYPE_HOME_NEWS_TOP
             })
+            var isSuccess = CacheManager.locationData?.locationSuccess?:false
+            if (isSuccess.not()){
+                var newsCount = 0
+                var insertIndex = -1
+                for (i in 0 until list.size){
+                    if (list.get(i).dataType == NewsData.TYPE_NEWS){
+                        newsCount++
+                    }
+                    if (newsCount == 3){
+                        insertIndex = i
+                        break
+                    }
+                }
+
+                if (insertIndex>=0){
+                    list.add(insertIndex,NewsData().apply {
+                        dataType = NewsData.TYPE_HOME_NEWS_LOCAL
+                    })
+                }
+            }
         }
         return list
     }

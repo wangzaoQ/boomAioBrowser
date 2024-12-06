@@ -341,6 +341,12 @@
     <string name="app_guide_top_title">Keep Information Synchronized Keeping You One Step Ahead</string>
     <string name="app_latest_breaking_news">Latest Breaking News</string>
     <string name="app_download_progress">Download Progress</string>
+    <string name="app_location_title">Are you currently in</string>
+    <string name="app_search_city">Search City</string>
+    <string name="app_current_location">Current Location</string>
+    <string name="app_popular_city">Popular City</string>
+    <string name="app_local_guide_title">Set Your Location Get The Latest News Around You</string>
+    <string name="app_news_from">News From</string>
 
 
 </resources>

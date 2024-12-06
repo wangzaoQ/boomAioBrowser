@@ -43,6 +43,7 @@ import com.boom.aiobrowser.databinding.NewsDetailsItemTitleBinding
 import com.boom.aiobrowser.databinding.NewsDetailsItemTopImgBinding
 import com.boom.aiobrowser.databinding.NewsDetailsItemTopVideoBinding
 import com.boom.aiobrowser.databinding.NewsItemHomeTopBinding
+import com.boom.aiobrowser.databinding.NewsItemLocalBinding
 import com.boom.aiobrowser.databinding.NewsItemTrendingBinding
 import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.ParamsConfig
@@ -101,6 +102,24 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
 
         constructor(parent: ViewGroup) : this(
             BrowserItemMainNewsBinding.inflate(
+                LayoutInflater.from(
+                    parent.context
+                ), parent, false
+            )
+        )
+    }
+
+    //home foryou新闻列表local
+    internal class HomeLocalItem(viewBinding: NewsItemLocalBinding) :
+        RecyclerView.ViewHolder(viewBinding.getRoot()) {
+        var viewBinding: NewsItemLocalBinding? = null
+
+        init {
+            this.viewBinding = viewBinding
+        }
+
+        constructor(parent: ViewGroup) : this(
+            NewsItemLocalBinding.inflate(
                 LayoutInflater.from(
                     parent.context
                 ), parent, false
@@ -352,6 +371,39 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                             tvNewsTitle.text = item.tconsi
                             GlideManager.loadImg(fragmet, ivSource, item.sschem)
                             tvSourceName.text = "${item.sfindi}"
+                        }
+                    }
+                })
+            .addItemType(
+                NewsData.TYPE_HOME_NEWS_LOCAL,
+                object : OnMultiItemAdapterListener<NewsData, HomeLocalItem> {
+
+                    override fun onCreate(
+                        context: Context,
+                        parent: ViewGroup,
+                        viewType: Int
+                    ): HomeLocalItem {
+                        return HomeLocalItem(
+                            parent
+                        );
+                    }
+
+                    override fun onBind(holder: HomeLocalItem, position: Int, item: NewsData?) {
+                        if (item == null) return
+                        holder.viewBinding?.apply {
+                            var locationCity = CacheManager.locationData?.locationCity?:""
+                            tvTitle.text = "${context.getString(R.string.app_location_title)} ${locationCity}?"
+                            var s = SpannableStringBuilder(tvTitle.text)
+                            var index = tvTitle.text.toString().indexOf(locationCity, ignoreCase = true)
+                            if (index >=0){
+                                s.setSpan(
+                                    ForegroundColorSpan(context.getColor(R.color.color_blue_4442E7)),
+                                    index,
+                                    index+locationCity.length,
+                                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                                )
+                                tvTitle.setText(s)
+                            }
                         }
                     }
                 })

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:paddingHorizontal="13dp"
+    android:background="@drawable/shape_ripple_item"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvCity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="tok"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:textSize="14sp"
+        android:textColor="#363636"
+        android:layout_marginEnd="5dp"
+        ></androidx.appcompat.widget.AppCompatTextView>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivCheck"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_gravity="center_vertical"
+        android:src="@mipmap/ic_city_check"
+        android:visibility="gone"
+        ></androidx.appcompat.widget.AppCompatImageView>
+</LinearLayout>

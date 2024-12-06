@@ -17,6 +17,7 @@ import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.NetworkUtils.OnNetworkStatusChangedListener
 import com.boom.aiobrowser.ad.AioADDataManager.initAD
 import com.boom.aiobrowser.data.JumpData
+import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.TopicBean
 import com.boom.aiobrowser.data.VideoDownloadData
@@ -106,6 +107,7 @@ class APP: Application(), ViewModelStoreOwner {
         val homeTabLiveData by lazy { ProtectedUnPeekLiveData<MutableList<JumpData>>() }
         val homeJumpLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
         val showRateLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
+        val locationListUpdateLiveData by lazy { ProtectedUnPeekLiveData<MutableList<LocationData>>() }
 
 
     }

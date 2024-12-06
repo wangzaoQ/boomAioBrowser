@@ -5,12 +5,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.data.TopicBean
+import com.boom.aiobrowser.other.NewsConfig.LOCAL_TAG
 import com.boom.aiobrowser.ui.fragment.LocalNewsFragment
 import com.boom.aiobrowser.ui.fragment.NewsFragment
 
-class NewsPagerStateAdapter(
-    var titleList: MutableList<TopicBean>,
+class LocalNewsPagerStateAdapter(
+    var titleList: MutableList<LocationData>,
     fm: FragmentManager,
     behavior: Int
 ) :
@@ -23,14 +25,11 @@ class NewsPagerStateAdapter(
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return titleList[position].topic
+        return titleList[position].locationCity
     }
 
     override fun getItem(position: Int): Fragment {
-        if (position == 1){
-            return LocalNewsFragment()
-        }
-        return NewsFragment.newInstance(titleList[position].id)
+        return NewsFragment.newInstance("${LOCAL_TAG}${titleList[position].locationCity}")
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Fragment {

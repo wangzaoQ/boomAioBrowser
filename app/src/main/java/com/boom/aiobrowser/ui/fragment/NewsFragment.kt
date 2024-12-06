@@ -44,7 +44,7 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
     }
 
     private fun loadData() {
-        if (topic == TopicConfig.TOPIC_FOR_YOU){
+        if (topic == TopicConfig.TOPIC_FOR_YOU || topic.startsWith(NewsConfig.LOCAL_TAG)){
             viewModel.value.getNewsData(topic,page)
         }else{
             viewModel.value.getNewsData("${NewsConfig.TOPIC_TAG}${topic}",page)

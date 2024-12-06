@@ -198,6 +198,7 @@ object WebConfig{
 object NewsConfig{
 
     const val TOPIC_TAG="topic_"
+    const val LOCAL_TAG="area_"
 
     var LOCAL_TOPIC_JSON= """
 [

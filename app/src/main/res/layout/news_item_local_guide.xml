@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_local_guide_title"
+        android:textSize="19sp"
+        android:textColor="@color/black"
+        style="@style/app_text_bold"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        ></androidx.appcompat.widget.AppCompatTextView>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginHorizontal="46dp"
+        android:layout_width="match_parent"
+        android:layout_marginTop="19dp"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:scaleType="centerCrop"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="h,269:208"
+            ></androidx.appcompat.widget.AppCompatImageView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvNewsFrom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:textSize="19sp"
+        android:textColor="@color/black"
+        ></androidx.appcompat.widget.AppCompatTextView>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

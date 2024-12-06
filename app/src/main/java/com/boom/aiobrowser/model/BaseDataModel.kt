@@ -23,7 +23,7 @@ open class BaseDataModel :ViewModel(), LifecycleObserver {
             viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
                 AppLogs.eLog(TAG,"error1:${throwable.stackTraceToString()}")
                 failLiveData.postValue("BaseDataModelError")
-
+                failBack.invoke(throwable)
             }) {
                 if (type == 0){
                     loadBack()

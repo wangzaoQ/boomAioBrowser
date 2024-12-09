@@ -11,6 +11,8 @@ import androidx.core.content.ContextCompat
 import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
@@ -25,6 +27,8 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.GlideManager
 import com.boom.aiobrowser.tools.WakeManager
 import com.boom.aiobrowser.tools.web.WebScan
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
 object NFShow {
@@ -270,6 +274,16 @@ object NFShow {
             AppLogs.dLog(NFManager.TAG,"最终展示通知:nfSource:${key} enumName:${enum.menuName}")
         }.onFailure {
             AppLogs.eLog(NFManager.TAG,it.stackTraceToString())
+        }
+        if (APP.isDebug){
+            AppLogs.dLog(NFManager.TAG,"isAllowNFPreload:"+APP.instance.isAllowNFPreload+"_ NowNewsKVUtils.dayPreloadCount:${CacheManager.dayPreloadCount}")
+        }
+        if (APP.instance.isAllowNFPreload){
+            if (CacheManager.dayPreloadCount == 0){
+                CacheManager.dayPreloadCount = 1
+                AppLogs.dLog(NFManager.TAG,"通知触发广告开始加载 LAUNCH")
+                AioADDataManager.preloadAD(ADEnum.LAUNCH_AD)
+            }
         }
     }
 

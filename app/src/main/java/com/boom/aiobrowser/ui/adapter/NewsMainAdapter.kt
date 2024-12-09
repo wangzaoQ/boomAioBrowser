@@ -776,16 +776,7 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
 
                     override fun onBind(holder: ReadSourceItem, position: Int, item: NewsData?) {
                         if (item == null) return
-                        holder.viewBinding?.apply {
-                            tvReadSource.setOnClickListener {
-                                context.startActivity(
-                                    Intent(
-                                        context,
-                                        WebActivity::class.java
-                                    ).putExtra("url", item.uweek)
-                                )
-                            }
-                        }
+
                     }
                 })
             .addItemType(

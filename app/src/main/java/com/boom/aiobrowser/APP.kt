@@ -113,7 +113,8 @@ class APP: Application(), ViewModelStoreOwner {
     }
 
     var toNewsFrom = 0
-
+    @Volatile
+    var isAllowNFPreload = false
     override fun onCreate() {
         super.onCreate()
         instance = this

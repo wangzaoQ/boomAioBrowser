@@ -33,6 +33,7 @@ object AioADDataManager {
     var AD_LOAD_FAIL = 103
 
     const val AD_PLATFORM_ADMOB = "admob"
+    const val AD_PLATFORM_MAX = "max"
 
     const val AD_TYPE_OPEN = "op"
     const val AD_TYPE_INT = "int"
@@ -70,9 +71,9 @@ object AioADDataManager {
         applovinSdk!!.initialize(initConfig){
             // Start loading ads
             AppLogs.dLog(APP.instance.TAG,"max 初始化结束")
-//            if (APP.isDebug){
-//                AppLovinSdk.getInstance(APP.instance).showMediationDebugger()
-//            }
+            if (APP.isDebug){
+                AppLovinSdk.getInstance(APP.instance).showMediationDebugger()
+            }
         }
     }
 

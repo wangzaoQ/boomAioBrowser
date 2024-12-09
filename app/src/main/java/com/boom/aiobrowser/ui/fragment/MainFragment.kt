@@ -157,6 +157,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             CacheManager.locationData = data
             CacheManager.addCityList(data)
             newsAdapter.removeAt(position)
+            fBinding.rv.scrollToPosition(0)
+            page = 1
+            loadData()
         }
         newsAdapter.addOnDebouncedChildClick(R.id.btnNo) { adapter, view, position ->
             LocationManager.requestGPSPermission(WeakReference(rootActivity), onSuccess = {
@@ -479,6 +482,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             adapterHelper.trailingLoadState = LoadState.Loading
         }else {
             adapterHelper.trailingLoadState = LoadState.None
+            fBinding.refreshLayout.isRefreshing = true
         }
         loadNews()
         PointEvent.posePoint(PointEventKey.home_page_refresh,Bundle().apply {

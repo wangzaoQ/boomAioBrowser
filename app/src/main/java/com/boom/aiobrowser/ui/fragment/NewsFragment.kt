@@ -72,6 +72,10 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
             fBinding.newsSmart.finishRefresh()
             fBinding.newsSmart.finishLoadMore()
         }
+        viewModel.value.failLiveData.observe(this){
+            fBinding.newsSmart.finishRefresh()
+            fBinding.newsSmart.finishLoadMore()
+        }
         fBinding.newsSmart.setOnRefreshListener{
             page = 1
             loadData()

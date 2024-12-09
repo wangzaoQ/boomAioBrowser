@@ -78,8 +78,12 @@ object CacheManager {
     const val KV_FIRST_DOWNLOAD_TIPS3 = "KV_FIRST_DOWNLOAD_TIPS3"
     const val KV_FIRST_DOWNLOAD_TIPS4 = "KV_FIRST_DOWNLOAD_TIPS4"
     const val KV_USER_DATA = "KV_USER_DATA"
+    const val KV_PRELOAD_AD_COUNT = "KV_PRELOAD_AD_COUNT"
 //    const val KV_FIRST_OPEN_APP = "KV_FIRST_OPEN_APP"
     const val KV_FIRST_ADD_SHORTCUT = "KV_FIRST_ADD_SHORTCUT"
+    const val KV_AD_VALUE = "KV_AD_VALUE"
+    const val KV_AD_001_VALUE = "KV_AD_001_VALUE"
+    const val KV_AD_DAY_VALUE = "KV_AD_DAY_VALUE"
 
 
     var videoDownloadTempList :MutableList<VideoUIData>
@@ -703,5 +707,38 @@ object CacheManager {
     fun getUser():UserData?{
         return getBeanByGson(mmkv.decodeString(KV_USER_DATA,""),UserData::class.java)
     }
+
+    var dayPreloadCount: Int
+        get(){
+            return mmkv.decodeInt(KV_PRELOAD_AD_COUNT, 0)
+        }
+        set(value) {
+            mmkv.encode(KV_PRELOAD_AD_COUNT,value)
+        }
+
+//    var adValue :Double
+//        get() {
+//            return mmkv.decodeDouble(KV_AD_VALUE,0.0)
+//        }
+//        set(value) {
+//            mmkv.encode(KV_AD_VALUE, value)
+//        }
+
+
+    var ad001Value :Double
+        get() {
+            return mmkv.decodeDouble(KV_AD_001_VALUE,0.0)
+        }
+        set(value) {
+            mmkv.encode(KV_AD_001_VALUE, value)
+        }
+
+    var adDayValue :Double
+        get() {
+            return mmkv.decodeDouble(KV_AD_DAY_VALUE,0.0)
+        }
+        set(value) {
+            mmkv.encode(KV_AD_DAY_VALUE, value)
+        }
 
 }

@@ -180,6 +180,8 @@ fun appDataReset(){
         CacheManager.dayShowBattery = true
         CacheManager.dayDownloadCount = 0
         CacheManager.dayFirstDownloadVideoSuccess = true
+        CacheManager.dayPreloadCount = 0
+        CacheManager.adDayValue = 0.0
         NFEnum.values().forEach {
             CacheManager.saveNFShowLastTime(it.menuName,0)
             CacheManager.saveDayNFShowCount(it.menuName,0)

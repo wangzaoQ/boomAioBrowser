@@ -91,7 +91,17 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
 
     override fun setShowView() {
         var locationData = CacheManager.locationData
-        acBinding.tvArea.text = locationData?.locationCity
+        locationData?.apply {
+            var builder = StringBuilder()
+            builder.append(locationData.locationCity)
+            if (locationData.locationCountryShort.isNullOrEmpty().not()){
+                builder.append(",${locationData.locationCountryShort}")
+            }
+            if (locationData.code.isNullOrEmpty().not()){
+                builder.append(",${locationData.code}")
+            }
+            acBinding.tvArea.text = builder.toString()
+        }
         viewModel.value.getRecommendList()
         acBinding.rv.apply {
             layoutManager = LinearLayoutManager(this@LocationSettingActivity,LinearLayoutManager.VERTICAL,false)

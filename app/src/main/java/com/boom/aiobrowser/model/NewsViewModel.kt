@@ -57,32 +57,35 @@ class NewsViewModel : BaseDataModel() {
     }
 
     private fun addHomeData(topic:String,page:Int,list:MutableList<NewsData>) :MutableList<NewsData>{
-        if (NetParams.FOR_YOU == topic && page == 1){
-            list.add(0,NewsData().apply {
-                dataType = NewsData.TYPE_HOME_NEWS_TRENDING
-                var trendNews = CacheManager.trendNews
-                if (trendNews.isNullOrEmpty()){
-                    trendList = mutableListOf<NewsData>().apply {
-                        add(NewsData().apply {
-                            isLoading = true
-                        })
-                        add(NewsData().apply {
-                            isLoading = true
-                        })
-                        add(NewsData().apply {
-                            isLoading = true
-                        })
+        if ((NetParams.FOR_YOU == topic || topic == "For You") && page == 1){
+            if (NetParams.FOR_YOU == topic){
+                list.add(0,NewsData().apply {
+                    dataType = NewsData.TYPE_HOME_NEWS_TRENDING
+                    var trendNews = CacheManager.trendNews
+                    if (trendNews.isNullOrEmpty()){
+                        trendList = mutableListOf<NewsData>().apply {
+                            add(NewsData().apply {
+                                isLoading = true
+                            })
+                            add(NewsData().apply {
+                                isLoading = true
+                            })
+                            add(NewsData().apply {
+                                isLoading = true
+                            })
+                        }
+                    }else{
+                        if (trendNews.size>3){
+                            trendNews = trendNews.subList(0,3)
+                        }
+                        trendList = trendNews
                     }
-                }else{
-                    if (trendNews.size>3){
-                        trendNews = trendNews.subList(0,3)
-                    }
-                    trendList = trendNews
-                }
-            })
-            list.add(0,NewsData().apply {
-                dataType = NewsData.TYPE_HOME_NEWS_TOP
-            })
+                })
+                list.add(0,NewsData().apply {
+                    dataType = NewsData.TYPE_HOME_NEWS_TOP
+                })
+            }
+
             var isSuccess = CacheManager.locationData?.locationSuccess?:false
             if (isSuccess.not()){
                 var newsCount = 0

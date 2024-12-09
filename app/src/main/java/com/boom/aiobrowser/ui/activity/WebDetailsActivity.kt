@@ -1,11 +1,13 @@
 package com.boom.aiobrowser.ui.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
@@ -22,6 +24,7 @@ import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.getNewsTopic
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
+import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.video.GSYVideoManager
 
 class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
@@ -56,6 +59,19 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
             }
             ivShare.setOneClick {
                 shareToShop(newData?.tconsi?:"")
+            }
+
+            newsAdapter.addOnDebouncedChildClick(R.id.tvReadSource) { adapter, view, position ->
+                var manager = AioADShowManager(this@WebDetailsActivity, ADEnum.INT_AD, tag = "readSource插屏") {
+                    var data = adapter.getItem(position) ?: return@AioADShowManager
+                    this@WebDetailsActivity.startActivity(
+                        Intent(
+                            this@WebDetailsActivity,
+                            WebActivity::class.java
+                        ).putExtra("url", data.uweek)
+                    )
+                }
+                manager.showScreenAD(AD_POINT.aobws_news_return_int)
             }
         }
         viewModel.value.newsDetailsLiveData.observe(this){

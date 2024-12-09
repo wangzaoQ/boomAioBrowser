@@ -265,7 +265,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                             if (position == 1){
                                 PointEvent.posePoint(PointEventKey.news,Bundle().apply {
                                     putString(PointValueKey.from_type,if (APP.instance.toNewsFrom == 1)"home_news_more" else "news")
-                                },object : PointCallback{
+                                },true,object : PointCallback{
                                     override fun onSuccess(response: Response) {
                                         APP.instance.toNewsFrom = 0
                                     }

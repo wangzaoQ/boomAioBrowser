@@ -40,7 +40,15 @@ class CityAdapter() : BaseQuickAdapter<LocationData, CityAdapter.VH>() {
     override fun onBindViewHolder(holder: VH, position: Int, item: LocationData?) {
         if (item == null)return
         holder.viewBinding.apply {
-            tvCity.text = "${item.locationCity},${item.locationCountryShort},${item.code}"
+            var builder = StringBuilder()
+            builder.append(item.locationCity)
+            if (item.locationCountryShort.isNullOrEmpty().not()){
+                builder.append(",${item.locationCountryShort}")
+            }
+            if (item.code.isNullOrEmpty().not()){
+                builder.append(",${item.code}")
+            }
+            tvCity.text = builder.toString()
             if (item.locationCheck) {
                 ivCheck.visibility = View.VISIBLE
             }else{

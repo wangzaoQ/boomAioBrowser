@@ -12,9 +12,12 @@ import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.TopicBean
 import com.boom.aiobrowser.databinding.NewsFragmentHomeBinding
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.CacheManager
@@ -105,6 +108,10 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
                         PointEvent.posePoint(PointEventKey.news_tab, Bundle().apply {
                             putString(PointEventKey.news_tab,list.get(position).id)
                         })
+                        var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "homeTab切换插屏") {
+
+                        }
+                        manager.showScreenAD(AD_POINT.aobws_news_return_int)
                     }
 
                     override fun onPageScrollStateChanged(state: Int) {

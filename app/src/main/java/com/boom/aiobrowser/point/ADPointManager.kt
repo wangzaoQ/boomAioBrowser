@@ -1,5 +1,7 @@
 package com.boom.aiobrowser.point
 
+import com.applovin.mediation.MaxAd
+import com.applovin.sdk.AppLovinSdk
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.data.AioRequestData
@@ -24,6 +26,10 @@ class ADPointManager(var adValue: Any, var ad: Any, var requestBean: AioRequestD
                 BigDecimal(1_000_000),10,
                 BigDecimal.ROUND_HALF_UP).toDouble()
             ad_sdk_ver = MobileAds.getVersion().toString()
+        }else if (requestBean.tybxumpn == AioADDataManager.AD_PLATFORM_MAX){
+            valueMicros = BigDecimal(valueMicros).multiply(BigDecimal(1000000.0)).toLong()
+            detailValueMicros = (adValue as? MaxAd)?.revenue ?: 0.0
+            ad_sdk_ver = AppLovinSdk.VERSION
         }
     }
 
@@ -44,6 +50,16 @@ class ADPointManager(var adValue: Any, var ad: Any, var requestBean: AioRequestD
             return "admob"
         }
         return "Unknown"
+    }
+
+
+    fun getCurrentCode():String{
+        runCatching {
+            if (requestBean.tybxumpn == AioADDataManager.AD_PLATFORM_ADMOB){
+                return (adValue as? AdValue)?.currencyCode?:"USD"
+            }
+        }
+        return "USD"
     }
 
     fun getADID(): String {

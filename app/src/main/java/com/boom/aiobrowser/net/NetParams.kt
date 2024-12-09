@@ -114,7 +114,7 @@ object NetParams {
 
     suspend fun filterLocation(needLocation:Boolean,isLocalTopic:Boolean,endKey:String,map:HashMap<String,String>){
         if (isLocalTopic){
-            var list = CacheManager.cityList
+            var list = CacheManager.alreadyAddCityList
             for (i in 0 until list.size){
                 if (list.get(i).locationCity == endKey){
                     var data = list.get(i)

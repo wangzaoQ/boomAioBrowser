@@ -155,7 +155,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             var data = CacheManager.locationData
             data?.locationSuccess = true
             CacheManager.locationData = data
-            CacheManager.addCityList(data)
+            CacheManager.addAlreadyAddCity(data)
             newsAdapter.removeAt(position)
             fBinding.rv.scrollToPosition(0)
             page = 1
@@ -175,7 +175,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                             }
                         }else{
                             CacheManager.locationData = area
-                            CacheManager.addCityList(area)
+                            CacheManager.addAlreadyAddCity(area)
                             withContext(Dispatchers.Main){
                                 page = 1
                                 fBinding.refreshLayout.isRefreshing = true

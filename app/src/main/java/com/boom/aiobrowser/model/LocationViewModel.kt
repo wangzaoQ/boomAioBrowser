@@ -7,12 +7,14 @@ import com.boom.aiobrowser.net.NetController
 import com.boom.aiobrowser.net.NetRequest
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.LocationManager
+import com.ironsource.da
 import com.ironsource.lo
 import com.mbridge.msdk.dycreator.viewmodel.BaseViewModel
 import java.util.Locale
 
 class LocationViewModel:BaseDataModel() {
     var cityLiveData = MutableLiveData<List<LocationData>>()
+    var recommendLiveData = MutableLiveData<List<LocationData>>()
 
     var completeLiveData = MutableLiveData<LocationData>()
 
@@ -28,6 +30,32 @@ class LocationViewModel:BaseDataModel() {
         }, failBack = {},1)
     }
 
+
+    fun getRecommendAddList(){
+        loadData(loadBack={
+            var list: MutableList<LocationData>? = LocationManager.recommendCity().get(Locale.getDefault().language)
+            if (list.isNullOrEmpty()) {
+                list = LocationManager.recommendCity().get("en")
+            }
+            var alreadyList = CacheManager.alreadyAddCityList
+            var endList = mutableListOf<LocationData>()
+            list?.forEach {
+                var data = it
+                var index = -1
+                for (i in 0 until alreadyList.size){
+                    if (data.locationCity == alreadyList.get(i).locationCity){
+                        index = i
+                        break
+                    }
+                }
+                if (index == -1){
+                    endList.add(data)
+                }
+            }
+            recommendLiveData.postValue(endList)
+        }, failBack = {},1)
+    }
+
     fun getAreaData(locationData:LocationData,addCityList:Boolean){
         loadData(loadBack={
             NetRequest.request { NetController.getLocation(locationData!!.longitude, locationData!!.latitude) }.data?.apply {
@@ -40,14 +68,14 @@ class LocationViewModel:BaseDataModel() {
                 }
                 CacheManager.locationData = locationData
                 if (addCityList){
-                    CacheManager.addCityList(locationData)
+                    CacheManager.addAlreadyAddCity(locationData)
                 }
                 completeLiveData.postValue(locationData)
             }
         }, failBack = {
             CacheManager.locationData = locationData
             if (addCityList){
-                CacheManager.addCityList(locationData)
+                CacheManager.addAlreadyAddCity(locationData)
             }
             completeLiveData.postValue(locationData)
         },1)

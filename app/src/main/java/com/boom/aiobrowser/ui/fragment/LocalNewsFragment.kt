@@ -21,6 +21,7 @@ import com.boom.aiobrowser.databinding.NewsFragmentLocationBinding
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.LocationManager
+import com.boom.aiobrowser.ui.activity.LocationAddActivity
 import com.boom.aiobrowser.ui.activity.LocationSettingActivity
 import com.boom.aiobrowser.ui.adapter.LocalNewsPagerStateAdapter
 import com.boom.aiobrowser.ui.pop.LoadingPop
@@ -42,17 +43,17 @@ class LocalNewsFragment :BaseFragment<NewsFragmentLocationBinding>(){
 
     override fun setListener() {
         APP.locationListUpdateLiveData.observe(this){
-            updateNewsHome(it)
+            updateNewsHome(CacheManager.alreadyAddCityList)
         }
         fBinding.apply {
             flAddCity.setOneClick {
-                toLocationSetting()
+                rootActivity.jumpActivity<LocationAddActivity>()
             }
         }
     }
 
     override fun setShowView() {
-        updateNewsHome(CacheManager.cityList)
+        updateNewsHome(CacheManager.alreadyAddCityList)
     }
 
     var fragmentAdapter: LocalNewsPagerStateAdapter? = null
@@ -77,8 +78,8 @@ class LocalNewsFragment :BaseFragment<NewsFragmentLocationBinding>(){
                 fBinding.tvNewsFrom.setText(s)
             }
             fBinding.btnYes.setOneClick {
-                CacheManager.addCityList(CacheManager.locationData)
-                updateNewsHome(CacheManager.cityList)
+                CacheManager.addAlreadyAddCity(CacheManager.locationData)
+                updateNewsHome(CacheManager.alreadyAddCityList)
             }
             fBinding.btnNo.setOneClick {
                 LocationManager.requestGPSPermission(WeakReference(rootActivity), onSuccess = {
@@ -95,9 +96,9 @@ class LocalNewsFragment :BaseFragment<NewsFragmentLocationBinding>(){
                                 }
                             }else{
                                 CacheManager.locationData = area
-                                CacheManager.addCityList(area)
+                                CacheManager.addAlreadyAddCity(area)
                                 withContext(Dispatchers.Main){
-                                    updateNewsHome(CacheManager.cityList)
+                                    updateNewsHome(CacheManager.alreadyAddCityList)
                                 }
                             }
                         }, failBack = {

@@ -107,7 +107,7 @@ class APP: Application(), ViewModelStoreOwner {
         val homeTabLiveData by lazy { ProtectedUnPeekLiveData<MutableList<JumpData>>() }
         val homeJumpLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
         val showRateLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
-        val locationListUpdateLiveData by lazy { ProtectedUnPeekLiveData<MutableList<LocationData>>() }
+        val locationListUpdateLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
 
 
     }
@@ -170,9 +170,14 @@ class APP: Application(), ViewModelStoreOwner {
         registerAny()
         initNFConfig()
         if (isDebug){
-            var map5 = "\n" +
-                    "{\"channel_id\":\"ch_a\",\"NEWS_ID\":\"8993843577094145\",\"tag\":\"tg_a\",\"body\":\"33.A driver was brutally attacked by a large group of people after having his vehicle damaged in downtown Los Angeles.\",\"image\":\"https://clevertap.com/wp-content/uploads/2021/05/Push-Notification-Header.png?w\\u003d1024\",\"title\":\"33-ck_a-ch_a-lbl_a-tg_a\",\"KEY_NOW_NAV_TYPE\":\"3\"}\n"
-            NFManager.showFCM(stringToMap(map5))
+            var map5 = "   {\n" +
+                    "        \"NEWS_ID\": \"11593148900048897\",\n" +
+                    "        \"body\": \"Internauta viralizou nas redes sociais após afirmar que avó estragou seu \\u0027Spotify Wrapped\\u0027\",\n" +
+                    "        \"image\": \"https://medias.itatiaia.com.br/dims4/default/34a0380/2147483647/strip/true/crop/1067x601+0+0/resize/1000x563!/quality/90/?url\\u003dhttps%3A%2F%2Fk2-prod-radio-itatiaia.s3.us-east-1.amazonaws.com%2Fbrightspot%2F1f%2F5a%2F71d4ee094407abb06b312895cc27%2Fpadre-marcelo-rossi.jpg\",\n" +
+                    "        \"title\": \"Jovem culpa avó por Padre Marcelo Rossi parar no topo do Spotify Wrapped e ele tem a melhor reação\",\n" +
+                    "        \"KEY_NOW_NAV_TYPE\": \"3\"\n" +
+                    "    }"
+                NFManager.showFCM(stringToMap(map5))
             AppLogs.dLog(NFManager.TAG,"language:${Locale.getDefault().language}  country:${Locale.getDefault().country}")
         }
         NFManager.notifyByTimerTask()

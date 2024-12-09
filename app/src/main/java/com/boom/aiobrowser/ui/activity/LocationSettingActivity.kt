@@ -50,7 +50,7 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
                         if (area == null){
                             loadingPop?.dismiss()
                         }else{
-                            CacheManager.addCityList(area)
+                            CacheManager.addAlreadyAddCity(area)
                             viewModel.value.completeLiveData.postValue(area)
                         }
                     }, failBack = {
@@ -66,7 +66,6 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
         }
         viewModel.value.completeLiveData.observe(this){
             loadingPop?.dismiss()
-            APP.locationListUpdateLiveData.postValue(CacheManager.cityList)
             finish()
         }
         viewModel.value.cityLiveData.observe(this){

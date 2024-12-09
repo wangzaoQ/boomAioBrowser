@@ -347,6 +347,11 @@
     <string name="app_popular_city">Popular City</string>
     <string name="app_local_guide_title">Set Your Location Get The Latest News Around You</string>
     <string name="app_news_from">News From</string>
+    <string name="app_mange_location">Manage Location</string>
+    <string name="app_location_search_tips">You\'ll Receive More Local News From The\nCities You Care About</string>
+    <string name="app_city_follow_title">You\'re located in</string>
+    <string name="app_remove">Remove</string>
+    <string name="app_follow">Follow</string>
 
 
 </resources>

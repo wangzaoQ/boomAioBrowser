@@ -328,9 +328,9 @@ object NFShow {
                 .setCustomBigContentView(largeRemote)
         } else {
             nfBuilder
-                .setCustomHeadsUpContentView(smallRemote)
-                .setCustomContentView(smallRemote)
-                .setCustomBigContentView(smallRemote)
+                .setCustomHeadsUpContentView(largeRemote)
+                .setCustomContentView(largeRemote)
+                .setCustomBigContentView(largeRemote)
         }
         return nfBuilder
     }

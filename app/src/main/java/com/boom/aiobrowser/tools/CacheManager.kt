@@ -78,6 +78,7 @@ object CacheManager {
     const val KV_FIRST_DOWNLOAD_TIPS3 = "KV_FIRST_DOWNLOAD_TIPS3"
     const val KV_FIRST_DOWNLOAD_TIPS4 = "KV_FIRST_DOWNLOAD_TIPS4"
     const val KV_USER_DATA = "KV_USER_DATA"
+    const val KV_CITY_ADD_LIST = "KV_CITY_ADD_LIST"
     const val KV_PRELOAD_AD_COUNT = "KV_PRELOAD_AD_COUNT"
 //    const val KV_FIRST_OPEN_APP = "KV_FIRST_OPEN_APP"
     const val KV_FIRST_ADD_SHORTCUT = "KV_FIRST_ADD_SHORTCUT"
@@ -483,47 +484,6 @@ object CacheManager {
             mmkv.encode(KV_RECENT_SEARCH_DATA, toJson(value))
         }
 
-    var cityList:MutableList<LocationData>
-        get() {
-            return getListByGson(mmkv.decodeString(KV_CITY_LIST),LocationData::class.java) ?: mutableListOf()
-        }
-        set(value) {
-            mmkv.encode(KV_CITY_LIST, toJson(value))
-        }
-
-    fun addCityList(data:LocationData?){
-        if (data==null)return
-        var list = cityList
-        var index = -1
-        for (i in 0 until list.size){
-            var area = list.get(i)
-            if (area.locationCity == data.locationCity){
-                index = i
-                break
-            }
-        }
-        if (index == -1){
-            list.add(data)
-        }
-        cityList = list
-    }
-
-    fun removeCityList(data:LocationData){
-        var list = cityList
-        var index = -1
-        for (i in 0 until list.size){
-            var area = list.get(i)
-            if (area.locationCity == data.locationCity){
-                index = i
-                break
-            }
-        }
-        if (index>=0){
-            list.removeAt(index)
-        }
-        cityList = list
-    }
-
 //
 //    var firstOpenApp:Boolean
 //        get(){
@@ -706,6 +666,45 @@ object CacheManager {
 
     fun getUser():UserData?{
         return getBeanByGson(mmkv.decodeString(KV_USER_DATA,""),UserData::class.java)
+    }
+
+    fun removeAlreadyAddCity(data: LocationData){
+        var list = alreadyAddCityList
+        var index = -1
+        for (i in 0 until list.size){
+            if (list.get(i).locationCity == data.locationCity){
+                index = i
+                break
+            }
+        }
+        if (index>=0){
+            list.removeAt(index)
+        }
+        alreadyAddCityList = list
+    }
+
+    var alreadyAddCityList:MutableList<LocationData>
+        get(){
+            return getListByGson(mmkv.decodeString(KV_CITY_ADD_LIST,""),LocationData::class.java)?: mutableListOf()
+        }
+        set(value) {
+            mmkv.encode(KV_CITY_ADD_LIST, toJson(value))
+        }
+
+    fun addAlreadyAddCity(data: LocationData?){
+        if (data == null)return
+        var list = alreadyAddCityList
+        var index = -1
+        for (i in 0 until list.size){
+            if (list.get(i).locationCity == data.locationCity){
+                index = i
+                break
+            }
+        }
+        if (index==-1){
+            list.add(data)
+        }
+        alreadyAddCityList = list
     }
 
     var dayPreloadCount: Int

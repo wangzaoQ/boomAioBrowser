@@ -184,7 +184,7 @@ object NFManager {
                     putString(PointValueKey.type,type)
                 })
             }
-            NFEnum.NF_NEWS.menuName,NFEnum.NF_LOCAL.menuName,NFEnum.NF_HOT.menuName,NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName,NFEnum.NF_NEW_USER.menuName,NFEnum.NF_DEFAULT.menuName -> {
+            NFEnum.NF_NEWS.menuName,NFEnum.NF_LOCAL.menuName,NFEnum.NF_HOT.menuName,NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName,NFEnum.NF_NEW_USER.menuName,NFEnum.NF_DEFAULT.menuName,NFEnum.NF_TREND.menuName -> {
                 var data = getBeanByGson(nfData,NewsData::class.java)
                 from = "push"
                 PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
@@ -212,6 +212,9 @@ object NFManager {
                     }
                     NFEnum.NF_DEFAULT.menuName -> {
                         id = NFEnum.NF_DEFAULT.position
+                    }
+                    NFEnum.NF_TREND.menuName->{
+                        id = NFEnum.NF_TREND.position
                     }
                     else -> {}
                 }

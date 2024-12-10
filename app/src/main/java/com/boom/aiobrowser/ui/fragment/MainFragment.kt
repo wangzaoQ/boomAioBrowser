@@ -91,6 +91,19 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         APP.homeTabLiveData.observe(this){
             updateTopTab()
         }
+        APP.locationListUpdateLiveData.observe(this){
+            var list = newsAdapter.mutableItems
+            var index = -1
+            for (i in 0 until list.size){
+                if(list.get(i).dataType == NewsData.TYPE_HOME_NEWS_LOCAL){
+                    index = i
+                    break
+                }
+            }
+            if (index>=0){
+                newsAdapter.removeAt(index)
+            }
+        }
 //        fBinding.topSearch.binding.ivRefresh.visibility = View.GONE
 //        fBinding.mainAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
 //            override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
@@ -134,7 +147,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             APP.instance.toNewsFrom = 0
             APP.homeJumpLiveData.postValue(1)
         }
-        newsAdapter.addOnDebouncedChildClick(R.id.tvMore) { adapter, view, position ->
+        newsAdapter.addOnDebouncedChildClick(R.id.rlMore) { adapter, view, position ->
             rootActivity.jumpActivity<TrendingNewsListActivity>()
         }
         newsAdapter.addOnDebouncedChildClick(R.id.rlSearch) { adapter, view, position ->
@@ -432,6 +445,8 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                         super.onScrolled(recyclerView, dx, dy)
                     }
                 })
+
+//                addItemDecoration(DividerItemDecoration(rootActivity, LinearLayout.VERTICAL))
             }
             refreshLayout.setOnRefreshListener {
                 fBinding.refreshLayout.isRefreshing = true
@@ -542,6 +557,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         APP.bottomLiveData.removeObservers(this)
         APP.jumpResumeData.removeObservers(this)
         APP.homeTabLiveData.removeObservers(this)
+        APP.locationListUpdateLiveData.removeObservers(this)
         super.onDestroy()
     }
 }

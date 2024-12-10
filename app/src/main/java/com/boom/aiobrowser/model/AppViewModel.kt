@@ -11,7 +11,10 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.getTopicDataLan
 import com.boom.aiobrowser.other.TopicConfig
+import com.ironsource.ol
+import kotlinx.coroutines.delay
 import java.util.Locale
+import kotlin.random.Random
 
 class AppViewModel : BaseDataModel() {
 
@@ -139,14 +142,62 @@ class AppViewModel : BaseDataModel() {
 
     fun getTrendsNews(){
         loadData(loadBack = {
-            var language = Locale.getDefault().language
-//            var target =  if (language == "pt"){
-//               "GTR-4"
-//            } else{
-//               "GTR-US-4"
+            var startTime = CacheManager.trendNewsTime
+            if (APP.isDebug){
+                if (System.currentTimeMillis()-startTime>1*60*1000){
+                    CacheManager.trendNews = mutableListOf()
+                }
+            }else{
+                if (System.currentTimeMillis()-startTime>4*60*60*1000){
+                    CacheManager.trendNews = mutableListOf()
+                }
+            }
+            var oldList = CacheManager.trendNews
+            if (oldList.isNullOrEmpty()){
+                var language = Locale.getDefault().language
+                var list = NetController.getTrendNews("GTR-4").data?: mutableListOf()
+                var index0 = 0
+                var index1 = 0
+                var index2 = 0
+                var endInx = list!!.size
+                if (endInx>15){
+                    endInx = 15
+                }
+                var count = 0
+                while (index0 == index1 || index0 == index2 || index1 == index2){
+                    count++
+                    index0 = Random.nextInt(3,endInx)
+                    delay(50)
+                    index1 = Random.nextInt(3, endInx)
+                    delay(50)
+                    index2 = Random.nextInt(3, endInx)
+                }
+                AppLogs.dLog(APP.instance.TAG,"取随机数 count:${count} index0:${index0} index1:${index1} index2:${index2}")
+                for (i in 0 until list.size){
+                    if (i == 0 || i == 1 || i == 2)continue
+                    if (i == index0 || i == index1 || i == index2 ){
+                        list.get(i).isTrendTop = true
+                    }
+                }
+                CacheManager.trendNews = list
+                CacheManager.trendNewsTime = System.currentTimeMillis()
+            }
+//            if (list.isNullOrEmpty().not()){
+//                if (oldList.isNotEmpty()){
+//                    var trendNewsIndex0 = CacheManager.trendNewsIndex0
+//                    var trendNewsIndex1 = CacheManager.trendNewsIndex1
+//                    var trendNewsIndex2 = CacheManager.trendNewsIndex2
+//                    if (trendNewsIndex0<list!!.size && trendNewsIndex0<oldList.size){
+//                        if (oldList.get(trendNewsIndex0) == )
+//                    }
+//                }else{
+//                    CacheManager.trendNews = oldList
+//                    CacheManager.trendNewsIndex0 = Random.nextInt(3, list!!.size)
+//                    CacheManager.trendNewsIndex1= Random.nextInt(3, list!!.size)
+//                    CacheManager.trendNewsIndex2= Random.nextInt(3, list!!.size)
+//                }
 //            }
-            var list = NetController.getTrendNews("GTR-4").data
-            CacheManager.trendNews = list?: mutableListOf()
+
             if (APP.isDebug){
                 NFShow.showNewsNFFilter(NFEnum.NF_TREND)
             }

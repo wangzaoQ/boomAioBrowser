@@ -349,7 +349,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     }
                     allowShowPop = false
                 }
-                NFEnum.NF_NEWS.menuName,NFEnum.NF_HOT.menuName,NFEnum.NF_NEW_USER.menuName,NFEnum.NF_LOCAL.menuName,NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName,NFEnum.NF_NEWS_FCM.menuName,NFEnum.NF_DEFAULT.menuName->{
+                NFEnum.NF_NEWS.menuName,NFEnum.NF_HOT.menuName,NFEnum.NF_NEW_USER.menuName,NFEnum.NF_LOCAL.menuName,NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName,NFEnum.NF_NEWS_FCM.menuName,NFEnum.NF_DEFAULT.menuName,NFEnum.NF_TREND.menuName->{
                     var data = getBeanByGson(nfData,NewsData::class.java)
 //                    var jumpData = JumpDataManager.getCurrentJumpData(tag="首页通知新闻跳转")
 //                    jumpData.apply {
@@ -360,9 +360,13 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 //                    }
 //                    JumpDataManager.updateCurrentJumpData(jumpData,tag="首页通知新闻跳转")
 //                    APP.jumpLiveData.postValue(jumpData)
-                    jumpActivity<WebDetailsActivity>(Bundle().apply {
-                        putString(ParamsConfig.JSON_PARAMS, toJson(data))
-                    })
+                    if (enumName == NFEnum.NF_TREND.menuName && nfTo == 0){
+                        jumpActivity<TrendingNewsListActivity>()
+                    }else{
+                        jumpActivity<WebDetailsActivity>(Bundle().apply {
+                            putString(ParamsConfig.JSON_PARAMS, toJson(data))
+                        })
+                    }
                     allowShowPop = false
                 }
                 ParamsConfig.WIDGET->{
@@ -376,6 +380,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     }
                     allowShowPop = false
                 }
+
                 else -> {}
             }
         }

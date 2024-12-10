@@ -43,7 +43,7 @@ class LocalNewsFragment :BaseFragment<NewsFragmentLocationBinding>(){
 
     override fun setListener() {
         APP.locationListUpdateLiveData.observe(this){
-            updateNewsHome(CacheManager.alreadyAddCityList)
+            updateNewsHome(CacheManager.alreadyAddCityList,it)
         }
         fBinding.apply {
             flAddCity.setOneClick {
@@ -59,7 +59,7 @@ class LocalNewsFragment :BaseFragment<NewsFragmentLocationBinding>(){
 
     var loadingPop:LoadingPop?=null
 
-    private fun updateNewsHome(list: MutableList<LocationData>) {
+    private fun updateNewsHome(list: MutableList<LocationData>,type:Int=0) {
         loadingPop?.dismiss()
         if (list.isNullOrEmpty()){
             fBinding.llLocationGuide.visibility = View.VISIBLE
@@ -175,8 +175,11 @@ class LocalNewsFragment :BaseFragment<NewsFragmentLocationBinding>(){
                     })
                 }
                 ViewPagerHelper.bind(tabLayout, vp)
-
-                vp.currentItem = list.size-1
+                if (type == 2){
+                    vp.currentItem = 0
+                }else{
+                    vp.currentItem = list.size-1
+                }
             }
         }
     }

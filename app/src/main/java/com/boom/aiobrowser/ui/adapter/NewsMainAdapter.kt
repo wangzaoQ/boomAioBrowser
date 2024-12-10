@@ -60,6 +60,7 @@ import com.boom.aiobrowser.tools.partitionList
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.activity.WebActivity
 import com.boom.aiobrowser.ui.activity.WebDetailsActivity
+import com.boom.aiobrowser.ui.fragment.MainFragment
 import com.boom.base.adapter4.BaseMultiItemAdapter
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import com.boom.drag.utils.DisplayUtils
@@ -323,7 +324,7 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                             tvNewsContent.visibility = View.VISIBLE
                             tvNewsContent.text = item.sissue
                             var params = (tvNewsTitle.layoutParams as ConstraintLayout.LayoutParams)
-                            params.topMargin = dp2px(0f)
+                            params.topMargin = dp2px(11f)
                         } else {
                             ivImg.visibility = View.VISIBLE
                             tvNewsContent.visibility = View.GONE
@@ -335,7 +336,13 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                 R.mipmap.ic_default_nf
                             )
                             var params = (tvNewsTitle.layoutParams as ConstraintLayout.LayoutParams)
-                            params.topMargin = dp2px(13f)
+                            params.topMargin = dp2px(12f)
+                            var paramsIv = (ivImg.layoutParams as ConstraintLayout.LayoutParams)
+                            if (position == 2 && fragmet is MainFragment){
+                                paramsIv.topMargin = dp2px(0f)
+                            }else{
+                                paramsIv.topMargin = dp2px(14f)
+                            }
                         }
                         tvNewsTitle.text = item.tconsi
                         GlideManager.loadImg(fragmet, ivSource, item.sschem)
@@ -427,6 +434,9 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                             rvList.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
                             var newsAdapter = TrendingNewsAdapter()
                             rvList.adapter = newsAdapter
+                            runCatching {
+                                rvList.removeItemDecorationAt(position)
+                            }
                             rvList.addItemDecoration(object : RecyclerView.ItemDecoration() {
 
                                 override fun getItemOffsets(

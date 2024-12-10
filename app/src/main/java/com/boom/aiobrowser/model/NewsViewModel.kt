@@ -28,10 +28,11 @@ class NewsViewModel : BaseDataModel() {
             loadData(loadBack = {
                 var list :MutableList<NewsData>
                 if (topic =="${NewsConfig.TOPIC_TAG}${APP.instance.getString(R.string.app_trending_today)}"){
-                    list = NetRequest.request(HashMap<String, Any>().apply {
-                        put("sessionKey", APP.instance.getString(R.string.app_trending_today))
-                    }) { NetController.getHotNewsList(HashMap()) }.data
-                        ?: mutableListOf()
+                    list = CacheManager.trendNews
+                    if (list.isNullOrEmpty()){
+                        list = NetController.getTrendNews("GTR-4").data?: mutableListOf()
+                    }
+                    CacheManager.trendNews = list
                     list.forEach {
                         it.dataType = NewsData.TYPE_DETAILS_NEWS_SEARCH
                     }

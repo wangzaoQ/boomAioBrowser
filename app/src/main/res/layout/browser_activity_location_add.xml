@@ -145,6 +145,7 @@
                         android:layout_gravity="end|center_vertical"
                         android:gravity="center"
                         android:padding="12dp"
+                        android:visibility="invisible"
                         android:src="@mipmap/ic_location_start"
                         android:textColor="@color/white"
                         android:textSize="16sp"></androidx.appcompat.widget.AppCompatImageView>

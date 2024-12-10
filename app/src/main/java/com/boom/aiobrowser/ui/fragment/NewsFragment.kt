@@ -150,6 +150,21 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
                 toLocationSetting()
             })
         }
+        if (topic == TopicConfig.TOPIC_FOR_YOU){
+            APP.locationListUpdateLiveData.observe(this){
+                var list = newsAdapter.mutableItems
+                var index = -1
+                for (i in 0 until list.size){
+                    if(list.get(i).dataType == NewsData.TYPE_HOME_NEWS_LOCAL){
+                        index = i
+                        break
+                    }
+                }
+                if (index>=0){
+                    newsAdapter.removeAt(index)
+                }
+            }
+        }
     }
 
     var loadingPop:LoadingPop?=null
@@ -164,6 +179,13 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
             layoutManager = LinearLayoutManager(rootActivity,LinearLayoutManager.VERTICAL,false)
             adapter = newsAdapter
         }
+    }
+
+    override fun onDestroy() {
+        if (topic == TopicConfig.TOPIC_FOR_YOU){
+            APP.locationListUpdateLiveData.removeObservers(this)
+        }
+        super.onDestroy()
     }
 
     companion object {

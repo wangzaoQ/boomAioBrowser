@@ -24,6 +24,7 @@ import com.boom.aiobrowser.ui.adapter.CityAdapter
 import com.boom.aiobrowser.ui.pop.LoadingPop
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
 
@@ -44,10 +45,15 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
             }
             ivGo.setOneClick {
                 LocationManager.requestGPSPermission(WeakReference(this@LocationSettingActivity), onSuccess = {
+                    var startTime = System.currentTimeMillis()
                     showPop()
                     this@LocationSettingActivity.addLaunch(success = {
                         var area = LocationManager.getAreaByGPS()
                         if (area == null){
+                            var middleTime = System.currentTimeMillis()-startTime
+                            if (middleTime<1000){
+                                delay(1000-middleTime)
+                            }
                             hidePop()
                         }else{
                             CacheManager.addAlreadyAddCity(area)
@@ -75,6 +81,17 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
             if (fromType == 1){
                 CacheManager.addAlreadyAddCity(it)
                 APP.locationListUpdateLiveData.postValue(1)
+            }else{
+                var list = CacheManager.alreadyAddCityList
+                if (list.isNullOrEmpty()){
+                    CacheManager.addAlreadyAddCity(it)
+                    APP.locationListUpdateLiveData.postValue(1)
+                }else{
+                    list.removeAt(0)
+                    list.add(0,it)
+                    CacheManager.alreadyAddCityList = list
+                    APP.locationListUpdateLiveData.postValue(2)
+                }
             }
             hidePop()
             finish()
@@ -127,8 +144,9 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
                 if (position>cityAdapter.items.size-1)return@setOnDebouncedItemClick
                 showPop()
                 var data = cityAdapter.items.get(position)
+                data.locationSuccess = true
                 CacheManager.locationData = data
-                viewModel.value.getAreaData(data,true)
+                viewModel.value.getAreaData(data,fromType == 1)
             }
         }
     }

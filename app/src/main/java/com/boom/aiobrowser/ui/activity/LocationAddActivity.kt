@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.base.BaseActivity
+import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.databinding.BrowserActivityLocationAddBinding
 import com.boom.aiobrowser.model.LocationViewModel
 import com.boom.aiobrowser.net.NetController
@@ -36,9 +37,7 @@ class LocationAddActivity: BaseActivity<BrowserActivityLocationAddBinding>() {
                 finish()
             }
             llRoot.setOneClick {
-                jumpActivity<LocationSettingActivity>(Bundle().apply {
-                    putInt(PointValueKey.from_type,1)
-                })
+                jumpActivity<LocationSettingActivity>()
             }
             tvSearch.setOneClick {
                 jumpActivity<LocationSettingActivity>(Bundle().apply {
@@ -51,9 +50,23 @@ class LocationAddActivity: BaseActivity<BrowserActivityLocationAddBinding>() {
         }
         APP.locationListUpdateLiveData.observe(this){
             if (it == 1){
-                addCityAdapter.submitList(CacheManager.alreadyAddCityList)
+                addCityAdapter.submitList(getFollowList())
                 viewModel.value.getRecommendAddList()
                 updateSize = true
+            }else if (it == 2){
+                //更新当前位置
+                var locationData = CacheManager.locationData
+                locationData?.apply {
+                    var builder = StringBuilder()
+                    builder.append(locationData.locationCity)
+                    if (locationData.locationCountryShort.isNullOrEmpty().not()){
+                        builder.append(",${locationData.locationCountryShort}")
+                    }
+                    if (locationData.code.isNullOrEmpty().not()){
+                        builder.append(",${locationData.code}")
+                    }
+                    acBinding.tvArea.text = builder.toString()
+                }
             }
         }
     }
@@ -93,11 +106,11 @@ class LocationAddActivity: BaseActivity<BrowserActivityLocationAddBinding>() {
                 if (position>addCityAdapter.items.size-1)return@setOnDebouncedItemClick
                 var data = addCityAdapter.items.get(position)
                 CacheManager.removeAlreadyAddCity(data)
-                addCityAdapter.submitList(CacheManager.alreadyAddCityList)
+                addCityAdapter.submitList(getFollowList())
                 viewModel.value.getRecommendAddList()
                 updateSize = true
             }
-            addCityAdapter.submitList(CacheManager.alreadyAddCityList)
+            addCityAdapter.submitList(getFollowList())
         }
         acBinding.rvRecommend.apply {
             layoutManager = LinearLayoutManager(this@LocationAddActivity,
@@ -119,7 +132,7 @@ class LocationAddActivity: BaseActivity<BrowserActivityLocationAddBinding>() {
                         CacheManager.addAlreadyAddCity(data)
                         withContext(Dispatchers.Main){
                             loadingPop?.dismiss()
-                            addCityAdapter.submitList(CacheManager.alreadyAddCityList)
+                            addCityAdapter.submitList(getFollowList())
                             viewModel.value.getRecommendAddList()
                             updateSize = true
                         }
@@ -130,6 +143,19 @@ class LocationAddActivity: BaseActivity<BrowserActivityLocationAddBinding>() {
             }
         }
         viewModel.value.getRecommendAddList()
+    }
+
+    private fun getFollowList(): List<LocationData>? {
+        var followList = CacheManager.alreadyAddCityList
+        var currentCity = CacheManager.locationData?.locationCity?:""
+        var deleteList = mutableListOf<LocationData>()
+        for (i in 0 until followList.size){
+            if (followList.get(i).locationCity == currentCity){
+                deleteList.add(followList.get(i))
+            }
+        }
+        followList.removeAll(deleteList)
+        return followList
     }
 
     override fun onDestroy() {

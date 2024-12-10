@@ -155,7 +155,7 @@ object NFViews {
                     setTextViewText(R.id.tvTitle, list[0].tconsi)
                     setOnClickPendingIntent(
                         R.id.ll1,
-                        getJumpIntent(0,list[0],enum)
+                        getJumpIntent(1,list[0],enum)
                     )
                     if (list[0].iassum.isNullOrEmpty()){
                         setViewVisibility(R.id.ivImg,View.GONE)
@@ -177,7 +177,7 @@ object NFViews {
                     setTextViewText(R.id.tvTitle3, list[2].tconsi)
                     setOnClickPendingIntent(
                         R.id.ll3,
-                        getJumpIntent(2,list[2],enum)
+                        getJumpIntent(1,list[2],enum)
                     )
                     if (list[2].iassum.isNullOrEmpty()){
                         setViewVisibility(R.id.ivImg3,View.GONE)
@@ -190,6 +190,10 @@ object NFViews {
 //            remoteViews.removeAllViews(R.id.rlView)
 //            val remoteViews2 = RemoteViews(APP.instance.packageName, R.layout.item_anim_layout)
 //            remoteViews.addView(R.id.rlView,remoteViews2)
+            remoteViews.setOnClickPendingIntent(
+                R.id.ll,
+                getJumpIntent(0,data= null,enum)
+            )
         }
         return remoteViews
     }

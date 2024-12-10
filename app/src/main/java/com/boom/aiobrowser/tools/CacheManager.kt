@@ -441,6 +441,13 @@ object CacheManager {
         set(value) {
             mmkv.encode(KV_TREND_NEWS_LIST, toJson(value))
         }
+    var trendNewsTime:Long
+        get() {
+            return mmkv.decodeLong("trendNewsTime", 0)
+        }
+        set(value) {
+            mmkv.encode("trendNewsTime", value)
+        }
 
     var pageList:MutableList<WebConfigData>
         get() {

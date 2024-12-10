@@ -227,7 +227,7 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
             if (data == null || data.locationArea.isNullOrEmpty()){
                 fBinding.tvLocation.text = getString(R.string.app_location)
             }else{
-                fBinding.tvLocation.text = data.locationArea
+                fBinding.tvLocation.text = data.locationCity
             }
         }
     }

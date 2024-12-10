@@ -38,6 +38,7 @@ import java.lang.ref.WeakReference
 
 class LocalNewsFragment :BaseFragment<NewsFragmentLocationBinding>(){
     override fun startLoadData() {
+        updateNewsHome(CacheManager.alreadyAddCityList)
     }
 
     override fun setListener() {
@@ -52,7 +53,6 @@ class LocalNewsFragment :BaseFragment<NewsFragmentLocationBinding>(){
     }
 
     override fun setShowView() {
-        updateNewsHome(CacheManager.alreadyAddCityList)
     }
 
     var fragmentAdapter: LocalNewsPagerStateAdapter? = null

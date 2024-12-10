@@ -39,7 +39,7 @@ interface NetService {
     /**
      * 新闻列表
      */
-    @GET("api/areas/search")
+    @GET("api/anail/srespo")
     suspend fun getLocation(@Query("loutsi") loutsi: Double,
                             @Query("linstr") linstr: Double): NetResponse<AreaData>
 

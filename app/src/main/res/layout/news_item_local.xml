@@ -10,6 +10,7 @@
         android:layout_height="56dp"
         android:layout_centerVertical="true"
         android:layout_marginStart="13dp"
+        app:srcCompat="@mipmap/ic_location"
         ></androidx.appcompat.widget.AppCompatImageView>
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"

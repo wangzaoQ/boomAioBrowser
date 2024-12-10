@@ -36,7 +36,6 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
         viewModels<LocationViewModel>()
     }
 
-    var loadingPop:LoadingPop?=null
 
     override fun setListener() {
         acBinding.apply {
@@ -49,16 +48,16 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
                     this@LocationSettingActivity.addLaunch(success = {
                         var area = LocationManager.getAreaByGPS()
                         if (area == null){
-                            loadingPop?.dismiss()
+                            hidePop()
                         }else{
                             CacheManager.addAlreadyAddCity(area)
                             viewModel.value.completeLiveData.postValue(area)
                         }
                     }, failBack = {
-                        loadingPop?.dismiss()
+                        hidePop()
                     })
                 }, onFail = {
-                    loadingPop?.dismiss()
+                    hidePop()
                 })
             }
             etSearch.setOnKeyListener { v, keyCode, event ->
@@ -70,14 +69,14 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
             }
         }
         viewModel.value.failLiveData.observe(this){
-            loadingPop?.dismiss()
+            hidePop()
         }
         viewModel.value.completeLiveData.observe(this){
             if (fromType == 1){
                 CacheManager.addAlreadyAddCity(it)
                 APP.locationListUpdateLiveData.postValue(1)
             }
-            loadingPop?.dismiss()
+            hidePop()
             finish()
         }
         viewModel.value.cityLiveData.observe(this){
@@ -87,7 +86,7 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
             cityAdapter.submitList(it)
         }
         viewModel.value.searchLiveData.observe(this){
-            loadingPop?.dismiss()
+            hidePop()
             cityAdapter.submitList(it)
         }
     }
@@ -97,14 +96,6 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
         val text =  acBinding.etSearch.text.toString().trim()
         viewModel.value.searchCityList(text)
         hideKeyBoard(acBinding.etSearch)
-    }
-
-    fun showPop(){
-        var isShowing = loadingPop?.isShowing?:false
-        if (isShowing.not()){
-            loadingPop = LoadingPop(this@LocationSettingActivity)
-            loadingPop!!.createPop()
-        }
     }
 
     val cityAdapter by lazy {

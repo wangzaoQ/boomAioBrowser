@@ -72,9 +72,10 @@ class LocationViewModel:BaseDataModel() {
                 }else{
                     locationData!!.locationArea = asilve
                 }
-                CacheManager.locationData = locationData
                 if (addCityList){
                     CacheManager.addAlreadyAddCity(locationData)
+                }else{
+                    CacheManager.locationData = locationData
                 }
                 completeLiveData.postValue(locationData)
             }

@@ -8,12 +8,17 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserActivityLocationAddBinding
 import com.boom.aiobrowser.model.LocationViewModel
+import com.boom.aiobrowser.net.NetController
+import com.boom.aiobrowser.net.NetRequest
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.ui.adapter.CityAlreadyAddAdapter
 import com.boom.aiobrowser.ui.adapter.CityRecommendAdapter
+import com.boom.aiobrowser.ui.pop.LoadingPop
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class LocationAddActivity: BaseActivity<BrowserActivityLocationAddBinding>() {
     override fun getBinding(inflater: LayoutInflater): BrowserActivityLocationAddBinding {
@@ -101,10 +106,27 @@ class LocationAddActivity: BaseActivity<BrowserActivityLocationAddBinding>() {
             recommendCityAdapter.setOnDebouncedItemClick{adapter, view, position ->
                 if (position>recommendCityAdapter.items.size-1)return@setOnDebouncedItemClick
                 var data = recommendCityAdapter.items.get(position)
-                CacheManager.addAlreadyAddCity(data)
-                addCityAdapter.submitList(CacheManager.alreadyAddCityList)
-                viewModel.value.getRecommendAddList()
-                updateSize = true
+                showPop()
+                addLaunch(success = {
+                    NetRequest.request { NetController.getLocation(locationData!!.longitude, locationData!!.latitude) }.data?.apply {
+                        if (asilve.isNullOrEmpty()){
+                            if (acoat!=null && acoat!!.asilve.isNotEmpty()){
+                                data!!.locationArea = acoat!!.asilve
+                            }
+                        }else{
+                            data!!.locationArea = asilve
+                        }
+                        CacheManager.addAlreadyAddCity(data)
+                        withContext(Dispatchers.Main){
+                            loadingPop?.dismiss()
+                            addCityAdapter.submitList(CacheManager.alreadyAddCityList)
+                            viewModel.value.getRecommendAddList()
+                            updateSize = true
+                        }
+                    }
+                }, failBack = {
+                    hidePop()
+                })
             }
         }
         viewModel.value.getRecommendAddList()

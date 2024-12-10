@@ -25,6 +25,7 @@ import com.boom.aiobrowser.tools.clearClipboard
 import com.boom.aiobrowser.tools.getClipContent
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.WebParseActivity
+import com.boom.aiobrowser.ui.pop.LoadingPop
 import com.boom.aiobrowser.ui.pop.ProcessingTextPop
 import com.boom.newsnow.view.statusbar.StatusBarHelper
 import kotlinx.coroutines.CoroutineDispatcher
@@ -250,5 +251,20 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
             }
         }
     }
+
+    var loadingPop:LoadingPop?=null
+
+    fun showPop(){
+        var isShowing = loadingPop?.isShowing?:false
+        if (isShowing.not()){
+            loadingPop = LoadingPop(this)
+            loadingPop!!.createPop()
+        }
+    }
+
+    fun hidePop(){
+        loadingPop?.dismiss()
+    }
+
 
 }

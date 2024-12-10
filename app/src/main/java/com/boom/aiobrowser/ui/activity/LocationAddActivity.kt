@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.ui.activity
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -7,6 +8,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserActivityLocationAddBinding
 import com.boom.aiobrowser.model.LocationViewModel
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.ui.adapter.CityAlreadyAddAdapter
@@ -29,11 +31,25 @@ class LocationAddActivity: BaseActivity<BrowserActivityLocationAddBinding>() {
                 finish()
             }
             llRoot.setOneClick {
-                jumpActivity<LocationSettingActivity>()
+                jumpActivity<LocationSettingActivity>(Bundle().apply {
+                    putInt(PointValueKey.from_type,1)
+                })
+            }
+            tvSearch.setOneClick {
+                jumpActivity<LocationSettingActivity>(Bundle().apply {
+                    putInt(PointValueKey.from_type,1)
+                })
             }
         }
         viewModel.value.recommendLiveData.observe(this){
             recommendCityAdapter.submitList(it)
+        }
+        APP.locationListUpdateLiveData.observe(this){
+            if (it == 1){
+                addCityAdapter.submitList(CacheManager.alreadyAddCityList)
+                viewModel.value.getRecommendAddList()
+                updateSize = true
+            }
         }
     }
 
@@ -44,6 +60,11 @@ class LocationAddActivity: BaseActivity<BrowserActivityLocationAddBinding>() {
     }
     val recommendCityAdapter by lazy {
         CityRecommendAdapter()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 
     override fun setShowView() {
@@ -90,7 +111,10 @@ class LocationAddActivity: BaseActivity<BrowserActivityLocationAddBinding>() {
     }
 
     override fun onDestroy() {
-        if (updateSize) APP.locationListUpdateLiveData.postValue(0)
+        APP.locationListUpdateLiveData.removeObservers(this)
+        if (updateSize){
+            APP.locationListUpdateLiveData.postValue(0)
+        }
         super.onDestroy()
     }
 }

@@ -157,9 +157,10 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             CacheManager.locationData = data
             CacheManager.addAlreadyAddCity(data)
             newsAdapter.removeAt(position)
-            fBinding.rv.scrollToPosition(0)
-            page = 1
-            loadData()
+            APP.locationListUpdateLiveData.postValue(0)
+//            fBinding.rv.smoothScrollToPosition(0)
+//            page = 1
+//            loadData()
         }
         newsAdapter.addOnDebouncedChildClick(R.id.btnNo) { adapter, view, position ->
             LocationManager.requestGPSPermission(WeakReference(rootActivity), onSuccess = {
@@ -178,8 +179,10 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                             CacheManager.addAlreadyAddCity(area)
                             withContext(Dispatchers.Main){
                                 page = 1
-                                fBinding.refreshLayout.isRefreshing = true
+                                fBinding.rv.smoothScrollToPosition(0)
+                                loadData()
                             }
+                            APP.locationListUpdateLiveData.postValue(0)
                         }
                     }, failBack = {
                         toLocationSetting()

@@ -38,7 +38,6 @@ import java.lang.ref.WeakReference
 
 class LocalNewsFragment :BaseFragment<NewsFragmentLocationBinding>(){
     override fun startLoadData() {
-
     }
 
     override fun setListener() {

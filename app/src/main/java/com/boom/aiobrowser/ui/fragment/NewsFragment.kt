@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.NewsData
@@ -17,12 +18,20 @@ import com.boom.aiobrowser.other.TopicConfig
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.LocationManager
 import com.boom.aiobrowser.tools.toJson
+import com.boom.aiobrowser.ui.activity.LocationSettingActivity
 import com.boom.aiobrowser.ui.activity.WebActivity
 import com.boom.aiobrowser.ui.activity.WebDetailsActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
+import com.boom.aiobrowser.ui.pop.LoadingPop
+import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.lang.ref.WeakReference
 
 class NewsFragment: BaseFragment<NewsFragmentBinding>() {
 
@@ -102,6 +111,51 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
                 })
             }
         }
+        newsAdapter.addOnDebouncedChildClick(R.id.btnYes) { adapter, view, position ->
+            var data = CacheManager.locationData
+            data?.locationSuccess = true
+            CacheManager.locationData = data
+            CacheManager.addAlreadyAddCity(data)
+            newsAdapter.removeAt(position)
+            APP.locationListUpdateLiveData.postValue(0)
+        }
+        newsAdapter.addOnDebouncedChildClick(R.id.btnNo) { adapter, view, position ->
+            LocationManager.requestGPSPermission(WeakReference(rootActivity), onSuccess = {
+                var isShowing = loadingPop?.isShowing?:false
+                if (isShowing.not()){
+                    loadingPop = LoadingPop(rootActivity)
+                    loadingPop!!.createPop()
+                    rootActivity.addLaunch(success = {
+                        var area = LocationManager.getAreaByGPS()
+                        if (area == null){
+                            withContext(Dispatchers.Main){
+                                toLocationSetting()
+                            }
+                        }else{
+                            CacheManager.locationData = area
+                            CacheManager.addAlreadyAddCity(area)
+                            withContext(Dispatchers.Main){
+                                page = 1
+                                fBinding.newsRv.smoothScrollToPosition(0)
+                                loadData()
+                            }
+                            APP.locationListUpdateLiveData.postValue(0)
+                        }
+                    }, failBack = {
+                        toLocationSetting()
+                    })
+                }
+
+            }, onFail = {
+                toLocationSetting()
+            })
+        }
+    }
+
+    var loadingPop:LoadingPop?=null
+    private fun toLocationSetting() {
+        loadingPop?.dismiss()
+        rootActivity.jumpActivity<LocationSettingActivity>()
     }
 
     override fun setShowView() {

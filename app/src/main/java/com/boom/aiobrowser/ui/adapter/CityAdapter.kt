@@ -49,11 +49,11 @@ class CityAdapter() : BaseQuickAdapter<LocationData, CityAdapter.VH>() {
                 builder.append(",${item.code}")
             }
             tvCity.text = builder.toString()
-            if (item.locationCheck) {
-                ivCheck.visibility = View.VISIBLE
-            }else{
-                ivCheck.visibility = View.GONE
-            }
+//            if (item.locationCheck) {
+//                ivCheck.visibility = View.VISIBLE
+//            }else{
+//                ivCheck.visibility = View.GONE
+//            }
         }
     }
 

@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.ui.activity
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -60,11 +61,22 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
                     loadingPop?.dismiss()
                 })
             }
+            etSearch.setOnKeyListener { v, keyCode, event ->
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    search()
+                    return@setOnKeyListener true
+                }
+                return@setOnKeyListener false
+            }
         }
         viewModel.value.failLiveData.observe(this){
             loadingPop?.dismiss()
         }
         viewModel.value.completeLiveData.observe(this){
+            if (fromType == 1){
+                CacheManager.addAlreadyAddCity(it)
+                APP.locationListUpdateLiveData.postValue(1)
+            }
             loadingPop?.dismiss()
             finish()
         }
@@ -74,6 +86,17 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
             }
             cityAdapter.submitList(it)
         }
+        viewModel.value.searchLiveData.observe(this){
+            loadingPop?.dismiss()
+            cityAdapter.submitList(it)
+        }
+    }
+
+    private fun search() {
+        showPop()
+        val text =  acBinding.etSearch.text.toString().trim()
+        viewModel.value.searchCityList(text)
+        hideKeyBoard(acBinding.etSearch)
     }
 
     fun showPop(){
@@ -88,7 +111,11 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
         CityAdapter()
     }
 
+    // 0 更改位置 1 添加关注城市列表
+    var fromType = 0
+
     override fun setShowView() {
+        fromType = intent.getIntExtra(PointValueKey.from_type,0)
         var locationData = CacheManager.locationData
         locationData?.apply {
             var builder = StringBuilder()

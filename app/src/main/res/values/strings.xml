@@ -342,14 +342,15 @@
     <string name="app_latest_breaking_news">Latest Breaking News</string>
     <string name="app_download_progress">Download Progress</string>
     <string name="app_location_title">Are you currently in</string>
-    <string name="app_search_city">Search City</string>
-    <string name="app_current_location">Current Location</string>
+    <string name="app_search_city">Search for zip code or city</string>
+    <string name="app_current_location">You\'re located in</string>
     <string name="app_popular_city">Popular City</string>
     <string name="app_local_guide_title">Set Your Location Get The Latest News Around You</string>
     <string name="app_news_from">News From</string>
-    <string name="app_mange_location">Manage Location</string>
-    <string name="app_location_search_tips">You\'ll Receive More Local News From The\nCities You Care About</string>
-    <string name="app_city_follow_title">You\'re located in</string>
+    <string name="app_mange_location">Manage Your Cities</string>
+    <string name="app_location_search_tips">You will receive more local news from thecities you followed</string>
+    <string name="app_city_follow_title">Other Cities You Followed</string>
+    <string name="app_other_city_follow_title">People are following</string>
     <string name="app_remove">Remove</string>
     <string name="app_follow">Follow</string>
 

@@ -23,6 +23,15 @@ class LocationData {
                 locationCheck = true
             }
         }
+        fun createDataBySearch(city: String, country: String, lon: Double, lat: Double): LocationData {
+            return LocationData().apply {
+                longitude = lon
+                latitude = lat
+                locationCity = city
+                locationCountryShort = country
+                locationType = -1
+            }
+        }
     }
 
     //经度

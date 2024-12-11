@@ -48,6 +48,7 @@ import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -166,6 +167,11 @@ class APP: Application(), ViewModelStoreOwner {
 
                 initVideo()
                 initOther()
+            }
+            delay(3000)
+            if (APP.instance.lifecycleApp.stack.isNullOrEmpty()){
+                //后台拉活
+                isAllowNFPreload = true
             }
         }
         registerAny()

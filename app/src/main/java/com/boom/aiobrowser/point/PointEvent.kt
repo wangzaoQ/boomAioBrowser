@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.point
 
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import com.adjust.sdk.Adjust
@@ -56,6 +57,7 @@ object PointEvent {
             val jsonObject = GeneralParams.getGenericParams().apply {
                 put("mazda", JSONObject().apply {
                     put("uphold","build/${Build.ID}")
+                    put("sargent", Uri.encode(referrerDetails?.installReferrer?:""))
                     put("cornwall", APP.instance.webUA)
                     put("sunspot","reject")
                     put("logan", referrerDetails?.referrerClickTimestampSeconds?:0)
@@ -165,11 +167,11 @@ object PointEvent {
     fun getLTVList(): MutableList<Double> {
         val ad = mutableListOf<Double>()
         val jsonObject = JSONObject(FirebaseConfig.ltvConfig)
-        ad.add(0, jsonObject.getDouble("nowltv_top50"))
-        ad.add(1, jsonObject.getDouble("nowltv_top40"))
-        ad.add(2, jsonObject.getDouble("nowltv_top30"))
-        ad.add(3, jsonObject.getDouble("nowltv_top20"))
-        ad.add(4, jsonObject.getDouble("nowltv_top10"))
+        ad.add(0, jsonObject.getDouble("aio_top50percent"))
+        ad.add(1, jsonObject.getDouble("aio_top40percent"))
+        ad.add(2, jsonObject.getDouble("aio_top30percent"))
+        ad.add(3, jsonObject.getDouble("aio_top20percent"))
+        ad.add(4, jsonObject.getDouble("aio_top10percent"))
         return ad
     }
 

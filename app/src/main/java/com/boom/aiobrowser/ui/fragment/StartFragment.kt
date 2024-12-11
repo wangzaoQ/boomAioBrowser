@@ -161,6 +161,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
 
     override fun setShowView() {
         APP.instance.firstInsertHomeAD = true
+        APP.instance.isAllowNFPreload = false
         fBinding.btnBrowser.isEnabled = fBinding.btnCheck.isChecked
         fBinding.btnCheck.setOnCheckedChangeListener { compoundButton, b ->
             fBinding.btnBrowser.isEnabled = fBinding.btnCheck.isChecked

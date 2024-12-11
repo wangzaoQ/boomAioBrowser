@@ -327,4 +327,29 @@
     <string name="app_logout_title">Sei sicuro di voler uscire?</string>
     <string name="app_logout_clear">Esci e cancella tutti i dati</string>
     <string name="app_logout">Esci</string>
+
+    <string name="app_local_brief">Riepilogo Locale</string>
+    <string name="app_trending_today">Tendenze Oggi</string>
+    <string name="app_trend_title">Indovina Cosa Vuoi Cercare</string>
+    <string name="app_movie_title">Titolo del Film</string>
+    <string name="app_movie_country">Paese</string>
+    <string name="app_movie_release_date">Data di Uscita</string>
+    <string name="app_movie">film</string>
+    <string name="app_break_news">Ultime Notizie</string>
+    <string name="app_guide_top_title">Tieni le informazioni sincronizzate per restare sempre un passo avanti</string>
+    <string name="app_latest_breaking_news">Ultime Notizie in Tempo Reale</string>
+    <string name="app_download_progress">Progresso del Download</string>
+    <string name="app_location_title">Sei attualmente a</string>
+    <string name="app_search_city">Cerca per CAP o città</string>
+    <string name="app_current_location">La tua posizione è</string>
+    <string name="app_popular_city">Città Popolare</string>
+    <string name="app_local_guide_title">Imposta la tua posizione per ricevere le ultime notizie da vicino</string>
+    <string name="app_news_from">Notizie da</string>
+    <string name="app_mange_location">Gestisci le tue città</string>
+    <string name="app_location_search_tips">Riceverai più notizie locali dalle città che segui</string>
+    <string name="app_city_follow_title">Altre città che segui</string>
+    <string name="app_other_city_follow_title">Altri seguono</string>
+    <string name="app_remove">Rimuovi</string>
+    <string name="app_follow">Segui</string>
+    <string name="app_gps_fail">Acquisizione della posizione fallita</string>
 </resources>

@@ -326,4 +326,29 @@
     <string name="app_logout_title">هل أنت متأكد أنك تريد تسجيل الخروج؟</string>
     <string name="app_logout_clear">تسجيل الخروج ومسح جميع البيانات</string>
     <string name="app_logout">تسجيل الخروج</string>
+
+    <string name="app_local_brief">ملخص الموقع</string>
+    <string name="app_trending_today">الترندات اليوم</string>
+    <string name="app_trend_title">افترض أنك تريد البحث</string>
+    <string name="app_movie_title">عنوان الفيلم</string>
+    <string name="app_movie_country">الدولة</string>
+    <string name="app_movie_release_date">تاريخ الإصدار</string>
+    <string name="app_movie">فيلم</string>
+    <string name="app_break_news">أخبار عاجلة</string>
+    <string name="app_guide_top_title">ابقَ متزامنًا مع المعلومات، حافظ على تقدمك خطوة للأمام</string>
+    <string name="app_latest_breaking_news">أحدث الأخبار العاجلة</string>
+    <string name="app_download_progress">تقدم التحميل</string>
+    <string name="app_location_title">هل أنت في</string>
+    <string name="app_search_city">ابحث عن الرمز البريدي أو المدينة</string>
+    <string name="app_current_location">موقعك الحالي</string>
+    <string name="app_popular_city">المدينة الشهيرة</string>
+    <string name="app_local_guide_title">حدد موقعك للحصول على أحدث الأخبار من حولك</string>
+    <string name="app_news_from">أخبار من</string>
+    <string name="app_mange_location">إدارة مدنك</string>
+    <string name="app_location_search_tips">سوف تتلقى المزيد من الأخبار المحلية من المدن التي تابعتها</string>
+    <string name="app_city_follow_title">مدن أخرى تابعتها</string>
+    <string name="app_other_city_follow_title">المدن التي يتابعها الآخرون</string>
+    <string name="app_remove">إزالة</string>
+    <string name="app_follow">تابع</string>
+    <string name="app_gps_fail">فشل في الحصول على الموقع</string>
 </resources>

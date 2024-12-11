@@ -327,4 +327,29 @@
     <string name="app_logout_title">Bạn có chắc chắn muốn đăng xuất không?</string>
     <string name="app_logout_clear">Đăng xuất và xóa toàn bộ dữ liệu</string>
     <string name="app_logout">Đăng xuất</string>
+
+    <string name="app_local_brief">Tóm tắt địa phương</string>
+    <string name="app_trending_today">Xu hướng hôm nay</string>
+    <string name="app_trend_title">Đoán bạn muốn tìm gì</string>
+    <string name="app_movie_title">Tên phim</string>
+    <string name="app_movie_country">Quốc gia</string>
+    <string name="app_movie_release_date">Ngày phát hành</string>
+    <string name="app_movie">phim</string>
+    <string name="app_break_news">Tin tức nóng</string>
+    <string name="app_guide_top_title">Giữ thông tin đồng bộ giúp bạn đi trước một bước</string>
+    <string name="app_latest_breaking_news">Tin tức nóng mới nhất</string>
+    <string name="app_download_progress">Tiến trình tải về</string>
+    <string name="app_location_title">Bạn hiện đang ở</string>
+    <string name="app_search_city">Tìm kiếm mã bưu điện hoặc thành phố</string>
+    <string name="app_current_location">Vị trí của bạn là</string>
+    <string name="app_popular_city">Thành phố phổ biến</string>
+    <string name="app_local_guide_title">Cài đặt vị trí của bạn để nhận tin tức mới nhất xung quanh bạn</string>
+    <string name="app_news_from">Tin tức từ</string>
+    <string name="app_mange_location">Quản lý các thành phố của bạn</string>
+    <string name="app_location_search_tips">Bạn sẽ nhận được nhiều tin tức địa phương hơn từ các thành phố bạn theo dõi</string>
+    <string name="app_city_follow_title">Các thành phố khác bạn theo dõi</string>
+    <string name="app_other_city_follow_title">Những thành phố đang được người khác theo dõi</string>
+    <string name="app_remove">Xóa</string>
+    <string name="app_follow">Theo dõi</string>
+    <string name="app_gps_fail">Lỗi lấy vị trí</string>
 </resources>

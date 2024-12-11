@@ -326,4 +326,29 @@
     <string name="app_logout_title">ログアウトしてもよろしいですか？</string>
     <string name="app_logout_clear">ログアウトしてすべてのデータを削除</string>
     <string name="app_logout">ログアウト</string>
+
+    <string name="app_local_brief">ローカル概要</string>
+    <string name="app_trending_today">今日のトレンド</string>
+    <string name="app_trend_title">検索したい内容を予測</string>
+    <string name="app_movie_title">映画タイトル</string>
+    <string name="app_movie_country">国</string>
+    <string name="app_movie_release_date">公開日</string>
+    <string name="app_movie">映画</string>
+    <string name="app_break_news">速報</string>
+    <string name="app_guide_top_title">情報を同期して一歩先を行こう</string>
+    <string name="app_latest_breaking_news">最新速報</string>
+    <string name="app_download_progress">ダウンロード進捗</string>
+    <string name="app_location_title">現在地は</string>
+    <string name="app_search_city">郵便番号または都市を検索</string>
+    <string name="app_current_location">現在の場所は</string>
+    <string name="app_popular_city">人気の都市</string>
+    <string name="app_local_guide_title">位置情報を設定して周辺の最新ニュースを入手</string>
+    <string name="app_news_from">ニュース元</string>
+    <string name="app_mange_location">都市を管理</string>
+    <string name="app_location_search_tips">フォローしている都市から、より多くのローカルニュースを受け取ります</string>
+    <string name="app_city_follow_title">フォローしている他の都市</string>
+    <string name="app_other_city_follow_title">他の人がフォローしている都市</string>
+    <string name="app_remove">削除</string>
+    <string name="app_follow">フォロー</string>
+    <string name="app_gps_fail">位置情報の取得に失敗しました</string>
 </resources>

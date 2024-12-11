@@ -328,4 +328,29 @@
     <string name="app_logout_title">Möchten Sie sich wirklich abmelden?</string>
     <string name="app_logout_clear">Abmelden und alle Daten löschen</string>
     <string name="app_logout">Abmelden</string>
+
+    <string name="app_local_brief">Lokale Zusammenfassung</string>
+    <string name="app_trending_today">Trends Heute</string>
+    <string name="app_trend_title">Vermutlich möchten Sie suchen</string>
+    <string name="app_movie_title">Filmtitel</string>
+    <string name="app_movie_country">Land</string>
+    <string name="app_movie_release_date">Veröffentlichungsdatum</string>
+    <string name="app_movie">Film</string>
+    <string name="app_break_news">Eilmeldungen</string>
+    <string name="app_guide_top_title">Halten Sie die Informationen synchron und bleiben Sie immer einen Schritt voraus</string>
+    <string name="app_latest_breaking_news">Neueste Eilmeldungen</string>
+    <string name="app_download_progress">Download-Fortschritt</string>
+    <string name="app_location_title">Sind Sie gerade in</string>
+    <string name="app_search_city">Postleitzahl oder Stadt suchen</string>
+    <string name="app_current_location">Ihr Standort ist</string>
+    <string name="app_popular_city">Beliebte Stadt</string>
+    <string name="app_local_guide_title">Legen Sie Ihren Standort fest und erhalten Sie die neuesten Nachrichten in Ihrer Nähe</string>
+    <string name="app_news_from">Nachrichten von</string>
+    <string name="app_mange_location">Verwalten Sie Ihre Städte</string>
+    <string name="app_location_search_tips">Sie erhalten mehr lokale Nachrichten von den Städten, denen Sie folgen</string>
+    <string name="app_city_follow_title">Andere Städte, denen Sie folgen</string>
+    <string name="app_other_city_follow_title">Städte, denen andere folgen</string>
+    <string name="app_remove">Entfernen</string>
+    <string name="app_follow">Folgen</string>
+    <string name="app_gps_fail">Standortabfrage fehlgeschlagen</string>
 </resources>

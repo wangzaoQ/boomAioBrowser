@@ -329,4 +329,29 @@
     <string name="app_logout_title">Tem certeza de que deseja sair?</string>
     <string name="app_logout_clear">Sair e limpar todos os dados</string>
     <string name="app_logout">Sair</string>
+
+    <string name="app_local_brief">Resumo Local</string>
+    <string name="app_trending_today">Tendências de Hoje</string>
+    <string name="app_trend_title">Adivinha o que você quer buscar</string>
+    <string name="app_movie_title">Título do Filme</string>
+    <string name="app_movie_country">País</string>
+    <string name="app_movie_release_date">Data de Lançamento</string>
+    <string name="app_movie">filme</string>
+    <string name="app_break_news">Últimas Notícias</string>
+    <string name="app_guide_top_title">Mantenha as informações sincronizadas e fique um passo à frente</string>
+    <string name="app_latest_breaking_news">Últimas Notícias de Última Hora</string>
+    <string name="app_download_progress">Progresso do Download</string>
+    <string name="app_location_title">Você está atualmente em</string>
+    <string name="app_search_city">Pesquise por CEP ou cidade</string>
+    <string name="app_current_location">Você está localizado em</string>
+    <string name="app_popular_city">Cidade Popular</string>
+    <string name="app_local_guide_title">Defina sua localização para obter as últimas notícias ao seu redor</string>
+    <string name="app_news_from">Notícias de</string>
+    <string name="app_mange_location">Gerenciar suas Cidades</string>
+    <string name="app_location_search_tips">Você receberá mais notícias locais das cidades que você segue</string>
+    <string name="app_city_follow_title">Outras Cidades que Você Segue</string>
+    <string name="app_other_city_follow_title">Pessoas estão seguindo</string>
+    <string name="app_remove">Remover</string>
+    <string name="app_follow">Seguir</string>
+    <string name="app_gps_fail">Falha ao obter localização</string>
 </resources>

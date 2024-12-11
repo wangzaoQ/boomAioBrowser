@@ -327,4 +327,29 @@
     <string name="app_logout_title">Êtes-vous sûr de vouloir vous déconnecter ?</string>
     <string name="app_logout_clear">Déconnexion et effacement de toutes les données</string>
     <string name="app_logout">Déconnexion</string>
+
+    <string name="app_local_brief">Résumé local</string>
+    <string name="app_trending_today">Tendances du jour</string>
+    <string name="app_trend_title">Devinez ce que vous voulez rechercher</string>
+    <string name="app_movie_title">Titre du film</string>
+    <string name="app_movie_country">Pays</string>
+    <string name="app_movie_release_date">Date de sortie</string>
+    <string name="app_movie">Film</string>
+    <string name="app_break_news">Dernières nouvelles</string>
+    <string name="app_guide_top_title">Gardez les informations synchronisées et prenez toujours une longueur d\'avance</string>
+    <string name="app_latest_breaking_news">Dernières nouvelles de dernière minute</string>
+    <string name="app_download_progress">Progression du téléchargement</string>
+    <string name="app_location_title">Êtes-vous actuellement à</string>
+    <string name="app_search_city">Rechercher un code postal ou une ville</string>
+    <string name="app_current_location">Vous êtes situé à</string>
+    <string name="app_popular_city">Ville populaire</string>
+    <string name="app_local_guide_title">Définissez votre emplacement pour recevoir les dernières nouvelles près de chez vous</string>
+    <string name="app_news_from">Nouvelles de</string>
+    <string name="app_mange_location">Gérer vos villes</string>
+    <string name="app_location_search_tips">Vous recevrez plus de nouvelles locales des villes que vous suivez</string>
+    <string name="app_city_follow_title">Autres villes que vous suivez</string>
+    <string name="app_other_city_follow_title">Les villes que les autres suivent</string>
+    <string name="app_remove">Supprimer</string>
+    <string name="app_follow">Suivre</string>
+    <string name="app_gps_fail">Échec de l\'acquisition de la position</string>
 </resources>

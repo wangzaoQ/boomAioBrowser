@@ -328,4 +328,29 @@
     <string name="app_logout_title">คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ?</string>
     <string name="app_logout_clear">ออกจากระบบและลบข้อมูลทั้งหมด</string>
     <string name="app_logout">ออกจากระบบ</string>
+
+    <string name="app_local_brief">สรุปท้องถิ่น</string>
+    <string name="app_trending_today">เทรนด์วันนี้</string>
+    <string name="app_trend_title">เดาว่าคุณต้องการค้นหาอะไร</string>
+    <string name="app_movie_title">ชื่อภาพยนตร์</string>
+    <string name="app_movie_country">ประเทศ</string>
+    <string name="app_movie_release_date">วันที่ออกฉาย</string>
+    <string name="app_movie">ภาพยนตร์</string>
+    <string name="app_break_news">ข่าวด่วน</string>
+    <string name="app_guide_top_title">รักษาข้อมูลให้ซิงค์และช่วยให้คุณก้าวนำเสมอ</string>
+    <string name="app_latest_breaking_news">ข่าวด่วนล่าสุด</string>
+    <string name="app_download_progress">ความคืบหน้าการดาวน์โหลด</string>
+    <string name="app_location_title">คุณอยู่ที่</string>
+    <string name="app_search_city">ค้นหารหัสไปรษณีย์หรือเมือง</string>
+    <string name="app_current_location">ตำแหน่งของคุณคือ</string>
+    <string name="app_popular_city">เมืองที่ได้รับความนิยม</string>
+    <string name="app_local_guide_title">ตั้งค่าตำแหน่งของคุณเพื่อรับข่าวสารล่าสุดรอบตัวคุณ</string>
+    <string name="app_news_from">ข่าวจาก</string>
+    <string name="app_mange_location">จัดการเมืองของคุณ</string>
+    <string name="app_location_search_tips">คุณจะได้รับข่าวท้องถิ่นมากขึ้นจากเมืองที่คุณติดตาม</string>
+    <string name="app_city_follow_title">เมืองอื่น ๆ ที่คุณติดตาม</string>
+    <string name="app_other_city_follow_title">เมืองที่ผู้คนติดตาม</string>
+    <string name="app_remove">ลบ</string>
+    <string name="app_follow">ติดตาม</string>
+    <string name="app_gps_fail">ไม่สามารถรับตำแหน่งได้</string>
 </resources>

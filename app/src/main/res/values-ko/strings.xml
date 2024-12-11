@@ -325,4 +325,29 @@
     <string name="app_logout_title">로그아웃 하시겠습니까?</string>
     <string name="app_logout_clear">로그아웃 및 모든 데이터 삭제</string>
     <string name="app_logout">로그아웃</string>
+
+    <string name="app_local_brief">지역 개요</string>
+    <string name="app_trending_today">오늘의 트렌드</string>
+    <string name="app_trend_title">검색하려는 내용을 추측</string>
+    <string name="app_movie_title">영화 제목</string>
+    <string name="app_movie_country">국가</string>
+    <string name="app_movie_release_date">개봉일</string>
+    <string name="app_movie">영화</string>
+    <string name="app_break_news">속보</string>
+    <string name="app_guide_top_title">정보를 동기화하여 한 발 앞서가세요</string>
+    <string name="app_latest_breaking_news">최신 속보</string>
+    <string name="app_download_progress">다운로드 진행 상황</string>
+    <string name="app_location_title">현재 위치는</string>
+    <string name="app_search_city">우편번호 또는 도시 검색</string>
+    <string name="app_current_location">현재 위치</string>
+    <string name="app_popular_city">인기 도시</string>
+    <string name="app_local_guide_title">위치를 설정하여 주변의 최신 뉴스를 받아보세요</string>
+    <string name="app_news_from">뉴스 출처</string>
+    <string name="app_mange_location">도시 관리</string>
+    <string name="app_location_search_tips">팔로우한 도시에서 더 많은 로컬 뉴스를 받을 수 있습니다</string>
+    <string name="app_city_follow_title">팔로우한 다른 도시들</string>
+    <string name="app_other_city_follow_title">다른 사람들이 팔로우하는 도시</string>
+    <string name="app_remove">제거</string>
+    <string name="app_follow">팔로우</string>
+    <string name="app_gps_fail">위치 정보 획득 실패</string>
 </resources>

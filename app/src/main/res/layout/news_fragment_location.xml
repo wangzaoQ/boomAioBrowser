@@ -4,14 +4,16 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <RelativeLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/rlTabRoot"
         android:layout_width="match_parent"
+        android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_height="45dp">
         <com.boom.indicator.MagicIndicator
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
+            android:layout_weight="1"
             android:layout_height="45dp"
             />
         <FrameLayout
@@ -28,7 +30,7 @@
                 android:layout_gravity="center"
                 ></androidx.appcompat.widget.AppCompatImageView>
         </FrameLayout>
-    </RelativeLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/vp"

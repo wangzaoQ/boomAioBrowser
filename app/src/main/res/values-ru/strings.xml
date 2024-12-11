@@ -327,4 +327,29 @@
     <string name="app_logout_title">Вы уверены, что хотите выйти?</string>
     <string name="app_logout_clear">Выйти и удалить все данные</string>
     <string name="app_logout">Выход</string>
+
+    <string name="app_local_brief">Локальное резюме</string>
+    <string name="app_trending_today">Тренды сегодня</string>
+    <string name="app_trend_title">Предположим, вы хотите искать</string>
+    <string name="app_movie_title">Название фильма</string>
+    <string name="app_movie_country">Страна</string>
+    <string name="app_movie_release_date">Дата выхода</string>
+    <string name="app_movie">Фильм</string>
+    <string name="app_break_news">Срочные новости</string>
+    <string name="app_guide_top_title">Держите информацию синхронизированной, чтобы всегда быть на шаг впереди</string>
+    <string name="app_latest_breaking_news">Последние срочные новости</string>
+    <string name="app_download_progress">Прогресс загрузки</string>
+    <string name="app_location_title">Вы сейчас в</string>
+    <string name="app_search_city">Ищите по почтовому индексу или городу</string>
+    <string name="app_current_location">Ваше местоположение</string>
+    <string name="app_popular_city">Популярный город</string>
+    <string name="app_local_guide_title">Установите ваше местоположение, чтобы получать последние новости рядом с вами</string>
+    <string name="app_news_from">Новости из</string>
+    <string name="app_mange_location">Управление вашими городами</string>
+    <string name="app_location_search_tips">Вы получите больше местных новостей из городов, которые вы отслеживаете</string>
+    <string name="app_city_follow_title">Другие города, которые вы отслеживаете</string>
+    <string name="app_other_city_follow_title">Города, которые следят другие</string>
+    <string name="app_remove">Удалить</string>
+    <string name="app_follow">Следить</string>
+    <string name="app_gps_fail">Не удалось получить местоположение</string>
 </resources>

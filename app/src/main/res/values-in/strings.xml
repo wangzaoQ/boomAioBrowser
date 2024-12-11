@@ -328,4 +328,29 @@
     <string name="app_logout_title">Apakah Anda yakin ingin keluar?</string>
     <string name="app_logout_clear">Keluar dan hapus semua data</string>
     <string name="app_logout">Keluar</string>
+
+    <string name="app_local_brief">Ringkasan Lokal</string>
+    <string name="app_trending_today">Tren Hari Ini</string>
+    <string name="app_trend_title">Tebak Apa yang Ingin Anda Cari</string>
+    <string name="app_movie_title">Judul Film</string>
+    <string name="app_movie_country">Negara</string>
+    <string name="app_movie_release_date">Tanggal Rilis</string>
+    <string name="app_movie">film</string>
+    <string name="app_break_news">Berita Terbaru</string>
+    <string name="app_guide_top_title">Tetap Sinkronisasi Informasi dan Menjaga Anda Selangkah Lebih Maju</string>
+    <string name="app_latest_breaking_news">Berita Terbaru</string>
+    <string name="app_download_progress">Progres Unduhan</string>
+    <string name="app_location_title">Apakah Anda saat ini berada di</string>
+    <string name="app_search_city">Cari kode pos atau kota</string>
+    <string name="app_current_location">Anda berada di</string>
+    <string name="app_popular_city">Kota Populer</string>
+    <string name="app_local_guide_title">Tetapkan Lokasi Anda untuk Mendapatkan Berita Terbaru di Sekitar Anda</string>
+    <string name="app_news_from">Berita Dari</string>
+    <string name="app_mange_location">Kelola Kota Anda</string>
+    <string name="app_location_search_tips">Anda akan menerima lebih banyak berita lokal dari kota-kota yang Anda ikuti</string>
+    <string name="app_city_follow_title">Kota Lain yang Anda Ikuti</string>
+    <string name="app_other_city_follow_title">Orang-orang sedang mengikuti</string>
+    <string name="app_remove">Hapus</string>
+    <string name="app_follow">Ikuti</string>
+    <string name="app_gps_fail">Gagal mendapatkan lokasi</string>
 </resources>

@@ -9,14 +9,12 @@ import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.ad.AioADDataManager.adRootBean
 import com.boom.aiobrowser.data.AioADData
 import com.boom.aiobrowser.data.AioNFData
-import com.boom.aiobrowser.data.AioRequestData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.PushData
 import com.boom.aiobrowser.firebase.FirebaseConfig.AD_DEFAULT_JSON
 import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.nf.NFManager.defaultNewsList
 import com.boom.aiobrowser.nf.NFManager.nfRootBean
-import com.boom.aiobrowser.nf.NFWorkManager
 import com.boom.aiobrowser.point.Install
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
@@ -39,9 +37,9 @@ import java.util.Locale
 
 object FirebaseManager {
 
-//    val firebaseAnalytics: FirebaseAnalytics by lazy {
-//        FirebaseAnalytics.getInstance(APP.instance)
-//    }
+    val firebaseAnalytics: FirebaseAnalytics by lazy {
+        FirebaseAnalytics.getInstance(APP.instance)
+    }
 
     var firebaseRemoteConfig: FirebaseRemoteConfig?=null
 
@@ -144,6 +142,12 @@ object FirebaseManager {
         if (splits.isNullOrEmpty().not() && splits.get(0).isNullOrEmpty().not()){
             FirebaseConfig.switchOpenFilterList.clear()
             FirebaseConfig.switchOpenFilterList.addAll(splits)
+        }
+        runCatching {
+            FirebaseConfig.ltvConfig = firebaseRemoteConfig?.getString("Aio_AdLTV_Percent")?:""
+        }
+        if (FirebaseConfig.ltvConfig.isNullOrEmpty()){
+            FirebaseConfig.ltvConfig = FirebaseConfig.LTV_DEFAULT
         }
     }
 

@@ -431,31 +431,19 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                     override fun onBind(holder: NewsTrendingItem, position: Int, item: NewsData?) {
                         if (item == null) return
                         holder.viewBinding?.apply {
-                            rvList.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
-                            var newsAdapter = TrendingNewsAdapter()
-                            rvList.adapter = newsAdapter
-                            runCatching {
-                                rvList.removeItemDecorationAt(position)
-                            }
-                            rvList.addItemDecoration(object : RecyclerView.ItemDecoration() {
-
-                                override fun getItemOffsets(
-                                    outRect: Rect,
-                                    view: View,
-                                    parent: RecyclerView,
-                                    state: RecyclerView.State
-                                ) {
-                                    super.getItemOffsets(outRect, view, parent, state)
-                                    outRect.bottom =
-                                        DisplayUtils.dp2px(context, 8f)
+                            var tag = rvList.getTag(R.id.rvList) as? MutableList<MutableList<NewsData>>
+                            if (tag != item.trendList){
+                                rvList.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
+                                var newsAdapter = TrendingNewsAdapter()
+                                rvList.adapter = newsAdapter
+                                newsAdapter.submitList(item.trendList)
+                                newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
+                                    var data = newsAdapter.items.get(position)
+                                    (context as BaseActivity<*>).jumpActivity<WebDetailsActivity>(Bundle().apply {
+                                        putString(ParamsConfig.JSON_PARAMS, toJson(data))
+                                    })
                                 }
-                            })
-                            newsAdapter.submitList(item.trendList)
-                            newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
-                                var data = newsAdapter.items.get(position)
-                                (context as BaseActivity<*>).jumpActivity<WebDetailsActivity>(Bundle().apply {
-                                    putString(ParamsConfig.JSON_PARAMS, toJson(data))
-                                })
+                                rvList.setTag(R.id.rvList,item.trendList)
                             }
                         }
                     }

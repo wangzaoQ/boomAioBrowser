@@ -62,7 +62,7 @@
             android:layout_height="19dp"
             android:layout_gravity="center_vertical"
             android:text="2."
-            android:textColor="#FC0000"
+            android:textColor="#FC5D00"
             android:textSize="13sp"></TextView>
 
         <TextView
@@ -103,7 +103,7 @@
             android:layout_height="19dp"
             android:layout_gravity="center_vertical"
             android:text="3."
-            android:textColor="#FC0000"
+            android:textColor="#FCA800"
             android:textSize="13sp"></TextView>
 
         <TextView

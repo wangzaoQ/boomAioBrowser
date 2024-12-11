@@ -61,6 +61,10 @@ class LocalNewsFragment :BaseFragment<NewsFragmentLocationBinding>(){
 
     private fun updateNewsHome(list: MutableList<LocationData>,type:Int=0) {
         loadingPop?.dismiss()
+        var locationData = CacheManager.locationData
+        if (locationData?.locationSuccess == true){
+            list.add(0,locationData)
+        }
         if (list.isNullOrEmpty()){
             fBinding.llLocationGuide.visibility = View.VISIBLE
             var locationCity = CacheManager.locationData?.locationCity?:""
@@ -77,7 +81,9 @@ class LocalNewsFragment :BaseFragment<NewsFragmentLocationBinding>(){
                 fBinding.tvNewsFrom.setText(s)
             }
             fBinding.btnYes.setOneClick {
-                CacheManager.addAlreadyAddCity(CacheManager.locationData)
+                var data = CacheManager.locationData
+                data?.locationSuccess = true
+                CacheManager.locationData = data
                 updateNewsHome(CacheManager.alreadyAddCityList)
             }
             fBinding.btnNo.setOneClick {
@@ -88,14 +94,11 @@ class LocalNewsFragment :BaseFragment<NewsFragmentLocationBinding>(){
                         loadingPop!!.createPop()
                         rootActivity.addLaunch(success = {
                             var area = LocationManager.getAreaByGPS()
-
                             if (area == null){
                                 withContext(Dispatchers.Main){
                                     toLocationSetting()
                                 }
                             }else{
-                                CacheManager.locationData = area
-                                CacheManager.addAlreadyAddCity(area)
                                 withContext(Dispatchers.Main){
                                     updateNewsHome(CacheManager.alreadyAddCityList)
                                 }

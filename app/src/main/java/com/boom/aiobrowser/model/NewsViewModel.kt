@@ -22,10 +22,10 @@ class NewsViewModel : BaseDataModel() {
             CacheManager.newsList = mutableListOf()
         }
         var newsList = CacheManager.newsList
-        if (newsList.isNotEmpty() && refresh.not()){
-            newsLiveData.postValue(addHomeData(topic,page,newsList))
-        }else{
-            loadData(loadBack = {
+        loadData(loadBack = {
+            if (newsList.isNotEmpty() && refresh.not()){
+                newsLiveData.postValue(addHomeData(topic,page,newsList))
+            }else{
                 var list :MutableList<NewsData>
                 if (topic =="${NewsConfig.TOPIC_TAG}${APP.instance.getString(R.string.app_trending_today)}"){
                     list = CacheManager.trendNews
@@ -51,18 +51,18 @@ class NewsViewModel : BaseDataModel() {
                     }
                 }
                 newsLiveData.postValue(addHomeData(topic,page,list))
-            }, failBack = {
+            }
+        }, failBack = {
 
-            }, 1)
-        }
+        }, 1)
     }
 
-    private fun addHomeData(topic:String,page:Int,list:MutableList<NewsData>) :MutableList<NewsData>{
+    private suspend fun addHomeData(topic:String, page:Int, list:MutableList<NewsData>) :MutableList<NewsData>{
         if ((NetParams.FOR_YOU == topic || topic == "For You") && page == 1){
             if (NetParams.FOR_YOU == topic){
                 list.add(0,NewsData().apply {
                     dataType = NewsData.TYPE_HOME_NEWS_TRENDING
-                    var trendNews = CacheManager.trendNews
+                    var trendNews = APP.instance.appModel.getTrendsNewsData()
                     if (trendNews.isNullOrEmpty()){
                         trendList = mutableListOf<NewsData>().apply {
                             add(NewsData().apply {

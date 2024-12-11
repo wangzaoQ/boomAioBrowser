@@ -107,7 +107,6 @@ object LocationManager {
                             locations.getJSONObject(0).getString("country"),
                             location.longitude,
                             location.latitude)
-                        CacheManager.locationData = areaData
                     }
                 }
                 if (areaData!=null){
@@ -120,13 +119,15 @@ object LocationManager {
                             } else {
                                 areaData!!.locationArea = asilve
                             }
-                            CacheManager.locationData = areaData
                         }
                     }
                 }
             }.onFailure {
                 AppLogs.eLog(TAG, it.stackTraceToString())
             }
+        }
+        if (areaData!=null){
+            CacheManager.locationData = areaData
         }
         return areaData
     }
@@ -258,7 +259,6 @@ object LocationManager {
             val area = decodeData(objet.getString("encCountry"),objet.getString("encCountryNo"), objet.getJSONArray("allCity"))
             map.put(objet.getString("tongue"), area)
         }
-
         return map
     }
 
@@ -274,6 +274,8 @@ object LocationManager {
                 this.latitude = objet.getString("lat").toDouble()
                 runCatching {
                     this.admCity = objet.getString("adm")
+                }
+                runCatching {
                     this.code = objet.getString("code")
                 }
             })

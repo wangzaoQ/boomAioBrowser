@@ -5,6 +5,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
@@ -54,9 +55,11 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
                             if (middleTime<1000){
                                 delay(1000-middleTime)
                             }
-                            hidePop()
+                            withContext(Dispatchers.Main){
+                                ToastUtils.showShort(getString(R.string.app_gps_fail))
+                                hidePop()
+                            }
                         }else{
-                            CacheManager.addAlreadyAddCity(area)
                             viewModel.value.completeLiveData.postValue(area)
                         }
                     }, failBack = {
@@ -82,16 +85,7 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
                 CacheManager.addAlreadyAddCity(it)
                 APP.locationListUpdateLiveData.postValue(1)
             }else{
-                var list = CacheManager.alreadyAddCityList
-                if (list.isNullOrEmpty()){
-                    CacheManager.addAlreadyAddCity(it)
-                    APP.locationListUpdateLiveData.postValue(1)
-                }else{
-                    list.removeAt(0)
-                    list.add(0,it)
-                    CacheManager.alreadyAddCityList = list
-                    APP.locationListUpdateLiveData.postValue(2)
-                }
+                APP.locationListUpdateLiveData.postValue(2)
             }
             hidePop()
             finish()

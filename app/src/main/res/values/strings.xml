@@ -353,6 +353,7 @@
     <string name="app_other_city_follow_title">People are following</string>
     <string name="app_remove">Remove</string>
     <string name="app_follow">Follow</string>
+    <string name="app_gps_fail">Location acquisition failed</string>
 
 
 </resources>

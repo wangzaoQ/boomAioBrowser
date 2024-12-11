@@ -80,9 +80,10 @@ class LocationViewModel:BaseDataModel() {
                 completeLiveData.postValue(locationData)
             }
         }, failBack = {
-            CacheManager.locationData = locationData
             if (addCityList){
                 CacheManager.addAlreadyAddCity(locationData)
+            }else{
+                CacheManager.locationData = locationData
             }
             completeLiveData.postValue(locationData)
         },1)

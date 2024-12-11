@@ -17,7 +17,7 @@
         android:layout_marginStart="13dp"
         android:textColor="#363636"
         android:layout_marginEnd="5dp"
-        style="@style/app_text_bold"
+        style="@style/app_text_normal"
         ></androidx.appcompat.widget.AppCompatTextView>
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvClick"

@@ -104,6 +104,21 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 newsAdapter.removeAt(index)
             }
         }
+        APP.trendNewsComplete.observe(this){
+            if (newsAdapter.mutableItems.isNullOrEmpty())return@observe
+            for (i in 0 until newsAdapter.mutableItems.size){
+                if (newsAdapter.mutableItems.get(i).dataType == NewsData.TYPE_HOME_NEWS_TRENDING){
+                    var trendNews = CacheManager.trendNews
+                    if (trendNews.size>3){
+                        trendNews = trendNews.subList(0,3)
+                    }
+                    newsAdapter.mutableItems.get(i).trendList = trendNews
+                    newsAdapter.notifyItemChanged(i)
+                    break
+                }
+            }
+
+        }
 //        fBinding.topSearch.binding.ivRefresh.visibility = View.GONE
 //        fBinding.mainAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
 //            override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
@@ -168,7 +183,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             var data = CacheManager.locationData
             data?.locationSuccess = true
             CacheManager.locationData = data
-            CacheManager.addAlreadyAddCity(data)
             newsAdapter.removeAt(position)
             APP.locationListUpdateLiveData.postValue(0)
 //            fBinding.rv.smoothScrollToPosition(0)
@@ -188,8 +202,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                                 toLocationSetting()
                             }
                         }else{
-                            CacheManager.locationData = area
-                            CacheManager.addAlreadyAddCity(area)
                             withContext(Dispatchers.Main){
                                 page = 1
                                 fBinding.rv.smoothScrollToPosition(0)
@@ -339,20 +351,14 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 adapter = adapterHelper.adapter
                 newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
                     var data = newsAdapter.items.get(position)
-                    rootActivity.jumpActivity<WebDetailsActivity>(Bundle().apply {
-                        putString(ParamsConfig.JSON_PARAMS, toJson(data))
-                    })
-//                    var jumpData = JumpDataManager.getCurrentJumpData(tag="点击新闻item")
-//                    jumpData.apply {
-//                        jumpUrl= data.uweek?:""
-//                        jumpType = JumpConfig.JUMP_WEB
-//                        jumpTitle = data.tconsi?:""
-//                        isJumpClick = true
-//                    }
-//                    APP.jumpLiveData.postValue(jumpData)
-                    PointEvent.posePoint(PointEventKey.home_page_feeds,Bundle().apply {
-                        putString(PointValueKey.news_id,data.itackl)
-                    })
+                    if (data.dataType == NewsData.TYPE_NEWS || data.dataType == NewsData.TYPE_HOME_NEWS_TRENDING){
+                        rootActivity.jumpActivity<WebDetailsActivity>(Bundle().apply {
+                            putString(ParamsConfig.JSON_PARAMS, toJson(data))
+                        })
+                        PointEvent.posePoint(PointEventKey.home_page_feeds,Bundle().apply {
+                            putString(PointValueKey.news_id,data.itackl)
+                        })
+                    }
                 }
                 newsAdapter.submitList(mutableListOf<NewsData>().apply {
                     add(NewsData().apply {
@@ -558,6 +564,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         APP.jumpResumeData.removeObservers(this)
         APP.homeTabLiveData.removeObservers(this)
         APP.locationListUpdateLiveData.removeObservers(this)
+        APP.trendNewsComplete.removeObservers(this)
         super.onDestroy()
     }
 }

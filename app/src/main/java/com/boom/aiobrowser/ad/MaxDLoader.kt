@@ -69,9 +69,6 @@ class MaxDLoader(
                             adType = requestBean.pxdtzgho
                             adRequestTime = (System.currentTimeMillis() - startTime) / 1000
                         })
-                        if (APP.isDebug){
-                            PointEvent.adPoint(AdValue.zza(1,"",1),p0,requestBean,adEnum)
-                        }
                         initADPoint(startTime)
                         maxInterstitialAd.setRevenueListener {
                             PointEvent.adPoint(it,p0,requestBean,adEnum)

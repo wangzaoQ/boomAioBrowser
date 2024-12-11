@@ -100,7 +100,7 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
                 rootActivity.jumpActivity<WebActivity>(Bundle().apply {
                     putString("url", data.uweek)
                 })
-            }else{
+            }else if (data.dataType == NewsData.TYPE_NEWS){
                 rootActivity.jumpActivity<WebDetailsActivity>(Bundle().apply {
                     putString(ParamsConfig.JSON_PARAMS, toJson(data))
                 })
@@ -115,7 +115,6 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
             var data = CacheManager.locationData
             data?.locationSuccess = true
             CacheManager.locationData = data
-            CacheManager.addAlreadyAddCity(data)
             newsAdapter.removeAt(position)
             APP.locationListUpdateLiveData.postValue(0)
         }
@@ -132,8 +131,6 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
                                 toLocationSetting()
                             }
                         }else{
-                            CacheManager.locationData = area
-                            CacheManager.addAlreadyAddCity(area)
                             withContext(Dispatchers.Main){
                                 page = 1
                                 fBinding.newsRv.smoothScrollToPosition(0)

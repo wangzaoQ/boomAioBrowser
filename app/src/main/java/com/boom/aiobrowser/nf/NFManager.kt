@@ -363,10 +363,10 @@ object NFManager {
                 NFShow.showNewsNFFilter(NFEnum.NF_LOCAL)
             }
             4->{
-                NFShow.showNewsNFFilter(NFEnum.NF_HOT)
+                NFShow.showNewsNFFilter(NFEnum.NF_TREND)
             }
             5->{
-                NFShow.showNewsNFFilter(NFEnum.NF_TREND)
+                NFShow.showNewsNFFilter(NFEnum.NF_HOT)
                 PointEvent.posePoint(PointEventKey.session_st)
             }
             else -> {}

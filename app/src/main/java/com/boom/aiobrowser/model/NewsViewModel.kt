@@ -15,6 +15,7 @@ class NewsViewModel : BaseDataModel() {
     var newsDetailsLiveData = MutableLiveData<MutableList<NewsData>>()
     var newsRelatedLiveData = MutableLiveData<MutableList<NewsData>>()
     var newsRecommendLiveData = MutableLiveData<MutableList<NewsData>>()
+    var newsVideoLiveData = MutableLiveData<MutableList<NewsData>>()
 
 
 
@@ -63,6 +64,17 @@ class NewsViewModel : BaseDataModel() {
         }, 1)
     }
 
+    fun getNewsVideoList(){
+        loadData(loadBack = {
+            var url = NetParams.videoMapToUrl(NetParams.getParamsMap(NetParams.NEWS_HOME_VIDEO))
+            var list = NetRequest.request(HashMap<String, Any>().apply { put("sessionKey", NetParams.NEWS_HOME_VIDEO) }){
+                NetController.getNewsList(url)
+            }.data ?: mutableListOf()
+            newsVideoLiveData.postValue(list)
+            CacheManager.videoList = list
+        }, failBack = {},1)
+    }
+
     private suspend fun addHomeData(topic:String, page:Int, list:MutableList<NewsData>) :MutableList<NewsData>{
         if ((NetParams.MAIN == topic || topic == NetParams.FOR_YOU) && page == 1){
             if (NetParams.MAIN == topic){
@@ -94,9 +106,9 @@ class NewsViewModel : BaseDataModel() {
             }
 
             var isSuccess = CacheManager.locationData?.locationSuccess?:false
+            var insertIndex = -1
             if (isSuccess.not()){
                 var newsCount = 0
-                var insertIndex = -1
                 for (i in 0 until list.size){
                     if (list.get(i).dataType == NewsData.TYPE_NEWS){
                         newsCount++
@@ -112,6 +124,23 @@ class NewsViewModel : BaseDataModel() {
                         dataType = NewsData.TYPE_HOME_NEWS_LOCAL
                     })
                 }
+            }
+            if (NetParams.MAIN == topic){
+                list.add(insertIndex,NewsData().apply {
+                    dataType = NewsData.TYPE_HOME_NEWS_VIDEO
+                    var tempList = CacheManager.videoList
+                    if (tempList.isNullOrEmpty()){
+                        var list = mutableListOf<NewsData>()
+                        for (i in 0 until 10){
+                            list.add(NewsData().apply {
+                                isLoading = true
+                            })
+                        }
+                        this.videoList = list
+                    }else{
+                        this.videoList = tempList
+                    }
+                })
             }
         }
         return list
@@ -231,7 +260,7 @@ class NewsViewModel : BaseDataModel() {
     //推荐新闻
     fun getNewsLike() {
         loadData(loadBack = {
-            var url = NetParams.mapToUrl(NetParams.getParamsMap(NetParams.NEWS_RECOMMEND))
+            var url = NetParams.likeMapToUrl(NetParams.getParamsMap(NetParams.NEWS_RECOMMEND))
             var list = NetRequest.request(HashMap<String, Any>().apply { put("sessionKey", NetParams.NEWS_RECOMMEND) }){
                 NetController.getNewsList(url)
             }.data ?: mutableListOf()

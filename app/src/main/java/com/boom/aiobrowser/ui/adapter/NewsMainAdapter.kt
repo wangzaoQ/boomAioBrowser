@@ -32,6 +32,7 @@ import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.NewsData
+import com.boom.aiobrowser.data.NewsVideoData
 import com.boom.aiobrowser.data.ViewItem
 import com.boom.aiobrowser.databinding.BrowserItemFilmNewsBinding
 import com.boom.aiobrowser.databinding.BrowserItemHomeAdBinding
@@ -45,6 +46,7 @@ import com.boom.aiobrowser.databinding.NewsDetailsItemTopImgBinding
 import com.boom.aiobrowser.databinding.NewsDetailsItemTopVideoBinding
 import com.boom.aiobrowser.databinding.NewsItemDetailsRelatedBinding
 import com.boom.aiobrowser.databinding.NewsItemHomeTopBinding
+import com.boom.aiobrowser.databinding.NewsItemHomeVideoBinding
 import com.boom.aiobrowser.databinding.NewsItemLocalBinding
 import com.boom.aiobrowser.databinding.NewsItemTopicBinding
 import com.boom.aiobrowser.databinding.NewsItemTrendingBinding
@@ -141,6 +143,23 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
 
         constructor(parent: ViewGroup) : this(
             NewsItemTrendingBinding.inflate(
+                LayoutInflater.from(
+                    parent.context
+                ), parent, false
+            )
+        )
+    }
+
+    internal class NewsHomeVideoItem(viewBinding: NewsItemHomeVideoBinding) :
+        RecyclerView.ViewHolder(viewBinding.getRoot()) {
+        var viewBinding: NewsItemHomeVideoBinding? = null
+
+        init {
+            this.viewBinding = viewBinding
+        }
+
+        constructor(parent: ViewGroup) : this(
+            NewsItemHomeVideoBinding.inflate(
                 LayoutInflater.from(
                     parent.context
                 ), parent, false
@@ -500,6 +519,68 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                     })
                                 }
                                 rvList.setTag(R.id.rvList,item.trendList)
+                            }
+                        }
+                    }
+                })
+            .addItemType(
+                NewsData.TYPE_HOME_NEWS_VIDEO,
+                object : OnMultiItemAdapterListener<NewsData, NewsHomeVideoItem> {
+
+                    override fun onCreate(
+                        context: Context,
+                        parent: ViewGroup,
+                        viewType: Int
+                    ): NewsHomeVideoItem {
+                        return NewsHomeVideoItem(
+                            parent
+                        );
+                    }
+
+                    override fun onBind(holder: NewsHomeVideoItem, position: Int, item: NewsData?) {
+                        if (item == null) return
+                        holder.viewBinding?.apply {
+                            var tag = clRoot.getTag(R.id.clRoot) as? MutableList<MutableList<NewsVideoData>>
+                            if (tag == null || tag != item.videoList){
+                                rvVideo.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+                                var newsAdapter = HomeVideoAdapter(fragmet)
+                                rvVideo.adapter = newsAdapter
+                                newsAdapter.submitList(item.videoList?: mutableListOf())
+                                if (rvVideo.itemDecorationCount==0){
+                                    rvVideo.addItemDecoration(object : RecyclerView.ItemDecoration() {
+
+                                        override fun getItemOffsets(
+                                            outRect: Rect,
+                                            view: View,
+                                            parent: RecyclerView,
+                                            state: RecyclerView.State
+                                        ) {
+                                            super.getItemOffsets(outRect, view, parent, state)
+                                            val itemPosition = parent.getChildAdapterPosition(view)
+                                            outRect.right = DisplayUtils.dp2px(
+                                                context,
+                                                8f
+                                            )
+                                            var endInx = item.videoList?.size?:0
+                                            if ( endInx > 0){
+                                                endInx = endInx-1
+                                            }
+                                            if (itemPosition == endInx){
+                                                outRect.right = DisplayUtils.dp2px(
+                                                    context,
+                                                    13f
+                                                )
+                                            }else if (itemPosition == 0){
+                                                outRect.left = DisplayUtils.dp2px(context, 13f)
+                                            }
+                                        }
+                                    })
+                                }
+
+                                newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
+                                    var data = newsAdapter.items.get(position)
+                                }
+                                clRoot.setTag(R.id.clRoot,item.videoList)
                             }
                         }
                     }

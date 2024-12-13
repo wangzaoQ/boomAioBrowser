@@ -26,110 +26,117 @@
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearance="@style/style_RoundStyle_13r"></com.google.android.material.imageview.ShapeableImageView>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvNewsTitle"
-            style="@style/app_text_bold"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clContent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="13dp"
-            android:layout_marginTop="12dp"
-            android:lineSpacingMultiplier="1.2"
-            android:textColor="@color/black"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:textSize="19sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivImg"
-            tools:text="My friend and I spent 5 days climbing to the top of the snowy mountains in Europe."></androidx.appcompat.widget.AppCompatTextView>
-
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvNewsContent"
-            style="@style/app_text_bold"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="13dp"
-            android:layout_marginTop="6dp"
-            android:ellipsize="end"
-            android:lineSpacingMultiplier="1.2"
-            android:maxLines="2"
-            android:textColor="#80000000"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvNewsTitle"
-            tools:text="My friend and I spent 5 days climbing to the top of the snowy mountains in Europe."></androidx.appcompat.widget.AppCompatTextView>
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/ivSource"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:layout_marginStart="13dp"
-            android:layout_marginTop="5dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvNewsContent"
-            app:shapeAppearance="@style/style_CircleStyle">
-
-        </com.google.android.material.imageview.ShapeableImageView>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvSourceName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="43dp"
-            android:textColor="#B31C274C"
-            android:textSize="11sp"
-            android:maxWidth="100dp"
-            android:ellipsize="end"
-            app:layout_constraintBottom_toBottomOf="@+id/ivSource"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/ivSource"
-            tools:text="Name"></androidx.appcompat.widget.AppCompatTextView>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvNewsTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:textColor="#B31C274C"
-            android:textSize="11sp"
-            app:layout_constraintBottom_toBottomOf="@+id/ivSource"
-            app:layout_constraintStart_toEndOf="@+id/tvSourceName"
-            app:layout_constraintTop_toTopOf="@+id/ivSource"
-            tools:text="1h"></androidx.appcompat.widget.AppCompatTextView>
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/llLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="18dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="@+id/ivSource"
-            app:layout_constraintStart_toEndOf="@+id/tvNewsTime"
-            app:layout_constraintTop_toTopOf="@+id/ivSource"
-            android:background="@drawable/shape_bg_news_location"
-            android:paddingStart="4dp"
-            android:paddingEnd="6dp"
-            android:layout_marginStart="6dp"
-            tools:visibility="visible"
-            android:visibility="gone"
+            android:layout_marginTop="12dp"
             >
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="14dp"
-                android:layout_height="14dp"
-                app:srcCompat="@mipmap/ic_location_tips"
-                android:layout_gravity="center_vertical"
-                ></androidx.appcompat.widget.AppCompatImageView>
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvLocation"
+                android:id="@+id/tvNewsTitle"
+                style="@style/app_text_bold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="13dp"
+                android:lineSpacingMultiplier="1.2"
+                android:textColor="@color/black"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textSize="19sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="My friend and I spent 5 days climbing to the top of the snowy mountains in Europe."></androidx.appcompat.widget.AppCompatTextView>
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvNewsContent"
+                style="@style/app_text_bold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="13dp"
+                android:layout_marginTop="6dp"
+                android:ellipsize="end"
+                android:lineSpacingMultiplier="1.2"
+                android:maxLines="2"
+                android:textColor="#80000000"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvNewsTitle"
+                tools:text="My friend and I spent 5 days climbing to the top of the snowy mountains in Europe."></androidx.appcompat.widget.AppCompatTextView>
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivSource"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="5dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvNewsContent"
+                app:shapeAppearance="@style/style_CircleStyle">
+
+            </com.google.android.material.imageview.ShapeableImageView>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvSourceName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                tools:text="123"
-                android:textColor="#CC1C274C"
+                android:layout_marginStart="43dp"
+                android:textColor="#B31C274C"
                 android:textSize="11sp"
-                ></androidx.appcompat.widget.AppCompatTextView>
-        </androidx.appcompat.widget.LinearLayoutCompat>
+                android:maxWidth="100dp"
+                android:ellipsize="end"
+                app:layout_constraintBottom_toBottomOf="@+id/ivSource"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/ivSource"
+                tools:text="Name"></androidx.appcompat.widget.AppCompatTextView>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvNewsTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:textColor="#B31C274C"
+                android:textSize="11sp"
+                app:layout_constraintBottom_toBottomOf="@+id/ivSource"
+                app:layout_constraintStart_toEndOf="@+id/tvSourceName"
+                app:layout_constraintTop_toTopOf="@+id/ivSource"
+                tools:text="1h"></androidx.appcompat.widget.AppCompatTextView>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/ivSource"
+                app:layout_constraintStart_toEndOf="@+id/tvNewsTime"
+                app:layout_constraintTop_toTopOf="@+id/ivSource"
+                android:background="@drawable/shape_bg_news_location"
+                android:paddingStart="4dp"
+                android:paddingEnd="6dp"
+                android:layout_marginStart="6dp"
+                tools:visibility="visible"
+                android:visibility="gone"
+                >
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    app:srcCompat="@mipmap/ic_location_tips"
+                    android:layout_gravity="center_vertical"
+                    ></androidx.appcompat.widget.AppCompatImageView>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    tools:text="123"
+                    android:textColor="#CC1C274C"
+                    android:textSize="11sp"
+                    ></androidx.appcompat.widget.AppCompatTextView>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

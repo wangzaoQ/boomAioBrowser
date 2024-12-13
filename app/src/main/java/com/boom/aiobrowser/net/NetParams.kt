@@ -24,11 +24,12 @@ object NetParams {
     var LOCAL = "local"
     var NEWS_RELATED = "NEWS_RELATED"
     var NEWS_RECOMMEND = "NEWS_RECOMMEND"
+    var NEWS_HOME_VIDEO = "NEWS_HOME_VIDEO"
     var MOVIE = "11370735975268352"
     var PUBLIC_SAFETY = "Public Safety"
 
 
-    suspend fun mapToUrl(map:HashMap<String,String>):String{
+    suspend fun likeMapToUrl(map:HashMap<String,String>):String{
         var builder = StringBuilder()
         map.forEach {
             builder.append(it.key).append("=").append(Uri.encode(it.value)).append("&")
@@ -44,6 +45,18 @@ object NetParams {
             endParams = toString.substring(0, toString.length - 1)
         }
         var url = "${Net.rootUrl}/api/nemplo?${endParams}"
+        AppLogs.dLog(Net.TAG,"getParamsMap2: ${url}")
+        return url
+    }
+
+    suspend fun videoMapToUrl(map:HashMap<String,String>):String{
+        var builder = StringBuilder()
+        map.forEach {
+            builder.append(it.key).append("=").append(Uri.encode(it.value)).append("&")
+        }
+        builder.append("vback=${true}")
+        val toString = builder.toString()
+        var url = "${Net.rootUrl}/api/nemplo?${toString}"
         AppLogs.dLog(Net.TAG,"getParamsMap2: ${url}")
         return url
     }
@@ -76,7 +89,7 @@ object NetParams {
             isLocalTopic = true
         }
         when (endKey) {
-            MAIN,NFEnum.NF_NEWS.menuName,WIDGET, NEWS_RECOMMEND,FOR_YOU-> {
+            MAIN,NFEnum.NF_NEWS.menuName,WIDGET, NEWS_RECOMMEND,FOR_YOU,NEWS_HOME_VIDEO-> {
                 needLocation = true
                 if (endKey == NFEnum.NF_NEWS.menuName || endKey == WIDGET){
                     map.put("fit","3:AIOPUSH")
@@ -85,6 +98,8 @@ object NetParams {
                     map.put("fit","3:BROWSER")
                 }else if (endKey == NEWS_RECOMMEND){
                     map.put("fit","3:USER")
+                }else if (endKey == NEWS_HOME_VIDEO){
+                    map.put("fit","3:BROWSER_VIDEO")
                 }
             }
             NFEnum.NF_EDITOR.menuName->{

@@ -69,6 +69,7 @@ class NewsData {
     var tdetai: MutableList<String>? = null
     var trendList:MutableList<NewsData>? = null
     var relatedList:MutableList<NewsData>? = null
+    var videoList:MutableList<NewsData>? = null
     var isTrendTop = false
     var isLoading = false
 
@@ -82,6 +83,7 @@ class NewsData {
         var TYPE_HOME_NEWS_TOP = 90
         var TYPE_HOME_NEWS_TRENDING = 91
         var TYPE_HOME_NEWS_LOCAL = 92
+        var TYPE_HOME_NEWS_VIDEO = 93
         var TYPE_DETAILS_NEWS_TITLE = 100
         var TYPE_DETAILS_NEWS_TOP_VIDEO = 101
         var TYPE_DETAILS_NEWS_TOP_IMG = 102

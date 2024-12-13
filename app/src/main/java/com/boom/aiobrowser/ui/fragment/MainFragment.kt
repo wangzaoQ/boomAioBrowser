@@ -220,6 +220,20 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             adapterHelper.trailingLoadState = LoadState.NotLoading(false)
             fBinding.refreshLayout.isRefreshing = false
         }
+        viewModel.value.newsVideoLiveData.observe(this){
+            var index = -1
+            for (i in 0 until newsAdapter.mutableItems.size){
+                var data = newsAdapter.mutableItems.get(i)
+                if (data.dataType == NewsData.TYPE_HOME_NEWS_VIDEO){
+                    data.videoList = it
+                    index = i
+                    break
+                }
+            }
+            if (index>=0){
+                newsAdapter.notifyItemChanged(index)
+            }
+        }
         viewModel.value.failLiveData.observe(rootActivity){
             adapterHelper.trailingLoadState = LoadState.NotLoading(false)
             fBinding.refreshLayout.isRefreshing = false
@@ -349,30 +363,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                         })
                     }
                 }
-                newsAdapter.submitList(mutableListOf<NewsData>().apply {
-                    add(NewsData().apply {
-                        dataType = NewsData.TYPE_HOME_NEWS_TOP
-                    })
-                    add(NewsData().apply {
-                        dataType = NewsData.TYPE_HOME_NEWS_TRENDING
-                        trendList = mutableListOf<NewsData>().apply {
-                            add(NewsData().apply {
-                                isLoading = true
-                            })
-                            add(NewsData().apply {
-                                isLoading = true
-                            })
-                            add(NewsData().apply {
-                                isLoading = true
-                            })
-                        }
-                    })
-//                    for (i in 0 until 8){
-//                        add(NewsData().apply {
-//                            isLoading = true
-//                        })
-//                    }
-                })
+                addDefault()
                 addOnScrollListener(object : RecyclerView.OnScrollListener(){
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         super.onScrollStateChanged(recyclerView, newState)
@@ -463,6 +454,28 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 //        APP.bottomLiveData.postValue(0)
     }
 
+    private fun addDefault() {
+        newsAdapter.submitList(mutableListOf<NewsData>().apply {
+            add(NewsData().apply {
+                dataType = NewsData.TYPE_HOME_NEWS_TOP
+            })
+            add(NewsData().apply {
+                dataType = NewsData.TYPE_HOME_NEWS_TRENDING
+                trendList = mutableListOf<NewsData>().apply {
+                    add(NewsData().apply {
+                        isLoading = true
+                    })
+                    add(NewsData().apply {
+                        isLoading = true
+                    })
+                    add(NewsData().apply {
+                        isLoading = true
+                    })
+                }
+            })
+        })
+    }
+
     private fun updateTopTab() {
         newsAdapter.notifyItemChanged(0)
     }
@@ -488,6 +501,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 
     fun loadNews(){
         viewModel.value.getNewsData(NetParams.MAIN, page = page)
+        viewModel.value.getNewsVideoList()
     }
 
     private fun loadData() {

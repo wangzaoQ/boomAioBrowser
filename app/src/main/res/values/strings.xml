@@ -355,6 +355,7 @@
     <string name="app_remove">Remove</string>
     <string name="app_follow">Follow</string>
     <string name="app_gps_fail">Location acquisition failed</string>
+    <string name="app_related_news">Related News</string>
 
 
 </resources>

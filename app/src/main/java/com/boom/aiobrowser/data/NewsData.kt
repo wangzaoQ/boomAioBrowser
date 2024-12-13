@@ -55,6 +55,7 @@ class NewsData {
     var sschem:String?=""
     var vbreas:String?=""
     var pphilo:Long?=0
+    var asilve:MutableList<String>?=null
 
     var dataType = 0
 
@@ -67,6 +68,7 @@ class NewsData {
     var lcousi : MutableList<LinkData>?=null
     var tdetai: MutableList<String>? = null
     var trendList:MutableList<NewsData>? = null
+    var relatedList:MutableList<NewsData>? = null
     var isTrendTop = false
     var isLoading = false
 
@@ -88,6 +90,8 @@ class NewsData {
         var TYPE_DETAILS_NEWS_TEXT = 110
         var TYPE_DETAILS_NEWS_IMG = 111
         var TYPE_DETAILS_NEWS_READ_SOURCE = 120
+        var TYPE_DETAILS_NEWS_RELATED = 121
+        var TYPE_DETAILS_NEWS_TOPIC = 130
 
     }
 }

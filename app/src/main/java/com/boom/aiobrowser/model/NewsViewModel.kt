@@ -13,6 +13,8 @@ import com.boom.aiobrowser.tools.CacheManager
 class NewsViewModel : BaseDataModel() {
     var newsLiveData = MutableLiveData<List<NewsData>>()
     var newsDetailsLiveData = MutableLiveData<MutableList<NewsData>>()
+    var newsRelatedLiveData = MutableLiveData<MutableList<NewsData>>()
+    var newsRecommendLiveData = MutableLiveData<MutableList<NewsData>>()
 
 
 
@@ -36,15 +38,19 @@ class NewsViewModel : BaseDataModel() {
                     list.forEach {
                         it.dataType = NewsData.TYPE_DETAILS_NEWS_SEARCH
                     }
+                }else if(topic == "${NewsConfig.TOPIC_TAG}${APP.instance.getString(R.string.app_local_brief)}"){
+                    list = NetRequest.request(HashMap<String, Any>().apply {
+                        put("sessionKey",topic)
+                    }) { NetController.getNewsList(NetParams.getParamsMap(topic, currentPage = page)) }.data
+                        ?: mutableListOf()
+                    list.forEach {
+                        it.dataType = NewsData.TYPE_DETAILS_NEWS_SEARCH
+                    }
                 }else{
                     list = NetRequest.request(HashMap<String, Any>().apply {
                         put("sessionKey",topic )
                     }) { NetController.getNewsList(NetParams.getParamsMap(topic,page)) }.data?: mutableListOf()
-                    if (topic == "${NewsConfig.TOPIC_TAG}${APP.instance.getString(R.string.app_local_brief)}"){
-                        list.forEach {
-                            it.dataType = NewsData.TYPE_DETAILS_NEWS_SEARCH
-                        }
-                    }else if (topic == "${NewsConfig.TOPIC_TAG}${APP.instance.getString(R.string.app_movie)}"){
+                     if (topic == "${NewsConfig.TOPIC_TAG}${APP.instance.getString(R.string.app_movie)}"){
                         list.forEach {
                             it.dataType = NewsData.TYPE_DETAILS_NEWS_SEARCH_FILM
                         }
@@ -58,8 +64,8 @@ class NewsViewModel : BaseDataModel() {
     }
 
     private suspend fun addHomeData(topic:String, page:Int, list:MutableList<NewsData>) :MutableList<NewsData>{
-        if ((NetParams.FOR_YOU == topic || topic == "For You") && page == 1){
-            if (NetParams.FOR_YOU == topic){
+        if ((NetParams.MAIN == topic || topic == NetParams.FOR_YOU) && page == 1){
+            if (NetParams.MAIN == topic){
                 list.add(0,NewsData().apply {
                     dataType = NewsData.TYPE_HOME_NEWS_TRENDING
                     var trendNews = APP.instance.appModel.getTrendsNewsData()
@@ -185,7 +191,51 @@ class NewsViewModel : BaseDataModel() {
                     dataType = NewsData.TYPE_DETAILS_NEWS_READ_SOURCE
                     uweek = newData.uweek
                 })
+
+                // topic
+                if (detailsData.tdetai.isNullOrEmpty().not()){
+                    newsList.add(NewsData().apply {
+                        dataType = NewsData.TYPE_DETAILS_NEWS_TOPIC
+                        tdetai = newData.tdetai
+                    })
+                }
+
+                // related news
+                var relatedList = mutableListOf<NewsData>()
+                for (i in 0 until 10){
+                    relatedList.add(NewsData().apply {
+                        isLoading = true
+                    })
+                }
+                newsList.add(NewsData().apply {
+                    dataType = NewsData.TYPE_DETAILS_NEWS_RELATED
+                    this.relatedList = relatedList
+                })
                 newsDetailsLiveData.postValue(newsList)
         }}, failBack = {},1)
+    }
+    // 相关新闻
+    fun getNewsRelated(newData: NewsData?) {
+        if (newData == null)return
+        loadData(loadBack = {
+            var list = NetRequest.request(HashMap<String, Any>().apply { put("sessionKey", NetParams.NEWS_RELATED) })
+            {
+                var map = NetParams.getParamsMap(NetParams.NEWS_RELATED)
+                map.put("itackl",newData.itackl?:"")
+                NetController.getRelatedNews(map)
+            }.data ?: mutableListOf()
+            newsRelatedLiveData.postValue(list)
+        }, failBack = {},1)
+    }
+
+    //推荐新闻
+    fun getNewsLike() {
+        loadData(loadBack = {
+            var url = NetParams.mapToUrl(NetParams.getParamsMap(NetParams.NEWS_RECOMMEND))
+            var list = NetRequest.request(HashMap<String, Any>().apply { put("sessionKey", NetParams.NEWS_RECOMMEND) }){
+                NetController.getNewsList(url)
+            }.data ?: mutableListOf()
+            newsRecommendLiveData.postValue(list)
+        }, failBack = {},1)
     }
 }

@@ -17,6 +17,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,8 +43,10 @@ import com.boom.aiobrowser.databinding.NewsDetailsItemTextBinding
 import com.boom.aiobrowser.databinding.NewsDetailsItemTitleBinding
 import com.boom.aiobrowser.databinding.NewsDetailsItemTopImgBinding
 import com.boom.aiobrowser.databinding.NewsDetailsItemTopVideoBinding
+import com.boom.aiobrowser.databinding.NewsItemDetailsRelatedBinding
 import com.boom.aiobrowser.databinding.NewsItemHomeTopBinding
 import com.boom.aiobrowser.databinding.NewsItemLocalBinding
+import com.boom.aiobrowser.databinding.NewsItemTopicBinding
 import com.boom.aiobrowser.databinding.NewsItemTrendingBinding
 import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.ParamsConfig
@@ -198,6 +201,9 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
         )
     }
 
+    /**
+     * 详情
+     */
     internal class TitleItem(viewBinding: NewsDetailsItemTitleBinding) :
         RecyclerView.ViewHolder(viewBinding.getRoot()) {
         var viewBinding: NewsDetailsItemTitleBinding? = null
@@ -249,6 +255,7 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
         )
     }
 
+
     internal class TopVideoItem(viewBinding: NewsDetailsItemTopVideoBinding) :
         RecyclerView.ViewHolder(viewBinding.getRoot()) {
         var viewBinding: NewsDetailsItemTopVideoBinding? = null
@@ -293,6 +300,44 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
 
         constructor(parent: ViewGroup) : this(
             NewsDetailsItemReadSourceBinding.inflate(
+                LayoutInflater.from(
+                    parent.context
+                ), parent, false
+            )
+        )
+    }
+
+
+    internal class TopicItem(viewBinding: NewsItemTopicBinding) :
+        RecyclerView.ViewHolder(viewBinding.getRoot()) {
+        var viewBinding: NewsItemTopicBinding? = null
+
+        init {
+            this.viewBinding = viewBinding
+        }
+
+        constructor(parent: ViewGroup) : this(
+            NewsItemTopicBinding.inflate(
+                LayoutInflater.from(
+                    parent.context
+                ), parent, false
+            )
+        )
+    }
+
+    /**
+     * 详情推荐新闻
+     */
+    internal class DetailsRelatedItem(viewBinding: NewsItemDetailsRelatedBinding) :
+        RecyclerView.ViewHolder(viewBinding.getRoot()) {
+        var viewBinding: NewsItemDetailsRelatedBinding? = null
+
+        init {
+            this.viewBinding = viewBinding
+        }
+
+        constructor(parent: ViewGroup) : this(
+            NewsItemDetailsRelatedBinding.inflate(
                 LayoutInflater.from(
                     parent.context
                 ), parent, false
@@ -348,6 +393,17 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                         GlideManager.loadImg(fragmet, ivSource, item.sschem)
                         tvSourceName.text = "${item.sfindi}"
                         tvNewsTime.text = TimeManager.getNewsTime(item.pphilo ?: 0)
+                        var location = CacheManager.locationData
+                        if(item.asilve.isNullOrEmpty().not() && location!=null && location.locationArea.isNullOrEmpty().not()){
+                            if (item.asilve!!.contains(location.locationArea)){
+                                llLocation.visibility = View.VISIBLE
+                                tvLocation.text = location.locationCity
+                            }else{
+                                llLocation.visibility = View.GONE
+                            }
+                        }else{
+                            llLocation.visibility = View.GONE
+                        }
                     }
                 }
             })
@@ -429,10 +485,10 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                     }
 
                     override fun onBind(holder: NewsTrendingItem, position: Int, item: NewsData?) {
-                        if (item == null) return
+                        if (item == null || item.trendList.isNullOrEmpty()) return
                         holder.viewBinding?.apply {
                             var tag = rvList.getTag(R.id.rvList) as? MutableList<MutableList<NewsData>>
-                            if (tag != item.trendList){
+                            if (tag == null || tag != item.trendList){
                                 rvList.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
                                 var newsAdapter = TrendingNewsAdapter()
                                 rvList.adapter = newsAdapter
@@ -548,7 +604,7 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                         if (item == null) return
                         holder.viewBinding?.apply {
                             var tag = clRoot.getTag(R.id.clRoot) as? NewsData
-                            if (tag != item) {
+                            if (tag== null || tag != item) {
                                 runCatching {
                                     var gsyVideoOptionBuilder = GSYVideoOptionBuilder()
                                     gsyVideoOptionBuilder!!
@@ -778,6 +834,100 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                     }
                 })
             .addItemType(
+                NewsData.TYPE_DETAILS_NEWS_TOPIC,
+                object : OnMultiItemAdapterListener<NewsData, TopicItem> {
+
+                    override fun onCreate(
+                        context: Context,
+                        parent: ViewGroup,
+                        viewType: Int
+                    ): TopicItem {
+                        return TopicItem(
+                            parent
+                        );
+                    }
+
+                    override fun onBind(holder: TopicItem, position: Int, item: NewsData?) {
+                        if (item == null || item.tdetai.isNullOrEmpty()) return
+                        holder.viewBinding?.topicRoot?.apply {
+                            var tag = getTag(R.id.topicRoot) as? MutableList<String>
+                            if (tag == null || tag!=item.tdetai){
+                                removeAllViews()
+                                heightLimit = false
+                                maxLimit = false
+                                for (i in 0 until item.tdetai!!.size){
+                                    var content = item.tdetai!!.get(i)
+                                    var topicView = LayoutInflater.from(context).inflate(R.layout.news_item_child_topic,null,false)
+                                    var tv = topicView.findViewById<AppCompatTextView>(R.id.tvTopic)
+                                    topicView.setOnClickListener {
+
+                                    }
+                                    tv.text = "#${content}"
+                                    addView(topicView)
+                                }
+                                setTag(R.id.topicRoot,item.tdetai!!)
+                            }
+                        }
+                    }
+                })
+            .addItemType(
+                NewsData.TYPE_DETAILS_NEWS_RELATED,
+                object : OnMultiItemAdapterListener<NewsData, DetailsRelatedItem> {
+
+                    override fun onCreate(
+                        context: Context,
+                        parent: ViewGroup,
+                        viewType: Int
+                    ): DetailsRelatedItem {
+                        return DetailsRelatedItem(
+                            parent
+                        );
+                    }
+
+                    override fun onBind(holder: DetailsRelatedItem, position: Int, item: NewsData?) {
+                        if (item == null || item.relatedList.isNullOrEmpty()) return
+                        holder.viewBinding?.apply {
+                            var tag = rvRecommend.getTag(R.id.rvRecommend) as? MutableList<NewsData>
+                            if (tag.isNullOrEmpty() || tag!=item.relatedList){
+                                var recommendAdapter = NewsRelatedAdapter()
+                                rvRecommend.apply {
+                                    layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+                                    adapter = recommendAdapter
+                                    recommendAdapter.submitList(item.relatedList)
+                                    addItemDecoration(object : RecyclerView.ItemDecoration() {
+
+                                        override fun getItemOffsets(
+                                            outRect: Rect,
+                                            view: View,
+                                            parent: RecyclerView,
+                                            state: RecyclerView.State
+                                        ) {
+                                            super.getItemOffsets(outRect, view, parent, state)
+                                            val itemPosition = parent.getChildAdapterPosition(view)
+                                            if (itemPosition == item.relatedList!!.size-1){
+                                                outRect.right = DisplayUtils.dp2px(
+                                                    context,
+                                                    14f
+                                                )
+                                            }
+                                            outRect.left = DisplayUtils.dp2px(context, 14f)
+                                        }
+                                    })
+                                    recommendAdapter.setOnDebouncedItemClick{adapter, view, position ->
+                                        var data = recommendAdapter.items.get(position)
+                                        if (data.dataType == NewsData.TYPE_NEWS){
+                                            (context as BaseActivity<*>).jumpActivity<WebDetailsActivity>(Bundle().apply {
+                                                putString(ParamsConfig.JSON_PARAMS, toJson(data))
+                                            })
+                                        }
+                                    }
+                                }
+                                rvRecommend.setTag(R.id.rvRecommend,item.relatedList)
+                            }
+                        }
+                    }
+                })
+            .addItemType(
                 NewsData.TYPE_HOME_NEWS_TOP,
                 object : OnMultiItemAdapterListener<NewsData, NewsHomeItem> {
 
@@ -845,7 +995,6 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                 tabList,
                                 partitionSize
                             ) as MutableList<MutableList<JumpData>>
-                            var tag = vp2.getTag(R.id.vp2) as? MutableList<MutableList<JumpData>>
                             if (true) {
                                 vp2.apply {
                                     offscreenPageLimit = dataList.size

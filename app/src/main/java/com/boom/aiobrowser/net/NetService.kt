@@ -13,6 +13,7 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
+import retrofit2.http.Url
 
 interface NetService {
 
@@ -21,7 +22,9 @@ interface NetService {
      */
     @GET("api/nemplo")
     suspend fun getNewsList(@QueryMap map: Map<String, String>): NetResponse<MutableList<NewsData>>
-
+    // 新闻列表
+    @GET
+    suspend fun getNewsList(@Url url: String): NetResponse<MutableList<NewsData>>
     /**
      * 人工推送新闻列表
      */
@@ -34,6 +37,12 @@ interface NetService {
      */
     @GET("api/nemplo/tpossi")
     suspend fun getHotNewsList(@QueryMap map: Map<String, String>): NetResponse<MutableList<NewsData>>
+
+    /**
+     * 相关新闻
+     */
+    @GET("api/nemplo/rlesso")
+    suspend fun getRelatedNewsList(@QueryMap map: Map<String, String>): NetResponse<MutableList<NewsData>>
 
 
     /**

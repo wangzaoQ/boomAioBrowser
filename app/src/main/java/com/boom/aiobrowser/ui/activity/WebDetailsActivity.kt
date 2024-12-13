@@ -22,9 +22,12 @@ import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.getNewsTopic
+import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
+import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import com.boom.video.GSYVideoManager
 
 class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
@@ -40,6 +43,8 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
     val newsAdapter by lazy {
         NewsMainAdapter()
     }
+
+    var page = 1
 
     override fun setListener() {
         acBinding.apply {
@@ -76,6 +81,43 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         }
         viewModel.value.newsDetailsLiveData.observe(this){
             newsAdapter.submitList(it)
+            viewModel.value.getNewsRelated(newData)
+            page = 1
+            viewModel.value.getNewsLike()
+            acBinding.newsSmart.setEnableLoadMore(true)
+        }
+        viewModel.value.newsRelatedLiveData.observe(this){
+            var index = -1
+            for (i in 0 until newsAdapter.mutableItems.size){
+                var data = newsAdapter.mutableItems.get(i)
+                if (data.dataType == NewsData.TYPE_DETAILS_NEWS_RELATED){
+                    index = i
+                    break
+                }
+            }
+            if (index>=0){
+                var data = newsAdapter.mutableItems.get(index)
+                data.relatedList = it
+                newsAdapter.notifyItemChanged(index)
+            }
+        }
+        viewModel.value.newsRecommendLiveData.observe(this){
+            newsAdapter.addAll(it)
+            acBinding.newsSmart.finishLoadMore()
+        }
+        acBinding.newsSmart.setOnLoadMoreListener {
+            page++
+            viewModel.value.getNewsLike()
+        }
+
+        newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
+            if (position>newsAdapter.items.size-1)return@setOnDebouncedItemClick
+            var data = newsAdapter.items.get(position)
+            if (data.dataType == NewsData.TYPE_NEWS){
+                jumpActivity<WebDetailsActivity>(Bundle().apply {
+                    putString(ParamsConfig.JSON_PARAMS, toJson(data))
+                })
+            }
         }
     }
 

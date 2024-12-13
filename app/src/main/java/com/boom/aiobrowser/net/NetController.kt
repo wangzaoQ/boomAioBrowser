@@ -16,6 +16,9 @@ object NetController {
     suspend fun getNewsList(map: HashMap<String, String>): NetResponse<MutableList<NewsData>> {
         return service.getNewsList(map)
     }
+    suspend fun getNewsList(url:String): NetResponse<MutableList<NewsData>> {
+        return service.getNewsList(url)
+    }
 
     suspend fun getEditorNewsList(map: HashMap<String, String>): NetResponse<MutableList<NewsData>> {
         return service.getEditorNewsList(map)
@@ -23,6 +26,10 @@ object NetController {
 
     suspend fun getHotNewsList(map: HashMap<String, String>): NetResponse<MutableList<NewsData>> {
         return service.getHotNewsList(map)
+    }
+
+    suspend fun getRelatedNews(map: HashMap<String, String>): NetResponse<MutableList<NewsData>> {
+        return service.getRelatedNewsList(map)
     }
 
     suspend fun getLocation(lcommu: Double,ldrawi: Double): NetResponse<AreaData> {

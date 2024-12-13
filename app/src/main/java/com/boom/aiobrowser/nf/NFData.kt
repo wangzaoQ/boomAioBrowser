@@ -46,7 +46,6 @@ object NFData {
                             put("sessionKey", key)
                         }) { NetController.getHotNewsList(NetParams.getParamsMap(key)) }.data
                             ?: mutableListOf()
-
                     }
 
                     NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName -> {

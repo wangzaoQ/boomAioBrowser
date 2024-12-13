@@ -9,8 +9,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
-import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
@@ -23,28 +21,22 @@ import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.net.NetParams
 import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.ParamsConfig
-import com.boom.aiobrowser.other.SearchConfig
 import com.boom.aiobrowser.other.ShortManager
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
-import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.LocationManager
-import com.boom.aiobrowser.tools.download.DownloadControlManager
-import com.boom.aiobrowser.tools.partitionList
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.activity.LocationSettingActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.SearchActivity
 import com.boom.aiobrowser.ui.activity.TrendingNewsListActivity
 import com.boom.aiobrowser.ui.activity.WebDetailsActivity
-import com.boom.aiobrowser.ui.adapter.HomeTabAdapter
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
-import com.boom.aiobrowser.ui.pop.EngineGuidePop
 import com.boom.aiobrowser.ui.pop.LoadingPop
 import com.boom.aiobrowser.ui.pop.SearchPop
 import com.boom.base.adapter4.QuickAdapterHelper
@@ -52,9 +44,6 @@ import com.boom.base.adapter4.loadState.LoadState
 import com.boom.base.adapter4.loadState.trailing.TrailingLoadStateAdapter
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
-import com.google.android.material.appbar.AppBarLayout
-import com.zhpan.indicator.enums.IndicatorSlideMode
-import com.zhpan.indicator.enums.IndicatorStyle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
@@ -351,7 +340,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 adapter = adapterHelper.adapter
                 newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
                     var data = newsAdapter.items.get(position)
-                    if (data.dataType == NewsData.TYPE_NEWS || data.dataType == NewsData.TYPE_HOME_NEWS_TRENDING){
+                    if (data.dataType == NewsData.TYPE_NEWS || data.dataType == NewsData.TYPE_HOME_NEWS_TRENDING || data.dataType == NewsData.TYPE_DETAILS_NEWS_SEARCH){
                         rootActivity.jumpActivity<WebDetailsActivity>(Bundle().apply {
                             putString(ParamsConfig.JSON_PARAMS, toJson(data))
                         })
@@ -498,7 +487,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     }
 
     fun loadNews(){
-        viewModel.value.getNewsData(NetParams.FOR_YOU, page = page)
+        viewModel.value.getNewsData(NetParams.MAIN, page = page)
     }
 
     private fun loadData() {

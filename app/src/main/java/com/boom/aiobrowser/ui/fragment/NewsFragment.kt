@@ -100,7 +100,7 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
                 rootActivity.jumpActivity<WebActivity>(Bundle().apply {
                     putString("url", data.uweek)
                 })
-            }else if (data.dataType == NewsData.TYPE_NEWS){
+            }else if (data.dataType == NewsData.TYPE_NEWS || data.dataType == NewsData.TYPE_HOME_NEWS_TRENDING || data.dataType == NewsData.TYPE_DETAILS_NEWS_SEARCH){
                 rootActivity.jumpActivity<WebDetailsActivity>(Bundle().apply {
                     putString(ParamsConfig.JSON_PARAMS, toJson(data))
                 })

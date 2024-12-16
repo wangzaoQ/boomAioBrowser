@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        style="@style/app_home_item_title"
+        android:text="@string/app_topics"
+        ></androidx.appcompat.widget.AppCompatTextView>
+    <com.boom.aiobrowser.ui.view.RecentSearchViewGroup
+        android:id="@+id/topicRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        ></com.boom.aiobrowser.ui.view.RecentSearchViewGroup>
+</androidx.appcompat.widget.LinearLayoutCompat>

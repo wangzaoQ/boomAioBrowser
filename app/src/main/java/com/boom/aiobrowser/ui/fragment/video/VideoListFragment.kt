@@ -32,6 +32,9 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
     }
 
     override fun setListener() {
+        fBinding.ivBack.setOneClick {
+            rootActivity.finish()
+        }
     }
 
     override fun onResume() {

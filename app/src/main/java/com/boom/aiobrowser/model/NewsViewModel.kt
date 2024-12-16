@@ -147,6 +147,30 @@ class NewsViewModel : BaseDataModel() {
                         this.videoList = tempList
                     }
                 })
+                var insertIndex = -1
+                var newsCount = 0
+                for (i in 0 until list.size){
+                    if (list.get(i).dataType == NewsData.TYPE_NEWS){
+                        newsCount++
+                    }
+                    if (newsCount == 4){
+                        insertIndex = i
+                        break
+                    }
+                }
+
+                if (insertIndex>=0){
+                    list.add(insertIndex,NewsData().apply {
+                        var topicList = CacheManager.defaultTopicList
+                        if (topicList.isNullOrEmpty()){
+                            isLoading = true
+                            this.topicList = mutableListOf()
+                        }else{
+                            this.topicList = topicList
+                        }
+                        dataType = NewsData.TYPE_HOME_NEWS_TOPIC
+                    })
+                }
             }
         }
         return list

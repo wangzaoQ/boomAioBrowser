@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.blankj.utilcode.util.SizeUtils.dp2px
+import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADDataManager
@@ -45,6 +46,7 @@ import com.boom.aiobrowser.databinding.NewsDetailsItemTopImgBinding
 import com.boom.aiobrowser.databinding.NewsDetailsItemTopVideoBinding
 import com.boom.aiobrowser.databinding.NewsItemDetailsRelatedBinding
 import com.boom.aiobrowser.databinding.NewsItemHomeTopBinding
+import com.boom.aiobrowser.databinding.NewsItemHomeTopicBinding
 import com.boom.aiobrowser.databinding.NewsItemHomeVideoBinding
 import com.boom.aiobrowser.databinding.NewsItemLocalBinding
 import com.boom.aiobrowser.databinding.NewsItemTopicBinding
@@ -160,6 +162,23 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
 
         constructor(parent: ViewGroup) : this(
             NewsItemHomeVideoBinding.inflate(
+                LayoutInflater.from(
+                    parent.context
+                ), parent, false
+            )
+        )
+    }
+
+    internal class NewsHomeTopicItem(viewBinding: NewsItemHomeTopicBinding) :
+        RecyclerView.ViewHolder(viewBinding.getRoot()) {
+        var viewBinding: NewsItemHomeTopicBinding? = null
+
+        init {
+            this.viewBinding = viewBinding
+        }
+
+        constructor(parent: ViewGroup) : this(
+            NewsItemHomeTopicBinding.inflate(
                 LayoutInflater.from(
                     parent.context
                 ), parent, false
@@ -582,6 +601,48 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                     VideoListActivity.startVideoListActivity(context as BaseActivity<*>,position,item.videoList?: mutableListOf())
                                 }
                                 clRoot.setTag(R.id.clRoot,item.videoList)
+                            }
+                        }
+                    }
+                })
+
+            .addItemType(
+                NewsData.TYPE_HOME_NEWS_TOPIC,
+                object : OnMultiItemAdapterListener<NewsData, NewsHomeTopicItem> {
+
+                    override fun onCreate(
+                        context: Context,
+                        parent: ViewGroup,
+                        viewType: Int
+                    ): NewsHomeTopicItem {
+                        return NewsHomeTopicItem(
+                            parent
+                        );
+                    }
+
+                    override fun onBind(holder: NewsHomeTopicItem, position: Int, item: NewsData?) {
+                        if (item == null) return
+                        holder.viewBinding?.topicRoot?.apply {
+                            var tag = getTag(R.id.topicRoot) as? MutableList<String>
+                            if (tag == null || tag!=item.topicList){
+                                removeAllViews()
+                                heightLimit = false
+                                maxLimit = false
+                                for (i in 0 until item.topicList!!.size){
+                                    var content = if(item.isLoading) context.getString(R.string.app_loading_content) else item.topicList!!.get(i).topic
+                                    var topicView = LayoutInflater.from(context).inflate(R.layout.news_item_child_topic,null,false)
+                                    var tv = topicView.findViewById<AppCompatTextView>(R.id.tvTopic)
+                                    topicView.setOnClickListener {
+                                        if (item.isLoading){
+                                            return@setOnClickListener
+                                        }else{
+                                            APP.topicJumpData.postValue(item.topicList!!.get(i).id)
+                                        }
+                                    }
+                                    tv.text = "#${content}"
+                                    addView(topicView)
+                                }
+                                setTag(R.id.topicRoot,item.topicList!!)
                             }
                         }
                     }

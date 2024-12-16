@@ -171,23 +171,25 @@ class AppViewModel : BaseDataModel() {
             var index1 = 0
             var index2 = 0
             var endInx = list!!.size
-            if (endInx>15){
-                endInx = 15
-            }
-            var count = 0
-            while (index0 == index1 || index0 == index2 || index1 == index2){
-                count++
-                index0 = Random.nextInt(3,endInx)
-                delay(50)
-                index1 = Random.nextInt(3, endInx)
-                delay(50)
-                index2 = Random.nextInt(3, endInx)
-            }
-            AppLogs.dLog(APP.instance.TAG,"取随机数 count:${count} index0:${index0} index1:${index1} index2:${index2}")
-            for (i in 0 until list.size){
-                if (i == 0 || i == 1 || i == 2)continue
-                if (i == index0 || i == index1 || i == index2 ){
-                    list.get(i).isTrendTop = true
+            if (list.size>3){
+                if (endInx>15){
+                    endInx = 15
+                }
+                var count = 0
+                while (index0 == index1 || index0 == index2 || index1 == index2){
+                    count++
+                    index0 = Random.nextInt(3,endInx)
+                    delay(50)
+                    index1 = Random.nextInt(3, endInx)
+                    delay(50)
+                    index2 = Random.nextInt(3, endInx)
+                }
+                AppLogs.dLog(APP.instance.TAG,"取随机数 count:${count} index0:${index0} index1:${index1} index2:${index2}")
+                for (i in 0 until list.size){
+                    if (i == 0 || i == 1 || i == 2)continue
+                    if (i == index0 || i == index1 || i == index2 ){
+                        list.get(i).isTrendTop = true
+                    }
                 }
             }
             CacheManager.trendNews = list

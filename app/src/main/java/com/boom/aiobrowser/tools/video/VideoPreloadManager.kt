@@ -104,10 +104,12 @@ object VideoPreloadManager {
                                 }
                             }else{
                                 var videoTime = videoData.vsound?:0
-                                if (videoTime<60){
+                                if (videoTime<20){
                                     videoTime = 3
-                                }else{
+                                }else if (videoTime<60){
                                     videoTime = 5
+                                }else{
+                                    videoTime = 8
                                 }
                                 var end= BigDecimal(requestLength).divide(
                                     BigDecimal(videoData.vsound?:0),

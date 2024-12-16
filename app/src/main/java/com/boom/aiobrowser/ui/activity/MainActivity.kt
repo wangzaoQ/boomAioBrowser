@@ -106,6 +106,26 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 ShortManager.addRate(WeakReference(this@MainActivity))
             }
         }
+        APP.topicJumpData.observe(this){
+           var topicList = CacheManager.defaultTopicList
+            var index = -1
+            for (i in 0 until topicList.size){
+                if (it == topicList.get(i).id){
+                    index = i
+                    break
+                }
+            }
+            if (index>=0){
+                if (fragments.size == 3){
+                    acBinding.fragmentMain.currentItem = 1
+                    (fragments.get(1) as? NewsHomeFragment)?.apply {
+                        runCatching {
+                            fBinding.vp.setCurrentItem(index,true)
+                        }
+                    }
+                }
+            }
+        }
     }
 
 

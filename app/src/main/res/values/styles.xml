@@ -45,7 +45,14 @@
         <item name="android:windowBackground">@color/tran</item>
     </style>
 
-<!--    <declare-styleable name="ScanItemStyle">-->
+    <style name="app_home_item_title" parent="app_text_bold">
+        <item name="android:textColor">#1C274C</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginStart">13dp</item>
+    </style>
+
+    <!--    <declare-styleable name="ScanItemStyle">-->
 <!--        <attr name="itemIcon" format="reference" />-->
 <!--        <attr name="itemTitle" format="string" />-->
 <!--        <attr name="itemTitleId" format="reference" />-->

@@ -93,6 +93,20 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 newsAdapter.removeAt(index)
             }
         }
+        APP.topicLiveData.observe(this){
+            var list = newsAdapter.mutableItems
+            var index = -1
+            for (i in 0 until list.size){
+                if(list.get(i).dataType == NewsData.TYPE_HOME_NEWS_TOPIC){
+                    index = i
+                    break
+                }
+            }
+            if (index>=0){
+                newsAdapter.mutableItems.get(index).topicList = it
+                newsAdapter.notifyItemChanged(index)
+            }
+        }
         APP.trendNewsComplete.observe(this){
             if (newsAdapter.mutableItems.isNullOrEmpty())return@observe
             for (i in 0 until newsAdapter.mutableItems.size){
@@ -108,6 +122,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             }
 
         }
+
 //        fBinding.topSearch.binding.ivRefresh.visibility = View.GONE
 //        fBinding.mainAppBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
 //            override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {

@@ -357,6 +357,7 @@
     <string name="app_gps_fail">Location acquisition failed</string>
     <string name="app_related_news">Related News</string>
     <string name="app_video_title">Featured Videos</string>
+    <string name="app_topics">Topics</string>
 
 
 </resources>

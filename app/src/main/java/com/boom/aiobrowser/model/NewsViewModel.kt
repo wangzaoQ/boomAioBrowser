@@ -9,6 +9,7 @@ import com.boom.aiobrowser.net.NetParams
 import com.boom.aiobrowser.net.NetRequest
 import com.boom.aiobrowser.other.NewsConfig
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.video.VideoPreloadManager
 
 class NewsViewModel : BaseDataModel() {
     var newsLiveData = MutableLiveData<List<NewsData>>()
@@ -72,6 +73,11 @@ class NewsViewModel : BaseDataModel() {
             }.data ?: mutableListOf()
             newsVideoLiveData.postValue(list)
             CacheManager.videoList = list
+            for (i in 0 until list.size){
+                VideoPreloadManager.serialList(1, mutableListOf<NewsData>().apply {
+                    add(list.get(i))
+                })
+            }
         }, failBack = {},1)
     }
 

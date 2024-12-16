@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.boom.aiobrowser.ui.view.CustomVideoView
+        android:id="@+id/video_item_player"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@mipmap/ic_video_back"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="53dp"
+        ></ImageView>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="13dp"
+        android:layout_marginBottom="97dp"
+        >
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivSource"
+            android:layout_width="22dp"
+            android:layout_height="22dp"></androidx.appcompat.widget.AppCompatImageView>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSourceName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/app_text_bold"
+            android:layout_marginStart="6dp"
+            android:textColor="@color/white"
+            tools:text="Manila Times"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textSize="14sp"
+
+            ></androidx.appcompat.widget.AppCompatTextView>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="67dp"
+        android:layout_marginBottom="15dp"
+        style="@style/app_text_normal"
+        android:textColor="@color/white"
+        tools:text="Happy New Year Happy New YearHappy New"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:textSize="14sp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="14dp"
+        ></androidx.appcompat.widget.AppCompatTextView>
+</FrameLayout>

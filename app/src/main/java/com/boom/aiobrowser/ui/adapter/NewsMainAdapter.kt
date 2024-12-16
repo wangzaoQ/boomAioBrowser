@@ -32,7 +32,6 @@ import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.NewsData
-import com.boom.aiobrowser.data.NewsVideoData
 import com.boom.aiobrowser.data.ViewItem
 import com.boom.aiobrowser.databinding.BrowserItemFilmNewsBinding
 import com.boom.aiobrowser.databinding.BrowserItemHomeAdBinding
@@ -63,6 +62,7 @@ import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.partitionList
 import com.boom.aiobrowser.tools.toJson
+import com.boom.aiobrowser.ui.activity.VideoListActivity
 import com.boom.aiobrowser.ui.activity.WebActivity
 import com.boom.aiobrowser.ui.activity.WebDetailsActivity
 import com.boom.aiobrowser.ui.fragment.MainFragment
@@ -540,7 +540,7 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                     override fun onBind(holder: NewsHomeVideoItem, position: Int, item: NewsData?) {
                         if (item == null) return
                         holder.viewBinding?.apply {
-                            var tag = clRoot.getTag(R.id.clRoot) as? MutableList<MutableList<NewsVideoData>>
+                            var tag = clRoot.getTag(R.id.clRoot) as? MutableList<MutableList<NewsData>>
                             if (tag == null || tag != item.videoList){
                                 rvVideo.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
                                 var newsAdapter = HomeVideoAdapter(fragmet)
@@ -579,6 +579,7 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
 
                                 newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
                                     var data = newsAdapter.items.get(position)
+                                    VideoListActivity.startVideoListActivity(context as BaseActivity<*>,position,item.videoList?: mutableListOf())
                                 }
                                 clRoot.setTag(R.id.clRoot,item.videoList)
                             }

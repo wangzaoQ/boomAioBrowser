@@ -55,6 +55,7 @@ class NewsData {
     var sschem:String?=""
     var vbreas:String?=""
     var pphilo:Long?=0
+    var vsound:Int?=0
     var asilve:MutableList<String>?=null
 
     var dataType = 0

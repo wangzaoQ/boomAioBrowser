@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.JumpData
@@ -35,8 +36,10 @@ class HomeTabChildAdapter() : BaseQuickAdapter<JumpData, HomeTabChildAdapter.VH>
             if (item.jumpType == JumpConfig.JUMP_WEB_TYPE){
                 tvBrowser.text = context.getString(R.string.app_more)
                 ivBrowser.setImageResource(R.mipmap.ic_news_catrgory_more)
+            }else if (item.jumpTitle == context.getString(R.string.app_x)){
+                ivBrowser.setImageDrawable(ContextCompat.getDrawable(context,R.mipmap.ic_home_tab_x))
             }else if (item.imgRes!=0){
-                ivBrowser.setImageResource(item.imgRes?:0)
+                ivBrowser.setImageDrawable(ContextCompat.getDrawable(context,item.imgRes!!))
             }else{
                 var uri = Uri.parse(item.jumpUrl)
                 var iconUrl = "https://www.google.com/s2/favicons?sz=128&domain=${uri.host}"

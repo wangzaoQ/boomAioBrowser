@@ -87,6 +87,10 @@ object NetParams {
         }else if (endKey.startsWith(NewsConfig.LOCAL_TAG)){
             endKey = endKey.substringAfter(NewsConfig.LOCAL_TAG)
             isLocalTopic = true
+        }else if (endKey.startsWith(NewsConfig.NO_SESSION_TAG)){
+            endKey = endKey.substringAfter(NewsConfig.NO_SESSION_TAG)
+            sessionType = 1
+            map.put("tearth",endKey)
         }
         when (endKey) {
             MAIN,NFEnum.NF_NEWS.menuName,WIDGET, NEWS_RECOMMEND,FOR_YOU,NEWS_HOME_VIDEO-> {
@@ -120,6 +124,7 @@ object NetParams {
             }
             PUBLIC_SAFETY->{
                 needLocation = true
+                map.put("tearth",PUBLIC_SAFETY)
             }
             MOVIE->{
                 sessionType = 1

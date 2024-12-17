@@ -50,6 +50,7 @@ import com.boom.aiobrowser.databinding.NewsItemHomeTopicBinding
 import com.boom.aiobrowser.databinding.NewsItemHomeVideoBinding
 import com.boom.aiobrowser.databinding.NewsItemLocalBinding
 import com.boom.aiobrowser.databinding.NewsItemTopicBinding
+import com.boom.aiobrowser.databinding.NewsItemTopicHeaderBinding
 import com.boom.aiobrowser.databinding.NewsItemTrendingBinding
 import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.ParamsConfig
@@ -64,6 +65,7 @@ import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.partitionList
 import com.boom.aiobrowser.tools.toJson
+import com.boom.aiobrowser.ui.activity.TopicListActivity
 import com.boom.aiobrowser.ui.activity.VideoListActivity
 import com.boom.aiobrowser.ui.activity.WebActivity
 import com.boom.aiobrowser.ui.activity.WebDetailsActivity
@@ -363,6 +365,24 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
         )
     }
 
+    //topic header
+    internal class NewsTopicHeaderItem(viewBinding: NewsItemTopicHeaderBinding) :
+        RecyclerView.ViewHolder(viewBinding.getRoot()) {
+        var viewBinding: NewsItemTopicHeaderBinding? = null
+
+        init {
+            this.viewBinding = viewBinding
+        }
+
+        constructor(parent: ViewGroup) : this(
+            NewsItemTopicHeaderBinding.inflate(
+                LayoutInflater.from(
+                    parent.context
+                ), parent, false
+            )
+        )
+    }
+
     /**
      * 详情推荐新闻
      */
@@ -421,24 +441,27 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                             var params = (tvNewsTitle.layoutParams as ConstraintLayout.LayoutParams)
                             params.topMargin = dp2px(12f)
                             var paramsIv = (ivImg.layoutParams as ConstraintLayout.LayoutParams)
-                            if (position == 2 && fragmet is MainFragment){
-                                paramsIv.topMargin = dp2px(0f)
+                            if (context is WebDetailsActivity){
+                                if (position>0 && mutableItems.get(position-1).dataType == NewsData.TYPE_DETAILS_NEWS_RELATED){
+                                    paramsIv.topMargin = dp2px(0f)
+                                }else{
+                                    paramsIv.topMargin = dp2px(14f)
+                                }
                             }else{
-                                paramsIv.topMargin = dp2px(14f)
+                                if ((position == 2 && (fragmet!=null && fragmet is MainFragment))){
+                                    paramsIv.topMargin = dp2px(0f)
+                                }else{
+                                    paramsIv.topMargin = dp2px(14f)
+                                }
                             }
                         }
                         tvNewsTitle.text = item.tconsi
                         GlideManager.loadImg(fragmet, ivSource, item.sschem)
                         tvSourceName.text = "${item.sfindi}"
                         tvNewsTime.text = TimeManager.getNewsTime(item.pphilo ?: 0)
-                        var location = CacheManager.locationData
-                        if(item.asilve.isNullOrEmpty().not() && location!=null && location.locationArea.isNullOrEmpty().not()){
-                            if (item.asilve!!.contains(location.locationArea)){
-                                llLocation.visibility = View.VISIBLE
-                                tvLocation.text = location.locationCity
-                            }else{
-                                llLocation.visibility = View.GONE
-                            }
+                        if(item.areaTag.isNotEmpty()){
+                            llLocation.visibility = View.VISIBLE
+                            tvLocation.text = item.areaTag
                         }else{
                             llLocation.visibility = View.GONE
                         }
@@ -869,6 +892,12 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                             tvSource.text = item.sfindi
                             tvTime.text = TimeManager.getNewsTime(item.pphilo ?: 0)
                             GlideManager.loadImg(fragment = null, iv = ivLogo, url = item.sschem)
+                            if(item.areaTag.isNotEmpty()){
+                                llLocation.visibility = View.VISIBLE
+                                tvLocation.text = item.areaTag
+                            }else{
+                                llLocation.visibility = View.GONE
+                            }
                         }
                     }
                 })
@@ -1003,7 +1032,9 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                     var topicView = LayoutInflater.from(context).inflate(R.layout.news_item_child_topic,null,false)
                                     var tv = topicView.findViewById<AppCompatTextView>(R.id.tvTopic)
                                     topicView.setOnClickListener {
-
+                                        (context as BaseActivity<*>).jumpActivity<TopicListActivity>(Bundle().apply {
+                                            putString("topic",content)
+                                        })
                                     }
                                     tv.text = "#${content}"
                                     addView(topicView)
@@ -1218,6 +1249,23 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                 }
                             }
                         }
+                    }
+                })
+            .addItemType(
+                NewsData.TYPE_TOPIC_HEADER,
+                object : OnMultiItemAdapterListener<NewsData, NewsTopicHeaderItem> {
+
+                    override fun onCreate(
+                        context: Context,
+                        parent: ViewGroup,
+                        viewType: Int
+                    ): NewsTopicHeaderItem {
+                        return NewsTopicHeaderItem(
+                            parent
+                        );
+                    }
+
+                    override fun onBind(holder: NewsTopicHeaderItem, position: Int, item: NewsData?) {
                     }
                 })
             .onItemViewType { position, list -> list.get(position).dataType }

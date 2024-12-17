@@ -34,27 +34,29 @@
             android:orientation="horizontal"
             android:layout_marginTop="6dp"
             >
-            <androidx.appcompat.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/btnYes"
                 android:layout_width="103dp"
                 android:layout_height="30dp"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:text="@string/app_yes"
+                android:gravity="center"
                 android:textAllCaps="false"
                 android:background="@drawable/shape_location_yes"
-                ></androidx.appcompat.widget.AppCompatButton>
-            <androidx.appcompat.widget.AppCompatButton
+                ></androidx.appcompat.widget.AppCompatTextView>
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/btnNo"
                 android:layout_width="103dp"
                 android:layout_height="30dp"
                 android:textColor="#5453A1"
                 android:textSize="14sp"
+                android:gravity="center"
                 android:text="@string/app_no"
                 android:textAllCaps="false"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/shape_location_no"
-                ></androidx.appcompat.widget.AppCompatButton>
+                ></androidx.appcompat.widget.AppCompatTextView>
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>
 

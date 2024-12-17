@@ -88,7 +88,7 @@ class HomeGuideActivity : BaseActivity<BrowserActivityHomeGuideBinding>() {
                 guideList.add(1)
                 guideList.add(2)
                 guideList.add(3)
-                acBinding.ivJump.setImageResource(R.mipmap.ic_x)
+                acBinding.ivJump.setImageResource(R.mipmap.ic_home_tab_x)
             }
             getString(R.string.app_instagram)->{
                 guideList.add(0)

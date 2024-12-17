@@ -17,6 +17,7 @@ class NewsViewModel : BaseDataModel() {
     var newsRelatedLiveData = MutableLiveData<MutableList<NewsData>>()
     var newsRecommendLiveData = MutableLiveData<MutableList<NewsData>>()
     var newsVideoLiveData = MutableLiveData<MutableList<NewsData>>()
+    var newsTopicListLiveData = MutableLiveData<HashMap<Int,MutableList<NewsData>>>()
 
 
 
@@ -65,6 +66,41 @@ class NewsViewModel : BaseDataModel() {
         }, 1)
     }
 
+
+    fun getNewsByTopic(topic: String,page: Int) {
+        loadData(loadBack = {
+            var dataType = 0
+            //topic
+            var list:MutableList<NewsData>?=null
+
+            list = NetRequest.request(HashMap<String, Any>().apply {
+                put("sessionKey","${NewsConfig.NO_SESSION_TAG}${topic}" )
+            }) {
+                NetController.getNewsList(NetParams.getParamsMap("${NewsConfig.NO_SESSION_TAG}${topic}",page))
+            }.data?: mutableListOf()
+
+            if (list.isNullOrEmpty()){
+                dataType = 1
+                list = NetRequest.request(HashMap<String, Any>().apply {
+                    put("sessionKey","${NewsConfig.NO_SESSION_TAG}${NetParams.PUBLIC_SAFETY}" )
+                }) {
+                    NetController.getNewsList(NetParams.getParamsMap("${NewsConfig.NO_SESSION_TAG}${NetParams.PUBLIC_SAFETY}",page))
+                }.data?: mutableListOf()
+            }
+            if (list.isNullOrEmpty()){
+                dataType =2
+                list = NetRequest.request(HashMap<String, Any>().apply {
+                    put("sessionKey","${NewsConfig.NO_SESSION_TAG}${topic}" )
+                }) {
+                    NetController.getEditorNewsList(NetParams.getParamsMap("${NewsConfig.NO_SESSION_TAG}${topic}",page))
+                }.data?: mutableListOf()
+            }
+            newsTopicListLiveData.postValue(HashMap<Int, MutableList<NewsData>>().apply {
+                put(dataType,list?: mutableListOf())
+            })
+        }, failBack = {})
+    }
+
     fun getNewsVideoList(){
         loadData(loadBack = {
             var url = NetParams.videoMapToUrl(NetParams.getParamsMap(NetParams.NEWS_HOME_VIDEO))
@@ -78,7 +114,12 @@ class NewsViewModel : BaseDataModel() {
                     add(list.get(i))
                 })
             }
-        }, failBack = {},1)
+        }, failBack = {
+            var cacheList = CacheManager.videoList
+            if (cacheList.isNotEmpty()){
+                newsVideoLiveData.postValue(cacheList)
+            }
+        },1)
     }
 
     private suspend fun addHomeData(topic:String, page:Int, list:MutableList<NewsData>) :MutableList<NewsData>{
@@ -111,69 +152,109 @@ class NewsViewModel : BaseDataModel() {
                 })
             }
 
-            var isSuccess = CacheManager.locationData?.locationSuccess?:false
-            var insertIndex = -1
-            if (isSuccess.not()){
-                var newsCount = 0
-                for (i in 0 until list.size){
-                    if (list.get(i).dataType == NewsData.TYPE_NEWS){
-                        newsCount++
-                    }
-                    if (newsCount == 3){
-                        insertIndex = i
-                        break
-                    }
-                }
-
-                if (insertIndex>=0){
-                    list.add(insertIndex,NewsData().apply {
-                        dataType = NewsData.TYPE_HOME_NEWS_LOCAL
-                    })
-                }
+            addVideo(list)
+            addLocation(list)
+            addTopic(list)
+        }
+        if (topic.startsWith(NewsConfig.LOCAL_TAG)){
+            var topicNew = topic.substringAfter(NewsConfig.LOCAL_TAG)
+            list.forEach {
+                it.areaTag = topicNew
             }
-            if (NetParams.MAIN == topic){
-                list.add(insertIndex,NewsData().apply {
-                    dataType = NewsData.TYPE_HOME_NEWS_VIDEO
-                    var tempList = CacheManager.videoList
-                    if (tempList.isNullOrEmpty()){
-                        var list = mutableListOf<NewsData>()
-                        for (i in 0 until 10){
-                            list.add(NewsData().apply {
-                                isLoading = true
-                            })
-                        }
-                        this.videoList = list
-                    }else{
-                        this.videoList = tempList
+        }else {
+            var locationData = CacheManager.locationData
+            if (locationData!=null&&locationData.locationSuccess){
+                list.forEach {
+                    var showArea = it.asilve?.contains(locationData.locationArea)?:false
+                    if (showArea){
+                        it.areaTag = locationData.locationCity
                     }
-                })
-                var insertIndex = -1
-                var newsCount = 0
-                for (i in 0 until list.size){
-                    if (list.get(i).dataType == NewsData.TYPE_NEWS){
-                        newsCount++
-                    }
-                    if (newsCount == 4){
-                        insertIndex = i
-                        break
-                    }
-                }
-
-                if (insertIndex>=0){
-                    list.add(insertIndex,NewsData().apply {
-                        var topicList = CacheManager.defaultTopicList
-                        if (topicList.isNullOrEmpty()){
-                            isLoading = true
-                            this.topicList = mutableListOf()
-                        }else{
-                            this.topicList = topicList
-                        }
-                        dataType = NewsData.TYPE_HOME_NEWS_TOPIC
-                    })
                 }
             }
         }
         return list
+    }
+
+    private fun addTopic(list: MutableList<NewsData>) {
+        var insertIndex = -1
+        var newsCount = 0
+        for (i in 0 until list.size) {
+            if (list.get(i).dataType == NewsData.TYPE_NEWS) {
+                newsCount++
+            }
+            if (newsCount == 4) {
+                insertIndex = i
+                break
+            }
+        }
+
+        if (insertIndex >= 0) {
+            list.add(insertIndex, NewsData().apply {
+                var topicList = CacheManager.defaultTopicList
+                if (topicList.isNullOrEmpty()) {
+                    isLoading = true
+                    this.topicList = mutableListOf()
+                } else {
+                    this.topicList = topicList
+                }
+                dataType = NewsData.TYPE_HOME_NEWS_TOPIC
+            })
+        }
+    }
+
+    private fun addVideo(
+        list: MutableList<NewsData>
+    ) {
+        var insertIndex = -1
+        var newsCount = 0
+        for (i in 0 until list.size) {
+            if (list.get(i).dataType == NewsData.TYPE_NEWS) {
+                newsCount++
+            }
+            if (newsCount == 3) {
+                insertIndex = i
+                break
+            }
+        }
+        list.add(insertIndex, NewsData().apply {
+            dataType = NewsData.TYPE_HOME_NEWS_VIDEO
+            var tempList = CacheManager.videoList
+            if (tempList.isNullOrEmpty()) {
+                var list = mutableListOf<NewsData>()
+                for (i in 0 until 10) {
+                    list.add(NewsData().apply {
+                        isLoading = true
+                    })
+                }
+                this.videoList = list
+            } else {
+                this.videoList = tempList
+            }
+        })
+    }
+
+    private fun addLocation(list: MutableList<NewsData>): Int {
+        var isSuccess = CacheManager.locationData?.locationSuccess ?: false
+        var insertIndex = -1
+        if (isSuccess.not()) {
+            var newsCount = 0
+            for (i in 0 until list.size) {
+                if (list.get(i).dataType == NewsData.TYPE_NEWS) {
+                    newsCount++
+                }
+                if (newsCount == 3) {
+                    insertIndex = i
+                    break
+                }
+            }
+
+            if (insertIndex >= 0) {
+                list.add(insertIndex, NewsData().apply {
+                    dataType = NewsData.TYPE_HOME_NEWS_LOCAL
+                })
+            }
+        }
+        return insertIndex
     }
 
 
@@ -206,6 +287,7 @@ class NewsViewModel : BaseDataModel() {
                     sfindi = detailsData.sfindi
                     sschem = detailsData.sschem
                     pphilo = detailsData.pphilo
+                    areaTag = newData.areaTag
                 })
                 //content
                 var size = detailsData?.cvehic?.size ?: 0
@@ -297,4 +379,5 @@ class NewsViewModel : BaseDataModel() {
             newsRecommendLiveData.postValue(list)
         }, failBack = {},1)
     }
+
 }

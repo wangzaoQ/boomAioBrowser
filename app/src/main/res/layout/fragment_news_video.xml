@@ -19,18 +19,18 @@
             android:layout_height="match_parent"></androidx.viewpager2.widget.ViewPager2>
     </com.boom.refresh.layout.SmartRefreshLayout>
 
-<!--    <com.airbnb.lottie.LottieAnimationView-->
-<!--        android:id="@+id/guide"-->
-<!--        android:layout_width="171dp"-->
-<!--        android:layout_height="194dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        android:layout_gravity="center"-->
-<!--        app:lottie_autoPlay="false"-->
-<!--        app:lottie_fileName="video_start.json"-->
-<!--        app:lottie_loop="true"-->
-<!--        android:visibility="gone"-->
-<!--        />-->
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnim"
+        android:layout_width="171dp"
+        android:layout_height="194dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_gravity="center"
+        app:lottie_autoPlay="false"
+        app:lottie_fileName="video_guide.json"
+        app:lottie_loop="true"
+        android:visibility="gone"
+        />
 </FrameLayout>

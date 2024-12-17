@@ -199,6 +199,7 @@ object NewsConfig{
 
     const val TOPIC_TAG="topic_"
     const val LOCAL_TAG="area_"
+    const val NO_SESSION_TAG="no_session_"
 
     var LOCAL_TOPIC_JSON= """
 [

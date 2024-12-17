@@ -358,6 +358,8 @@
     <string name="app_related_news">Related News</string>
     <string name="app_video_title">Featured Videos</string>
     <string name="app_topics">Topics</string>
+    <string name="app_topic_title">No Related News Found Recommend Information Of Your Interest</string>
+    <string name="app_you_may_like">You May Like</string>
 
 
 </resources>

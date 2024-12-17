@@ -28,7 +28,7 @@ object WebSourceManager {
             jumpType = JumpConfig.JUMP_WEB
             jumpUrl = "https://x.com/"
             jumpTitle = APP.instance.getString(R.string.app_x)
-            imgRes = R.mipmap.ic_x
+            imgRes = R.mipmap.ic_home_tab_x
         })
 //        defaultList.add(JumpData().apply {
 //            jumpType = JumpConfig.JUMP_WEB
@@ -235,7 +235,7 @@ object WebSourceManager {
         list.add(JumpData().apply {
             jumpUrl = WebConfig.X_URL
             jumpTitle = APP.instance.getString(R.string.app_x)
-            imgRes = R.mipmap.ic_x
+            imgRes = R.mipmap.ic_home_tab_x
         })
         list.add(JumpData().apply {
             jumpUrl = WebConfig.WhatsApp_URL

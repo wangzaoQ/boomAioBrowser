@@ -148,7 +148,6 @@
 <!--            ></activity>-->
         <activity android:name=".ui.activity.WebDetailsActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:launchMode="singleTop"
             android:hardwareAccelerated="true"
             ></activity>
         <activity android:name=".ui.activity.SearchActivity"
@@ -206,6 +205,10 @@
             >
         </activity>
         <activity android:name=".ui.activity.VideoListActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            ></activity>
+        <activity android:name=".ui.activity.TopicListActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:launchMode="singleTop"
             ></activity>

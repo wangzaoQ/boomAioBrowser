@@ -2,6 +2,7 @@ package com.boom.aiobrowser.ui.fragment.video
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
@@ -9,9 +10,13 @@ import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.FragmentNewsVideoBinding
 import com.boom.aiobrowser.model.NewsViewModel
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.getListByGson
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.adapter.VideoListAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
 
@@ -21,7 +26,21 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
 
 
     override fun startLoadData() {
-
+        if (CacheManager.isFirstVideoGuide){
+            CacheManager.isFirstVideoGuide = false
+            fBinding.lottieAnim.visibility = View.VISIBLE
+            fBinding.lottieAnim.apply {
+                setAnimation("video_guide.json")
+                playAnimation()
+            }
+            rootActivity.addLaunch(success = {
+                delay(3000)
+                withContext(Dispatchers.Main){
+                    fBinding.lottieAnim.cancelAnimation()
+                    fBinding.lottieAnim.visibility = View.GONE
+                }
+            }, failBack = {})
+        }
     }
 
     override fun setListener() {

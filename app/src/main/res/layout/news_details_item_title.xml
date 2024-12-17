@@ -47,9 +47,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="Manila Times"
+            android:maxWidth="110dp"
+            android:singleLine="true"
             android:ellipsize="end"
             android:gravity="center_vertical"
-            android:singleLine="true"
             android:layout_marginStart="8dp"
             android:textColor="@color/black_33"
             android:textSize="12sp"
@@ -63,5 +64,37 @@
             android:textColor="#999999"
             android:textSize="12sp"
             tools:text="14 ago"></androidx.appcompat.widget.AppCompatTextView>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/ivSource"
+            app:layout_constraintStart_toEndOf="@+id/tvNewsTime"
+            app:layout_constraintTop_toTopOf="@+id/ivSource"
+            android:background="@drawable/shape_bg_news_location"
+            android:paddingStart="4dp"
+            android:paddingEnd="6dp"
+            android:layout_marginStart="6dp"
+            tools:visibility="visible"
+            android:visibility="gone"
+            >
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                app:srcCompat="@mipmap/ic_location_tips"
+                android:layout_gravity="center_vertical"
+                ></androidx.appcompat.widget.AppCompatImageView>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                tools:text="123"
+                android:textColor="#CC1C274C"
+                android:textSize="11sp"
+                ></androidx.appcompat.widget.AppCompatTextView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.appcompat.widget.LinearLayoutCompat>

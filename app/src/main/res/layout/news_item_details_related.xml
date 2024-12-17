@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvRecommend"
+        android:id="@+id/tvRelated"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:textSize="16sp"
@@ -30,4 +30,17 @@
         android:layout_marginTop="13dp"
         android:background="#F7F7F9"
         app:layout_constraintTop_toBottomOf="@+id/ivSource"></View>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvRecommend"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:textSize="16sp"
+        android:textColor="#1C274C"
+        android:text="@string/app_you_may_like"
+        android:layout_marginLeft="14dp"
+        style="@style/app_text_bold"
+        android:gravity="center_vertical"
+        ></androidx.appcompat.widget.AppCompatTextView>
 </androidx.appcompat.widget.LinearLayoutCompat>

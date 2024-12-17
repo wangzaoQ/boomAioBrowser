@@ -57,6 +57,7 @@ class NewsData {
     var pphilo:Long?=0
     var vsound:Int?=0
     var asilve:MutableList<String>?=null
+    var areaTag :String = ""
 
     var dataType = 0
 
@@ -97,6 +98,8 @@ class NewsData {
         var TYPE_DETAILS_NEWS_READ_SOURCE = 120
         var TYPE_DETAILS_NEWS_RELATED = 121
         var TYPE_DETAILS_NEWS_TOPIC = 130
+
+        var TYPE_TOPIC_HEADER = 140
 
     }
 }

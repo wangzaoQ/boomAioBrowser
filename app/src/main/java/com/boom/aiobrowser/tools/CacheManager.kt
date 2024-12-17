@@ -86,6 +86,7 @@ object CacheManager {
     const val KV_AD_VALUE = "KV_AD_VALUE"
     const val KV_AD_001_VALUE = "KV_AD_001_VALUE"
     const val KV_AD_DAY_VALUE = "KV_AD_DAY_VALUE"
+    const val KV_FIRST_VIDEO_GUIDE = "KV_FIRST_VIDEO_GUIDE"
 
 
     var videoDownloadTempList :MutableList<VideoUIData>
@@ -110,6 +111,14 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_FIRST_START, value)
+        }
+
+    var isFirstVideoGuide: Boolean
+        get() {
+            return mmkv.decodeBool(KV_FIRST_VIDEO_GUIDE, true)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_VIDEO_GUIDE, value)
         }
 
     var isFirstClickDownloadButton: Boolean

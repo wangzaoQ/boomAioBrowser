@@ -7,6 +7,7 @@ class AioNFData {
     var aio_hot:Data?=null
     var aio_newuser:Data?=null
     var aio_unlock:Data?=null
+    var aio_trend:Data?=null
 }
 
 class Data{

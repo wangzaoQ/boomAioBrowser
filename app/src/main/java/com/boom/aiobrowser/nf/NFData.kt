@@ -209,6 +209,9 @@ object NFData {
             NFEnum.NF_UNLOCK.menuName->{
                 NFManager.nfRootBean?.aio_unlock?.times?:0
             }
+            NFEnum.NF_TREND.menuName->{
+                NFManager.nfRootBean?.aio_trend?.times?:0
+            }
             else -> {
                 NFManager.nfRootBean?.aio_for_you?.times?:0
             }
@@ -232,6 +235,9 @@ object NFData {
             NFEnum.NF_UNLOCK.menuName->{
                 NFManager.nfRootBean?.aio_unlock?.first_time?:0
             }
+            NFEnum.NF_TREND.menuName->{
+                NFManager.nfRootBean?.aio_trend?.first_time?:0
+            }
             else -> {
                 NFManager.nfRootBean?.aio_for_you?.first_time?:0
             }
@@ -254,9 +260,13 @@ object NFData {
             NFEnum.NF_UNLOCK.menuName->{
                 NFManager.nfRootBean?.aio_unlock?.in_time?:0
             }
+            NFEnum.NF_TREND.menuName->{
+                NFManager.nfRootBean?.aio_trend?.in_time?:0
+            }
             else -> {
                 NFManager.nfRootBean?.aio_for_you?.in_time?:0
             }
-        }    }
+        }
+    }
 
 }

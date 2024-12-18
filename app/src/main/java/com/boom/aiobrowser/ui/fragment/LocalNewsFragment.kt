@@ -169,23 +169,8 @@ class LocalNewsFragment :BaseFragment<NewsFragmentLocationBinding>(){
                         FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
                     )
                     adapter = fragmentAdapter
-                    addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-                        override fun onPageScrolled(
-                            position: Int,
-                            positionOffset: Float,
-                            positionOffsetPixels: Int
-                        ) {
-                        }
-
-                        override fun onPageSelected(position: Int) {
-                            PointEvent.posePoint(PointEventKey.local_page_city, Bundle().apply {
-                                putString(PointValueKey.type,list.get(position).locationCity)
-                            })
-                        }
-
-                        override fun onPageScrollStateChanged(state: Int) {
-                        }
-                    })
+                    removeOnPageChangeListener(listener)
+                    addOnPageChangeListener(listener)
                 }
                 ViewPagerHelper.bind(tabLayout, vp)
                 if (type == 2){
@@ -194,6 +179,24 @@ class LocalNewsFragment :BaseFragment<NewsFragmentLocationBinding>(){
                     vp.currentItem = list.size-1
                 }
             }
+        }
+    }
+
+    var listener = object : ViewPager.OnPageChangeListener {
+        override fun onPageScrolled(
+            position: Int,
+            positionOffset: Float,
+            positionOffsetPixels: Int
+        ) {
+        }
+
+        override fun onPageSelected(position: Int) {
+            PointEvent.posePoint(PointEventKey.local_page_city, Bundle().apply {
+                putString(PointValueKey.type,fragmentAdapter?.titleList?.get(position)?.locationCity?:"")
+            })
+        }
+
+        override fun onPageScrollStateChanged(state: Int) {
         }
     }
 

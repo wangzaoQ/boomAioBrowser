@@ -117,7 +117,7 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
             CacheManager.locationData = data
             newsAdapter.removeAt(position)
             APP.locationListUpdateLiveData.postValue(0)
-            PointEvent.posePoint(PointEventKey.IP_location,Bundle().apply {
+            PointEvent.posePoint(PointEventKey.IP_location_banner,Bundle().apply {
                 putString(PointValueKey.from_type,"for you")
                 putString(PointValueKey.type,"yes")
             })
@@ -150,7 +150,7 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
             }, onFail = {
                 toLocationSetting()
             })
-            PointEvent.posePoint(PointEventKey.IP_location,Bundle().apply {
+            PointEvent.posePoint(PointEventKey.IP_location_banner,Bundle().apply {
                 putString(PointValueKey.from_type,"for you")
                 putString(PointValueKey.type,"no")
             })

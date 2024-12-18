@@ -97,6 +97,7 @@ class AppViewModel : BaseDataModel() {
                     }
                 }
                 defaultTopicList.add(0,getTopicByLanguage(TopicConfig.TOPIC_FOR_YOU))
+                defaultTopicList.add(1,getTopicByLanguage(TopicConfig.TOPIC_LOCAL))
                 CacheManager.defaultTopicList = defaultTopicList
                 APP.topicLiveData.postValue(defaultTopicList)
 

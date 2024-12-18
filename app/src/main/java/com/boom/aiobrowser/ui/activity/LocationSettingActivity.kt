@@ -113,11 +113,11 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
         CityAdapter()
     }
 
-    // 0 更改位置 1 添加关注城市列表
+    // 0 更改位置 1 添加关注城市列表  -1 other
     var fromType = 0
 
     override fun setShowView() {
-        fromType = intent.getIntExtra(PointValueKey.from_type,0)
+        fromType = intent.getIntExtra(PointValueKey.from_type,-1)
         var locationData = CacheManager.locationData
         locationData?.apply {
             var builder = StringBuilder()
@@ -142,6 +142,15 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
                 CacheManager.locationData = data
                 viewModel.value.getAreaData(data,fromType == 1)
             }
+        }
+        if (fromType>=0){
+            PointEvent.posePoint(PointEventKey.city_page_set,Bundle().apply {
+                putString(PointValueKey.type,"city_page_current")
+            })
+        }else{
+            PointEvent.posePoint(PointEventKey.city_page_set,Bundle().apply {
+                putString(PointValueKey.type,"IP_location_no")
+            })
         }
     }
 }

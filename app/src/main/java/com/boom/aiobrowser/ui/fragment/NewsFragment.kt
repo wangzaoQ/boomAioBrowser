@@ -117,6 +117,10 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
             CacheManager.locationData = data
             newsAdapter.removeAt(position)
             APP.locationListUpdateLiveData.postValue(0)
+            PointEvent.posePoint(PointEventKey.IP_location,Bundle().apply {
+                putString(PointValueKey.from_type,"for you")
+                putString(PointValueKey.type,"yes")
+            })
         }
         newsAdapter.addOnDebouncedChildClick(R.id.btnNo) { adapter, view, position ->
             LocationManager.requestGPSPermission(WeakReference(rootActivity), onSuccess = {
@@ -145,6 +149,10 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
 
             }, onFail = {
                 toLocationSetting()
+            })
+            PointEvent.posePoint(PointEventKey.IP_location,Bundle().apply {
+                putString(PointValueKey.from_type,"for you")
+                putString(PointValueKey.type,"no")
             })
         }
         if (topic == TopicConfig.TOPIC_FOR_YOU){

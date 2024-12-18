@@ -8,10 +8,14 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.NewsFragmentVideoListBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.GlideManager
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getListByGson
+import com.boom.aiobrowser.tools.getNewsTopic
 import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.tools.video.VideoPreloadManager
@@ -54,12 +58,14 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
     var gsyVideoPlayer: CustomVideoView? = null
     var gsyVideoOptionBuilder: GSYVideoOptionBuilder? = GSYVideoOptionBuilder()
 
+    var bean:NewsData?=null
+
     override fun setShowView() {
         arguments?.apply {
             list =  getListByGson(getString("data"),NewsData::class.java)
             index = getInt("index")
         }
-        var bean = list?.get(index)
+        bean = list?.get(index)
         //防止错位，离开释放
         //gsyVideoPlayer.initUIState();
         bean?.apply {
@@ -113,9 +119,9 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
             gsyVideoPlayer!!.getBackButton().setVisibility(View.GONE)
             gsyVideoPlayer!!.loadCoverImage(iassum?:"")
             fBinding.apply {
-                tvTitle.text = bean.tconsi
-                GlideManager.loadImg(this@VideoListFragment, ivVideoSource, bean.sschem)
-                tvSourceName.text = "${bean.sfindi}"
+                tvTitle.text = bean?.tconsi?:""
+                GlideManager.loadImg(this@VideoListFragment, ivVideoSource, bean?.sschem)
+                tvSourceName.text = "${bean?.sfindi}"
             }
 //            AppLogs.dLog(VideoCacheUtils.TAG,"current:${list!!.get(index).mLRqPtKJX}")
         }
@@ -147,6 +153,11 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
             VideoPreloadManager.serialList(1,cacheList)
         }, failBack = {
         }, Dispatchers.Main)
+        PointEvent.posePoint(PointEventKey.featured_videos_page,Bundle().apply {
+            putString(PointValueKey.from_type,bean?.fromType)
+            putString(PointValueKey.news_id,bean?.itackl)
+            putString(PointValueKey.news_topic,bean?.tdetai?.getNewsTopic())
+        })
     }
 
     private fun stopDownLoad() {

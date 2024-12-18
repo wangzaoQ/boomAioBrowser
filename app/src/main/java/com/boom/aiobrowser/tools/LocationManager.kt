@@ -13,6 +13,8 @@ import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.net.NetController
 import com.boom.aiobrowser.net.WebNet
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
@@ -54,12 +56,15 @@ object LocationManager {
                 override fun onGranted(permissions: MutableList<String>, allGranted: Boolean) {
                     AppLogs.dLog(TAG,"onGranted:${allGranted}")
 //                    fireLog2Server(PointInfo.gps_req_enable,null)
+                    PointEvent.posePoint(PointEventKey.gps_req_enable)
                     onSuccess.invoke()
                 }
 
                 override fun onDenied(permissions: MutableList<String>, doNotAskAgain: Boolean) {
                     super.onDenied(permissions, doNotAskAgain)
 //                    fireLog2Server(PointInfo.gps_req_refuse,null)
+                    PointEvent.posePoint(PointEventKey.gps_req_refuse)
+
                     onFail.invoke()
 //                    XXPermissions.startPermissionActivity(activity,Permission.ACCESS_COARSE_LOCATION)
                 }

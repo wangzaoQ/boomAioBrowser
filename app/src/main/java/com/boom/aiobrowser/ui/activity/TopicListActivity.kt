@@ -50,6 +50,7 @@ class TopicListActivity :BaseActivity<NewsActivityTopicListBinding>() {
                     isSearch = true
                     newsSmart.autoRefresh()
                     hideKeyBoard(v)
+                    PointEvent.posePoint(PointEventKey.topics_page_search)
                     return@setOnKeyListener true
                 }
                 return@setOnKeyListener false
@@ -123,6 +124,7 @@ class TopicListActivity :BaseActivity<NewsActivityTopicListBinding>() {
             }
             newsSmart.autoRefresh()
         }
+        PointEvent.posePoint(PointEventKey.topics_page)
     }
 
     fun loadData(){

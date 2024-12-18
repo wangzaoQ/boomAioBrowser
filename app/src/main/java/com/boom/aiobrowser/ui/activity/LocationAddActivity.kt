@@ -11,6 +11,8 @@ import com.boom.aiobrowser.databinding.BrowserActivityLocationAddBinding
 import com.boom.aiobrowser.model.LocationViewModel
 import com.boom.aiobrowser.net.NetController
 import com.boom.aiobrowser.net.NetRequest
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
@@ -37,12 +39,16 @@ class LocationAddActivity: BaseActivity<BrowserActivityLocationAddBinding>() {
                 finish()
             }
             llRoot.setOneClick {
-                jumpActivity<LocationSettingActivity>()
+                jumpActivity<LocationSettingActivity>(Bundle().apply {
+                    putInt(PointValueKey.from_type,0)
+                })
+                PointEvent.posePoint(PointEventKey.city_page_current)
             }
             tvSearch.setOneClick {
                 jumpActivity<LocationSettingActivity>(Bundle().apply {
                     putInt(PointValueKey.from_type,1)
                 })
+                PointEvent.posePoint(PointEventKey.city_page_search)
             }
         }
         viewModel.value.recommendLiveData.observe(this){
@@ -109,6 +115,9 @@ class LocationAddActivity: BaseActivity<BrowserActivityLocationAddBinding>() {
                 addCityAdapter.submitList(getFollowList())
                 viewModel.value.getRecommendAddList()
                 updateSize = true
+                PointEvent.posePoint(PointEventKey.city_page_remove,Bundle().apply {
+                    putString(PointValueKey.type,data.locationCity)
+                })
             }
             addCityAdapter.submitList(getFollowList())
         }
@@ -140,9 +149,13 @@ class LocationAddActivity: BaseActivity<BrowserActivityLocationAddBinding>() {
                 }, failBack = {
                     hidePop()
                 })
+                PointEvent.posePoint(PointEventKey.city_page_follow,Bundle().apply {
+                    putString(PointValueKey.type,data.locationCity)
+                })
             }
         }
         viewModel.value.getRecommendAddList()
+        PointEvent.posePoint(PointEventKey.city_page)
     }
 
     private fun getFollowList(): List<LocationData>? {

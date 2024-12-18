@@ -3,6 +3,7 @@ package com.boom.aiobrowser.ui.fragment
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
+import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
@@ -18,6 +19,9 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.databinding.NewsFragmentLocationBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.LocationManager
@@ -85,6 +89,8 @@ class LocalNewsFragment :BaseFragment<NewsFragmentLocationBinding>(){
                 data?.locationSuccess = true
                 CacheManager.locationData = data
                 updateNewsHome(CacheManager.alreadyAddCityList)
+
+                PointEvent.posePoint(PointEventKey.IP_location_yes)
             }
             fBinding.btnNo.setOneClick {
                 LocationManager.requestGPSPermission(WeakReference(rootActivity), onSuccess = {
@@ -111,7 +117,9 @@ class LocalNewsFragment :BaseFragment<NewsFragmentLocationBinding>(){
                 }, onFail = {
                     toLocationSetting()
                 })
+                PointEvent.posePoint(PointEventKey.IP_location_no)
             }
+            PointEvent.posePoint(PointEventKey.IP_location)
         }else{
             fBinding.llLocationGuide.visibility = View.GONE
             fBinding.apply {
@@ -170,7 +178,9 @@ class LocalNewsFragment :BaseFragment<NewsFragmentLocationBinding>(){
                         }
 
                         override fun onPageSelected(position: Int) {
-
+                            PointEvent.posePoint(PointEventKey.local_page_city, Bundle().apply {
+                                putString(PointValueKey.type,list.get(position).locationCity)
+                            })
                         }
 
                         override fun onPageScrollStateChanged(state: Int) {

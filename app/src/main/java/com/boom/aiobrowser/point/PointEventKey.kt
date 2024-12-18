@@ -231,6 +231,45 @@ object PointEventKey {
 
     //趋势新闻页曝光
     const val trend_today_page = "trend_today_page"
+    //趋势新闻点击
+    const val trend_news = "trend_news"
+    //城市页面展示
+    const val city_page = "city_page"
+    //城市页面当前位置点击
+    const val city_page_current = "city_page_current"
+    //城市页面点击搜索
+    const val city_page_search = "city_page_search"
+    //城市页面关注的城市点击
+    const val city_page_follow = "city_page_follow"
+    //城市页面删除的城市点击
+    const val city_page_remove = "city_page_remove"
+    //本地城市选择页面展示
+    const val city_page_set = "city_page_set"
+    //本地页城市点击
+    const val local_page_city = "local_page_city"
+    // IP定位确定展示
+    const val IP_location = "IP_location"
+    const val IP_location_banner = "IP_location_banner"
+    // IP定位确定是点击
+    const val IP_location_yes = "IP_location_yes"
+    // IP定位确定否点击
+    const val IP_location_no = "IP_location_no"
+    //gps位置权限申请成功
+    const val gps_req_enable = "gps_req_enable"
+    //gps位置权限申请失败
+    const val gps_req_refuse = "gps_req_refuse"
+    //新闻页面点击相关阅读
+    const val news_page_related = "news_page_related"
+    //新闻页面点击猜你喜欢
+    const val news_page_like = "news_page_like"
+    //topic点击
+    const val topics_click = "topics_click"
+    //topic页面展示
+    const val topics_page = "topics_page"
+    //topic页面搜索点击
+    const val topics_page_search = "topics_page_search"
+    //视频播放页
+    const val featured_videos_page = "featured_videos_page"
 
 }
 

@@ -78,6 +78,7 @@ class NewsData {
 
     var nfSource:String?=""
 
+    var fromType=""
 
     companion object{
         var TYPE_NEWS = 0

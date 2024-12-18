@@ -118,6 +118,17 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
                     putString(ParamsConfig.JSON_PARAMS, toJson(data))
                 })
             }
+            if (data.dataType == NewsData.TYPE_NEWS) {
+                PointEvent.posePoint(PointEventKey.news_page_like,Bundle().apply {
+                    putString(PointValueKey.news_id,data.itackl)
+                    putString(PointValueKey.news_topic,newData?.tdetai?.getNewsTopic())
+                })
+            }else if (data.dataType == NewsData.TYPE_DETAILS_NEWS_RELATED){
+                PointEvent.posePoint(PointEventKey.news_page_related,Bundle().apply {
+                    putString(PointValueKey.news_id,data.itackl)
+                    putString(PointValueKey.news_topic,newData?.tdetai?.getNewsTopic())
+                })
+            }
         }
     }
 

@@ -59,6 +59,12 @@ class NewsViewModel : BaseDataModel() {
                         }
                     }
                 }
+                if (topic == "${NewsConfig.TOPIC_TAG}${NetParams.PUBLIC_SAFETY}" && list.isNullOrEmpty()){
+                    list = NetRequest.request(HashMap<String, Any>().apply {
+                        put("sessionKey",topic)
+                    }) { NetController.getNewsList(NetParams.getParamsMap(topic, currentPage = page,specialKey="noLocation")) }.data
+                        ?: mutableListOf()
+                }
                 newsLiveData.postValue(addHomeData(topic,page,list))
             }
         }, failBack = {

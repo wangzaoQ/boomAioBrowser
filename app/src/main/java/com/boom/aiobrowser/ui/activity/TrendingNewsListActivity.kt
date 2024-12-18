@@ -14,6 +14,7 @@ import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointManager
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.toJson
@@ -46,6 +47,10 @@ class TrendingNewsListActivity :BaseActivity<NewsActivityTrendingListBinding>() 
                 var data = newsAdapter.items.get(position)
                 jumpActivity<WebDetailsActivity>(Bundle().apply {
                     putString(ParamsConfig.JSON_PARAMS, toJson(data))
+                })
+                PointEvent.posePoint(PointEventKey.trend_news, Bundle().apply {
+                    putString(PointValueKey.from_type,"trend_today_page")
+                    putString(PointValueKey.news_id,data.itackl)
                 })
             }
             addItemDecoration(object : RecyclerView.ItemDecoration() {

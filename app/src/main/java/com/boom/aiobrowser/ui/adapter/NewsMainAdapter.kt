@@ -71,6 +71,7 @@ import com.boom.aiobrowser.ui.activity.VideoListActivity
 import com.boom.aiobrowser.ui.activity.WebActivity
 import com.boom.aiobrowser.ui.activity.WebDetailsActivity
 import com.boom.aiobrowser.ui.fragment.MainFragment
+import com.boom.aiobrowser.ui.fragment.NewsFragment
 import com.boom.base.adapter4.BaseMultiItemAdapter
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import com.boom.drag.utils.DisplayUtils
@@ -560,6 +561,10 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                     (context as BaseActivity<*>).jumpActivity<WebDetailsActivity>(Bundle().apply {
                                         putString(ParamsConfig.JSON_PARAMS, toJson(data))
                                     })
+                                    PointEvent.posePoint(PointEventKey.trend_news, Bundle().apply {
+                                        putString(PointValueKey.from_type,"home_page")
+                                        putString(PointValueKey.news_id,data.itackl)
+                                    })
                                 }
                                 rvList.setTag(R.id.rvList,item.trendList)
                             }
@@ -622,6 +627,15 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
 
                                 newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
                                     var data = newsAdapter.items.get(position)
+                                    if (fragmet!= null){
+                                        if (fragmet!=null){
+                                            if (fragmet is MainFragment){
+                                                data.fromType = "home"
+                                            }else if (fragmet is NewsFragment){
+                                                data.fromType = "for_you"
+                                            }
+                                        }
+                                    }
                                     VideoListActivity.startVideoListActivity(context as BaseActivity<*>,position,item.videoList?: mutableListOf())
                                 }
                                 clRoot.setTag(R.id.clRoot,item.videoList)
@@ -662,6 +676,15 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                         }else{
                                             APP.topicJumpData.postValue(item.topicList!!.get(i))
                                         }
+                                        PointEvent.posePoint(PointEventKey.topics_click,Bundle().apply{
+                                            if (fragmet!=null){
+                                                if (fragmet is MainFragment){
+                                                    putString(PointValueKey.from_type,"home")
+                                                }else if (fragmet is NewsFragment){
+                                                    putString(PointValueKey.from_type,"for_you")
+                                                }
+                                            }
+                                        })
                                     }
                                     tv.text = "#${content}"
                                     addView(topicView)
@@ -1053,6 +1076,9 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                                 }))
                                             })
                                         }
+                                        PointEvent.posePoint(PointEventKey.topics_click,Bundle().apply{
+                                            putString(PointValueKey.from_type,"news_page")
+                                        })
                                     }
                                     tv.text = "#${content}"
                                     addView(topicView)

@@ -189,6 +189,11 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             CacheManager.locationData = data
             newsAdapter.removeAt(position)
             APP.locationListUpdateLiveData.postValue(0)
+            PointEvent.posePoint(PointEventKey.IP_location,Bundle().apply {
+                putString(PointValueKey.from_type,"home_page")
+                putString(PointValueKey.type,"yes")
+            })
+
 //            fBinding.rv.smoothScrollToPosition(0)
 //            page = 1
 //            loadData()
@@ -220,6 +225,10 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 
             }, onFail = {
                 toLocationSetting()
+            })
+            PointEvent.posePoint(PointEventKey.IP_location,Bundle().apply {
+                putString(PointValueKey.from_type,"home_page")
+                putString(PointValueKey.type,"no")
             })
         }
         viewModel.value.newsLiveData.observe(rootActivity){

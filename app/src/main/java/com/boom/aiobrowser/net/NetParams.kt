@@ -61,7 +61,7 @@ object NetParams {
         return url
     }
 
-    suspend fun getParamsMap(key:String,currentPage:Int=0):HashMap<String,String>{
+    suspend fun getParamsMap(key:String,currentPage:Int=0,specialKey:String=""):HashMap<String,String>{
         var needLocation = false
         var sessionType = 0
         var isPush = false
@@ -123,7 +123,7 @@ object NetParams {
 //                sessionType = 1
             }
             PUBLIC_SAFETY->{
-                needLocation = true
+                needLocation = specialKey != "noLocation"
                 map.put("tearth",PUBLIC_SAFETY)
             }
             MOVIE->{

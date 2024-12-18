@@ -57,7 +57,7 @@ class WebSourceAdapter : BaseQuickAdapter<WebSourceData, WebSourceAdapter.VH>() 
                 childAdapter.setOnDebouncedItemClick{adapter, view, position ->
                     if (position>item.sourceList!!.size-1)return@setOnDebouncedItemClick
                     var data = item.sourceList!!.get(position)
-                    APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(data.jumpUrl, title = "","webStore"))
+                    APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(data.jumpUrl, title = "","webStore",false))
                     (context as BaseActivity<*>).finish()
                 }
 

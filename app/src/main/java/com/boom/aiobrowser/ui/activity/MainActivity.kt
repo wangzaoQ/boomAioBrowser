@@ -416,7 +416,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             if (index>=0){
                 APP.instance.shareText = APP.instance.shareText.substring(index,APP.instance.shareText.length)
             }
-            APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(APP.instance.shareText,title="","分享网页"))
+            APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(APP.instance.shareText,title="","分享网页",true))
         }else{
 
         }

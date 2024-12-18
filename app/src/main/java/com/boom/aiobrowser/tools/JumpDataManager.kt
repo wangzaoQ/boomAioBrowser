@@ -33,14 +33,14 @@ object JumpDataManager {
         return data
     }
 
-    fun addTabToOtherWeb(url:String,title:String="",tag:String): JumpData{
+    fun addTabToOtherWeb(url:String,title:String="",tag:String,autoDownload:Boolean): JumpData{
         AppLogs.dLog(TAG, "addTab $tag")
         var data = JumpData().apply {
             jumpType = JumpConfig.JUMP_WEB
             jumpTitle = title
             jumpUrl = url
             isCurrent = true
-            autoDownload = true
+            this.autoDownload = autoDownload
         }
         addBrowserTab(data,CacheManager.browserStatus,true,tag = "tabPop 增加tab")
         return data

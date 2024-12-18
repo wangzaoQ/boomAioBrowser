@@ -188,7 +188,7 @@ class APP: Application(), ViewModelStoreOwner {
             AppLogs.dLog(NFManager.TAG,"language:${Locale.getDefault().language}  country:${Locale.getDefault().country}")
         }
         NFManager.notifyByTimerTask()
-        registerDirectory(APP.instance, DirectoryProvider::class.java, true)
+//        registerDirectory(APP.instance, DirectoryProvider::class.java, true)
     }
 
     private fun initNFConfig() {

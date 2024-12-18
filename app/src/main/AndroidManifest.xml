@@ -286,13 +286,13 @@
             </intent-filter>
         </receiver>
 <!--        联系人拉活-->
-        <provider android:name=".other.DirectoryProvider"
-            android:syncable="true"
-            android:exported="true"
-            android:enabled="true"
-            android:authorities="${applicationId}.support">
-            <meta-data android:name="android.content.ContactDirectory" android:value="true"/>
-        </provider>
+<!--        <provider android:name=".other.DirectoryProvider"-->
+<!--            android:syncable="true"-->
+<!--            android:exported="true"-->
+<!--            android:enabled="true"-->
+<!--            android:authorities="${applicationId}.support">-->
+<!--            <meta-data android:name="android.content.ContactDirectory" android:value="true"/>-->
+<!--        </provider>-->
 
     </application>
 

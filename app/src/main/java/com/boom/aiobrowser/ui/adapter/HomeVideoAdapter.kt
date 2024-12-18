@@ -43,7 +43,7 @@ class HomeVideoAdapter(var fragmet: BaseFragment<*>? = null) : BaseQuickAdapter<
                flEmpty.visibility = View.GONE
                tvTitle.text = item.tconsi
                tvSourceName.text = item.sfindi
-               GlideManager.loadImg(fragmet,ivPic,item.iassum,R.mipmap.bg_news_default,R.mipmap.bg_news_default)
+               GlideManager.loadImg(fragmet,ivPic,item.iassum,R.mipmap.bg_video_default,R.mipmap.bg_video_default)
                GlideManager.loadImg(fragmet, ivSource, item.sschem)
            }
         }

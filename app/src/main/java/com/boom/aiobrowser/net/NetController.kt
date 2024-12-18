@@ -51,6 +51,10 @@ object NetController {
         return service.getTopics(tmouth)
     }
 
+    suspend fun searchNews(content:String): NetResponse<MutableList<NewsData>> {
+        return service.searchNews(content)
+    }
+
     suspend fun createUser(body: JsonObject): NetResponse<UserData> {
         return service.createUser(body)
     }

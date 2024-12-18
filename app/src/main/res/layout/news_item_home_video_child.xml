@@ -95,7 +95,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@mipmap/bg_news_default"
+                    app:srcCompat="@mipmap/bg_video_default"
                     ></com.google.android.material.imageview.ShapeableImageView>
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/rlTemp"

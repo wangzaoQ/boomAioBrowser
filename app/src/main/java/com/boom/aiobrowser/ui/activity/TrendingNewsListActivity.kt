@@ -11,6 +11,9 @@ import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.NewsActivityTrendingListBinding
 import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointManager
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.toJson
@@ -66,5 +69,6 @@ class TrendingNewsListActivity :BaseActivity<NewsActivityTrendingListBinding>() 
 
         }
         APP.instance.appModel.getTrendsNews()
+        PointEvent.posePoint(PointEventKey.trend_today_page)
     }
 }

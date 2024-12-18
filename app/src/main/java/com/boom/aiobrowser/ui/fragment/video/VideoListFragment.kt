@@ -114,7 +114,7 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
             gsyVideoPlayer!!.loadCoverImage(iassum?:"")
             fBinding.apply {
                 tvTitle.text = bean.tconsi
-                GlideManager.loadImg(this@VideoListFragment, ivSource, bean.sschem)
+                GlideManager.loadImg(this@VideoListFragment, ivVideoSource, bean.sschem)
                 tvSourceName.text = "${bean.sfindi}"
             }
 //            AppLogs.dLog(VideoCacheUtils.TAG,"current:${list!!.get(index).mLRqPtKJX}")

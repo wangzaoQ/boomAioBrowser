@@ -77,6 +77,14 @@ interface NetService {
     suspend fun getTopics(@Query("tmouth") tmouth:String): NetResponse<MutableList<TopicData>>
 
 
+
+    /**
+     * topic
+     */
+    @GET("api/nemplo/srespo")
+    suspend fun searchNews(@Query("kadvic") kadvic:String): NetResponse<MutableList<NewsData>>
+
+
     /**
      * 趋势
      */

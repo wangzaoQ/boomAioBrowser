@@ -93,7 +93,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 newsAdapter.removeAt(index)
             }
         }
-        APP.topicLiveData.observe(this){
+        APP.homeTopicLiveData.observe(this){
             var list = newsAdapter.mutableItems
             var index = -1
             for (i in 0 until list.size){
@@ -583,6 +583,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         APP.homeTabLiveData.removeObservers(this)
         APP.locationListUpdateLiveData.removeObservers(this)
         APP.trendNewsComplete.removeObservers(this)
+        APP.homeTopicLiveData.removeObservers(this)
         super.onDestroy()
     }
 }

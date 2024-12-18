@@ -17,7 +17,6 @@ import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.NetworkUtils.OnNetworkStatusChangedListener
 import com.boom.aiobrowser.ad.AioADDataManager.initAD
 import com.boom.aiobrowser.data.JumpData
-import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.TopicBean
 import com.boom.aiobrowser.data.VideoDownloadData
@@ -27,7 +26,6 @@ import com.boom.aiobrowser.model.AppViewModel
 import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.nf.NFReceiver
 import com.boom.aiobrowser.other.DirectoryProvider
-import com.boom.aiobrowser.point.Install
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
@@ -105,7 +103,8 @@ class APP: Application(), ViewModelStoreOwner {
         val videoLiveData by lazy { ProtectedUnPeekLiveData<HashMap<Int, VideoTaskItem>>() }
         val videoUpdateLiveData by lazy { ProtectedUnPeekLiveData<String>() }
         val topicLiveData by lazy { ProtectedUnPeekLiveData<MutableList<TopicBean>>() }
-        val topicJumpData by lazy { ProtectedUnPeekLiveData<String>() }
+        val homeTopicLiveData by lazy { ProtectedUnPeekLiveData<MutableList<TopicBean>>() }
+        val topicJumpData by lazy { ProtectedUnPeekLiveData<TopicBean>() }
         val homeTabLiveData by lazy { ProtectedUnPeekLiveData<MutableList<JumpData>>() }
         val homeJumpLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
         val showRateLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
@@ -269,8 +268,8 @@ class APP: Application(), ViewModelStoreOwner {
 
     fun getWebConfig() {
         appModel.getWebConfig()
-        appModel.getTopic()
         appModel.getTrendsNews()
+        appModel.getTopics()
     }
 
     var netBack = object : OnNetworkStatusChangedListener {

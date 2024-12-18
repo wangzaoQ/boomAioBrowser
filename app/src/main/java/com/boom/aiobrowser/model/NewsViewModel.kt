@@ -67,7 +67,7 @@ class NewsViewModel : BaseDataModel() {
     }
 
 
-    fun getNewsByTopic(topic: String,page: Int) {
+    fun getNewsByTopic(topic: String,page: Int,isSearch:Boolean=false) {
         loadData(loadBack = {
             var dataType = 0
             //topic
@@ -76,7 +76,11 @@ class NewsViewModel : BaseDataModel() {
             list = NetRequest.request(HashMap<String, Any>().apply {
                 put("sessionKey","${NewsConfig.NO_SESSION_TAG}${topic}" )
             }) {
-                NetController.getNewsList(NetParams.getParamsMap("${NewsConfig.NO_SESSION_TAG}${topic}",page))
+                if (isSearch){
+                    NetController.searchNews(topic)
+                }else{
+                    NetController.getNewsList(NetParams.getParamsMap("${NewsConfig.NO_SESSION_TAG}${topic}",page))
+                }
             }.data?: mutableListOf()
 
             if (list.isNullOrEmpty()){
@@ -190,7 +194,7 @@ class NewsViewModel : BaseDataModel() {
 
         if (insertIndex >= 0) {
             list.add(insertIndex, NewsData().apply {
-                var topicList = CacheManager.defaultTopicList
+                var topicList = CacheManager.homeTopicList
                 if (topicList.isNullOrEmpty()) {
                     isLoading = true
                     this.topicList = mutableListOf()

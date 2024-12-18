@@ -60,7 +60,9 @@ object CacheManager {
     const val KV_HISTORY_DATA = "KV_HISTORY_DATA"
     const val KV_HISTORY_DATA_JUMP = "KV_HISTORY_DATA_JUMP"
     const val KV_URL_LIST = "KV_URL_LIST"
-    const val KV_TOPIC_LIST = "KV_URL_LIST"
+    const val KV_TOPIC_LIST = "KV_TOPIC_LIST_NEW"
+    const val KV_HOME_TOPIC_LIST = "KV_HOME_TOPIC_LIST"
+    const val KV_ALL_TOPIC_LIST = "KV_ALL_TOPIC_LIST"
     const val KV_SAVE_DAY = "KV_SAVE_DAY"
     const val KV_GID = "KV_GID"
     const val KV_CLICK_EVERY_DAY = "KV_CLICK_EVERY_DAY"
@@ -584,6 +586,23 @@ object CacheManager {
         set(value) {
             mmkv.encode(KV_TOPIC_LIST, toJson(value))
         }
+
+    var homeTopicList :MutableList<TopicBean>
+        get() {
+            return getListByGson(mmkv.decodeString(KV_HOME_TOPIC_LIST,""),TopicBean::class.java)?: mutableListOf()
+        }
+        set(value) {
+            mmkv.encode(KV_HOME_TOPIC_LIST, toJson(value))
+        }
+
+    var allTopicList :MutableList<TopicBean>
+        get() {
+            return getListByGson(mmkv.decodeString(KV_ALL_TOPIC_LIST,""),TopicBean::class.java)?: mutableListOf()
+        }
+        set(value) {
+            mmkv.encode(KV_ALL_TOPIC_LIST, toJson(value))
+        }
+
 
     fun clearAll() {
         recentSearchDataList = mutableListOf()

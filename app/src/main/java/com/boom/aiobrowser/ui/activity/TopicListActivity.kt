@@ -8,13 +8,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.NewsData
+import com.boom.aiobrowser.data.TopicBean
 import com.boom.aiobrowser.databinding.NewsActivityTopicListBinding
 import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
@@ -35,6 +38,8 @@ class TopicListActivity :BaseActivity<NewsActivityTopicListBinding>() {
         return NewsActivityTopicListBinding.inflate(layoutInflater)
     }
 
+    var isSearch = false
+
     override fun setListener() {
         acBinding.apply {
             ivBack.setOneClick {
@@ -42,6 +47,7 @@ class TopicListActivity :BaseActivity<NewsActivityTopicListBinding>() {
             }
             etSearch.setOnKeyListener { v, keyCode, event ->
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    isSearch = true
                     newsSmart.autoRefresh()
                     hideKeyBoard(v)
                     return@setOnKeyListener true
@@ -60,6 +66,7 @@ class TopicListActivity :BaseActivity<NewsActivityTopicListBinding>() {
             }
         }
         viewModel.value.newsTopicListLiveData.observe(this){
+            isSearch = false
             var key = 0
             var list:MutableList<NewsData>?= null
             it.forEach { i, newsData ->
@@ -82,6 +89,7 @@ class TopicListActivity :BaseActivity<NewsActivityTopicListBinding>() {
             finishLoadData()
         }
         viewModel.value.failLiveData.observe(this){
+            isSearch = false
             finishLoadData()
         }
     }
@@ -91,13 +99,15 @@ class TopicListActivity :BaseActivity<NewsActivityTopicListBinding>() {
         acBinding.newsSmart.finishRefresh()
     }
 
-    var topic = ""
     var page = 1
 
+    var topicBean:TopicBean?=null
+
     override fun setShowView() {
-        topic = intent.getStringExtra("topic")?:""
+        topicBean= getBeanByGson(intent.getStringExtra("topic")?:"",TopicBean::class.java)
+
         acBinding.apply {
-            etSearch.setText(topic)
+            etSearch.setText(topicBean?.topic?:"")
             rv.apply {
                 layoutManager = LinearLayoutManager(this@TopicListActivity,LinearLayoutManager.VERTICAL,false)
                 adapter = newsAdapter
@@ -116,6 +126,6 @@ class TopicListActivity :BaseActivity<NewsActivityTopicListBinding>() {
     }
 
     fun loadData(){
-        viewModel.value.getNewsByTopic(acBinding.etSearch.text.toString().trim(),page)
+        viewModel.value.getNewsByTopic(acBinding.etSearch.text.toString().trim(),page,isSearch)
     }
 }

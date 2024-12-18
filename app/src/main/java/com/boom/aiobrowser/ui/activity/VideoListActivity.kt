@@ -39,15 +39,20 @@ class VideoListActivity : BaseActivity<NewsActivityVideoListBinding>() {
         }
     }
 
-//    override fun onPause() {
-//        super.onPause()
-//        AppLogs.dLog(VideoPreloadManager.TAG,"VideoListActivity onPause")
-//        GSYVideoManager.onPause()
-//    }
-//
-//    override fun onResume() {
-//        super.onResume()
-//        AppLogs.dLog(VideoPreloadManager.TAG,"VideoListActivity onResume")
-//        GSYVideoManager.onResume()
-//    }
+    override fun onDestroy() {
+        GSYVideoManager.releaseAllVideos()
+        super.onDestroy()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        AppLogs.dLog(VideoPreloadManager.TAG,"VideoListActivity onPause")
+        GSYVideoManager.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        AppLogs.dLog(VideoPreloadManager.TAG,"VideoListActivity onResume")
+        GSYVideoManager.onResume()
+    }
 }

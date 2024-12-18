@@ -43,6 +43,15 @@ object TopicConfig{
     const val TOPIC_POLITICS = "Politics"
     const val TOPIC_LOCAL = "Local"
     const val TOPIC_FOR_YOU = "For You"
+    const val TOPIC_WORLD = "World"
+    const val TOPIC_LIFESTYLE = "Lifestyle"
+    const val TOPIC_ECONOMY = "Economy"
+    const val TOPIC_SPORTS = "Sports"
+    const val TOPIC_RELATIONSHIP = "Relationship"
+    const val TOPIC_SOCIAL_WELFARE = "Social Welfare"
+    const val TOPIC_FUNNY = "Funny"
+
+
 
 }
 

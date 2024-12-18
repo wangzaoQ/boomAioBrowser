@@ -13,6 +13,7 @@ import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.TopicData
+import com.boom.aiobrowser.firebase.FirebaseManager
 import com.boom.aiobrowser.other.isAndroid11
 import com.boom.aiobrowser.tools.web.WebScan
 import com.google.gson.Gson
@@ -146,12 +147,7 @@ fun Job?.jobCancel() {
 
 // 返回国家缩写，例如 "US" 表示美国，"CN" 表示中国
 fun getCurrentCountryCode(): String {
-    val locale = Locale.getDefault()
-    if (locale.country == "CN"){
-        return "US"
-    }else{
-        return locale.country
-    }
+   return FirebaseManager.matchCountry()
 }
 
 

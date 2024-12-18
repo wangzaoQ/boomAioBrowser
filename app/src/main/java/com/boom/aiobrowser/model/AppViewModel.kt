@@ -6,13 +6,11 @@ import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.TopicBean
 import com.boom.aiobrowser.data.WebConfigData
 import com.boom.aiobrowser.net.NetController
-import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.nf.NFShow
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
-import com.boom.aiobrowser.tools.getTopicDataLan
 import com.boom.aiobrowser.other.TopicConfig
-import com.ironsource.ol
+import com.boom.aiobrowser.tools.getTopicDataLan
 import kotlinx.coroutines.delay
 import java.util.Locale
 import kotlin.random.Random
@@ -49,40 +47,73 @@ class AppViewModel : BaseDataModel() {
         }, 1)
     }
 
-    fun getTopic() {
-        var list = CacheManager.defaultTopicList
-        if (list.isNullOrEmpty()) {
-//            var topString = mutableListOf<String>(
-//                TopicConfig.TOPIC_FOR_YOU,
-//                TopicConfig.TOPIC_LOCAL,
-//                TopicConfig.TOPIC_POLITICS,
-//                TopicConfig.TOPIC_ENTERTAINMENT,
-//                TopicConfig.TOPIC_PUBLIC_SAFETY
-//            )
-            loadData(loadBack = {
-//                var data = NetController.getTopic().data
-//                topString.forEachIndexed { index, s ->
-//                    data?.forEachIndexed { index, nowTopicData ->
-//                        if (s == nowTopicData.nsand) {
-//                            list.add(TopicBean().apply {
-//                                topic = getTopicDataLan(nowTopicData)
-//                                id = nowTopicData.nsand ?: ""
-//                            })
-//                        }
-//                    }
-//                }
-                list.add(getTopicByLanguage(TopicConfig.TOPIC_FOR_YOU))
-                list.add(getTopicByLanguage(TopicConfig.TOPIC_LOCAL))
-                list.add(getTopicByLanguage(TopicConfig.TOPIC_POLITICS))
-                list.add(getTopicByLanguage(TopicConfig.TOPIC_ENTERTAINMENT))
-                list.add(getTopicByLanguage(TopicConfig.TOPIC_PUBLIC_SAFETY))
+    fun getTopics(){
 
-                CacheManager.defaultTopicList = list
-                APP.topicLiveData.postValue(list)
+        var topStringHomeTab = mutableListOf<String>(
+            TopicConfig.TOPIC_PUBLIC_SAFETY,
+            TopicConfig.TOPIC_WORLD,
+            TopicConfig.TOPIC_POLITICS,
+            TopicConfig.TOPIC_SPORTS,
+            TopicConfig.TOPIC_RELATIONSHIP,
+            TopicConfig.TOPIC_SOCIAL_WELFARE,
+            TopicConfig.TOPIC_FUNNY
+        )
+
+        var topStringNewsTab = mutableListOf<String>(
+            TopicConfig.TOPIC_LOCAL,
+            TopicConfig.TOPIC_POLITICS,
+            TopicConfig.TOPIC_ENTERTAINMENT,
+            TopicConfig.TOPIC_PUBLIC_SAFETY
+        )
+        var homeTopicList = CacheManager.homeTopicList
+        var defaultTopicList = CacheManager.defaultTopicList
+        var allTopicList = CacheManager.allTopicList
+        if (allTopicList.isNullOrEmpty()) {
+            homeTopicList.clear()
+            defaultTopicList.clear()
+            loadData(loadBack = {
+                var data = NetController.getTopic().data
+                topStringHomeTab.forEachIndexed { index, s ->
+                    data?.forEachIndexed { index, nowTopicData ->
+                        if (s == nowTopicData.nsand) {
+                            homeTopicList.add(TopicBean().apply {
+                                topic = getTopicDataLan(nowTopicData)
+                                id = nowTopicData.nsand ?: ""
+                            })
+                        }
+                    }
+                }
+                CacheManager.homeTopicList =homeTopicList
+                APP.homeTopicLiveData.postValue(homeTopicList)
+
+                topStringNewsTab.forEachIndexed { index, s ->
+                    data?.forEachIndexed { index, nowTopicData ->
+                        if (s == nowTopicData.nsand) {
+                            defaultTopicList.add(TopicBean().apply {
+                                topic = getTopicDataLan(nowTopicData)
+                                id = nowTopicData.nsand ?: ""
+                            })
+                        }
+                    }
+                }
+                defaultTopicList.add(0,getTopicByLanguage(TopicConfig.TOPIC_FOR_YOU))
+                CacheManager.defaultTopicList = defaultTopicList
+                APP.topicLiveData.postValue(defaultTopicList)
+
+                data?.forEachIndexed { index, nowTopicData ->
+                    allTopicList.add(TopicBean().apply {
+                        topic = getTopicDataLan(nowTopicData)
+                        id = nowTopicData.nsand ?: ""
+                    })
+                }
+                CacheManager.allTopicList = allTopicList
             }, failBack = {
             }, 1)
         } else {
-            APP.topicLiveData.postValue(list)
+            CacheManager.homeTopicList = homeTopicList
+            APP.homeTopicLiveData.postValue(homeTopicList)
+            CacheManager.defaultTopicList = defaultTopicList
+            APP.topicLiveData.postValue(defaultTopicList)
         }
     }
 

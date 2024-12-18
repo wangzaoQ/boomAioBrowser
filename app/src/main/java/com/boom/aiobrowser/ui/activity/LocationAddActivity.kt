@@ -121,7 +121,7 @@ class LocationAddActivity: BaseActivity<BrowserActivityLocationAddBinding>() {
                 var data = recommendCityAdapter.items.get(position)
                 showPop()
                 addLaunch(success = {
-                    NetRequest.request { NetController.getLocation(locationData!!.longitude, locationData!!.latitude) }.data?.apply {
+                    NetRequest.request { NetController.getLocation(data!!.longitude, data!!.latitude) }.data?.apply {
                         if (asilve.isNullOrEmpty()){
                             if (acoat!=null && acoat!!.asilve.isNotEmpty()){
                                 data!!.locationArea = acoat!!.asilve

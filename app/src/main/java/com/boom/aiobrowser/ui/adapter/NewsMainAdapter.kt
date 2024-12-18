@@ -33,6 +33,7 @@ import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.NewsData
+import com.boom.aiobrowser.data.TopicBean
 import com.boom.aiobrowser.data.ViewItem
 import com.boom.aiobrowser.databinding.BrowserItemFilmNewsBinding
 import com.boom.aiobrowser.databinding.BrowserItemHomeAdBinding
@@ -659,7 +660,7 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                         if (item.isLoading){
                                             return@setOnClickListener
                                         }else{
-                                            APP.topicJumpData.postValue(item.topicList!!.get(i).id)
+                                            APP.topicJumpData.postValue(item.topicList!!.get(i))
                                         }
                                     }
                                     tv.text = "#${content}"
@@ -1032,9 +1033,26 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                     var topicView = LayoutInflater.from(context).inflate(R.layout.news_item_child_topic,null,false)
                                     var tv = topicView.findViewById<AppCompatTextView>(R.id.tvTopic)
                                     topicView.setOnClickListener {
-                                        (context as BaseActivity<*>).jumpActivity<TopicListActivity>(Bundle().apply {
-                                            putString("topic",content)
-                                        })
+                                        var allTopicList = CacheManager.allTopicList
+                                        var index = -1
+                                        for(i in 0 until allTopicList.size){
+                                            if (content == allTopicList.get(i).topic){
+                                                index = i
+                                                break
+                                            }
+                                        }
+                                        if (index>=0){
+                                            (context as BaseActivity<*>).jumpActivity<TopicListActivity>(Bundle().apply {
+                                                putString("topic", toJson(allTopicList.get(i)))
+                                            })
+                                        }else{
+                                            (context as BaseActivity<*>).jumpActivity<TopicListActivity>(Bundle().apply {
+                                                putString("topic", toJson(TopicBean().apply {
+                                                    id = content
+                                                    topic = content
+                                                }))
+                                            })
+                                        }
                                     }
                                     tv.text = "#${content}"
                                     addView(topicView)

@@ -161,6 +161,20 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
                     newsAdapter.removeAt(index)
                 }
             }
+            APP.homeTopicLiveData.observe(this){
+                var list = newsAdapter.mutableItems
+                var index = -1
+                for (i in 0 until list.size){
+                    if(list.get(i).dataType == NewsData.TYPE_HOME_NEWS_TOPIC){
+                        index = i
+                        break
+                    }
+                }
+                if (index>=0){
+                    newsAdapter.mutableItems.get(index).topicList = it
+                    newsAdapter.notifyItemChanged(index)
+                }
+            }
         }
     }
 
@@ -181,6 +195,7 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
     override fun onDestroy() {
         if (topic == TopicConfig.TOPIC_FOR_YOU){
             APP.locationListUpdateLiveData.removeObservers(this)
+            APP.homeTopicLiveData.removeObservers(this)
         }
         super.onDestroy()
     }

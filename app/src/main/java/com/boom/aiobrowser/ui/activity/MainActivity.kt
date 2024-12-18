@@ -110,7 +110,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
            var topicList = CacheManager.defaultTopicList
             var index = -1
             for (i in 0 until topicList.size){
-                if (it == topicList.get(i).id){
+                if (it.id == topicList.get(i).id){
                     index = i
                     break
                 }
@@ -124,6 +124,10 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                         }
                     }
                 }
+            }else{
+                jumpActivity<TopicListActivity>(Bundle().apply {
+                    putString("topic", toJson(it))
+                })
             }
         }
     }

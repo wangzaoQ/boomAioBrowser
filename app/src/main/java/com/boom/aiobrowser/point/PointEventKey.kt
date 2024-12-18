@@ -229,6 +229,9 @@ object PointEventKey {
     //news_tab
     const val news_tab = "news_tab"
 
+    //趋势新闻页曝光
+    const val trend_today_page = "trend_today_page"
+
 }
 
 

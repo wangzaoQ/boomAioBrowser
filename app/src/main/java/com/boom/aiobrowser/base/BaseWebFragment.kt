@@ -294,7 +294,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
         var showTask = false
         var host = Uri.parse(mAgentWeb?.webCreator?.webView?.url?:"")?.host?:""
         AppLogs.dLog(fragmentTAG,"当前加载Url:${mAgentWeb?.webCreator?.webView?.url?:""} host:${host}")
-        if (WebScan.isVimeo(host))
+        if (WebScan.isVimeo(host)){}
         else if (FirebaseConfig.switchOpenFilter1){
             AppLogs.dLog(fragmentTAG,"命中filter1")
             showTask = true

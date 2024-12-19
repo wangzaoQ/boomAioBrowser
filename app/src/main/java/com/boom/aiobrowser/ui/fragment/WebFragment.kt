@@ -220,32 +220,34 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                 size++
             }
         }
-        dragBiding?.apply {
-            if (type == 1 ||(status && size>0)){
-                ivDownload.visibility = View.GONE
-                ivDownload2.visibility = View.VISIBLE
-                if (size>0){
-                    tvDownload.visibility = View.VISIBLE
-                    tvDownload.text = "$size"
+        if (allowShowTips().not()){
+            dragBiding?.apply {
+                if (type == 1 ||(status && size>0)){
+                    ivDownload.visibility = View.GONE
+                    ivDownload2.visibility = View.VISIBLE
+                    if (size>0){
+                        tvDownload.visibility = View.VISIBLE
+                        tvDownload.text = "$size"
+                    }else{
+                        tvDownload.visibility = View.GONE
+                    }
+                    if (type != 1){
+                        ivDownload2.apply {
+                            setAnimation("download.json")
+                            playAnimation()
+                        }
+                        if (CacheManager.isFirstDownloadTips){
+                            CacheManager.isFirstDownloadTips = false
+                            tips1 = FirstDownloadTips(rootActivity)
+                            tips1?.createPop(root,1)
+                        }
+                    }
                 }else{
+                    ivDownload.visibility = View.VISIBLE
+                    ivDownload2.visibility = View.GONE
                     tvDownload.visibility = View.GONE
+                    ivDownload2.cancelAnimation()
                 }
-                if (type != 1){
-                    ivDownload2.apply {
-                        setAnimation("download.json")
-                        playAnimation()
-                    }
-                    if (CacheManager.isFirstDownloadTips){
-                        CacheManager.isFirstDownloadTips = false
-                        tips1 = FirstDownloadTips(rootActivity)
-                        tips1?.createPop(root,1)
-                    }
-                }
-            }else{
-                ivDownload.visibility = View.VISIBLE
-                ivDownload2.visibility = View.GONE
-                tvDownload.visibility = View.GONE
-                ivDownload2.cancelAnimation()
             }
         }
     }
@@ -354,7 +356,6 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
      */
 
     override fun setShowView() {
-        EasyFloat.dismiss(tag = "webPop",true)
         dragBiding = BrowserDragLayoutBinding.inflate(layoutInflater,null,false)
         updateData(getBeanByGson(arguments?.getString(ParamsConfig.JSON_PARAMS)?:"",JumpData::class.java))
         updateTabCount()
@@ -379,70 +380,72 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         }
         AppLogs.dLog("dragParams","startX:${startX} startY:${startY}")
         updateDownloadButtonStatus(false)
-        dragBiding?.apply {     EasyFloat.with(rootActivity)
-            .setSidePattern(SidePattern.RESULT_HORIZONTAL)
-            .setImmersionStatusBar(true)
-            .setGravity(Gravity.START or Gravity.BOTTOM, offsetX = startX, offsetY = startY)
-            .setLocation(startX, startY)
-            .setTag("webPop")
-            // 传入View，传入布局文件皆可，如：MyCustomView(this)、R.layout.float_custom
-            .setLayout(root) {
-                ivDownload.setOneClick {
-                    if (allowShowTips()){
-                        showTipsPop()
-                        return@setOneClick
+        if (allowShowTips().not()){
+            EasyFloat.dismiss(tag = "webPop",true)
+            dragBiding?.apply {     EasyFloat.with(rootActivity)
+                .setSidePattern(SidePattern.RESULT_HORIZONTAL)
+                .setImmersionStatusBar(true)
+                .setGravity(Gravity.START or Gravity.BOTTOM, offsetX = startX, offsetY = startY)
+                .setLocation(startX, startY)
+                .setTag("webPop")
+                // 传入View，传入布局文件皆可，如：MyCustomView(this)、R.layout.float_custom
+                .setLayout(root) {
+                    ivDownload.setOneClick {
+                        if (allowShowTips()){
+                            showTipsPop()
+                            return@setOneClick
+                        }
+                        rootActivity.addLaunch(success = {
+                            delay(500)
+                            withContext(Dispatchers.Main){
+                                VideoPop2(rootActivity).createPop(getRealParseUrl()) {  }
+                            }
+                        }, failBack = {})
+                        PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
+                            putString(PointValueKey.type,"no_have")
+                            putString(PointValueKey.url,jumpData?.jumpUrl)
+                            putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+                        })
                     }
-                    rootActivity.addLaunch(success = {
-                        delay(500)
-                        withContext(Dispatchers.Main){
-                            VideoPop2(rootActivity).createPop(getRealParseUrl()) {  }
-                        }
-                    }, failBack = {})
-                    PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
-                        putString(PointValueKey.type,"no_have")
-                        putString(PointValueKey.url,jumpData?.jumpUrl)
-                        putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
-                    })
-                }
-                ivDownload2.setOneClick {
-                    tips1?.dismiss()
-                    ivDownload2.cancelAnimation()
-                    rootActivity.addLaunch(success = {
-                        delay(500)
-                        withContext(Dispatchers.Main){
-                            showDownloadPop()
-                        }
-                    }, failBack = {})
-                    PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
-                        putString(PointValueKey.type,"have")
-                        putString(PointValueKey.url,jumpData?.jumpUrl)
-                        putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
-                    })
-                }
+                    ivDownload2.setOneClick {
+                        tips1?.dismiss()
+                        ivDownload2.cancelAnimation()
+                        rootActivity.addLaunch(success = {
+                            delay(500)
+                            withContext(Dispatchers.Main){
+                                showDownloadPop()
+                            }
+                        }, failBack = {})
+                        PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
+                            putString(PointValueKey.type,"have")
+                            putString(PointValueKey.url,jumpData?.jumpUrl)
+                            putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+                        })
+                    }
 
-            }
+                }
 //            .setTag(TAG_1)
-            .registerCallback {
-                // 在此处设置view也可以，建议在setLayout进行view操作
-                createResult { isCreated, msg, _ ->
+                .registerCallback {
+                    // 在此处设置view也可以，建议在setLayout进行view操作
+                    createResult { isCreated, msg, _ ->
 //                    toast("isCreated: $isCreated")
 //                    logger.e("DSL:  $isCreated   $msg")
-                }
-                show {
-
-                }
-                hide {
-                }
-                dismiss {
-                }
-
-                touchEvent { view, event ->
-                    if (event.action == MotionEvent.ACTION_DOWN) {
+                    }
+                    show {
 
                     }
-                }
+                    hide {
+                    }
+                    dismiss {
+                    }
 
-                drag { view, motionEvent ->
+                    touchEvent { view, event ->
+                        if (event.action == MotionEvent.ACTION_DOWN) {
+
+                        }
+                    }
+
+                    drag { view, motionEvent ->
 //                    view.findViewById<TextView>(R.id.textView).apply {
 //                        text = "我被拖拽..."
 //                        setBackgroundResource(R.drawable.corners_red)
@@ -456,28 +459,28 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 //                            EasyFloat.dismiss(tag, true)
 //                        }
 //                    })
-                }
-
-                dragEnd {
-                    root?.apply {
-                        val location = IntArray(2)
-                        this.getLocationOnScreen(location)
-                        val x = location[0] // view距离 屏幕左边的距离（即x轴方向）
-                        val y = location[1] // view距离 屏幕顶边的距离（即y轴方向）
-                        CacheManager.dragX = x
-                        CacheManager.dragY = y
-                        AppLogs.dLog("dragParams","拖拽后x:${x} 拖拽后y:${y}")
                     }
+
+                    dragEnd {
+                        root?.apply {
+                            val location = IntArray(2)
+                            this.getLocationOnScreen(location)
+                            val x = location[0] // view距离 屏幕左边的距离（即x轴方向）
+                            val y = location[1] // view距离 屏幕顶边的距离（即y轴方向）
+                            CacheManager.dragX = x
+                            CacheManager.dragY = y
+                            AppLogs.dLog("dragParams","拖拽后x:${x} 拖拽后y:${y}")
+                        }
 //                    it.findViewById<TextView>(R.id.textView).apply {
 //                        text = "拖拽结束"
 //                        val location = IntArray(2)
 //                        getLocationOnScreen(location)
 //                        setBackgroundResource(if (location[0] > 10) R.drawable.corners_left else R.drawable.corners_right)
 //                    }
+                    }
                 }
-            }
-            .show() }
-
+                .show() }
+        }
     }
 
     var tips1 :FirstDownloadTips?=null

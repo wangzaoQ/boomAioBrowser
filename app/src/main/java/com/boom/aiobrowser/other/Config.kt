@@ -66,7 +66,6 @@ object WebConfig{
     var X_URL = "https://x.com/"
     var WhatsApp_URL = "https://www.whatsapp.com/"
     var Reddit_URL = "https://www.reddit.com/"
-    var Snapchat_URL = "https://www.snapchat.com/"
     var Orkut_URL = "https://www.orkut.com/"
     var Tiktok_URL = "https://www.tiktok.com/"
     var URL_Netflix = "https://www.netflix.com/"

@@ -257,10 +257,6 @@ object WebSourceManager {
                     jumpUrl = WebConfig.Reddit_URL
                     jumpTitle = APP.instance.getString(R.string.app_reddit)
                 })
-                list.add(JumpData().apply {
-                    jumpUrl = WebConfig.Snapchat_URL
-                    jumpTitle = APP.instance.getString(R.string.app_snapchat)
-                })
             }
         }
         list.forEach {

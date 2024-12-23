@@ -1,8 +1,11 @@
 package com.boom.aiobrowser.model
 
+import android.os.Build
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.NewsData
+import com.boom.aiobrowser.data.SourceData
 import com.boom.aiobrowser.data.TopicBean
 import com.boom.aiobrowser.data.WebConfigData
 import com.boom.aiobrowser.net.NetController
@@ -10,8 +13,16 @@ import com.boom.aiobrowser.nf.NFShow
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.other.TopicConfig
+import com.boom.aiobrowser.point.PointManager
+import com.boom.aiobrowser.tools.encryptECB
+import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getTopicDataLan
+import com.boom.aiobrowser.tools.toJson
 import kotlinx.coroutines.delay
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.Request
+import okhttp3.RequestBody
+import org.json.JSONObject
 import java.util.Locale
 import kotlin.random.Random
 
@@ -47,7 +58,7 @@ class AppViewModel : BaseDataModel() {
         }, 1)
     }
 
-    fun getTopics(){
+    fun getTopics() {
 
         var topStringHomeTab = mutableListOf<String>(
             TopicConfig.TOPIC_PUBLIC_SAFETY,
@@ -83,7 +94,7 @@ class AppViewModel : BaseDataModel() {
                         }
                     }
                 }
-                CacheManager.homeTopicList =homeTopicList
+                CacheManager.homeTopicList = homeTopicList
                 APP.homeTopicLiveData.postValue(homeTopicList)
 
                 topStringNewsTab.forEachIndexed { index, s ->
@@ -96,8 +107,8 @@ class AppViewModel : BaseDataModel() {
                         }
                     }
                 }
-                defaultTopicList.add(0,getTopicByLanguage(TopicConfig.TOPIC_FOR_YOU))
-                defaultTopicList.add(1,getTopicByLanguage(TopicConfig.TOPIC_LOCAL))
+                defaultTopicList.add(0, getTopicByLanguage(TopicConfig.TOPIC_FOR_YOU))
+                defaultTopicList.add(1, getTopicByLanguage(TopicConfig.TOPIC_LOCAL))
                 CacheManager.defaultTopicList = defaultTopicList
                 APP.topicLiveData.postValue(defaultTopicList)
 
@@ -173,10 +184,10 @@ class AppViewModel : BaseDataModel() {
         return topicBean
     }
 
-    fun getTrendsNews(){
+    fun getTrendsNews() {
         loadData(loadBack = {
             getTrendsNewsData()
-            if (APP.isDebug){
+            if (APP.isDebug) {
                 NFShow.showNewsNFFilter(NFEnum.NF_TREND)
             }
             APP.trendNewsComplete.postValue(0)
@@ -185,41 +196,44 @@ class AppViewModel : BaseDataModel() {
         }, 1)
     }
 
-   suspend fun getTrendsNewsData():MutableList<NewsData>{
+    suspend fun getTrendsNewsData(): MutableList<NewsData> {
         var startTime = CacheManager.trendNewsTime
-        if (APP.isDebug){
-            if (System.currentTimeMillis()-startTime>10*1000){
+        if (APP.isDebug) {
+            if (System.currentTimeMillis() - startTime > 10 * 1000) {
                 CacheManager.trendNews = mutableListOf()
             }
-        }else{
-            if (System.currentTimeMillis()-startTime>4*60*60*1000){
+        } else {
+            if (System.currentTimeMillis() - startTime > 4 * 60 * 60 * 1000) {
                 CacheManager.trendNews = mutableListOf()
             }
         }
         var oldList = CacheManager.trendNews
-        if (oldList.isNullOrEmpty()){
-            var list = NetController.getTrendNews("GTR-4").data?: mutableListOf()
+        if (oldList.isNullOrEmpty()) {
+            var list = NetController.getTrendNews("GTR-4").data ?: mutableListOf()
             var index0 = 0
             var index1 = 0
             var index2 = 0
             var endInx = list!!.size
-            if (list.size>3){
-                if (endInx>15){
+            if (list.size > 3) {
+                if (endInx > 15) {
                     endInx = 15
                 }
                 var count = 0
-                while (index0 == index1 || index0 == index2 || index1 == index2){
+                while (index0 == index1 || index0 == index2 || index1 == index2) {
                     count++
-                    index0 = Random.nextInt(3,endInx)
+                    index0 = Random.nextInt(3, endInx)
                     delay(50)
                     index1 = Random.nextInt(3, endInx)
                     delay(50)
                     index2 = Random.nextInt(3, endInx)
                 }
-                AppLogs.dLog(APP.instance.TAG,"取随机数 count:${count} index0:${index0} index1:${index1} index2:${index2}")
-                for (i in 0 until list.size){
-                    if (i == 0 || i == 1 || i == 2)continue
-                    if (i == index0 || i == index1 || i == index2 ){
+                AppLogs.dLog(
+                    APP.instance.TAG,
+                    "取随机数 count:${count} index0:${index0} index1:${index1} index2:${index2}"
+                )
+                for (i in 0 until list.size) {
+                    if (i == 0 || i == 1 || i == 2) continue
+                    if (i == index0 || i == index1 || i == index2) {
                         list.get(i).isTrendTop = true
                     }
                 }
@@ -227,8 +241,64 @@ class AppViewModel : BaseDataModel() {
             CacheManager.trendNews = list
             CacheManager.trendNewsTime = System.currentTimeMillis()
             return list
-        }else{
+        } else {
             return oldList
         }
     }
+
+    var maxCount = if (APP.isDebug) 4 else 15
+    var currentCount = 0
+    fun getCampaign() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return
+        }
+        if (CacheManager.campaignId.isNullOrEmpty().not()) {
+            return
+        }
+        loadData(loadBack = {
+            currentCount++
+            runCatching {
+                var json = JSONObject().apply {
+                    put(
+                        "pkg",
+                        if (APP.isDebug) "com.fast.safe.browser" else BuildConfig.APPLICATION_ID
+                    )
+                    put(
+                        "distinct_id",
+                        if (APP.isDebug) "bbf7e0edf9806583" else CacheManager.getID()
+                    )
+                    put("platform", "android")
+                }
+                var old = json.toString()
+                AppLogs.dLog(APP.instance.TAG, "归因" + "原始数据:${old}")
+//
+                AppLogs.dLog(
+                    APP.instance.TAG,
+                    "归因" + "加密后:${encryptECB(old, "tmg6UbIp2gY/JcueVU7oYQ==")}"
+                )
+
+                var endJson = JSONObject().apply {
+                    put("encrypt", encryptECB(old, "tmg6UbIp2gY/JcueVU7oYQ=="))
+                }
+                val requestBody: RequestBody = RequestBody.create(
+                    "application/json; charset=utf-8".toMediaTypeOrNull(),
+                    endJson.toString()
+                )
+                var request = Request.Builder().post(requestBody)
+                    .url("https://layette.safebrowsers.net/odium/butler/sedulous/remorse").build()
+                val response = PointManager.getPonitNet().newCall(request)?.execute()
+                val bodyStr = response?.body?.string() ?: ""
+                var data = getBeanByGson(bodyStr, SourceData::class.java)
+                AppLogs.dLog(APP.instance.TAG, "查询归因:${toJson(data)}")
+                if (data?.campaign_id.isNullOrEmpty() && currentCount < maxCount) {
+                    delay(2000)
+                    getCampaign()
+                    return@loadData
+                }
+                CacheManager.campaignId = data?.campaign_id?:""
+            }
+        }, failBack = {}, 1)
+
+    }
+
 }

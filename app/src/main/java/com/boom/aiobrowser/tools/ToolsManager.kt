@@ -6,8 +6,10 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.text.TextUtils
 import androidx.annotation.NonNull
+import androidx.annotation.RequiresApi
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
@@ -27,10 +29,13 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.text.SimpleDateFormat
+import java.util.Base64
 import java.util.Date
 import java.util.LinkedList
 import java.util.Locale
 import java.util.Vector
+import javax.crypto.Cipher
+import javax.crypto.spec.SecretKeySpec
 import kotlin.math.min
 
 
@@ -422,6 +427,32 @@ fun extractDomain(host: String?): String {
     return secondLevelDomain
 }
 
+
+/**
+ * AES ECB 加密
+ *
+ * @param message 需要加密的字符串
+ * @param key     密匙
+ * @return 返回加密后密文，编码为base64
+ */
+@RequiresApi(Build.VERSION_CODES.O)
+fun encryptECB(message: String, key: String?): String? {
+    val cipherMode = "AES/ECB/PKCS5Padding"
+    val charsetName = "UTF-8"
+    try {
+        val content = message.toByteArray(charset(charsetName))
+        val keyByte = Base64.getDecoder().decode(key)
+        val keySpec = SecretKeySpec(keyByte, "AES")
+        val cipher = Cipher.getInstance(cipherMode)
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec)
+        val data = cipher.doFinal(content)
+        val encoder = Base64.getEncoder()
+        return encoder.encodeToString(data)
+    } catch (e: java.lang.Exception) {
+        e.printStackTrace()
+    }
+    return null
+}
 
 
 

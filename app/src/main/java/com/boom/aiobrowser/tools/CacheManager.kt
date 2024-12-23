@@ -27,7 +27,10 @@ object CacheManager {
 
     val mmkv = MMKV.mmkvWithID("${BuildConfig.APPLICATION_ID}kv", MMKV.MULTI_PROCESS_MODE)
     const val KV_FIRST_START = "KV_FIRST_START"
+    const val KV_FIRST_CLOAK = "KV_FIRST_CLOAK"
     const val KV_INSTALL_REFER = "KV_INSTALL_REFER"
+    const val KV_ADJUST_FROM = "KV_ADJUST_FROM"
+    const val KV_AF_FROM = "KV_AF_FROM"
     const val KV_FIRST_CLICK_DOWNLOAD_BUTTON = "KV_FIRST_CLICK_DOWNLOAD_BUTTON"
     const val KV_FIRST_DOWNLOAD_VIDEO_SUCCESS = "KV_FIRST_DOWNLOAD_VIDEO_SUCCESS"
     const val KV_DAY_DOWNLOAD_COUNT = "KV_DAY_DOWNLOAD_COUNT"
@@ -65,6 +68,7 @@ object CacheManager {
     const val KV_ALL_TOPIC_LIST = "KV_ALL_TOPIC_LIST"
     const val KV_SAVE_DAY = "KV_SAVE_DAY"
     const val KV_GID = "KV_GID"
+    const val KV_CAMPAIGN_ID = "KV_CAMPAIGN_ID"
     const val KV_CLICK_EVERY_DAY = "KV_CLICK_EVERY_DAY"
     const val KV_SHOW_EVERY_DAY = "KV_SHOW_EVERY_DAY"
     const val KV_LAST_LAUNCH_TIME = "KV_LAST_LAUNCH_TIME"
@@ -107,12 +111,34 @@ object CacheManager {
         set(value) {
             mmkv.encode(KV_INSTALL_REFER, value)
         }
-     var isFirstStart: Boolean
+    var adJustFrom: String
+        get() {
+            return mmkv.decodeString(KV_ADJUST_FROM,"Organic")?:"Organic"
+        }
+        set(value) {
+            mmkv.encode(KV_ADJUST_FROM, value)
+        }
+    var afFrom: String
+        get() {
+            return mmkv.decodeString(KV_AF_FROM,"Organic")?:"Organic"
+        }
+        set(value) {
+            mmkv.encode(KV_AF_FROM, value)
+        }
+    var isFirstStart: Boolean
         get() {
             return mmkv.decodeBool(KV_FIRST_START, true)
         }
         set(value) {
             mmkv.encode(KV_FIRST_START, value)
+        }
+
+    var cloakValue: String
+        get() {
+            return mmkv.decodeString(KV_FIRST_CLOAK, "")?:""
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_CLOAK, value)
         }
 
     var isFirstVideoGuide: Boolean
@@ -306,6 +332,13 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_GID, value)
+        }
+    var campaignId: String
+        get() {
+            return mmkv.decodeString(KV_CAMPAIGN_ID)?:""
+        }
+        set(value) {
+            mmkv.encode(KV_CAMPAIGN_ID, value)
         }
 
     // 不一样就清除部分数据

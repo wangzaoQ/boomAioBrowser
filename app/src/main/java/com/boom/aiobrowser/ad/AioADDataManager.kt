@@ -71,9 +71,9 @@ object AioADDataManager {
         applovinSdk!!.initialize(initConfig){
             // Start loading ads
             AppLogs.dLog(APP.instance.TAG,"max 初始化结束")
-            if (APP.isDebug){
-                AppLovinSdk.getInstance(APP.instance).showMediationDebugger()
-            }
+//            if (APP.isDebug){
+//                AppLovinSdk.getInstance(APP.instance).showMediationDebugger()
+//            }
         }
     }
 

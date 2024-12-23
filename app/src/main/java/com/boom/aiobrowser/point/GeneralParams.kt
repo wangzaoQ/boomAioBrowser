@@ -39,7 +39,7 @@ object GeneralParams {
         return JSONObject().apply {
             put("jungian",JSONObject().apply {
                 put("paycheck", Build.VERSION.RELEASE)
-                put("magma", BuildConfig.APPLICATION_ID)
+                put("magma", if (APP.isDebug)"com.fast.safe.browser" else BuildConfig.APPLICATION_ID)
                 put("allotted", System.currentTimeMillis())
                 put("hackle", UUID.randomUUID().toString())
             })

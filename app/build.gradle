@@ -17,7 +17,9 @@ android {
         //测试google登录
 //        applicationId "com.test.demo"
         //测试max
-        applicationId "com.damo.tesp"
+//        applicationId "com.damo.tesp"
+        //af
+        applicationId "com.test.boom"
         minSdk 24
         targetSdk 34
         versionCode 1
@@ -276,6 +278,8 @@ dependencies {
 
     implementation 'com.facebook.android:facebook-android-sdk:12.3.0'
     implementation 'com.adjust.sdk:adjust-android:4.33.5'
+    implementation 'com.appsflyer:af-android-sdk:6.12.1'
+
 
 }
 

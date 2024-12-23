@@ -58,15 +58,24 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         if (isAdded.not())return
         fBinding.llLoadingRoot.visibility = View.VISIBLE
         fBinding.rlStart.visibility = View.GONE
-        startPb(0, 100, if (isFirst) 1000 else 10000, update = {
+        startPb(0, 100, if (isFirst) 5000 else 10000, update = {
             if (isFirst.not()){
-                if (AioADDataManager.getLaunchData() == null && AioADDataManager.adAllowShowScreen() ) {
+                if (AioADDataManager.getLaunchData() == null && AioADDataManager.adAllowShowScreen()) {
                     fBinding.progress.progress = it
                 } else {
                     showEnd()
                 }
             }else{
-                fBinding.progress.progress = it
+                if (CacheManager.campaignId.isNullOrEmpty().not()){
+                    if (APP.isDebug){
+                        AppLogs.dLog(APP.instance.TAG,"当前已查到归因:${CacheManager.campaignId}")
+                    }
+                    endProgress{
+                        adLoadComplete(AioADDataManager.AD_SHOW_TYPE_SUCCESS)
+                    }
+                }else{
+                    fBinding.progress.progress = it
+                }
             }
         }, complete = {
             AppLogs.dLog(fragmentTAG, "10秒内没拿到ad")
@@ -109,7 +118,6 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         }else{
             (rootActivity as MainActivity).apply {
                 (rootActivity as MainActivity).hideStart(true)
-                CacheManager.isFirstStart = false
                 AppLogs.dLog("testAPP","启动页 隐藏")
             }
         }

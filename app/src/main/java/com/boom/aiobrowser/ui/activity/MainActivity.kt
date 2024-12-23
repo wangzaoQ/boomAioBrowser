@@ -48,6 +48,7 @@ import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointManager.PointCallback
 import com.boom.aiobrowser.point.PointValueKey
+import com.boom.aiobrowser.tools.UIManager
 import com.boom.aiobrowser.ui.fragment.MeFragment
 import com.boom.aiobrowser.ui.pop.DefaultPop
 import com.boom.aiobrowser.ui.pop.HomeGuidePop
@@ -339,6 +340,22 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     fun hideStart(isNormal: Boolean) {
         APP.instance.isHideSplash = true
         var allowShowPop = true
+        // 0 默认  1 browser 2 news
+        var jumpType = 0
+        if (UIManager.isBuyUser()){
+            if (CacheManager.isFirstStart && CacheManager.campaignId.isNullOrEmpty().not()){
+                var campaignId = CacheManager.campaignId
+                if (FirebaseConfig.browserJumpList.contains(campaignId)){
+                    //browser
+                    jumpType = 1
+                }else if (FirebaseConfig.newsJumpList.contains(campaignId)){
+                    //news
+                    acBinding.fragmentMain.setCurrentItem(1,true)
+                    jumpType = 2
+                }
+            }
+        }
+        CacheManager.isFirstStart = false
         if (enumName.isNullOrEmpty().not()){
             when (enumName) {
                 NFEnum.NF_DOWNLOAD_VIDEO.menuName -> {
@@ -432,20 +449,20 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             AppLogs.dLog(acTAG,"首页弹窗判断 isDefaultBrowser：:${BrowserManager.isDefaultBrowser()} " +
                     "isFirstShowBrowserDefault:${CacheManager.isFirstShowBrowserDefault} switchDefaultPop:${FirebaseConfig.switchDefaultPop} allowShowPop:${allowShowPop}")
         }
-        if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault && FirebaseConfig.switchDefaultPop && allowShowPop){
+        if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault && FirebaseConfig.switchDefaultPop && allowShowPop && jumpType == 0 || jumpType == 1){
             AppLogs.dLog(acTAG,"shouw browser pop")
             CacheManager.isFirstShowBrowserDefault = false
             var pop = DefaultPop(this@MainActivity)
             pop.setOnDismissListener(object :OnDismissListener(){
                 override fun onDismiss() {
                     showPopCount++
-                    showDownloadGuide(showPopCount,allowShowPop)
+                    showDownloadGuide(showPopCount,allowShowPop,jumpType)
                 }
             })
             pop.createPop()
         }else{
             showPopCount++
-            showDownloadGuide(showPopCount, allowShowPop)
+            showDownloadGuide(showPopCount, allowShowPop,jumpType)
         }
         if (XXPermissions.isGranted(APP.instance, Permission.POST_NOTIFICATIONS).not()){
             //无通知权限
@@ -456,19 +473,19 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             guidePop.setOnDismissListener(object :OnDismissListener(){
                 override fun onDismiss() {
                     showPopCount++
-                    showDownloadGuide(showPopCount, allowShowPop)
+                    showDownloadGuide(showPopCount, allowShowPop,jumpType)
                 }
             })
         }else{
             showPopCount++
-            showDownloadGuide(showPopCount, allowShowPop)
+            showDownloadGuide(showPopCount, allowShowPop,jumpType)
         }
 
         APP.jumpResumeData.postValue(0)
     }
 
-    private fun showDownloadGuide(showPopCount: Int, allowShowPop: Boolean) {
-        if (showPopCount == 2){
+    private fun showDownloadGuide(showPopCount: Int, allowShowPop: Boolean,jumpType:Int) {
+        if (showPopCount == 2 && jumpType == 0 || jumpType == 1){
             if (FirebaseConfig.switchDownloadGuidePop && allowShowPop){
                 AppLogs.dLog(acTAG,"允许开启引导弹窗")
                 if (CacheManager.isFirstShowDownload){

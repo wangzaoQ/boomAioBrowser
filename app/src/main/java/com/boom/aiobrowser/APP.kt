@@ -13,6 +13,13 @@ import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import com.adjust.sdk.Adjust
 import com.adjust.sdk.AdjustConfig
+import com.appsflyer.AppsFlyerConversionListener
+import com.appsflyer.AppsFlyerLib
+import com.appsflyer.AppsFlyerProperties
+import com.appsflyer.attribution.AppsFlyerRequestListener
+//import com.appsflyer.AppsFlyerLib
+//import com.appsflyer.AppsFlyerProperties
+//import com.appsflyer.attribution.AppsFlyerRequestListener
 import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.NetworkUtils.OnNetworkStatusChangedListener
 import com.boom.aiobrowser.ad.AioADDataManager.initAD
@@ -30,6 +37,8 @@ import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.CloakManager
+import com.boom.aiobrowser.tools.UIManager
 import com.boom.aiobrowser.tools.registerDirectory
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.event.ProtectedUnPeekLiveData
@@ -148,6 +157,7 @@ class APP: Application(), ViewModelStoreOwner {
         initAD()
         initFB()
         initAdjust()
+        initAF()
         CoroutineScope(Dispatchers.IO).launch{
             //1. mmkv
             runCatching {
@@ -191,6 +201,56 @@ class APP: Application(), ViewModelStoreOwner {
 //        registerDirectory(APP.instance, DirectoryProvider::class.java, true)
     }
 
+    private fun initAF() {
+        runCatching {
+            var key = "Ed2FymhzHg3qqYpyH8Z9Eg"
+            val conversionDataListener  = object : AppsFlyerConversionListener{
+                override fun onConversionDataSuccess(data: MutableMap<String, Any>?) {
+                    // ...
+                    data?.map {
+                        AppLogs.dLog(APP.instance.TAG, " af onConversionDataSuccess: ${it.key} = ${it.value}")
+                    }
+                    runCatching {
+                        var afStatus = data?.get("af_status") as? String
+                        if (afStatus.isNullOrEmpty()){
+                            afStatus = "Organic"
+                        }
+                        if (afStatus != "Organic"){
+                            CacheManager.afFrom = afStatus
+                        }
+                    }
+                }
+                override fun onConversionDataFail(error: String?) {
+                    AppLogs.dLog(instance.TAG, "af onConversionDataFail :  $error")
+                }
+                override fun onAppOpenAttribution(data: MutableMap<String, String>?) {
+                    // Must be overriden to satisfy the AppsFlyerConversionListener interface.
+                    // Business logic goes here when UDL is not implemented.
+                    data?.map {
+                        AppLogs.dLog(APP.instance.TAG, "af onAppOpenAttribution: ${it.key} = ${it.value}")
+                    }
+                }
+                override fun onAttributionFailure(error: String?) {
+                    // Must be overriden to satisfy the AppsFlyerConversionListener interface.
+                    // Business logic goes here when UDL is not implemented.
+                    AppLogs.dLog(APP.instance.TAG, "af onAttributionFailure :  $error")
+                }
+            }
+            if (AppsFlyerProperties.getInstance().getString(AppsFlyerProperties.APP_USER_ID).isNullOrEmpty()) {
+                AppsFlyerLib.getInstance().setCustomerUserId(CacheManager.getID())
+                AppsFlyerLib.getInstance().waitForCustomerUserId(true)
+                AppsFlyerLib.getInstance().init(key, conversionDataListener, applicationContext)
+
+                AppsFlyerLib.getInstance().setCustomerIdAndLogSession(CacheManager.getID(), this)
+
+            } else {
+                AppsFlyerLib.getInstance().init(key, conversionDataListener, applicationContext)
+            }
+            AppsFlyerLib.getInstance().setDebugLog(isDebug)
+            AppsFlyerLib.getInstance().start(this)
+        }
+    }
+
     private fun initNFConfig() {
 
     }
@@ -198,6 +258,12 @@ class APP: Application(), ViewModelStoreOwner {
     private fun initAdjust() {
         runCatching {
             val config = AdjustConfig(this, "ih2pm2dr3k74", AdjustConfig.ENVIRONMENT_SANDBOX)
+            config.setOnAttributionChangedListener {
+                AppLogs.dLog(UIManager.TAG,"adjust network:${it.network}")
+                if (CacheManager.adJustFrom.contains("organic", true).not()) return@setOnAttributionChangedListener
+                if (it.network.isNullOrBlank()) return@setOnAttributionChangedListener
+                CacheManager.adJustFrom = it.network
+            }
             config.setDelayStart(5.5)
             Adjust.addSessionCallbackParameter("customer_user_id",CacheManager.getID())
             config.setOnEventTrackingSucceededListener {
@@ -267,6 +333,8 @@ class APP: Application(), ViewModelStoreOwner {
     }
 
     fun getWebConfig() {
+        CloakManager().getCloak()
+        appModel.getCampaign()
         appModel.getWebConfig()
         appModel.getTrendsNews()
         appModel.getTopics()

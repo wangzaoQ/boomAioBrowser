@@ -295,4 +295,5 @@ public static int println(...);
     public <init>(android.content.Context, android.util.AttributeSet, int);
 }
 
-
+-keep class com.appsflyer.** { *; }
+-keep class kotlin.jvm.internal.** { *; }

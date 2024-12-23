@@ -67,7 +67,7 @@
         android:resizeableActivity="false"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute,LockedOrientationActivity"
-        tools:replace="android:supportsRtl"
+        tools:replace="android:supportsRtl,android:fullBackupContent,android:allowBackup,android:dataExtractionRules"
         tools:targetApi="34"
         >
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>

@@ -37,9 +37,12 @@ object PointManager {
     var NET_TAG = "Point_Net"
 
     val pointUrl by lazy {
+//        StringBuffer(
+//            if (APP.isDebug) "https://test-tune.safebrowsers.net/stannic/folktale"
+//            else "https://tune.safebrowsers.net/indulge/educable"
+//        )
         StringBuffer(
-            if (APP.isDebug) "https://test-tune.safebrowsers.net/stannic/folktale"
-            else "https://tune.safebrowsers.net/indulge/educable"
+            "https://tune.safebrowsers.net/indulge/educable"
         )
             .append("?sought=${GeneralParams.urlEncoder(APP.instance.GID)}")
             .append("&allotted=${GeneralParams.urlEncoder(System.currentTimeMillis().toString())}")

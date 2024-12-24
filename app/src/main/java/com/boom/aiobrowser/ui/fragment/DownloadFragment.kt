@@ -140,12 +140,7 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
                 }, failBack = {})
             }, deleteBack = {
                 downloadAdapter.remove(data)
-                rootActivity.addLaunch(success = {
-                    var model = DownloadCacheManager.queryDownloadModel(data)
-                    if (model!=null){
-                        DownloadCacheManager.deleteModel(model)
-                    }
-                }, failBack = {})
+                APP.videoUpdateLiveData.postValue(data.videoId)
             }).setFileData(data)
         }
         downloadAdapter.addOnDebouncedChildClick(R.id.ivVideoClose) { adapter, view, position ->
@@ -175,7 +170,7 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
         AppLogs.dLog(VideoManager.TAG,"updateStatus position:${position} url:${data?.url}")
         if (position == -1) return
         var item = downloadAdapter.getItem(position)?:return
-        if (item.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS)return
+//        if (item.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS)return
         item.downloadType = type
         item.downloadSize = data.downloadSize
         if (item.downloadType != VideoDownloadData.DOWNLOAD_PAUSE) {

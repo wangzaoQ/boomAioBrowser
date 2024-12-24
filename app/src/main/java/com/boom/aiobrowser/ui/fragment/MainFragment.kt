@@ -215,6 +215,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                                 page = 1
                                 fBinding.rv.smoothScrollToPosition(0)
                                 loadData()
+                                viewModel.value.getNewsData(newsAdapter.mutableItems,NetParams.MAIN, page = page,true)
                             }
                             APP.locationListUpdateLiveData.postValue(0)
                         }
@@ -345,6 +346,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                     AppLogs.dLog(fragmentTAG,"加载更多")
                     page++
                     loadData()
+                    viewModel.value.getNewsData(newsAdapter.mutableItems,NetParams.MAIN, page = page)
                 }
 
                 override fun onFailRetry() {
@@ -462,6 +464,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 fBinding.refreshLayout.isRefreshing = true
                 page = 1
                 loadData()
+                viewModel.value.getNewsData(newsAdapter.mutableItems,NetParams.MAIN, page = page,true)
             }
         }
         updateEngine(CacheManager.engineType)
@@ -471,7 +474,8 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         }else{
             fBinding.topSearch.binding.ivPrivate.visibility = View.VISIBLE
         }
-        loadNews()
+        viewModel.value.getNewsData(newsAdapter.mutableItems,NetParams.MAIN, page = page)
+        viewModel.value.getNewsVideoList()
         fBinding.root.postDelayed({
             fBinding.topSearch.visibility = View.GONE
         },0)
@@ -523,11 +527,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         return newsBeans?:ArrayList()
     }
 
-    fun loadNews(){
-        viewModel.value.getNewsData(NetParams.MAIN, page = page)
-        viewModel.value.getNewsVideoList()
-    }
-
     private fun loadData() {
         if (page>1){
             adapterHelper.trailingLoadState = LoadState.Loading
@@ -535,7 +534,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             adapterHelper.trailingLoadState = LoadState.None
             fBinding.refreshLayout.isRefreshing = true
         }
-        loadNews()
         PointEvent.posePoint(PointEventKey.home_page_refresh,Bundle().apply {
             putString(PointValueKey.refresh_type,if (page == 1)"down" else "up")
         })

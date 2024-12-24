@@ -27,6 +27,7 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.UIManager
 import com.boom.aiobrowser.tools.extractDomain
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getMapByGson
@@ -292,25 +293,28 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
     fun allowShowTips(): Boolean {
         var showTask = false
-        var host = Uri.parse(mAgentWeb?.webCreator?.webView?.url?:"")?.host?:""
-        AppLogs.dLog(fragmentTAG,"当前加载Url:${mAgentWeb?.webCreator?.webView?.url?:""} host:${host}")
-        if (WebScan.isVimeo(host)){}
-        else if (FirebaseConfig.switchOpenFilter1){
-            AppLogs.dLog(fragmentTAG,"命中filter1")
-            showTask = true
-        }else{
-            var index = -1
-            for (i in 0 until FirebaseConfig.switchOpenFilterList.size){
-                var filterWeb = FirebaseConfig.switchOpenFilterList.get(i)
-                filterWeb.trim()
-                host = extractDomain(host)
-                if (host == filterWeb){
-                    index = i
-                }
-            }
-            if (index>=0){
-                AppLogs.dLog(fragmentTAG,"命中filter2 indexUrl:${FirebaseConfig.switchOpenFilterList.get(index) } host:${host}")
+        if (UIManager.isBuyUser().not()){
+            var hostList = extractDomain(mAgentWeb?.webCreator?.webView?.url?:"")
+            AppLogs.dLog(fragmentTAG,"当前加载Url:${mAgentWeb?.webCreator?.webView?.url?:""} host:${hostList}")
+            if (WebScan.isVimeo(hostList)){}
+            else if (FirebaseConfig.switchOpenFilter1){
+                AppLogs.dLog(fragmentTAG,"命中filter1")
                 showTask = true
+            }else{
+                var index = -1
+                for (i in 0 until FirebaseConfig.switchOpenFilterList.size){
+                    var filterWeb = FirebaseConfig.switchOpenFilterList.get(i).trim()
+                    for (j in 0 until hostList.size){
+                        if (hostList.get(j).equals(filterWeb,true)){
+                            index = i
+                            break
+                        }
+                    }
+                }
+                if (index>=0){
+                    AppLogs.dLog(fragmentTAG,"命中filter2 indexUrl:${FirebaseConfig.switchOpenFilterList.get(index) } host:${hostList}")
+                    showTask = true
+                }
             }
         }
         return showTask
@@ -382,10 +386,10 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             view: WebView?,
             request: WebResourceRequest?
         ): WebResourceResponse? {
-            AppLogs.dLog(
-                fragmentTAG,
-                "mWebViewClient shouldInterceptRequest:${request?.url}"
-            )
+//            AppLogs.dLog(
+//                fragmentTAG,
+//                "mWebViewClient shouldInterceptRequest:${request?.url}"
+//            )
 //            request?.url?.apply {
 //                if (WebScan.isTikTok(this.toString())){
 //                    var  builder = Request.Builder()

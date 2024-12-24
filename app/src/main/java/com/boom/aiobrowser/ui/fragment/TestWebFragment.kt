@@ -13,6 +13,7 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.other.JumpConfig
+import com.boom.aiobrowser.tools.extractDomain
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -39,14 +40,20 @@ class TestWebFragment: BaseWebFragment<BrowserFragmentTempBinding>() {
         var script = ""
         var list = CacheManager.fetchList
         var index = -1
+        var hostList = extractDomain(url)
+
         for (i in 0 until list.size){
             var fetchData = list.get(i)
-            var uri = Uri.parse(webUrl)
-            if (uri.host?.contains(fetchData.cUrl)?:false){
+            var splits = fetchData.cUrl.split(".")
+            var host = ""
+            if (splits.size>0){
+                host = splits.get(0)
+            }
+            if (hostList.contains(host)){
                 script = fetchData.cDetail
                 script = script.replace("__INPUT_URL__",URLEncoder.encode(webUrl))
                 if (APP.isDebug){
-                    AppLogs.dLog("webReceive","fetch 模式执行特定脚本:${script}")
+                    AppLogs.dLog("webReceive","fetch 模式执行特定脚本 host:${host} js:${script}")
                 }
                 mAgentWeb!!.getWebCreator().getWebView().evaluateJavascript(script) {
                     AppLogs.dLog("webReceive", "evaluateJavascript 接收:$it thread:${Thread.currentThread()}")
@@ -55,6 +62,24 @@ class TestWebFragment: BaseWebFragment<BrowserFragmentTempBinding>() {
                 break
             }
         }
+//
+//
+//        for (i in 0 until list.size){
+//            var fetchData = list.get(i)
+//            var uri = Uri.parse(webUrl)
+//            if (uri.host?.contains(fetchData.cUrl)?:false){
+//                script = fetchData.cDetail
+//                script = script.replace("__INPUT_URL__",URLEncoder.encode(webUrl))
+//                if (APP.isDebug){
+//                    AppLogs.dLog("webReceive","fetch 模式执行特定脚本:${script}")
+//                }
+//                mAgentWeb!!.getWebCreator().getWebView().evaluateJavascript(script) {
+//                    AppLogs.dLog("webReceive", "evaluateJavascript 接收:$it thread:${Thread.currentThread()}")
+//                }
+//                index = i
+//                break
+//            }
+//        }
         if (index == -1){
             //通用
             for (i in 0 until list.size){

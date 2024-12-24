@@ -43,7 +43,7 @@ class VideoMorePop(context: Context) : BasePopupWindow(context) {
                 builder.setNegativeButton(context.getString(R.string.app_yes)) { dialog, which ->
                     PointEvent.posePoint(PointEventKey.download_page_more_delete)
                     runCatching {
-                        DownloadControlManager.videoDelete(data!!)
+                        DownloadControlManager.videoDelete(data!!,false)
                         deleteBack.invoke(data!!.downloadFilePath)
                         dismiss()
                     }

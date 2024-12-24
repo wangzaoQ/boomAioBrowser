@@ -463,21 +463,20 @@ object CacheManager {
             mmkv.encode(KV_TAB_DATA_PRIVATE, toJson(value))
         }
 
-    var newsSaveTime :Long
-        get() {
-            return mmkv.decodeLong(KV_NEWS_SAVE_TIME, 0)
-        }
-        set(value) {
-            mmkv.encode(KV_NEWS_SAVE_TIME, value)
-        }
-    var newsList:MutableList<NewsData>
-        get() {
 
-            return getListByGson(mmkv.decodeString(KV_NEWS_LIST),NewsData::class.java) ?: mutableListOf()
-        }
-        set(value) {
-            mmkv.encode(KV_NEWS_LIST, toJson(value))
-        }
+    fun getNewsSaveTime(topic:String): Long {
+        return mmkv.decodeLong("${KV_NEWS_SAVE_TIME}_${topic}", 0)
+    }
+    fun saveNewsSaveTime(topic:String) {
+        mmkv.encode("${KV_NEWS_SAVE_TIME}_${topic}", System.currentTimeMillis())
+    }
+
+    fun getNewsSaveList(topic:String): MutableList<NewsData> {
+        return getListByGson(mmkv.decodeString("${KV_NEWS_LIST}_${topic}"),NewsData::class.java) ?: mutableListOf()
+    }
+    fun saveNewsSaveList(topic:String,list: MutableList<NewsData>) {
+        mmkv.encode("${KV_NEWS_LIST}_${topic}", toJson(list))
+    }
 
     var videoList:MutableList<NewsData>
         get() {

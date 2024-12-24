@@ -196,6 +196,8 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
 
     override fun onDestroy() {
         APP.jumpLiveData.removeObservers(this)
+        APP.videoNFLiveData.removeObservers(this)
+        APP.videoLiveData.removeObservers(this)
         super.onDestroy()
     }
 }

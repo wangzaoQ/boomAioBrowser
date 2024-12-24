@@ -52,11 +52,11 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
         fBinding.newsSmart.autoRefresh()
     }
 
-    private fun loadData() {
+    private fun loadData(refresh:Boolean) {
         if (topic == TopicConfig.TOPIC_FOR_YOU || topic.startsWith(NewsConfig.LOCAL_TAG)){
-            viewModel.value.getNewsData(topic,page)
+            viewModel.value.getNewsData(newsAdapter.mutableItems,topic,page,refresh)
         }else{
-            viewModel.value.getNewsData("${NewsConfig.TOPIC_TAG}${topic}",page)
+            viewModel.value.getNewsData(newsAdapter.mutableItems,"${NewsConfig.TOPIC_TAG}${topic}",page,refresh)
         }
     }
 
@@ -64,18 +64,11 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
         viewModel.value.newsLiveData.observe(this){
             if (page == 1){
                 newsAdapter.submitList(it)
-            }else{
-                var oldList = newsAdapter.mutableItems
-                var removeList = mutableListOf<NewsData>()
-                it.forEach {
-                    for (j in 0 until newsAdapter.mutableItems.size){
-                        if (newsAdapter.mutableItems.get(j).itackl == it.itackl){
-                            removeList.add(it)
-                            break
-                        }
-                    }
+                if (newsAdapter.mutableItems.size<5){
+                    page++
+                    loadData(false)
                 }
-                (it as MutableList<NewsData>).removeAll(removeList)
+            }else{
                 newsAdapter.addAll(it)
             }
             fBinding.newsSmart.finishRefresh()
@@ -87,11 +80,11 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
         }
         fBinding.newsSmart.setOnRefreshListener{
             page = 1
-            loadData()
+            loadData(true)
         }
         fBinding.newsSmart.setOnLoadMoreListener{
             page++
-            loadData()
+            loadData(false)
         }
         newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
             if (position>newsAdapter.items.size-1)return@setOnDebouncedItemClick
@@ -138,7 +131,7 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
                             withContext(Dispatchers.Main){
                                 page = 1
                                 fBinding.newsRv.smoothScrollToPosition(0)
-                                loadData()
+                                loadData(true)
                             }
                             APP.locationListUpdateLiveData.postValue(0)
                         }

@@ -280,8 +280,16 @@ object WebScan {
         return url.contains(WebConfig.YOUTUBE,true)
     }
 
-    fun isVimeo(url: String):Boolean{
-        return url.contains(WebConfig.VIMEO,true)
+    fun isVimeo(urlList: MutableList<String>):Boolean{
+        var index = -1
+        for (i in 0 until urlList.size){
+            var url = urlList.get(i)
+            if (url.equals(WebConfig.VIMEO,true) ){
+                index = i
+                break
+            }
+        }
+        return (index == -1).not()
     }
 
     fun reset() {

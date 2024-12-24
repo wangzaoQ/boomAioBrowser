@@ -114,9 +114,12 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
             if (position>newsAdapter.items.size-1)return@setOnDebouncedItemClick
             var data = newsAdapter.items.get(position)
             if (data.dataType == NewsData.TYPE_NEWS || data.dataType == NewsData.TYPE_DETAILS_NEWS_RELATED){
-                jumpActivity<WebDetailsActivity>(Bundle().apply {
-                    putString(ParamsConfig.JSON_PARAMS, toJson(data))
-                })
+                var manager = AioADShowManager(this@WebDetailsActivity, ADEnum.INT_AD, tag = "新闻详情相关推荐") {
+                    jumpActivity<WebDetailsActivity>(Bundle().apply {
+                        putString(ParamsConfig.JSON_PARAMS, toJson(data))
+                    })
+                }
+                manager.showScreenAD(AD_POINT.aobws_news_other)
             }
             if (data.dataType == NewsData.TYPE_NEWS) {
                 PointEvent.posePoint(PointEventKey.news_page_like,Bundle().apply {

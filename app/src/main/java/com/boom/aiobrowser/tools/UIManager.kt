@@ -22,10 +22,11 @@ object UIManager {
 //                return false
 //            }
 //        }
-        if (APP.isDebug){
-            AppLogs.dLog(TAG,"debug环境 测试为买量用户")
-            return true
-        }
+
+//        if (APP.isDebug){
+//            AppLogs.dLog(TAG,"debug环境 测试为买量用户")
+//            return true
+//        }
         if (CacheManager.cloakValue == "orgasm"){
             AppLogs.dLog(TAG,"cloak 命中买量")
             return true

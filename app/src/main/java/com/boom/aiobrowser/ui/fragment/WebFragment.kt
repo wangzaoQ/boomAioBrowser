@@ -31,6 +31,7 @@ import com.boom.aiobrowser.tools.web.WebScan
 import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
+import com.boom.aiobrowser.tools.extractDomain
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.pop.ClearPop
 import com.boom.aiobrowser.ui.pop.DownLoadPop
@@ -62,12 +63,18 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         addLast(url)
         var list = CacheManager.pageList
         var index = -1
+        var hostList = extractDomain(url)
+
         for (i in 0 until list.size){
             var pageData = list.get(i)
-            var uri = Uri.parse(url)
-            if (uri.host?.contains(pageData.cUrl)?:false){
+            var splits = pageData.cUrl.split(".")
+            var host = ""
+            if (splits.size>0){
+                host = splits.get(0)
+            }
+            if (hostList.contains(host)){
                 if (APP.isDebug){
-                    AppLogs.dLog("webReceive","page 模式执行特定脚本:${pageData.cDetail}")
+                    AppLogs.dLog("webReceive","page 模式执行特定脚本:host:${host} js:${pageData.cDetail}")
                 }
                 mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${pageData.cDetail}");
                 index = i
@@ -79,7 +86,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
             for (i in 0 until list.size){
                 var pageData = list.get(i)
                 if (pageData.cUrl == "*"){
-                    AppLogs.dLog("webReceive","page 模式执行通用脚本")
+                    AppLogs.dLog("webReceive","page 模式执行通用脚本 js:${pageData.cDetail}")
                     mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${pageData.cDetail}");
                     break
                 }
@@ -209,9 +216,10 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
     open fun updateDownloadButtonStatus(status: Boolean,type:Int=0) {
         var size = 0
-        for (i in 0 until CacheManager.videoDownloadTempList.size){
+        var tempList = CacheManager.videoDownloadTempList
+        for (i in 0 until tempList.size){
             var allow = false
-            CacheManager.videoDownloadTempList.get(i).formatsList.forEach {
+            tempList.get(i).formatsList.forEach {
                 if (it.downloadType != VideoDownloadData.DOWNLOAD_SUCCESS){
                     allow = true
                 }
@@ -222,7 +230,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         }
         if (allowShowTips().not()){
             dragBiding?.apply {
-                if (type == 1 ||(status && size>0)){
+                if (tempList.size>0){
                     ivDownload.visibility = View.GONE
                     ivDownload2.visibility = View.VISIBLE
                     if (size>0){
@@ -308,6 +316,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         fBinding.flTop.binding.tvToolbarSearch.text = "${jumpData?.jumpTitle} ${getSearchTitle()}"
         fBinding.refreshLayout.isRefreshing = false
 //        var key = mAgentWeb?.webCreator?.webView?.url?:""
+        addDownload()
     }
 
     fun getSearchTitle():String{
@@ -364,24 +373,26 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         PointEvent.posePoint(PointEventKey.webpage_page,Bundle().apply {
             putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
         })
-        var startX = 0
-        var startY = 0
-        var dragX = CacheManager.dragX
-        var dragY = CacheManager.dragY
-        startX = if (dragX == 0){
-            DisplayUtils.getScreenWidth(rootActivity) - dp2px(85f)-dp2px(28f)
-        }else{
-            dragX
-        }
-        startY = if (dragY == 0){
-            DisplayUtils.getScreenHeight(rootActivity)-(BigDecimalUtils.div(DisplayUtils.getScreenWidth(rootActivity).toDouble(),3.0).toInt()*2)
-        }else{
-            dragY
-        }
-        AppLogs.dLog("dragParams","startX:${startX} startY:${startY}")
-        updateDownloadButtonStatus(false)
+        addDownload()
+    }
+
+    private fun addDownload() {
         if (allowShowTips().not()){
-            EasyFloat.dismiss(tag = "webPop",true)
+            var startX = 0
+            var startY = 0
+            var dragX = CacheManager.dragX
+            var dragY = CacheManager.dragY
+            startX = if (dragX == 0){
+                DisplayUtils.getScreenWidth(rootActivity) - dp2px(85f)-dp2px(28f)
+            }else{
+                dragX
+            }
+            startY = if (dragY == 0){
+                DisplayUtils.getScreenHeight(rootActivity)-(BigDecimalUtils.div(DisplayUtils.getScreenWidth(rootActivity).toDouble(),3.0).toInt()*2)
+            }else{
+                dragY
+            }
+            AppLogs.dLog(fragmentTAG,"startX:${startX} startY:${startY}")
             dragBiding?.apply {     EasyFloat.with(rootActivity)
                 .setSidePattern(SidePattern.RESULT_HORIZONTAL)
                 .setImmersionStatusBar(true)
@@ -480,6 +491,8 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                     }
                 }
                 .show() }
+        }else{
+            EasyFloat.dismiss(tag = "webPop",true)
         }
     }
 
@@ -487,6 +500,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
     override fun onResume() {
         super.onResume()
+        updateDownloadButtonStatus(false)
     }
 
     override fun getUrl(): String {

@@ -8,6 +8,7 @@ import com.boom.aiobrowser.net.NetController
 import com.boom.aiobrowser.net.NetParams
 import com.boom.aiobrowser.net.NetRequest
 import com.boom.aiobrowser.other.NewsConfig
+import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.video.VideoPreloadManager
 
@@ -21,15 +22,19 @@ class NewsViewModel : BaseDataModel() {
 
 
 
-    fun getNewsData(topic:String,page:Int,refresh:Boolean=false) {
-        var middleTime = System.currentTimeMillis()-CacheManager.newsSaveTime
-        if (middleTime>5*60*1000){
-            CacheManager.newsList = mutableListOf()
+    fun getNewsData(dataList:MutableList<NewsData>,topic:String,page:Int,refresh:Boolean=false) {
+        var newsList:MutableList<NewsData>?=null
+        if (page == 1){
+            var middleTime = System.currentTimeMillis()-CacheManager.getNewsSaveTime(topic)
+            if (middleTime>5*60*1000){
+                CacheManager.saveNewsSaveList(topic, mutableListOf())
+            }
+            newsList = CacheManager.getNewsSaveList(topic)
         }
-        var newsList = CacheManager.newsList
         loadData(loadBack = {
-            if (newsList.isNotEmpty() && refresh.not()){
-                newsLiveData.postValue(addHomeData(topic,page,newsList))
+            if (newsList.isNullOrEmpty().not() && refresh.not()){
+                newsList = detailHistory(dataList,newsList!!)
+                newsLiveData.postValue(addHomeData(dataList,topic,page,newsList!!))
             }else{
                 var list :MutableList<NewsData>
                 if (topic =="${NewsConfig.TOPIC_TAG}${APP.instance.getString(R.string.app_trending_today)}"){
@@ -59,13 +64,15 @@ class NewsViewModel : BaseDataModel() {
                         }
                     }
                 }
+                list = detailHistory(dataList,list)
                 if (topic == "${NewsConfig.TOPIC_TAG}${NetParams.PUBLIC_SAFETY}" && list.isNullOrEmpty()){
                     list = NetRequest.request(HashMap<String, Any>().apply {
                         put("sessionKey",topic)
                     }) { NetController.getNewsList(NetParams.getParamsMap(topic, currentPage = page,specialKey="noLocation")) }.data
                         ?: mutableListOf()
                 }
-                newsLiveData.postValue(addHomeData(topic,page,list))
+                list = detailHistory(dataList,list)
+                newsLiveData.postValue(addHomeData(dataList,topic,page,list))
             }
         }, failBack = {
 
@@ -132,9 +139,16 @@ class NewsViewModel : BaseDataModel() {
         },1)
     }
 
-    private suspend fun addHomeData(topic:String, page:Int, list:MutableList<NewsData>) :MutableList<NewsData>{
+    private suspend fun addHomeData(oldList:MutableList<NewsData>,topic:String, page:Int, list:MutableList<NewsData>) :MutableList<NewsData>{
         if ((NetParams.MAIN == topic || topic == NetParams.FOR_YOU) && page == 1){
             if (NetParams.MAIN == topic){
+                var removeList = mutableListOf<NewsData>()
+                for (i in 0 until list.size){
+                    if (list.get(i).dataType != 0){
+                        removeList.add(list.get(i))
+                    }
+                }
+                list.removeAll(removeList)
                 list.add(0,NewsData().apply {
                     dataType = NewsData.TYPE_HOME_NEWS_TRENDING
                     var trendNews = APP.instance.appModel.getTrendsNewsData()
@@ -182,6 +196,8 @@ class NewsViewModel : BaseDataModel() {
                 }
             }
         }
+        CacheManager.saveNewsSaveList(topic, list)
+        CacheManager.saveNewsSaveTime(topic)
         return list
     }
 
@@ -390,4 +406,24 @@ class NewsViewModel : BaseDataModel() {
         }, failBack = {},1)
     }
 
+
+    fun detailHistory(oldList:MutableList<NewsData>,newsList:MutableList<NewsData>):MutableList<NewsData>{
+        AppLogs.dLog(TAG,"请求的数据长度:${newsList.size}")
+        if (newsList.isNullOrEmpty())return mutableListOf()
+        if (oldList.isNullOrEmpty())return newsList
+        var removeList = mutableListOf<NewsData>()
+        newsList.forEach {
+            for (i in 0 until oldList.size){
+                var oldData = oldList.get(i)
+                if (oldData.dataType == NewsData.TYPE_NEWS){
+                    if (it.itackl == oldData.itackl){
+                        removeList.add(it)
+                    }
+                }
+            }
+        }
+        newsList.removeAll(removeList)
+        AppLogs.dLog(TAG,"经过过滤后的数据长度:${newsList.size}  移除了:${removeList.size}")
+        return newsList
+    }
 }

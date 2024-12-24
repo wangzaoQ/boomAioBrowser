@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.boom.aiobrowser.APP
@@ -13,6 +14,7 @@ import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.UserData
 import com.boom.aiobrowser.databinding.NewsFragmentMeBinding
+import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.model.APPUserViewModel
 import com.boom.aiobrowser.other.LoginConfig.SIGN_LOGIN
 import com.boom.aiobrowser.other.LoginConfig.SIGN_LOGIN_ONE_TAP
@@ -24,6 +26,8 @@ import com.boom.aiobrowser.tools.BrowserManager
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.GlideManager
 import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.tools.UIManager
+import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.activity.AboutActivity
 import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.HistoryActivity
@@ -59,12 +63,61 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
 
 
     override fun startLoadData() {
+        if (APP.isDebug){
+            fBinding.llRoot.apply {
+                addTest("买量用户状态:${UIManager.isBuyUser()}") {
+                }
+                addTest("adjust:${CacheManager.adJustFrom}") {
+                }
+                addTest("af:${CacheManager.afFrom}") {
+                }
+                addTest("refer:${CacheManager.installRefer}") {
+                }
+                addTest("referConfig:${FirebaseConfig.referConfig}") {
+                }
+                addTest("cloak:${CacheManager.cloakValue}") {
+                    if (CacheManager.cloakValue == "creamery"){
+                        CacheManager.cloakValue = "orgasm"
+                        it.text = "orgasm"
+                    }else{
+                        CacheManager.cloakValue = "creamery"
+                        it.text = "creamery"
+                    }
+                }
+                addTest("归因结果:${CacheManager.campaignId}") {
+                }
+                addTest("所有网站下载限制开关:${FirebaseConfig.switchOpenFilter1}") {
+                    FirebaseConfig.switchOpenFilter1 = FirebaseConfig.switchOpenFilter1.not()
+                    it.text = "所有网站下载限制开关:${FirebaseConfig.switchOpenFilter1}"
+                }
+                addTest("网站限制list:${toJson(FirebaseConfig.switchOpenFilterList)}") {
 
+                }
+                addTest("默认浏览器开关:${FirebaseConfig.switchDefaultPop}") {
+//                    FirebaseConfig.switchDefaultPop = FirebaseConfig.switchDefaultPop.not()
+//                    it.text = "默认浏览器开关:${FirebaseConfig.switchDefaultPop}"
+                }
+                addTest("下载引导开关:${FirebaseConfig.switchDownloadGuidePop}") {
+//                    FirebaseConfig.switchDownloadGuidePop = FirebaseConfig.switchDownloadGuidePop.not()
+//                    it.text = "下载引导开关:${FirebaseConfig.switchDownloadGuidePop}"
+                }
+            }
+        }
+    }
+
+    fun ViewGroup.addTest(str: String, block: (view:AppCompatButton)-> Unit){
+        this.addView(AppCompatButton(context).apply {
+            text = str
+
+            setOnClickListener {
+                block(this)
+            }
+        })
     }
 
     override fun onResume() {
         super.onResume()
-      updateUI()
+        updateUI()
     }
 
     var tempTag = "loginTAG"

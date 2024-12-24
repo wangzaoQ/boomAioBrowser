@@ -24,6 +24,7 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.other.UrlConfig
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.WebActivity
+import com.boom.aiobrowser.ui.pop.ConfigPop
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
 import kotlinx.coroutines.Dispatchers
@@ -178,6 +179,9 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         if (CacheManager.isFirstStart){
             fBinding.rlStart.visibility = View.VISIBLE
             fBinding.llLoadingRoot.visibility = View.GONE
+            if (APP.isDebug){
+                ConfigPop(rootActivity).createPop()
+            }
         }else{
             toMain("非首次")
         }

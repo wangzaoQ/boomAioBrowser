@@ -343,7 +343,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         // 0 默认  1 browser 2 news
         var jumpType = 0
         if (UIManager.isBuyUser()){
-            if (CacheManager.isFirstStart && CacheManager.campaignId.isNullOrEmpty().not()){
+            if (CacheManager.campaignId.isNullOrEmpty().not()){
                 var campaignId = CacheManager.campaignId
                 if (FirebaseConfig.browserJumpList.contains(campaignId)){
                     //browser
@@ -355,7 +355,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 }
             }
         }
-        CacheManager.isFirstStart = false
         if (enumName.isNullOrEmpty().not()){
             when (enumName) {
                 NFEnum.NF_DOWNLOAD_VIDEO.menuName -> {
@@ -485,7 +484,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
 
     private fun showDownloadGuide(showPopCount: Int, allowShowPop: Boolean,jumpType:Int) {
-        if (showPopCount == 2 && jumpType == 0 || jumpType == 1){
+        if (showPopCount == 2 && (jumpType == 0 || jumpType == 1)){
             if (FirebaseConfig.switchDownloadGuidePop && allowShowPop){
                 AppLogs.dLog(acTAG,"允许开启引导弹窗")
                 if (CacheManager.isFirstShowDownload){

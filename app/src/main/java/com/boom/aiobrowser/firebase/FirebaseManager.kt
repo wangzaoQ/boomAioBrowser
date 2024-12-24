@@ -64,6 +64,7 @@ object FirebaseManager {
                     firebaseRemoteConfig?.fetchAndActivate()?.addOnCompleteListener {
                         if (it.isSuccessful) {
                             initFirebaseConfig("firebase 获取最新配置")
+                            initFirebaseConfig2()
                         }
                     }
                     delay(60*60*1000)
@@ -100,6 +101,41 @@ object FirebaseManager {
         }
     }
 
+    /**
+     * 只在成功后初始化
+     */
+    private fun initFirebaseConfig2() {
+        initJumpConfig()
+    }
+
+    private fun initJumpConfig() {
+        var configBrowserFrom = ""
+        runCatching {
+            configBrowserFrom = firebaseRemoteConfig?.getString("start_home_download")?:""
+        }
+        var splits = configBrowserFrom.split(",")
+        if (configBrowserFrom.isNullOrEmpty()||splits.isNullOrEmpty()||splits.get(0).isNullOrEmpty()){
+            configBrowserFrom = FirebaseConfig.jumpBrowserConfig
+            splits = configBrowserFrom.split(",")
+        }
+        if (splits.isNullOrEmpty().not()){
+            FirebaseConfig.browserJumpList = splits
+        }
+
+        var configNewsFrom = ""
+        runCatching {
+            configNewsFrom = firebaseRemoteConfig?.getString("start_news")?:""
+        }
+        var splitsNews = configNewsFrom.split(",")
+        if (configNewsFrom.isNullOrEmpty()||splitsNews.isNullOrEmpty()||splitsNews.get(0).isNullOrEmpty()){
+            configNewsFrom = FirebaseConfig.jumpNewsConfig
+            splitsNews = configNewsFrom.split(",")
+        }
+        if (splitsNews.isNullOrEmpty().not()){
+            FirebaseConfig.newsJumpList = splitsNews
+        }
+    }
+
     private fun initFirebaseConfig(tag: String) {
         AppLogs.dLog(APP.instance.TAG,"tag:${tag}")
         getADConfig()
@@ -125,7 +161,7 @@ object FirebaseManager {
                 putInt(PointValueKey.type,FirebaseConfig.pushData?.time_interval?:0)
             })
         }
-        var config_filter1 = 1
+        var config_filter1 = 0
         runCatching {
             config_filter1 = firebaseRemoteConfig?.getString("alldownload_switch")?.toInt()?:1
         }

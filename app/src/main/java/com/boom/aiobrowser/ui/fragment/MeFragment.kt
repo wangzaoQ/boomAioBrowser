@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.boom.aiobrowser.APP
@@ -32,6 +33,7 @@ import com.boom.aiobrowser.ui.activity.AboutActivity
 import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.HistoryActivity
 import com.boom.aiobrowser.ui.pop.ClearPop
+import com.boom.aiobrowser.ui.pop.ConfigPop
 import com.boom.aiobrowser.ui.pop.DefaultPop
 import com.boom.aiobrowser.ui.pop.LoadingPop
 import com.boom.aiobrowser.ui.pop.TabPop
@@ -65,55 +67,16 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
     override fun startLoadData() {
         if (APP.isDebug){
             fBinding.llRoot.apply {
-                addTest("买量用户状态:${UIManager.isBuyUser()}") {
-                }
-                addTest("adjust:${CacheManager.adJustFrom}") {
-                }
-                addTest("af:${CacheManager.afFrom}") {
-                }
-                addTest("refer:${CacheManager.installRefer}") {
-                }
-                addTest("referConfig:${FirebaseConfig.referConfig}") {
-                }
-                addTest("cloak:${CacheManager.cloakValue}") {
-                    if (CacheManager.cloakValue == "creamery"){
-                        CacheManager.cloakValue = "orgasm"
-                        it.text = "orgasm"
-                    }else{
-                        CacheManager.cloakValue = "creamery"
-                        it.text = "creamery"
+                addView(AppCompatTextView(rootActivity).apply {
+                    text = "启动配置弹窗"
+                    setOneClick {
+                        ConfigPop(rootActivity).createPop()
                     }
-                }
-                addTest("归因结果:${CacheManager.campaignId}") {
-                }
-                addTest("所有网站下载限制开关:${FirebaseConfig.switchOpenFilter1}") {
-                    FirebaseConfig.switchOpenFilter1 = FirebaseConfig.switchOpenFilter1.not()
-                    it.text = "所有网站下载限制开关:${FirebaseConfig.switchOpenFilter1}"
-                }
-                addTest("网站限制list:${toJson(FirebaseConfig.switchOpenFilterList)}") {
-
-                }
-                addTest("默认浏览器开关:${FirebaseConfig.switchDefaultPop}") {
-//                    FirebaseConfig.switchDefaultPop = FirebaseConfig.switchDefaultPop.not()
-//                    it.text = "默认浏览器开关:${FirebaseConfig.switchDefaultPop}"
-                }
-                addTest("下载引导开关:${FirebaseConfig.switchDownloadGuidePop}") {
-//                    FirebaseConfig.switchDownloadGuidePop = FirebaseConfig.switchDownloadGuidePop.not()
-//                    it.text = "下载引导开关:${FirebaseConfig.switchDownloadGuidePop}"
-                }
+                })
             }
         }
     }
 
-    fun ViewGroup.addTest(str: String, block: (view:AppCompatButton)-> Unit){
-        this.addView(AppCompatButton(context).apply {
-            text = str
-
-            setOnClickListener {
-                block(this)
-            }
-        })
-    }
 
     override fun onResume() {
         super.onResume()

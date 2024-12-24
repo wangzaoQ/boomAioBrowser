@@ -45,12 +45,12 @@ object UIManager {
             AppLogs.dLog(TAG,"refer 命中买量 match:${configList.get(index)}")
             return true
         }
-        var buyAdjust = CacheManager.adJustFrom.contains("Organic", true).not()
+        var buyAdjust = CacheManager.adJustFrom.equals("Organic", true).not()
         if (buyAdjust){
             AppLogs.dLog(TAG,"buyAdjust 命中买量 match:${buyAdjust}")
             return true
         }
-        var buyAF = CacheManager.afFrom.contains("Organic", true).not()
+        var buyAF = CacheManager.afFrom.equals("Organic", true).not()
         if (buyAF){
             AppLogs.dLog(TAG,"buyAF 命中买量 match:${buyAF}")
             return true

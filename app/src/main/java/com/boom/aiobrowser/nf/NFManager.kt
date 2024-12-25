@@ -50,6 +50,7 @@ object NFManager {
     var nfRootBean: AioNFData? = null
 
     val videoNFMap = LinkedHashMap<String,Int>()
+    val videoTimeMap = HashMap<String,Long>()
 
     var nfForeground:Notification?=null
     var defaultNewsList:MutableList<NewsData>?=null

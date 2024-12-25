@@ -339,6 +339,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
     fun hideStart(isNormal: Boolean) {
         APP.instance.isHideSplash = true
+        CacheManager.isFirstStart = false
         var allowShowPop = true
         // 0 默认  1 browser 2 news
         var jumpType = 0
@@ -487,7 +488,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         if (showPopCount == 2 && (jumpType == 0 || jumpType == 1)){
             if (FirebaseConfig.switchDownloadGuidePop && allowShowPop){
                 AppLogs.dLog(acTAG,"允许开启引导弹窗")
-                if (CacheManager.isFirstShowDownload){
+                if (CacheManager.isFirstShowDownloadGuide){
+                    CacheManager.isFirstShowDownloadGuide = false
                     var homeGuidePop = HomeGuidePop(this@MainActivity)
                     homeGuidePop.createPop()
                 }

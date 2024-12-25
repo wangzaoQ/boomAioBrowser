@@ -18,6 +18,7 @@ import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.nf.NFManager.nfAllow
 import com.boom.aiobrowser.nf.NFManager.videoNFMap
+import com.boom.aiobrowser.nf.NFManager.videoTimeMap
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValue
@@ -89,7 +90,8 @@ object NFShow {
 //            newsList = mutableListOf()
 
             var data = newsList?.removeFirstOrNull()
-            if (data == null){
+            data?.itackl = ""
+            if (data == null || data.itackl.isNullOrEmpty()){
                 AppLogs.dLog(NFManager.TAG,"name:${enum.menuName} sourceType:${sourceType} NFManager.defaultNewsList.size:${NFManager.defaultNewsList?.size}获取数据来源失败走本地通知")
                 if (NFManager.defaultNewsList.isNullOrEmpty().not()){
                     var index = Random.nextInt(0,NFManager.defaultNewsList!!.size)
@@ -125,12 +127,19 @@ object NFShow {
     @SuppressLint("MissingPermission")
     fun showDownloadNF(data: VideoDownloadData, posePoint:Boolean = false) {
         if (nfAllow().not())return
+        var lastTime = videoTimeMap.get(data.videoId)?:0L
+        if (data.downloadType == VideoDownloadData.DOWNLOAD_LOADING && System.currentTimeMillis()- lastTime<1000){
+            AppLogs.dLog(NFManager.TAG,"${data.fileName} 间隔时间过小 不刷新")
+            return
+        }
+        videoTimeMap.put(data.videoId!!,System.currentTimeMillis())
         runCatching {
             var nfId = videoNFMap.get(data.videoId)
             if (data.videoId.isNullOrEmpty().not()){
                 if (nfId == null){
                     nfId = Random.nextInt(1,999999)
                     data.nfId = nfId
+                    AppLogs.dLog(NFManager.TAG,"video start name:${data.fileName} nfId:${nfId}")
                     val smallRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data)
                     val largeRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data, true)
                     var bulider = createBuilder(NFEnum.NF_DOWNLOAD_VIDEO,smallRemote,largeRemote)
@@ -153,6 +162,7 @@ object NFShow {
                     NFManager.manager.notify(nfId, bulider.build())
                 }else{
                     data.nfId = nfId
+                    AppLogs.dLog(NFManager.TAG,"video progress name:${data.fileName} nfId:${nfId}")
                     val smallRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data)
                     val largeRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data, true)
                     var bulider = createBuilder(NFEnum.NF_DOWNLOAD_VIDEO,smallRemote,largeRemote)

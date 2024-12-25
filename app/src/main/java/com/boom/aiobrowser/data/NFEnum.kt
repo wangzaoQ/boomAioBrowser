@@ -18,5 +18,5 @@ enum class NFEnum(val menuName: String, val channelId:String, val channelPriorit
     NF_NEW_USER("new_user_push","NewUser", NotificationManager.IMPORTANCE_MAX,NotificationCompat.PRIORITY_MAX,position = 94004),
     NF_UNLOCK("unlock_push","Unlock", NotificationManager.IMPORTANCE_MAX,NotificationCompat.PRIORITY_MAX,position = 94005),
     NF_DEFAULT("default_push","Default", NotificationManager.IMPORTANCE_MAX,NotificationCompat.PRIORITY_MAX,position = 94006),
-    NF_TREND("trend_push","Default", NotificationManager.IMPORTANCE_MAX,NotificationCompat.PRIORITY_MAX,position = 94007),
+    NF_TREND("trend_push","Trend", NotificationManager.IMPORTANCE_MAX,NotificationCompat.PRIORITY_MAX,position = 94007),
 }

@@ -186,17 +186,17 @@ class APP: Application(), ViewModelStoreOwner {
         }
         registerAny()
         initNFConfig()
-        if (isDebug){
-            var map5 = "   {\n" +
-                    "        \"NEWS_ID\": \"11593148900048897\",\n" +
-                    "        \"body\": \"Internauta viralizou nas redes sociais após afirmar que avó estragou seu \\u0027Spotify Wrapped\\u0027\",\n" +
-                    "        \"image\": \"https://medias.itatiaia.com.br/dims4/default/34a0380/2147483647/strip/true/crop/1067x601+0+0/resize/1000x563!/quality/90/?url\\u003dhttps%3A%2F%2Fk2-prod-radio-itatiaia.s3.us-east-1.amazonaws.com%2Fbrightspot%2F1f%2F5a%2F71d4ee094407abb06b312895cc27%2Fpadre-marcelo-rossi.jpg\",\n" +
-                    "        \"title\": \"Jovem culpa avó por Padre Marcelo Rossi parar no topo do Spotify Wrapped e ele tem a melhor reação\",\n" +
-                    "        \"KEY_NOW_NAV_TYPE\": \"3\"\n" +
-                    "    }"
-                NFManager.showFCM(stringToMap(map5))
-            AppLogs.dLog(NFManager.TAG,"language:${Locale.getDefault().language}  country:${Locale.getDefault().country}")
-        }
+//        if (isDebug){
+//            var map5 = "   {\n" +
+//                    "        \"NEWS_ID\": \"11593148900048897\",\n" +
+//                    "        \"body\": \"Internauta viralizou nas redes sociais após afirmar que avó estragou seu \\u0027Spotify Wrapped\\u0027\",\n" +
+//                    "        \"image\": \"https://medias.itatiaia.com.br/dims4/default/34a0380/2147483647/strip/true/crop/1067x601+0+0/resize/1000x563!/quality/90/?url\\u003dhttps%3A%2F%2Fk2-prod-radio-itatiaia.s3.us-east-1.amazonaws.com%2Fbrightspot%2F1f%2F5a%2F71d4ee094407abb06b312895cc27%2Fpadre-marcelo-rossi.jpg\",\n" +
+//                    "        \"title\": \"Jovem culpa avó por Padre Marcelo Rossi parar no topo do Spotify Wrapped e ele tem a melhor reação\",\n" +
+//                    "        \"KEY_NOW_NAV_TYPE\": \"3\"\n" +
+//                    "    }"
+//                NFManager.showFCM(stringToMap(map5))
+//            AppLogs.dLog(NFManager.TAG,"language:${Locale.getDefault().language}  country:${Locale.getDefault().country}")
+//        }
         NFManager.notifyByTimerTask()
 //        registerDirectory(APP.instance, DirectoryProvider::class.java, true)
     }

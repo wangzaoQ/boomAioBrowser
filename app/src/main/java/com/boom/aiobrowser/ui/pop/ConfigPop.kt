@@ -1,9 +1,17 @@
 package com.boom.aiobrowser.ui.pop
 
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.KeyEvent
+import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.content.ContextCompat
+import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserPopConfigBinding
@@ -29,63 +37,79 @@ class ConfigPop(context: Context) : BasePopupWindow(context) {
         defaultBinding = BrowserPopConfigBinding.bind(contentView)
     }
 
-    fun createPop() {
-        (context as BaseActivity<*>).addLaunch(success = {
-            while (CacheManager.campaignId.isNullOrEmpty()) {
-                delay(1000)
-            }
-            withContext(Dispatchers.Main){
-                defaultBinding?.llRoot?.apply {
-                    removeAllViews()
-                    addTest("买量用户状态:${UIManager.isBuyUser()}") {
-                    }
-                    addTest("adjust:${CacheManager.adJustFrom}") {
-                    }
-                    addTest("af:${CacheManager.afFrom}") {
-                    }
-                    addTest("refer:${CacheManager.installRefer}") {
-                    }
-                    addTest("referConfig:${FirebaseConfig.referConfig}") {
-                    }
-                    addTest("cloak:${CacheManager.cloakValue}") {
-                        if (CacheManager.cloakValue == "creamery") {
-                            CacheManager.cloakValue = "orgasm"
-                            it.text = "orgasm"
-                        } else {
-                            CacheManager.cloakValue = "creamery"
-                            it.text = "creamery"
-                        }
-                    }
-                    addTest("归因结果:${CacheManager.campaignId}") {
-                        if (CacheManager.campaignId.isNullOrEmpty())return@addTest
-                        if (CacheManager.campaignId == "22019400202") {
-                            CacheManager.campaignId = "22008263268"
-                        } else {
-                            CacheManager.campaignId = "22019400202"
-                        }
-                        it.text = "归因结果:${CacheManager.campaignId}"
-                    }
-                    addTest("全局视频限制开关 true为限制 不展示下载:${FirebaseConfig.switchOpenFilter1}") {
-                        FirebaseConfig.switchOpenFilter1 =
-                            FirebaseConfig.switchOpenFilter1.not()
-                        it.text = "全局视频限制开关 true为限制 不展示下载:${FirebaseConfig.switchOpenFilter1}"
-                    }
-                    addTest("网站限制list 命中则不展示下载:${toJson(FirebaseConfig.switchOpenFilterList)}") {
+    var allowRefresh = true
 
-                    }
-                    addTest("默认浏览器开关 true 允许展示pop :${FirebaseConfig.switchDefaultPop}") {
-                        FirebaseConfig.switchDefaultPop = FirebaseConfig.switchDefaultPop.not()
-                        it.text = "默认浏览器开关 true 允许展示pop:${FirebaseConfig.switchDefaultPop}"
-                    }
-                    addTest("下载引导开关 true 允许展示pop:${FirebaseConfig.switchDownloadGuidePop}") {
-                        FirebaseConfig.switchDownloadGuidePop =
-                            FirebaseConfig.switchDownloadGuidePop.not()
-                        it.text = "下载引导开关 true 允许展示pop:${FirebaseConfig.switchDownloadGuidePop}"
+    fun createPop() {
+        addPop()
+        showPopupWindow()
+    }
+
+    private fun addPop() {
+        allowRefresh = true
+        (context as BaseActivity<*>).addLaunch(success = {
+            while (allowRefresh) {
+                delay(500)
+                if (allowRefresh.not())return@addLaunch
+                withContext(Dispatchers.Main){
+                    defaultBinding?.llRoot?.apply {
+                        removeAllViews()
+                        addTest("买量用户状态:${UIManager.isBuyUser()}") {
+                        }
+                        addTest("cloak:${UIManager.cloakValue}") {
+                            if (UIManager.cloakValue == "creamery") {
+                                UIManager.cloakValue = "orgasm"
+//                            it.text = "orgasm"
+                            } else {
+                                UIManager.cloakValue = "creamery"
+//                            it.text = "creamery"
+                            }
+                        }
+                        addTest("adjust:${CacheManager.adJustFrom}") {
+                            if (CacheManager.adJustFrom == "Organic"){
+                                CacheManager.adJustFrom = "买量"
+                            }else{
+                                CacheManager.adJustFrom = "Organic"
+                            }
+                        }
+                        addTest("af:${CacheManager.afFrom}") {
+                            if (CacheManager.afFrom == "Organic"){
+                                CacheManager.afFrom = "买量"
+                            }else{
+                                CacheManager.afFrom = "Organic"
+                            }
+                        }
+                        addEdittext("refer:${CacheManager.installRefer}") {
+                            CacheManager.installRefer = it.text.toString().trim().substringAfter("refer:")
+                        }
+                        addEdittext("referConfig:${FirebaseConfig.referConfig}") {
+                            FirebaseConfig.referConfig = it.text.toString().trim().substringAfter("referConfig:")
+                        }
+
+                        addEdittext("归因结果:${CacheManager.campaignId}") {
+                            CacheManager.campaignId = it.text.toString().trim()
+//                        it.text = "归因结果:${CacheManager.campaignId}"
+                        }
+                        addTest("全局视频限制开关 true为限制 不展示下载:${FirebaseConfig.switchOpenFilter1}") {
+                            FirebaseConfig.switchOpenFilter1 =
+                                FirebaseConfig.switchOpenFilter1.not()
+//                        it.text = "全局视频限制开关 true为限制 不展示下载:${FirebaseConfig.switchOpenFilter1}"
+                        }
+                        addTest("网站限制list 命中则不展示下载:${toJson(FirebaseConfig.switchOpenFilterList)}") {
+
+                        }
+                        addTest("默认浏览器开关 true 允许展示pop :${FirebaseConfig.switchDefaultPop}") {
+                            FirebaseConfig.switchDefaultPop = FirebaseConfig.switchDefaultPop.not()
+//                        it.text = "默认浏览器开关 true 允许展示pop:${FirebaseConfig.switchDefaultPop}"
+                        }
+                        addTest("下载引导开关 true 允许展示pop:${FirebaseConfig.switchDownloadGuidePop}") {
+                            FirebaseConfig.switchDownloadGuidePop =
+                                FirebaseConfig.switchDownloadGuidePop.not()
+//                        it.text = "下载引导开关 true 允许展示pop:${FirebaseConfig.switchDownloadGuidePop}"
+                        }
                     }
                 }
             }
         }, failBack = {})
-        showPopupWindow()
     }
 
 
@@ -96,6 +120,29 @@ class ConfigPop(context: Context) : BasePopupWindow(context) {
             setOnClickListener {
                 block(this)
             }
+        })
+    }
+
+    fun ViewGroup.addEdittext(str: String, block: (view: AppCompatEditText) -> Unit) {
+        this.addView(AppCompatEditText(context).apply {
+            setText(str)
+            isAllCaps = false
+            background = ContextCompat.getDrawable(APP.instance,R.drawable.shape_allow)
+            setOnTouchListener(object :OnTouchListener{
+                override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
+                    allowRefresh = false
+                    return false
+                }
+
+            })
+            setOnKeyListener { v, keyCode, event ->
+                    if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                        block(this@apply)
+                        addPop()
+                        return@setOnKeyListener true
+                    }
+                    return@setOnKeyListener false
+                }
         })
     }
 }

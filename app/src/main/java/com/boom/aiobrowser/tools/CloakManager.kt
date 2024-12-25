@@ -22,7 +22,7 @@ import java.io.IOException
 
 class CloakManager {
     fun getCloak(){
-        if (CacheManager.cloakValue.isNotEmpty())return
+        if (UIManager.cloakValue.isNotEmpty())return
         var url =
             "https://highroad.safebrowsers.net/pastor/frown/fungus?magma=${urlEncoder(BuildConfig.APPLICATION_ID)}" +
                     "&buckaroo=${"scylla"}&trait=${urlEncoder(BuildConfig.VERSION_NAME)}&hardy=${getID()}" +
@@ -30,7 +30,7 @@ class CloakManager {
                     "&sought=${urlEncoder(APP.instance.GID)}&referent=${urlEncoder(getID())}"
 
         getNewsClock(url,"getClock", callBack = {
-            CacheManager.cloakValue = it
+            UIManager.cloakValue = it
         })
     }
 

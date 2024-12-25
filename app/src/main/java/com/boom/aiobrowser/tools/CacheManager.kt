@@ -27,12 +27,12 @@ object CacheManager {
 
     val mmkv = MMKV.mmkvWithID("${BuildConfig.APPLICATION_ID}kv", MMKV.MULTI_PROCESS_MODE)
     const val KV_FIRST_START = "KV_FIRST_START"
-    const val KV_FIRST_CLOAK = "KV_FIRST_CLOAK"
     const val KV_INSTALL_REFER = "KV_INSTALL_REFER"
     const val KV_ADJUST_FROM = "KV_ADJUST_FROM"
     const val KV_AF_FROM = "KV_AF_FROM"
     const val KV_FIRST_CLICK_DOWNLOAD_BUTTON = "KV_FIRST_CLICK_DOWNLOAD_BUTTON"
     const val KV_FIRST_DOWNLOAD_VIDEO_SUCCESS = "KV_FIRST_DOWNLOAD_VIDEO_SUCCESS"
+    const val KV_IS_B_USER = "KV_IS_B_USER"
     const val KV_DAY_DOWNLOAD_COUNT = "KV_DAY_DOWNLOAD_COUNT"
     const val KV_NEWS_READ_COUNT = "KV_NEWS_READ_COUNT"
     const val KV_DAY_SHOW_ADD_SHORT = "KV_DAY_SHOW_ADD_SHORT2"
@@ -74,7 +74,7 @@ object CacheManager {
     const val KV_LAST_LAUNCH_TIME = "KV_LAST_LAUNCH_TIME"
     const val KV_CLEAN_TIME = "KV_CLEAN_TIME"
     const val KV_FIRST_SHOW_DOWNLOAD = "KV_FIRST_SHOW_DOWNLOAD"
-    const val KV_FIRST_SHOW_HOME_GUIDE = "KV_FIRST_SHOW_HOME_GUIDE"
+    const val KV_FIRST_SHOW_DOWNLOAD_GUIDE = "KV_FIRST_SHOW_DOWNLOAD_GUIDE"
     const val KV_NEWS_NF_HISTORY = "KV_NEWS_NF_HISTORY"
     const val KV_NF_SHOW_LAST_TIME = "KV_NF_SHOW_LAST_TIME"
     const val KV_DAY_NF_SHOW_COUNT = "KV_DAY_NF_SHOW_COUNT"
@@ -133,14 +133,6 @@ object CacheManager {
             mmkv.encode(KV_FIRST_START, value)
         }
 
-    var cloakValue: String
-        get() {
-            return mmkv.decodeString(KV_FIRST_CLOAK, "")?:""
-        }
-        set(value) {
-            mmkv.encode(KV_FIRST_CLOAK, value)
-        }
-
     var isFirstVideoGuide: Boolean
         get() {
             return mmkv.decodeBool(KV_FIRST_VIDEO_GUIDE, true)
@@ -163,6 +155,14 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_FIRST_DOWNLOAD_VIDEO_SUCCESS, value)
+        }
+
+    var isBUser: Boolean
+        get() {
+            return mmkv.decodeBool(KV_IS_B_USER, false)
+        }
+        set(value) {
+            mmkv.encode(KV_IS_B_USER, value)
         }
 
     var dayDownloadCount:Int
@@ -220,12 +220,12 @@ object CacheManager {
         set(value) {
             mmkv.encode(KV_FIRST_SHOW_DOWNLOAD, value)
         }
-    var isFirstShowHomeGuide: Boolean
+    var isFirstShowDownloadGuide: Boolean
         get() {
-            return mmkv.decodeBool(KV_FIRST_SHOW_HOME_GUIDE, true)
+            return mmkv.decodeBool(KV_FIRST_SHOW_DOWNLOAD_GUIDE, true)
         }
         set(value) {
-            mmkv.encode(KV_FIRST_SHOW_HOME_GUIDE, value)
+            mmkv.encode(KV_FIRST_SHOW_DOWNLOAD_GUIDE, value)
         }
     var isVideoFirst: Boolean
         get() {

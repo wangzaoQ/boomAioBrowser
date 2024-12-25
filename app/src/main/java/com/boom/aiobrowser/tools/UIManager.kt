@@ -11,26 +11,54 @@ object UIManager {
 
     var TAG = APP.instance.TAG
 
-    /**
-     * 1. 先判断cloak
-     * 2. refer adjust
-     */
-    fun isBuyUser(): Boolean {
-//        (APP.instance.getSystemService(TELEPHONY_SERVICE) as TelephonyManager)?.apply{
-//            if (simState != TelephonyManager.SIM_STATE_READY){
-//                AppLogs.dLog(TAG,"无sim卡为A包")
-//                return false
-//            }
-//        }
+    var cloakValue = ""
 
-//        if (APP.isDebug){
-//            AppLogs.dLog(TAG,"debug环境 测试为买量用户")
-//            return true
-//        }
-        if (CacheManager.cloakValue == "orgasm"){
-            AppLogs.dLog(TAG,"cloak 命中买量")
-            return true
+    fun getCloakData():String{
+        if (cloakValue.isNotEmpty()){
+            if (cloakValue.equals("orgasm",true)){
+                AppLogs.dLog(TAG,"cloak 命中正常用户")
+                return "B"
+            }else{
+                AppLogs.dLog(TAG,"cloak 命中黑名单用户")
+                return "A"
+            }
         }
+        return "A"
+    }
+
+    /**
+     * 1命中cloak为黑名单，AF/refer归因 为非自然量 =A包，归因数据存本地，下次冷启动如cloak变为白名单则正常走校验逻辑=B包
+     * 2相同逻辑命中黑名单，AF/refer归因 为自然量 =A包，下次冷启动如cloak变为白名单则正常走校验逻辑=A包
+     * 3首次命中cloak为白名单，AF/refer归因 为自然量 =A包，数据存本地
+     * 4首次命中cloak为白名单，AF/refer归因 为非自然量 =B包，数据存本地
+     * 5如进入app过程中数据返回较慢，当返回上面对应结果时需在应用内切换A/B
+     */
+
+    fun isBuyUser(): Boolean {
+        if (CacheManager.isBUser){
+            return true
+        }else{
+            var cloakData = getCloakData()
+            var referData = getReferData()
+            if (cloakData == "A" && referData == "A"){
+                AppLogs.dLog(TAG,"黑名单用户:cloakData A referData A")
+                return false
+            }else if (cloakData == "B" && referData == "A"){
+                AppLogs.dLog(TAG,"黑名单用户:cloakData B referData A")
+                return false
+            }else if (cloakData == "A" && referData == "B"){
+                AppLogs.dLog(TAG,"黑名单用户:cloakData A referData B")
+                return false
+            } else if (cloakData == "B" && referData == "B"){
+                AppLogs.dLog(TAG,"正常用户:cloakData B referData B")
+                CacheManager.isBUser = true
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun getReferData():String {
         var refer = CacheManager.installRefer
         var config = FirebaseConfig.referConfig
         var configList = config.split(",")
@@ -43,19 +71,19 @@ object UIManager {
         }
         if (index>=0){
             AppLogs.dLog(TAG,"refer 命中买量 match:${configList.get(index)}")
-            return true
+            return "B"
         }
         var buyAdjust = CacheManager.adJustFrom.equals("Organic", true).not()
         if (buyAdjust){
             AppLogs.dLog(TAG,"buyAdjust 命中买量 match:${buyAdjust}")
-            return true
+            return "B"
         }
         var buyAF = CacheManager.afFrom.equals("Organic", true).not()
         if (buyAF){
             AppLogs.dLog(TAG,"buyAF 命中买量 match:${buyAF}")
-            return true
+            return "B"
         }
-        AppLogs.dLog(TAG,"未命中买量当前为非买量用户")
-        return false
+        AppLogs.dLog(TAG,"归因未命中买量当前为非买量用户")
+        return "A"
     }
 }

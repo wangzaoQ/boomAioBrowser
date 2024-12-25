@@ -22,63 +22,67 @@ object NFViews {
         }
         var remoteViews = RemoteViews(APP.instance.packageName, layoutId)
         remoteViews.apply {
-            var leftIcon = 0
-            var rightIcon = 0
-            var nfToRoot = 0
-            when (data.downloadType) {
-                VideoDownloadData.DOWNLOAD_LOADING,VideoDownloadData.DOWNLOAD_PAUSE,VideoDownloadData.DOWNLOAD_PREPARE -> {
-                    leftIcon = R.mipmap.nf_video_download
-                    if (data.downloadType == VideoDownloadData.DOWNLOAD_PAUSE){
-                        rightIcon = R.mipmap.ic_video_play
-                    }else{
-                        rightIcon = R.mipmap.ic_video_pause
+            runCatching {
+                var leftIcon = 0
+                var rightIcon = 0
+                var nfToRoot = 0
+                when (data.downloadType) {
+                    VideoDownloadData.DOWNLOAD_LOADING,VideoDownloadData.DOWNLOAD_PAUSE,VideoDownloadData.DOWNLOAD_PREPARE -> {
+                        leftIcon = R.mipmap.nf_video_download
+                        if (data.downloadType == VideoDownloadData.DOWNLOAD_PAUSE){
+                            rightIcon = R.mipmap.ic_video_play
+                        }else{
+                            rightIcon = R.mipmap.ic_video_pause
+                        }
+                        setViewVisibility(R.id.progress,View.VISIBLE)
+                        var fileProgress = 0
+                        runCatching {
+                            fileProgress = BigDecimalUtils.mul(
+                                100.0,
+                                BigDecimalUtils.div((data.downloadSize ?: 0).toDouble(), data.size!!.toDouble())
+                            ).toInt()
+                        }
+                        if (fileProgress >0){
+                            setProgressBar(R.id.progress, 100, fileProgress, false);
+                        }
+                        if (isLargeView){
+                            AppLogs.dLog(NFManager.TAG,"状态:${data.fileName} fileProgress:${fileProgress}")
+                        }
                     }
-                    setViewVisibility(R.id.progress,View.VISIBLE)
-                    var fileProgress = 0
-                    runCatching {
-                        fileProgress = BigDecimalUtils.mul(
-                            100.0,
-                            BigDecimalUtils.div((data.downloadSize ?: 0).toDouble(), data.size!!.toDouble())
-                        ).toInt()
+                    VideoDownloadData.DOWNLOAD_ERROR ->{
+                        leftIcon = R.mipmap.nf_video_download_error
+                        rightIcon = R.mipmap.ic_video_error
+                        setViewVisibility(R.id.progress,View.GONE)
+                        if (isLargeView){
+                            AppLogs.dLog(NFManager.TAG,"状态: ${data.fileName}error ")
+                        }
+                        nfToRoot = 1
                     }
-                    if (fileProgress >0){
-                        setProgressBar(R.id.progress, 100, fileProgress, false);
+                    VideoDownloadData.DOWNLOAD_SUCCESS ->{
+                        leftIcon = R.mipmap.nf_video_download_success
+                        rightIcon = R.mipmap.ic_nf_video_success
+                        nfToRoot = 2
+                        setViewVisibility(R.id.progress,View.GONE)
+                        AppLogs.dLog(NFManager.TAG,"状态: ${data.fileName}success")
                     }
-                    if (isLargeView){
-                        AppLogs.dLog(NFManager.TAG,"状态:${data.downloadType} fileProgress:${fileProgress}")
-                    }
+                    else -> {}
                 }
-                VideoDownloadData.DOWNLOAD_ERROR ->{
-                    leftIcon = R.mipmap.nf_video_download_error
-                    rightIcon = R.mipmap.ic_video_error
-                    setViewVisibility(R.id.progress,View.GONE)
-                    if (isLargeView){
-                        AppLogs.dLog(NFManager.TAG,"状态: error ")
-                    }
-                    nfToRoot = 1
+                if (isLargeView){
+                    setImageViewResource(R.id.ivLeft,leftIcon)
                 }
-                VideoDownloadData.DOWNLOAD_SUCCESS ->{
-                    leftIcon = R.mipmap.nf_video_download_success
-                    rightIcon = R.mipmap.ic_nf_video_success
-                    nfToRoot = 2
-                    setViewVisibility(R.id.progress,View.GONE)
-                    AppLogs.dLog(NFManager.TAG,"状态: success")
-                }
-                else -> {}
+                setImageViewResource(R.id.ivStatus,rightIcon)
+                setTextViewText(R.id.tvName,data.fileName)
+                setOnClickPendingIntent(
+                    R.id.ivStatus,
+                    getRefreshIntent(data,enum)
+                )
+                setOnClickPendingIntent(
+                    R.id.rlRoot,
+                    getJumpIntent(nfToRoot,data,enum)
+                )
+            }.onFailure {
+                AppLogs.eLog(NFManager.TAG,"getDownLoadRemoteView error:${it.stackTraceToString()}")
             }
-            if (isLargeView){
-                setImageViewResource(R.id.ivLeft,leftIcon)
-            }
-            setImageViewResource(R.id.ivStatus,rightIcon)
-            setTextViewText(R.id.tvName,data.fileName)
-            setOnClickPendingIntent(
-                R.id.ivStatus,
-                getRefreshIntent(data,enum)
-            )
-            setOnClickPendingIntent(
-                R.id.rlRoot,
-                getJumpIntent(nfToRoot,data,enum)
-            )
         }
         return remoteViews
     }

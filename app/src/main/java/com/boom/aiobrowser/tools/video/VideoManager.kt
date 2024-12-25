@@ -17,6 +17,7 @@ import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
+import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.tools.web.WebScan
 import com.boom.video.cache.CacheFactory
 import com.boom.video.media.exo2.Exo2PlayerManager
@@ -28,6 +29,7 @@ import com.boom.downloader.common.DownloadConstants
 import com.boom.downloader.listener.DownloadListener
 import com.boom.downloader.model.VideoTaskItem
 import com.boom.downloader.utils.VideoStorageUtils
+import com.ironsource.sc
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -43,8 +45,10 @@ object VideoManager {
 //    private val _showDialogFlow = MutableSharedFlow<VideoTaskItem>(replay = 10, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 //    val showDialogFlow : SharedFlow<VideoTaskItem> = _showDialogFlow
 
-    var job: Job? = null
 //    var flow = flow<VideoTaskItem>{}
+
+    val jobsMap = HashMap<String, MutableList<Job>>()
+
 
     fun initVideo() {
         PlayerFactory.setPlayManager(Exo2PlayerManager::class.java) //EXO模式
@@ -80,8 +84,9 @@ object VideoManager {
 
             override fun onDownloadProgress(item: VideoTaskItem?) {
                 if (item == null) return
-                AppLogs.dLog(TAG, "onDownloadProgress:totalSize:${item?.totalSize} downloadSize:${item?.downloadSize} url:${item.url}")
-                CoroutineScope(Dispatchers.IO).launch {
+//                AppLogs.dLog(TAG, "onDownloadProgress:totalSize:${item?.totalSize} downloadSize:${item?.downloadSize} url:${item.url}")
+                var job:Job?=null
+                job = getDownloadScope(item,"onDownloadProgress").launch {
                     var model = DownloadCacheManager.queryDownloadModelByUrl(item.url)
                     if (model != null) {
                         if (item.downloadSize >= item.totalSize) {
@@ -94,19 +99,22 @@ object VideoManager {
                         CacheManager.updateTempList(model)
                         NFShow.showDownloadNF(VideoDownloadData().createVideoDownloadData(model))
                     }
-                    AppLogs.dLog(TAG, "收到进度消息 :${model?.downloadSize} url:${model?.url}")
+                    AppLogs.dLog(TAG, "收到进度消息 :${model?.downloadSize} url:${model?.fileName}")
                     videoLiveData.postValue(HashMap<Int, VideoTaskItem>().apply {
                         put(VideoDownloadData.DOWNLOAD_LOADING, item)
                     })
+                    removeJob(item,job,"onDownloadProgress")
                 }
+                addJob(item,job,"onDownloadProgress")
             }
 
             override fun onDownloadSpeed(item: VideoTaskItem?) {}
 
             override fun onDownloadPause(item: VideoTaskItem?) {
-                AppLogs.dLog(TAG, "onDownloadPause:${item?.url} totalSize:${item?.totalSize} downloadSize:${item?.downloadSize}")
+                AppLogs.dLog(TAG, "onDownloadPause:${item?.fileName} totalSize:${item?.totalSize} downloadSize:${item?.downloadSize}")
                 if (item == null) return
-                CoroutineScope(Dispatchers.IO).launch {
+                var job:Job ?=null
+                job = getDownloadScope(item,"onDownloadPause").launch {
                     var model = DownloadCacheManager.queryDownloadModelByUrl(item.url)
                     if (model != null) {
                         model.downloadSize = item.downloadSize
@@ -118,14 +126,17 @@ object VideoManager {
                     videoLiveData.postValue(HashMap<Int, VideoTaskItem>().apply {
                         put(VideoDownloadData.DOWNLOAD_PAUSE, item)
                     })
+                    removeJob(item,job,"onDownloadPause")
                 }
+                addJob(item,job,"onDownloadPause")
             }
 
             override fun onDownloadError(item: VideoTaskItem?) {
-                AppLogs.dLog(TAG, "onDownloadError:${item?.url}")
+                AppLogs.dLog(TAG, "onDownloadError:${item?.fileName}")
                 ToastUtils.showShort(APP.instance.getString(R.string.download_failed))
                 if (item == null) return
-                CoroutineScope(Dispatchers.IO).launch {
+                var job:Job ?=null
+                job = getDownloadScope(item,"onDownloadError").launch {
                     runCatching {
                         var isSuccessParent = FileUtils.delete(File(item.filePath).parent)
                     }.onFailure {
@@ -147,17 +158,20 @@ object VideoManager {
                     videoLiveData.postValue(HashMap<Int, VideoTaskItem>().apply {
                         put(VideoDownloadData.DOWNLOAD_ERROR, item)
                     })
+                    removeJob(item,job,"onDownloadError")
                 }
+                addJob(item,job,"onDownloadError")
             }
 
             override fun onDownloadSuccess(item: VideoTaskItem?) {
                 AppLogs.dLog(
                     TAG,
-                    "onDownloadSuccess:${item?.url} downloadSize:${item?.downloadSize} totalSize:${item?.totalSize}"
+                    "onDownloadSuccess:${item?.fileName} downloadSize:${item?.downloadSize} totalSize:${item?.totalSize}"
                 )
                 if (item == null) return
                 ToastUtils.showShort(APP.instance.getString(R.string.download_finished))
-                CoroutineScope(Dispatchers.IO).launch {
+                var job:Job ?=null
+                job = getDownloadScope(item,"onDownloadSuccess").launch {
                     var model = DownloadCacheManager.queryDownloadModelByUrl(item.url)
                     if (model != null) {
                         model.downloadFileName = item.fileName
@@ -197,6 +211,16 @@ object VideoManager {
                             ShortManager.addRate(WeakReference(activity))
                         }
                     }
+                    removeJob(item,job,"onDownloadSuccess")
+                }
+                jobsMap.get(item.downloadVideoId)?.apply {
+                    forEach {
+                        it.jobCancel()
+                    }
+                    clear()
+                    job?.let {
+                        add(it)
+                    }
                 }
             }
         })
@@ -207,5 +231,38 @@ object VideoManager {
             it.downloadType = VideoDownloadData.DOWNLOAD_PAUSE
             DownloadCacheManager.updateModel(it)
         }
+    }
+
+    private fun addJob(item: VideoTaskItem,job: Job?, tag: String) {
+//        AppLogs.dLog(TAG,"addJob:${tag} 原始数据大小:${jobsMap.get(item.downloadVideoId)?.size}")
+        if (job == null)return
+        var jobList = jobsMap.get(item.downloadVideoId)
+        if (jobList.isNullOrEmpty()){
+            jobList = mutableListOf<Job>()
+            jobsMap.put(item.downloadVideoId,jobList)
+        }
+        jobsMap.get(item.downloadVideoId)?.add(job)
+//        AppLogs.dLog(TAG,"addJob:${tag} 添加数据大小:${jobsMap.get(item.downloadVideoId)?.size}")
+    }
+
+    fun removeJob(item: VideoTaskItem,job: Job?, tag: String){
+//        AppLogs.dLog(TAG,"removeJob:${tag} 原始数据大小:${jobsMap.get(item.downloadVideoId)?.size}")
+        if (job == null)return
+        var jobList = jobsMap.get(item.downloadVideoId)
+        jobList?.apply {
+            remove(job)
+        }
+//        AppLogs.dLog(TAG,"removeJob:${tag} 删除后数据大小:${jobsMap.get(item.downloadVideoId)?.size}")
+    }
+
+    private fun getDownloadScope(item: VideoTaskItem, tag: String):CoroutineScope  {
+//        var scope = scopeMap.get(item.downloadVideoId)
+//        if (scope == null){
+//            scope = CoroutineScope(Dispatchers.IO)
+//            scopeMap.put(item.downloadVideoId,scope)
+//        }
+//        return scopeMap.get(item.downloadVideoId)!!
+        var scope = CoroutineScope(Dispatchers.IO)
+        return scope
     }
 }

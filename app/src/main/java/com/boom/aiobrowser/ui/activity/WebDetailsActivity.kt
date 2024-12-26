@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.NewsData
@@ -29,6 +30,9 @@ import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import com.boom.video.GSYVideoManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
 
@@ -157,6 +161,9 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
     var allowShowRate = false
 
     override fun setShowView() {
+        AioADDataManager.preloadAD(ADEnum.BANNER_AD_NEWS_DETAILS_TOP,"新闻详情页展示时")
+        AioADDataManager.preloadAD(ADEnum.BANNER_AD_NEWS_DETAILS,"新闻详情页展示时")
+
         newData = getBeanByGson(
             intent.getStringExtra(ParamsConfig.JSON_PARAMS),
             NewsData::class.java
@@ -173,6 +180,22 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         if (readCount == 2 || readCount == 5 || readCount == 10 || readCount == 20){
             allowShowRate = true
         }
+        addLaunch(success = {
+            while (getActivityStatus().not()){
+                delay(1000)
+            }
+            withContext(Dispatchers.Main){
+                if (AioADDataManager.adFilter1().not()) {
+                    PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
+                        putString(PointValueKey.ad_pos_id, ADEnum.BANNER_AD_NEWS_DETAILS_TOP.adName)
+                    })
+                }
+                AioADShowManager(this@WebDetailsActivity,ADEnum.BANNER_AD_NEWS_DETAILS_TOP,"详情页原生/banner"){
+
+                }.showNativeAD(acBinding.flRoot,ADEnum.BANNER_AD_NEWS_DETAILS_TOP.adName)
+            }
+        }, failBack = {})
+
     }
 
     override fun onDestroy() {

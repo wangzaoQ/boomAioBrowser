@@ -763,15 +763,25 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                     }
 
                     override fun onBind(holder: ADItem, position: Int, item: NewsData?) {
+                        if (item == null)return
                         holder.viewBinding?.apply {
+                            var adPosId = AD_POINT.aobws_news_one
+                            var adEnum = ADEnum.NATIVE_AD
+                            if (item.adTag == ADEnum.BANNER_AD_NEWS_DETAILS.adName){
+                                adPosId = ADEnum.BANNER_AD_NEWS_DETAILS.adName
+                                adEnum = ADEnum.BANNER_AD_NEWS_DETAILS
+                                line.visibility = View.GONE
+                            }else{
+                                line.visibility = View.VISIBLE
+                            }
                             if (AioADDataManager.adFilter1().not()) {
                                 PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
-                                    putString(PointValueKey.ad_pos_id, AD_POINT.aobws_news_one)
+                                    putString(PointValueKey.ad_pos_id, adPosId)
                                 })
                             }
-                            AioADShowManager(fragmet!!.rootActivity, ADEnum.NATIVE_AD, "原生") {
+                            AioADShowManager(if (fragmet == null)(context as BaseActivity<*>) else fragmet!!.rootActivity,adEnum , "原生") {
 
-                            }.showNativeAD(flRoot, AD_POINT.aobws_news_one)
+                            }.showNativeAD(flRoot, adPosId)
                         }
                     }
 

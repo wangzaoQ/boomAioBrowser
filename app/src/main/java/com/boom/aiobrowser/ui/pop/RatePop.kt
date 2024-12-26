@@ -48,7 +48,10 @@ class RatePop(context: Context) : BasePopupWindow(context) {
 
     var submit = false
 
-    fun createPop(allowShowAddTask:Boolean = false){
+    var tempList:MutableList<String>?=null
+
+    fun createPop(allowShowAddTask:Boolean = false,downloadVideoIdList:MutableList<String> = mutableListOf()){
+        tempList = downloadVideoIdList
         this.allowShowAddTask = allowShowAddTask
         CacheManager.dayFirstDownloadVideoSuccess = false
         APP.instance.showPopLevel = 4
@@ -146,7 +149,7 @@ class RatePop(context: Context) : BasePopupWindow(context) {
     override fun onDismiss() {
         APP.instance.showPopLevel = 0
         if (allowShowAddTask){
-            TaskAddPop(context).createPop()
+            TaskAddPop(context).createPop(tempList?: mutableListOf())
         }
         if (submit.not()){
             PointEvent.posePoint(PointEventKey.rate_us_pop_close)

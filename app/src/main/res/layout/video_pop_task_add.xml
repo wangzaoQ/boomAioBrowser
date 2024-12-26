@@ -15,21 +15,39 @@
         android:gravity="center_vertical"
         >
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivDownload"
             android:layout_width="27dp"
             android:layout_height="27dp"
             app:srcCompat="@mipmap/nf_video_download"
             android:layout_marginStart="13dp"
             ></androidx.appcompat.widget.AppCompatImageView>
-        <androidx.appcompat.widget.AppCompatTextView
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/app_task_add"
             android:layout_weight="1"
-            android:textSize="15sp"
-            android:textColor="@color/black"
-            style="@style/app_text_bold"
+            android:orientation="vertical"
             android:layout_marginStart="10dp"
-            ></androidx.appcompat.widget.AppCompatTextView>
+            >
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/taskTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/app_task_add"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                style="@style/app_text_bold"
+                ></androidx.appcompat.widget.AppCompatTextView>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/taskContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/app_task_add"
+                android:textSize="13sp"
+                android:textColor="#80000000"
+                android:visibility="gone"
+                ></androidx.appcompat.widget.AppCompatTextView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvView"
             android:layout_width="wrap_content"

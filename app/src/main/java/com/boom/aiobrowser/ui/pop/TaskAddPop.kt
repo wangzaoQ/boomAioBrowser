@@ -16,10 +16,17 @@ import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
+import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BatteryUtil
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.download.DownloadCacheManager
+import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.adapter.DownloadAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import pop.basepopup.BasePopupWindow
 import pop.util.animation.AnimationHelper
 import pop.util.animation.TranslationConfig
@@ -40,7 +47,9 @@ class TaskAddPop (context: Context) : BasePopupWindow(context){
 
     var clickOther = true
 
-    fun createPop(){
+    var job: Job?=null
+
+    fun createPop(downloadVideoIdList:MutableList<String>){
         defaultBinding?.apply {
             if (AioADDataManager.adFilter1().not()) {
                 PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
@@ -74,11 +83,42 @@ class TaskAddPop (context: Context) : BasePopupWindow(context){
                 }
             },500)
         }
+        job = (context as BaseActivity<*>).addLaunch(success = {
+            while (true){
+                delay(1000)
+                var list = DownloadCacheManager.queryDownloadModelDone()
+                var name = ""
+                var completeCount = 0
+                list?.forEach {
+                    for (i in 0 until downloadVideoIdList.size ){
+                        if (it.videoId == downloadVideoIdList.get(i)){
+                            if (name.isNullOrEmpty()){
+                                name = it.fileName?:""
+                            }
+                            completeCount++
+                        }
+                    }
+                }
+                if (completeCount>0){
+                    withContext(Dispatchers.Main){
+                        defaultBinding?.apply {
+                            ivDownload.setImageResource(R.mipmap.nf_video_download_success)
+                            taskTitle.text = context.getString(R.string.app_download_complete)
+                            taskContent.visibility = View.VISIBLE
+                            taskContent.text = name
+                        }
+                    }
+                }
+            }
+        }, failBack = {
+            AppLogs.eLog("TaskAddPop",it)
+        })
     }
 
 
     override fun dismiss() {
         tips3?.dismiss()
+        job?.jobCancel()
         super.dismiss()
     }
 

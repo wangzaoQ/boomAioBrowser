@@ -333,7 +333,6 @@ class APP: Application(), ViewModelStoreOwner {
     }
 
     fun getWebConfig() {
-        CloakManager().getCloak()
         appModel.getCampaign()
         appModel.getWebConfig()
         appModel.getTrendsNews()

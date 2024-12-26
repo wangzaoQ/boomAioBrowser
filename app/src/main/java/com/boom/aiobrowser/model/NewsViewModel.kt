@@ -3,6 +3,8 @@ package com.boom.aiobrowser.model
 import androidx.lifecycle.MutableLiveData
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.net.NetController
 import com.boom.aiobrowser.net.NetParams
@@ -349,6 +351,12 @@ class NewsViewModel : BaseDataModel() {
 //                                    }
                                 }
                             })
+                            if (newsList.size == 5 && AioADDataManager.getCacheAD(ADEnum.BANNER_AD_NEWS_DETAILS)!=null){
+                                newsList.add(NewsData().apply {
+                                    dataType = NewsData.TYPE_AD
+                                    adTag = ADEnum.BANNER_AD_NEWS_DETAILS.adName
+                                })
+                            }
                         }
                     }
                 }

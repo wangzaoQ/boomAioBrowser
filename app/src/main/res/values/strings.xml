@@ -360,6 +360,7 @@
     <string name="app_topics">Topics</string>
     <string name="app_topic_title">No Related News Found Recommend Information Of Your Interest</string>
     <string name="app_you_may_like">You May Like</string>
+    <string name="app_download_complete">Download complete</string>
 
 
 </resources>

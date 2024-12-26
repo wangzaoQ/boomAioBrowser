@@ -70,7 +70,7 @@ class AioADShowManager(
         if (adEnum == ADEnum.NATIVE_AD || adEnum == ADEnum.NATIVE_DOWNLOAD_AD){
             status = false
         }
-        if (activity == null || status || data == null) {
+        if (activity == null || data == null) {
             adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag)
             return
         }

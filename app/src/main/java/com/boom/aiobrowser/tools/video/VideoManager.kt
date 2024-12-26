@@ -178,6 +178,7 @@ object VideoManager {
                         model.downloadFilePath = item.filePath
                         model.downloadType = VideoDownloadData.DOWNLOAD_SUCCESS
                         model.size = item.totalSize
+                        model.completeTime = System.currentTimeMillis()
                         DownloadCacheManager.updateModel(model)
                         CacheManager.updateTempList(model)
                         NFShow.showDownloadNF(VideoDownloadData().createVideoDownloadData(model),true)

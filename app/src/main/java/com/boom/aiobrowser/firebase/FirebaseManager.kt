@@ -113,10 +113,12 @@ object FirebaseManager {
         runCatching {
             configBrowserFrom = firebaseRemoteConfig?.getString("start_home_download")?:""
         }
+        AppLogs.dLog(APP.instance.TAG,"remoteConfig start_home_download:${configBrowserFrom}")
         var splits = configBrowserFrom.split(",")
         if (configBrowserFrom.isNullOrEmpty()||splits.isNullOrEmpty()||splits.get(0).isNullOrEmpty()){
             configBrowserFrom = FirebaseConfig.jumpBrowserConfig
             splits = configBrowserFrom.split(",")
+            AppLogs.dLog(APP.instance.TAG,"localConfig start_home_download:${configBrowserFrom}")
         }
         if (splits.isNullOrEmpty().not()){
             FirebaseConfig.browserJumpList = splits
@@ -126,10 +128,12 @@ object FirebaseManager {
         runCatching {
             configNewsFrom = firebaseRemoteConfig?.getString("start_news")?:""
         }
+        AppLogs.dLog(APP.instance.TAG,"remoteConfig start_news:${configNewsFrom}")
         var splitsNews = configNewsFrom.split(",")
         if (configNewsFrom.isNullOrEmpty()||splitsNews.isNullOrEmpty()||splitsNews.get(0).isNullOrEmpty()){
             configNewsFrom = FirebaseConfig.jumpNewsConfig
             splitsNews = configNewsFrom.split(",")
+            AppLogs.dLog(APP.instance.TAG,"localConfig start_news:${configBrowserFrom}")
         }
         if (splitsNews.isNullOrEmpty().not()){
             FirebaseConfig.newsJumpList = splitsNews
@@ -148,11 +152,13 @@ object FirebaseManager {
         runCatching {
             show_tutorial = firebaseRemoteConfig?.getString("show_tutorial")?.toInt()?:0
         }
+        AppLogs.dLog(APP.instance.TAG,"remoteConfig show_tutorial 1则展示弹窗:${show_tutorial}")
         FirebaseConfig.switchDownloadGuidePop = show_tutorial != 0
         var show_default = 0
         runCatching {
             show_default = firebaseRemoteConfig?.getString("show_default")?.toInt()?:0
         }
+        AppLogs.dLog(APP.instance.TAG,"remoteConfig show_default 1则展示弹窗:${show_default}")
         FirebaseConfig.switchDefaultPop = show_default != 0
         runCatching {
             var aioPush = firebaseRemoteConfig?.getString("aio_push")
@@ -165,15 +171,18 @@ object FirebaseManager {
         runCatching {
             config_filter1 = firebaseRemoteConfig?.getString("alldownload_switch")?.toInt()?:1
         }
+        AppLogs.dLog(APP.instance.TAG,"remoteConfig alldownload_switch 1则限制下载:${config_filter1}")
         FirebaseConfig.switchOpenFilter1=config_filter1!=0
         var config_filter2 = ""
         runCatching {
             config_filter2 = firebaseRemoteConfig?.getString("config_filter")?:""
         }
+        AppLogs.dLog(APP.instance.TAG,"remoteConfig config_filter 命中就限制下载:${config_filter2}")
         var splits = config_filter2.split(",")
         if (config_filter2.isNullOrEmpty()||splits.isNullOrEmpty()||splits.get(0).isNullOrEmpty()){
             config_filter2 = FirebaseConfig.FILTER_DEFAULT_WEB
             splits = config_filter2.split(",")
+            AppLogs.dLog(APP.instance.TAG,"localConfig config_filter 命中就限制下载:${config_filter2}")
         }
         if (splits.isNullOrEmpty().not() && splits.get(0).isNullOrEmpty().not()){
             FirebaseConfig.switchOpenFilterList.clear()

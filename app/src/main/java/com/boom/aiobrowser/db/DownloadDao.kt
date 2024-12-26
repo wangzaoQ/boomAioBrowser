@@ -23,7 +23,7 @@ interface DownloadDao{
     fun queryDataByUrl(url:String): DownloadModel?
 
     // 查询
-    @Query("SELECT * FROM download_tab WHERE downloadType = 4")
+    @Query("SELECT * FROM download_tab WHERE downloadType = 4 ORDER BY completeTime DESC")
     fun queryDataDone(): MutableList<DownloadModel>
 
     // 查询

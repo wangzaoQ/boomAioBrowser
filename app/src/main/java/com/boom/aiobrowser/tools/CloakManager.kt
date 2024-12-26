@@ -22,9 +22,8 @@ import java.io.IOException
 
 class CloakManager {
     fun getCloak(){
-        if (UIManager.cloakValue.isNotEmpty())return
         var url =
-            "https://highroad.safebrowsers.net/pastor/frown/fungus?magma=${urlEncoder(BuildConfig.APPLICATION_ID)}" +
+            "https://highroad.safebrowsers.net/pastor/frown/fungus?magma=${urlEncoder(if (APP.isDebug)"com.fast.safe.browser" else BuildConfig.APPLICATION_ID)}" +
                     "&buckaroo=${"scylla"}&trait=${urlEncoder(BuildConfig.VERSION_NAME)}&hardy=${getID()}" +
                     "&allotted=${System.currentTimeMillis()}&kidnap=${urlEncoder(DeviceUtils.getModel())}&paycheck=${urlEncoder(Build.VERSION.RELEASE)}" +
                     "&sought=${urlEncoder(APP.instance.GID)}&referent=${urlEncoder(getID())}"

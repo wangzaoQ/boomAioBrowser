@@ -16,6 +16,7 @@ public class DownloadModel{
     var imageUrl:String?=""
     var size:Long?=0
     var downloadSize:Long?=0
+    var completeTime:Long=0
     var videoType:String?=""
     var paramsMapJson:String?=""
     var downloadType:Int?=0

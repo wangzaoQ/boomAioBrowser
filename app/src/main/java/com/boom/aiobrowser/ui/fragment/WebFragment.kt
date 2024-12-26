@@ -34,6 +34,7 @@ import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.extractDomain
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.pop.ClearPop
+import com.boom.aiobrowser.ui.pop.DisclaimerPop
 import com.boom.aiobrowser.ui.pop.DownLoadPop
 import com.boom.aiobrowser.ui.pop.FirstDownloadTips
 import com.boom.aiobrowser.ui.pop.TabPop
@@ -424,7 +425,14 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                         rootActivity.addLaunch(success = {
                             delay(500)
                             withContext(Dispatchers.Main){
-                                showDownloadPop()
+                                if (CacheManager.isDisclaimerFirst) {
+                                    CacheManager.isDisclaimerFirst = false
+                                    DisclaimerPop(rootActivity).createPop {
+                                        showDownloadPop()
+                                    }
+                                }else{
+                                    showDownloadPop()
+                                }
                             }
                         }, failBack = {})
                         PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {

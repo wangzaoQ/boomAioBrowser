@@ -145,7 +145,7 @@ class AdmobDLoader(
         CoroutineScope(Dispatchers.IO).launch{
             val adView = AdView(APP.instance)
 
-            if (adEnum == ADEnum.NATIVE_AD){
+            if (adEnum == ADEnum.NATIVE_AD || adEnum == ADEnum.BANNER_AD_NEWS_DETAILS){
                 adView.setAdSize(AdSize.MEDIUM_RECTANGLE)
             }else{
                 adView.setAdSize(AdSize.BANNER)

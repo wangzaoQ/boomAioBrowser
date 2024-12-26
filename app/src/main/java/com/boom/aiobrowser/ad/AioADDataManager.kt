@@ -96,6 +96,14 @@ object AioADDataManager {
                 BANNER_AD ->{
                     it.adRequestList = bean.aobws_ban_one ?: mutableListOf()
                 }
+
+                ADEnum.BANNER_AD_NEWS_DETAILS_TOP ->{
+                    it.adRequestList = bean.aobws_ban_newtp ?: mutableListOf()
+                }
+                ADEnum.BANNER_AD_NEWS_DETAILS ->{
+                    it.adRequestList = bean.aobws_ban_newin ?: mutableListOf()
+                }
+
                 else -> {}
             }
             it.adRequestList.sortByDescending { it.npxotusg }

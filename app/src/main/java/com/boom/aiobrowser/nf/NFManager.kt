@@ -159,9 +159,9 @@ object NFManager {
                             putString(PointValueKey.ponit_action, PointValue.click)
                             putString(PointValueKey.video_url, data?.url?:"")
                         })
-//                        runCatching {
-//                            manager.cancel(data?.nfId?:0)
-//                        }
+                        runCatching {
+                            manager.cancel(data?.nfId?:0)
+                        }
                     }
                     else -> {}
                 }

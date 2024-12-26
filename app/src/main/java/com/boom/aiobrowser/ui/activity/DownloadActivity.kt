@@ -28,6 +28,7 @@ import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.FirstDownloadTips
 import com.boom.aiobrowser.ui.pop.MorePop
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
 
@@ -173,14 +174,22 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
                 }
             }
         }, failBack = {})
-        if (AioADDataManager.adFilter1().not()) {
-            PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
-                putString(PointValueKey.ad_pos_id, AD_POINT.aobws_download_one)
-            })
-        }
-        AioADShowManager(this,ADEnum.NATIVE_DOWNLOAD_AD,"下载页原生"){
 
-        }.showNativeAD(acBinding.flRoot,AD_POINT.aobws_download_one)
+        addLaunch(success = {
+            while (getActivityStatus().not()){
+                delay(1000)
+            }
+            withContext(Dispatchers.Main){
+                if (AioADDataManager.adFilter1().not()) {
+                    PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
+                        putString(PointValueKey.ad_pos_id, AD_POINT.aobws_download_one)
+                    })
+                }
+                AioADShowManager(this@DownloadActivity,ADEnum.NATIVE_DOWNLOAD_AD,"下载页原生"){
+
+                }.showNativeAD(acBinding.flRoot,AD_POINT.aobws_download_one)
+            }
+        }, failBack = {})
         updateBottomUI(2)
         if (fromPage == "webpage_download_pop"){
             acBinding.vpRoot.currentItem = 1

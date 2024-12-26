@@ -22,6 +22,7 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.other.UrlConfig
+import com.boom.aiobrowser.tools.CloakManager
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.WebActivity
 import com.boom.aiobrowser.ui.pop.ConfigPop
@@ -128,6 +129,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         AioADDataManager.preloadAD(ADEnum.NATIVE_AD,"首页展示时")
         AioADDataManager.preloadAD(ADEnum.NATIVE_DOWNLOAD_AD,"首页展示时")
         AioADDataManager.preloadAD(ADEnum.BANNER_AD,"首页展示时")
+        AioADDataManager.preloadAD(ADEnum.BANNER_AD_NEWS_DETAILS_TOP,"首页展示时")
     }
 
     private fun showEnd() {
@@ -196,6 +198,9 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
             NFShow.showForegroundNF()
         }, onFail = {})
+        if (CacheManager.isBUser.not()){
+            CloakManager().getCloak()
+        }
     }
 
     var dataIntent :Intent?=null

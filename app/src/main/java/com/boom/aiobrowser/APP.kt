@@ -240,10 +240,10 @@ class APP: Application(), ViewModelStoreOwner {
                 }
             }
             AppsFlyerLib.getInstance().setCustomerUserId(CacheManager.getID())
-            AppsFlyerLib.getInstance().waitForCustomerUserId(true)
+//            AppsFlyerLib.getInstance().waitForCustomerUserId(true)
             AppsFlyerLib.getInstance().init(key, conversionDataListener, applicationContext)
 
-            AppsFlyerLib.getInstance().setCustomerIdAndLogSession(CacheManager.getID(), this)
+//            AppsFlyerLib.getInstance().setCustomerIdAndLogSession(CacheManager.getID(), this)
 //            if (AppsFlyerProperties.getInstance().getString(AppsFlyerProperties.APP_USER_ID).isNullOrEmpty()) {
 //                AppsFlyerLib.getInstance().setCustomerUserId(CacheManager.getID())
 //                AppsFlyerLib.getInstance().waitForCustomerUserId(true)

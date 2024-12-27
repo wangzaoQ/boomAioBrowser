@@ -527,6 +527,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     }
 
     override fun onDestroy() {
+        EasyFloat.dismiss(tag = "webPop",true)
         APP.engineLiveData.removeObservers(this)
         super.onDestroy()
     }

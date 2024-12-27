@@ -354,4 +354,11 @@
     <string name="app_remove">Remover</string>
     <string name="app_follow">Seguir</string>
     <string name="app_gps_fail">Falha ao obter localização</string>
+
+    <string name="app_related_news">Notícias relacionadas</string>
+    <string name="app_video_title">Vídeos em destaque</string>
+    <string name="app_topics">Tópicos</string>
+    <string name="app_topic_title">Nenhuma notícia relacionada encontrada Recomendar informações de seu interesse</string>
+    <string name="app_you_may_like">Você pode gostar</string>
+    <string name="app_download_complete">Download concluído</string>
 </resources>

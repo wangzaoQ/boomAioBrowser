@@ -16,7 +16,7 @@
         android:layout_centerHorizontal="true"
         app:shapeAppearance="@style/style_RoundStyle_8r"
         android:background="@drawable/shape_8r_white"
-        app:srcCompat="@mipmap/ic_default_browser_icon"></com.google.android.material.imageview.ShapeableImageView>
+        ></com.google.android.material.imageview.ShapeableImageView>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvBrowser"

@@ -86,7 +86,7 @@ class ConfigPop(context: Context) : BasePopupWindow(context) {
                         }
 
                         addEdittext("归因结果:${CacheManager.campaignId}") {
-                            CacheManager.campaignId = it.text.toString().trim()
+                            CacheManager.campaignId = it.text.toString().trim().substringAfter("归因结果:")
 //                        it.text = "归因结果:${CacheManager.campaignId}"
                         }
                         addTest("全局视频限制开关 true为限制 不展示下载:${FirebaseConfig.switchOpenFilter1}") {

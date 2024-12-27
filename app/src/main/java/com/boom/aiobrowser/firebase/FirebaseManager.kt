@@ -142,6 +142,12 @@ object FirebaseManager {
 
     private fun initFirebaseConfig(tag: String) {
         AppLogs.dLog(APP.instance.TAG,"tag:${tag}")
+        runCatching {
+            FirebaseConfig.referConfig = firebaseRemoteConfig?.getString("refer_config")?:""
+        }
+        if (FirebaseConfig.referConfig.isNullOrEmpty()){
+            FirebaseConfig.referConfig = FirebaseConfig.DEFAULT_REFER_CONFIG
+        }
         getADConfig()
         getNFConfig()
         getDefaultConfig()

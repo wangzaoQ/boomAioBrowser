@@ -378,7 +378,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     }
 
     private fun addDownload() {
-        if (allowShowTips().not()){
+        if (allowShowTips().not() && isAdded){
             var startX = 0
             var startY = 0
             var dragX = CacheManager.dragX

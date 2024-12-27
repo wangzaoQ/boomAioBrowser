@@ -49,6 +49,8 @@ class TaskAddPop (context: Context) : BasePopupWindow(context){
 
     var job: Job?=null
 
+    var isComplete = false
+
     fun createPop(downloadVideoIdList:MutableList<String>){
         defaultBinding?.apply {
             if (AioADDataManager.adFilter1().not()) {
@@ -62,10 +64,15 @@ class TaskAddPop (context: Context) : BasePopupWindow(context){
                 }
             }
             llRoot.setOnClickListener {
+                if (isComplete){
+                    PointEvent.posePoint(PointEventKey.download_complete_view)
+                }else{
+                    PointEvent.posePoint(PointEventKey.download_task_view)
+                }
                 clickOther = false
-                PointEvent.posePoint(PointEventKey.download_task_view)
                 context.startActivity(Intent(context, DownloadActivity::class.java).apply {
                     putExtra("fromPage", "webpage_download_task_pop")
+                    putExtra("jumpType", if (isComplete) 1 else 0)
                 })
                 tips3?.dismiss()
                 dismiss()
@@ -83,6 +90,7 @@ class TaskAddPop (context: Context) : BasePopupWindow(context){
                 }
             },500)
         }
+        var first = true
         job = (context as BaseActivity<*>).addLaunch(success = {
             while (true){
                 delay(1000)
@@ -106,6 +114,11 @@ class TaskAddPop (context: Context) : BasePopupWindow(context){
                             taskTitle.text = context.getString(R.string.app_download_complete)
                             taskContent.visibility = View.VISIBLE
                             taskContent.text = name
+                        }
+                        isComplete = true
+                        if (first){
+                            first = false
+                            PointEvent.posePoint(PointEventKey.download_complete)
                         }
                     }
                 }

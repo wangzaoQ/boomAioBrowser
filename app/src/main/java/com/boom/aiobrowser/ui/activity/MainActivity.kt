@@ -351,7 +351,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     jumpType = 1
                 }else if (FirebaseConfig.newsJumpList.contains(campaignId)){
                     //news
-                    acBinding.fragmentMain.setCurrentItem(1,true)
                     jumpType = 2
                 }
             }
@@ -434,8 +433,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 APP.instance.shareText = APP.instance.shareText.substring(index,APP.instance.shareText.length)
             }
             APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(APP.instance.shareText,title="","分享网页",true))
-        }else{
-
         }
 
         if (isNormal.not()){
@@ -444,6 +441,14 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }
         fManager.hideFragment(supportFragmentManager, startFragment!!)
         acBinding.llMainControl.visibility = View.VISIBLE
+        if (jumpType == 1){
+            PointEvent.posePoint(PointEventKey.attribution_download)
+        }else if (jumpType == 2){
+            acBinding.fragmentMain.setCurrentItem(1,true)
+            PointEvent.posePoint(PointEventKey.attribution_news)
+        }else{
+            PointEvent.posePoint(PointEventKey.attribution_default)
+        }
         var showPopCount = 0
         if (APP.isDebug){
             AppLogs.dLog(acTAG,"首页弹窗判断 isDefaultBrowser：:${BrowserManager.isDefaultBrowser()} " +

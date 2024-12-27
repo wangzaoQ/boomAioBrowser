@@ -6,25 +6,34 @@ import android.os.Bundle
 import com.adjust.sdk.Adjust
 import com.adjust.sdk.AdjustAdRevenue
 import com.adjust.sdk.AdjustConfig
-import com.adjust.sdk.AdjustEvent
 import com.android.installreferrer.api.ReferrerDetails
+import com.applovin.mediation.MaxAd
+import com.appsflyer.adrevenue.AppsFlyerAdRevenue
+import com.appsflyer.adrevenue.adnetworks.AppsFlyerAdNetworkEventType
+import com.appsflyer.adrevenue.adnetworks.generic.MediationNetwork
+import com.appsflyer.adrevenue.adnetworks.generic.Scheme
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.data.AioRequestData
 import com.boom.aiobrowser.firebase.FirebaseConfig
-import com.boom.aiobrowser.firebase.FirebaseConfig.LTV_DEFAULT
 import com.boom.aiobrowser.firebase.FirebaseManager.firebaseAnalytics
 import com.boom.aiobrowser.point.Install.isLoading
-import com.boom.aiobrowser.point.PointManager.NET_TAG
 import com.boom.aiobrowser.point.PointManager.PointCallback
 import com.boom.aiobrowser.point.PointManager.postEvent
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.facebook.appevents.AppEventsLogger
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.appopen.AppOpenAd
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.nativead.NativeAd
 import com.google.firebase.analytics.FirebaseAnalytics
 import okhttp3.Response
 import org.json.JSONObject
 import java.util.Currency
+import java.util.Locale
+
 
 object PointEvent {
 
@@ -91,7 +100,7 @@ object PointEvent {
      * adValue 广告具体的价值
      * ad 广告类型
      */
-    fun adPoint(adValue: Any, ad: Any, requestBean: AioRequestData, adEnum: ADEnum,){
+    fun adPoint(adValue: Any, ad: Any, requestBean: AioRequestData, adEnum: ADEnum){
         var adPointManager = ADPointManager(adValue,ad,requestBean,adEnum)
 
         PointManager.postEvent(GeneralParams.getGenericParams().apply {
@@ -111,6 +120,29 @@ object PointEvent {
             adjustAdRevenue.setAdRevenueNetwork(adPointManager.getADFill())
             Adjust.trackAdRevenue(adjustAdRevenue)
         }
+        runCatching {
+            val value = adPointManager.getADValue()
+            val customParams: MutableMap<String, String> = HashMap()
+            customParams[Scheme.COUNTRY] = "US"
+            customParams[Scheme.AD_UNIT] = requestBean.ktygzdzn
+            customParams[Scheme.AD_TYPE] = getAdType(requestBean,ad)
+            var from = "admob"
+            var netWork = MediationNetwork.googleadmob
+            if (requestBean.tybxumpn == AioADDataManager.AD_PLATFORM_MAX){
+                from = "max"
+                netWork =MediationNetwork.applovinmax
+            }
+            AppsFlyerAdRevenue.logAdRevenue(
+                from,
+                netWork,
+                Currency.getInstance(Locale.US),
+                value,
+                customParams
+            )
+        }.onFailure {
+            AppLogs.eLog("AppsFlyerLib", it.stackTraceToString())
+        }
+
 
         runCatching {
             fb.logPurchase((adPointManager.getADValue()).toBigDecimal(), Currency.getInstance("USD"))
@@ -162,6 +194,28 @@ object PointEvent {
             }
         }
 
+    }
+
+    private fun getAdType(requestBean: AioRequestData,ad: Any): String {
+        if (requestBean.tybxumpn == AioADDataManager.AD_PLATFORM_ADMOB){
+            return when (ad) {
+                is AppOpenAd ->{
+                    AppsFlyerAdNetworkEventType.APP_OPEN.toString()
+                }
+                is InterstitialAd ->{
+                    AppsFlyerAdNetworkEventType.INTERSTITIAL.toString()
+                }
+                is NativeAd ->{
+                    AppsFlyerAdNetworkEventType.NATIVE.toString()
+                }
+                is AdView ->{
+                    AppsFlyerAdNetworkEventType.BANNER.toString()
+                }
+                else -> "Unknown"
+            }
+        }else{
+          return  "Unknown"
+        }
     }
 
     fun getLTVList(): MutableList<Double> {

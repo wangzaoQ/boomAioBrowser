@@ -279,6 +279,7 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:12.3.0'
     implementation 'com.adjust.sdk:adjust-android:4.33.5'
     implementation 'com.appsflyer:af-android-sdk:6.12.1'
+    implementation 'com.appsflyer:adrevenue:6.9.0'
 
 
 }

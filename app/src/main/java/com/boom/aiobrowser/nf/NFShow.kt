@@ -90,7 +90,6 @@ object NFShow {
 //            newsList = mutableListOf()
 
             var data = newsList?.removeFirstOrNull()
-            data?.itackl = ""
             if (data == null || data.itackl.isNullOrEmpty()){
                 AppLogs.dLog(NFManager.TAG,"name:${enum.menuName} sourceType:${sourceType} NFManager.defaultNewsList.size:${NFManager.defaultNewsList?.size}获取数据来源失败走本地通知")
                 if (NFManager.defaultNewsList.isNullOrEmpty().not()){

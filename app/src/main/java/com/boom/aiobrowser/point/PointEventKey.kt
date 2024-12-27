@@ -270,6 +270,25 @@ object PointEventKey {
     const val topics_page_search = "topics_page_search"
     //视频播放页
     const val featured_videos_page = "featured_videos_page"
+    //cloak请求
+    const val clock_req = "clock_req"
+    //cloak返回成功
+    const val cloak_suc = "cloak_suc"
+    const val af_suc = "af_suc"
+    //归因请求
+    const val attribution_req = "attribution_req"
+    //拿到归因结果
+    const val attribution_suc = "attribution_suc"
+    //归因新闻流程
+    const val attribution_news = "attribution_news"
+    //归因Download流程
+    const val attribution_download = "attribution_download"
+    //attribution_default
+    const val attribution_default = "attribution_default"
+    //下载完成弹窗展示
+    const val download_complete = "download_complete"
+    //下载完成弹窗查看点击
+    const val download_complete_view = "download_complete_view"
 
 }
 

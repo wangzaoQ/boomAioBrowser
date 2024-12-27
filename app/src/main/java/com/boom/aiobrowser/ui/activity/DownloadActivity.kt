@@ -99,6 +99,7 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
 
     override fun setShowView() {
         fromPage = intent.getStringExtra("fromPage")?:""
+        var jumpType = intent.getIntExtra("jumpType",0)
         fragments.add(DownloadFragment.newInstance(0,fromPage))
         fragments.add(DownloadFragment.newInstance(1,fromPage))
         acBinding.vpRoot.apply {
@@ -191,7 +192,7 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
             }
         }, failBack = {})
         updateBottomUI(2)
-        if (fromPage == "webpage_download_pop"){
+        if (fromPage == "webpage_download_pop" || jumpType == 1){
             acBinding.vpRoot.currentItem = 1
         }else if (fromPage == "webpage_download_task_pop"){
             BatteryUtil(WeakReference(this)).requestIgnoreBatteryOptimizations()

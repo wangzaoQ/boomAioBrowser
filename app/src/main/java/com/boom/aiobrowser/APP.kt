@@ -1,11 +1,15 @@
 package com.boom.aiobrowser
 
+//import com.appsflyer.AppsFlyerLib
+//import com.appsflyer.AppsFlyerProperties
+//import com.appsflyer.attribution.AppsFlyerRequestListener
 import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.lifecycle.ViewModelProvider
@@ -15,11 +19,7 @@ import com.adjust.sdk.Adjust
 import com.adjust.sdk.AdjustConfig
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
-import com.appsflyer.AppsFlyerProperties
-import com.appsflyer.attribution.AppsFlyerRequestListener
-//import com.appsflyer.AppsFlyerLib
-//import com.appsflyer.AppsFlyerProperties
-//import com.appsflyer.attribution.AppsFlyerRequestListener
+import com.appsflyer.adrevenue.AppsFlyerAdRevenue
 import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.NetworkUtils.OnNetworkStatusChangedListener
 import com.boom.aiobrowser.ad.AioADDataManager.initAD
@@ -32,18 +32,15 @@ import com.boom.aiobrowser.firebase.FirebaseManager.initFirebase
 import com.boom.aiobrowser.model.AppViewModel
 import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.nf.NFReceiver
-import com.boom.aiobrowser.other.DirectoryProvider
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.CloakManager
 import com.boom.aiobrowser.tools.UIManager
-import com.boom.aiobrowser.tools.registerDirectory
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.event.ProtectedUnPeekLiveData
 import com.boom.aiobrowser.tools.isOtherPkg
-import com.boom.aiobrowser.tools.stringToMap
 import com.boom.aiobrowser.tools.video.VideoManager.initVideo
 import com.boom.downloader.VideoDownloadManager
 import com.boom.downloader.model.VideoTaskItem
@@ -57,7 +54,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 
 class APP: Application(), ViewModelStoreOwner {
@@ -215,9 +211,16 @@ class APP: Application(), ViewModelStoreOwner {
                         if (afStatus.isNullOrEmpty()){
                             afStatus = "Organic"
                         }
-                        if (afStatus != "Organic"){
-                            CacheManager.afFrom = afStatus
-                        }
+                        CacheManager.afFrom = afStatus
+                        PointEvent.posePoint(PointEventKey.af_suc, Bundle().apply {
+                            var userStatus = 1
+                            if (afStatus.equals("Organic",true)){
+                                userStatus = 1
+                            }else{
+                                userStatus = 0
+                            }
+                            putInt("af_user",userStatus)
+                        })
                     }
                 }
                 override fun onConversionDataFail(error: String?) {
@@ -236,18 +239,25 @@ class APP: Application(), ViewModelStoreOwner {
                     AppLogs.dLog(APP.instance.TAG, "af onAttributionFailure :  $error")
                 }
             }
-            if (AppsFlyerProperties.getInstance().getString(AppsFlyerProperties.APP_USER_ID).isNullOrEmpty()) {
-                AppsFlyerLib.getInstance().setCustomerUserId(CacheManager.getID())
-                AppsFlyerLib.getInstance().waitForCustomerUserId(true)
-                AppsFlyerLib.getInstance().init(key, conversionDataListener, applicationContext)
+            AppsFlyerLib.getInstance().setCustomerUserId(CacheManager.getID())
+            AppsFlyerLib.getInstance().waitForCustomerUserId(true)
+            AppsFlyerLib.getInstance().init(key, conversionDataListener, applicationContext)
 
-                AppsFlyerLib.getInstance().setCustomerIdAndLogSession(CacheManager.getID(), this)
-
-            } else {
-                AppsFlyerLib.getInstance().init(key, conversionDataListener, applicationContext)
-            }
+            AppsFlyerLib.getInstance().setCustomerIdAndLogSession(CacheManager.getID(), this)
+//            if (AppsFlyerProperties.getInstance().getString(AppsFlyerProperties.APP_USER_ID).isNullOrEmpty()) {
+//                AppsFlyerLib.getInstance().setCustomerUserId(CacheManager.getID())
+//                AppsFlyerLib.getInstance().waitForCustomerUserId(true)
+//                AppsFlyerLib.getInstance().init(key, conversionDataListener, applicationContext)
+//
+//                AppsFlyerLib.getInstance().setCustomerIdAndLogSession(CacheManager.getID(), this)
+//
+//            } else {
+//                AppsFlyerLib.getInstance().init(key, conversionDataListener, applicationContext)
+//            }
             AppsFlyerLib.getInstance().setDebugLog(isDebug)
             AppsFlyerLib.getInstance().start(this)
+            val afRevenueBuilder = AppsFlyerAdRevenue.Builder(this)
+            AppsFlyerAdRevenue.initialize(afRevenueBuilder.build())
         }
     }
 
@@ -333,6 +343,7 @@ class APP: Application(), ViewModelStoreOwner {
     }
 
     fun getWebConfig() {
+        CloakManager().getCloak()
         appModel.getCampaign()
         appModel.getWebConfig()
         appModel.getTrendsNews()

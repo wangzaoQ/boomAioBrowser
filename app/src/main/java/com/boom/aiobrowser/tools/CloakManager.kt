@@ -2,11 +2,14 @@ package com.boom.aiobrowser.tools
 
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import com.blankj.utilcode.util.DeviceUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.point.GeneralParams
 import com.boom.aiobrowser.point.GeneralParams.urlEncoder
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointManager
 import com.boom.aiobrowser.tools.CacheManager.getID
 import kotlinx.coroutines.CoroutineScope
@@ -22,14 +25,22 @@ import java.io.IOException
 
 class CloakManager {
     fun getCloak(){
+        if (CacheManager.isBUser)return
         var url =
             "https://highroad.safebrowsers.net/pastor/frown/fungus?magma=${urlEncoder(if (APP.isDebug)"com.fast.safe.browser" else BuildConfig.APPLICATION_ID)}" +
                     "&buckaroo=${"scylla"}&trait=${urlEncoder(BuildConfig.VERSION_NAME)}&hardy=${getID()}" +
                     "&allotted=${System.currentTimeMillis()}&kidnap=${urlEncoder(DeviceUtils.getModel())}&paycheck=${urlEncoder(Build.VERSION.RELEASE)}" +
                     "&sought=${urlEncoder(APP.instance.GID)}&referent=${urlEncoder(getID())}"
-
+        PointEvent.posePoint(PointEventKey.clock_req)
         getNewsClock(url,"getClock", callBack = {
             UIManager.cloakValue = it
+            PointEvent.posePoint(PointEventKey.cloak_suc, Bundle().apply {
+                var userStatus = 0
+                if (it.equals("orgasm",true)){
+                    userStatus = 1
+                }
+                putInt("cloak_user",userStatus)
+            })
         })
     }
 

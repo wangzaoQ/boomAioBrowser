@@ -13,6 +13,8 @@ import com.boom.aiobrowser.nf.NFShow
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.other.TopicConfig
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointManager
 import com.boom.aiobrowser.tools.encryptECB
 import com.boom.aiobrowser.tools.getBeanByGson
@@ -248,13 +250,17 @@ class AppViewModel : BaseDataModel() {
 
     var maxCount = if (APP.isDebug) 4 else 15
     var currentCount = 0
-    fun getCampaign() {
+    fun getCampaign(isCurrent:Boolean=true) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return
         }
         if (CacheManager.campaignId.isNullOrEmpty().not()) {
             return
         }
+        if (isCurrent){
+            PointEvent.posePoint(PointEventKey.attribution_req)
+        }
+
         loadData(loadBack = {
             currentCount++
             runCatching {
@@ -292,10 +298,11 @@ class AppViewModel : BaseDataModel() {
                 AppLogs.dLog(APP.instance.TAG, "查询归因:${toJson(data)}")
                 if (data?.campaign_id.isNullOrEmpty() && currentCount < maxCount) {
                     delay(2000)
-                    getCampaign()
+                    getCampaign(false)
                     return@loadData
                 }
                 CacheManager.campaignId = data?.campaign_id?:""
+                PointEvent.posePoint(PointEventKey.attribution_suc)
             }
         }, failBack = {}, 1)
 

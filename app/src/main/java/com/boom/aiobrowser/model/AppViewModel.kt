@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.model
 
 import android.os.Build
+import android.os.Bundle
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.data.NFEnum
@@ -303,6 +304,9 @@ class AppViewModel : BaseDataModel() {
                 }
                 CacheManager.campaignId = data?.campaign_id?:""
                 PointEvent.posePoint(PointEventKey.attribution_suc)
+                PointEvent.posePoint(PointEventKey.track_platform, Bundle().apply {
+                    putString("from",data?.track_platform?:"")
+                })
             }
         }, failBack = {}, 1)
 

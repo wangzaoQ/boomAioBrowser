@@ -24,7 +24,7 @@ class CloakManager {
                     "&buckaroo=${"scylla"}&trait=${urlEncoder(BuildConfig.VERSION_NAME)}&hardy=${getID()}" +
                     "&allotted=${System.currentTimeMillis()}&kidnap=${urlEncoder(DeviceUtils.getModel())}&paycheck=${urlEncoder(Build.VERSION.RELEASE)}" +
                     "&sought=${urlEncoder(APP.instance.GID)}&referent=${urlEncoder(getID())}"
-        PointEvent.posePoint(PointEventKey.cloak_req)
+//        PointEvent.posePoint(PointEventKey.cloak_req)
         getNewsClock(url,"getClock", callBack = {
             UIManager.cloakValue = it
             PointEvent.posePoint(PointEventKey.cloak_suc, Bundle().apply {

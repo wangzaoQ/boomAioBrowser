@@ -34,6 +34,7 @@ import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.nf.NFReceiver
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.CloakManager
@@ -202,19 +203,18 @@ class APP: Application(), ViewModelStoreOwner {
             var key = "Ed2FymhzHg3qqYpyH8Z9Eg"
             val conversionDataListener  = object : AppsFlyerConversionListener{
                 override fun onConversionDataSuccess(data: MutableMap<String, Any>?) {
+                    if (CacheManager.afFrom.contains("organic", true).not()) return
                     // ...
                     data?.map {
                         AppLogs.dLog(APP.instance.TAG, " af onConversionDataSuccess: ${it.key} = ${it.value}")
                     }
                     runCatching {
                         var afStatus = data?.get("af_status") as? String
-                        if (afStatus.isNullOrEmpty()){
-                            afStatus = "Organic"
-                        }
+                        if (afStatus.isNullOrBlank()) return
                         CacheManager.afFrom = afStatus
                         PointEvent.posePoint(PointEventKey.af_suc, Bundle().apply {
                             var userStatus = 1
-                            if (afStatus.equals("Organic",true)){
+                            if (afStatus.contains("organic",true)){
                                 userStatus = 1
                             }else{
                                 userStatus = 0
@@ -273,6 +273,17 @@ class APP: Application(), ViewModelStoreOwner {
                 if (CacheManager.adJustFrom.contains("organic", true).not()) return@setOnAttributionChangedListener
                 if (it.network.isNullOrBlank()) return@setOnAttributionChangedListener
                 CacheManager.adJustFrom = it.network
+//                adjust_user：
+//                【0】买量用户
+//                【1】自然量用户
+                var userType = 1
+                if (it.network.contains("organic", true).not()){
+                    // 买量用户
+                    userType = 0
+                }
+                PointEvent.posePoint(PointEventKey.adjust_suc,Bundle().apply {
+                    putInt(PointValueKey.adjust_user,userType)
+                })
             }
             config.setDelayStart(5.5)
             Adjust.addSessionCallbackParameter("customer_user_id",CacheManager.getID())
@@ -283,7 +294,6 @@ class APP: Application(), ViewModelStoreOwner {
         }.onFailure {
             AppLogs.eLog(APP.instance.TAG,"adjust init error :${it.stackTraceToString()}")
         }
-
     }
 
     private fun initFB() {

@@ -33,6 +33,8 @@ object CacheManager {
     const val KV_FIRST_CLICK_DOWNLOAD_BUTTON = "KV_FIRST_CLICK_DOWNLOAD_BUTTON"
     const val KV_FIRST_DOWNLOAD_VIDEO_SUCCESS = "KV_FIRST_DOWNLOAD_VIDEO_SUCCESS"
     const val KV_IS_B_USER = "KV_IS_B_USER"
+    const val KV_IS_A_USER = "KV_IS_A_USER"
+    const val KV_IS_SEND_B = "KV_IS_SEND_B"
     const val KV_DAY_DOWNLOAD_COUNT = "KV_DAY_DOWNLOAD_COUNT"
     const val KV_NEWS_READ_COUNT = "KV_NEWS_READ_COUNT"
     const val KV_DAY_SHOW_ADD_SHORT = "KV_DAY_SHOW_ADD_SHORT2"
@@ -163,6 +165,22 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_IS_B_USER, value)
+        }
+
+    var isAUser: Boolean
+        get() {
+            return mmkv.decodeBool(KV_IS_A_USER, false)
+        }
+        set(value) {
+            mmkv.encode(KV_IS_A_USER, value)
+        }
+
+    var isSendB: Boolean
+        get() {
+            return mmkv.decodeBool(KV_IS_SEND_B, false)
+        }
+        set(value) {
+            mmkv.encode(KV_IS_SEND_B, value)
         }
 
     var dayDownloadCount:Int

@@ -271,10 +271,13 @@ object PointEventKey {
     //视频播放页
     const val featured_videos_page = "featured_videos_page"
     //cloak请求
-    const val cloak_req = "cloak_req"
+//    const val cloak_req = "cloak_req"
     //cloak返回成功
     const val cloak_suc = "cloak_suc"
+    //af返回成功
     const val af_suc = "af_suc"
+    //adjust返回成功
+    const val adjust_suc = "adjust_suc"
     //归因请求
     const val attribution_req = "attribution_req"
     //拿到归因结果
@@ -289,6 +292,12 @@ object PointEventKey {
     const val download_complete = "download_complete"
     //下载完成弹窗查看点击
     const val download_complete_view = "download_complete_view"
+    //用户来源
+    const val user_source = "user_source"
+    // a to b
+    const val user_a_b = "user_a_b"
+    // 归因来源
+    const val track_platform = "track_platform"
 
 }
 
@@ -320,6 +329,7 @@ object PointValueKey{
     const val source_from = "source_from"
     const val from_type = "from_type"
     const val web_store = "web_store"
+    const val adjust_user = "adjust_user"
 
 
 }

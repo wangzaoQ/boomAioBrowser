@@ -78,6 +78,10 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     val newsHomeFragment by lazy {
         NewsHomeFragment()
     }
+
+//    val musicFragment by lazy {
+//        MusicFragment()
+//    }
     val meFragment by lazy {
         MeFragment()
     }
@@ -161,9 +165,13 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 })
             }
             3 ->{
-                acBinding.fragmentMain.setCurrentItem(index, false)
+                acBinding.fragmentMain.setCurrentItem(2, false)
 
 //                fManager.switchFragment(supportFragmentManager,R.id.fragmentMain,mainRootFragment,meFragment,"MeFragment")
+                updateUI(index)
+            }
+            4 ->{
+                acBinding.fragmentMain.setCurrentItem(3, false)
                 updateUI(index)
             }
             else -> {}
@@ -262,6 +270,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     fragments.apply {
                         add(mainRootFragment)
                         add(newsHomeFragment)
+//                        add(musicFragment)
                         add(meFragment)
                     }
                     offscreenPageLimit = fragments.size
@@ -343,7 +352,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         var allowShowPop = true
         // 0 默认  1 browser 2 news
         var jumpType = 0
-        if (UIManager.isBuyUser()){
+        if (UIManager.isBuyUser(true)){
             if (CacheManager.campaignId.isNullOrEmpty().not()){
                 var campaignId = CacheManager.campaignId
                 if (FirebaseConfig.browserJumpList.contains(campaignId)){
@@ -444,17 +453,19 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         if (jumpType == 1){
             PointEvent.posePoint(PointEventKey.attribution_download)
         }else if (jumpType == 2){
-            acBinding.fragmentMain.setCurrentItem(1,true)
             PointEvent.posePoint(PointEventKey.attribution_news)
+            acBinding.fragmentMain.setCurrentItem(1,true)
         }else{
-            PointEvent.posePoint(PointEventKey.attribution_default)
+            PointEvent.posePoint(PointEventKey.attribution_default,Bundle().apply {
+                putString("from",if (UIManager.isBuyUser()) "b" else "a")
+            })
         }
         var showPopCount = 0
         if (APP.isDebug){
             AppLogs.dLog(acTAG,"首页弹窗判断 isDefaultBrowser：:${BrowserManager.isDefaultBrowser()} " +
                     "isFirstShowBrowserDefault:${CacheManager.isFirstShowBrowserDefault} switchDefaultPop:${FirebaseConfig.switchDefaultPop} allowShowPop:${allowShowPop}")
         }
-        if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault && FirebaseConfig.switchDefaultPop && allowShowPop && jumpType == 0 || jumpType == 1){
+        if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault && (FirebaseConfig.switchDefaultPop) && allowShowPop && (jumpType == 0 || jumpType == 1)){
             AppLogs.dLog(acTAG,"shouw browser pop")
             CacheManager.isFirstShowBrowserDefault = false
             var pop = DefaultPop(this@MainActivity)
@@ -490,14 +501,12 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
 
     private fun showDownloadGuide(showPopCount: Int, allowShowPop: Boolean,jumpType:Int) {
-        if (showPopCount == 2 && (jumpType == 0 || jumpType == 1)){
-            if (FirebaseConfig.switchDownloadGuidePop && allowShowPop){
+        if (showPopCount == 2 && jumpType == 1 && allowShowPop){
+            if (CacheManager.isFirstShowDownloadGuide){
                 AppLogs.dLog(acTAG,"允许开启引导弹窗")
-                if (CacheManager.isFirstShowDownloadGuide){
-                    CacheManager.isFirstShowDownloadGuide = false
-                    var homeGuidePop = HomeGuidePop(this@MainActivity)
-                    homeGuidePop.createPop()
-                }
+                CacheManager.isFirstShowDownloadGuide = false
+                var homeGuidePop = HomeGuidePop(this@MainActivity)
+                homeGuidePop.createPop()
             }else{
                 AppLogs.dLog(acTAG,"不允许开启引导弹窗")
                 PointEvent.posePoint(PointEventKey.home_page_first)

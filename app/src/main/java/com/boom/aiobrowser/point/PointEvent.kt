@@ -46,7 +46,7 @@ object PointEvent {
         bundle?.keySet()?.forEach {
             jsonObject.put("${it}>bassi",bundle.get(it))
         }
-        postEvent(jsonObject,tag = key)
+        postEvent(jsonObject,tag = key,callback)
         if (needFireBase){
             runCatching {
                 firebaseAnalytics.logEvent(key, bundle)

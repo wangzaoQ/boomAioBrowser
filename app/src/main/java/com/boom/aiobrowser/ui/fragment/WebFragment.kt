@@ -216,48 +216,56 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
 
     open fun updateDownloadButtonStatus(status: Boolean,type:Int=0) {
-        var size = 0
-        var tempList = CacheManager.videoDownloadTempList
-        for (i in 0 until tempList.size){
-            var allow = false
-            tempList.get(i).formatsList.forEach {
-                if (it.downloadType != VideoDownloadData.DOWNLOAD_SUCCESS){
-                    allow = true
+        runCatching {
+            var size = 0
+            var tempList = CacheManager.videoDownloadTempList
+            for (i in 0 until tempList.size){
+                var allow = false
+                tempList.get(i).formatsList.forEach {
+                    if (it.downloadType != VideoDownloadData.DOWNLOAD_SUCCESS){
+                        allow = true
+                    }
+                }
+                if (allow){
+                    size++
                 }
             }
-            if (allow){
-                size++
-            }
-        }
-        if (allowShowTips().not()){
-            dragBiding?.apply {
-                if (tempList.size>0){
-                    ivDownload.visibility = View.GONE
-                    ivDownload2.visibility = View.VISIBLE
-                    if (size>0){
-                        tvDownload.visibility = View.VISIBLE
-                        tvDownload.text = "$size"
+            if (allowShowTips().not()){
+                dragBiding?.apply {
+                    if (tempList.size>0){
+                        AppLogs.dLog(fragmentTAG,"展示有数据下载状态 type:${type}")
+                        ivDownload.visibility = View.GONE
+                        ivDownload2.visibility = View.VISIBLE
+                        if (size>0){
+                            tvDownload.visibility = View.VISIBLE
+                            tvDownload.text = "$size"
+                        }else{
+                            tvDownload.visibility = View.GONE
+                        }
+                        if (type != 1){
+                            ivDownload2.apply {
+                                setAnimation("download.json")
+                                playAnimation()
+                            }
+                            if (CacheManager.isFirstDownloadTips){
+                                CacheManager.isFirstDownloadTips = false
+                                tips1 = FirstDownloadTips(rootActivity)
+                                tips1?.createPop(root,1)
+                            }
+                        }
+                        AppLogs.dLog(fragmentTAG,"展示有数据下载状态完成 type:${type}")
                     }else{
+                        AppLogs.dLog(fragmentTAG,"展示无数据下载状态")
+                        ivDownload.visibility = View.VISIBLE
+                        ivDownload2.visibility = View.GONE
                         tvDownload.visibility = View.GONE
+                        ivDownload2.cancelAnimation()
+                        AppLogs.dLog(fragmentTAG,"展示无数据下载状态完成")
                     }
-                    if (type != 1){
-                        ivDownload2.apply {
-                            setAnimation("download.json")
-                            playAnimation()
-                        }
-                        if (CacheManager.isFirstDownloadTips){
-                            CacheManager.isFirstDownloadTips = false
-                            tips1 = FirstDownloadTips(rootActivity)
-                            tips1?.createPop(root,1)
-                        }
-                    }
-                }else{
-                    ivDownload.visibility = View.VISIBLE
-                    ivDownload2.visibility = View.GONE
-                    tvDownload.visibility = View.GONE
-                    ivDownload2.cancelAnimation()
                 }
             }
+        }.onFailure {
+            AppLogs.dLog(fragmentTAG,it.stackTraceToString())
         }
     }
 
@@ -379,6 +387,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
     private fun addDownload() {
         if (allowShowTips().not() && isAdded){
+            EasyFloat.dismiss(tag = "webPop",true)
             var startX = 0
             var startY = 0
             var dragX = CacheManager.dragX

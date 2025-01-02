@@ -271,7 +271,7 @@ object PointEventKey {
     //视频播放页
     const val featured_videos_page = "featured_videos_page"
     //cloak请求
-    const val clock_req = "clock_req"
+    const val cloak_req = "cloak_req"
     //cloak返回成功
     const val cloak_suc = "cloak_suc"
     const val af_suc = "af_suc"

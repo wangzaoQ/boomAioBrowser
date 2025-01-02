@@ -1,22 +1,15 @@
 package com.boom.aiobrowser.tools
 
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import com.blankj.utilcode.util.DeviceUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
-import com.boom.aiobrowser.point.GeneralParams
 import com.boom.aiobrowser.point.GeneralParams.urlEncoder
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointManager
 import com.boom.aiobrowser.tools.CacheManager.getID
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Request
@@ -31,7 +24,7 @@ class CloakManager {
                     "&buckaroo=${"scylla"}&trait=${urlEncoder(BuildConfig.VERSION_NAME)}&hardy=${getID()}" +
                     "&allotted=${System.currentTimeMillis()}&kidnap=${urlEncoder(DeviceUtils.getModel())}&paycheck=${urlEncoder(Build.VERSION.RELEASE)}" +
                     "&sought=${urlEncoder(APP.instance.GID)}&referent=${urlEncoder(getID())}"
-        PointEvent.posePoint(PointEventKey.clock_req)
+        PointEvent.posePoint(PointEventKey.cloak_req)
         getNewsClock(url,"getClock", callBack = {
             UIManager.cloakValue = it
             PointEvent.posePoint(PointEventKey.cloak_suc, Bundle().apply {

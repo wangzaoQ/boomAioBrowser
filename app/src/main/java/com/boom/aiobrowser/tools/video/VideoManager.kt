@@ -62,7 +62,7 @@ object VideoManager {
             .setTimeOut(DownloadConstants.READ_TIMEOUT, DownloadConstants.CONN_TIMEOUT)
             .setConcurrentCount(DownloadConstants.CONCURRENT)
             .setIgnoreCertErrors(false)
-            .setShouldM3U8Merged(true)
+            .setShouldM3U8Merged(false)
             .buildConfig();
 //        CoroutineScope(Dispatchers.IO).launch {
 //            showDialogFlow?.collect{

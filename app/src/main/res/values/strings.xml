@@ -361,6 +361,11 @@
     <string name="app_topic_title">No Related News Found Recommend Information Of Your Interest</string>
     <string name="app_you_may_like">You May Like</string>
     <string name="app_download_complete">Download complete</string>
+    <string name="app_allow_music_premission">Allow access to your music files.</string>
+    <string name="app_play_all">Play All</string>
+    <string name="app_play_music">Play Music</string>
+    <string name="app_delete_audio">Delete Audio</string>
+    <string name="app_close">Close</string>
 
 
 </resources>

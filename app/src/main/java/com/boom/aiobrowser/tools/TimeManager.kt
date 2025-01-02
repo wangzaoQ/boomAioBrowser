@@ -38,6 +38,11 @@ object TimeManager {
         return SimpleDateFormat("yyyy.MM.dd").format(Date(time?:System.currentTimeMillis()))
     }
 
+    fun getAudioTime(time:Long): String {
+        val tmpDate = SimpleDateFormat("mm:ss", Locale.getDefault()).format(Date(time)).toString()
+        return "$tmpDate"
+    }
+
 
     fun getHistoryDay(time:Long): String {
         val calendar = Calendar.getInstance()

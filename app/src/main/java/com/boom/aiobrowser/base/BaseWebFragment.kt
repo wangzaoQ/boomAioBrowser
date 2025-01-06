@@ -402,7 +402,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 //                    return webResourceResponse
 //                }
 //            }
-            WebScan.filterUri(request?.url?.toString()?:"",WeakReference(rootActivity))
+//            WebScan.filterUri(request?.url?.toString()?:"",WeakReference(rootActivity))
             return super.shouldInterceptRequest(view, request)
         }
 
@@ -455,12 +455,12 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                 var cookieManager = CookieManager.getInstance()
                 var cookie = cookieManager.getCookie(url)?:""
                 AppLogs.dLog(fragmentTAG,"onPageFinished page mUrl:${url}  cookie:${cookie}")
-                if (WebScan.isTikTok(url)){
+//                if (WebScan.isTikTok(url)){
 //                CacheManager.pageList.get(0).cDetail
 //                mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${CacheManager.pageList.get(0).cDetail}");
-                }else if (WebScan.isPornhub(url)){
-                    WebScan.filterUri(url, WeakReference(rootActivity))
-                }
+//                }else if (WebScan.isPornhub(url)){
+//                    WebScan.filterUri(url, WeakReference(rootActivity))
+//                }
 //            evaluateHTML(view!!)
                 WebScan.reset()
             }

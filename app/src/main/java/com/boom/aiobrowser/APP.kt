@@ -105,6 +105,7 @@ class APP: Application(), ViewModelStoreOwner {
         val bottomLiveData  by lazy { ProtectedUnPeekLiveData<String>() }
         val videoScanLiveData by lazy { ProtectedUnPeekLiveData<VideoUIData>() }
         val videoNFLiveData by lazy { ProtectedUnPeekLiveData<VideoDownloadData>() }
+        val downloadPageLiveData by lazy { ProtectedUnPeekLiveData<String>() }
 
         val videoLiveData by lazy { ProtectedUnPeekLiveData<HashMap<Int, VideoTaskItem>>() }
         val videoUpdateLiveData by lazy { ProtectedUnPeekLiveData<String>() }
@@ -199,11 +200,12 @@ class APP: Application(), ViewModelStoreOwner {
     }
 
     private fun initAF() {
+        var startTime = System.currentTimeMillis()
         runCatching {
             var key = "Ed2FymhzHg3qqYpyH8Z9Eg"
             val conversionDataListener  = object : AppsFlyerConversionListener{
                 override fun onConversionDataSuccess(data: MutableMap<String, Any>?) {
-                    if (CacheManager.afFrom.contains("organic", true).not()) return
+                    if (CacheManager.afFrom.equals("organic", true).not()) return
                     // ...
                     data?.map {
                         AppLogs.dLog(APP.instance.TAG, " af onConversionDataSuccess: ${it.key} = ${it.value}")
@@ -214,13 +216,16 @@ class APP: Application(), ViewModelStoreOwner {
                         CacheManager.afFrom = afStatus
                         PointEvent.posePoint(PointEventKey.af_suc, Bundle().apply {
                             var userStatus = 1
-                            if (afStatus.contains("organic",true)){
+                            if (afStatus.equals("organic",true)){
                                 userStatus = 1
                             }else{
                                 userStatus = 0
                             }
                             putInt("af_user",userStatus)
+                            putLong(PointValueKey.load_time,System.currentTimeMillis()-startTime)
+                            putString(PointValueKey.network,afStatus)
                         })
+                        UIManager.isBuyUser()
                     }
                 }
                 override fun onConversionDataFail(error: String?) {
@@ -266,6 +271,7 @@ class APP: Application(), ViewModelStoreOwner {
     }
 
     private fun initAdjust() {
+        var startTime = System.currentTimeMillis()
         runCatching {
             val config = AdjustConfig(this, "ih2pm2dr3k74", AdjustConfig.ENVIRONMENT_SANDBOX)
             config.setOnAttributionChangedListener {
@@ -283,9 +289,11 @@ class APP: Application(), ViewModelStoreOwner {
                 }
                 PointEvent.posePoint(PointEventKey.adjust_suc,Bundle().apply {
                     putInt(PointValueKey.adjust_user,userType)
+                    putLong(PointValueKey.load_time,System.currentTimeMillis()-startTime)
+                    putString(PointValueKey.network,it.network)
                 })
+                UIManager.isBuyUser()
             }
-            config.setDelayStart(5.5)
             Adjust.addSessionCallbackParameter("customer_user_id",CacheManager.getID())
             config.setOnEventTrackingSucceededListener {
                 AppLogs.dLog(APP.instance.TAG, "adjust 初始化成功 event：${it.eventToken}")

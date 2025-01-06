@@ -33,7 +33,18 @@ public abstract class VideoDownloadTask {
         mFinalUrl = taskItem.getFinalUrl();
 //        mSaveName = VideoDownloadUtils.computeMD5(taskItem.getUrl());
         mSaveName = taskItem.getFileName();
-        mSaveDir = new File(VideoDownloadUtils.getDownloadConfig().getCacheRoot(),mSaveName);
+        String name = "";
+        try{
+            if (mSaveName.contains(File.separator)){
+                name = mSaveName.substring(0,mSaveName.indexOf(File.separator));
+            }
+        }catch (Exception e){
+
+        }
+        if (name.isEmpty()){
+            name = mSaveName;
+        }
+        mSaveDir = new File(VideoDownloadUtils.getDownloadConfig().getCacheRoot(),name);
         if (!mSaveDir.exists()) {
             mSaveDir.mkdir();
         }

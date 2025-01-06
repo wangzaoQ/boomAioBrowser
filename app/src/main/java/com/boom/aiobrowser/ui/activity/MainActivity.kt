@@ -49,6 +49,7 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointManager.PointCallback
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.UIManager
+import com.boom.aiobrowser.ui.fragment.HomePageDownloadFragment
 import com.boom.aiobrowser.ui.fragment.MeFragment
 import com.boom.aiobrowser.ui.pop.DefaultPop
 import com.boom.aiobrowser.ui.pop.HomeGuidePop
@@ -77,6 +78,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
     val newsHomeFragment by lazy {
         NewsHomeFragment()
+    }
+    val downloadHomeFragment by lazy {
+        HomePageDownloadFragment()
     }
 
 //    val musicFragment by lazy {
@@ -135,56 +139,61 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 })
             }
         }
+        APP.downloadPageLiveData.observe(this){
+            acBinding.fragmentMain.setCurrentItem(2,true)
+        }
     }
 
-
     private fun clickIndex(index: Int) {
-        when (index) {
-            0 -> {
-//                APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "点击 home tab ").apply {
-//                    jumpType = JumpConfig.JUMP_HOME
-//                    jumpTitle = APP.instance.getString(R.string.app_home)
-//                })
-//                fManager.switchFragment(supportFragmentManager,R.id.fragmentMain,newsHomeFragment,mainRootFragment,"MainFragment")
-                acBinding.fragmentMain.setCurrentItem(index, false)
-                updateUI(index)
-            }
-            1->{
-                acBinding.fragmentMain.setCurrentItem(index, false)
-
-//                fManager.switchFragment(supportFragmentManager,R.id.fragmentMain,mainRootFragment,newsHomeFragment,"NewsHomeFragment")
-                updateUI(index)
-            }
-            2 ->{
-//                APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "点击 file tab").apply {
-//                    jumpType = JumpConfig.JUMP_FILE
-//                    jumpTitle = APP.instance.getString(R.string.app_files)
-//                })
-                startActivity(Intent(this@MainActivity,DownloadActivity::class.java).apply {
-                    putExtra("fromPage","home_tab")
-                })
-            }
-            3 ->{
-                acBinding.fragmentMain.setCurrentItem(2, false)
-
-//                fManager.switchFragment(supportFragmentManager,R.id.fragmentMain,mainRootFragment,meFragment,"MeFragment")
-                updateUI(index)
-            }
-            4 ->{
-                acBinding.fragmentMain.setCurrentItem(3, false)
-                updateUI(index)
-            }
-            else -> {}
-        }
+        acBinding.fragmentMain.setCurrentItem(index, false)
+        updateUI(index)
+//        when (index) {
+//            0 -> {
+////                APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "点击 home tab ").apply {
+////                    jumpType = JumpConfig.JUMP_HOME
+////                    jumpTitle = APP.instance.getString(R.string.app_home)
+////                })
+////                fManager.switchFragment(supportFragmentManager,R.id.fragmentMain,newsHomeFragment,mainRootFragment,"MainFragment")
+//                acBinding.fragmentMain.setCurrentItem(index, false)
+//                updateUI(index)
+//            }
+//            1->{
+//                acBinding.fragmentMain.setCurrentItem(index, false)
+//
+////                fManager.switchFragment(supportFragmentManager,R.id.fragmentMain,mainRootFragment,newsHomeFragment,"NewsHomeFragment")
+//                updateUI(index)
+//            }
+//            2 ->{
+////                APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "点击 file tab").apply {
+////                    jumpType = JumpConfig.JUMP_FILE
+////                    jumpTitle = APP.instance.getString(R.string.app_files)
+////                })
+////                startActivity(Intent(this@MainActivity,DownloadActivity::class.java).apply {
+////                    putExtra("fromPage","home_tab")
+////                })
+//                updateUI(index)
+//            }
+//            3 ->{
+//                acBinding.fragmentMain.setCurrentItem(2, false)
+//
+////                fManager.switchFragment(supportFragmentManager,R.id.fragmentMain,mainRootFragment,meFragment,"MeFragment")
+//                updateUI(index)
+//            }
+//            4 ->{
+//                acBinding.fragmentMain.setCurrentItem(3, false)
+//                updateUI(index)
+//            }
+//            else -> {}
+//        }
     }
 
 
 
     private fun updateUI(index: Int) {
         var endIndex = index
-        if (index == 2 ){
-            endIndex = index+1
-        }
+//        if (index == 2 ){
+//            endIndex = index+1
+//        }
         for ( start in 0 until acBinding.llMainControl.childCount){
             var ll = acBinding.llMainControl.getChildAt(start) as LinearLayoutCompat
             for (i in 0 until ll.childCount){
@@ -270,7 +279,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     fragments.apply {
                         add(mainRootFragment)
                         add(newsHomeFragment)
-//                        add(musicFragment)
+                        add(downloadHomeFragment)
                         add(meFragment)
                     }
                     offscreenPageLimit = fragments.size
@@ -374,9 +383,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                             putString("video_path", toJson(data))
                         })
                     }else{
-                        startActivity(Intent(this,DownloadActivity::class.java).apply {
-                            putExtra("fromPage","nf_download")
-                        })
+                        APP.downloadPageLiveData.postValue("nf_download")
                     }
                     allowShowPop = false
                 }
@@ -384,9 +391,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     if (nfTo == 1){
                         jumpActivity<SearchActivity>()
                     }else if (nfTo == 4){
-                        startActivity(Intent(this,DownloadActivity::class.java).apply {
-                            putExtra("fromPage","nf_fix")
-                        })
+                        APP.downloadPageLiveData.postValue("nf_fix")
                     }else if (nfTo == 2){
                         jumpActivity<HomeGuideActivity>(Bundle().apply {
                             putString(ParamsConfig.JUMP_FROM,getString(R.string.app_x))
@@ -594,6 +599,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         APP.homeJumpLiveData.removeObservers(this)
         APP.showRateLiveData.removeObservers(this)
         APP.jumpLiveData.removeObservers(this)
+        APP.topicJumpData.removeObservers(this)
+        APP.downloadPageLiveData.removeObservers(this)
         super.onDestroy()
     }
 }

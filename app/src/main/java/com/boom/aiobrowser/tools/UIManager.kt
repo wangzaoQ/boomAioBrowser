@@ -106,7 +106,7 @@ object UIManager {
             AppLogs.dLog(TAG,"buyAdjust 命中买量 match:${buyAdjust}")
             return "B"
         }
-        var buyAF = CacheManager.afFrom.contains("Organic", true).not()
+        var buyAF = CacheManager.afFrom.equals("Organic", true).not()
         if (buyAF){
             AppLogs.dLog(TAG,"buyAF 命中买量 match:${buyAF}")
             return "B"

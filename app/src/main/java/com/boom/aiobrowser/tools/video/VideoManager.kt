@@ -62,7 +62,7 @@ object VideoManager {
             .setTimeOut(DownloadConstants.READ_TIMEOUT, DownloadConstants.CONN_TIMEOUT)
             .setConcurrentCount(DownloadConstants.CONCURRENT)
             .setIgnoreCertErrors(false)
-            .setShouldM3U8Merged(false)
+            .setShouldM3U8Merged(true)
             .buildConfig();
 //        CoroutineScope(Dispatchers.IO).launch {
 //            showDialogFlow?.collect{
@@ -80,6 +80,26 @@ object VideoManager {
 
             override fun onDownloadStart(item: VideoTaskItem?) {
                 AppLogs.dLog(TAG, "onDownloadStart:${item?.url}")
+                if (item == null) return
+                var job:Job?=null
+                job = getDownloadScope(item,"onDownloadStart").launch {
+                    var model = DownloadCacheManager.queryDownloadModelByUrl(item.url)
+                    if (model != null) {
+                        if (item.downloadSize >= item.totalSize) {
+                            return@launch
+                        }
+                        model.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
+                        DownloadCacheManager.updateModel(model)
+                        CacheManager.updateTempList(model)
+                        NFShow.showDownloadNF(VideoDownloadData().createVideoDownloadData(model))
+                    }
+                    AppLogs.dLog(TAG, "收到进度消息 :${model?.downloadSize} url:${model?.fileName}")
+                    videoLiveData.postValue(HashMap<Int, VideoTaskItem>().apply {
+                        put(VideoDownloadData.DOWNLOAD_PREPARE, item)
+                    })
+                    removeJob(item,job,"onDownloadStart")
+                }
+                addJob(item,job,"onDownloadStart")
             }
 
             override fun onDownloadProgress(item: VideoTaskItem?) {
@@ -251,6 +271,7 @@ object VideoManager {
         if (job == null)return
         var jobList = jobsMap.get(item.downloadVideoId)
         jobList?.apply {
+            job?.jobCancel()
             remove(job)
         }
 //        AppLogs.dLog(TAG,"removeJob:${tag} 删除后数据大小:${jobsMap.get(item.downloadVideoId)?.size}")

@@ -330,6 +330,8 @@ object PointValueKey{
     const val from_type = "from_type"
     const val web_store = "web_store"
     const val adjust_user = "adjust_user"
+    const val load_time = "load_time"
+    const val network = "network"
 
 
 }

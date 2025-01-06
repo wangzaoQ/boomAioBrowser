@@ -44,10 +44,9 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
     }
 
     companion object{
-        fun newInstance(type:Int,fromPage:String):DownloadFragment {
+        fun newInstance(type:Int):DownloadFragment {
             val args = Bundle()
             args.putInt("fromType",type)
-            args.putString("fromPage",fromPage)
             val fragment = DownloadFragment()
             fragment.arguments = args
             return fragment
@@ -57,7 +56,6 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
     var type = 0
 
     override fun startLoadData() {
-        viewModel.value.queryDataByType(type)
     }
 
     override fun setListener() {
@@ -65,8 +63,10 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
             downloadAdapter.submitList(it)
             if(it.isEmpty()){
                 fBinding.llEmpty.visibility = View.VISIBLE
+                fBinding.llGuide.visibility = View.VISIBLE
             }else{
                 fBinding.llEmpty.visibility = View.GONE
+                fBinding.llGuide.visibility = View.GONE
             }
         }
 
@@ -149,6 +149,14 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
             DownloadControlManager.videoDelete(item!!,false)
             APP.videoUpdateLiveData.postValue(item.videoId)
         }
+        APP.videoLiveData.observe(this){
+            runCatching {
+                var map = it
+                it.keys.forEach {
+                    updateStatus(it,map.get(it)){}
+                }
+            }
+        }
     }
 
     private val downloadAdapter by lazy {
@@ -156,8 +164,8 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
     }
 
 
-    fun updateStatus(type: Int, data: VideoTaskItem?, callBack: (data: VideoDownloadData) -> Unit) {
-        AppLogs.dLog(VideoManager.TAG,"updateStatus type:${type} url:${data?.url}")
+    fun updateStatus(videoType: Int, data: VideoTaskItem?, callBack: (data: VideoDownloadData) -> Unit) {
+        AppLogs.dLog(VideoManager.TAG,"updateStatus type:${videoType} url:${data?.url}")
         if (data == null) return
         var position = -1
         for (i in 0 until downloadAdapter.items.size) {
@@ -168,19 +176,31 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
             }
         }
         AppLogs.dLog(VideoManager.TAG,"updateStatus position:${position} url:${data?.url}")
-        if (position == -1) return
-        var item = downloadAdapter.getItem(position)?:return
-//        if (item.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS)return
-        item.downloadType = type
-        item.downloadSize = data.downloadSize
-        if (item.downloadType != VideoDownloadData.DOWNLOAD_PAUSE) {
-            item.size = data.totalSize
-        }
-        if (type == VideoDownloadData.DOWNLOAD_SUCCESS){
-            downloadAdapter.remove(item)
-            callBack.invoke(item)
+        if (type == 0){
+            if (position == -1){
+                if (videoType == VideoDownloadData.DOWNLOAD_PREPARE){
+//                    downloadAdapter.add(VideoDownloadData().createByVideoDownloadTask(videoType,data))
+                    viewModel.value.queryDataByType(type)
+                }
+            }else{
+                var item = downloadAdapter.getItem(position)?:return
+                item.downloadType = videoType
+                item.downloadSize = data.downloadSize
+                if (item.downloadType != VideoDownloadData.DOWNLOAD_PAUSE) {
+                    item.size = data.totalSize
+                }
+                if (videoType == VideoDownloadData.DOWNLOAD_SUCCESS){
+                    downloadAdapter.remove(item)
+                    callBack.invoke(item)
+                    updateEmptyUI()
+                }else{
+                    downloadAdapter.notifyItemChanged(position, "updateLoading")
+                }
+            }
         }else{
-            downloadAdapter.notifyItemChanged(position, "updateLoading")
+            if (videoType == VideoDownloadData.DOWNLOAD_SUCCESS){
+                viewModel.value.queryDataByType(type)
+            }
         }
     }
 
@@ -198,12 +218,33 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateEmptyUI()
+    }
+
+    private fun updateEmptyUI() {
+        if(downloadAdapter.mutableItems.isEmpty()){
+            fBinding.llEmpty.visibility = View.VISIBLE
+            fBinding.llGuide.visibility = View.VISIBLE
+        }else{
+            fBinding.llEmpty.visibility = View.GONE
+            fBinding.llGuide.visibility = View.GONE
+        }
+    }
+
     override fun setShowView() {
         type = arguments?.getInt("fromType",0)?:0
         fBinding.rv.apply {
             layoutManager = LinearLayoutManager(rootActivity,LinearLayoutManager.VERTICAL,false)
             adapter = downloadAdapter
         }
+        viewModel.value.queryDataByType(type)
+    }
+
+    override fun onDestroy() {
+//        APP.downloadPageLiveData.removeObservers(this)
+        super.onDestroy()
     }
 
     override fun getBinding(

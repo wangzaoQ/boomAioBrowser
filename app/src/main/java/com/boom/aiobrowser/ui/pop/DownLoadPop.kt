@@ -299,9 +299,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 downloadAdapter.setPopContext(this@DownLoadPop)
             }
             tvDownload.setOnClickListener {
-                context.startActivity(Intent(context, DownloadActivity::class.java).apply {
-                    putExtra("fromPage", "webpage_download_pop")
-                })
+                APP.downloadPageLiveData.postValue("webpage_download_pop")
                 PointEvent.posePoint(PointEventKey.webpage_download_pop_record)
             }
             tvClear.setOnClickListener {
@@ -347,9 +345,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 PointEvent.posePoint(PointEventKey.download_click)
                 CacheManager.dayDownloadCount += 1
                 if (btnDownloadAll.text.toString() == context.getString(R.string.app_open)){
-                    context.startActivity(Intent(context, DownloadActivity::class.java).apply {
-                        putExtra("fromPage", "webpage_download_pop")
-                    })
+                    APP.downloadPageLiveData.postValue("webpage_download_pop")
                 }else{
                     showDownloadAD {
                         download(callBack)

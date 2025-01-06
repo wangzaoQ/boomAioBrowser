@@ -9,6 +9,7 @@ import com.boom.aiobrowser.point.GeneralParams.urlEncoder
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointManager
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager.getID
 import okhttp3.Call
 import okhttp3.Callback
@@ -19,6 +20,7 @@ import java.io.IOException
 class CloakManager {
     fun getCloak(){
         if (CacheManager.isBUser)return
+        var startTime = System.currentTimeMillis()
         var url =
             "https://highroad.safebrowsers.net/pastor/frown/fungus?magma=${urlEncoder(if (APP.isDebug)"com.fast.safe.browser" else BuildConfig.APPLICATION_ID)}" +
                     "&buckaroo=${"scylla"}&trait=${urlEncoder(BuildConfig.VERSION_NAME)}&hardy=${getID()}" +
@@ -33,7 +35,9 @@ class CloakManager {
                     userStatus = 1
                 }
                 putInt("cloak_user",userStatus)
+                putLong(PointValueKey.load_time,System.currentTimeMillis()-startTime)
             })
+            UIManager.isBuyUser()
         })
     }
 

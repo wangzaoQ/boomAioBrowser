@@ -100,8 +100,8 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
     override fun setShowView() {
         fromPage = intent.getStringExtra("fromPage")?:""
         var jumpType = intent.getIntExtra("jumpType",0)
-        fragments.add(DownloadFragment.newInstance(0,fromPage))
-        fragments.add(DownloadFragment.newInstance(1,fromPage))
+        fragments.add(DownloadFragment.newInstance(0))
+        fragments.add(DownloadFragment.newInstance(1))
         acBinding.vpRoot.apply {
             offscreenPageLimit = fragments.size
             adapter = object : FragmentPagerAdapter(

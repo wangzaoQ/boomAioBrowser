@@ -81,9 +81,7 @@ class MorePop(context: Context) : BasePopupWindow(context) {
             }
             llDownload.setOnClickListener {
                 if (context is BaseActivity<*>){
-                    (context as BaseActivity<*>).startActivity(Intent(context, DownloadActivity::class.java).apply {
-                        putExtra("fromPage","home_more_pop")
-                    })
+                    APP.downloadPageLiveData.postValue("home_more_pop")
                 }
                 PointEvent.posePoint(PointEventKey.profile_download)
                 dismiss()

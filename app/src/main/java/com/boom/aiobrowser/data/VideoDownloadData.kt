@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.data
 
+import android.text.TextUtils
 import com.boom.aiobrowser.data.model.DownloadModel
 import com.boom.aiobrowser.tools.getMapByGson
 import com.boom.downloader.model.Video
@@ -15,7 +16,6 @@ class VideoDownloadData {
         var DOWNLOAD_SUCCESS = 4
         var DOWNLOAD_PREPARE = 5
 
-        var TYPE_MP4 = "video/mp4"
         var TYPE_M3U8 = "m3u8"
     }
 
@@ -70,13 +70,16 @@ class VideoDownloadData {
     fun createDownloadData(data: VideoDownloadData): VideoTaskItem {
         var task = VideoTaskItem(
             data.url,
-            data.url,
+            if (TextUtils.isEmpty(data.imageUrl)) data.url else data.imageUrl,
             data.fileName,
             "group-1"
         )
-        if (data.videoType == TYPE_MP4) {
-            task.videoType = Video.Type.MP4_TYPE
-        } else if (data.videoType == TYPE_M3U8) {
+//        if (data.videoType == TYPE_MP4) {
+//            task.videoType = Video.Type.MP4_TYPE
+//        } else if (data.videoType == TYPE_M3U8) {
+//            task.totalSize = data.size ?: 0L
+//        }
+        if (data.videoType == TYPE_M3U8) {
             task.totalSize = data.size ?: 0L
         }
         task.fileName = data.fileName
@@ -113,5 +116,20 @@ class VideoDownloadData {
         size = bean.size
         videoType = bean.videoType
         imageUrl = bean.imageUrl
+    }
+
+    fun createByVideoDownloadTask(videoDownloadType:Int,bean: VideoTaskItem?):VideoDownloadData {
+        if (bean ==null)return this
+        downloadSize = bean.downloadSize
+        downloadType = videoDownloadType
+        downloadFilePath = bean.filePath?:""
+        downloadFileName = bean.fileName?:""
+        fileName = bean.fileName?:""
+        url = bean.url
+        size = bean.totalSize
+        videoType = bean.mimeType?:""
+        imageUrl = if (TextUtils.isEmpty(bean.coverUrl)) bean.url?:"" else bean.coverUrl?:""
+        videoId = bean.downloadVideoId
+        return this
     }
 }

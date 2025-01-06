@@ -72,7 +72,7 @@ class ConfigPop(context: Context) : BasePopupWindow(context) {
                             }
                         }
                         addTest("af:${CacheManager.afFrom}") {
-                            if (CacheManager.afFrom == "Organic"){
+                            if (CacheManager.afFrom.equals("Organic",true)){
                                 CacheManager.afFrom = "买量"
                             }else{
                                 CacheManager.afFrom = "Organic"

@@ -127,7 +127,7 @@ public class MultiSegVideoDownloadTask extends VideoDownloadTask {
                 @Override
                 public void onProgress(VideoRange range, int id, long cachedSize) {
                     long size = startList.get(id) +  cachedSize;
-                    LogUtils.i(DownloadConstants.TAG, "onProgress ID="+id+", size=" + size);
+//                    LogUtils.i(DownloadConstants.TAG, "onProgress ID="+id+", size=" + size);
                     cachedMap.put(id, size);
                     notifyOnProgress(cachedMap);
                 }
@@ -193,7 +193,7 @@ public class MultiSegVideoDownloadTask extends VideoDownloadTask {
             int id = (int) entry.getKey();
             long cachedSize = (long) entry.getValue();
             cachedSizes.add(id, cachedSize);
-            LogUtils.i(DownloadConstants.TAG, "saveCacheInfo id="+id+", cachedSize=" + cachedSize);
+//            LogUtils.i(DownloadConstants.TAG, "saveCacheInfo id="+id+", cachedSize=" + cachedSize);
         }
 
         MultiRangeInfo rangeInfo = new MultiRangeInfo();

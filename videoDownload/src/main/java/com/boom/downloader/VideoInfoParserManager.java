@@ -65,6 +65,20 @@ public class VideoInfoParserManager {
 //                    }
 //                }
 //            }
+//            String endUrl = taskItem.getFinalUrl();
+//            String endContentType = taskItem.getContentType();
+//            long totalSize = taskItem.getTotalSize();
+//            if (!TextUtils.isEmpty(endUrl) && totalSize>100 ){
+//                if (endUrl.contains(Video.TypeInfo.M3U8) || VideoDownloadUtils.isM3U8Mimetype(endContentType)) {
+//                    //这是M3U8视频类型
+//                    taskItem.setMimeType(Video.TypeInfo.M3U8);
+//                    parseNetworkM3U8Info(taskItem, headers, listener);
+//                } else {
+//                    taskItem.setTotalSize(totalSize);
+//                    listener.onBaseVideoInfoSuccess(taskItem);
+//                }
+//                return;
+//            }
 
             String finalUrl = taskItem.getUrl();
             LogUtils.i(DownloadConstants.TAG, "doParseVideoInfoTask url="+finalUrl);
@@ -90,7 +104,7 @@ public class VideoInfoParserManager {
             }
             taskItem.setFinalUrl(finalUrl);
             String contentType = connection.getContentType();
-
+            taskItem.setContentType(contentType);
             if (finalUrl.contains(Video.TypeInfo.M3U8) || VideoDownloadUtils.isM3U8Mimetype(contentType)) {
                 //这是M3U8视频类型
                 taskItem.setMimeType(Video.TypeInfo.M3U8);

@@ -8,7 +8,7 @@ import android.os.Message;
 import android.text.TextUtils;
 
 import com.boom.downloader.common.DownloadConstants;
-import com.boom.downloader.database.VideoDownloadDatabaseHelper;
+//import com.boom.downloader.database.VideoDownloadDatabaseHelper;
 import com.boom.downloader.listener.DownloadListener;
 import com.boom.downloader.listener.IDownloadInfosCallback;
 import com.boom.downloader.listener.IDownloadTaskListener;
@@ -41,7 +41,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class VideoDownloadManager {
     private static volatile VideoDownloadManager sInstance = null;
     private DownloadListener mGlobalDownloadListener = null;
-    private VideoDownloadDatabaseHelper mVideoDatabaseHelper = null;
+//    private VideoDownloadDatabaseHelper mVideoDatabaseHelper = null;
     private VideoDownloadQueue mVideoDownloadQueue;
     private Object mQueueLock = new Object();
     private VideoDownloadConfig mConfig;
@@ -137,7 +137,7 @@ public class VideoDownloadManager {
         //如果为null, 会crash
         mConfig = config;
         VideoDownloadUtils.setDownloadConfig(config);
-        mVideoDatabaseHelper = new VideoDownloadDatabaseHelper(ContextUtils.getApplicationContext());
+//        mVideoDatabaseHelper = new VideoDownloadDatabaseHelper(ContextUtils.getApplicationContext());
         HandlerThread stateThread = new HandlerThread("Video_download_state_thread");
         stateThread.start();
         mVideoDownloadHandler = new VideoDownloadHandler(stateThread.getLooper());
@@ -160,7 +160,26 @@ public class VideoDownloadManager {
         mGlobalDownloadListener = downloadListener;
     }
 
-    public void startDownload(VideoTaskItem taskItem) {
+//    public void startDownload(VideoTaskItem taskItem) {
+//        if (taskItem == null || TextUtils.isEmpty(taskItem.getUrl()))
+//            return;
+//
+//        synchronized (mQueueLock) {
+//            if (mVideoDownloadQueue.contains(taskItem)) {
+//                taskItem = mVideoDownloadQueue.getTaskItem(taskItem.getUrl());
+//            } else {
+//                mVideoDownloadQueue.offer(taskItem);
+//            }
+//        }
+//        taskItem.setPaused(false);
+//        taskItem.setDownloadCreateTime(taskItem.getDownloadCreateTime());
+//        taskItem.setTaskState(VideoTaskState.PENDING);
+//        VideoTaskItem tempTaskItem = (VideoTaskItem) taskItem.clone();
+//        mVideoDownloadHandler.obtainMessage(DownloadConstants.MSG_DOWNLOAD_PENDING, tempTaskItem).sendToTarget();
+//        startDownload(taskItem, null);
+//    }
+
+    public void startDownload(VideoTaskItem taskItem, Map<String, String> headers) {
         if (taskItem == null || TextUtils.isEmpty(taskItem.getUrl()))
             return;
 
@@ -174,14 +193,10 @@ public class VideoDownloadManager {
         taskItem.setPaused(false);
         taskItem.setDownloadCreateTime(taskItem.getDownloadCreateTime());
         taskItem.setTaskState(VideoTaskState.PENDING);
+        taskItem.setHeaders(headers);
         VideoTaskItem tempTaskItem = (VideoTaskItem) taskItem.clone();
+        mVideoItemTaskMap.put(taskItem.getUrl(), taskItem);
         mVideoDownloadHandler.obtainMessage(DownloadConstants.MSG_DOWNLOAD_PENDING, tempTaskItem).sendToTarget();
-        startDownload(taskItem, null);
-    }
-
-    public void startDownload(VideoTaskItem taskItem, Map<String, String> headers) {
-        if (taskItem == null || TextUtils.isEmpty(taskItem.getUrl()))
-            return;
         parseVideoDownloadInfo(taskItem, headers);
     }
 
@@ -260,9 +275,11 @@ public class VideoDownloadManager {
         }, headers);
     }
 
+    //
     private void startM3U8VideoDownloadTask(final VideoTaskItem taskItem, M3U8 m3u8, Map<String, String> headers) {
         taskItem.setTaskState(VideoTaskState.PREPARE);
         mVideoItemTaskMap.put(taskItem.getUrl(), taskItem);
+        LogUtils.i(DownloadConstants.TAG, "startM3U8VideoDownloadTask 增加 size"+mVideoItemTaskMap.size());
         VideoTaskItem tempTaskItem = (VideoTaskItem) taskItem.clone();
         mVideoDownloadHandler.obtainMessage(DownloadConstants.MSG_DOWNLOAD_PREPARE, tempTaskItem).sendToTarget();
         synchronized (mQueueLock) {
@@ -279,8 +296,13 @@ public class VideoDownloadManager {
     }
 
     private void startBaseVideoDownloadTask(VideoTaskItem taskItem, Map<String, String> headers) {
+        if (!mVideoDownloadQueue.contains(taskItem)){
+            LogUtils.i(DownloadConstants.TAG, "startBaseVideoDownloadTask 任务终止");
+            return;
+        }
         taskItem.setTaskState(VideoTaskState.PREPARE);
         mVideoItemTaskMap.put(taskItem.getUrl(), taskItem);
+        LogUtils.i(DownloadConstants.TAG, "startBaseVideoDownloadTask 增加 size"+mVideoItemTaskMap.size());
         VideoTaskItem tempTaskItem = (VideoTaskItem) taskItem.clone();
         mVideoDownloadHandler.obtainMessage(DownloadConstants.MSG_DOWNLOAD_PREPARE, tempTaskItem).sendToTarget();
         synchronized (mQueueLock) {
@@ -333,11 +355,13 @@ public class VideoDownloadManager {
 
                 @Override
                 public void onTaskPaused() {
+                    LogUtils.i(DownloadConstants.TAG, "onTaskPaused");
                     if (!taskItem.isErrorState() || !taskItem.isSuccessState()) {
                         taskItem.setTaskState(VideoTaskState.PAUSE);
                         taskItem.setPaused(true);
                         mVideoDownloadHandler.obtainMessage(DownloadConstants.MSG_DOWNLOAD_PAUSE, taskItem).sendToTarget();
                         mVideoDownloadHandler.removeMessages(DownloadConstants.MSG_DOWNLOAD_PROCESSING);
+                        mVideoDownloadHandler.removeMessages(DownloadConstants.MSG_DOWNLOAD_PENDING,taskItem);
                     }
                 }
 
@@ -420,7 +444,9 @@ public class VideoDownloadManager {
     }
 
     public void pauseDownloadTask(String videoUrl) {
+        LogUtils.i(DownloadConstants.TAG, "pauseDownloadTask"+mVideoItemTaskMap.size());
         if (mVideoItemTaskMap.containsKey(videoUrl)) {
+            LogUtils.i(DownloadConstants.TAG, "pauseDownloadTask 真实触发");
             VideoTaskItem taskItem = mVideoItemTaskMap.get(videoUrl);
             pauseDownloadTask(taskItem);
         }
@@ -440,9 +466,11 @@ public class VideoDownloadManager {
     }
 
     public boolean resumeDownload(String videoUrl) {
+        LogUtils.i(DownloadConstants.TAG, "resumeDownload"+mVideoItemTaskMap.size());
         if (mVideoItemTaskMap.containsKey(videoUrl)) {
+            LogUtils.i(DownloadConstants.TAG, "resumeDownload  真实触发");
             VideoTaskItem taskItem = mVideoItemTaskMap.get(videoUrl);
-            startDownload(taskItem);
+            startDownload(taskItem,taskItem.getHeaders());
         }else {
             return false;
         }
@@ -456,7 +484,7 @@ public class VideoDownloadManager {
             pauseDownloadTask(taskItem);
 //            String saveName = VideoDownloadUtils.computeMD5(taskItem.getUrl());
             File file = new File(cacheFilePath + File.separator + taskItem.getFileName());
-            WorkerThreadHandler.submitRunnableTask(() -> mVideoDatabaseHelper.deleteDownloadItemByUrl(taskItem));
+//            WorkerThreadHandler.submitRunnableTask(() -> mVideoDatabaseHelper.deleteDownloadItemByUrl(taskItem));
             try {
                 if (shouldDeleteSourceFile) {
                     VideoStorageUtils.delete(file);
@@ -473,7 +501,9 @@ public class VideoDownloadManager {
     }
 
     public void deleteVideoTask(String videoUrl, boolean shouldDeleteSourceFile) {
+        LogUtils.i(DownloadConstants.TAG, "deleteVideoTask"+mVideoItemTaskMap.size());
         if (mVideoItemTaskMap.containsKey(videoUrl)) {
+            LogUtils.i(DownloadConstants.TAG, "deleteVideoTask 真实触发");
             VideoTaskItem taskItem = mVideoItemTaskMap.get(videoUrl);
             deleteVideoTask(taskItem, shouldDeleteSourceFile);
             mVideoItemTaskMap.remove(videoUrl);
@@ -528,30 +558,30 @@ public class VideoDownloadManager {
                 dispatchDownloadInfos();
             } else if (msg.what == DownloadConstants.MSG_DELETE_ALL_FILES) {
                 //删除数据库中所有记录
-                WorkerThreadHandler.submitRunnableTask(() -> mVideoDatabaseHelper.deleteAllDownloadInfos());
+//                WorkerThreadHandler.submitRunnableTask(() -> mVideoDatabaseHelper.deleteAllDownloadInfos());
             } else {
                 dispatchDownloadMessage(msg.what, (VideoTaskItem) msg.obj);
             }
         }
 
         private void dispatchDownloadInfos() {
-            WorkerThreadHandler.submitRunnableTask(() -> {
-                List<VideoTaskItem> taskItems = mVideoDatabaseHelper.getDownloadInfos();
-                for (VideoTaskItem taskItem : taskItems) {
-                    if (mConfig != null && mConfig.shouldM3U8Merged() && taskItem.isHlsType()) {
-                        doMergeTs(taskItem, taskItem1 -> {
-                            mVideoItemTaskMap.put(taskItem1.getUrl(), taskItem1);
-                            markDownloadFinishEvent(taskItem1);
-                        });
-                    } else {
-                        mVideoItemTaskMap.put(taskItem.getUrl(), taskItem);
-                    }
-                }
-
-                for (IDownloadInfosCallback callback : mDownloadInfoCallbacks) {
-                    callback.onDownloadInfos(taskItems);
-                }
-            });
+//            WorkerThreadHandler.submitRunnableTask(() -> {
+//                List<VideoTaskItem> taskItems = mVideoDatabaseHelper.getDownloadInfos();
+//                for (VideoTaskItem taskItem : taskItems) {
+//                    if (mConfig != null && mConfig.shouldM3U8Merged() && taskItem.isHlsType()) {
+//                        doMergeTs(taskItem, taskItem1 -> {
+//                            mVideoItemTaskMap.put(taskItem1.getUrl(), taskItem1);
+//                            markDownloadFinishEvent(taskItem1);
+//                        });
+//                    } else {
+//                        mVideoItemTaskMap.put(taskItem.getUrl(), taskItem);
+//                    }
+//                }
+//
+//                for (IDownloadInfosCallback callback : mDownloadInfoCallbacks) {
+//                    callback.onDownloadInfos(taskItems);
+//                }
+//            });
         }
 
         private void dispatchDownloadMessage(int msg, VideoTaskItem taskItem) {
@@ -739,18 +769,18 @@ public class VideoDownloadManager {
     }
 
     private void markDownloadInfoAddEvent(VideoTaskItem taskItem) {
-        WorkerThreadHandler.submitRunnableTask(() -> mVideoDatabaseHelper.markDownloadInfoAddEvent(taskItem));
+//        WorkerThreadHandler.submitRunnableTask(() -> mVideoDatabaseHelper.markDownloadInfoAddEvent(taskItem));
     }
 
     private void markDownloadProgressInfoUpdateEvent(VideoTaskItem taskItem) {
         long currentTime = System.currentTimeMillis();
         if (taskItem.getLastUpdateTime() + 1000 < currentTime) {
-            WorkerThreadHandler.submitRunnableTask(() -> mVideoDatabaseHelper.markDownloadProgressInfoUpdateEvent(taskItem));
+//            WorkerThreadHandler.submitRunnableTask(() -> mVideoDatabaseHelper.markDownloadProgressInfoUpdateEvent(taskItem));
             taskItem.setLastUpdateTime(currentTime);
         }
     }
 
     private void markDownloadFinishEvent(VideoTaskItem taskItem) {
-        WorkerThreadHandler.submitRunnableTask(() -> mVideoDatabaseHelper.markDownloadProgressInfoUpdateEvent(taskItem));
+//        WorkerThreadHandler.submitRunnableTask(() -> mVideoDatabaseHelper.markDownloadProgressInfoUpdateEvent(taskItem));
     }
 }

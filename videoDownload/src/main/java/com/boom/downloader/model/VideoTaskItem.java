@@ -4,6 +4,8 @@ import com.boom.downloader.utils.VideoDownloadUtils;
 import com.boom.downloader.utils.VideoStorageUtils;
 import com.boom.downloader.m3u8.M3U8;
 
+import java.util.Map;
+
 public class VideoTaskItem implements Cloneable {
 
     private String mUrl;                 //下载视频的url
@@ -33,7 +35,9 @@ public class VideoTaskItem implements Cloneable {
     private String mFilePath;            //文件完整路径(包括文件名)
     private String downloadVideoId;
     private boolean mPaused;
-
+    private String contentType;// 判断是否是m3u8
+    //头信息
+    private Map<String, String> headers;
     public VideoTaskItem(String url) {
         this(url, "", "", "");
     }
@@ -346,5 +350,21 @@ public class VideoTaskItem implements Cloneable {
 
     public void setDownloadVideoId(String downloadVideoId) {
         this.downloadVideoId = downloadVideoId;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
+    public void setHeaders(Map<String, String> headers) {
+        this.headers = headers;
     }
 }

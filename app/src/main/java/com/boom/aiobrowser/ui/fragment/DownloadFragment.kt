@@ -27,6 +27,7 @@ import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.tools.video.VideoManager
 import com.boom.aiobrowser.ui.activity.VideoPreActivity
 import com.boom.aiobrowser.ui.adapter.VideoDownloadAdapter
+import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.VideoMorePop
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
@@ -64,6 +65,9 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
             if(it.isEmpty()){
                 fBinding.llEmpty.visibility = View.VISIBLE
                 fBinding.llGuide.visibility = View.VISIBLE
+                fBinding.llGuide.setOnClickListener {
+                    DownloadVideoGuidePop(rootActivity).createPop(1) {  }
+                }
             }else{
                 fBinding.llEmpty.visibility = View.GONE
                 fBinding.llGuide.visibility = View.GONE
@@ -99,9 +103,7 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
                     VideoDownloadManager.getInstance().pauseDownloadTask(url)
                     downloadAdapter.notifyItemChanged(position,"updateLoading")
                 }else if (downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
-                    rootActivity.jumpActivity<VideoPreActivity>(Bundle().apply {
-                        putString("video_path", toJson(data))
-                    })
+                    VideoPreActivity.startVideoPreActivity(rootActivity,data)
                     PointEvent.posePoint(PointEventKey.download_page_play,Bundle().apply {
                         putString("video_url",url)
                     })
@@ -220,13 +222,16 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
 
     override fun onResume() {
         super.onResume()
-        updateEmptyUI()
+        viewModel.value.queryDataByType(type)
     }
 
     private fun updateEmptyUI() {
         if(downloadAdapter.mutableItems.isEmpty()){
             fBinding.llEmpty.visibility = View.VISIBLE
             fBinding.llGuide.visibility = View.VISIBLE
+            fBinding.llGuide.setOnClickListener {
+                DownloadVideoGuidePop(rootActivity).createPop(1) {  }
+            }
         }else{
             fBinding.llEmpty.visibility = View.GONE
             fBinding.llGuide.visibility = View.GONE

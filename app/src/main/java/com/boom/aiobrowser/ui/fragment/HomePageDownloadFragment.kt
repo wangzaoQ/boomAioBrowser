@@ -41,14 +41,25 @@ class HomePageDownloadFragment : BaseFragment<BrowserHomeDownloadBinding>(){
             var tips4 = FirstDownloadTips(rootActivity)
             tips4?.createPop(fBinding.tvDone,4)
         }
-        if (AioADDataManager.adFilter1().not()) {
-            PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
-                putString(PointValueKey.ad_pos_id, AD_POINT.aobws_download_one)
-            })
-        }
-        AioADShowManager(rootActivity, ADEnum.NATIVE_DOWNLOAD_AD,"下载页原生"){
+    }
 
-        }.showNativeAD(fBinding.flRoot, AD_POINT.aobws_download_one)
+    override fun onResume() {
+        super.onResume()
+        rootActivity.addLaunch(success = {
+            while (APP.instance.isHideSplash.not()){
+                delay(1000)
+            }
+            withContext(Dispatchers.Main){
+                if (AioADDataManager.adFilter1().not()) {
+                    PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
+                        putString(PointValueKey.ad_pos_id, AD_POINT.aobws_download_one)
+                    })
+                    AioADShowManager(rootActivity, ADEnum.NATIVE_DOWNLOAD_AD,"下载页原生"){
+
+                    }.showNativeAD(fBinding.flRoot, AD_POINT.aobws_download_one)
+                }
+            }
+        }, failBack = {})
     }
 
     override fun setListener() {

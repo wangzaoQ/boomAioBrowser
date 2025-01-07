@@ -115,9 +115,7 @@ class DownloadAdapter(): BaseQuickAdapter<VideoUIData, DownloadAdapter.VH>() {
                         var data = childAdapter.getItem(position)
                         data?.apply {
                             if (downloadType == VideoDownloadData.DOWNLOAD_SUCCESS) {
-                                (context as BaseActivity<*>).jumpActivity<VideoPreActivity>(Bundle().apply {
-                                    putString("video_path", toJson(data))
-                                })
+                                VideoPreActivity.startVideoPreActivity((context as BaseActivity<*>),data)
                             } else{
                                 item.formatsList.forEach {
                                     it.videoChecked = false

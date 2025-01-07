@@ -16,6 +16,8 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.NewsData
@@ -44,6 +46,7 @@ import com.boom.aiobrowser.ui.fragment.NewsHomeFragment
 import com.boom.aiobrowser.ui.fragment.StartFragment
 import com.boom.aiobrowser.ui.fragment.WebFragment
 import com.boom.aiobrowser.other.isAndroid12
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointManager.PointCallback
@@ -147,44 +150,11 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     private fun clickIndex(index: Int) {
         acBinding.fragmentMain.setCurrentItem(index, false)
         updateUI(index)
-//        when (index) {
-//            0 -> {
-////                APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "点击 home tab ").apply {
-////                    jumpType = JumpConfig.JUMP_HOME
-////                    jumpTitle = APP.instance.getString(R.string.app_home)
-////                })
-////                fManager.switchFragment(supportFragmentManager,R.id.fragmentMain,newsHomeFragment,mainRootFragment,"MainFragment")
-//                acBinding.fragmentMain.setCurrentItem(index, false)
-//                updateUI(index)
-//            }
-//            1->{
-//                acBinding.fragmentMain.setCurrentItem(index, false)
-//
-////                fManager.switchFragment(supportFragmentManager,R.id.fragmentMain,mainRootFragment,newsHomeFragment,"NewsHomeFragment")
-//                updateUI(index)
-//            }
-//            2 ->{
-////                APP.jumpLiveData.postValue(JumpDataManager.getCurrentJumpData(tag = "点击 file tab").apply {
-////                    jumpType = JumpConfig.JUMP_FILE
-////                    jumpTitle = APP.instance.getString(R.string.app_files)
-////                })
-////                startActivity(Intent(this@MainActivity,DownloadActivity::class.java).apply {
-////                    putExtra("fromPage","home_tab")
-////                })
-//                updateUI(index)
-//            }
-//            3 ->{
-//                acBinding.fragmentMain.setCurrentItem(2, false)
-//
-////                fManager.switchFragment(supportFragmentManager,R.id.fragmentMain,mainRootFragment,meFragment,"MeFragment")
-//                updateUI(index)
-//            }
-//            4 ->{
-//                acBinding.fragmentMain.setCurrentItem(3, false)
-//                updateUI(index)
-//            }
-//            else -> {}
-//        }
+        var firstTime = CacheManager.firstTime
+        if ((System.currentTimeMillis()-firstTime) > 60*1000){
+            var manager = AioADShowManager(this, ADEnum.INT_AD, tag = "底部按钮切换") {}
+            manager.showScreenAD(AD_POINT.aobws_tap_int)
+        }
     }
 
 
@@ -501,8 +471,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             showPopCount++
             showDownloadGuide(showPopCount, allowShowPop,jumpType)
         }
-
-        APP.jumpResumeData.postValue(0)
+        APP.jumpResumeData.postValue(if (allowShowPop.not()) 1 else 0)
     }
 
     private fun showDownloadGuide(showPopCount: Int, allowShowPop: Boolean,jumpType:Int) {

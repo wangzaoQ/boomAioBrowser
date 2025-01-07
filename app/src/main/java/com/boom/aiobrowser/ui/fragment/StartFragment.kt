@@ -128,8 +128,9 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
     private fun loadAD() {
         AioADDataManager.preloadAD(ADEnum.NATIVE_AD,"首页展示时")
         AioADDataManager.preloadAD(ADEnum.NATIVE_DOWNLOAD_AD,"首页展示时")
-        AioADDataManager.preloadAD(ADEnum.BANNER_AD,"首页展示时")
+//        AioADDataManager.preloadAD(ADEnum.BANNER_AD,"首页展示时")
         AioADDataManager.preloadAD(ADEnum.BANNER_AD_NEWS_DETAILS_TOP,"首页展示时")
+        AioADDataManager.preloadAD(ADEnum.BANNER_AD_NEWS_DETAILS,"首页展示时")
     }
 
     private fun showEnd() {
@@ -184,6 +185,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             if (APP.isDebug){
                 ConfigPop(rootActivity).createPop()
             }
+            CacheManager.firstTime = System.currentTimeMillis()
         }else{
             toMain("非首次")
         }
@@ -199,7 +201,6 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             NFShow.showForegroundNF()
         }, onFail = {})
         CloakManager().getCloak()
-
     }
 
     var dataIntent :Intent?=null

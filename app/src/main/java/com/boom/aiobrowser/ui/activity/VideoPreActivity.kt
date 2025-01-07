@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.ui.activity
 
 import android.content.pm.ActivityInfo
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import com.boom.aiobrowser.APP
@@ -19,6 +20,8 @@ import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getUrlIcon
 import com.boom.aiobrowser.tools.getUrlSource
 import com.boom.aiobrowser.other.JumpConfig
+import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.view.CustomVideoView
 import com.boom.video.GSYVideoManager
 import com.boom.video.builder.GSYVideoOptionBuilder
@@ -27,6 +30,18 @@ import com.boom.video.utils.OrientationUtils
 import java.io.File
 
 class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
+
+
+    companion object{
+        fun startVideoPreActivity(context:BaseActivity<*>,data:VideoDownloadData){
+            var manager = AioADShowManager(context as BaseActivity<*>, ADEnum.INT_AD, tag = "播放视频") {
+                context.jumpActivity<VideoPreActivity>(Bundle().apply {
+                    putString("video_path", toJson(data))
+                })
+            }
+            manager.showScreenAD(AD_POINT.aobws_play_int)
+        }
+    }
 
     override fun getBinding(inflater: LayoutInflater): VideoActivityPreviewBinding {
         return VideoActivityPreviewBinding.inflate(layoutInflater)

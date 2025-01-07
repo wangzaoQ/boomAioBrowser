@@ -36,6 +36,7 @@ object CacheManager {
     const val KV_IS_A_USER = "KV_IS_A_USER"
     const val KV_IS_SEND_B = "KV_IS_SEND_B"
     const val KV_DAY_DOWNLOAD_COUNT = "KV_DAY_DOWNLOAD_COUNT"
+    const val KV_FIRST_TIME = "KV_FIRST_TIME"
     const val KV_NEWS_READ_COUNT = "KV_NEWS_READ_COUNT"
     const val KV_DAY_SHOW_ADD_SHORT = "KV_DAY_SHOW_ADD_SHORT2"
     const val KV_DAY_SHOW_BATTERY = "KV_DAY_SHOW_BATTERY"
@@ -189,6 +190,14 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_DAY_DOWNLOAD_COUNT, value)
+        }
+
+    var firstTime:Long
+        get() {
+            return mmkv.decodeLong(KV_FIRST_TIME, 0)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_TIME, value)
         }
 
     var newsReadCount:Int

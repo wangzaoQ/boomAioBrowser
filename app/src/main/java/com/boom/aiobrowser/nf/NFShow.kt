@@ -27,6 +27,7 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.GlideManager
 import com.boom.aiobrowser.tools.WakeManager
+import com.boom.aiobrowser.tools.video.VideoManager
 import com.boom.aiobrowser.tools.web.WebScan
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -127,8 +128,8 @@ object NFShow {
     fun showDownloadNF(data: VideoDownloadData, posePoint:Boolean = false) {
         if (nfAllow().not())return
         var lastTime = videoTimeMap.get(data.videoId)?:0L
-        if (data.downloadType == VideoDownloadData.DOWNLOAD_LOADING && System.currentTimeMillis()- lastTime<1000){
-            AppLogs.dLog(NFManager.TAG,"${data.fileName} 间隔时间过小 不刷新")
+        if (data.downloadType == VideoDownloadData.DOWNLOAD_LOADING && (System.currentTimeMillis()- lastTime)<1000){
+            AppLogs.dLog(VideoManager.TAG,"${data.fileName} 间隔时间过小 不刷新")
             return
         }
         videoTimeMap.put(data.videoId!!,System.currentTimeMillis())

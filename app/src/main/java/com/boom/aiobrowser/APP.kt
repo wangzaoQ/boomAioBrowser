@@ -135,7 +135,6 @@ class APP: Application(), ViewModelStoreOwner {
         registerActivityLifecycleCallbacks(lifecycleApp)
     }
 
-
     private fun configWebViewCacheDirWithAndroidP() {
         runCatching {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

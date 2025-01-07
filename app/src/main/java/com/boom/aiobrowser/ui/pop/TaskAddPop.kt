@@ -58,10 +58,10 @@ class TaskAddPop (context: Context) : BasePopupWindow(context){
                 PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
                     putString(PointValueKey.ad_pos_id, AD_POINT.aobws_task_add)
                 })
-                val data = AioADDataManager.getCacheAD(ADEnum.BANNER_AD)
+                val data = AioADDataManager.getCacheAD(ADEnum.BANNER_AD_NEWS_DETAILS)
                 data?.apply {
-                    AioADShowManager(context as BaseActivity<*>, ADEnum.BANNER_AD,"添加任务过渡弹窗 banner"){
-                    }.showADBanner(defaultBinding!!.flRoot,this,AD_POINT.aobws_task_add)
+                    AioADShowManager(context as BaseActivity<*>, ADEnum.BANNER_AD_NEWS_DETAILS,"添加任务过渡弹窗 原生/banner"){
+                    }.showNativeAD(defaultBinding!!.flRoot,AD_POINT.aobws_task_add)
                 }
             }
             llRoot.setOnClickListener {

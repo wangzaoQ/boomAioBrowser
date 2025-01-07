@@ -73,13 +73,15 @@
         android:id="@+id/flRoot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rlTop"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="3dp"
         ></FrameLayout>
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/vpRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/flRoot"
+        android:layout_below="@+id/rlTop"
+        android:layout_above="@+id/flRoot"
         />
 
 

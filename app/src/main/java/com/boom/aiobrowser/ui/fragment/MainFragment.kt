@@ -75,7 +75,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             fBinding.topSearch.updateEngine(it)
         }
         APP.jumpResumeData.observe(this){
-            jump()
+            jump(it == 1)
         }
         APP.homeTabLiveData.observe(this){
             updateTopTab()
@@ -289,14 +289,14 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         jump()
     }
 
-    open fun jump() {
+    open fun jump(isNfClick:Boolean = false) {
         AppLogs.dLog(fragmentTAG,"jump 触发")
         if (APP.instance.isHideSplash.not())return
         AppLogs.dLog(fragmentTAG,"jump 跳过限制")
         AppLogs.dLog(fragmentTAG,"onResume")
         PointEvent.posePoint(PointEventKey.home_page)
         var jumpData:JumpData
-        if (firstLoad){
+        if (firstLoad && isNfClick.not()){
             firstLoad = false
             jumpData = JumpDataManager.getCurrentJumpData(tag = "MainFragment onResume 首次")
             if (jumpData.jumpType == JumpConfig.JUMP_WEB){

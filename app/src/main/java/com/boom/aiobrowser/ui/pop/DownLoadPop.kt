@@ -189,6 +189,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             withContext(Dispatchers.Main) {
                 downloadAdapter.submitList(endList)
                 updateBottomSize()
+                defaultBinding?.tvClear?.performClick()
             }
         }, failBack = {})
     }
@@ -362,9 +363,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 if (data.formatsList.size == 1){
                     var downloadData = data.formatsList.get(0)
                     if (downloadData.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS) {
-                        context.jumpActivity<VideoPreActivity>(Bundle().apply {
-                            putString("video_path", toJson(downloadData))
-                        })
+                        VideoPreActivity.startVideoPreActivity((context as BaseActivity<*>),downloadData)
                     } else{
                         if (downloadData.videoChecked){
                             var allowCancel = false

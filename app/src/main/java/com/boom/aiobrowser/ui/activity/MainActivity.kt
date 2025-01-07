@@ -168,6 +168,13 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             var ll = acBinding.llMainControl.getChildAt(start) as LinearLayoutCompat
             for (i in 0 until ll.childCount){
                 ll.getChildAt(i).isEnabled = (start == endIndex).not()
+                if (start == endIndex){
+                    ll.getChildAt(i).scaleX = 1.2f
+                    ll.getChildAt(i).scaleY = 1.2f
+                }else{
+                    ll.getChildAt(i).scaleX = 1.0f
+                    ll.getChildAt(i).scaleY = 1.0f
+                }
             }
         }
     }

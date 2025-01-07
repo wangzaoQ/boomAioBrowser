@@ -17,6 +17,7 @@ import com.boom.aiobrowser.other.TopicConfig
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointManager
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.encryptECB
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getTopicDataLan
@@ -258,7 +259,9 @@ class AppViewModel : BaseDataModel() {
         if (CacheManager.campaignId.isNullOrEmpty().not()) {
             return
         }
+        var startTime = 0L
         if (isCurrent){
+            startTime = System.currentTimeMillis()
             PointEvent.posePoint(PointEventKey.attribution_req)
         }
 
@@ -298,7 +301,7 @@ class AppViewModel : BaseDataModel() {
                 var data = getBeanByGson(bodyStr, SourceData::class.java)
                 AppLogs.dLog(APP.instance.TAG, "查询归因:${toJson(data)}")
                 if (data?.campaign_id.isNullOrEmpty() && currentCount < maxCount) {
-                    delay(2000)
+                    delay(500)
                     getCampaign(false)
                     return@loadData
                 }
@@ -306,6 +309,7 @@ class AppViewModel : BaseDataModel() {
                 PointEvent.posePoint(PointEventKey.attribution_suc)
                 PointEvent.posePoint(PointEventKey.track_platform, Bundle().apply {
                     putString("from",data?.track_platform?:"")
+                    putLong(PointValueKey.load_time,System.currentTimeMillis()-startTime)
                 })
             }
         }, failBack = {}, 1)

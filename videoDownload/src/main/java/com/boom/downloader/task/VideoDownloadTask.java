@@ -1,7 +1,9 @@
 package com.boom.downloader.task;
 
+import com.boom.downloader.common.DownloadConstants;
 import com.boom.downloader.listener.IDownloadTaskListener;
 import com.boom.downloader.model.VideoTaskItem;
+import com.boom.downloader.utils.LogUtils;
 import com.boom.downloader.utils.VideoDownloadUtils;
 
 import java.io.File;
@@ -35,8 +37,8 @@ public abstract class VideoDownloadTask {
         mSaveName = taskItem.getFileName();
         String name = "";
         try{
-            if (mSaveName.contains(File.separator)){
-                name = mSaveName.substring(0,mSaveName.indexOf(File.separator));
+            if (mSaveName.contains(".")){
+                name = mSaveName.substring(0,mSaveName.indexOf("."));
             }
         }catch (Exception e){
 
@@ -44,6 +46,7 @@ public abstract class VideoDownloadTask {
         if (name.isEmpty()){
             name = mSaveName;
         }
+        LogUtils.i(DownloadConstants.TAG,"VideoDownloadTask name:"+name + " mSaveName:"+mSaveName);
         mSaveDir = new File(VideoDownloadUtils.getDownloadConfig().getCacheRoot(),name);
         if (!mSaveDir.exists()) {
             mSaveDir.mkdir();

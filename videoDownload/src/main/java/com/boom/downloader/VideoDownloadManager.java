@@ -182,7 +182,7 @@ public class VideoDownloadManager {
     public void startDownload(VideoTaskItem taskItem, Map<String, String> headers) {
         if (taskItem == null || TextUtils.isEmpty(taskItem.getUrl()))
             return;
-
+        LogUtils.w(DownloadConstants.TAG, "startDownload" + taskItem.getFileName());
         synchronized (mQueueLock) {
             if (mVideoDownloadQueue.contains(taskItem)) {
                 taskItem = mVideoDownloadQueue.getTaskItem(taskItem.getUrl());
@@ -190,6 +190,7 @@ public class VideoDownloadManager {
                 mVideoDownloadQueue.offer(taskItem);
             }
         }
+        LogUtils.w(DownloadConstants.TAG, "startDownload 跳过 synchronized" + taskItem.getFileName());
         taskItem.setPaused(false);
         taskItem.setDownloadCreateTime(taskItem.getDownloadCreateTime());
         taskItem.setTaskState(VideoTaskState.PENDING);
@@ -231,6 +232,7 @@ public class VideoDownloadManager {
     }
 
     private void parseNetworkVideoInfo(final VideoTaskItem taskItem, final Map<String, String> headers) {
+        LogUtils.w(DownloadConstants.TAG, "parseNetworkVideoInfo" + taskItem.getFileName());
         VideoInfoParserManager.getInstance().parseVideoInfo(taskItem, new IVideoInfoListener() {
             @Override
             public void onFinalUrl(String finalUrl) {
@@ -305,11 +307,11 @@ public class VideoDownloadManager {
         LogUtils.i(DownloadConstants.TAG, "startBaseVideoDownloadTask 增加 size"+mVideoItemTaskMap.size());
         VideoTaskItem tempTaskItem = (VideoTaskItem) taskItem.clone();
         mVideoDownloadHandler.obtainMessage(DownloadConstants.MSG_DOWNLOAD_PREPARE, tempTaskItem).sendToTarget();
-        synchronized (mQueueLock) {
-            if (mVideoDownloadQueue.getDownloadingCount() >= mConfig.getConcurrentCount()) {
-                return;
-            }
-        }
+//        synchronized (mQueueLock) {
+//            if (mVideoDownloadQueue.getDownloadingCount() >= mConfig.getConcurrentCount()) {
+//                return;
+//            }
+//        }
         VideoDownloadTask downloadTask = mVideoDownloadTaskMap.get(taskItem.getUrl());
         if (downloadTask == null) {
 //            downloadTask = new BaseVideoDownloadTask(taskItem, headers);
@@ -395,7 +397,7 @@ public class VideoDownloadManager {
                     }
                 }
             });
-
+            LogUtils.i(DownloadConstants.TAG, "downloadTask.startDownload "+taskItem.getFileName());
             downloadTask.startDownload();
         }
     }
@@ -537,7 +539,7 @@ public class VideoDownloadManager {
                 if (downloadingCount == mVideoDownloadQueue.size())
                     break;
                 VideoTaskItem item1 = mVideoDownloadQueue.peekPendingTask();
-                startDownload(item1, null);
+                startDownload(item1, item1.getHeaders());
                 pendingCount--;
                 downloadingCount++;
             }

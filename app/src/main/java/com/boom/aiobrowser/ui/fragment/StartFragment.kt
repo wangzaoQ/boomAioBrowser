@@ -23,6 +23,7 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.other.UrlConfig
 import com.boom.aiobrowser.tools.CloakManager
+import com.boom.aiobrowser.tools.UIManager
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.WebActivity
 import com.boom.aiobrowser.ui.pop.ConfigPop
@@ -41,6 +42,9 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
     override fun setListener() {
         fBinding.btnBrowser.setOneClick {
             PointEvent.posePoint(PointEventKey.launch_page_start)
+            if (CacheManager.campaignId.isNullOrEmpty()){
+                APP.instance.appModel.getCampaign()
+            }
             toMain("点击Start",true)
         }
         fBinding.apply {
@@ -68,7 +72,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
                     showEnd()
                 }
             }else{
-                if (CacheManager.campaignId.isNullOrEmpty().not()){
+                if (CacheManager.campaignId.isNullOrEmpty().not() && UIManager.isBuyUser()){
                     if (APP.isDebug){
                         AppLogs.dLog(APP.instance.TAG,"当前已查到归因:${CacheManager.campaignId}")
                     }

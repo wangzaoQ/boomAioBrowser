@@ -39,6 +39,7 @@ import com.boom.aiobrowser.ui.activity.WebDetailsActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.LoadingPop
 import com.boom.aiobrowser.ui.pop.SearchPop
+import com.boom.aiobrowser.ui.pop.TabPop
 import com.boom.base.adapter4.QuickAdapterHelper
 import com.boom.base.adapter4.loadState.LoadState
 import com.boom.base.adapter4.loadState.trailing.TrailingLoadStateAdapter
@@ -46,6 +47,7 @@ import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import pop.basepopup.BasePopupWindow.OnDismissListener
 import java.lang.ref.WeakReference
 
 
@@ -169,6 +171,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         newsAdapter.addOnDebouncedChildClick(R.id.rlMore) { adapter, view, position ->
             rootActivity.jumpActivity<TrendingNewsListActivity>()
         }
+        newsAdapter.addOnDebouncedChildClick(R.id.tvTab) { adapter, view, position ->
+            showTabPop()
+        }
         newsAdapter.addOnDebouncedChildClick(R.id.rlSearch) { adapter, view, position ->
             JumpDataManager.getCurrentJumpData(isReset = true,tag = "mainFragment 点击搜索").apply {
                 jumpType = JumpConfig.JUMP_SEARCH
@@ -289,8 +294,21 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         jump()
     }
 
+
+    fun showTabPop() {
+        var tabPop = TabPop(rootActivity)
+        tabPop.createPop()
+        tabPop.setOnDismissListener(object : OnDismissListener(){
+            override fun onDismiss() {
+                updateTopUI()
+            }
+        })
+        PointEvent.posePoint(PointEventKey.webpage_tag)
+    }
+
     open fun jump(isNfClick:Boolean = false) {
         AppLogs.dLog(fragmentTAG,"jump 触发")
+        updateTopUI()
         if (APP.instance.isHideSplash.not())return
         AppLogs.dLog(fragmentTAG,"jump 跳过限制")
         AppLogs.dLog(fragmentTAG,"onResume")
@@ -328,6 +346,22 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             ShortManager.addWidgetToLaunch(APP.instance)
             ShortManager.addPinShortcut(WeakReference(rootActivity))
         },1000)
+    }
+
+    private fun updateTopUI() {
+        var count = JumpDataManager.getBrowserTabList(CacheManager.browserStatus,tag ="mainFragment 获取当前tab数量").size
+        if (count>0){
+            fBinding.topSearch.binding.tvTab.visibility = View.VISIBLE
+            fBinding.topSearch.binding.tvTab.text = "${count}"
+            fBinding.topSearch.binding.tvTab.setOneClick {
+                showTabPop()
+            }
+        }else{
+            fBinding.topSearch.binding.tvTab.visibility = View.GONE
+        }
+        if (newsAdapter.mutableItems.size>0 && newsAdapter.mutableItems.get(0).dataType == NewsData.TYPE_HOME_NEWS_TOP){
+            newsAdapter.notifyItemChanged(0,"updateTopTab")
+        }
     }
 
     private fun updateEngine(type: Int) {

@@ -253,9 +253,9 @@ class AppViewModel : BaseDataModel() {
     var maxCount = if (APP.isDebug) 4 else 15
     var currentCount = 0
     fun getCampaign(isCurrent:Boolean=true) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            return
-        }
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+//            return
+//        }
         if (CacheManager.campaignId.isNullOrEmpty().not()) {
             return
         }
@@ -276,6 +276,7 @@ class AppViewModel : BaseDataModel() {
                     put(
                         "distinct_id",
                         if (APP.isDebug) "bbf7e0edf9806583" else CacheManager.getID()
+//                        CacheManager.getID()
                     )
                     put("platform", "android")
                 }
@@ -284,11 +285,11 @@ class AppViewModel : BaseDataModel() {
 //
                 AppLogs.dLog(
                     APP.instance.TAG,
-                    "归因" + "加密后:${encryptECB(old, "tmg6UbIp2gY/JcueVU7oYQ==")}"
+                    "归因" + "加密后:${old.encryptECB("tmg6UbIp2gY/JcueVU7oYQ==")}"
                 )
 
                 var endJson = JSONObject().apply {
-                    put("encrypt", encryptECB(old, "tmg6UbIp2gY/JcueVU7oYQ=="))
+                    put("encrypt", old.encryptECB("tmg6UbIp2gY/JcueVU7oYQ=="))
                 }
                 val requestBody: RequestBody = RequestBody.create(
                     "application/json; charset=utf-8".toMediaTypeOrNull(),

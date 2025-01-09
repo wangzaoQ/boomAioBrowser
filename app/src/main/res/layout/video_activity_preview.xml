@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -12,35 +12,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/llRoot"
+
+    <FrameLayout
+        android:id="@+id/flRoot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        ></FrameLayout>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivClose"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="13dp"
+        android:layout_gravity="end"
+        android:layout_marginEnd="3dp"
+        android:layout_alignParentEnd="true"
+        app:srcCompat="@mipmap/ic_native_close"
+        android:layout_above="@+id/flRoot"
         android:visibility="gone"
         >
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivClose"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:padding="13dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="3dp"
-            app:srcCompat="@mipmap/ic_native_close">
 
-        </androidx.appcompat.widget.AppCompatImageView>
-        <FrameLayout
-            android:id="@+id/flRoot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            ></FrameLayout>
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-</FrameLayout>
+    </androidx.appcompat.widget.AppCompatImageView>
+</RelativeLayout>

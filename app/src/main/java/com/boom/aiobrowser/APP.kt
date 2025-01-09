@@ -117,6 +117,7 @@ class APP: Application(), ViewModelStoreOwner {
         val showRateLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
         val locationListUpdateLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
         val trendNewsComplete by lazy { ProtectedUnPeekLiveData<Int>() }
+        val downloadButtonLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
 
 
     }
@@ -244,20 +245,7 @@ class APP: Application(), ViewModelStoreOwner {
                 }
             }
             AppsFlyerLib.getInstance().setCustomerUserId(CacheManager.getID())
-//            AppsFlyerLib.getInstance().waitForCustomerUserId(true)
             AppsFlyerLib.getInstance().init(key, conversionDataListener, applicationContext)
-
-//            AppsFlyerLib.getInstance().setCustomerIdAndLogSession(CacheManager.getID(), this)
-//            if (AppsFlyerProperties.getInstance().getString(AppsFlyerProperties.APP_USER_ID).isNullOrEmpty()) {
-//                AppsFlyerLib.getInstance().setCustomerUserId(CacheManager.getID())
-//                AppsFlyerLib.getInstance().waitForCustomerUserId(true)
-//                AppsFlyerLib.getInstance().init(key, conversionDataListener, applicationContext)
-//
-//                AppsFlyerLib.getInstance().setCustomerIdAndLogSession(CacheManager.getID(), this)
-//
-//            } else {
-//                AppsFlyerLib.getInstance().init(key, conversionDataListener, applicationContext)
-//            }
             AppsFlyerLib.getInstance().setDebugLog(isDebug)
             AppsFlyerLib.getInstance().start(this)
             val afRevenueBuilder = AppsFlyerAdRevenue.Builder(this)

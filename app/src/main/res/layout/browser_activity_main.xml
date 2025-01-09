@@ -52,15 +52,15 @@
                 android:layout_weight="1"
                 >
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     app:srcCompat="@drawable/selector_main_home"
                     ></androidx.appcompat.widget.AppCompatImageView>
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/app_home"
-                    android:textSize="9sp"
+                    android:textSize="10sp"
                     android:layout_marginTop="3dp"
                     style="@style/app_text_bold"
                     android:textColor="@drawable/selector_tab_text"
@@ -74,15 +74,15 @@
                 android:layout_weight="1"
                 >
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     app:srcCompat="@drawable/selector_main_news"
                     ></androidx.appcompat.widget.AppCompatImageView>
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/app_news"
-                    android:textSize="9sp"
+                    android:textSize="10sp"
                     android:layout_marginTop="3dp"
                     style="@style/app_text_bold"
                     android:textColor="@drawable/selector_tab_text"
@@ -97,15 +97,15 @@
                 android:layout_weight="1"
                 >
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     app:srcCompat="@drawable/selector_main_download"
                     ></androidx.appcompat.widget.AppCompatImageView>
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/app_download"
-                    android:textSize="9sp"
+                    android:textSize="10sp"
                     android:layout_marginTop="3dp"
                     style="@style/app_text_bold"
                     android:textColor="@drawable/selector_tab_text"
@@ -120,15 +120,15 @@
                 android:visibility="gone"
                 >
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     app:srcCompat="@drawable/selector_main_music"
                     ></androidx.appcompat.widget.AppCompatImageView>
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/app_music"
-                    android:textSize="9sp"
+                    android:textSize="10sp"
                     android:layout_marginTop="3dp"
                     style="@style/app_text_bold"
                     android:textColor="@drawable/selector_tab_text"

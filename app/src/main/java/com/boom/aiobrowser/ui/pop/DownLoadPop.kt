@@ -347,6 +347,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 CacheManager.dayDownloadCount += 1
                 if (btnDownloadAll.text.toString() == context.getString(R.string.app_open)){
                     APP.downloadPageLiveData.postValue("webpage_download_pop")
+                    dismiss()
                 }else{
                     showDownloadAD {
                         download(callBack)

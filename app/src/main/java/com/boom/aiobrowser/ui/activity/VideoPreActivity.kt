@@ -85,9 +85,11 @@ class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
                         when (state) {
                             CURRENT_STATE_PAUSE -> {
                                 if (showAd)return
-                                acBinding.llRoot.visibility = View.VISIBLE
+                                acBinding.flRoot.visibility = View.VISIBLE
+                                acBinding.ivClose.visibility = View.VISIBLE
                                 acBinding.ivClose.setOneClick {
-                                    acBinding.llRoot.visibility = View.GONE
+                                    acBinding.flRoot.visibility = View.GONE
+                                    acBinding.ivClose.visibility = View.GONE
                                 }
                                 if (AioADDataManager.adFilter1().not()) {
                                     showAd = true
@@ -103,7 +105,8 @@ class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
                             }
                             else -> {
                                 showAd = false
-                                acBinding.llRoot.visibility = View.GONE
+                                acBinding.flRoot.visibility = View.GONE
+                                acBinding.ivClose.visibility = View.GONE
                             }
                         }
                     }

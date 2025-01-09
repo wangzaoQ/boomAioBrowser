@@ -379,7 +379,10 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                 fragmentTAG,
                 "mWebViewClient shouldOverrideUrlLoading:${request?.url}"
             )
-            return super.shouldOverrideUrlLoading(view, request)
+            var url = request?.url?.toString()?:""
+            return if (url.startsWith("intent://")) {
+                true
+            } else super.shouldOverrideUrlLoading(view, request)
         }
 
         override fun shouldInterceptRequest(

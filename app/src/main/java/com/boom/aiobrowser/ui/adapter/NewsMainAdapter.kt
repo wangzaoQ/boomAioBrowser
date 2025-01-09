@@ -62,6 +62,7 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.GlideManager
+import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.partitionList
@@ -770,9 +771,9 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                             if (item.adTag == ADEnum.BANNER_AD_NEWS_DETAILS.adName){
                                 adPosId = ADEnum.BANNER_AD_NEWS_DETAILS.adName
                                 adEnum = ADEnum.BANNER_AD_NEWS_DETAILS
-                                line.visibility = View.GONE
+                                line.setBackgroundColor(ContextCompat.getColor(context,R.color.white))
                             }else{
-                                line.visibility = View.VISIBLE
+                                line.setBackgroundColor(ContextCompat.getColor(context,R.color.color_black_F7F7F9))
                             }
                             if (AioADDataManager.adFilter1().not()) {
                                 PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
@@ -1175,7 +1176,7 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                         item: NewsData?,
                         payloads: List<Any>
                     ) {
-                        super.onBind(holder, position, item, payloads)
+//                        super.onBind(holder, position, item, payloads)
                         if (payloads.isNullOrEmpty()) {
                             onBindViewHolder(holder, position, item)
                         } else {
@@ -1202,7 +1203,16 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                     }
                                 }
                             } else if (payload == "updateTopTab") {
-
+                                if (item == null) return
+                                holder.viewBinding?.apply{
+                                    var count = JumpDataManager.getBrowserTabList(CacheManager.browserStatus,tag ="mainAdapter 获取当前tab数量").size
+                                    if (count>0){
+                                        tvTab.text = "${count}"
+                                        tvTab.visibility = View.VISIBLE
+                                    }else{
+                                        tvTab.visibility = View.GONE
+                                    }
+                                }
                             }
                         }
                     }
@@ -1301,6 +1311,13 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                 SearchConfig.SEARCH_ENGINE_PERPLEXITY -> {
                                     ivSearchEngine.setImageResource(R.mipmap.ic_search_perplexity)
                                 }
+                            }
+                            var count = JumpDataManager.getBrowserTabList(CacheManager.browserStatus,tag ="mainAdapter 获取当前tab数量").size
+                            if (count>0){
+                                tvTab.text = "${count}"
+                                tvTab.visibility = View.VISIBLE
+                            }else{
+                                tvTab.visibility = View.GONE
                             }
                         }
                     }

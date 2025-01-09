@@ -47,10 +47,12 @@ object NFShow {
                 if (newsList.size>3){
                     newsList = newsList.subList(0,3)
                 }
-                showNewsNF(NewsData().apply {
-                    nfSource = enum.menuName
-                    trendList = newsList
-                },enum)
+                if(newsList.isNullOrEmpty().not()){
+                    showNewsNF(NewsData().apply {
+                        nfSource = enum.menuName
+                        trendList = newsList
+                    },enum)
+                }
                 return
             }
             if (NFManager.needRefreshData(enum.menuName)) {

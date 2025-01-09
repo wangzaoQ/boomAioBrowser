@@ -10,6 +10,7 @@ import android.os.Build
 import android.text.TextUtils
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
+import com.blankj.utilcode.util.EncodeUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
@@ -421,23 +422,36 @@ fun extractDomain(url: String): MutableList<String> {
  * @param key     密匙
  * @return 返回加密后密文，编码为base64
  */
-@RequiresApi(Build.VERSION_CODES.O)
-fun encryptECB(message: String, key: String?): String? {
+//@RequiresApi(Build.VERSION_CODES.O)
+//fun encryptECB(message: String, key: String?): String? {
+//    val cipherMode = "AES/ECB/PKCS5Padding"
+//    val charsetName = "UTF-8"
+//    try {
+//        val content = message.toByteArray(charset(charsetName))
+//        val keyByte = Base64.getDecoder().decode(key)
+//        val keySpec = SecretKeySpec(keyByte, "AES")
+//        val cipher = Cipher.getInstance(cipherMode)
+//        cipher.init(Cipher.ENCRYPT_MODE, keySpec)
+//        val data = cipher.doFinal(content)
+//        val encoder = Base64.getEncoder()
+//        return encoder.encodeToString(data)
+//    } catch (e: java.lang.Exception) {
+//        e.printStackTrace()
+//    }
+//    return null
+//}
+
+fun String.encryptECB(key: String): String {
+    val key = key
     val cipherMode = "AES/ECB/PKCS5Padding"
-    val charsetName = "UTF-8"
-    try {
-        val content = message.toByteArray(charset(charsetName))
-        val keyByte = Base64.getDecoder().decode(key)
-        val keySpec = SecretKeySpec(keyByte, "AES")
-        val cipher = Cipher.getInstance(cipherMode)
-        cipher.init(Cipher.ENCRYPT_MODE, keySpec)
-        val data = cipher.doFinal(content)
-        val encoder = Base64.getEncoder()
-        return encoder.encodeToString(data)
-    } catch (e: java.lang.Exception) {
-        e.printStackTrace()
-    }
-    return null
+    val content = this.toByteArray()
+    val keyByte = EncodeUtils.base64Decode(key)
+    val keySpec = SecretKeySpec(keyByte, "AES")
+    val cipher = Cipher.getInstance(cipherMode)
+    cipher.init(Cipher.ENCRYPT_MODE, keySpec)
+    val data = cipher.doFinal(content)
+    return EncodeUtils.base64Encode2String(data)
+
 }
 
 

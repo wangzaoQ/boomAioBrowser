@@ -220,16 +220,28 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                 }
             }, failBack = {})
         }
+        APP.downloadButtonLiveData.observe(this){
+            addDownload()
+        }
     }
 
 
     open fun updateDownloadButtonStatus(status: Boolean,type:Int=0) {
-        runCatching {
+        rootActivity.addLaunch(success = {
             var size = 0
             var tempList = CacheManager.videoDownloadTempList
+            var modelList = DownloadCacheManager.queryDownloadModelDone()
+
             for (i in 0 until tempList.size){
                 var allow = false
                 tempList.get(i).formatsList.forEach {
+                    for (j in 0 until (modelList?.size?:0)){
+                        var dbData = modelList?.get(j)
+                        if (it.videoId == dbData?.videoId?:""){
+                            it.downloadType = dbData?.downloadType?:0
+                            break
+                        }
+                    }
                     if (it.downloadType != VideoDownloadData.DOWNLOAD_SUCCESS){
                         allow = true
                     }
@@ -239,42 +251,42 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                 }
             }
             if (allowShowTips().not()){
-                dragBiding?.apply {
-                    if (tempList.size>0){
-                        AppLogs.dLog(fragmentTAG,"展示有数据下载状态 type:${type}")
-                        ivDownload.visibility = View.GONE
-                        ivDownload2.visibility = View.VISIBLE
-                        if (size>0){
-                            tvDownload.visibility = View.VISIBLE
-                            tvDownload.text = "$size"
+                withContext(Dispatchers.Main){
+                    dragBiding?.apply {
+                        if (tempList.size>0){
+                            AppLogs.dLog(fragmentTAG,"展示有数据下载状态 type:${type}")
+                            ivDownload.visibility = View.GONE
+                            ivDownload2.visibility = View.VISIBLE
+                            if (size>0){
+                                tvDownload.visibility = View.VISIBLE
+                                tvDownload.text = "$size"
+                            }else{
+                                tvDownload.visibility = View.GONE
+                            }
+                            if (type != 1){
+                                ivDownload2.apply {
+                                    setAnimation("download.json")
+                                    playAnimation()
+                                }
+                                if (CacheManager.isFirstDownloadTips){
+                                    CacheManager.isFirstDownloadTips = false
+                                    tips1 = FirstDownloadTips(rootActivity)
+                                    tips1?.createPop(root,1)
+                                }
+                            }
+                            AppLogs.dLog(fragmentTAG,"展示有数据下载状态完成 type:${type}")
                         }else{
+                            AppLogs.dLog(fragmentTAG,"展示无数据下载状态")
+                            ivDownload.visibility = View.VISIBLE
+                            ivDownload2.visibility = View.GONE
                             tvDownload.visibility = View.GONE
+                            ivDownload2.cancelAnimation()
+                            AppLogs.dLog(fragmentTAG,"展示无数据下载状态完成")
                         }
-                        if (type != 1){
-                            ivDownload2.apply {
-                                setAnimation("download.json")
-                                playAnimation()
-                            }
-                            if (CacheManager.isFirstDownloadTips){
-                                CacheManager.isFirstDownloadTips = false
-                                tips1 = FirstDownloadTips(rootActivity)
-                                tips1?.createPop(root,1)
-                            }
-                        }
-                        AppLogs.dLog(fragmentTAG,"展示有数据下载状态完成 type:${type}")
-                    }else{
-                        AppLogs.dLog(fragmentTAG,"展示无数据下载状态")
-                        ivDownload.visibility = View.VISIBLE
-                        ivDownload2.visibility = View.GONE
-                        tvDownload.visibility = View.GONE
-                        ivDownload2.cancelAnimation()
-                        AppLogs.dLog(fragmentTAG,"展示无数据下载状态完成")
                     }
                 }
             }
-        }.onFailure {
-            AppLogs.dLog(fragmentTAG,it.stackTraceToString())
-        }
+        }, failBack = {})
     }
 
 
@@ -333,7 +345,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         fBinding.flTop.binding.tvToolbarSearch.text = "${jumpData?.jumpTitle} ${getSearchTitle()}"
         fBinding.refreshLayout.isRefreshing = false
 //        var key = mAgentWeb?.webCreator?.webView?.url?:""
-        addDownload()
+//        addDownload()
     }
 
     fun getSearchTitle():String{
@@ -525,7 +537,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
     override fun onResume() {
         super.onResume()
-        updateDownloadButtonStatus(false)
+        updateDownloadButtonStatus(false,1)
     }
 
     override fun getUrl(): String {
@@ -546,6 +558,11 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     override fun onDestroy() {
         EasyFloat.dismiss(tag = "webPop",true)
         APP.engineLiveData.removeObservers(this)
+        APP.downloadButtonLiveData.removeObservers(this)
+        APP.videoNFLiveData.removeObservers(this)
+        APP.videoLiveData.removeObservers(this)
+        APP.videoScanLiveData.removeObservers(this)
+        APP.videoUpdateLiveData.removeObservers(this)
         super.onDestroy()
     }
 }

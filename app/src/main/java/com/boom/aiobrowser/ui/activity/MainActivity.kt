@@ -59,6 +59,7 @@ import com.boom.aiobrowser.ui.pop.HomeGuidePop
 import com.boom.aiobrowser.ui.pop.MorePop
 import com.boom.aiobrowser.ui.pop.NFGuidePop
 import com.boom.aiobrowser.ui.pop.ProcessingTextPop
+import com.boom.drag.EasyFloat
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import kotlinx.coroutines.Job
@@ -168,13 +169,13 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             var ll = acBinding.llMainControl.getChildAt(start) as LinearLayoutCompat
             for (i in 0 until ll.childCount){
                 ll.getChildAt(i).isEnabled = (start == endIndex).not()
-                if (start == endIndex){
-                    ll.getChildAt(i).scaleX = 1.2f
-                    ll.getChildAt(i).scaleY = 1.2f
-                }else{
-                    ll.getChildAt(i).scaleX = 1.0f
-                    ll.getChildAt(i).scaleY = 1.0f
-                }
+//                if (start == endIndex){
+//                    ll.getChildAt(i).scaleX = 1.2f
+//                    ll.getChildAt(i).scaleY = 1.2f
+//                }else{
+//                    ll.getChildAt(i).scaleX = 1.0f
+//                    ll.getChildAt(i).scaleY = 1.0f
+//                }
             }
         }
     }
@@ -291,6 +292,11 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                                     }
                                 })
                             }
+                            if (position == 0){
+                                APP.downloadButtonLiveData.postValue(0)
+                            }else{
+                                EasyFloat.dismiss(tag = "webPop",true)
+                            }
                         }
 
                         override fun onPageScrollStateChanged(state: Int) {
@@ -347,6 +353,17 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 }else if (FirebaseConfig.newsJumpList.contains(campaignId)){
                     //news
                     jumpType = 2
+                }
+            }
+            if (jumpType == 0){
+                when (FirebaseConfig.defaultUserData?.other?:"") {
+                    "download"-> {
+                         jumpType = 3
+                     }
+                    "news"-> {
+                        jumpType = 4
+                    }
+                    else -> {}
                 }
             }
         }
@@ -432,23 +449,34 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }
         fManager.hideFragment(supportFragmentManager, startFragment!!)
         acBinding.llMainControl.visibility = View.VISIBLE
-        if (jumpType == 1){
+        if (jumpType == 1||jumpType==3){
             PointEvent.posePoint(PointEventKey.attribution_download)
-        }else if (jumpType == 2){
+            if (jumpType == 3){
+                PointEvent.posePoint(PointEventKey.attribution_other,Bundle().apply {
+                    putString("from","download")
+                })
+            }
+        }else if (jumpType == 2||jumpType==4){
             PointEvent.posePoint(PointEventKey.attribution_news)
+            if (jumpType == 4){
+                PointEvent.posePoint(PointEventKey.attribution_other,Bundle().apply {
+                    putString("from","news")
+                })
+            }
             acBinding.fragmentMain.setCurrentItem(1,true)
-        }else{
-            PointEvent.posePoint(PointEventKey.attribution_default,Bundle().apply {
-                putString("from",if (UIManager.isBuyUser()) "b" else "a")
-            })
         }
+//        else{
+//            PointEvent.posePoint(PointEventKey.attribution_default,Bundle().apply {
+//                putString("from",if (UIManager.isBuyUser()) "b" else "a")
+//            })
+//        }
         var showPopCount = 0
         if (APP.isDebug){
             AppLogs.dLog(acTAG,"首页弹窗判断 isDefaultBrowser：:${BrowserManager.isDefaultBrowser()} " +
-                    "isFirstShowBrowserDefault:${CacheManager.isFirstShowBrowserDefault} switchDefaultPop:${FirebaseConfig.switchDefaultPop} allowShowPop:${allowShowPop}")
+                    "isFirstShowBrowserDefault:${CacheManager.isFirstShowBrowserDefault} switchDefaultPop:${FirebaseConfig.switchDefaultPop} allowShowPop:${allowShowPop} jumpType:${jumpType}")
         }
-        if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault && (FirebaseConfig.switchDefaultPop) && allowShowPop && (jumpType == 0 || jumpType == 1)){
-            AppLogs.dLog(acTAG,"shouw browser pop")
+        if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault && ((jumpType > 0 && FirebaseConfig.switchDefaultPop) || jumpType == 0) && allowShowPop){
+            AppLogs.dLog(acTAG,"show browser pop")
             CacheManager.isFirstShowBrowserDefault = false
             var pop = DefaultPop(this@MainActivity)
             pop.setOnDismissListener(object :OnDismissListener(){
@@ -482,7 +510,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
 
     private fun showDownloadGuide(showPopCount: Int, allowShowPop: Boolean,jumpType:Int) {
-        if (showPopCount == 2 && jumpType == 1 && allowShowPop){
+        if (showPopCount == 2 && (jumpType == 1 || jumpType == 3) && allowShowPop){
             if (CacheManager.isFirstShowDownloadGuide){
                 AppLogs.dLog(acTAG,"允许开启引导弹窗")
                 CacheManager.isFirstShowDownloadGuide = false

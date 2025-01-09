@@ -9,6 +9,7 @@ import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.ad.AioADDataManager.adRootBean
 import com.boom.aiobrowser.data.AioADData
 import com.boom.aiobrowser.data.AioNFData
+import com.boom.aiobrowser.data.DefaultUserData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.PushData
 import com.boom.aiobrowser.firebase.FirebaseConfig.AD_DEFAULT_JSON
@@ -22,6 +23,7 @@ import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getListByGson
+import com.boom.aiobrowser.tools.toJson
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.ktx.Firebase
@@ -109,34 +111,29 @@ object FirebaseManager {
     }
 
     private fun initJumpConfig() {
-        var configBrowserFrom = ""
         runCatching {
-            configBrowserFrom = firebaseRemoteConfig?.getString("start_home_download")?:""
+            FirebaseConfig.defaultUserData = getBeanByGson(firebaseRemoteConfig?.getString("user_flow")?:"",DefaultUserData::class.java)
         }
-        AppLogs.dLog(APP.instance.TAG,"remoteConfig start_home_download:${configBrowserFrom}")
-        var splits = configBrowserFrom.split(",")
-        if (configBrowserFrom.isNullOrEmpty()||splits.isNullOrEmpty()||splits.get(0).isNullOrEmpty()){
-            configBrowserFrom = FirebaseConfig.jumpBrowserConfig
-            splits = configBrowserFrom.split(",")
-            AppLogs.dLog(APP.instance.TAG,"localConfig start_home_download:${configBrowserFrom}")
-        }
-        if (splits.isNullOrEmpty().not()){
-            FirebaseConfig.browserJumpList = splits
-        }
+        AppLogs.dLog(APP.instance.TAG,"user_flow:${ toJson(FirebaseConfig.defaultUserData)}")
+        FirebaseConfig.defaultUserData?.apply {
+            var splits = download?.split(",")
+//            if (splits.isNullOrEmpty() || splits.get(0).isNullOrEmpty()){
+//                var configBrowserFrom = FirebaseConfig.jumpBrowserConfig
+//                splits = configBrowserFrom.split(",")
+//                AppLogs.dLog(APP.instance.TAG,"localConfig start_home_download:${configBrowserFrom}")
+//            }
+            if (splits.isNullOrEmpty().not()){
+                FirebaseConfig.browserJumpList = splits?: mutableListOf()
+            }
 
-        var configNewsFrom = ""
-        runCatching {
-            configNewsFrom = firebaseRemoteConfig?.getString("start_news")?:""
-        }
-        AppLogs.dLog(APP.instance.TAG,"remoteConfig start_news:${configNewsFrom}")
-        var splitsNews = configNewsFrom.split(",")
-        if (configNewsFrom.isNullOrEmpty()||splitsNews.isNullOrEmpty()||splitsNews.get(0).isNullOrEmpty()){
-            configNewsFrom = FirebaseConfig.jumpNewsConfig
-            splitsNews = configNewsFrom.split(",")
-            AppLogs.dLog(APP.instance.TAG,"localConfig start_news:${configBrowserFrom}")
-        }
-        if (splitsNews.isNullOrEmpty().not()){
-            FirebaseConfig.newsJumpList = splitsNews
+            var splitsNews = news?.split(",")
+//            if (splitsNews.isNullOrEmpty()||splitsNews.get(0).isNullOrEmpty()){
+//                var configNewsFrom = FirebaseConfig.jumpNewsConfig
+//                splitsNews = configNewsFrom.split(",")
+//            }
+            if (splitsNews.isNullOrEmpty().not()){
+                FirebaseConfig.newsJumpList = splitsNews?: mutableListOf()
+            }
         }
     }
 

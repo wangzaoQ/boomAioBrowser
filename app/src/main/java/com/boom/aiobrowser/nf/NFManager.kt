@@ -36,6 +36,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
+import java.util.Locale
 import java.util.Objects
 import kotlin.random.Random
 
@@ -361,7 +362,13 @@ object NFManager {
                 NFShow.showNewsNFFilter(NFEnum.NF_EDITOR)
             }
             3->{
-                NFShow.showNewsNFFilter(NFEnum.NF_LOCAL)
+                var language = ""
+                runCatching {
+                    language = Locale.getDefault().language
+                }
+                if (language != "ko"){
+                    NFShow.showNewsNFFilter(NFEnum.NF_LOCAL)
+                }
             }
             4->{
                 NFShow.showNewsNFFilter(NFEnum.NF_TREND)

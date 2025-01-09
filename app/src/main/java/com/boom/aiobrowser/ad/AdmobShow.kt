@@ -11,7 +11,11 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.AioADDataManager.addADClick
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.ADResultData
+import com.boom.aiobrowser.databinding.BrowserAdNative2Binding
+import com.boom.aiobrowser.databinding.BrowserAdNative3Binding
+import com.boom.aiobrowser.databinding.BrowserAdNative4Binding
 import com.boom.aiobrowser.databinding.BrowserAdNativeBinding
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -103,14 +107,29 @@ class AdmobShow(activity: BaseActivity<*>, adEnum: ADEnum, tag: String,result: (
         val data = AioADDataManager.getCacheAD(adEnum)
         nativeAd = (data!!.adAny as NativeAd)
         if (flRoot.childCount == 0 || (flRoot.get(0) is NativeAdView).not()) {
-            val binding: BrowserAdNativeBinding = BrowserAdNativeBinding.inflate(activity.layoutInflater)
-            nativeAdView = binding.root
+            if (pointTag == AD_POINT.aobws_task_add){
+                val binding: BrowserAdNative2Binding = BrowserAdNative2Binding.inflate(activity.layoutInflater)
+                nativeAdView = binding.root
+            }else if (pointTag == ADEnum.BANNER_AD_NEWS_DETAILS.adName){
+                //新闻正文
+                val binding: BrowserAdNativeBinding = BrowserAdNativeBinding.inflate(activity.layoutInflater)
+                nativeAdView = binding.root
+            }else if (pointTag == AD_POINT.aobws_play_bnat){
+                // 播放视频
+                val binding: BrowserAdNative3Binding = BrowserAdNative3Binding.inflate(activity.layoutInflater)
+                nativeAdView = binding.root
+            }else{
+                // 新闻列表
+                val binding: BrowserAdNative4Binding = BrowserAdNative4Binding.inflate(activity.layoutInflater)
+                nativeAdView = binding.root
+            }
             flRoot.removeAllViews()
             flRoot.addView(nativeAdView)
         } else {
             nativeAdView = flRoot[0] as NativeAdView
         }
         nativeAd?.let {
+            flRoot.visibility = View.VISIBLE
             nativeAdView?.run {
                 findViewById<TextView>(R.id.is_headline)?.run {
                     text = it.headline

@@ -298,6 +298,7 @@ object PointEventKey {
     const val user_a_b = "user_a_b"
     // 归因来源
     const val track_platform = "track_platform"
+    const val attribution_other = "attribution_other"
 
 }
 
@@ -356,4 +357,5 @@ object AD_POINT{
     const val aobws_news_one = "aobws_news_one"
     const val aobws_download_one = "aobws_download_one"
     const val aobws_task_add = "aobws_task_add"
+    const val aobws_play_bnat = "aobws_play_bnat"
 }

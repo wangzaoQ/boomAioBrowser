@@ -186,7 +186,7 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
                         putString(PointValueKey.ad_pos_id, AD_POINT.aobws_download_one)
                     })
                 }
-                AioADShowManager(this@DownloadActivity,ADEnum.NATIVE_DOWNLOAD_AD,"下载页原生"){
+                AioADShowManager(this@DownloadActivity,ADEnum.BANNER_AD_NEWS_DETAILS_TOP,"下载页原生"){
 
                 }.showNativeAD(acBinding.flRoot,AD_POINT.aobws_download_one)
             }

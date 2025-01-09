@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.get
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.AioADDataManager.platformMax
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.ADResultData
 import com.boom.aiobrowser.databinding.BrowserAdNativeBinding
@@ -67,7 +68,7 @@ class AioADShowManager(
     ) {
         val data = AioADDataManager.getCacheAD(adEnum)
         var status = activity?.getActivityStatus()?.not()?:true
-        if (adEnum == ADEnum.NATIVE_AD || adEnum == ADEnum.NATIVE_DOWNLOAD_AD){
+        if (adEnum == ADEnum.NATIVE_AD || adEnum == ADEnum.BANNER_AD_NEWS_DETAILS_TOP){
             status = false
         }
         if (activity == null || data == null) {
@@ -78,7 +79,10 @@ class AioADShowManager(
             showADBanner(flRoot,data,pointTag)
         }else{
             adShow?.showNativeAD(flRoot,pointTag)
-            AioADDataManager.preloadAD(adEnum,"showNativeAD 广告展示时")
+            var platform = data.adRequestData?.tybxumpn?:""
+            if (platform == platformMax){
+                AioADDataManager.preloadAD(adEnum,"showNativeAD 广告展示时")
+            }
             PointEvent.posePoint(PointEventKey.aobws_ad_impression,Bundle().apply {
                 putString(PointValueKey.ad_pos_id,pointTag)
             })

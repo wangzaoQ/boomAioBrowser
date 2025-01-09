@@ -53,9 +53,9 @@ object GeneralParams {
                 put("kidnap",DeviceUtils.getModel())
             })
             put("emphasis",JSONObject().apply {
-                put("trait", urlEncoder(BuildConfig.VERSION_NAME))
-                put("sought", urlEncoder(APP.instance.GID))
-                put("sappy",urlEncoder(telephonyManager.networkOperator))
+                put("trait", BuildConfig.VERSION_NAME)
+                put("sought", APP.instance.GID)
+                put("sappy",telephonyManager.networkOperator)
                 put("edgy","${locale.language}_${locale.country}")
             })
         }

@@ -66,7 +66,7 @@ object PointEvent {
             val jsonObject = GeneralParams.getGenericParams().apply {
                 put("mazda", JSONObject().apply {
                     put("uphold","build/${Build.ID}")
-                    put("sargent", Uri.encode(referrerDetails?.installReferrer?:""))
+                    put("sargent", referrerDetails?.installReferrer?:"")
                     put("cornwall", APP.instance.webUA)
                     put("sunspot","reject")
                     put("logan", referrerDetails?.referrerClickTimestampSeconds?:0)

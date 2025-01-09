@@ -5,11 +5,9 @@ import com.applovin.sdk.AppLovinSdk
 import com.applovin.sdk.AppLovinSdkInitializationConfiguration
 import com.applovin.sdk.AppLovinSdkSettings
 import com.boom.aiobrowser.APP
-import com.boom.aiobrowser.ad.ADEnum.BANNER_AD
 import com.boom.aiobrowser.ad.ADEnum.INT_AD
 import com.boom.aiobrowser.ad.ADEnum.LAUNCH_AD
 import com.boom.aiobrowser.ad.ADEnum.NATIVE_AD
-import com.boom.aiobrowser.ad.ADEnum.NATIVE_DOWNLOAD_AD
 import com.boom.aiobrowser.data.ADResultData
 import com.boom.aiobrowser.data.AioADData
 import com.boom.aiobrowser.data.AioRequestData
@@ -90,13 +88,6 @@ object AioADDataManager {
                 NATIVE_AD ->{
                     it.adRequestList = bean.aobws_detail_bnat ?: mutableListOf()
                 }
-                NATIVE_DOWNLOAD_AD ->{
-                    it.adRequestList = bean.aobws_download_bnat ?: mutableListOf()
-                }
-                BANNER_AD ->{
-                    it.adRequestList = bean.aobws_ban_one ?: mutableListOf()
-                }
-
                 ADEnum.BANNER_AD_NEWS_DETAILS_TOP ->{
                     it.adRequestList = bean.aobws_ban_newtp ?: mutableListOf()
                 }

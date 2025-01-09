@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.VideoDownloadData
@@ -20,13 +21,16 @@ import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getUrlIcon
 import com.boom.aiobrowser.tools.getUrlSource
 import com.boom.aiobrowser.other.JumpConfig
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.view.CustomVideoView
 import com.boom.video.GSYVideoManager
 import com.boom.video.builder.GSYVideoOptionBuilder
 import com.boom.video.listener.GSYSampleCallBack
+import com.boom.video.listener.GSYStateUiListener
 import com.boom.video.utils.OrientationUtils
+import com.boom.video.video.base.GSYVideoView.CURRENT_STATE_PAUSE
 import java.io.File
 
 class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
@@ -54,6 +58,8 @@ class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
 
     var orientationUtils: OrientationUtils? = null
 
+    var showAd = false
+
     /**
      * /storage/emulated/0/Android/data/com.boom.aiobrowser/files/Video/Download/tiktok_1731163898235/tiktok_1731163898235.video
      */
@@ -74,6 +80,34 @@ class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
                 .setShowFullAnimation(true)
                 .setNeedLockFull(true)
                 .setCacheWithPlay(false)
+                .setGSYStateUiListener(object : GSYStateUiListener {
+                    override fun onStateChanged(state: Int) {
+                        when (state) {
+                            CURRENT_STATE_PAUSE -> {
+                                if (showAd)return
+                                acBinding.llRoot.visibility = View.VISIBLE
+                                acBinding.ivClose.setOneClick {
+                                    acBinding.llRoot.visibility = View.GONE
+                                }
+                                if (AioADDataManager.adFilter1().not()) {
+                                    showAd = true
+                                    PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
+                                        putString(PointValueKey.ad_pos_id, AD_POINT.aobws_play_bnat)
+                                    })
+                                    val data = AioADDataManager.getCacheAD(ADEnum.BANNER_AD_NEWS_DETAILS)
+                                    data?.apply {
+                                        AioADShowManager(this@VideoPreActivity, ADEnum.BANNER_AD_NEWS_DETAILS,"播放视频"){
+                                        }.showNativeAD(acBinding.flRoot,AD_POINT.aobws_play_bnat)
+                                    }
+                                }
+                            }
+                            else -> {
+                                showAd = false
+                                acBinding.llRoot.visibility = View.GONE
+                            }
+                        }
+                    }
+                })
                 .setVideoAllCallBack(object : GSYSampleCallBack() {
                     override fun onPrepared(url: String, vararg objects: Any) {
                         super.onPrepared(url, *objects)

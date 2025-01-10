@@ -14,6 +14,7 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.drag.EasyFloat
 import java.util.LinkedList
 
@@ -55,6 +56,10 @@ class MainRootFragment :BaseFragment<BrowserFragmentMainRootBinding>() {
 //                    }
                 }
                 JumpConfig.JUMP_HOME ->{
+                    it.jumpUrl=""
+                    it.jumpTitle = getString(R.string.app_home)
+                    JumpDataManager.updateCurrentJumpData(it,"MainFragment onResume 更新 jumpData")
+
                     val navOptions = NavOptions.Builder()
                         .setEnterAnim(R.anim.in_alpha)
                         .setExitAnim(R.anim.out_alpha)

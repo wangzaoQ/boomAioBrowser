@@ -429,7 +429,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             var data = downloadAdapter.items.get(i)
             var videoId = ""
             data.formatsList.forEach {
-                if (it.videoChecked) {
+                if (it.videoChecked && it.downloadType!=VideoDownloadData.DOWNLOAD_SUCCESS) {
                     realDownload = true
                     videoId = it.videoId?:""
                     downloadVideoIdList.add(videoId)

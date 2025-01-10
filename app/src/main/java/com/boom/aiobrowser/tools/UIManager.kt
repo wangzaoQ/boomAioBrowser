@@ -19,13 +19,13 @@ object UIManager {
 
     var cloakValue = ""
 
-    fun getCloakData():String{
-        if (cloakValue.isNotEmpty()){
-            if (cloakValue.equals("orgasm",true)){
-                AppLogs.dLog(TAG,"cloak 命中正常用户")
+    fun getCloakData(): String {
+        if (cloakValue.isNotEmpty()) {
+            if (cloakValue.equals("orgasm", true)) {
+                AppLogs.dLog(TAG, "cloak 命中正常用户")
                 return "B"
-            }else{
-                AppLogs.dLog(TAG,"cloak 命中黑名单用户")
+            } else {
+                AppLogs.dLog(TAG, "cloak 命中黑名单用户")
                 return "A"
             }
         }
@@ -40,44 +40,33 @@ object UIManager {
      * 5如进入app过程中数据返回较慢，当返回上面对应结果时需在应用内切换A/B
      */
 
-    fun isBuyUser(isMain:Boolean = false): Boolean {
-        if (CacheManager.isBUser){
-            if (CacheManager.isSendB.not()){
-                PointEvent.posePoint(PointEventKey.user_source, Bundle().apply {
-                    putString("from","b")
-                },callback = object : PointCallback{
-                    override fun onSuccess(response: Response) {
-                        CacheManager.isSendB = true
-                    }
-                })
-            }
+
+    var isSend = false
+
+    fun isBuyUser(isMain: Boolean = false): Boolean {
+        if (CacheManager.isBUser) {
+            sendBPoint()
             return true
-        }else{
+        } else {
             var cloakData = getCloakData()
             var referData = getReferData()
-            if (cloakData == "A" && referData == "A"){
-                AppLogs.dLog(TAG,"黑名单用户:cloakData A referData A")
-                if (isMain)CacheManager.isAUser = true
+            if (cloakData == "A" && referData == "A") {
+                AppLogs.dLog(TAG, "黑名单用户:cloakData A referData A")
+                if (isMain) CacheManager.isAUser = true
                 return false
-            }else if (cloakData == "B" && referData == "A"){
-                AppLogs.dLog(TAG,"黑名单用户:cloakData B referData A")
-                if (isMain)CacheManager.isAUser = true
+            } else if (cloakData == "B" && referData == "A") {
+                AppLogs.dLog(TAG, "黑名单用户:cloakData B referData A")
+                if (isMain) CacheManager.isAUser = true
                 return false
-            }else if (cloakData == "A" && referData == "B"){
-                AppLogs.dLog(TAG,"黑名单用户:cloakData A referData B")
-                if (isMain)CacheManager.isAUser = true
+            } else if (cloakData == "A" && referData == "B") {
+                AppLogs.dLog(TAG, "黑名单用户:cloakData A referData B")
+                if (isMain) CacheManager.isAUser = true
                 return false
-            } else if (cloakData == "B" && referData == "B"){
-                AppLogs.dLog(TAG,"正常用户:cloakData B referData B")
+            } else if (cloakData == "B" && referData == "B") {
+                AppLogs.dLog(TAG, "正常用户:cloakData B referData B")
                 CacheManager.isBUser = true
-                PointEvent.posePoint(PointEventKey.user_source, Bundle().apply {
-                    putString("from","b")
-                },callback = object : PointCallback{
-                    override fun onSuccess(response: Response) {
-                        CacheManager.isSendB = true
-                    }
-                })
-                if (CacheManager.isAUser){
+                sendBPoint()
+                if (CacheManager.isAUser) {
                     PointEvent.posePoint(PointEventKey.user_a_b)
                 }
                 return true
@@ -86,32 +75,51 @@ object UIManager {
         return false
     }
 
-    private fun getReferData():String {
+    private fun sendBPoint() {
+        if (CacheManager.isSendB.not() && isSend.not()) {
+            isSend = true
+            PointEvent.posePoint(PointEventKey.user_source, Bundle().apply {
+                putString("from", "b")
+            }, callback = object : PointCallback {
+                override fun onSuccess(response: Response) {
+                    isSend = false
+                    CacheManager.isSendB = true
+                }
+
+                override fun onFailed() {
+                    super.onFailed()
+                    isSend = false
+                }
+            })
+        }
+    }
+
+    private fun getReferData(): String {
         var refer = CacheManager.installRefer
         var config = FirebaseConfig.referConfig
         var configList = config.split(",")
         var index = -1
-        for (i in 0 until configList.size){
-            if (refer.contains(configList.get(i),true)){
+        for (i in 0 until configList.size) {
+            if (refer.contains(configList.get(i), true)) {
                 index = i
                 break
             }
         }
-        if (index>=0){
-            AppLogs.dLog(TAG,"refer 命中买量 match:${configList.get(index)}")
+        if (index >= 0) {
+            AppLogs.dLog(TAG, "refer 命中买量 match:${configList.get(index)}")
             return "B"
         }
         var buyAdjust = CacheManager.adJustFrom.contains("Organic", true).not()
-        if (buyAdjust){
-            AppLogs.dLog(TAG,"buyAdjust 命中买量 match:${buyAdjust}")
+        if (buyAdjust) {
+            AppLogs.dLog(TAG, "buyAdjust 命中买量 match:${buyAdjust}")
             return "B"
         }
         var buyAF = CacheManager.afFrom.equals("Organic", true).not()
-        if (buyAF){
-            AppLogs.dLog(TAG,"buyAF 命中买量 match:${buyAF}")
+        if (buyAF) {
+            AppLogs.dLog(TAG, "buyAF 命中买量 match:${buyAF}")
             return "B"
         }
-        AppLogs.dLog(TAG,"归因未命中买量当前为非买量用户")
+        AppLogs.dLog(TAG, "归因未命中买量当前为非买量用户")
         return "A"
     }
 }

@@ -292,6 +292,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         super.onResume()
         AppLogs.dLog(fragmentTAG,"onResume")
         jump()
+        fBinding.root.postDelayed({
+            updateTopUI()
+        },500)
     }
 
 
@@ -308,7 +311,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 
     open fun jump(isNfClick:Boolean = false) {
         AppLogs.dLog(fragmentTAG,"jump 触发")
-        updateTopUI()
         if (APP.instance.isHideSplash.not())return
         AppLogs.dLog(fragmentTAG,"jump 跳过限制")
         AppLogs.dLog(fragmentTAG,"onResume")

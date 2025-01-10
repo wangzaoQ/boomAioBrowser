@@ -603,8 +603,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         AppLogs.dLog(acTAG,"onActivityResult  requestCode:${requestCode}  resultCode:${resultCode}")
-        if (requestCode == SIGN_LOGIN || resultCode == SIGN_LOGIN_ONE_TAP && fragments.size>2 && fragments.get(2) is MeFragment ){
-            (fragments.get(2) as MeFragment).result(requestCode, resultCode, data)
+        if (requestCode == SIGN_LOGIN || resultCode == SIGN_LOGIN_ONE_TAP && fragments.size>2 && fragments.get(3) is MeFragment ){
+            (fragments.get(3) as MeFragment).result(requestCode, resultCode, data)
         }
     }
 

@@ -134,12 +134,15 @@ object NFManager {
         }
     }
 
-    fun clickPoint(nfData: String, nfTo: Int,enumName: String) {
+    fun clickPoint(nfData: String, nfTo: Int,enumName: String,isLaunch:Boolean) {
 
         var from = ""
+        if (isLaunch){
+            from = "launch"
+        }
         when (enumName) {
             NFEnum.NF_DOWNLOAD_VIDEO.menuName -> {
-                from = "push"
+                from = "download_push"
                 var data = getBeanByGson(nfData,VideoDownloadData::class.java)
                 // 0 进度中点击 1 失败点击 2成功点击  3 成功点击观看视频
                 when (nfTo) {
@@ -168,7 +171,7 @@ object NFManager {
                 }
             }
             NFEnum.NF_SEARCH_VIDEO.menuName -> {
-                from = "push"
+                from = "search_push"
                 // 0 暂无 1 点击search  2-4 右侧按钮
                 var type = ""
                 if (nfTo == 0){
@@ -188,7 +191,7 @@ object NFManager {
             }
             NFEnum.NF_NEWS.menuName,NFEnum.NF_LOCAL.menuName,NFEnum.NF_HOT.menuName,NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName,NFEnum.NF_NEW_USER.menuName,NFEnum.NF_DEFAULT.menuName,NFEnum.NF_TREND.menuName -> {
                 var data = getBeanByGson(nfData,NewsData::class.java)
-                from = "push"
+                from = "news_push"
                 PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
                     putString(PointValueKey.push_type, enumName)
                     if (enumName == NFEnum.NF_DEFAULT.menuName && data!=null){
@@ -236,7 +239,7 @@ object NFManager {
                 }
             }
             ParamsConfig.WIDGET->{
-                from = "widget"
+                from = "widget_short"
                 if (nfTo == 1){
                     PointEvent.posePoint(PointEventKey.widget_click)
                     ShortManager.widgetUpdate(APP.instance,"widgetClick")

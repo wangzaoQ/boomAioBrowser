@@ -237,7 +237,16 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         nfTo = intent.getIntExtra(ParamsConfig.NF_TO,0)
         nfData = intent.getStringExtra(ParamsConfig.NF_DATA)?:""
         enumName = intent.getStringExtra(ParamsConfig.NF_ENUM_NAME)?:""
-        NFManager.clickPoint(nfData,nfTo,enumName)
+        var isLaunch = false
+        runCatching {
+            if (intent != null && Intent.ACTION_MAIN.equals(intent.getAction())) {
+                if (intent.hasCategory(Intent.CATEGORY_LAUNCHER)) {
+                    // 应用是从Launcher启动的
+                    isLaunch = true
+                }
+            }
+        }
+        NFManager.clickPoint(nfData,nfTo,enumName,isLaunch)
         acBinding.root.postDelayed({
             var count = 0
             for ( i in 0 until APP.instance.lifecycleApp.stack.size){

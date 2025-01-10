@@ -165,7 +165,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 //            }
 //        })
         newsAdapter.addOnDebouncedChildClick(R.id.tvMoreNews) { adapter, view, position ->
-            APP.instance.toNewsFrom = 0
+            APP.instance.toNewsFrom = 1
             APP.homeJumpLiveData.postValue(1)
         }
         newsAdapter.addOnDebouncedChildClick(R.id.rlMore) { adapter, view, position ->

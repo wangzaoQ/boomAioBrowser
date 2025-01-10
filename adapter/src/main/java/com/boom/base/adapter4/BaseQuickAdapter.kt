@@ -586,6 +586,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
         }
         if (mutableItems.add(data)) {
             notifyItemInserted(items.size - 1)
+            notifyItemRangeChanged(0,items.size)
         }
     }
 
@@ -641,7 +642,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
         }
         mutableItems.removeAt(position)
         notifyItemRemoved(position)
-
+        notifyItemRangeChanged(0,mutableItems.size)
         // 处理空视图的情况
         if (displayEmptyView()) {
             notifyItemInserted(0)

@@ -310,7 +310,7 @@ class AppViewModel : BaseDataModel() {
                 PointEvent.posePoint(PointEventKey.attribution_suc)
                 PointEvent.posePoint(PointEventKey.track_platform, Bundle().apply {
                     putString("from",data?.track_platform?:"")
-                    putLong(PointValueKey.load_time,System.currentTimeMillis()-startTime)
+                    putLong(PointValueKey.load_time,(System.currentTimeMillis()-startTime)/1000)
                 })
             }
         }, failBack = {}, 1)

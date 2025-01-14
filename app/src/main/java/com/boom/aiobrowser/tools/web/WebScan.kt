@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.tools.web
 
-import android.webkit.CookieManager
+import android.net.Uri
+import android.text.TextUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.PManageData
@@ -8,23 +9,25 @@ import com.boom.aiobrowser.data.PVideoData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.VideoDownloadData.Companion.TYPE_M3U8
 import com.boom.aiobrowser.data.VideoUIData
-import com.boom.aiobrowser.net.WebNet
 import com.boom.aiobrowser.tools.AppLogs
-import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
-import com.boom.aiobrowser.tools.clean.CleanConfig.videoExtension
 import com.boom.aiobrowser.tools.clean.formatSize
-import com.boom.aiobrowser.tools.clean.getFileSize
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.toJson
+import com.boom.downloader.VideoDownloadException
+import com.boom.downloader.VideoInfoParserManager
+import com.boom.downloader.common.DownloadConstants
+import com.boom.downloader.model.Video
+import com.boom.downloader.model.Video.Mime.MIME_TYPE_MP4
+import com.boom.downloader.utils.DownloadExceptionUtils
+import com.boom.downloader.utils.HttpUtils
+import com.boom.downloader.utils.LogUtils
+import com.boom.downloader.utils.VideoDownloadUtils
 import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.Request
-import okhttp3.Response
 import org.jsoup.Jsoup
-import java.io.IOException
 import java.lang.ref.WeakReference
 import java.math.BigDecimal
+import java.net.HttpURLConnection
 import java.util.regex.Pattern
 
 
@@ -34,12 +37,12 @@ object WebScan {
 
     var isloading = false
 
-    fun filterUri(uri:String,reference: WeakReference<BaseActivity<*>>) {
+    fun filterUri(uri: String, reference: WeakReference<BaseActivity<*>>) {
         var activity: BaseActivity<*>? = reference.get() ?: return
         var type = ""
         uri?.apply {
             var url = uri.toString()
-            if (url.contains(WebConfig.FILTER_TIKTOK, true)) {
+//            if (url.contains(WebConfig.FILTER_TIKTOK, true)) {
 //                var cookieManager = CookieManager.getInstance()
 //                var cookieTikTok = cookieManager.getCookie(url)?:""
 //                if (APP.isDebug){
@@ -50,7 +53,7 @@ object WebScan {
 //                if (APP.isDebug){
 //                    AppLogs.dLog(TAG, "判断 1 isloading :${isloading}  命中tiktok uri:${uri}")
 //                }
-//                var id = "tiktok_${getTikTokId(url)}"
+//                var id = "tiktok_${getTkTokId(url)}"
 //                var list = CacheManager.videoDownloadTempList
 //                var allow = true
 //                for (i in 0 until list.size) {
@@ -85,9 +88,10 @@ object WebScan {
 //                        getVideoHeaderInfo(type, url, cookieTikTok)
 //                    }
 //                }
-            } else if (url.contains(WebConfig.FILTER_PORNHUB,true)){
+//            } else
+            if (url.contains(WebConfig.FILTER_PORNHUB, true)) {
                 activity?.addLaunch(success = {
-                    if (url.contains("pornhub.com/view_video.php?viewkey",true)){
+                    if (url.contains("pornhub.com/view_video.php?viewkey", true)) {
                         var startTime = System.currentTimeMillis()
                         var doc = Jsoup.connect(url).get()
 
@@ -99,20 +103,20 @@ object WebScan {
                         var json = ""
 //                        var content = scripts.get(46).html()
 //                        val matcher = pattern.matcher(content)
-                        for (i in 0 until scripts.size){
+                        for (i in 0 until scripts.size) {
                             var data = scripts.get(i)
                             val scriptContent = data.html()
                             val matcher = pattern.matcher(scriptContent)
-                            if (matcher.find()){
+                            if (matcher.find()) {
 //                                AppLogs.dLog(TAG,"p 站视频数据:${matcher.group(1)}")
                                 json = matcher.group(1)
                                 break
                             }
                         }
-                        var pData = getBeanByGson(json,PManageData::class.java)
-                        var pVideo:PVideoData?= null
+                        var pData = getBeanByGson(json, PManageData::class.java)
+                        var pVideo: PVideoData? = null
                         pData?.mediaDefinitions?.forEach {
-                            if (it.defaultQuality){
+                            if (it.defaultQuality) {
                                 pVideo = it
                             }
                         }
@@ -136,155 +140,226 @@ object WebScan {
                                 }
                             }
                         }
-                        if (allow.not())return@addLaunch
-                        var size = PManager.parseNetworkM3U8InfoByP(videoUrl?:"",HashMap<String,String>(),0,pData?.video_duration?:0)
-                        AppLogs.dLog(TAG,"p站  title :${doc.title()}-imgs:${img}" +
-                                "文件大小"+size.formatSize()+"-"+
-                                " 视频播放地址" +videoUrl+"-"+
-                                " 视频播放时长" +"${pData?.video_duration?:0}"+"-"+
-                                " 耗时:${System.currentTimeMillis()-startTime}")
+                        if (allow.not()) return@addLaunch
+                        var size = PManager.parseNetworkM3U8InfoByP(
+                            videoUrl ?: "",
+                            HashMap<String, String>(),
+                            0,
+                            pData?.video_duration ?: 0
+                        )
+                        AppLogs.dLog(
+                            TAG, "p站  title :${doc.title()}-imgs:${img}" +
+                                    "文件大小" + size.formatSize() + "-" +
+                                    " 视频播放地址" + videoUrl + "-" +
+                                    " 视频播放时长" + "${pData?.video_duration ?: 0}" + "-" +
+                                    " 耗时:${System.currentTimeMillis() - startTime}"
+                        )
                         var uiData = VideoUIData()
 
                         var map = HashMap<String, Any>()
                         var data = VideoDownloadData().createDefault(
                             videoId = videoId,
-                            fileName = pData?.video_title?:"",
-                            url = videoUrl?:"",
-                            imageUrl = pData?.image_url?:"",
+                            fileName = pData?.video_title ?: "",
+                            url = videoUrl ?: "",
+                            imageUrl = pData?.image_url ?: "",
                             paramsMap = map,
                             size = size,
                             videoType = TYPE_M3U8,
                             resolution = ""
                         )
                         uiData.formatsList.add(data)
-                        uiData.videoResultId = videoId+"_parent"
+                        uiData.videoResultId = videoId + "_parent"
                         uiData.source = "page"
-                        uiData.thumbnail = pData?.image_url?:""
-                        uiData.description = pData?.video_title?:""
+                        uiData.thumbnail = pData?.image_url ?: ""
+                        uiData.description = pData?.video_title ?: ""
                         list.add(0, uiData)
                         CacheManager.videoDownloadTempList = list
                         AppLogs.dLog(TAG, "filterUri 发送数据变化 id:${data.videoId}")
                         APP.videoScanLiveData.postValue(uiData)
                     }
                 }, failBack = {})
-            }else{
-//                url = "https://cm-h.phncdn.com/hls/videos/202406/30/454565161/720P_4000K_454565161.mp4/master.m3u8?YV-e9ptSuEg0nZgHhnYuKKQ2NyWf9EA6uIIBFxLuwVNzdneBBvTitDXuNa7W6Z-AAQfYXja9zzso1uvOfzZU70Xv2e2ISYWK_QoJus9A5wLSQjdpILfiAjFktEX27kZ70pJnrr_33YAptYx_XKGoJ4wm1aBLHUVQZi94M46h8enNbugZu4HIuveyLNVUZPo7_y5nd5EkmA"
-//                var allow = false
-//                for (i in 0 until videoExtension.size) {
-//                    var data = videoExtension.get(i)
-//                    if (url.contains(data, true) && url.contains("master.m3u8")) {
-//                        AppLogs.dLog(TAG, "命中其它视频 uri:${uri}")
-//                        allow = true
-//                        break
-//                    }
-//                }
-//                if (allow.not()) return
-//                var id = "video_${url}"
-//                var list = CacheManager.videoDownloadTempList
-//                for (i in 0 until list.size) {
-//                    var data = list.get(i)
-//                    if (data.videoId == id) {
-//                        allow = false
-//                        break
-//                    }
-//                }
-//                if (allow.not()) return
-//                var map = HashMap<String, Any>()
-//                var data = VideoDownloadData().createDefault(
-//                    videoId = id,
-//                    fileName = id,
-//                    url = url,
-//                    paramsMap = map,
-//                    size = BigDecimal(0).toLong(),
-//                    videoType = ""
-//                )
-//                list.add(0, data)
-//                CacheManager.videoDownloadTempList = list
-//                AppLogs.dLog(TAG, "filterUri 发送数据变化 id:${data.videoId}")
-//                APP.videoScanLiveData.postValue(data)
-//                getVideoHeaderInfo(type, url, WebConfig.cookieTikTok)
+            } else {
+                activity?.addLaunch(success = {
+                    var doc = Jsoup.connect(url).get()
+                    // 获取所有的 <video> 标签
+                    val videoElements = doc.select("video")
+                    var videoList = mutableListOf<String>()
+                    for (videoElement in videoElements) {
+                        // 直接获取 <video> 标签的 src 属性
+                        val videoSrc = videoElement.attr("src")
+                        // 如果 <video> 标签本身有 src
+                        if (!videoSrc.isEmpty()) {
+                            videoList.add(videoSrc)
+                        }
+
+                        // 有些视频可能放在 <source> 标签中
+                        val sourceElements = videoElement.select("source")
+                        for (sourceElement in sourceElements) {
+                            val sourceSrc = sourceElement.attr("src")
+                            videoList.add(sourceSrc)
+                        }
+
+                        // 这里假设视频地址存储在 data-src 属性中
+                        val videoLinks = doc.select("[data-src]")
+
+                        for (videoLink in videoLinks) {
+                            val videoUrl = videoLink.attr("data-src")
+                            videoList.add(videoUrl)
+                        }
+                    }
+                    val iframe = doc.select("iframe").first()
+                    if (iframe != null) {
+                        val iframeSrc = iframe.attr("src")
+                        videoList.add(iframeSrc)
+                    }
+
+                    var title = doc.title()
+                    AppLogs.dLog(
+                        "webReceive",
+                        "网页 title :${title} 获取网页video:${toJson(videoList)}"
+                    )
+                }, failBack = {})
             }
+        }
+    }
+
+    suspend fun getResourceInfo(videoUrl: String, cookie: String) {
+        var uiData = VideoUIData()
+        var map = getVideoHeaderInfo(videoUrl, cookie)
+        var contentLength = 0L
+        var contentType = ""
+        contentType = map.get(content_type) as? String ?: ""
+        contentLength = map.get(content_length) as? Long ?: 0L
+
+        var imageUrl = ""
+        var videoType = ""
+        if (contentType == MIME_TYPE_MP4) {
+            videoType = "mp4"
+            imageUrl = videoUrl
+        } else if (videoUrl.contains("m3u8")) {
+
+        } else {
+
+        }
+        if (videoType.isNullOrEmpty()) return
+        AppLogs.dLog("webReceive", "videoType 通过 getResourceInfo:${videoUrl}")
+        var paramsMap = HashMap<String, Any>()
+        paramsMap.put("Cookie", cookie)
+        var doc = Jsoup.connect(videoUrl).get()
+        var fileStart = doc.title()
+        if (fileStart.isNullOrEmpty()) {
+            runCatching {
+                if (fileStart.isNullOrEmpty()) {
+                    var uri = Uri.parse(videoUrl)
+                    var split = uri.host?.split(".")
+                    if (split!!.size > 0) {
+                        fileStart = "${split[0]}_${System.currentTimeMillis()}"
+                    }
+                }
+            }
+        }
+        if (fileStart.isNullOrEmpty()) {
+            fileStart = "${System.currentTimeMillis()}"
+        }
+        var videoDownloadData = VideoDownloadData().createDefault(
+            videoId = "${VideoDownloadUtils.computeMD5(videoUrl)}",
+            fileName = "${fileStart}.${videoType}",
+            url = videoUrl,
+            imageUrl = imageUrl,
+            paramsMap = paramsMap,
+            size = contentLength ?: 0L,
+            videoType = videoType,
+            resolution = ""
+        )
+        uiData.formatsList.add(videoDownloadData)
+        uiData.videoResultId = "${VideoDownloadUtils.computeMD5(videoUrl)}"
+        AppLogs.dLog("webReceive", "过滤前 getResourceInfo:${toJson(uiData)}")
+        var index = -1
+        var list = CacheManager.videoDownloadTempList
+        for (i in 0 until list.size) {
+            var data = list.get(i)
+//            AppLogs.dLog("webReceive","getResourceInfo data.videoResultId:${data.videoResultId} uiData.videoResultId:${uiData.videoResultId}")
+            if (data.videoResultId == uiData.videoResultId) {
+                index = i
+                break
+            }
+        }
+        if (index == -1) {
+            list.add(0, uiData)
+            CacheManager.videoDownloadTempList = list
+            AppLogs.dLog("webReceive", "过滤后:${toJson(uiData)}")
+//            APP.videoScanLiveData.postValue(uiData)
         }
     }
 
     private var call: Call? = null
 
-    fun getVideoHeaderInfo( videoUrl: String, cookie: String): String? {
-        isloading = true
-        val request: Request = Request.Builder()
-            .url(videoUrl)
-            .addHeader("Cookie", cookie)
-            .head() // 只请求头信息
-            .build()
-        call = WebNet.netClient.newCall(request)
-        var result = call?.execute()
-        var contentLength = result?.header("Content-Length")
-        return contentLength
-//        call?.enqueue(object : Callback {
-//            override fun onFailure(call: Call, e: IOException) {
-//                AppLogs.eLog(TAG, e.stackTraceToString())
-//                isloading = false
-//            }
-//
-//            override fun onResponse(call: Call, response: Response) {
-//                // 获取文件的内容类型
-//                val contentType = response.header("Content-Type")
-//                // 获取视频文件的大小
-//                val contentLength = response.header("Content-Length")
-//                AppLogs.dLog(TAG, "Content-Type:$contentType")
-//                AppLogs.dLog(TAG, "Content-Length:$contentLength bytes")
-//                isloading = false
-//                var id = ""
-//                if (type == WebConfig.TIKTOK) {
-//                    id = "tiktok_${getTikTokId(videoUrl)}"
-////                    var map = HashMap<String, Any>()
-////                    map.put("Cookie", cookie)
-//                }else{
-//                    id = "video_${videoUrl}"
-//                }
-//                var list = CacheManager.videoDownloadTempList
-//                for (i in 0 until list.size) {
-//                    var data = list.get(i)
-//                    if (data.videoId == id) {
-//                        data.videoType = contentType
-//                        data.size = BigDecimal(contentLength).toLong()
-//                        CacheManager.videoDownloadTempList = list
-//                        AppLogs.dLog(TAG, "getVideoHeaderInfo 发送数据变化 id:${data.videoId}")
-//                        APP.videoScanLiveData.postValue(data)
-//                        break
-//                    }
-//                }
-//            }
-//        })
+    var content_length = "contentLength"
+    var content_type = "contentType"
+
+    suspend fun getVideoHeaderInfo(videoUrl: String, cookie: String): Map<String, Any> {
+        var infoMap = HashMap<String, Any>()
+        var connection: HttpURLConnection? = null
+        var headers = HashMap<String, String>().apply {
+            put("Cookie", cookie)
+        }
+        // Redirect is enabled, send redirect request to get final location.
+        var finalUrl = videoUrl
+        try {
+            connection = HttpUtils.getConnection(
+                finalUrl,
+                headers,
+                VideoDownloadUtils.getDownloadConfig().shouldIgnoreCertErrors()
+            )
+        } catch (e: Exception) {
+            HttpUtils.closeConnection(connection)
+            return infoMap
+        }
+        if (connection == null) {
+            return infoMap
+        }
+        finalUrl = connection.url.toString()
+        if (TextUtils.isEmpty(finalUrl)) {
+            HttpUtils.closeConnection(connection)
+            return infoMap
+        }
+        val contentType = connection.contentType
+        if (finalUrl.contains(Video.TypeInfo.M3U8) || VideoDownloadUtils.isM3U8Mimetype(contentType)) {
+            //这是M3U8视频类型
+        } else {
+            //这是非M3U8类型, 需要获取视频的totalLength ===> contentLength
+            val contentLength: Long = VideoInfoParserManager.getInstance()
+                .getContentLength(finalUrl, headers, connection, false)
+            if (contentLength == VideoDownloadUtils.DEFAULT_CONTENT_LENGTH) {
+                HttpUtils.closeConnection(connection)
+                return infoMap
+            }
+            infoMap.put(content_type, contentType)
+            infoMap.put(content_length, contentLength)
+        }
+        HttpUtils.closeConnection(connection)
+        AppLogs.dLog("webReceive","infoMap:${toJson(infoMap)} url:${videoUrl}")
+        return infoMap
     }
 
-    private fun getTikTokId(videoUrl: String): String {
-        val substringBefore = videoUrl.substringBefore("?")
-        val split = substringBefore.split("/")
-        if (split.size > 2) {
-            return split.get(split.size - 2)
-        } else {
-            return videoUrl
-        }
-    }
 
     fun isTikTok(url: String): Boolean {
-        return url.contains(WebConfig.TIKTOK,true)
+        return url.contains(WebConfig.TIKTOK, true)
     }
 
-    fun isPornhub(url: String):Boolean{
-        return url.contains(WebConfig.PORNHUB,true)
+    fun isPornhub(url: String): Boolean {
+        return url.contains(WebConfig.PORNHUB, true)
     }
 
-    fun isYoutube(url: String):Boolean{
-        return url.contains(WebConfig.YOUTUBE,true)
+    fun isYoutube(url: String): Boolean {
+        return url.contains(WebConfig.YOUTUBE, true)
     }
 
-    fun isVimeo(urlList: MutableList<String>):Boolean{
+    fun isVimeo(urlList: MutableList<String>): Boolean {
         var index = -1
-        for (i in 0 until urlList.size){
+        for (i in 0 until urlList.size) {
             var url = urlList.get(i)
-            if (url.equals(WebConfig.VIMEO,true) ){
+            if (url.equals(WebConfig.VIMEO, true)) {
                 index = i
                 break
             }

@@ -35,7 +35,7 @@ class CloakManager {
                     userStatus = 1
                 }
                 putInt("cloak_user",userStatus)
-                putLong(PointValueKey.load_time,System.currentTimeMillis()-startTime)
+                putLong(PointValueKey.load_time,(System.currentTimeMillis()-startTime)/1000)
             })
             UIManager.isBuyUser()
         })

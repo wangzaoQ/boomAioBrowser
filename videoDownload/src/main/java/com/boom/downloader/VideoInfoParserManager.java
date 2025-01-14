@@ -111,7 +111,7 @@ public class VideoInfoParserManager {
                 parseNetworkM3U8Info(taskItem, headers, listener);
             } else {
                 //这是非M3U8类型, 需要获取视频的totalLength ===> contentLength
-                long contentLength = getContentLength(taskItem, headers, connection, false);
+                long contentLength = getContentLength(taskItem.getFinalUrl(), headers, connection, false);
                 if (contentLength == VideoDownloadUtils.DEFAULT_CONTENT_LENGTH) {
                     listener.onBaseVideoInfoFailed(new VideoDownloadException(DownloadExceptionUtils.FILE_LENGTH_FETCHED_ERROR_STRING));
                     HttpUtils.closeConnection(connection);
@@ -125,10 +125,10 @@ public class VideoInfoParserManager {
         }
     }
 
-    private long getContentLength(VideoTaskItem taskItem, Map<String, String> headers, HttpURLConnection connection, boolean shouldRetry) {
+    public long getContentLength(String finalUrl, Map<String, String> headers, HttpURLConnection connection, boolean shouldRetry) {
         if (shouldRetry) {
             try {
-                connection = HttpUtils.getConnection(taskItem.getFinalUrl(), headers, VideoDownloadUtils.getDownloadConfig().shouldIgnoreCertErrors());
+                connection = HttpUtils.getConnection(finalUrl, headers, VideoDownloadUtils.getDownloadConfig().shouldIgnoreCertErrors());
                 if (connection == null) {
                     return VideoDownloadUtils.DEFAULT_CONTENT_LENGTH;
                 }
@@ -152,7 +152,7 @@ public class VideoInfoParserManager {
             }
             headers.put("Range", "bytes=0-");
             HttpUtils.closeConnection(connection);
-            return getContentLength(taskItem, headers, connection, true);
+            return getContentLength(finalUrl, headers, connection, true);
         } else {
             long totalLength = Long.parseLong(length);
             if (totalLength <= 0) {

@@ -170,12 +170,12 @@ object FirebaseManager {
                 putInt(PointValueKey.type,FirebaseConfig.pushData?.time_interval?:0)
             })
         }
-        var config_filter1 = 0
-        runCatching {
-            config_filter1 = firebaseRemoteConfig?.getString("alldownload_switch")?.toInt()?:1
-        }
-        AppLogs.dLog(APP.instance.TAG,"remoteConfig alldownload_switch 1则限制下载:${config_filter1}")
-        FirebaseConfig.switchOpenFilter1=config_filter1!=0
+//        var config_filter1 = 1
+//        runCatching {
+//            config_filter1 = firebaseRemoteConfig?.getString("alldownload_switch")?.toInt()?:1
+//        }
+//        AppLogs.dLog(APP.instance.TAG,"remoteConfig alldownload_switch 1则限制下载:${config_filter1}")
+//        FirebaseConfig.switchOpenFilter1=config_filter1!=0
         var config_filter2 = ""
         runCatching {
             config_filter2 = firebaseRemoteConfig?.getString("config_filter")?:""

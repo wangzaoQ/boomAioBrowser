@@ -1,12 +1,15 @@
 package com.boom.aiobrowser.ui.pop
 
 import android.content.Context
+import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
+import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.databinding.BrowserPopHomeGuideBinding
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.tools.UIManager
 import pop.basepopup.BasePopupWindow
 import pop.util.animation.AnimationHelper
 import pop.util.animation.TranslationConfig
@@ -38,13 +41,17 @@ class HomeGuidePop(context: Context) : BasePopupWindow(context) {
                 dismiss()
             }
         }
-        PointEvent.posePoint(PointEventKey.guide_pop)
+        PointEvent.posePoint(PointEventKey.guide_pop, Bundle().apply {
+            putString("from",if(UIManager.isBuyUser()) "b" else "a")
+        })
         showPopupWindow()
+        APP.instance.showPopLevel = 1
     }
 
     override fun dismiss() {
         PointEvent.posePoint(PointEventKey.guide_close)
         PointEvent.posePoint(PointEventKey.home_page_first)
+        APP.instance.showPopLevel = 0
         super.dismiss()
     }
 

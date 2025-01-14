@@ -51,9 +51,9 @@ import pop.basepopup.BasePopupWindow.OnDismissListener
 import java.lang.ref.WeakReference
 
 
-class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
+class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 
-    var jumpData:JumpData?=null
+    var jumpData: JumpData? = null
 
 
     override fun getInsertParent(): ViewGroup {
@@ -66,36 +66,45 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         var index = -1
         var hostList = extractDomain(url)
 
-        for (i in 0 until list.size){
+        for (i in 0 until list.size) {
             var pageData = list.get(i)
             var splits = pageData.cUrl.split(".")
             var host = ""
-            if (splits.size>0){
+            if (splits.size > 0) {
                 host = splits.get(0)
             }
-            if (hostList.contains(host)){
-                if (APP.isDebug){
-                    AppLogs.dLog("webReceive","page 模式执行特定脚本:host:${host} js:${pageData.cDetail}")
+            if (hostList.contains(host)) {
+                if (APP.isDebug) {
+                    AppLogs.dLog(
+                        "webReceive",
+                        "page 模式执行特定脚本:host:${host} js:${pageData.cDetail}"
+                    )
                 }
 //                mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${pageData.cDetail}");
                 mAgentWeb!!.getWebCreator().getWebView().evaluateJavascript(pageData.cDetail) {
-                    AppLogs.dLog("webReceive", "evaluateJavascript 接收:$it thread:${Thread.currentThread()}")
+                    AppLogs.dLog(
+                        "webReceive",
+                        "evaluateJavascript 接收:$it thread:${Thread.currentThread()}"
+                    )
                 }
                 index = i
                 break
             }
         }
-        if (index == -1){
+        if (index == -1) {
             //通用
-            for (i in 0 until list.size){
+            for (i in 0 until list.size) {
                 var pageData = list.get(i)
-                if (pageData.cUrl == "*"){
-                    AppLogs.dLog("webReceive","page 模式执行通用脚本 js:${pageData.cDetail}")
+                if (pageData.cUrl == "*") {
+                    AppLogs.dLog("webReceive", "page 模式执行通用脚本 js:${pageData.cDetail}")
 //                    var str = "!function(){const e=window.location.href,t=window.fetch.bind(window),n=e=>t(e,{method:\"HEAD\"}),r=new Set([]);let s;const o=e=>e&&parseInt(e.split(\"/\")[1]),i=e=>o(e.headers.get(\"content-range\"))||parseInt(e.headers.get(\"content-length\")),a=e=>e&&e.split(\";\",2)[0],c=[\"application/vnd.apple.mpegurl\",\"application/x-mpegurl\",\"application/mpegurl\",\"video/x-mpegurl\",\"video/mpegurl\",\"audio/x-mpegurl\",\"audio/mpegurl\"],l={},u=async(e,r)=>{if(!r)return t(e).then((t=>t.text().then((t=>u(e,t)))));if(!r.includes(\"#EXTINF\"))return;const s=[];let o=0,a=0;const c=r.split(\"\\n\"),l=/#EXTINF:\\s*([\\d\\.]+)/;for(let t=0;t<c.length;t++)if(c[t])if(\"#\"===c[t][0]){const e=l.exec(c[t]);e&&(a+=parseFloat(e[1]),s.length<5&&(o=a))}else s.length<5&&s.push(new URL(c[t],e).toString());return o?Promise.all(s.map((e=>n(e).then((e=>i(e)))))).then((e=>e.reduce(((e,t)=>e+t),0)/o*a)).then(Math.floor):void 0},p=[\"video/mp4\"],d={\"user-agent\":window.navigator.userAgent,accept:\"*/*\",referer:e},h=(e,t={},n)=>{if(n.entries)Promise.all(n.entries.map((({resolution:e,url:t})=>u(t).then((r=>({url:t,format:n.format,cookie:!0,size:r,resolution:`\${e}p`})))))).then((n=>{const r={source:\"PAGE\",id:e,description:e,...t,formats:n,headers:d};\$__.result(\"VIDEO\",JSON.stringify(r))}));else{const r={source:\"PAGE\",id:e,description:e,...t,formats:[{url:e,format:\"mp4\",cookie:!0,size:void 0,resolution:void 0,...n}],headers:d};\$__.result(\"VIDEO\",JSON.stringify(r))}},f=(e,t,o)=>{if(!r.has(e)){r.add(e);const c=t??s;o?h(e,c,o):n(e).then((t=>{const n=a(t.headers.get(\"content-type\"));if(p.includes(n)){const e=i(t);h(t.url,c,{format:\"mp4\",size:e})}else h(e,c,{format:\"m3u8\"})}))}},m=e=>!!e&&(e.startsWith(\"http://\")||e.startsWith(\"https://\")),g=e=>{const t=/\\.(mp4|m3u8)/.exec(e);return t&&t[1]||\"mp4\"},v=e=>{if(\"VIDEO\"!==e.tagName)return;const t=e.src||e.querySelector(\"source\")?.src;if(m(t)){const n=(e=>{if(e.poster)return{thumbnail:e.poster};let t=3;for(;e&&t>=0;){const n=e.querySelector(\"img\");if(n&&m(n.src))return{thumbnail:n.src,description:n.alt};e=e.parentNode,t--}})(e);f(t,n,{format:g(t)})}else n=t,n&&n.startsWith(\"blob:\")&&(({thumbnail:e,description:t})=>{s={thumbnail:e||document.querySelector('meta[property=\"og:image\"]')?.content,description:t||document.title}})(imageInfo??{});var n};var y;window.fetch=function(){var e=t.apply(window,arguments);return e.then((e=>{if(!e.ok)return e;try{const t=a(e.headers.get(\"content-type\"));if(c.includes(t))u(e.url).then((t=>t&&f(e.url,void 0,{format:\"m3u8\",size:t})));else if(p.includes(t)){const t=o(e.headers.get(\"content-range\"));f(e.url,void 0,{format:\"mp4\",size:t})}}catch(e){}return e}))},y=XMLHttpRequest.prototype.open,XMLHttpRequest.prototype.open=function(){this.addEventListener(\"load\",(function(){var e=a(this.getResponseHeader(\"content-type\"));try{if(p.includes(e)){const e=o(this.getResponseHeader(\"content-range\"));(e=>!!e)(e)&&f(this.responseURL,void 0,{format:\"mp4\",size:e})}else if(c.includes(e)||this.responseText?.startsWith(\"#EXTM3U\")){if(l[this.responseURL])return;(async(e,t)=>{if(!t.includes(\"#EXT-X-STREAM-INF\"))return;const n=t.split(\"\\n\"),r=/#EXT-X-STREAM-INF.*RESOLUTION=\\d+x(\\d+)/,s=[];let o=null;for(let t=0;t<n.length;t++)if(n[t])if(\"#\"===n[t][0]){const e=r.exec(n[t]);e&&(o=parseInt(e[1]))}else{const r=new URL(n[t],e).toString();l[r]=e,s.push({resolution:o,url:r}),o=null}return s.sort(((e,t)=>t.resolution-e.resolution))})(this.responseURL,this.responseText).then((e=>{e?.length>0?f(this.responseURL,void 0,{format:\"m3u8\",entries:e}):u(this.responseURL,this.responseText).then((e=>e&&f(this.responseURL,void 0,{format:\"m3u8\",size:e})))}))}}catch(e){}})),y.apply(this,arguments)};const E=e=>{e instanceof Element&&\"VIDEO\"===e.tagName&&v(e),e?.childNodes?.length>0&&e?.querySelectorAll(\"video\").forEach((e=>v(e)))};new MutationObserver((function(e,t){try{e.forEach((e=>{switch(e.type){case\"attributes\":E(e.target);break;case\"childList\":e.addedNodes.forEach((e=>E(e)))}}))}catch(e){}})).observe(document,{subtree:!0,childList:!0,attributes:!0})}();"
 //                    mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${str}");
 //                    mAgentWeb!!.getWebCreator().getWebView().evaluateJavascript(pageData.cDetail,{})
                     mAgentWeb!!.getWebCreator().getWebView().evaluateJavascript(pageData.cDetail) {
-                        AppLogs.dLog("webReceive", "evaluateJavascript 接收:$it thread:${Thread.currentThread()}")
+                        AppLogs.dLog(
+                            "webReceive",
+                            "evaluateJavascript 接收:$it thread:${Thread.currentThread()}"
+                        )
                     }
                     break
                 }
@@ -108,11 +117,11 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         jumpData?.apply {
             jumpUrl = url
             jumpType = JumpConfig.JUMP_WEB
-            JumpDataManager.updateCurrentJumpData(this,"MainFragment onResume 更新 jumpData")
+            JumpDataManager.updateCurrentJumpData(this, "MainFragment onResume 更新 jumpData")
         }
     }
 
-    override fun getFromSource():String{
+    override fun getFromSource(): String {
         return "page"
     }
 
@@ -120,10 +129,10 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     }
 
     override fun setListener() {
-        APP.engineLiveData.observe(this){
+        APP.engineLiveData.observe(this) {
             fBinding.flTop.updateEngine(it)
         }
-        fBinding.flTop.updateTopView(2,searchRefresh={
+        fBinding.flTop.updateTopView(2, searchRefresh = {
             refresh()
         })
         fBinding.tvTabCount.setOneClick {
@@ -138,16 +147,16 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 //                putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
 //            })
             if (rootActivity is MainActivity) {
-                rootActivity.onKeyDown(KeyEvent.KEYCODE_BACK,null)
+                rootActivity.onKeyDown(KeyEvent.KEYCODE_BACK, null)
             }
         }
 
-        APP.videoScanLiveData.observe(this){
-            if (jumpData?.autoDownload == true){
-                if (it.formatsList.size == 1){
+        APP.videoScanLiveData.observe(this) {
+            if (jumpData?.autoDownload == true) {
+                if (it.formatsList.size == 1) {
                     it?.apply {
                         (context as BaseActivity<*>).addLaunch(success = {
-                            if (it.formatsList.isNotEmpty()){
+                            if (it.formatsList.isNotEmpty()) {
                                 var data = it.formatsList.get(0)
                                 var model = DownloadCacheManager.queryDownloadModel(data)
                                 if (model == null) {
@@ -171,117 +180,117 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
                             }
                         }, failBack = {})
                     }
-                }else{
-                    var status = popDown?.isShowing?:false
-                    if (!status && it.formatsList.size>1){
+                } else {
+                    var status = popDown?.isShowing ?: false
+                    if (!status && it.formatsList.size > 1) {
                         showDownloadPop()
                     }
                 }
                 jumpData?.apply {
                     autoDownload = false
-                    JumpDataManager.updateCurrentJumpData(this,"自动下载后重置")
+                    JumpDataManager.updateCurrentJumpData(this, "自动下载后重置")
                 }
-            }else{
+            } else {
                 popDown?.updateDataByScan(it)
             }
-            updateDownloadButtonStatus(true,0)
+            updateDownloadButtonStatus(true, 0)
         }
-        APP.videoNFLiveData.observe(this){
+        APP.videoNFLiveData.observe(this) {
             popDown?.updateDataByNF(it)
         }
-        APP.videoLiveData.observe(this){
+        APP.videoLiveData.observe(this) {
             var map = it
             it.keys.forEach {
-                popDown?.updateStatus(rootActivity,it,map.get(it)){
+                popDown?.updateStatus(rootActivity, it, map.get(it)) {
 //                    itemRemoveData(it)
                 }
-                if (it == VideoDownloadData.DOWNLOAD_SUCCESS){
-                    updateDownloadButtonStatus(true,1)
+                if (it == VideoDownloadData.DOWNLOAD_SUCCESS) {
+                    updateDownloadButtonStatus(true, 1)
                 }
             }
         }
 
-        APP.videoUpdateLiveData.observe(this){
+        APP.videoUpdateLiveData.observe(this) {
             var updateId = it
             rootActivity.addLaunch(success = {
                 var list = CacheManager.videoDownloadTempList
-                if (list.isNotEmpty()){
+                if (list.isNotEmpty()) {
                     list.forEach {
                         it.formatsList.forEach {
-                            if (it.videoId == updateId){
+                            if (it.videoId == updateId) {
                                 it.downloadType = VideoDownloadData.DOWNLOAD_NOT
                                 CacheManager.videoDownloadTempList = list
                             }
                         }
                     }
                 }
-                withContext(Dispatchers.Main){
+                withContext(Dispatchers.Main) {
                     popDown?.updateItem()
                 }
             }, failBack = {})
         }
-        APP.downloadButtonLiveData.observe(this){
+        APP.downloadButtonLiveData.observe(this) {
             addDownload()
         }
     }
 
 
-    open fun updateDownloadButtonStatus(status: Boolean,type:Int=0) {
+    open fun updateDownloadButtonStatus(status: Boolean, type: Int = 0) {
         rootActivity.addLaunch(success = {
             var size = 0
             var tempList = CacheManager.videoDownloadTempList
             var modelList = DownloadCacheManager.queryDownloadModelDone()
 
-            for (i in 0 until tempList.size){
+            for (i in 0 until tempList.size) {
                 var allow = false
                 tempList.get(i).formatsList.forEach {
-                    for (j in 0 until (modelList?.size?:0)){
+                    for (j in 0 until (modelList?.size ?: 0)) {
                         var dbData = modelList?.get(j)
-                        if (it.videoId == dbData?.videoId?:""){
-                            it.downloadType = dbData?.downloadType?:0
+                        if (it.videoId == dbData?.videoId ?: "") {
+                            it.downloadType = dbData?.downloadType ?: 0
                             break
                         }
                     }
-                    if (it.downloadType != VideoDownloadData.DOWNLOAD_SUCCESS){
+                    if (it.downloadType != VideoDownloadData.DOWNLOAD_SUCCESS) {
                         allow = true
                     }
                 }
-                if (allow){
+                if (allow) {
                     size++
                 }
             }
-            if (allowShowTips().not()){
-                withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
+                if (allowShowTips().not()) {
                     dragBiding?.apply {
-                        if (tempList.size>0){
-                            AppLogs.dLog(fragmentTAG,"展示有数据下载状态 type:${type}")
+                        if (tempList.size > 0) {
+                            AppLogs.dLog(fragmentTAG, "展示有数据下载状态 type:${type}")
                             ivDownload.visibility = View.GONE
                             ivDownload2.visibility = View.VISIBLE
-                            if (size>0){
+                            if (size > 0) {
                                 tvDownload.visibility = View.VISIBLE
                                 tvDownload.text = "$size"
-                            }else{
+                            } else {
                                 tvDownload.visibility = View.GONE
                             }
-                            if (type != 1){
+                            if (type != 1) {
                                 ivDownload2.apply {
                                     setAnimation("download.json")
                                     playAnimation()
                                 }
-                                if (CacheManager.isFirstDownloadTips){
+                                if (CacheManager.isFirstDownloadTips) {
                                     CacheManager.isFirstDownloadTips = false
                                     tips1 = FirstDownloadTips(rootActivity)
-                                    tips1?.createPop(root,1)
+                                    tips1?.createPop(root, 1)
                                 }
                             }
-                            AppLogs.dLog(fragmentTAG,"展示有数据下载状态完成 type:${type}")
-                        }else{
-                            AppLogs.dLog(fragmentTAG,"展示无数据下载状态")
+                            AppLogs.dLog(fragmentTAG, "展示有数据下载状态完成 type:${type}")
+                        } else {
+                            AppLogs.dLog(fragmentTAG, "展示无数据下载状态")
                             ivDownload.visibility = View.VISIBLE
                             ivDownload2.visibility = View.GONE
                             tvDownload.visibility = View.GONE
                             ivDownload2.cancelAnimation()
-                            AppLogs.dLog(fragmentTAG,"展示无数据下载状态完成")
+                            AppLogs.dLog(fragmentTAG, "展示无数据下载状态完成")
                         }
                     }
                 }
@@ -292,25 +301,24 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 
     private fun showDownloadPop() {
         popDown = DownLoadPop(rootActivity)
-        popDown?.createPop(){
-            updateDownloadButtonStatus(true,1)
+        popDown?.createPop() {
+            updateDownloadButtonStatus(true, 1)
         }
         popDown?.setOnDismissListener(object : OnDismissListener() {
             override fun onDismiss() {
-                updateDownloadButtonStatus(true,1)
+                updateDownloadButtonStatus(true, 1)
             }
         })
         CacheManager.isFirstClickDownloadButton = false
     }
 
-    var popDown: DownLoadPop?=null
-
+    var popDown: DownLoadPop? = null
 
 
     fun showTabPop() {
         var tabPop = TabPop(rootActivity)
         tabPop.createPop()
-        tabPop.setOnDismissListener(object : OnDismissListener(){
+        tabPop.setOnDismissListener(object : OnDismissListener() {
             override fun onDismiss() {
                 updateTabCount()
             }
@@ -319,11 +327,16 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     }
 
     fun updateTabCount() {
-        fBinding.tvTabCount.text = "${JumpDataManager.getBrowserTabList(CacheManager.browserStatus,tag ="WebDetailsActivity 更新tab 数量").size}"
+        fBinding.tvTabCount.text = "${
+            JumpDataManager.getBrowserTabList(
+                CacheManager.browserStatus,
+                tag = "WebDetailsActivity 更新tab 数量"
+            ).size
+        }"
     }
 
 
-    fun clearData(){
+    fun clearData() {
         ClearPop(rootActivity).createPop {
             CacheManager.clearAll()
             JumpDataManager.toMain()
@@ -348,15 +361,17 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 //        addDownload()
     }
 
-    fun getSearchTitle():String{
+    fun getSearchTitle(): String {
         var search = when (CacheManager.engineType) {
-            else -> { "Google"}
+            else -> {
+                "Google"
+            }
         }
         var unit = rootActivity.getString(R.string.app_search)
-       return " - $search $unit"
+        return " - $search $unit"
     }
 
-    open fun updateData(data:JumpData?){
+    open fun updateData(data: JumpData?) {
         jumpData = data
         initWeb()
         fBinding.flTop.updateEngine(CacheManager.engineType)
@@ -366,12 +381,12 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
         fBinding.root.postDelayed({
             jumpData?.apply {
                 jumpType = JumpConfig.JUMP_WEB
-                JumpDataManager.updateCurrentJumpData(this,"MainFragment onResume 更新 jumpData")
-                if(CacheManager.browserStatus == 0 ){
+                JumpDataManager.updateCurrentJumpData(this, "MainFragment onResume 更新 jumpData")
+                if (CacheManager.browserStatus == 0) {
                     CacheManager.saveRecentSearchData(this)
                 }
             }
-        },0)
+        }, 0)
         back = {
 //            jumpData?.apply {
 //                nextJumpType = JumpConfig.JUMP_WEB
@@ -387,113 +402,132 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     }
 
 
-    var dragBiding :BrowserDragLayoutBinding?=null
+    var dragBiding: BrowserDragLayoutBinding? = null
 
     /**
      * 进入
      */
 
     override fun setShowView() {
-        dragBiding = BrowserDragLayoutBinding.inflate(layoutInflater,null,false)
-        updateData(getBeanByGson(arguments?.getString(ParamsConfig.JSON_PARAMS)?:"",JumpData::class.java))
+        dragBiding = BrowserDragLayoutBinding.inflate(layoutInflater, null, false)
+        updateData(
+            getBeanByGson(
+                arguments?.getString(ParamsConfig.JSON_PARAMS) ?: "",
+                JumpData::class.java
+            )
+        )
         updateTabCount()
         CacheManager.videoDownloadTempList = mutableListOf()
 //        fBinding.ivDownload.visibility = View.VISIBLE
-        PointEvent.posePoint(PointEventKey.webpage_page,Bundle().apply {
-            putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
+        PointEvent.posePoint(PointEventKey.webpage_page, Bundle().apply {
+            putString(
+                PointValueKey.model_type,
+                if (CacheManager.browserStatus == 1) "private" else "normal"
+            )
         })
         addDownload()
     }
 
     private fun addDownload() {
-        if (allowShowTips().not() && isAdded){
-            EasyFloat.dismiss(tag = "webPop",true)
+        if (allowShowTips().not() && isAdded) {
+            EasyFloat.dismiss(tag = "webPop", true)
             var startX = 0
             var startY = 0
             var dragX = CacheManager.dragX
             var dragY = CacheManager.dragY
-            startX = if (dragX == 0){
-                DisplayUtils.getScreenWidth(rootActivity) - dp2px(85f)-dp2px(28f)
-            }else{
+            startX = if (dragX == 0) {
+                DisplayUtils.getScreenWidth(rootActivity) - dp2px(85f) - dp2px(28f)
+            } else {
                 dragX
             }
-            startY = if (dragY == 0){
-                DisplayUtils.getScreenHeight(rootActivity)-(BigDecimalUtils.div(DisplayUtils.getScreenWidth(rootActivity).toDouble(),3.0).toInt()*2)
-            }else{
+            startY = if (dragY == 0) {
+                DisplayUtils.getScreenHeight(rootActivity) - (BigDecimalUtils.div(
+                    DisplayUtils.getScreenWidth(
+                        rootActivity
+                    ).toDouble(), 3.0
+                ).toInt() * 2)
+            } else {
                 dragY
             }
-            AppLogs.dLog(fragmentTAG,"startX:${startX} startY:${startY}")
-            dragBiding?.apply {     EasyFloat.with(rootActivity)
-                .setSidePattern(SidePattern.RESULT_HORIZONTAL)
-                .setImmersionStatusBar(true)
-                .setGravity(Gravity.START or Gravity.BOTTOM, offsetX = startX, offsetY = startY)
-                .setLocation(startX, startY)
-                .setTag("webPop")
-                // 传入View，传入布局文件皆可，如：MyCustomView(this)、R.layout.float_custom
-                .setLayout(root) {
-                    ivDownload.setOneClick {
-                        if (allowShowTips()){
-                            showTipsPop()
-                            return@setOneClick
-                        }
-                        rootActivity.addLaunch(success = {
-                            delay(500)
-                            withContext(Dispatchers.Main){
-                                VideoPop2(rootActivity).createPop(getRealParseUrl()) {  }
+            AppLogs.dLog(fragmentTAG, "startX:${startX} startY:${startY}")
+            dragBiding?.apply {
+                EasyFloat.with(rootActivity)
+                    .setSidePattern(SidePattern.RESULT_HORIZONTAL)
+                    .setImmersionStatusBar(true)
+                    .setGravity(Gravity.START or Gravity.BOTTOM, offsetX = startX, offsetY = startY)
+                    .setLocation(startX, startY)
+                    .setTag("webPop")
+                    // 传入View，传入布局文件皆可，如：MyCustomView(this)、R.layout.float_custom
+                    .setLayout(root) {
+                        ivDownload.setOneClick {
+                            if (allowShowTips()) {
+                                showTipsPop()
+                                return@setOneClick
                             }
-                        }, failBack = {})
-                        PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
-                            putString(PointValueKey.type,"no_have")
-                            putString(PointValueKey.url,jumpData?.jumpUrl)
-                            putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
-                        })
-                    }
-                    ivDownload2.setOneClick {
-                        tips1?.dismiss()
-                        ivDownload2.cancelAnimation()
-                        rootActivity.addLaunch(success = {
-                            delay(500)
-                            withContext(Dispatchers.Main){
-                                if (CacheManager.isDisclaimerFirst) {
-                                    CacheManager.isDisclaimerFirst = false
-                                    DisclaimerPop(rootActivity).createPop {
+                            rootActivity.addLaunch(success = {
+                                delay(500)
+                                withContext(Dispatchers.Main) {
+                                    VideoPop2(rootActivity).createPop(getRealParseUrl()) { }
+                                }
+                            }, failBack = {})
+                            PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
+                                putString(PointValueKey.type, "no_have")
+                                putString(PointValueKey.url, jumpData?.jumpUrl)
+                                putString(
+                                    PointValueKey.model_type,
+                                    if (CacheManager.browserStatus == 1) "private" else "normal"
+                                )
+                            })
+                        }
+                        ivDownload2.setOneClick {
+                            tips1?.dismiss()
+                            ivDownload2.cancelAnimation()
+                            rootActivity.addLaunch(success = {
+                                delay(500)
+                                withContext(Dispatchers.Main) {
+                                    if (CacheManager.isDisclaimerFirst) {
+                                        CacheManager.isDisclaimerFirst = false
+                                        DisclaimerPop(rootActivity).createPop {
+                                            showDownloadPop()
+                                        }
+                                    } else {
                                         showDownloadPop()
                                     }
-                                }else{
-                                    showDownloadPop()
                                 }
-                            }
-                        }, failBack = {})
-                        PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
-                            putString(PointValueKey.type,"have")
-                            putString(PointValueKey.url,jumpData?.jumpUrl)
-                            putString(PointValueKey.model_type,if (CacheManager.browserStatus == 1) "private" else "normal")
-                        })
-                    }
+                            }, failBack = {})
+                            PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
+                                putString(PointValueKey.type, "have")
+                                putString(PointValueKey.url, jumpData?.jumpUrl)
+                                putString(
+                                    PointValueKey.model_type,
+                                    if (CacheManager.browserStatus == 1) "private" else "normal"
+                                )
+                            })
+                        }
 
-                }
+                    }
 //            .setTag(TAG_1)
-                .registerCallback {
-                    // 在此处设置view也可以，建议在setLayout进行view操作
-                    createResult { isCreated, msg, _ ->
+                    .registerCallback {
+                        // 在此处设置view也可以，建议在setLayout进行view操作
+                        createResult { isCreated, msg, _ ->
 //                    toast("isCreated: $isCreated")
 //                    logger.e("DSL:  $isCreated   $msg")
-                    }
-                    show {
-
-                    }
-                    hide {
-                    }
-                    dismiss {
-                    }
-
-                    touchEvent { view, event ->
-                        if (event.action == MotionEvent.ACTION_DOWN) {
+                        }
+                        show {
 
                         }
-                    }
+                        hide {
+                        }
+                        dismiss {
+                        }
 
-                    drag { view, motionEvent ->
+                        touchEvent { view, event ->
+                            if (event.action == MotionEvent.ACTION_DOWN) {
+
+                            }
+                        }
+
+                        drag { view, motionEvent ->
 //                    view.findViewById<TextView>(R.id.textView).apply {
 //                        text = "我被拖拽..."
 //                        setBackgroundResource(R.drawable.corners_red)
@@ -507,45 +541,46 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
 //                            EasyFloat.dismiss(tag, true)
 //                        }
 //                    })
-                    }
-
-                    dragEnd {
-                        root?.apply {
-                            val location = IntArray(2)
-                            this.getLocationOnScreen(location)
-                            val x = location[0] // view距离 屏幕左边的距离（即x轴方向）
-                            val y = location[1] // view距离 屏幕顶边的距离（即y轴方向）
-                            CacheManager.dragX = x
-                            CacheManager.dragY = y
-                            AppLogs.dLog("dragParams","拖拽后x:${x} 拖拽后y:${y}")
                         }
+
+                        dragEnd {
+                            root?.apply {
+                                val location = IntArray(2)
+                                this.getLocationOnScreen(location)
+                                val x = location[0] // view距离 屏幕左边的距离（即x轴方向）
+                                val y = location[1] // view距离 屏幕顶边的距离（即y轴方向）
+                                CacheManager.dragX = x
+                                CacheManager.dragY = y
+                                AppLogs.dLog("dragParams", "拖拽后x:${x} 拖拽后y:${y}")
+                            }
 //                    it.findViewById<TextView>(R.id.textView).apply {
 //                        text = "拖拽结束"
 //                        val location = IntArray(2)
 //                        getLocationOnScreen(location)
 //                        setBackgroundResource(if (location[0] > 10) R.drawable.corners_left else R.drawable.corners_right)
 //                    }
+                        }
                     }
-                }
-                .show() }
-        }else{
-            EasyFloat.dismiss(tag = "webPop",true)
+                    .show()
+            }
+        } else {
+            EasyFloat.dismiss(tag = "webPop", true)
         }
     }
 
-    var tips1 :FirstDownloadTips?=null
+    var tips1: FirstDownloadTips? = null
 
     override fun onResume() {
         super.onResume()
-        updateDownloadButtonStatus(false,1)
+        updateDownloadButtonStatus(false, 1)
     }
 
     override fun getUrl(): String {
-        return jumpData?.jumpUrl?:""
+        return jumpData?.jumpUrl ?: ""
     }
 
     override fun getRealParseUrl(): String {
-        return jumpData?.jumpUrl?:""
+        return jumpData?.jumpUrl ?: ""
     }
 
     override fun getBinding(
@@ -556,7 +591,7 @@ class WebFragment:BaseWebFragment<BrowserFragmentWebBinding>() {
     }
 
     override fun onDestroy() {
-        EasyFloat.dismiss(tag = "webPop",true)
+        EasyFloat.dismiss(tag = "webPop", true)
         APP.engineLiveData.removeObservers(this)
         APP.downloadButtonLiveData.removeObservers(this)
         APP.videoNFLiveData.removeObservers(this)

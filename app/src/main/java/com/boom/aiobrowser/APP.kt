@@ -222,7 +222,7 @@ class APP: Application(), ViewModelStoreOwner {
                                 userStatus = 0
                             }
                             putInt("af_user",userStatus)
-                            putLong(PointValueKey.load_time,System.currentTimeMillis()-startTime)
+                            putLong(PointValueKey.load_time,(System.currentTimeMillis()-startTime)/1000)
                             putString(PointValueKey.network,afStatus)
                         })
                         UIManager.isBuyUser()
@@ -276,7 +276,7 @@ class APP: Application(), ViewModelStoreOwner {
                 }
                 PointEvent.posePoint(PointEventKey.adjust_suc,Bundle().apply {
                     putInt(PointValueKey.adjust_user,userType)
-                    putLong(PointValueKey.load_time,System.currentTimeMillis()-startTime)
+                    putLong(PointValueKey.load_time,(System.currentTimeMillis()-startTime)/1000)
                     putString(PointValueKey.network,it.network)
                 })
                 UIManager.isBuyUser()

@@ -43,7 +43,7 @@ object UIManager {
 
     var isSend = false
 
-    fun isBuyUser(isMain: Boolean = false): Boolean {
+    fun isBuyUser(): Boolean {
         if (CacheManager.isBUser) {
             sendBPoint()
             return true
@@ -52,22 +52,21 @@ object UIManager {
             var referData = getReferData()
             if (cloakData == "A" && referData == "A") {
                 AppLogs.dLog(TAG, "黑名单用户:cloakData A referData A")
-                if (isMain) CacheManager.isAUser = true
                 return false
             } else if (cloakData == "B" && referData == "A") {
                 AppLogs.dLog(TAG, "黑名单用户:cloakData B referData A")
-                if (isMain) CacheManager.isAUser = true
                 return false
             } else if (cloakData == "A" && referData == "B") {
                 AppLogs.dLog(TAG, "黑名单用户:cloakData A referData B")
-                if (isMain) CacheManager.isAUser = true
                 return false
             } else if (cloakData == "B" && referData == "B") {
                 AppLogs.dLog(TAG, "正常用户:cloakData B referData B")
                 CacheManager.isBUser = true
                 sendBPoint()
                 if (CacheManager.isAUser) {
-                    PointEvent.posePoint(PointEventKey.user_a_b)
+                    PointEvent.posePoint(PointEventKey.user_a_b,Bundle().apply {
+                        putLong(PointValueKey.load_time,(System.currentTimeMillis()-CacheManager.AUserTime)/1000)
+                    })
                 }
                 return true
             }

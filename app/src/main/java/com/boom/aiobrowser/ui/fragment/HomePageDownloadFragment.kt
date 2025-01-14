@@ -121,19 +121,6 @@ class HomePageDownloadFragment : BaseFragment<BrowserHomeDownloadBinding>(){
                 }
             })
         }
-
-
-        var isFirst = false
-        if (CacheManager.isFirstShowDownload){
-            isFirst = true
-            CacheManager.isFirstShowDownload = false
-        }
-        fBinding.root.postDelayed({
-            PointEvent.posePoint(PointEventKey.download_page, Bundle().apply {
-                putInt(PointValueKey.open_type,if (isFirst) 0 else 1)
-//                putString(PointValueKey.from_page,fromPage)
-            })
-        },0)
     }
 
     private fun updateUI(position: Int) {

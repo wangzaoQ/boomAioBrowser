@@ -300,6 +300,15 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                                         APP.instance.toNewsFrom = 0
                                     }
                                 })
+                            }else if (position == 2){
+                                var isFirst = false
+                                if (CacheManager.isFirstShowDownload){
+                                    isFirst = true
+                                    CacheManager.isFirstShowDownload = false
+                                }
+                                PointEvent.posePoint(PointEventKey.download_page, Bundle().apply {
+                                    putInt(PointValueKey.open_type,if (isFirst) 0 else 1)
+                                })
                             }
                             if (position == 0){
                                 APP.downloadButtonLiveData.postValue(0)
@@ -349,11 +358,10 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
     fun hideStart(isNormal: Boolean) {
         APP.instance.isHideSplash = true
-        CacheManager.isFirstStart = false
         var allowShowPop = true
         // 0 默认  1 browser 2 news
         var jumpType = 0
-        if (UIManager.isBuyUser(true)){
+        if (UIManager.isBuyUser()){
             if (CacheManager.campaignId.isNullOrEmpty().not()){
                 var campaignId = CacheManager.campaignId
                 if (FirebaseConfig.browserJumpList.contains(campaignId)){
@@ -366,16 +374,21 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             }
             if (jumpType == 0){
                 when (FirebaseConfig.defaultUserData?.other?:"") {
-                    "download"-> {
-                         jumpType = 3
-                     }
                     "news"-> {
                         jumpType = 4
                     }
-                    else -> {}
+                    else -> {
+                        jumpType = 3
+                    }
                 }
             }
+        }else{
+            if (CacheManager.isFirstStart){
+                CacheManager.isAUser = true
+                CacheManager.AUserTime = System.currentTimeMillis()
+            }
         }
+        CacheManager.isFirstStart = false
         if (enumName.isNullOrEmpty().not()){
             when (enumName) {
                 NFEnum.NF_DOWNLOAD_VIDEO.menuName -> {
@@ -484,7 +497,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             AppLogs.dLog(acTAG,"首页弹窗判断 isDefaultBrowser：:${BrowserManager.isDefaultBrowser()} " +
                     "isFirstShowBrowserDefault:${CacheManager.isFirstShowBrowserDefault} switchDefaultPop:${FirebaseConfig.switchDefaultPop} allowShowPop:${allowShowPop} jumpType:${jumpType}")
         }
-        if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault && ((jumpType > 0 && FirebaseConfig.switchDefaultPop) || jumpType == 0) && allowShowPop){
+//        if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault && ((jumpType > 0 && FirebaseConfig.switchDefaultPop) || jumpType == 0)){
+        if (false){
             AppLogs.dLog(acTAG,"show browser pop")
             CacheManager.isFirstShowBrowserDefault = false
             var pop = DefaultPop(this@MainActivity)
@@ -519,7 +533,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
 
     private fun showDownloadGuide(showPopCount: Int, allowShowPop: Boolean,jumpType:Int) {
-        if (showPopCount == 2 && (jumpType == 1 || jumpType == 3) && allowShowPop){
+//        if (showPopCount == 2 && (jumpType == 0 || jumpType == 1 || jumpType == 3)){
+        if (showPopCount == 2){
             if (CacheManager.isFirstShowDownloadGuide){
                 AppLogs.dLog(acTAG,"允许开启引导弹窗")
                 CacheManager.isFirstShowDownloadGuide = false

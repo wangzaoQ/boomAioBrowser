@@ -75,6 +75,7 @@ object CacheManager {
     const val KV_CLICK_EVERY_DAY = "KV_CLICK_EVERY_DAY"
     const val KV_SHOW_EVERY_DAY = "KV_SHOW_EVERY_DAY"
     const val KV_LAST_LAUNCH_TIME = "KV_LAST_LAUNCH_TIME"
+    const val KV_A_USER_TIME = "KV_A_USER_TIME"
     const val KV_CLEAN_TIME = "KV_CLEAN_TIME"
     const val KV_FIRST_SHOW_DOWNLOAD = "KV_FIRST_SHOW_DOWNLOAD"
     const val KV_FIRST_SHOW_DOWNLOAD_GUIDE = "KV_FIRST_SHOW_DOWNLOAD_GUIDE"
@@ -398,6 +399,14 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_LAST_LAUNCH_TIME, value)
+        }
+
+    var AUserTime: Long
+        get() {
+            return mmkv.decodeLong(KV_A_USER_TIME)
+        }
+        set(value) {
+            mmkv.encode(KV_A_USER_TIME, value)
         }
 
 //

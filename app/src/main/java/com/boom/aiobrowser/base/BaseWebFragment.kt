@@ -150,7 +150,6 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                                 var cookie = CookieManager.getInstance().getCookie(url)?:""
                                 map.put("Cookie", cookie)
                             }
-
                         }
                         var sourceList = if (fromSource == "page") CacheManager.pageList else  CacheManager.fetchList
                         var fileStart = ""
@@ -293,28 +292,50 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
     fun allowShowTips(): Boolean {
         var showTask = false
-        if (UIManager.isBuyUser().not()){
-            var hostList = extractDomain(mAgentWeb?.webCreator?.webView?.url?:"")
-            AppLogs.dLog(fragmentTAG,"当前加载Url:${mAgentWeb?.webCreator?.webView?.url?:""} host:${hostList}")
-            if (WebScan.isVimeo(hostList)){}
-            else if (FirebaseConfig.switchOpenFilter1){
-                AppLogs.dLog(fragmentTAG,"命中filter1")
-                showTask = true
-            }else{
-                var index = -1
-                for (i in 0 until FirebaseConfig.switchOpenFilterList.size){
-                    var filterWeb = FirebaseConfig.switchOpenFilterList.get(i).trim()
-                    for (j in 0 until hostList.size){
-                        if (hostList.get(j).equals(filterWeb,true)){
-                            index = i
-                            break
-                        }
+//        if (UIManager.isBuyUser().not()){
+//            var hostList = extractDomain(mAgentWeb?.webCreator?.webView?.url?:"")
+//            AppLogs.dLog(fragmentTAG,"当前加载Url:${mAgentWeb?.webCreator?.webView?.url?:""} host:${hostList}")
+//            if (WebScan.isVimeo(hostList)){}
+//            else if (FirebaseConfig.switchOpenFilter1){
+//                AppLogs.dLog(fragmentTAG,"命中filter1")
+//                showTask = true
+//            }else{
+//                var index = -1
+//                for (i in 0 until FirebaseConfig.switchOpenFilterList.size){
+//                    var filterWeb = FirebaseConfig.switchOpenFilterList.get(i).trim()
+//                    for (j in 0 until hostList.size){
+//                        if (hostList.get(j).equals(filterWeb,true)){
+//                            index = i
+//                            break
+//                        }
+//                    }
+//                }
+//                if (index>=0){
+//                    AppLogs.dLog(fragmentTAG,"命中filter2 indexUrl:${FirebaseConfig.switchOpenFilterList.get(index) } host:${hostList}")
+//                    showTask = true
+//                }
+//            }
+//        }
+        var hostList = extractDomain(mAgentWeb?.webCreator?.webView?.url?:"")
+        AppLogs.dLog(fragmentTAG,"当前加载Url:${mAgentWeb?.webCreator?.webView?.url?:""} host:${hostList}")
+        if (WebScan.isVimeo(hostList)){}
+        else if (FirebaseConfig.switchOpenFilter1){
+            AppLogs.dLog(fragmentTAG,"命中filter1")
+            showTask = true
+        }else{
+            var index = -1
+            for (i in 0 until FirebaseConfig.switchOpenFilterList.size){
+                var filterWeb = FirebaseConfig.switchOpenFilterList.get(i).trim()
+                for (j in 0 until hostList.size){
+                    if (hostList.get(j).equals(filterWeb,true)){
+                        index = i
+                        break
                     }
                 }
-                if (index>=0){
-                    AppLogs.dLog(fragmentTAG,"命中filter2 indexUrl:${FirebaseConfig.switchOpenFilterList.get(index) } host:${hostList}")
-                    showTask = true
-                }
+            }
+            if (index>=0){
+                AppLogs.dLog(fragmentTAG,"命中filter2 indexUrl:${FirebaseConfig.switchOpenFilterList.get(index) } host:${hostList}")
+                showTask = true
             }
         }
         return showTask
@@ -375,12 +396,19 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-            AppLogs.dLog(
-                fragmentTAG,
-                "mWebViewClient shouldOverrideUrlLoading:${request?.url}"
-            )
-            var url = request?.url?.toString()?:""
-            return if (url.startsWith("intent://")) {
+//            AppLogs.dLog(
+//                fragmentTAG,
+//                "mWebViewClient shouldOverrideUrlLoading:${request?.url}"
+//            )
+            var requestUrl = request?.url?.toString()?:""
+//            rootActivity.addLaunch(success = {
+//                if (requestUrl.contains(".js").not()&&requestUrl.contains(".css").not()){
+//                    var cookieManager = CookieManager.getInstance()
+//                    var cookie = cookieManager.getCookie(requestUrl)?:""
+//                    WebScan.getResourceInfo(requestUrl,cookie)
+//                }
+//            }, failBack = {})
+            return if (requestUrl.startsWith("intent://")) {
                 true
             } else super.shouldOverrideUrlLoading(view, request)
         }
@@ -393,6 +421,15 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 //                fragmentTAG,
 //                "mWebViewClient shouldInterceptRequest:${request?.url}"
 //            )
+//            rootActivity.addLaunch(success = {
+//                var requestUrl = request?.url?.toString()?:""
+//                if (requestUrl.contains(".js").not()&&requestUrl.contains(".css").not()){
+//                    var cookieManager = CookieManager.getInstance()
+//                    var cookie = cookieManager.getCookie(requestUrl)?:""
+//                    WebScan.getResourceInfo(requestUrl,cookie)
+//                }
+//            }, failBack = {})
+
 //            request?.url?.apply {
 //                if (WebScan.isTikTok(this.toString())){
 //                    var  builder = Request.Builder()
@@ -464,7 +501,11 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 //                }else if (WebScan.isPornhub(url)){
 //                    WebScan.filterUri(url, WeakReference(rootActivity))
 //                }
-//            evaluateHTML(view!!)
+//                fBinding.root.postDelayed({
+//                    evaluateHTML(view!!)
+//                    WebScan.filterUri(url, WeakReference(rootActivity))
+//                    WebScan.reset()
+//                },10000)
                 WebScan.reset()
             }
         }

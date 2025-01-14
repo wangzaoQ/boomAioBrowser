@@ -168,17 +168,9 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                         if (allowCheckStatus(formatData) && index == -1){
                             index = j
                             firstIndex = i
-//                        runCatching {
-//                            resolution = resolution.substring(0,resolution.length-1)
-//                            if (resolution.toInt()>selectedResolution.toInt()){
-//                                selectedResolution = resolution
-//                                index = i
-//                            }
-//                        }
+                            data.formatsList.get(index).videoChecked = true
+                            break
                         }
-                    }
-                    if (index >= 0){
-                        data.formatsList.get(index).videoChecked = true
                     }
                 }else{
                     data.formatsList.forEach {
@@ -193,6 +185,8 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             }
         }, failBack = {})
     }
+
+    var isFirstClickAll = true
 
     /**
      *   - 未下载/下载中时，弹窗全选，下载按钮总计文件大小，如果都是已下载完成的展示open
@@ -332,8 +326,15 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                     tvClear.text = context.getString(R.string.app_all)
                 } else {
                     downloadAdapter.items.forEach {
-                        it.formatsList.forEach {
-                            it.videoChecked = true
+                        if (isFirstClickAll){
+                            isFirstClickAll = false
+                            if (it.formatsList.size>0){
+                                it.formatsList.get(0).videoChecked = true
+                            }
+                        }else{
+                            it.formatsList.forEach {
+                                it.videoChecked = true
+                            }
                         }
                     }
                     isSelectedAll = true

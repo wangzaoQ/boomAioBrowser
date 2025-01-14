@@ -358,7 +358,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
         fBinding.flTop.binding.tvToolbarSearch.text = "${jumpData?.jumpTitle} ${getSearchTitle()}"
         fBinding.refreshLayout.isRefreshing = false
 //        var key = mAgentWeb?.webCreator?.webView?.url?:""
-//        addDownload()
+        addDownload()
     }
 
     fun getSearchTitle(): String {
@@ -430,7 +430,11 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 
     private fun addDownload() {
         if (allowShowTips().not() && isAdded) {
-            EasyFloat.dismiss(tag = "webPop", true)
+            if (EasyFloat.isShow()){
+                updateDownloadButtonStatus(true, 0)
+                return
+            }
+//            EasyFloat.dismiss(tag = "webPop", true)
             var startX = 0
             var startY = 0
             var dragX = CacheManager.dragX

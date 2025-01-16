@@ -14,20 +14,18 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.toJson
-import com.boom.downloader.VideoDownloadException
 import com.boom.downloader.VideoInfoParserManager
-import com.boom.downloader.common.DownloadConstants
 import com.boom.downloader.model.Video
 import com.boom.downloader.model.Video.Mime.MIME_TYPE_MP4
-import com.boom.downloader.utils.DownloadExceptionUtils
 import com.boom.downloader.utils.HttpUtils
-import com.boom.downloader.utils.LogUtils
 import com.boom.downloader.utils.VideoDownloadUtils
 import okhttp3.Call
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import java.lang.ref.WeakReference
-import java.math.BigDecimal
 import java.net.HttpURLConnection
+import java.net.URL
+import java.net.URLDecoder
 import java.util.regex.Pattern
 
 
@@ -175,7 +173,7 @@ object WebScan {
                         list.add(0, uiData)
                         CacheManager.videoDownloadTempList = list
                         AppLogs.dLog(TAG, "filterUri 发送数据变化 id:${data.videoId}")
-                        APP.videoScanLiveData.postValue(uiData)
+//                        APP.videoScanLiveData.postValue(uiData)
                     }
                 }, failBack = {})
             } else {
@@ -223,30 +221,59 @@ object WebScan {
         }
     }
 
-    suspend fun getResourceInfo(videoUrl: String, cookie: String) {
-        var uiData = VideoUIData()
+    suspend fun getResourceInfo(videoUrl: String, cookie: String,realUrl:String ) {
+
         var map = getVideoHeaderInfo(videoUrl, cookie)
         var contentLength = 0L
         var contentType = ""
         contentType = map.get(content_type) as? String ?: ""
         contentLength = map.get(content_length) as? Long ?: 0L
-
+        var doc: Document?=null
+        runCatching {
+            doc = Jsoup.connect(realUrl).get()
+        }
+        if (contentLength<=0)return
         var imageUrl = ""
         var videoType = ""
         if (contentType == MIME_TYPE_MP4) {
             videoType = "mp4"
             imageUrl = videoUrl
-        } else if (videoUrl.contains("m3u8")) {
+        } else if (contentType == "m3u8") {
+            videoType = "m3u8"
 
+            var img = ""
+            // 获取 Open Graph 元数据中的封面图 URL
+            val ogImage = doc?.select("meta[property=og:image]")?.attr("content")?:""
+            if (img.isNullOrEmpty()){
+                AppLogs.dLog("webReceive","loadWebFinished 图片1:${ogImage}")
+                img = ogImage
+            }
+            // 获取 <video> 标签的 poster 属性
+            if (img.isNullOrEmpty()){
+                val posterImage = doc?.select("video")?.attr("poster")?:""
+                AppLogs.dLog("webReceive","loadWebFinished 图片2:${posterImage}")
+                img = posterImage
+            }
+            if (img.isNullOrEmpty()){
+                val videoOtherImg = getVideoCoverImageFromNearbyImages(doc)?:""
+                AppLogs.dLog("webReceive","loadWebFinished 图片3:${videoOtherImg}")
+                img = videoOtherImg
+            }
+            if (img.isNullOrEmpty().not()){
+                imageUrl = img
+            }
+//            imageUrl = loadImg
         } else {
-
+//            videoType = "video"
+//            imageUrl = videoUrl
         }
         if (videoType.isNullOrEmpty()) return
-        AppLogs.dLog("webReceive", "videoType 通过 getResourceInfo:${videoUrl}")
+//        AppLogs.dLog("webReceive", "videoType 通过 getResourceInfo:${videoUrl}")
         var paramsMap = HashMap<String, Any>()
         paramsMap.put("Cookie", cookie)
-        var doc = Jsoup.connect(videoUrl).get()
-        var fileStart = doc.title()
+//        var doc = Jsoup.connect(videoUrl).get()
+        var title = doc?.title()?:""
+        var fileStart = ""
         if (fileStart.isNullOrEmpty()) {
             runCatching {
                 if (fileStart.isNullOrEmpty()) {
@@ -263,7 +290,7 @@ object WebScan {
         }
         var videoDownloadData = VideoDownloadData().createDefault(
             videoId = "${VideoDownloadUtils.computeMD5(videoUrl)}",
-            fileName = "${fileStart}.${videoType}",
+            fileName = if (TextUtils.isEmpty(title)) "${fileStart}.${videoType}" else  "${title}.${videoType}",
             url = videoUrl,
             imageUrl = imageUrl,
             paramsMap = paramsMap,
@@ -271,25 +298,66 @@ object WebScan {
             videoType = videoType,
             resolution = ""
         )
-        uiData.formatsList.add(videoDownloadData)
-        uiData.videoResultId = "${VideoDownloadUtils.computeMD5(videoUrl)}"
-        AppLogs.dLog("webReceive", "过滤前 getResourceInfo:${toJson(uiData)}")
-        var index = -1
         var list = CacheManager.videoDownloadTempList
-        for (i in 0 until list.size) {
-            var data = list.get(i)
-//            AppLogs.dLog("webReceive","getResourceInfo data.videoResultId:${data.videoResultId} uiData.videoResultId:${uiData.videoResultId}")
-            if (data.videoResultId == uiData.videoResultId) {
-                index = i
-                break
+//        var baseUrl = URL(URL(videoUrl), "1").toString()
+        var baseUrl = URL(videoUrl).host
+        var isAdd = false
+        list.forEach {
+            if (it.formatsList.isNotEmpty()&& videoType == "m3u8"){
+                var tempDownloadData =  it.formatsList.get(0)
+//                var tempDataBaseUrl = URL(URL(tempDownloadData.url), "1").toString()
+                var tempDataBaseUrl = URL(tempDownloadData.url).host
+                if (tempDataBaseUrl == baseUrl){
+                    var resolution = extractResolution(videoUrl)
+                    if (resolution.isNullOrEmpty()){
+                        var index = videoUrl?.lastIndexOf("/")?:0
+                        if (index>0){
+                            resolution = videoUrl?.substring(index+1)?:""
+                        }
+                    }
+                    //同一来源
+                    isAdd = true
+                    videoDownloadData.resolution = resolution?:""
+                    it.formatsList.add(videoDownloadData)
+                    AppLogs.dLog("getResourceInfo", "过滤后 加入到同一数据源:${toJson(it)}")
+                    APP.videoScanLiveData.postValue(0)
+                }
             }
         }
-        if (index == -1) {
-            list.add(0, uiData)
+        if (isAdd.not()){
+            var uiData = VideoUIData()
+            uiData.description = doc?.title()?:""
+            var resolution = extractResolution(videoUrl)
+            if (resolution.isNullOrEmpty()){
+                var urlIndex = videoUrl?.lastIndexOf("/")?:0
+                if (urlIndex>0){
+                    resolution = videoUrl?.substring(urlIndex+1)?:""
+                }
+            }
+            videoDownloadData.resolution = resolution
+            uiData.formatsList.add(videoDownloadData)
+            uiData.videoResultId = "${VideoDownloadUtils.computeMD5(videoUrl)}"
+            uiData.thumbnail = imageUrl
+//        AppLogs.dLog("webReceive", "过滤前 getResourceInfo:${toJson(uiData)}")
+            var index = -1
+            for (i in 0 until list.size) {
+                var data = list.get(i)
+                if (data.videoResultId == uiData.videoResultId) {
+                    index = i
+                    break
+                }
+            }
+            if (index == -1) {
+                list.add(0, uiData)
+                CacheManager.videoDownloadTempList = list
+                AppLogs.dLog("getResourceInfo", "过滤后 加入不同数据源:${toJson(uiData)}")
+                APP.videoScanLiveData.postValue(0)
+            }
+        }else{
             CacheManager.videoDownloadTempList = list
-            AppLogs.dLog("webReceive", "过滤后:${toJson(uiData)}")
-//            APP.videoScanLiveData.postValue(uiData)
+            APP.videoScanLiveData.postValue(0)
         }
+
     }
 
     private var call: Call? = null
@@ -302,6 +370,7 @@ object WebScan {
         var connection: HttpURLConnection? = null
         var headers = HashMap<String, String>().apply {
             put("Cookie", cookie)
+            put("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36")
         }
         // Redirect is enabled, send redirect request to get final location.
         var finalUrl = videoUrl
@@ -309,7 +378,7 @@ object WebScan {
             connection = HttpUtils.getConnection(
                 finalUrl,
                 headers,
-                VideoDownloadUtils.getDownloadConfig().shouldIgnoreCertErrors()
+                VideoDownloadUtils.getDownloadConfig().shouldIgnoreCertErrors(),true
             )
         } catch (e: Exception) {
             HttpUtils.closeConnection(connection)
@@ -324,8 +393,12 @@ object WebScan {
             return infoMap
         }
         val contentType = connection.contentType
+//        finalUrl = "https://cdn77-vid.xnxx-cdn.com/g_RrfJQs9IIf11KsD3AkWQ==,1736930045/videos/hls/bf/5d/ca/bf5dcaaf9b3e82dff80c3ebb0ea7f9da/hls-250p-0b616.m3u8"
         if (finalUrl.contains(Video.TypeInfo.M3U8) || VideoDownloadUtils.isM3U8Mimetype(contentType)) {
+            AppLogs.dLog("m3u8","m3u8 finalUrl:${finalUrl} cookie:${cookie}")
             //这是M3U8视频类型
+            infoMap.put(content_type, "m3u8")
+            infoMap.put(content_length, PManager.calculateM3U8Size(finalUrl,headers))
         } else {
             //这是非M3U8类型, 需要获取视频的totalLength ===> contentLength
             val contentLength: Long = VideoInfoParserManager.getInstance()
@@ -338,7 +411,7 @@ object WebScan {
             infoMap.put(content_length, contentLength)
         }
         HttpUtils.closeConnection(connection)
-        AppLogs.dLog("webReceive","infoMap:${toJson(infoMap)} url:${videoUrl}")
+//        AppLogs.dLog("webReceive","infoMap:${toJson(infoMap)} url:${videoUrl}")
         return infoMap
     }
 
@@ -365,6 +438,78 @@ object WebScan {
             }
         }
         return (index == -1).not()
+    }
+
+
+    fun isXhaMaster(urlList: MutableList<String>): Boolean {
+        var index = -1
+        for (i in 0 until urlList.size) {
+            var url = urlList.get(i)
+            if (url.equals(WebConfig.Xhamster, true)) {
+                index = i
+                break
+            }
+        }
+        return (index == -1).not()
+    }
+
+    // 从 URL 查询字符串中提取某个特定的 key 对应的值
+    fun getQueryParam(url: String, key: String): String? {
+        // 使用 URI 类解析 URL
+        val uri = URL(url).toURI()
+        // 分割查询字符串并将每个参数分解为 key-value 对
+        val queryParams = uri.query.split("&").map { it.split("=") }
+            .associate { it[0] to URLDecoder.decode(it[1], "UTF-8") }
+
+        // 返回指定 key 对应的值
+        return queryParams[key]
+    }
+
+
+    // 从 URL 中提取分辨率信息
+    fun extractResolution(url: String): String? {
+        // 定义一个正则表达式，用于匹配像 360p, 720p, 1080p 等分辨率格式
+        val resolutionRegex = "(\\d{2,4}p)"  // 匹配类似 360p, 720p, 1080p 的格式
+
+        // 使用正则表达式查找分辨率
+        val pattern = Pattern.compile(resolutionRegex)
+        val matcher = pattern.matcher(url)
+
+        return if (matcher.find()) {
+            matcher.group()  // 提取匹配到的分辨率
+        } else {
+            ""  // 如果没有找到分辨率，返回 null
+        }
+    }
+
+    fun getVideoCoverImageFromNearbyImages(doc: Document?): String? {
+        if (doc == null)return null
+        // 查找包含视频的元素
+        val videoElements = doc.select("video")
+
+        // 遍历每个视频元素，查找其周围的图片
+        for (videoElement in videoElements) {
+            // 检查 video 元素是否有 poster 属性
+            val posterImage = videoElement.attr("poster")
+            if (posterImage.isNotEmpty()) {
+                return posterImage
+            }
+
+            // 向上查找视频元素周围的图片
+            var parentElement = videoElement.parent()
+            var depth = 3  // 设置查找的深度
+            while (parentElement != null && depth > 0) {
+                // 查找父元素下的所有 img 标签
+                val img = parentElement.select("img").first()
+                if (img != null && img.hasAttr("src") && img.attr("src").startsWith("http")) {
+                    return img.attr("src")  // 返回第一个找到的图片 src
+                }
+                parentElement = parentElement.parent()  // 向上遍历父元素
+                depth--
+            }
+        }
+
+        return null
     }
 
     fun reset() {

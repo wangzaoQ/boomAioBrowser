@@ -47,6 +47,8 @@ import com.boom.drag.utils.DisplayUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import pop.basepopup.BasePopupWindow.OnDismissListener
 import java.lang.ref.WeakReference
 
@@ -110,7 +112,8 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
                 }
             }
         }
-        updateDownloadButtonStatus(false)
+        EasyFloat.dismiss(tag = "webPop", true)
+        addDownload()
     }
 
     private fun addLast(url: String) {
@@ -152,47 +155,47 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
         }
 
         APP.videoScanLiveData.observe(this) {
-            if (jumpData?.autoDownload == true) {
-                if (it.formatsList.size == 1) {
-                    it?.apply {
-                        (context as BaseActivity<*>).addLaunch(success = {
-                            if (it.formatsList.isNotEmpty()) {
-                                var data = it.formatsList.get(0)
-                                var model = DownloadCacheManager.queryDownloadModel(data)
-                                if (model == null) {
-                                    data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
-                                    DownloadCacheManager.addDownLoadPrepare(data)
-                                    withContext(Dispatchers.Main) {
-                                        var headerMap = HashMap<String, String>()
-                                        data.paramsMap?.forEach {
-                                            headerMap.put(it.key, it.value.toString())
-                                        }
-                                        VideoDownloadManager.getInstance()
-                                            .startDownload(data.createDownloadData(data), headerMap)
-                                        NFManager.requestNotifyPermission(
-                                            WeakReference((context as BaseActivity<*>)),
-                                            onSuccess = {
-                                                NFShow.showDownloadNF(data, true)
-                                            },
-                                            onFail = {})
-                                    }
-                                }
-                            }
-                        }, failBack = {})
-                    }
-                } else {
-                    var status = popDown?.isShowing ?: false
-                    if (!status && it.formatsList.size > 1) {
-                        showDownloadPop()
-                    }
-                }
-                jumpData?.apply {
-                    autoDownload = false
-                    JumpDataManager.updateCurrentJumpData(this, "自动下载后重置")
-                }
-            } else {
-                popDown?.updateDataByScan(it)
-            }
+//            if (jumpData?.autoDownload == true) {
+//                if (it.formatsList.size == 1) {
+//                    it?.apply {
+//                        (context as BaseActivity<*>).addLaunch(success = {
+//                            if (it.formatsList.isNotEmpty()) {
+//                                var data = it.formatsList.get(0)
+//                                var model = DownloadCacheManager.queryDownloadModel(data)
+//                                if (model == null) {
+//                                    data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
+//                                    DownloadCacheManager.addDownLoadPrepare(data)
+//                                    withContext(Dispatchers.Main) {
+//                                        var headerMap = HashMap<String, String>()
+//                                        data.paramsMap?.forEach {
+//                                            headerMap.put(it.key, it.value.toString())
+//                                        }
+//                                        VideoDownloadManager.getInstance()
+//                                            .startDownload(data.createDownloadData(data), headerMap)
+//                                        NFManager.requestNotifyPermission(
+//                                            WeakReference((context as BaseActivity<*>)),
+//                                            onSuccess = {
+//                                                NFShow.showDownloadNF(data, true)
+//                                            },
+//                                            onFail = {})
+//                                    }
+//                                }
+//                            }
+//                        }, failBack = {})
+//                    }
+//                } else {
+//                    var status = popDown?.isShowing ?: false
+//                    if (!status && it.formatsList.size > 1) {
+//                        showDownloadPop()
+//                    }
+//                }
+//                jumpData?.apply {
+//                    autoDownload = false
+//                    JumpDataManager.updateCurrentJumpData(this, "自动下载后重置")
+//                }
+//            } else {
+//                popDown?.updateDataByScan(it)
+//            }
             updateDownloadButtonStatus(true, 0)
         }
         APP.videoNFLiveData.observe(this) {
@@ -350,8 +353,9 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
         }
     }
 
-    override fun loadWebFinished() {
-        super.loadWebFinished()
+
+    override fun loadWebFinished(url:String) {
+        super.loadWebFinished(url)
 //        if (allowShowTips()){
 //            showTipsPop()
 //        }

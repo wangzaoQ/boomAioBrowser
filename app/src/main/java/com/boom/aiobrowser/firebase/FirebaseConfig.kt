@@ -250,8 +250,8 @@ object FirebaseConfig {
 
     const val DEFAULT_REFER_CONFIG = "fb4a,facebook,gclid,not%20set,youtubeads,%7B%22,bytedance,adjust"
 
-    const val FILTER_DEFAULT_WEB = "tiktok,facebook,instagram,x,whatsapp,reddit,snapchat,orkut,netflix,disneyplus,hulu,primevideo,hbomax,imdb,globoplay,looke,telecineplay,cnn,nytimes,foxnews,nbcnews,washingtonpost,usatoday,globo,uol,folha,uol,estadao,r7,correiobraziliense,tmz,people,eonline,usmagazine,perezhilton,justjared,quem,purepeople,ego,rd1,caras,google,chatgpt,office,grammarly,canva,pagseguro,webmd,mayoclinic,healthline,medlineplus,everydayhealth,minhavida,einstein,hipocentro,saude,tripadvisor,expedia,kayak,airbnb,booking,lonelyplanet,decolar,maxmilhas,hurb,melhoresdestinos,viajanet,spotify,pandora,apple,soundcloud,amazon,tidal,deezer,suamusica,palcomp3,mercadolivre,americanas,magazineluiza,submarino,netshoes,aliexpress,espn,bleacherreport,yahoosports,cbssports,nba,nfl,globo,esporte,lance,esporteinterativo,futebolinterior,youtube,vimeo,dailymotion,twitch,kwai"
-//    const val FILTER_DEFAULT_WEB = ""
+//    const val FILTER_DEFAULT_WEB = "tiktok,facebook,instagram,x,whatsapp,reddit,snapchat,orkut,netflix,disneyplus,hulu,primevideo,hbomax,imdb,globoplay,looke,telecineplay,cnn,nytimes,foxnews,nbcnews,washingtonpost,usatoday,globo,uol,folha,uol,estadao,r7,correiobraziliense,tmz,people,eonline,usmagazine,perezhilton,justjared,quem,purepeople,ego,rd1,caras,google,chatgpt,office,grammarly,canva,pagseguro,webmd,mayoclinic,healthline,medlineplus,everydayhealth,minhavida,einstein,hipocentro,saude,tripadvisor,expedia,kayak,airbnb,booking,lonelyplanet,decolar,maxmilhas,hurb,melhoresdestinos,viajanet,spotify,pandora,apple,soundcloud,amazon,tidal,deezer,suamusica,palcomp3,mercadolivre,americanas,magazineluiza,submarino,netshoes,aliexpress,espn,bleacherreport,yahoosports,cbssports,nba,nfl,globo,esporte,lance,esporteinterativo,futebolinterior,youtube,vimeo,dailymotion,twitch,kwai"
+    const val FILTER_DEFAULT_WEB = ""
 //
 //    const val jumpBrowserConfig = "22008263268,21983018088"
 //    const val jumpNewsConfig = "22019400202,22018175955,22039651813"

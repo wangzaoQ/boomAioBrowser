@@ -103,7 +103,7 @@ class APP: Application(), ViewModelStoreOwner {
         val jumpWebLiveData  by lazy { ProtectedUnPeekLiveData<JumpData>() }
         val engineLiveData  by lazy { ProtectedUnPeekLiveData<Int>() }
         val bottomLiveData  by lazy { ProtectedUnPeekLiveData<String>() }
-        val videoScanLiveData by lazy { ProtectedUnPeekLiveData<VideoUIData>() }
+        val videoScanLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
         val videoNFLiveData by lazy { ProtectedUnPeekLiveData<VideoDownloadData>() }
         val downloadPageLiveData by lazy { ProtectedUnPeekLiveData<String>() }
 

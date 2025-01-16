@@ -77,7 +77,7 @@ object WebNet {
             builder.addInterceptor(loggingInterceptor)
         }
         var build = builder.build()
-        build.dispatcher.maxRequestsPerHost = 10
+        build.dispatcher.maxRequestsPerHost = 100
         return build
     }
     val netClient: OkHttpClient by lazy {

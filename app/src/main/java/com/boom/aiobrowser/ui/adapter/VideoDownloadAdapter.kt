@@ -90,7 +90,6 @@ class VideoDownloadAdapter(var isPop:Boolean = false): BaseQuickAdapter<VideoDow
                     }
                     progress.visibility = View.GONE
                     tvContent.text = "${item.size?.formatLength()}"
-                    tvName.text = item.downloadFileName
                     if (item.videoType == VideoDownloadData.TYPE_M3U8){
                         GlideManager.loadImg(null,ivVideo,item.imageUrl,0,R.mipmap.ic_default_download,0)
                     }else{

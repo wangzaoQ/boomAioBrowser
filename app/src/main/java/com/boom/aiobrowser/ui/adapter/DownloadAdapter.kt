@@ -2,6 +2,7 @@ package com.boom.aiobrowser.ui.adapter
 
 import android.content.Context
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,15 +64,15 @@ class DownloadAdapter(): BaseQuickAdapter<VideoUIData, DownloadAdapter.VH>() {
 
     private fun updateItem(item: VideoUIData, holder: VH,payload:String): Boolean {
         holder.viewBinding.apply {
-            tvName.text = item.description
-            GlideManager.loadImg(null,ivVideo,item.thumbnail,0,R.mipmap.ic_default_download,0)
+//            tvName.text = item.description
+//            GlideManager.loadImg(null,ivVideo,item.thumbnail,0,R.mipmap.ic_default_download,0)
             if(item.formatsList.size == 1){
                 rvFormats.visibility = View.GONE
                 var data = item.formatsList.get(0)
                 when (data.downloadType) {
                     VideoDownloadData.DOWNLOAD_SUCCESS->{
                         tvContent.text = "${data.size?.formatLength()}"
-                        tvName.text = data.downloadFileName
+                        tvName.text = if (TextUtils.isEmpty(data.fileName)) data.downloadFileName else data.fileName
                         if (data.videoType == VideoDownloadData.TYPE_M3U8){
                             GlideManager.loadImg(null,ivVideo,data.imageUrl,0,R.mipmap.ic_default_download,0)
                         }else{
@@ -87,15 +88,12 @@ class DownloadAdapter(): BaseQuickAdapter<VideoUIData, DownloadAdapter.VH>() {
                         GlideManager.loadImg(null,ivVideo,data.imageUrl,0,R.mipmap.ic_default_download,0)
                         ivPlay.visibility = View.VISIBLE
                         ivSelected.visibility = View.GONE
-                        if (item.description.isNullOrEmpty()){
-                            tvName.text = data.fileName
-                        }
+                        tvName.text = data.fileName
                     }
 
                     else -> {
-                        if (item.description.isNullOrEmpty()){
-                            tvName.text = data.fileName
-                        }
+                        GlideManager.loadImg(null,ivVideo,data.imageUrl,0,R.mipmap.ic_default_download,0)
+                        tvName.text = data.fileName
                         if (data.size == 0L) {
                             tvContent.text = ""
                         }else{
@@ -110,8 +108,10 @@ class DownloadAdapter(): BaseQuickAdapter<VideoUIData, DownloadAdapter.VH>() {
                     }
                 }
             }else{
+                tvName.text = item.description
                 ivSelected.visibility = View.GONE
                 rvFormats.visibility = View.VISIBLE
+                GlideManager.loadImg(null,ivVideo,item.thumbnail,0,R.mipmap.ic_default_download,0)
                 rvFormats.apply {
                     var childAdapter = DownloadChildItemAdapter()
                     layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)

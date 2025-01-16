@@ -8,5 +8,6 @@ object WebConfig {
     const val PORNHUB = "pornhub"
     const val YOUTUBE = "youtube"
     const val VIMEO = "vimeo"
+    const val Xhamster = "xhamster"
 
 }

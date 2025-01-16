@@ -12,6 +12,7 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
@@ -27,7 +28,6 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
-import com.boom.aiobrowser.tools.UIManager
 import com.boom.aiobrowser.tools.extractDomain
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getMapByGson
@@ -47,6 +47,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.Request
 import okhttp3.Response
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import java.lang.ref.WeakReference
 
 
@@ -54,6 +56,8 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
     var mAgentWeb :AgentWeb?=null
 
     var back: () -> Unit = {}
+
+    var loadResourceList = mutableListOf<String>()
 
     fun initWeb(){
         runCatching {
@@ -98,6 +102,8 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
             // AgentWeb 没有把WebView的功能全面覆盖 ，所以某些设置 AgentWeb 没有提供 ， 请从WebView方面入手设置。
             mAgentWeb!!.getWebCreator().getWebView().setOverScrollMode(WebView.OVER_SCROLL_NEVER)
+            mAgentWeb!!.getWebCreator().getWebView().getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
+
             if (CacheManager.browserStatus == 1){
                 runCatching {
                     // 禁止记录cookie
@@ -107,6 +113,14 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                 }
             }
         }
+        rootActivity.addLaunch(success = {
+//            WebScan.getResourceInfo("https://cdn77-vid.xnxx-cdn.com/g_RrfJQs9IIf11KsD3AkWQ==,1736930045/videos/hls/bf/5d/ca/bf5dcaaf9b3e82dff80c3ebb0ea7f9da/hls-250p-0b616.m3u8","")
+            var doc = Jsoup.connect(getRealParseUrl()).get()
+
+//            WebScan.getResourceInfo("https://em-h.phncdn.com/hls/videos/202309/16/439515521/720P_4000K_439515521.mp4/index-v1-a1.m3u8?validfrom=1736929616&validto=1736936816&ipa=43.228.226.11&hdl=-1&hash=xQN1VMKHDTfG%2BrZN8MtEv0%2BRU5A%3D","",doc)
+//            WebScan.getResourceInfo("https://em-h-ph.ypncdn.com/hls/videos/202412/10/461673981/720P_4000K_461673981.mp4/index-v1-a1.m3u8?validfrom=1736992493&validto=1736999693&hdl=-1&hash=XyU79tP5Xaje9AAZxzRRr5k0Ngg%3D",CookieManager.getInstance().getCookie(getRealParseUrl())?:"",doc)
+        }, failBack = {})
+
     }
 
     abstract fun getInsertParent(): ViewGroup
@@ -120,6 +134,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
         @JavascriptInterface
         fun result(kind: String, detail: String){
             AppLogs.dLog("webReceive","结果类型:${kind} thread:${Thread.currentThread()} detail:${detail}")
+            return
             fragmentWebReference.get()?.rootActivity?.addLaunch(success = {
                 allow = true
                 if (kind == "ERROR"){
@@ -236,7 +251,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                     if (index == -1){
                         list.add(0,uiData)
                         CacheManager.videoDownloadTempList = list
-                        APP.videoScanLiveData.postValue(uiData)
+                        APP.videoScanLiveData.postValue(0)
                     }
                 }
             }, failBack = {})
@@ -396,18 +411,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-//            AppLogs.dLog(
-//                fragmentTAG,
-//                "mWebViewClient shouldOverrideUrlLoading:${request?.url}"
-//            )
             var requestUrl = request?.url?.toString()?:""
-//            rootActivity.addLaunch(success = {
-//                if (requestUrl.contains(".js").not()&&requestUrl.contains(".css").not()){
-//                    var cookieManager = CookieManager.getInstance()
-//                    var cookie = cookieManager.getCookie(requestUrl)?:""
-//                    WebScan.getResourceInfo(requestUrl,cookie)
-//                }
-//            }, failBack = {})
             return if (requestUrl.startsWith("intent://")) {
                 true
             } else super.shouldOverrideUrlLoading(view, request)
@@ -417,18 +421,33 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             view: WebView?,
             request: WebResourceRequest?
         ): WebResourceResponse? {
-//            AppLogs.dLog(
-//                fragmentTAG,
-//                "mWebViewClient shouldInterceptRequest:${request?.url}"
-//            )
-//            rootActivity.addLaunch(success = {
-//                var requestUrl = request?.url?.toString()?:""
-//                if (requestUrl.contains(".js").not()&&requestUrl.contains(".css").not()){
-//                    var cookieManager = CookieManager.getInstance()
-//                    var cookie = cookieManager.getCookie(requestUrl)?:""
-//                    WebScan.getResourceInfo(requestUrl,cookie)
-//                }
-//            }, failBack = {})
+            var requestUrl = request?.url?.toString()?:""
+
+            if (loadResourceList.contains(requestUrl).not()){
+                loadResourceList.add(requestUrl)
+                rootActivity.addLaunch(success = {
+                    if (requestUrl.contains(".js").not()&&requestUrl.contains(".css").not()){
+                        var cookieManager = CookieManager.getInstance()
+                        var cookie = cookieManager.getCookie(requestUrl)?:""
+                        if (cookie.isNullOrEmpty()){
+                            cookie = cookieManager.getCookie(getRealParseUrl())?:""
+                        }
+                        var hostList = extractDomain(requestUrl)
+                        if (WebScan.isXhaMaster(hostList)){
+                            var sourceUrl = WebScan.getQueryParam(requestUrl,"sourceURL")?:""
+                            if (sourceUrl.contains("m3u8")){
+                                requestUrl = sourceUrl
+                            }
+                        }
+                        AppLogs.dLog(
+                            fragmentTAG,
+                            "mWebViewClient shouldInterceptRequest:${requestUrl} cookie:${cookie}"
+                        )
+                        WebScan.getResourceInfo(requestUrl,cookie,getRealParseUrl())
+                    }
+                }, failBack = {})
+            }
+
 
 //            request?.url?.apply {
 //                if (WebScan.isTikTok(this.toString())){
@@ -466,6 +485,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
         override fun onPageStarted(view: WebView?, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
+            loadResourceList.clear()
             CacheManager.videoDownloadTempList = mutableListOf()
             AppLogs.dLog(
                 fragmentTAG,
@@ -491,10 +511,10 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                     "  page mUrl:" + url + "  used time:" + (overTime - startTime!!)
                 )
                 timer.remove(url)
-                loadWebFinished()
-                var cookieManager = CookieManager.getInstance()
-                var cookie = cookieManager.getCookie(url)?:""
-                AppLogs.dLog(fragmentTAG,"onPageFinished page mUrl:${url}  cookie:${cookie}")
+                loadWebFinished(url)
+//                var cookieManager = CookieManager.getInstance()
+//                var cookie = cookieManager.getCookie(url)?:""
+//                AppLogs.dLog(fragmentTAG,"onPageFinished page mUrl:${url}  cookie:${cookie}")
 //                if (WebScan.isTikTok(url)){
 //                CacheManager.pageList.get(0).cDetail
 //                mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${CacheManager.pageList.get(0).cDetail}");
@@ -556,7 +576,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
     abstract fun getRealParseUrl():String
 
 
-    open fun loadWebFinished(){
+    open fun loadWebFinished(url:String){
 
     }
 

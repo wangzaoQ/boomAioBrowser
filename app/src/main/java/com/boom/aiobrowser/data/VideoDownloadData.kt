@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.data
 
+import android.net.Uri
 import android.text.TextUtils
 import com.boom.aiobrowser.data.model.DownloadModel
 import com.boom.aiobrowser.tools.getMapByGson
@@ -55,6 +56,7 @@ class VideoDownloadData {
         resolution: String,
     ): VideoDownloadData {
         this.fileName = fileName
+        this.downloadFileName = fileName
         this.url = url
         this.imageUrl = imageUrl
         this.paramsMap = paramsMap
@@ -68,10 +70,26 @@ class VideoDownloadData {
     }
 
     fun createDownloadData(data: VideoDownloadData): VideoTaskItem {
+        var fileStart = ""
+        if (fileStart.isNullOrEmpty()) {
+            runCatching {
+                if (fileStart.isNullOrEmpty()) {
+                    var uri = Uri.parse(data.url)
+                    var split = uri.host?.split(".")
+                    if (split!!.size > 0) {
+                        fileStart = "${split[0]}_${System.currentTimeMillis()}"
+                    }
+                }
+            }
+        }
+        if (fileStart.isNullOrEmpty()) {
+            fileStart = "${System.currentTimeMillis()}"
+        }
+        var fileName = "${fileStart}.${videoType}"
         var task = VideoTaskItem(
             data.url,
             if (TextUtils.isEmpty(data.imageUrl)) data.url else data.imageUrl,
-            data.fileName,
+            fileName,
             "group-1"
         )
 //        if (data.videoType == TYPE_MP4) {
@@ -82,7 +100,7 @@ class VideoDownloadData {
         if (data.videoType == TYPE_M3U8) {
             task.totalSize = data.size ?: 0L
         }
-        task.fileName = data.fileName
+        task.fileName = fileName
         task.downloadVideoId = data.videoId
 //        task.filePath
         return task

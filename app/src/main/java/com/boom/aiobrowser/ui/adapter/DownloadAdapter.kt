@@ -109,6 +109,7 @@ class DownloadAdapter(): BaseQuickAdapter<VideoUIData, DownloadAdapter.VH>() {
                 }
             }else{
                 tvName.text = item.description
+                tvContent.text = ""
                 ivSelected.visibility = View.GONE
                 rvFormats.visibility = View.VISIBLE
                 GlideManager.loadImg(null,ivVideo,item.thumbnail,0,R.mipmap.ic_default_download,0)

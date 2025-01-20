@@ -35,6 +35,15 @@ object WebScan {
 
     var isloading = false
 
+    val videoTypeList = mutableListOf<String>(
+        MIME_TYPE_MP4, "m3u8"
+    )
+
+    val mp4ContinueList = mutableListOf<String>(
+        WebConfig.PORNHUB,WebConfig.XNXX,WebConfig.XVIDEOS,WebConfig.FMOVIES,WebConfig.TOPFLIX,WebConfig.YOUPORN,WebConfig.PORNHAT,WebConfig.Xhamster
+    )
+    @Volatile
+    var loadResourceList = mutableListOf<String>()
     fun filterUri(uri: String, reference: WeakReference<BaseActivity<*>>) {
         var activity: BaseActivity<*>? = reference.get() ?: return
         var type = ""
@@ -221,58 +230,30 @@ object WebScan {
         }
     }
 
-    suspend fun getResourceInfo(videoUrl: String, cookie: String,realUrl:String ) {
 
-        var map = getVideoHeaderInfo(videoUrl, cookie)
+
+    suspend fun getResourceInfo(
+        videoUrl: String,
+        cookie: String,
+        realUrl: String,
+        hostList:MutableList<String>
+    ) {
+        var map = getVideoHeaderInfo(videoUrl, cookie,realUrl)
         var contentLength = 0L
         var contentType = ""
         contentType = map.get(content_type) as? String ?: ""
         contentLength = map.get(content_length) as? Long ?: 0L
-        var doc: Document?=null
-        runCatching {
-            doc = Jsoup.connect(realUrl).get()
+        if (videoTypeList.any { contentType.equals(it, true) }.not()){
+//            AppLogs.dLog("webReceive","原生 videoType 无匹配1")
+            return
         }
-        if (contentLength<=0)return
         var imageUrl = ""
         var videoType = ""
-        if (contentType == MIME_TYPE_MP4) {
-            videoType = "mp4"
-            imageUrl = videoUrl
-        } else if (contentType == "m3u8") {
-            videoType = "m3u8"
-
-            var img = ""
-            // 获取 Open Graph 元数据中的封面图 URL
-            val ogImage = doc?.select("meta[property=og:image]")?.attr("content")?:""
-            if (img.isNullOrEmpty()){
-                AppLogs.dLog("webReceive","loadWebFinished 图片1:${ogImage}")
-                img = ogImage
-            }
-            // 获取 <video> 标签的 poster 属性
-            if (img.isNullOrEmpty()){
-                val posterImage = doc?.select("video")?.attr("poster")?:""
-                AppLogs.dLog("webReceive","loadWebFinished 图片2:${posterImage}")
-                img = posterImage
-            }
-            if (img.isNullOrEmpty()){
-                val videoOtherImg = getVideoCoverImageFromNearbyImages(doc)?:""
-                AppLogs.dLog("webReceive","loadWebFinished 图片3:${videoOtherImg}")
-                img = videoOtherImg
-            }
-            if (img.isNullOrEmpty().not()){
-                imageUrl = img
-            }
-//            imageUrl = loadImg
-        } else {
-//            videoType = "video"
-//            imageUrl = videoUrl
+        var videoFileName = ""
+        if (contentLength<=0){
+            AppLogs.dLog("webReceive","原生 contentLength = 0 videoType:${contentType} url:${videoUrl}")
+            return
         }
-        if (videoType.isNullOrEmpty()) return
-//        AppLogs.dLog("webReceive", "videoType 通过 getResourceInfo:${videoUrl}")
-        var paramsMap = HashMap<String, Any>()
-        paramsMap.put("Cookie", cookie)
-//        var doc = Jsoup.connect(videoUrl).get()
-        var title = doc?.title()?:""
         var fileStart = ""
         if (fileStart.isNullOrEmpty()) {
             runCatching {
@@ -288,9 +269,47 @@ object WebScan {
         if (fileStart.isNullOrEmpty()) {
             fileStart = "${System.currentTimeMillis()}"
         }
+        if (contentType == MIME_TYPE_MP4) {
+            videoType = "mp4"
+            imageUrl = videoUrl
+            videoFileName = videoUrl
+            AppLogs.dLog("webReceive","videoType mp4 匹配 url:${videoUrl}")
+            hostList.apply {
+                if (isContinueMp4Host(this)){
+                    AppLogs.dLog("shouldInterceptRequest","原生 过滤mp4")
+                    return
+                }
+            }
+        } else if (contentType == "m3u8") {
+            videoType = "m3u8"
+            // 获取 Open Graph 元数据中的封面图 URL
+            imageUrl = map.get(content_img) as? String?:""
+            var title = map.get(content_title) as? String?:""
+            videoFileName =if (TextUtils.isEmpty(title)) "${fileStart}.${videoType}" else  "${title}.${videoType}"
+            AppLogs.dLog("webReceive","videoType m3u8 匹配 url:${videoUrl}")
+
+//            imageUrl = loadImg
+        } else {
+            AppLogs.dLog("shouldInterceptRequest","videoType ${contentType} 不匹配 url:${videoUrl}")
+//            videoType = "video"
+//            imageUrl = videoUrl
+        }
+        if (videoType.isNullOrEmpty()){
+//            AppLogs.dLog("webReceive","原生 videoType 无匹配1")
+            return
+        }
+        if (loadResourceList.contains(videoUrl)){
+            AppLogs.dLog("webReceive","原生 过滤重复数据 url:${videoUrl}")
+            return
+        }
+        loadResourceList.add(videoUrl)
+//        AppLogs.dLog("webReceive", "videoType 通过 getResourceInfo:${videoUrl}")
+        var paramsMap = HashMap<String, Any>()
+        paramsMap.put("Cookie", cookie)
+//        var doc = Jsoup.connect(videoUrl).get()
         var videoDownloadData = VideoDownloadData().createDefault(
             videoId = "${VideoDownloadUtils.computeMD5(videoUrl)}",
-            fileName = if (TextUtils.isEmpty(title)) "${fileStart}.${videoType}" else  "${title}.${videoType}",
+            fileName = videoFileName,
             url = videoUrl,
             imageUrl = imageUrl,
             paramsMap = paramsMap,
@@ -319,14 +338,13 @@ object WebScan {
                     isAdd = true
                     videoDownloadData.resolution = resolution?:""
                     it.formatsList.add(videoDownloadData)
-                    AppLogs.dLog("getResourceInfo", "过滤后 加入到同一数据源:${toJson(it)}")
-                    APP.videoScanLiveData.postValue(0)
+                    AppLogs.dLog("webReceive", "原生 过滤后 加入到同一数据源:${toJson(it)}")
                 }
             }
         }
         if (isAdd.not()){
             var uiData = VideoUIData()
-            uiData.description = doc?.title()?:""
+            uiData.description = map.get(content_title) as? String?:""
             var resolution = extractResolution(videoUrl)
             if (resolution.isNullOrEmpty()){
                 var urlIndex = videoUrl?.lastIndexOf("/")?:0
@@ -338,21 +356,10 @@ object WebScan {
             uiData.formatsList.add(videoDownloadData)
             uiData.videoResultId = "${VideoDownloadUtils.computeMD5(videoUrl)}"
             uiData.thumbnail = imageUrl
-//        AppLogs.dLog("webReceive", "过滤前 getResourceInfo:${toJson(uiData)}")
-            var index = -1
-            for (i in 0 until list.size) {
-                var data = list.get(i)
-                if (data.videoResultId == uiData.videoResultId) {
-                    index = i
-                    break
-                }
-            }
-            if (index == -1) {
-                list.add(0, uiData)
-                CacheManager.videoDownloadTempList = list
-                AppLogs.dLog("getResourceInfo", "过滤后 加入不同数据源:${toJson(uiData)}")
-                APP.videoScanLiveData.postValue(0)
-            }
+            list.add(0, uiData)
+            CacheManager.videoDownloadTempList = list
+            AppLogs.dLog("webReceive", "原生 过滤后 加入不同数据源:${toJson(uiData)}")
+            APP.videoScanLiveData.postValue(0)
         }else{
             CacheManager.videoDownloadTempList = list
             APP.videoScanLiveData.postValue(0)
@@ -364,8 +371,12 @@ object WebScan {
 
     var content_length = "contentLength"
     var content_type = "contentType"
+    var content_img = "imageUrl"
+    var content_title = "webTitle"
 
-    suspend fun getVideoHeaderInfo(videoUrl: String, cookie: String): Map<String, Any> {
+    var webTitle = ""
+
+    suspend fun getVideoHeaderInfo(videoUrl: String, cookie: String,realUrl: String): Map<String, Any> {
         var infoMap = HashMap<String, Any>()
         var connection: HttpURLConnection? = null
         var headers = HashMap<String, String>().apply {
@@ -381,10 +392,12 @@ object WebScan {
                 VideoDownloadUtils.getDownloadConfig().shouldIgnoreCertErrors(),true
             )
         } catch (e: Exception) {
+            AppLogs.dLog("webReceive","原生 无法创建链接 url:${finalUrl}")
             HttpUtils.closeConnection(connection)
             return infoMap
         }
         if (connection == null) {
+            AppLogs.dLog("webReceive","原生 链接为 null url:${finalUrl}")
             return infoMap
         }
         finalUrl = connection.url.toString()
@@ -395,10 +408,16 @@ object WebScan {
         val contentType = connection.contentType
 //        finalUrl = "https://cdn77-vid.xnxx-cdn.com/g_RrfJQs9IIf11KsD3AkWQ==,1736930045/videos/hls/bf/5d/ca/bf5dcaaf9b3e82dff80c3ebb0ea7f9da/hls-250p-0b616.m3u8"
         if (finalUrl.contains(Video.TypeInfo.M3U8) || VideoDownloadUtils.isM3U8Mimetype(contentType)) {
+            AppLogs.dLog("webReceive","原生 视频格式为 m3u8 url:${finalUrl}")
             AppLogs.dLog("m3u8","m3u8 finalUrl:${finalUrl} cookie:${cookie}")
             //这是M3U8视频类型
             infoMap.put(content_type, "m3u8")
+            AppLogs.dLog("m3u8","calculateM3U8Size Start")
+
+            AppLogs.dLog("m3u8","calculateM3U8Size end")
             infoMap.put(content_length, PManager.calculateM3U8Size(finalUrl,headers))
+            infoMap.put(content_img, imageUrl)
+            infoMap.put(content_title, webTitle)
         } else {
             //这是非M3U8类型, 需要获取视频的totalLength ===> contentLength
             val contentLength: Long = VideoInfoParserManager.getInstance()
@@ -409,6 +428,7 @@ object WebScan {
             }
             infoMap.put(content_type, contentType)
             infoMap.put(content_length, contentLength)
+            infoMap.put(content_title, webTitle)
         }
         HttpUtils.closeConnection(connection)
 //        AppLogs.dLog("webReceive","infoMap:${toJson(infoMap)} url:${videoUrl}")
@@ -435,6 +455,17 @@ object WebScan {
             if (url.equals(WebConfig.VIMEO, true)) {
                 index = i
                 break
+            }
+        }
+        return (index == -1).not()
+    }
+
+    fun isContinueMp4Host(urlList: MutableList<String>): Boolean {
+        var index = -1
+        for (i in 0 until urlList.size) {
+            var url = urlList.get(i)
+            if (mp4ContinueList.any { url.contains(it, true)}){
+                index = 1
             }
         }
         return (index == -1).not()
@@ -516,4 +547,35 @@ object WebScan {
         isloading = false
         call?.cancel()
     }
+
+    var imageUrl = ""
+
+
+   suspend fun getImg(realUrl: String) {
+       imageUrl = ""
+       webTitle = ""
+        AppLogs.dLog("m3u8","获取 title 和 img start")
+        var doc: Document?=null
+        runCatching {
+            doc = Jsoup.connect(realUrl).get()
+        }
+
+        val ogImage = doc?.select("meta[property=og:image]")?.attr("content")?:""
+        if (imageUrl.isNullOrEmpty()){
+            AppLogs.dLog("webReceive","loadWebFinished 图片1:${ogImage}")
+            imageUrl = ogImage
+        }
+
+        if (imageUrl.isNullOrEmpty()){
+            val videoOtherImg = getVideoCoverImageFromNearbyImages(doc)?:""
+            AppLogs.dLog("webReceive","loadWebFinished 图片3:${videoOtherImg}")
+            imageUrl = videoOtherImg
+        }
+       val videoElement = doc!!.select("video").first()
+       webTitle = videoElement?.attr("alt")?:"" // 如果视频有 alt 属性，可以获取
+       if (webTitle.isNullOrEmpty()){
+           webTitle = doc?.title()?:""
+       }
+       AppLogs.dLog("webReceive","loadWebFinished title:${webTitle}")
+   }
 }

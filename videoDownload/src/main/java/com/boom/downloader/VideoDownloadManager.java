@@ -41,7 +41,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class VideoDownloadManager {
     private static volatile VideoDownloadManager sInstance = null;
     private DownloadListener mGlobalDownloadListener = null;
-//    private VideoDownloadDatabaseHelper mVideoDatabaseHelper = null;
+    //    private VideoDownloadDatabaseHelper mVideoDatabaseHelper = null;
     private VideoDownloadQueue mVideoDownloadQueue;
     private Object mQueueLock = new Object();
     private VideoDownloadConfig mConfig;
@@ -307,6 +307,11 @@ public class VideoDownloadManager {
         LogUtils.i(DownloadConstants.TAG, "startBaseVideoDownloadTask 增加 size"+mVideoItemTaskMap.size());
         VideoTaskItem tempTaskItem = (VideoTaskItem) taskItem.clone();
         mVideoDownloadHandler.obtainMessage(DownloadConstants.MSG_DOWNLOAD_PREPARE, tempTaskItem).sendToTarget();
+        synchronized (mQueueLock) {
+            if (mVideoDownloadQueue.getDownloadingCount() >= mConfig.getConcurrentCount()) {
+                return;
+            }
+        }
 //        synchronized (mQueueLock) {
 //            if (mVideoDownloadQueue.getDownloadingCount() >= mConfig.getConcurrentCount()) {
 //                return;

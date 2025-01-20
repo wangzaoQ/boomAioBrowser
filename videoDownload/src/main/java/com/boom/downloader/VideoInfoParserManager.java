@@ -159,6 +159,7 @@ public class VideoInfoParserManager {
                 HttpUtils.closeConnection(connection);
                 return VideoDownloadUtils.DEFAULT_CONTENT_LENGTH;
             }
+            HttpUtils.closeConnection(connection);
             return totalLength;
         }
     }

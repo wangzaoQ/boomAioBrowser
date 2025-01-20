@@ -40,32 +40,41 @@ class WebParseActivity: BaseActivity<BrowserActivityWebParseBinding>() {
 
     override fun setListener() {
         APP.videoScanLiveData.observe(this){
-//            if (it.formatsList.isNullOrEmpty())return@observe
-//            var index = 0
-//            var selectedResolution = "0"
-//            for (i in 0 until it.formatsList.size){
-//                var formatData = it.formatsList.get(i)
-//                var resolution = formatData.resolution?:""
-//                if (resolution.isNotEmpty()){
-//                    runCatching {
-//                        resolution = resolution.substring(0,resolution.length-1)
-//                        if (resolution.toInt()>selectedResolution.toInt()){
-//                            selectedResolution = resolution
-//                            index = i
-//                        }
-//                    }
-//                }
-//            }
-//            var data = it.formatsList.get(index)
-//            if (CacheManager.isDisclaimerFirst){
-//                CacheManager.isDisclaimerFirst = false
-//                DisclaimerPop(this@WebParseActivity).createPop {
-//                    downData(data = data)
-//                }
-//            }else{
-//                downData(data = data)
-//            }
+            var videoDownloadTempList = CacheManager.videoDownloadTempList
+            if (videoDownloadTempList.isNotEmpty()){
+                var it = videoDownloadTempList.get(videoDownloadTempList.size-1)
+                if (it.formatsList.isNullOrEmpty())return@observe
+                var index = 0
+                var selectedResolution = "0"
+                for (i in 0 until it.formatsList.size){
+                    var formatData = it.formatsList.get(i)
+                    var resolution = formatData.resolution?:""
+                    if (resolution.isNotEmpty()){
+                        runCatching {
+                            resolution = resolution.substring(0,resolution.length-1)
+                            if (resolution.toInt()>selectedResolution.toInt()){
+                                selectedResolution = resolution
+                                index = i
+                            }
+                        }
+                    }
+                }
+                var data = it.formatsList.get(index)
+                if (CacheManager.isDisclaimerFirst){
+                    CacheManager.isDisclaimerFirst = false
+                    DisclaimerPop(this@WebParseActivity).createPop {
+                        downData(data = data)
+                    }
+                }else{
+                    downData(data = data)
+                }
+            }
         }
+    }
+
+    override fun onDestroy() {
+        APP.videoScanLiveData.removeObservers(this)
+        super.onDestroy()
     }
 
 

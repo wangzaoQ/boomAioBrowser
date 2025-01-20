@@ -63,6 +63,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
     }
 
     override fun loadWebOnPageStared(url: String) {
+        allowNeedCommon = false
         addLast(url)
         var list = CacheManager.pageList
         var index = -1
@@ -94,15 +95,346 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
             }
         }
         if (index == -1) {
+            allowNeedCommon = true
             //通用
             for (i in 0 until list.size) {
                 var pageData = list.get(i)
                 if (pageData.cUrl == "*") {
                     AppLogs.dLog("webReceive", "page 模式执行通用脚本 js:${pageData.cDetail}")
-//                    var str = "!function(){const e=window.location.href,t=window.fetch.bind(window),n=e=>t(e,{method:\"HEAD\"}),r=new Set([]);let s;const o=e=>e&&parseInt(e.split(\"/\")[1]),i=e=>o(e.headers.get(\"content-range\"))||parseInt(e.headers.get(\"content-length\")),a=e=>e&&e.split(\";\",2)[0],c=[\"application/vnd.apple.mpegurl\",\"application/x-mpegurl\",\"application/mpegurl\",\"video/x-mpegurl\",\"video/mpegurl\",\"audio/x-mpegurl\",\"audio/mpegurl\"],l={},u=async(e,r)=>{if(!r)return t(e).then((t=>t.text().then((t=>u(e,t)))));if(!r.includes(\"#EXTINF\"))return;const s=[];let o=0,a=0;const c=r.split(\"\\n\"),l=/#EXTINF:\\s*([\\d\\.]+)/;for(let t=0;t<c.length;t++)if(c[t])if(\"#\"===c[t][0]){const e=l.exec(c[t]);e&&(a+=parseFloat(e[1]),s.length<5&&(o=a))}else s.length<5&&s.push(new URL(c[t],e).toString());return o?Promise.all(s.map((e=>n(e).then((e=>i(e)))))).then((e=>e.reduce(((e,t)=>e+t),0)/o*a)).then(Math.floor):void 0},p=[\"video/mp4\"],d={\"user-agent\":window.navigator.userAgent,accept:\"*/*\",referer:e},h=(e,t={},n)=>{if(n.entries)Promise.all(n.entries.map((({resolution:e,url:t})=>u(t).then((r=>({url:t,format:n.format,cookie:!0,size:r,resolution:`\${e}p`})))))).then((n=>{const r={source:\"PAGE\",id:e,description:e,...t,formats:n,headers:d};\$__.result(\"VIDEO\",JSON.stringify(r))}));else{const r={source:\"PAGE\",id:e,description:e,...t,formats:[{url:e,format:\"mp4\",cookie:!0,size:void 0,resolution:void 0,...n}],headers:d};\$__.result(\"VIDEO\",JSON.stringify(r))}},f=(e,t,o)=>{if(!r.has(e)){r.add(e);const c=t??s;o?h(e,c,o):n(e).then((t=>{const n=a(t.headers.get(\"content-type\"));if(p.includes(n)){const e=i(t);h(t.url,c,{format:\"mp4\",size:e})}else h(e,c,{format:\"m3u8\"})}))}},m=e=>!!e&&(e.startsWith(\"http://\")||e.startsWith(\"https://\")),g=e=>{const t=/\\.(mp4|m3u8)/.exec(e);return t&&t[1]||\"mp4\"},v=e=>{if(\"VIDEO\"!==e.tagName)return;const t=e.src||e.querySelector(\"source\")?.src;if(m(t)){const n=(e=>{if(e.poster)return{thumbnail:e.poster};let t=3;for(;e&&t>=0;){const n=e.querySelector(\"img\");if(n&&m(n.src))return{thumbnail:n.src,description:n.alt};e=e.parentNode,t--}})(e);f(t,n,{format:g(t)})}else n=t,n&&n.startsWith(\"blob:\")&&(({thumbnail:e,description:t})=>{s={thumbnail:e||document.querySelector('meta[property=\"og:image\"]')?.content,description:t||document.title}})(imageInfo??{});var n};var y;window.fetch=function(){var e=t.apply(window,arguments);return e.then((e=>{if(!e.ok)return e;try{const t=a(e.headers.get(\"content-type\"));if(c.includes(t))u(e.url).then((t=>t&&f(e.url,void 0,{format:\"m3u8\",size:t})));else if(p.includes(t)){const t=o(e.headers.get(\"content-range\"));f(e.url,void 0,{format:\"mp4\",size:t})}}catch(e){}return e}))},y=XMLHttpRequest.prototype.open,XMLHttpRequest.prototype.open=function(){this.addEventListener(\"load\",(function(){var e=a(this.getResponseHeader(\"content-type\"));try{if(p.includes(e)){const e=o(this.getResponseHeader(\"content-range\"));(e=>!!e)(e)&&f(this.responseURL,void 0,{format:\"mp4\",size:e})}else if(c.includes(e)||this.responseText?.startsWith(\"#EXTM3U\")){if(l[this.responseURL])return;(async(e,t)=>{if(!t.includes(\"#EXT-X-STREAM-INF\"))return;const n=t.split(\"\\n\"),r=/#EXT-X-STREAM-INF.*RESOLUTION=\\d+x(\\d+)/,s=[];let o=null;for(let t=0;t<n.length;t++)if(n[t])if(\"#\"===n[t][0]){const e=r.exec(n[t]);e&&(o=parseInt(e[1]))}else{const r=new URL(n[t],e).toString();l[r]=e,s.push({resolution:o,url:r}),o=null}return s.sort(((e,t)=>t.resolution-e.resolution))})(this.responseURL,this.responseText).then((e=>{e?.length>0?f(this.responseURL,void 0,{format:\"m3u8\",entries:e}):u(this.responseURL,this.responseText).then((e=>e&&f(this.responseURL,void 0,{format:\"m3u8\",size:e})))}))}}catch(e){}})),y.apply(this,arguments)};const E=e=>{e instanceof Element&&\"VIDEO\"===e.tagName&&v(e),e?.childNodes?.length>0&&e?.querySelectorAll(\"video\").forEach((e=>v(e)))};new MutationObserver((function(e,t){try{e.forEach((e=>{switch(e.type){case\"attributes\":E(e.target);break;case\"childList\":e.addedNodes.forEach((e=>E(e)))}}))}catch(e){}})).observe(document,{subtree:!0,childList:!0,attributes:!0})}();"
+                    var str ="(function () {\n" +
+                            "  const url = window.location.href;\n" +
+                            "  const of = window.fetch.bind(window);\n" +
+                            "  const headFetch = (u) => of(u, { method: 'HEAD' });\n" +
+                            "  const observed = new Set([]);\n" +
+                            "  let mainImageInfo = undefined;\n" +
+                            "  const sizeFromRange = (range) => range && parseInt(range.split('/')[1]);\n" +
+                            "  const sizeFromResp = (resp) => {\n" +
+                            "    return (\n" +
+                            "      sizeFromRange(resp.headers.get('content-range')) ||\n" +
+                            "      parseInt(resp.headers.get('content-length'))\n" +
+                            "    );\n" +
+                            "  };\n" +
+                            "  const contentTypeMainPart = (type) => type && type.split(';', 2)[0];\n" +
+                            "  const m3u8 = [\n" +
+                            "    'application/vnd.apple.mpegurl',\n" +
+                            "    'application/x-mpegurl',\n" +
+                            "    'application/mpegurl',\n" +
+                            "    'video/x-mpegurl',\n" +
+                            "    'video/mpegurl',\n" +
+                            "    'audio/x-mpegurl',\n" +
+                            "    'audio/mpegurl',\n" +
+                            "  ];\n" +
+                            "  const m3u8Entries = {};\n" +
+                            "  const m3u8Entry = async (url, text) => {\n" +
+                            "    if (!text.includes('#EXT-X-STREAM-INF')) {\n" +
+                            "      return;\n" +
+                            "    }\n" +
+                            "    const lines = text.split('\\n');\n" +
+                            "    const resolutionPattern = /#EXT-X-STREAM-INF.*RESOLUTION=\\d+x(\\d+)/;\n" +
+                            "    const result = [];\n" +
+                            "    let resolution = null;\n" +
+                            "    for (let i = 0; i < lines.length; i++) {\n" +
+                            "      if (!lines[i]) {\n" +
+                            "        continue;\n" +
+                            "      }\n" +
+                            "      if (lines[i][0] === '#') {\n" +
+                            "        const match = resolutionPattern.exec(lines[i]);\n" +
+                            "        if (match) {\n" +
+                            "          resolution = parseInt(match[1]);\n" +
+                            "        }\n" +
+                            "      } else {\n" +
+                            "        const ent = new URL(lines[i], url).toString();\n" +
+                            "        m3u8Entries[ent] = url;\n" +
+                            "        result.push({\n" +
+                            "          resolution,\n" +
+                            "          url: ent,\n" +
+                            "        });\n" +
+                            "        resolution = null;\n" +
+                            "      }\n" +
+                            "    }\n" +
+                            "    return result.sort((a, b) => b.resolution - a.resolution);\n" +
+                            "  };\n" +
+                            "  const m3u8Size = async (url, text) => {\n" +
+                            "    if (!text) {\n" +
+                            "      return of(url).then((resp) => resp.text().then((t) => m3u8Size(url, t)));\n" +
+                            "    }\n" +
+                            "    if (!text.includes('#EXTINF')) {\n" +
+                            "      return;\n" +
+                            "    }\n" +
+                            "    const samples = [];\n" +
+                            "    let sampleDuration = 0;\n" +
+                            "    let duration = 0;\n" +
+                            "    const lines = text.split('\\n');\n" +
+                            "    const durationPattern = /#EXTINF:\\s*([\\d\\.]+)/;\n" +
+                            "    for (let i = 0; i < lines.length; i++) {\n" +
+                            "      if (!lines[i]) {\n" +
+                            "        continue;\n" +
+                            "      }\n" +
+                            "      if (lines[i][0] === '#') {\n" +
+                            "        const match = durationPattern.exec(lines[i]);\n" +
+                            "        if (match) {\n" +
+                            "          duration += parseFloat(match[1]);\n" +
+                            "          if (samples.length < 5) {\n" +
+                            "            sampleDuration = duration;\n" +
+                            "          }\n" +
+                            "        }\n" +
+                            "      } else {\n" +
+                            "        if (samples.length < 5) {\n" +
+                            "          samples.push(new URL(lines[i], url).toString());\n" +
+                            "        }\n" +
+                            "      }\n" +
+                            "    }\n" +
+                            "    if (!sampleDuration) {\n" +
+                            "      return;\n" +
+                            "    }\n" +
+                            "    return Promise.all(samples.map((u) => headFetch(u).then((resp) => sizeFromResp(resp))))\n" +
+                            "      .then((s) => (s.reduce((prev, curr) => prev + curr, 0) / sampleDuration) * duration)\n" +
+                            "      .then(Math.floor);\n" +
+                            "  };\n" +
+                            "  const mp4 = ['video/mp4'];\n" +
+                            "  const acceptMp4 = (size) => !!size;\n" +
+                            "  const headers = {\n" +
+                            "    'user-agent': window.navigator.userAgent,\n" +
+                            "    accept: '*/*',\n" +
+                            "    referer: url,\n" +
+                            "  };\n" +
+                            "\n" +
+                            "  const result = (url, imageInfo = {}, videos) => {\n" +
+                            "    if (videos.entries) {\n" +
+                            "      Promise.all(\n" +
+                            "        videos.entries.map(({ resolution, url: ent }) =>\n" +
+                            "          m3u8Size(ent).then((size) => ({\n" +
+                            "            url: ent,\n" +
+                            "            format: videos.format,\n" +
+                            "            cookie: true,\n" +
+                            "            size,\n" +
+                            "            resolution: `\${resolution}p`,\n" +
+                            "          }))\n" +
+                            "        )\n" +
+                            "      ).then((formats) => {\n" +
+                            "        const obj = {\n" +
+                            "          source: 'PAGE',\n" +
+                            "          id: url,\n" +
+                            "          description: url,\n" +
+                            "          ...imageInfo,\n" +
+                            "          formats,\n" +
+                            "          headers,\n" +
+                            "        };\n" +
+                            "        console.log(obj);\n" +
+                            "        \$__.result('VIDEO', JSON.stringify(obj));\n" +
+                            "      });\n" +
+                            "    } else {\n" +
+                            "      const obj = {\n" +
+                            "        source: 'PAGE',\n" +
+                            "        id: url,\n" +
+                            "        description: url,\n" +
+                            "        ...imageInfo,\n" +
+                            "        formats: [\n" +
+                            "          {\n" +
+                            "            url,\n" +
+                            "            format: 'mp4',\n" +
+                            "            cookie: true,\n" +
+                            "            size: undefined,\n" +
+                            "            resolution: undefined,\n" +
+                            "            ...videos,\n" +
+                            "          },\n" +
+                            "        ],\n" +
+                            "        headers,\n" +
+                            "      };\n" +
+                            "      console.log(obj);\n" +
+                            "      \$__.result('VIDEO', JSON.stringify(obj));\n" +
+                            "    }\n" +
+                            "  };\n" +
+                            "\n" +
+                            "  const handleResult = (videoUrl, imgInfo, videoInfo) => {\n" +
+                            "    if (!observed.has(videoUrl)) {\n" +
+                            "      observed.add(videoUrl);\n" +
+                            "      const imageInfo = imgInfo ?? mainImageInfo;\n" +
+                            "      if (!videoInfo) {\n" +
+                            "        headFetch(videoUrl).then((resp) => {\n" +
+                            "          const contentType = contentTypeMainPart(resp.headers.get('content-type'));\n" +
+                            "          if (mp4.includes(contentType)) {\n" +
+                            "            const size = sizeFromResp(resp);\n" +
+                            "\n" +
+                            "            \$__.logEvent(\"handleResult mp4\"+JSON.stringify(imgInfo));\n" +
+                            "            result(resp.url, imageInfo, { format: 'mp4', size });\n" +
+                            "          } else {\n" +
+                            "           \$__.logEvent(\"handleResult m3u8\"+JSON.stringify(imgInfo));\n" +
+                            "            result(videoUrl, imageInfo, { format: 'm3u8' });\n" +
+                            "          }\n" +
+                            "        });\n" +
+                            "      } else {\n" +
+                            "        const imageInfoOther = {\n" +
+                            "          thumbnail:  metaThumbnail(),\n" +
+                            "          description: document.title,\n" +
+                            "        }\n" +
+                            "        const imageInfo = imgInfo ?? imageInfoOther;\n" +
+                            "        \$__.logEvent(\"handleResult other\"+JSON.stringify(imageInfo)+JSON.stringify(imageInfoOther));\n" +
+                            "        result(videoUrl, imageInfo, videoInfo);\n" +
+                            "      }\n" +
+                            "    }\n" +
+                            "  };\n" +
+                            "\n" +
+                            "  const externalUrl = (videoUrl) => {\n" +
+                            "    return !!videoUrl && (videoUrl.startsWith('http://') || videoUrl.startsWith('https://'));\n" +
+                            "  };\n" +
+                            "\n" +
+                            "  const blobUrl = (videoUrl) => {\n" +
+                            "    return !!videoUrl && videoUrl.startsWith('blob:');\n" +
+                            "  };\n" +
+                            "\n" +
+                            "  const findImg = (node) => {\n" +
+                            "    if (node.poster) {\n" +
+                            "      \$__.logEvent(\"findImg node.poster\");\n" +
+                            "      return {\n" +
+                            "        thumbnail: node.poster,\n" +
+                            "        description:document.title\n" +
+                            "      };\n" +
+                            "    }\n" +
+                            "    let depth = 3;\n" +
+                            "    while (node && depth >= 0) {\n" +
+                            "      const img = node.querySelector('img');\n" +
+                            "      if (img && externalUrl(img.src)) {\n" +
+                            "        \$__.logEvent(\"findImg img.src\");\n" +
+                            "        return {\n" +
+                            "          thumbnail: img.src,\n" +
+                            "          description: img.alt,\n" +
+                            "        };\n" +
+                            "      }\n" +
+                            "      node = node.parentNode;\n" +
+                            "      depth--;\n" +
+                            "    }\n" +
+                            "    const ogImage = metaThumbnail()\n" +
+                            "    if (ogImage){\n" +
+                            "      \$__.logEvent(\"findImg ogImage\");\n" +
+                            "      return {\n" +
+                            "        thumbnail: ogImage,\n" +
+                            "        description:document.title\n" +
+                            "      };\n" +
+                            "    }\n" +
+                            "  };\n" +
+                            "\n" +
+                            "  const metaThumbnail = () => document.querySelector('meta[property=\"og:image\"]')?.content;\n" +
+                            "\n" +
+                            "  const updateMainImageInfo = ({ thumbnail, description }) => {\n" +
+                            "    mainImageInfo = {\n" +
+                            "      thumbnail: thumbnail || metaThumbnail(),\n" +
+                            "      description: description || document.title,\n" +
+                            "    };\n" +
+                            "  };\n" +
+                            "\n" +
+                            "  const getFormat = (video_url) => {\n" +
+                            "    const formatPattern = /\\.(mp4|m3u8)/;\n" +
+                            "    const match = formatPattern.exec(video_url);\n" +
+                            "    return (match && match[1]) || 'mp4';\n" +
+                            "  };\n" +
+                            "\n" +
+                            "  const parseVideo = (node) => {\n" +
+                            "    if (node.tagName !== 'VIDEO') {\n" +
+                            "      return;\n" +
+                            "    }\n" +
+                            "    const src = node.src || node.querySelector('source')?.src;\n" +
+                            "    if (externalUrl(src)) {\n" +
+                            "      \$__.logEvent(\"parseVideo externalUrl\");\n" +
+                            "      const imageInfo = findImg(node);\n" +
+                            "      handleResult(src, imageInfo, { format: getFormat(src) });\n" +
+                            "    } else if (blobUrl(src)) {\n" +
+                            "      \$__.logEvent(\"parseVideo blobUrl\");\n" +
+                            "      // const imageInfo = findImg(node);\n" +
+                            "      // handleResult(src, imageInfo, { format: getFormat(src) });\n" +
+                            "      updateMainImageInfo(imageInfo ?? {});\n" +
+                            "    }\n" +
+                            "  };\n" +
+                            "\n" +
+                            "  (function () {\n" +
+                            "    window.fetch = function () {\n" +
+                            "      var ret = of.apply(window, arguments);\n" +
+                            "      return ret.then((resp) => {\n" +
+                            "        if (!resp.ok) {\n" +
+                            "          return resp;\n" +
+                            "        }\n" +
+                            "        try {\n" +
+                            "          const contentType = contentTypeMainPart(resp.headers.get('content-type'));\n" +
+                            "          if (m3u8.includes(contentType)) {\n" +
+                            "\n" +
+                            "            m3u8Size(resp.url).then(\n" +
+                            "              (size) => size && handleResult(resp.url, undefined, { format: 'm3u8', size })\n" +
+                            "            );\n" +
+                            "          } else if (mp4.includes(contentType)) {\n" +
+                            "            const size = sizeFromRange(resp.headers.get('content-range'));\n" +
+                            "            handleResult(resp.url, undefined, { format: 'mp4', size });\n" +
+                            "          }\n" +
+                            "        } catch (e) {}\n" +
+                            "        return resp;\n" +
+                            "      });\n" +
+                            "    };\n" +
+                            "  })();\n" +
+                            "\n" +
+                            "  (function () {\n" +
+                            "    var origOpen = XMLHttpRequest.prototype.open;\n" +
+                            "    XMLHttpRequest.prototype.open = function () {\n" +
+                            "      this.addEventListener('load', function () {\n" +
+                            "        var contentType = contentTypeMainPart(this.getResponseHeader('content-type'));\n" +
+                            "        try {\n" +
+                            "          if (mp4.includes(contentType)) {\n" +
+                            "            const size = sizeFromRange(this.getResponseHeader('content-range'));\n" +
+                            "            if (acceptMp4(size)) {\n" +
+                            "              handleResult(this.responseURL, undefined, { format: 'mp4', size });\n" +
+                            "            }\n" +
+                            "          } else if (m3u8.includes(contentType) || this.responseText?.startsWith('#EXTM3U')) {\n" +
+                            "            if (m3u8Entries[this.responseURL]) {\n" +
+                            "              return;\n" +
+                            "            }\n" +
+                            "            m3u8Entry(this.responseURL, this.responseText).then((result) => {\n" +
+                            "              if (result?.length > 0) {\n" +
+                            "                handleResult(this.responseURL, undefined, { format: 'm3u8', entries: result });\n" +
+                            "              } else {\n" +
+                            "                m3u8Size(this.responseURL, this.responseText).then(\n" +
+                            "                  (size) =>\n" +
+                            "                    size && handleResult(this.responseURL, undefined, { format: 'm3u8', size })\n" +
+                            "                );\n" +
+                            "              }\n" +
+                            "            });\n" +
+                            "          }\n" +
+                            "        } catch (e) {}\n" +
+                            "      });\n" +
+                            "      origOpen.apply(this, arguments);\n" +
+                            "    };\n" +
+                            "  })();\n" +
+                            "\n" +
+                            "  const recognizeNode = (node) => {\n" +
+                            "    if (node instanceof Element && node.tagName === 'VIDEO') {\n" +
+                            "      parseVideo(node);\n" +
+                            "    }\n" +
+                            "    if (node?.childNodes?.length > 0) {\n" +
+                            "      node?.querySelectorAll('video').forEach((videoNode) => parseVideo(videoNode));\n" +
+                            "    }\n" +
+                            "  };\n" +
+                            "\n" +
+                            "  new MutationObserver(function (mutations, observer) {\n" +
+                            "    try {\n" +
+                            "      mutations.forEach((mutation) => {\n" +
+                            "        switch (mutation.type) {\n" +
+                            "          case 'attributes':\n" +
+                            "            recognizeNode(mutation.target);\n" +
+                            "            break;\n" +
+                            "          case 'childList':\n" +
+                            "            mutation.addedNodes.forEach((n) => recognizeNode(n));\n" +
+                            "            break;\n" +
+                            "        }\n" +
+                            "      });\n" +
+                            "    } catch (e) {\n" +
+                            "      console.log('catch error: ', e);\n" +
+                            "    }\n" +
+                            "  }).observe(document, {\n" +
+                            "    subtree: true,\n" +
+                            "    childList: true,\n" +
+                            "    attributes: true,\n" +
+                            "  });\n" +
+                            "})();\n"
 //                    mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${str}");
 //                    mAgentWeb!!.getWebCreator().getWebView().evaluateJavascript(pageData.cDetail,{})
-                    mAgentWeb!!.getWebCreator().getWebView().evaluateJavascript(pageData.cDetail) {
+                    mAgentWeb!!.getWebCreator().getWebView().evaluateJavascript(str) {
                         AppLogs.dLog(
                             "webReceive",
                             "evaluateJavascript 接收:$it thread:${Thread.currentThread()}"
@@ -155,47 +487,51 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
         }
 
         APP.videoScanLiveData.observe(this) {
-//            if (jumpData?.autoDownload == true) {
-//                if (it.formatsList.size == 1) {
-//                    it?.apply {
-//                        (context as BaseActivity<*>).addLaunch(success = {
-//                            if (it.formatsList.isNotEmpty()) {
-//                                var data = it.formatsList.get(0)
-//                                var model = DownloadCacheManager.queryDownloadModel(data)
-//                                if (model == null) {
-//                                    data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
-//                                    DownloadCacheManager.addDownLoadPrepare(data)
-//                                    withContext(Dispatchers.Main) {
-//                                        var headerMap = HashMap<String, String>()
-//                                        data.paramsMap?.forEach {
-//                                            headerMap.put(it.key, it.value.toString())
-//                                        }
-//                                        VideoDownloadManager.getInstance()
-//                                            .startDownload(data.createDownloadData(data), headerMap)
-//                                        NFManager.requestNotifyPermission(
-//                                            WeakReference((context as BaseActivity<*>)),
-//                                            onSuccess = {
-//                                                NFShow.showDownloadNF(data, true)
-//                                            },
-//                                            onFail = {})
-//                                    }
-//                                }
-//                            }
-//                        }, failBack = {})
-//                    }
-//                } else {
-//                    var status = popDown?.isShowing ?: false
-//                    if (!status && it.formatsList.size > 1) {
-//                        showDownloadPop()
-//                    }
-//                }
-//                jumpData?.apply {
-//                    autoDownload = false
-//                    JumpDataManager.updateCurrentJumpData(this, "自动下载后重置")
-//                }
-//            } else {
-//                popDown?.updateDataByScan(it)
-//            }
+            if (jumpData?.autoDownload == true) {
+                var videoDownloadTempList = CacheManager.videoDownloadTempList
+                if (videoDownloadTempList.isNotEmpty()){
+                    var it = videoDownloadTempList.get(videoDownloadTempList.size-1)
+                    if (it.formatsList.size == 1) {
+                        it?.apply {
+                            (context as BaseActivity<*>).addLaunch(success = {
+                                if (it.formatsList.isNotEmpty()) {
+                                    var data = it.formatsList.get(0)
+                                    var model = DownloadCacheManager.queryDownloadModel(data)
+                                    if (model == null) {
+                                        data.downloadType = VideoDownloadData.DOWNLOAD_PREPARE
+                                        DownloadCacheManager.addDownLoadPrepare(data)
+                                        withContext(Dispatchers.Main) {
+                                            var headerMap = HashMap<String, String>()
+                                            data.paramsMap?.forEach {
+                                                headerMap.put(it.key, it.value.toString())
+                                            }
+                                            VideoDownloadManager.getInstance()
+                                                .startDownload(data.createDownloadData(data), headerMap)
+                                            NFManager.requestNotifyPermission(
+                                                WeakReference((context as BaseActivity<*>)),
+                                                onSuccess = {
+                                                    NFShow.showDownloadNF(data, true)
+                                                },
+                                                onFail = {})
+                                        }
+                                    }
+                                }
+                            }, failBack = {})
+                        }
+                    } else {
+                        var status = popDown?.isShowing ?: false
+                        if (!status && it.formatsList.size > 1) {
+                            showDownloadPop()
+                        }
+                    }
+                }
+                jumpData?.apply {
+                    autoDownload = false
+                    JumpDataManager.updateCurrentJumpData(this, "自动下载后重置")
+                }
+            } else {
+                popDown?.updateData(false)
+            }
             updateDownloadButtonStatus(true, 0)
         }
         APP.videoNFLiveData.observe(this) {
@@ -571,6 +907,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
                     }
                     .show()
             }
+            updateDownloadButtonStatus(true, 0)
         } else {
             EasyFloat.dismiss(tag = "webPop", true)
         }
@@ -588,7 +925,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
     }
 
     override fun getRealParseUrl(): String {
-        return jumpData?.jumpUrl ?: ""
+        return mAgentWeb?.webCreator?.webView?.url?:""
     }
 
     override fun getBinding(

@@ -70,6 +70,36 @@ public class HttpUtils {
         throw new NoRouteToHostException("Too many redirects: " + sRedirectCount);
     }
 
+    public static HttpURLConnection getConnection(String videoUrl, Map<String, String> headers, boolean shouldIgnoreCertErrors,boolean onlyHead) throws IOException {
+        URL url = new URL(videoUrl);
+        sRedirectCount = 0;
+        while(sRedirectCount < MAX_REDIRECT) {
+            try {
+                HttpURLConnection connection = makeConnection(url, headers, shouldIgnoreCertErrors);
+                connection.setRequestMethod("HEAD");
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_MULT_CHOICE ||
+                        responseCode == HttpURLConnection.HTTP_MOVED_PERM ||
+                        responseCode == HttpURLConnection.HTTP_MOVED_TEMP ||
+                        responseCode == HttpURLConnection.HTTP_SEE_OTHER &&
+                                (responseCode == 307 || responseCode == 308)) {
+                    String location = connection.getHeaderField("Location");
+                    connection.disconnect();
+                    url = new URL(location);
+                    sRedirectCount++;
+                } else {
+                    return connection;
+                }
+            } catch (IOException e) {
+                if ((e instanceof SSLHandshakeException || e instanceof SSLPeerUnverifiedException) && !shouldIgnoreCertErrors) {
+                    //这种情况下需要信任证书重试
+                    return getConnection(videoUrl, headers, true);
+                }
+            }
+        }
+        throw new NoRouteToHostException("Too many redirects: " + sRedirectCount);
+    }
+
     private static URL handleRedirect(URL originalUrl, String location) throws IOException {
         if (location == null) {
             throw new ProtocolException("Null location redirect");

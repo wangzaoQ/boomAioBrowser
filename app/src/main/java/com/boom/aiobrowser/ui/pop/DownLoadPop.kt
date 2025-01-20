@@ -74,26 +74,6 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         downloadAdapter.submitList(endList)
     }
 
-    fun updateDataByScan(data: VideoUIData) {
-        (context as BaseActivity<*>).addLaunch(success = {
-            //1.如果是第一次进入 先将数据与库里状态对齐
-            var modelList = DownloadCacheManager.queryDownloadModelOther()
-            if (modelList.isNullOrEmpty().not()) {
-                for (k in 0 until modelList!!.size) {
-                    var bean = modelList.get(k)
-                    data.formatsList.forEach {
-                        if (bean.videoId == it.videoId) {
-                            it.covertByDbData(bean)
-                        }
-                    }
-                }
-            }
-            withContext(Dispatchers.Main) {
-                downloadAdapter.add(data)
-            }
-        }, failBack = {})
-    }
-
     fun updateDataByNF(data: VideoDownloadData) {
         (context as BaseActivity<*>).addLaunch(success = {
             var index = -1
@@ -118,7 +98,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         }, failBack = {})
     }
 
-    fun updateData() {
+    fun updateData(updateClick:Boolean) {
         (context as BaseActivity<*>).addLaunch(success = {
             var modelList = mutableListOf<VideoDownloadData>()
             DownloadCacheManager.queryAllModel().forEach {
@@ -181,7 +161,9 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             withContext(Dispatchers.Main) {
                 downloadAdapter.submitList(endList)
                 updateBottomSize()
-                defaultBinding?.tvClear?.performClick()
+                if (updateClick){
+                    defaultBinding?.tvClear?.performClick()
+                }
             }
         }, failBack = {})
     }
@@ -394,7 +376,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 }
             }
         }
-        updateData()
+        updateData(true)
         setOutSideDismiss(true)
         setBackground(R.color.color_70_black)
         showPopupWindow()

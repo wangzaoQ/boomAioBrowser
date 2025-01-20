@@ -9,14 +9,11 @@ import com.boom.downloader.common.DownloadConstants
 import com.boom.downloader.utils.HttpUtils
 import com.boom.downloader.utils.LogUtils
 import com.boom.downloader.utils.VideoDownloadUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import okhttp3.Request
+import okhttp3.Response
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -145,12 +142,12 @@ object PManager {
                 val match = durationPattern.find(line)
                 match?.let {
                     duration += it.groupValues[1].toDouble()
-                    if (samples.size < 10) {
+                    if (samples.size < 1) {
                         sampleDuration = duration
                     }
                 }
             }else{
-                if (samples.size < 10) {
+                if (samples.size < 1) {
                     samples.add(getFullUrl(m3u8Url,line.trim()))  // 绝对路径化 .ts 文件
                 }
             }
@@ -176,19 +173,16 @@ object PManager {
         if (sampleDuration == 0.0) {
             return 0L  // 没有有效的样本时返回 0
         }
-
+        runBlocking {
         // 获取样本文件的大小
         val sizes = samples.mapNotNull { tsUrl ->
-            runBlocking {
-                getVideoSegmentSize(tsUrl,headers)
+                async {getVideoSegmentSize(tsUrl,headers)  }
             }
+            // 根据样本大小和时长估算整个 M3U8 文件的大小
+            sizePromises = sizes.awaitAll().sum()
         }
-
-        // 根据样本大小和时长估算整个 M3U8 文件的大小
-        sizePromises = sizes.sum()
         val estimatedSize = (sizePromises / sampleDuration) * duration
         AppLogs.dLog("m3u8","calculateM3U8Size url:${m3u8Url} size:${sizePromises}")
-
         return estimatedSize.toLong()  // 返回估算的总大小（字节）
     }
 
@@ -199,13 +193,17 @@ object PManager {
             builder.header(it.key,it.value)
         }
 //            .head() // 只请求头信息
-
-        var result = WebNet.netClient.newCall(builder.build()).execute()
+        var result:Response?=null
+        runCatching {
+            result = WebNet.netClient.newCall(builder.build()).execute()
+        }
         return result?.body?.string() ?: ""
     }
 
 
-    fun getVideoSegmentSize(url: String,headers:HashMap<String, String>): Long {
+    fun getVideoSegmentSize(url: String,headers:HashMap<String, String>,isRetry :Boolean= false): Long {
+        AppLogs.dLog("m3u8","calculateM3U8Size 开始 获取大小 url:${url}")
+
 //        var connection = HttpUtils.getConnection(
 //            url,
 //            headers,
@@ -215,14 +213,24 @@ object PManager {
 //        //这是非M3U8类型, 需要获取视频的totalLength ===> contentLength
 //        return VideoInfoParserManager.getInstance().getContentLength(url, headers, connection, false)
         val builder = Request.Builder()
-            .head() // 只请求头信息
+            if (isRetry.not()){
+                builder.head() // 只请求头信息
+            }else{
+                builder.addHeader("Range","bytes=0-")
+            }
             .url(url)
         headers.forEach {
             builder.header(it.key,it.value)
         }
-
-        var result = WebNet.netClient.newCall(builder.build()).execute()
-        var contentLength = result?.header("Content-Length")?:"0"
+        var result: Response?=null
+        runCatching {
+            result = WebNet.netClient.newCall(builder.build()).execute()
+        }
+        var contentLength = result?.header("content-length")?:"0"
+        if (contentLength == "0" && isRetry.not()){
+            return getVideoSegmentSize(url,headers,isRetry = true)
+        }
+//        var contentLength = result?.header("Content-Length")?:"0"
         return BigDecimal(contentLength).toLong()
     }
 

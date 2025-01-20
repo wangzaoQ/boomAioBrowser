@@ -701,6 +701,8 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
         addDownload()
     }
 
+
+
     fun getSearchTitle(): String {
         var search = when (CacheManager.engineType) {
             else -> {

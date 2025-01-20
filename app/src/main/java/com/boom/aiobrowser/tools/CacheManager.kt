@@ -89,6 +89,7 @@ object CacheManager {
     const val KV_FIRST_DOWNLOAD_TIPS3 = "KV_FIRST_DOWNLOAD_TIPS3"
     const val KV_FIRST_DOWNLOAD_TIPS4 = "KV_FIRST_DOWNLOAD_TIPS4"
     const val KV_USER_DATA = "KV_USER_DATA"
+    const val KV_VIDEO_UI_DATA = "KV_VIDEO_UI_DATA"
     const val KV_CITY_ADD_LIST = "KV_CITY_ADD_LIST"
     const val KV_PRELOAD_AD_COUNT = "KV_PRELOAD_AD_COUNT"
 //    const val KV_FIRST_OPEN_APP = "KV_FIRST_OPEN_APP"
@@ -773,6 +774,13 @@ object CacheManager {
             mmkv.encode(KV_DRAG_Y,value )
         }
 
+    var videoGuide:VideoUIData?
+        get() {
+            return getBeanByGson(mmkv.decodeString(KV_VIDEO_UI_DATA,""),VideoUIData::class.java)
+        }
+        set(value) {
+            mmkv.encode(KV_VIDEO_UI_DATA, toJson(value))
+        }
     fun saveUser(user:UserData?){
         mmkv.encode(KV_USER_DATA, toJson(user))
     }

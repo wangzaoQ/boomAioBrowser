@@ -30,7 +30,7 @@ object NFWorkManager {
             if (language != "ko"){
                 start(APP.instance,LocalNewsWork::class.java,NFEnum.NF_LOCAL.menuName,3*60*1000,15*60*1000)
             }
-            start(APP.instance,HotNewsWork::class.java,NFEnum.NF_HOT.menuName,30*60*1000,15*60*1000)
+//            start(APP.instance,HotNewsWork::class.java,NFEnum.NF_HOT.menuName,30*60*1000,15*60*1000)
             start(APP.instance,TrendNewsWork::class.java,NFEnum.NF_TREND.menuName,30*60*1000,15*60*1000)
             start(APP.instance,NewUserNewsWork::class.java,NFEnum.NF_NEW_USER.menuName,5*60*1000,15*60*1000)
         }else{
@@ -43,7 +43,7 @@ object NFWorkManager {
             if (language != "ko"){
                 start(APP.instance,LocalNewsWork::class.java,NFEnum.NF_LOCAL.menuName,20*60*1000,60*60*1000)
             }
-            start(APP.instance,HotNewsWork::class.java,NFEnum.NF_HOT.menuName,30*60*1000,3*60*60*1000)
+//            start(APP.instance,HotNewsWork::class.java,NFEnum.NF_HOT.menuName,30*60*1000,3*60*60*1000)
             start(APP.instance,TrendNewsWork::class.java,NFEnum.NF_TREND.menuName,30*60*1000,60*60*1000)
             start(APP.instance,NewUserNewsWork::class.java,NFEnum.NF_NEW_USER.menuName,40*60*1000,60*60*1000)
         }

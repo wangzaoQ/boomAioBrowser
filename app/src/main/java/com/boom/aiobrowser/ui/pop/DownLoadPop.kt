@@ -309,7 +309,6 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 } else {
                     downloadAdapter.items.forEach {
                         if (isFirstClickAll){
-                            isFirstClickAll = false
                             if (it.formatsList.size>0){
                                 it.formatsList.get(0).videoChecked = true
                             }
@@ -319,6 +318,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                             }
                         }
                     }
+                    isFirstClickAll = false
                     isSelectedAll = true
                     tvClear.text = context.getString(R.string.app_clear_all)
                 }

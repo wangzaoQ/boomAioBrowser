@@ -49,8 +49,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.Request
 import okhttp3.Response
-import org.jsoup.Jsoup
 import java.lang.ref.WeakReference
+import java.net.URL
 
 
 abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
@@ -61,8 +61,14 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
     var allowNeedCommon = false
 
     var locationLoadResourceList = mutableListOf<String>()
+    var isGuide = false
+    var isFirst = true
+//    var guideList = mutableListOf<>()
 
     fun initWeb(){
+        if (getUrl() == "https://mixkit.co/free-stock-video/woman-in-bikini-enjoying-sun-in-swimming-pool-36904/"){
+            isGuide = true
+        }
         runCatching {
             if (mAgentWeb != null){
                 mAgentWeb!!.go(getUrl())
@@ -116,7 +122,12 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                 }
             }
         }
-
+        if (isFirst){
+            isFirst = false
+            rootActivity.addLaunch(success = {
+                WebScan.getImg(getRealParseUrl())
+            }, failBack = {})
+        }
     }
 
     abstract fun getInsertParent(): ViewGroup
@@ -158,7 +169,6 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
                 if (allow.not())return@addLaunch
                 getBeanByGson(detail,WebDetailsData::class.java)?.apply {
-                    var uiData = VideoUIData()
                     var loadImageUrl = thumbnail
 //                    var doc: Document?=null
 //                    runCatching {
@@ -183,7 +193,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 //                        loadImageUrl = videoOtherImg
 //                    }
                     formats?.forEach {
-                        if ((it.size ?: 0) <= 0 && it.format=="m3u8"){
+                        if ((it.size ?: 0) <= 0){
                             AppLogs.dLog("shouldInterceptRequest","js 无视频大小 url:${url}")
                             return@forEach
                         }
@@ -193,7 +203,6 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                                 return@forEach
                             }
                         }
-
                         var map = HashMap<String,Any>()
                         if (it.cookie == true){
                             withContext(Dispatchers.Main){
@@ -235,42 +244,70 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                             videoType = it.format?:"",
                             resolution = if (resolution.isNullOrEmpty()) "--" else resolution
                         )
-
-                        if (uiData.formatsList.isNullOrEmpty()){
-                            uiData.formatsList.add(videoDownloadData)
-                        }else{
-                            runCatching {
-                                var oldData = uiData.formatsList.get(uiData.formatsList.size-1)
-                                var oldResolution = oldData.resolution?:""
-                                var newResolution = it.resolution?:""
-                                if (oldResolution.contains("p",true) && newResolution.contains("p",true)){
-                                    runCatching {
-                                        oldResolution = oldResolution.substring(0,oldResolution.indexOf("p", startIndex = 0, ignoreCase=true))
-                                        newResolution = newResolution.substring(0,newResolution.indexOf("p", startIndex = 0, ignoreCase=true))
-                                        if (newResolution.toInt()>oldResolution.toInt()){
-                                            uiData.formatsList.add(0,videoDownloadData)
-                                        }else{
-                                            uiData.formatsList.add(videoDownloadData)
-                                        }
-                                    }.onFailure {
-                                        uiData.formatsList.add(videoDownloadData)
+                        var list = CacheManager.videoDownloadTempList
+                        var currentBaseUrl = URL(it.url).host
+                        var isAdd = false
+                        for (i in 0 until list.size){
+                            var cacheDownload = list.get(i)
+                            if (cacheDownload.formatsList.isNotEmpty()&&  it.format == "m3u8"){
+                                var tempDownloadData =  cacheDownload.formatsList.get(0)
+                                var tempDataBaseUrl = URL(tempDownloadData.url).host
+                                if (tempDataBaseUrl == currentBaseUrl){
+                                    var resolution = it.resolution
+                                    if (resolution.isNullOrEmpty()){
+                                        resolution = extractResolution(url)?:""
                                     }
-                                }else{
-                                    uiData.formatsList.add(0,videoDownloadData)
+                                    if (resolution.isNullOrEmpty()){
+                                        var index = url?.lastIndexOf("/")?:0
+                                        if (index>0){
+                                            resolution = url?.substring(index+1)?:""
+                                        }
+                                    }
+                                    //同一来源
+                                    isAdd = true
+                                    videoDownloadData.resolution = resolution
+                                    AppLogs.dLog("webReceive", "js 过滤后 加入到同一数据源:${toJson(it)}")
+                                    runCatching {
+                                        var oldData = cacheDownload.formatsList.get(cacheDownload.formatsList.size-1)
+                                        var oldResolution = oldData.resolution?:""
+                                        var newResolution = it.resolution?:""
+                                        if (oldResolution.contains("p",true) && newResolution.contains("p",true)){
+                                            runCatching {
+                                                oldResolution = oldResolution.substring(0,oldResolution.indexOf("p", startIndex = 0, ignoreCase=true))
+                                                newResolution = newResolution.substring(0,newResolution.indexOf("p", startIndex = 0, ignoreCase=true))
+                                                if (newResolution.toInt()>oldResolution.toInt()){
+                                                    cacheDownload.formatsList.add(0,videoDownloadData)
+                                                }else{
+                                                    cacheDownload.formatsList.add(videoDownloadData)
+                                                }
+                                            }.onFailure {
+                                                cacheDownload.formatsList.add(videoDownloadData)
+                                            }
+                                        }else{
+                                            cacheDownload.formatsList.add(videoDownloadData)
+                                        }
+                                    }
                                 }
                             }
                         }
+                        if (isAdd.not()){
+                            var uiData = VideoUIData()
+                            uiData.formatsList.add(videoDownloadData)
+                            uiData.videoResultId = "${VideoDownloadUtils.computeMD5(url)}"
+                            uiData.source = fromSource
+                            uiData.thumbnail = loadImageUrl
+                            uiData.description = description
+                            var list =  CacheManager.videoDownloadTempList
+                            list.add(0,uiData)
+                            CacheManager.videoDownloadTempList = list
+                            AppLogs.dLog("webReceive","js 过滤后 加入不同数据源:${toJson(uiData)}")
+                            APP.videoScanLiveData.postValue(0)
+                        }else{
+                            CacheManager.videoDownloadTempList = list
+                            APP.videoScanLiveData.postValue(0)
+                        }
                     }
-                    if (uiData.formatsList.isNullOrEmpty())return@apply
-                    uiData.videoResultId = "${VideoDownloadUtils.computeMD5(url)}"
-                    uiData.source = fromSource
-                    uiData.thumbnail = loadImageUrl
-                    uiData.description = description
-                    var list =  CacheManager.videoDownloadTempList
-                    list.add(0,uiData)
-                    CacheManager.videoDownloadTempList = list
-                    AppLogs.dLog("webReceive","js 获取成功:${toJson(uiData)}")
-                    APP.videoScanLiveData.postValue(0)
+
                 }
             }, failBack = {})
 
@@ -470,7 +507,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                                 "shouldInterceptRequest",
                                 "mWebViewClient shouldInterceptRequest:${requestUrl} cookie:${cookie}"
                             )
-                            WebScan.getResourceInfo(requestUrl,cookie,realUrl,hostList)
+                            WebScan.getResourceInfo(requestUrl,cookie,realUrl,hostList,isGuide)
                         }else{
                             AppLogs.dLog("shouldInterceptRequest","原生重复回调 url:${requestUrl}")
                         }
@@ -516,6 +553,15 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             WebScan.loadResourceList.clear()
             locationLoadResourceList.clear()
             CacheManager.videoDownloadTempList = mutableListOf()
+            if (isGuide){
+                var videoGuide = CacheManager.videoGuide
+                if (videoGuide!=null){
+                    var list = CacheManager.videoDownloadTempList
+                    list.add(videoGuide)
+                    CacheManager.videoDownloadTempList = list
+                    APP.videoScanLiveData.postValue(0)
+                }
+            }
             AppLogs.dLog(
                 fragmentTAG,
                 "mUrl:" + url + " onPageStarted  target:" + getUrl()
@@ -613,6 +659,15 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
     open fun loadWebFinished(url:String){
 
+    }
+
+    override fun onDestroy() {
+        if (isGuide){
+            // 清除 WebView 缓存
+            mAgentWeb!!.getWebCreator().getWebView()?.clearCache(true);
+            mAgentWeb!!.getWebCreator().getWebView()?.clearHistory();
+        }
+        super.onDestroy()
     }
 
 

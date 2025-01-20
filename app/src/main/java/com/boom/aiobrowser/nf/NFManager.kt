@@ -353,7 +353,7 @@ object NFManager {
     }
 
     private suspend fun showNFByCount() {
-        var count = showCount%5
+        var count = showCount%4
         when (count) {
             0 -> {
                 NFShow.showNewsNFFilter(NFEnum.NF_NEW_USER)
@@ -375,11 +375,11 @@ object NFManager {
             }
             4->{
                 NFShow.showNewsNFFilter(NFEnum.NF_TREND)
-            }
-            5->{
-                NFShow.showNewsNFFilter(NFEnum.NF_HOT)
                 PointEvent.posePoint(PointEventKey.session_st)
             }
+//            5->{
+//                NFShow.showNewsNFFilter(NFEnum.NF_HOT)
+//            }
             else -> {}
         }
     }

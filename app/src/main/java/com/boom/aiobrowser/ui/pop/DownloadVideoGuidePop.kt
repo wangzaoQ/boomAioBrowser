@@ -91,7 +91,8 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
                 PointEvent.posePoint(PointEventKey.download_tutorial_try)
                 var data = JumpDataManager.getCurrentJumpData(tag = "DownloadVideoGuidePop guide")
                 data.jumpType = JumpConfig.JUMP_WEB
-                data.jumpUrl = "https://mixkit.co/free-stock-video/young-people-dancing-intensely-4606/"
+                data.jumpUrl = "https://mixkit.co/free-stock-video/woman-in-bikini-enjoying-sun-in-swimming-pool-36904/"
+//                data.jumpUrl = "https://www.pexels.com/videos"
                 JumpDataManager.updateCurrentJumpData(data,tag = "DownloadVideoGuidePop guide")
                 APP.jumpLiveData.postValue(data)
                 JumpDataManager.closeAll()

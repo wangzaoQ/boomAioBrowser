@@ -191,9 +191,9 @@ class AppViewModel : BaseDataModel() {
     fun getTrendsNews() {
         loadData(loadBack = {
             getTrendsNewsData()
-            if (APP.isDebug) {
-                NFShow.showNewsNFFilter(NFEnum.NF_TREND)
-            }
+//            if (APP.isDebug) {
+//                NFShow.showNewsNFFilter(NFEnum.NF_TREND)
+//            }
             APP.trendNewsComplete.postValue(0)
         }, failBack = {
             AppLogs.eLog(TAG, it.stackTraceToString())

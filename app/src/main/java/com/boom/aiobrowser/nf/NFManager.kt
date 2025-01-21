@@ -338,16 +338,25 @@ object NFManager {
     var timerJob: Job?=null
 
     fun notifyByTimerTask() {
-        NFWorkManager.startNF()
+        var language = ""
+        runCatching {
+            language = Locale.getDefault().language
+        }
+        if (language != "ko"){
+            NFWorkManager.startNF()
+        }
         timerJob.jobCancel()
         timerJob = CoroutineScope(Dispatchers.IO).launch{
+            appDataReset()
             startForeground("APP")
-           delay(10*1000)
-           while (true) {
-                appDataReset()
-                showNFByCount()
-                showCount++
+            delay(10*1000)
+            while (true) {
+                if (language != "ko"){
+                    showNFByCount()
+                    showCount++
+                }
                 delay((if (APP.isDebug)1 else 10)*60*1000L)
+                appDataReset()
             }
         }
     }
@@ -365,13 +374,7 @@ object NFManager {
                 NFShow.showNewsNFFilter(NFEnum.NF_EDITOR)
             }
             3->{
-                var language = ""
-                runCatching {
-                    language = Locale.getDefault().language
-                }
-                if (language != "ko"){
-                    NFShow.showNewsNFFilter(NFEnum.NF_LOCAL)
-                }
+                NFShow.showNewsNFFilter(NFEnum.NF_LOCAL)
             }
             4->{
                 NFShow.showNewsNFFilter(NFEnum.NF_TREND)

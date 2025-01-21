@@ -28,6 +28,18 @@ object NetParams {
     var MOVIE = "11370735975268352"
     var PUBLIC_SAFETY = "Public Safety"
 
+    //download
+    /**
+     *   aio_for_you: 1803
+     *   aio_editor: 3:AIO_DL_EDITOR
+     *   aio_unlock: 1802
+     *   aio_newuser: 3:AIO_DL_NEWS
+     */
+    var DOWNLOAD_EDITOR_PUSH = "DOWNLOAD_EDITOR_PUSH"
+    var DOWNLOAD_FOR_YOU_PUSH = "DOWNLOAD_FOR_YOU_PUSH"
+    var DOWNLOAD_UNLOCK_PUSH = "DOWNLOAD_UNLOCK_PUSH"
+    var DOWNLOAD_NEW_USER_PUSH = "DOWNLOAD_NEW_USER_PUSH"
+
 
     suspend fun likeMapToUrl(map:HashMap<String,String>):String{
         var builder = StringBuilder()
@@ -92,8 +104,14 @@ object NetParams {
             sessionType = 1
             map.put("tearth",endKey)
         }
+        /**
+         *   aio_for_you: 1803
+         *   aio_editor: 3:AIO_DL_EDITOR
+         *   aio_unlock: 1802
+         *   aio_newuser: 3:AIO_DL_NEWS
+         */
         when (endKey) {
-            MAIN,NFEnum.NF_NEWS.menuName,WIDGET, NEWS_RECOMMEND,FOR_YOU,NEWS_HOME_VIDEO-> {
+            MAIN,NFEnum.NF_NEWS.menuName,WIDGET, NEWS_RECOMMEND,FOR_YOU,NEWS_HOME_VIDEO,DOWNLOAD_EDITOR_PUSH, DOWNLOAD_NEW_USER_PUSH-> {
                 needLocation = true
                 if (endKey == NFEnum.NF_NEWS.menuName || endKey == WIDGET){
                     map.put("fit","3:AIOPUSH")
@@ -104,7 +122,21 @@ object NetParams {
                     map.put("fit","3:USER")
                 }else if (endKey == NEWS_HOME_VIDEO){
                     map.put("fit","3:BROWSER_VIDEO")
+                }else if (endKey == DOWNLOAD_EDITOR_PUSH){
+                    isPush = true
+                    map.put("fit","3:AIO_DL_EDITOR")
+                }else if (endKey == DOWNLOAD_NEW_USER_PUSH){
+                    isPush = true
+                    map.put("fit","3:AIO_DL_NEW")
                 }
+            }
+            DOWNLOAD_FOR_YOU_PUSH->{
+                isPush = true
+                map.put("opop","1803")
+            }
+            DOWNLOAD_UNLOCK_PUSH->{
+                isPush = true
+                map.put("opop","1802")
             }
             NFEnum.NF_EDITOR.menuName->{
 

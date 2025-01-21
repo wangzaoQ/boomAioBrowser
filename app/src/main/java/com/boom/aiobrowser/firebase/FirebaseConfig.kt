@@ -272,6 +272,7 @@ object FirebaseConfig {
     var newsJumpList: List<String> = mutableListOf()
     var referConfig = FirebaseConfig.DEFAULT_REFER_CONFIG
     var defaultUserData: DefaultUserData?=null
+    var isDownloadConfig = false
 
 
 }

@@ -324,8 +324,19 @@ object WebScan {
         var isAdd = false
         list.forEach {
             if (it.formatsList.isNotEmpty()&& videoType == "m3u8"){
+//                var isOldData = false
+//                for (j in 0 until it.formatsList.size){
+//                    if (videoUrl == it.formatsList.get(j).url){
+//                        isOldData = true
+//                        break
+//                    }
+//                }
+//                if (isOldData){
+//                    AppLogs.dLog("webReceive","js 过滤重复数据2")
+//                    return@forEach
+//                }
+
                 var tempDownloadData =  it.formatsList.get(0)
-//                var tempDataBaseUrl = URL(URL(tempDownloadData.url), "1").toString()
                 var tempDataBaseUrl = URL(tempDownloadData.url).host
                 if (tempDataBaseUrl == baseUrl){
                     var resolution = extractResolution(videoUrl)?:""
@@ -338,8 +349,8 @@ object WebScan {
                     //同一来源
                     isAdd = true
                     videoDownloadData.resolution = resolution?:""
-                    it.formatsList.add(videoDownloadData)
-                    AppLogs.dLog("webReceive", "原生 过滤后 加入到同一数据源:${toJson(it)}")
+//                    it.formatsList.add(videoDownloadData)
+                    AppLogs.dLog("urlAdd", "原生 过滤后 加入到同一数url:${videoUrl}")
                     var formatsList = it.formatsList
                     runCatching {
                         var oldData = formatsList.get(it.formatsList.size-1)
@@ -382,7 +393,7 @@ object WebScan {
                 if (CacheManager.videoGuide == null){
                     list.add(0, uiData)
                     CacheManager.videoDownloadTempList = list
-                    AppLogs.dLog("webReceive", "原生 过滤后 加入不同数据源:${toJson(uiData)}")
+                    AppLogs.dLog("urlAdd", "原生 过滤后 引导加入不同数据源url:${videoUrl}")
                     APP.videoScanLiveData.postValue(0)
                 }else{
                     CacheManager.videoGuide = uiData
@@ -390,7 +401,7 @@ object WebScan {
             }else{
                 list.add(0, uiData)
                 CacheManager.videoDownloadTempList = list
-                AppLogs.dLog("webReceive", "原生 过滤后 加入不同数据源:${toJson(uiData)}")
+                AppLogs.dLog("urlAdd", "原生 过滤后 非引导加入不同数据源:url:${videoUrl}")
                 APP.videoScanLiveData.postValue(0)
             }
         }else{

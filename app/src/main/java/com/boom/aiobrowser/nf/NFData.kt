@@ -4,6 +4,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.NewsTempData
+import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.net.NetController
 import com.boom.aiobrowser.net.NetParams
 import com.boom.aiobrowser.net.NetRequest
@@ -50,17 +51,43 @@ object NFData {
 
                     NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName -> {
                         // 人工
-                        list = NetRequest.request(HashMap<String, Any>().apply {
-                            put("sessionKey", key)
-                        }) { NetController.getEditorNewsList(NetParams.getParamsMap(key)) }.data
-                            ?: mutableListOf()
+                        if (FirebaseConfig.isDownloadConfig){
+                            if (key == NFEnum.NF_EDITOR.menuName){
+                                list = NetRequest.request(HashMap<String, Any>().apply {
+                                    put("sessionKey", NetParams.DOWNLOAD_EDITOR_PUSH)
+                                }) { NetController.getNewsList(NetParams.getParamsMap(NetParams.DOWNLOAD_EDITOR_PUSH)) }.data
+                                    ?: mutableListOf()
+                            }else if (key == NFEnum.NF_UNLOCK.menuName){
+                                list = NetRequest.request(HashMap<String, Any>().apply {
+                                    put("sessionKey", NetParams.DOWNLOAD_UNLOCK_PUSH)
+                                }) { NetController.getNewsList(NetParams.getParamsMap(NetParams.DOWNLOAD_UNLOCK_PUSH)) }.data
+                                    ?: mutableListOf()
+                            }
+                        }else{
+                            list = NetRequest.request(HashMap<String, Any>().apply {
+                                put("sessionKey", key)
+                            }) { NetController.getEditorNewsList(NetParams.getParamsMap(key)) }.data
+                                ?: mutableListOf()
+                        }
                     }
 
                     else -> {
-                        list = NetRequest.request(HashMap<String, Any>().apply {
-                            put("sessionKey", key)
-                        }) { NetController.getNewsList(NetParams.getParamsMap(key)) }.data
-                            ?: mutableListOf()
+                        if (key == NFEnum.NF_NEWS.menuName && FirebaseConfig.isDownloadConfig){
+                            list = NetRequest.request(HashMap<String, Any>().apply {
+                                put("sessionKey", NetParams.DOWNLOAD_FOR_YOU_PUSH)
+                            }) { NetController.getNewsList(NetParams.getParamsMap(NetParams.DOWNLOAD_FOR_YOU_PUSH)) }.data
+                                ?: mutableListOf()
+                        }else if (key == NFEnum.NF_UNLOCK.menuName && FirebaseConfig.isDownloadConfig){
+                            list = NetRequest.request(HashMap<String, Any>().apply {
+                                put("sessionKey", NetParams.DOWNLOAD_UNLOCK_PUSH)
+                            }) { NetController.getNewsList(NetParams.getParamsMap(NetParams.DOWNLOAD_UNLOCK_PUSH)) }.data
+                                ?: mutableListOf()
+                        }else{
+                            list = NetRequest.request(HashMap<String, Any>().apply {
+                                put("sessionKey", key)
+                            }) { NetController.getNewsList(NetParams.getParamsMap(key)) }.data
+                                ?: mutableListOf()
+                        }
                     }
                 }
             }.onFailure {

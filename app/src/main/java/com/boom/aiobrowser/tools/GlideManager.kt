@@ -21,7 +21,7 @@ object GlideManager {
     fun loadImg(fragment: Fragment?=null, iv: ImageView, url: Any?, loadId:Int?=0, errorId:Int?=0, width: Int=0, height: Int=0) {
         runCatching {
             if (url == null)return
-            val builder =if (fragment !=null) Glide.with(fragment).load(url) else Glide.with(iv).load(url)
+            val builder =if (fragment !=null) GlideApp.with(fragment).load(url) else GlideApp.with(iv).load(url)
 //
             if (width!=0 && height!=0){
                 builder.override(width,height)
@@ -40,23 +40,14 @@ object GlideManager {
     }
 
     fun loadNFBitmap(mContext: Context, url: Any?, width:Int, height: Int, bitmapCall:(Bitmap?)->Unit, callFail:(()->Unit)?=null){
-        // val FJST = "ImageLoader"
-        // logsi(FJST, "call() url=$url" )
         if (url == null || mContext == null){
             callFail?.invoke()
             return
         }
 
-        var options =  RequestOptions.bitmapTransform(RoundedCorners(dp2px(15f)))
-
-        Glide.with(mContext)
+        GlideApp.with(mContext)
             .load(url)
             .override(width,height)
-//            .placeholder(R.mipmap.ic_default_nf)
-//            .transform(RoundedCorners(dp2px(15f)))
-//            .apply { options }
-//            .apply(RequestOptions.bitmapTransform(RoundedCorners(20))) // 设置圆角大小为20dp
-
             .into(object : CustomTarget<Drawable?>() {
                 override fun onResourceReady(resource: Drawable, transition: com.bumptech.glide.request.transition.Transition<in Drawable?>?) {
                     runCatching {

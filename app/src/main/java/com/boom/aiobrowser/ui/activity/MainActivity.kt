@@ -498,7 +498,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     "isFirstShowBrowserDefault:${CacheManager.isFirstShowBrowserDefault} switchDefaultPop:${FirebaseConfig.switchDefaultPop} allowShowPop:${allowShowPop} jumpType:${jumpType}")
         }
 //        if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault && ((jumpType > 0 && FirebaseConfig.switchDefaultPop) || jumpType == 0)){
-        if (false){
+        if (BrowserManager.isDefaultBrowser().not() && CacheManager.isFirstShowBrowserDefault && FirebaseConfig.switchDefaultPop){
             AppLogs.dLog(acTAG,"show browser pop")
             CacheManager.isFirstShowBrowserDefault = false
             var pop = DefaultPop(this@MainActivity)
@@ -534,7 +534,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
     private fun showDownloadGuide(showPopCount: Int, allowShowPop: Boolean,jumpType:Int) {
 //        if (showPopCount == 2 && (jumpType == 0 || jumpType == 1 || jumpType == 3)){
-        if (showPopCount == 2){
+        if (showPopCount == 2 && FirebaseConfig.switchDownloadGuidePop){
             if (CacheManager.isFirstShowDownloadGuide){
                 AppLogs.dLog(acTAG,"允许开启引导弹窗")
                 CacheManager.isFirstShowDownloadGuide = false

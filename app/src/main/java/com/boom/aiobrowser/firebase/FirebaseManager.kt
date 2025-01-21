@@ -151,9 +151,9 @@ object FirebaseManager {
         runCatching {
             FirebaseConfig.AD_CD_ALL = firebaseRemoteConfig?.getString("aobws_cd")?.toInt()?:if (APP.isDebug)10 else 60
         }
-        var show_tutorial = 0
+        var show_tutorial = 1
         runCatching {
-            show_tutorial = firebaseRemoteConfig?.getString("show_tutorial")?.toInt()?:0
+            show_tutorial = firebaseRemoteConfig?.getString("show_tutorial")?.toInt()?:1
         }
         AppLogs.dLog(APP.instance.TAG,"remoteConfig show_tutorial 1则展示弹窗:${show_tutorial}")
         FirebaseConfig.switchDownloadGuidePop = show_tutorial != 0

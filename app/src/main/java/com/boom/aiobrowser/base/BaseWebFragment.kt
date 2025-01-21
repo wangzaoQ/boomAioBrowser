@@ -166,7 +166,6 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                     url = fragmentWebReference.get()?.getRealParseUrl()?:""
                     hostList = extractDomain(fragmentWebReference.get()?.getUrl()?:"")
                 }
-
                 if (allow.not())return@addLaunch
                 getBeanByGson(detail,WebDetailsData::class.java)?.apply {
                     var loadImageUrl = thumbnail
@@ -230,7 +229,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                             resolution = extractResolution(it.url?:"")
                         }
                         if (WebScan.loadResourceList.contains(it.url)){
-                            AppLogs.dLog("webReceive","js 过滤重复数据")
+                            AppLogs.dLog("webReceive","js 过滤重复数据1")
                             return@forEach
                         }
                         WebScan.loadResourceList.add(it.url?:"")
@@ -250,7 +249,19 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                         for (i in 0 until list.size){
                             var cacheDownload = list.get(i)
                             if (cacheDownload.formatsList.isNotEmpty()&&  it.format == "m3u8"){
+//                                var isOldData = false
+//                                for (j in 0 until cacheDownload.formatsList.size){
+//                                    if (it.url == cacheDownload.formatsList.get(j).url){
+//                                        isOldData = true
+//                                        break
+//                                    }
+//                                }
+//                                if (isOldData){
+//                                    AppLogs.dLog("webReceive","js 过滤重复数据2")
+//                                    continue
+//                                }
                                 var tempDownloadData =  cacheDownload.formatsList.get(0)
+
                                 var tempDataBaseUrl = URL(tempDownloadData.url).host
                                 if (tempDataBaseUrl == currentBaseUrl){
                                     var resolution = it.resolution
@@ -266,7 +277,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                                     //同一来源
                                     isAdd = true
                                     videoDownloadData.resolution = resolution
-                                    AppLogs.dLog("webReceive", "js 过滤后 加入到同一数据源:${toJson(it)}")
+                                    AppLogs.dLog("urlAdd", "js 过滤后 加入到同一数据源url:${it.url}")
                                     runCatching {
                                         var oldData = cacheDownload.formatsList.get(cacheDownload.formatsList.size-1)
                                         var oldResolution = oldData.resolution?:""
@@ -300,7 +311,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                             var list =  CacheManager.videoDownloadTempList
                             list.add(0,uiData)
                             CacheManager.videoDownloadTempList = list
-                            AppLogs.dLog("webReceive","js 过滤后 加入不同数据源:${toJson(uiData)}")
+                            AppLogs.dLog("urlAdd", "js 过滤后 加入不同数据源url:${it.url}")
                             APP.videoScanLiveData.postValue(0)
                         }else{
                             CacheManager.videoDownloadTempList = list

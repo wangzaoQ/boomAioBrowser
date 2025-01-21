@@ -308,14 +308,8 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                     tvClear.text = context.getString(R.string.app_all)
                 } else {
                     downloadAdapter.items.forEach {
-                        if (isFirstClickAll){
-                            if (it.formatsList.size>0){
-                                it.formatsList.get(0).videoChecked = true
-                            }
-                        }else{
-                            it.formatsList.forEach {
-                                it.videoChecked = true
-                            }
+                        if (it.formatsList.size>0){
+                            it.formatsList.get(0).videoChecked = true
                         }
                     }
                     isFirstClickAll = false

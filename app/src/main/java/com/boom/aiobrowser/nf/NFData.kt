@@ -82,6 +82,11 @@ object NFData {
                                 put("sessionKey", NetParams.DOWNLOAD_UNLOCK_PUSH)
                             }) { NetController.getNewsList(NetParams.getParamsMap(NetParams.DOWNLOAD_UNLOCK_PUSH)) }.data
                                 ?: mutableListOf()
+                        }else if (key == NFEnum.NF_NEW_USER.menuName && FirebaseConfig.isDownloadConfig){
+                            list = NetRequest.request(HashMap<String, Any>().apply {
+                                put("sessionKey", NetParams.DOWNLOAD_NEW_USER_PUSH)
+                            }) { NetController.getNewsList(NetParams.getParamsMap(NetParams.DOWNLOAD_NEW_USER_PUSH)) }.data
+                                ?: mutableListOf()
                         }else{
                             list = NetRequest.request(HashMap<String, Any>().apply {
                                 put("sessionKey", key)

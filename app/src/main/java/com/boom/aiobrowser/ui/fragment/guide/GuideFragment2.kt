@@ -29,12 +29,12 @@ class GuideFragment2 :BaseFragment<BrowserFragmentVideoGuide2Binding>() {
             if (it == 1){
                 fBinding.apply {
                     rlGuide1.visibility = View.VISIBLE
-                    val scaleXAnimator = ObjectAnimator.ofFloat(ivGuideAnimal, "scaleX", 1.0f, 1.5f)
-                    val scaleYAnimator = ObjectAnimator.ofFloat(ivGuideAnimal, "scaleY", 1.0f, 1.5f)
+                    val scaleXAnimator = ObjectAnimator.ofFloat(ivGuideAnimal, "scaleX", 1.0f, 1.6f)
+                    val scaleYAnimator = ObjectAnimator.ofFloat(ivGuideAnimal, "scaleY", 1.0f, 1.6f)
                     val alphaAnimator = ObjectAnimator.ofFloat(ivGuideAnimal, "alpha", 1.0f, 0.0f)
                     val set = AnimatorSet()
                     set.play(scaleXAnimator).with(scaleYAnimator).with(alphaAnimator)
-                    set.setDuration(3000)
+                    set.setDuration(2000)
                     set.start()
                     set.addListener(object : Animator.AnimatorListener {
                         override fun onAnimationStart(p0: Animator) {

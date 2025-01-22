@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:clipChildren="false"
     tools:background="#B3000000">
 
@@ -18,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="70dp"
-            android:layout_marginTop="129dp"
+            android:layout_marginTop="110dp"
             android:layout_marginEnd="45dp"
             android:scaleType="fitXY"
             app:layout_constraintDimensionRatio="h,246:368"
@@ -67,20 +68,34 @@
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/ivGuide1"></androidx.appcompat.widget.AppCompatTextView>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivLeft"
+            android:layout_width="53dp"
+            android:layout_marginStart="40dp"
+            android:layout_height="53dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="36dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@mipmap/ic_video_guide_left"
+            ></androidx.appcompat.widget.AppCompatImageView>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvCommit"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="47dp"
-            android:layout_marginHorizontal="45dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginStart="19dp"
+            android:layout_marginEnd="39dp"
             android:background="@drawable/shape_commit"
             android:gravity="center"
             android:text="@string/app_try_now"
             android:textColor="@color/white"
             android:textSize="17sp"
+            app:layout_constraintStart_toEndOf="@+id/ivLeft"
+            app:layout_constraintEnd_toEndOf="parent"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/tvGuide"></androidx.appcompat.widget.AppCompatTextView>
+            app:layout_constraintTop_toTopOf="@+id/ivLeft"
+            app:layout_constraintBottom_toBottomOf="@+id/ivLeft"
+            ></androidx.appcompat.widget.AppCompatTextView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>

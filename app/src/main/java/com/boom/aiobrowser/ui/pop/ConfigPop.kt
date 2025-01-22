@@ -104,7 +104,8 @@ class ConfigPop(context: Context) : BasePopupWindow(context) {
                         addTest("下载引导开关 true 允许展示pop:${FirebaseConfig.switchDownloadGuidePop}") {
                             FirebaseConfig.switchDownloadGuidePop =
                                 FirebaseConfig.switchDownloadGuidePop.not()
-//                        it.text = "下载引导开关 true 允许展示pop:${FirebaseConfig.switchDownloadGuidePop}"
+                        }
+                        addTest("是否归到下载类型通知:${FirebaseConfig.isDownloadConfig}") {
                         }
 //
 //                        addTest("a包具体弹窗逻辑  a包：默认浏览器、教程 不走任何配置直接展示") {

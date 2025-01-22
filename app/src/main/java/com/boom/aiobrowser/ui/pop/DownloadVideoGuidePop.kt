@@ -38,6 +38,7 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
     fun createPop(fromType:Int,callBack: () -> Unit){
         defaultBinding?.apply {
             vp.apply {
+                offscreenPageLimit = 3
                 setOrientation(ViewPager2.ORIENTATION_HORIZONTAL)
                 var dataList = mutableListOf<Int>()
                 dataList.add(0)
@@ -74,28 +75,19 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
                         APP.videoGuideLiveData.postValue(position)
                         indicator.onPageSelected(position)
                         when (position) {
-                            0 -> {
-                                ivLeft.setImageResource(R.mipmap.ic_video_guide_left1)
-                                ivRight.setImageResource(R.mipmap.ic_video_guide_right2)
-                            }
-                            1 -> {
-                                ivLeft.setImageResource(R.mipmap.ic_video_guide_left2)
-                                ivRight.setImageResource(R.mipmap.ic_video_guide_right2)
-                            }
                             2 -> {
-                                ivLeft.setImageResource(R.mipmap.ic_video_guide_left2)
-                                ivRight.setImageResource(R.mipmap.ic_video_guide_right1)
+                                indicator.visibility = View.GONE
+                                ivRight.visibility = View.GONE
                             }
-                            else -> {}
+                            else -> {
+                                indicator.visibility = View.VISIBLE
+                                ivRight.visibility = View.VISIBLE
+                            }
                         }
                     }
                 })
             }
-            ivLeft.setOnClickListener {
-                if (vp.currentItem>0){
-                    vp.currentItem -= 1
-                }
-            }
+
             ivRight.setOnClickListener {
                 if (vp.currentItem<2){
                     vp.currentItem += 1
@@ -116,6 +108,10 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
         APP.videoGuideLiveData.observe(context as BaseActivity<*>){
             if (it == 10){
                 dismiss()
+            }else if (it == 11){
+                defaultBinding?.vp?.apply {
+                    currentItem -= 1
+                }
             }
         }
     }

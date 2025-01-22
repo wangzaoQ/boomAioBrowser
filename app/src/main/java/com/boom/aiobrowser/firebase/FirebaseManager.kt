@@ -12,6 +12,7 @@ import com.boom.aiobrowser.data.AioNFData
 import com.boom.aiobrowser.data.DefaultUserData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.PushData
+import com.boom.aiobrowser.data.PushRuleData
 import com.boom.aiobrowser.firebase.FirebaseConfig.AD_DEFAULT_JSON
 import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.nf.NFManager.defaultNewsList
@@ -108,6 +109,10 @@ object FirebaseManager {
      */
     private fun initFirebaseConfig2() {
         initJumpConfig()
+        runCatching {
+            FirebaseConfig.jsConfig = firebaseRemoteConfig?.getString("page_js")?:""
+        }
+        AppLogs.dLog("APP.instance.TAG", "page_js:${FirebaseConfig.jsConfig}")
     }
 
     private fun initJumpConfig() {
@@ -144,6 +149,15 @@ object FirebaseManager {
         }
         if (FirebaseConfig.referConfig.isNullOrEmpty()){
             FirebaseConfig.referConfig = FirebaseConfig.DEFAULT_REFER_CONFIG
+        }
+        runCatching {
+            var push_rule = firebaseRemoteConfig?.getString("push_rule")?:""
+            var data = getBeanByGson(push_rule,PushRuleData::class.java)
+            var downloadSplit = (data?.download?:"").split(",")
+            var country = matchCountry()
+            if (downloadSplit.contains(country)){
+                FirebaseConfig.isDownloadConfig = true
+            }
         }
         getADConfig()
         getNFConfig()

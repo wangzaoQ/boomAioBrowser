@@ -248,9 +248,14 @@ object FirebaseManager {
 
     fun matchCountry(): String {
         var language = ""
+        var country = ""
         runCatching {
             language = Locale.getDefault().language
         }
+        runCatching {
+            country = Locale.getDefault().country
+        }
+        AppLogs.dLog(APP.instance.TAG,"matchCountry language:${language} country:${country}")
         return when (language) {
             "pt" -> {
                 "BR"
@@ -273,7 +278,11 @@ object FirebaseManager {
             }
 
             else -> {
-                "US"
+                if (country.isNullOrEmpty() || country == "CN"){
+                    "US"
+                }else{
+                    country
+                }
             }
         }
     }

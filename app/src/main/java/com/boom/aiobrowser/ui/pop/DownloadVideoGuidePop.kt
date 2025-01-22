@@ -43,7 +43,6 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
                 dataList.add(0)
                 dataList.add(1)
                 dataList.add(2)
-                dataList.add(3)
                 adapter = PopGuideAdapter(dataList,context as BaseActivity<*>)
 //                isUserInputEnabled = false
                 var width = dp2px(7f).toFloat()
@@ -72,31 +71,40 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
 
                     override fun onPageSelected(position: Int) {
                         super.onPageSelected(position)
+                        APP.videoGuideLiveData.postValue(position)
                         indicator.onPageSelected(position)
-                        if (position == 3){
-                            btnCommit.visibility = View.VISIBLE
-                        }else{
-                            btnCommit.visibility = View.GONE
+                        when (position) {
+                            0 -> {
+                                ivLeft.setImageResource(R.mipmap.ic_video_guide_left1)
+                                ivRight.setImageResource(R.mipmap.ic_video_guide_right2)
+                            }
+                            1 -> {
+                                ivLeft.setImageResource(R.mipmap.ic_video_guide_left2)
+                                ivRight.setImageResource(R.mipmap.ic_video_guide_right2)
+                            }
+                            2 -> {
+                                ivLeft.setImageResource(R.mipmap.ic_video_guide_left2)
+                                ivRight.setImageResource(R.mipmap.ic_video_guide_right1)
+                            }
+                            else -> {}
                         }
                     }
                 })
+            }
+            ivLeft.setOnClickListener {
+                if (vp.currentItem>0){
+                    vp.currentItem -= 1
+                }
+            }
+            ivRight.setOnClickListener {
+                if (vp.currentItem<2){
+                    vp.currentItem += 1
+                }
             }
             tvSkip.setOnClickListener {
                 PointEvent.posePoint(PointEventKey.download_tutorial_skip, Bundle().apply {
                     putInt(PointValueKey.page,vp.currentItem)
                 })
-                dismiss()
-            }
-            btnCommit.setOnClickListener {
-                PointEvent.posePoint(PointEventKey.download_tutorial_try)
-                var data = JumpDataManager.getCurrentJumpData(tag = "DownloadVideoGuidePop guide")
-                data.jumpType = JumpConfig.JUMP_WEB
-                data.jumpUrl = "https://mixkit.co/free-stock-video/woman-in-bikini-enjoying-sun-in-swimming-pool-36904/"
-//                data.jumpUrl = "https://www.pexels.com/videos"
-                JumpDataManager.updateCurrentJumpData(data,tag = "DownloadVideoGuidePop guide")
-                APP.jumpLiveData.postValue(data)
-                JumpDataManager.closeAll()
-                PointEvent.posePoint(PointEventKey.tutorial_webpage)
                 dismiss()
             }
         }
@@ -105,7 +113,15 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
             putInt(PointValueKey.open_type,if (CacheManager.isVideoFirst) 0 else 1)
         })
         CacheManager.isVideoFirst = false
+        APP.videoGuideLiveData.observe(context as BaseActivity<*>){
+            if (it == 10){
+                dismiss()
+            }
+        }
     }
 
-
+    override fun dismiss() {
+        APP.videoGuideLiveData.removeObservers(context as BaseActivity<*>)
+        super.dismiss()
+    }
 }

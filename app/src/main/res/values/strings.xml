@@ -366,6 +366,9 @@
     <string name="app_play_music">Play Music</string>
     <string name="app_delete_audio">Delete Audio</string>
     <string name="app_close">Close</string>
+    <string name="app_video_guide1">Visit Website</string>
+    <string name="app_video_guide2">Play Videos</string>
+    <string name="app_video_guide3">Click the button to download the video</string>
 
 
 </resources>

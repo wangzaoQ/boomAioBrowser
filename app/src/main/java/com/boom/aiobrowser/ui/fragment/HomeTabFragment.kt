@@ -17,10 +17,8 @@ import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.getListByGson
 import com.boom.aiobrowser.tools.toJson
-import com.boom.aiobrowser.ui.activity.WebDetailsActivity
 import com.boom.aiobrowser.ui.activity.WebSourceActivity
 import com.boom.aiobrowser.ui.adapter.HomeTabChildAdapter
-import com.boom.aiobrowser.ui.fragment.guide.GuideFragment
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
 
 class HomeTabFragment : BaseFragment<NewsFragmentHomeTabBinding>(){

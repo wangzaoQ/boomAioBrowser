@@ -118,6 +118,7 @@ class APP: Application(), ViewModelStoreOwner {
         val locationListUpdateLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
         val trendNewsComplete by lazy { ProtectedUnPeekLiveData<Int>() }
         val downloadButtonLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
+        val videoGuideLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
 
 
     }

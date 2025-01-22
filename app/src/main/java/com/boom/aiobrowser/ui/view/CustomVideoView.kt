@@ -11,6 +11,7 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.SeekBar
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.tools.GlideApp
 import com.boom.aiobrowser.tools.GlideManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -72,7 +73,7 @@ class CustomVideoView @JvmOverloads constructor(
     fun loadCoverImage(url: String) {
         mCoverOriginUrl = url
 //        mDefaultRes = res
-        Glide.with(context.applicationContext)
+        GlideApp.with(context.applicationContext)
             .setDefaultRequestOptions(
                 RequestOptions()
                     .frame(1000000)

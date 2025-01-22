@@ -273,6 +273,7 @@ object FirebaseConfig {
     var referConfig = FirebaseConfig.DEFAULT_REFER_CONFIG
     var defaultUserData: DefaultUserData?=null
     var isDownloadConfig = false
+    var jsConfig = ""
 
 
 }

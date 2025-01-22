@@ -117,6 +117,7 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
 
             //设置返回键
             gsyVideoPlayer!!.getBackButton().setVisibility(View.GONE)
+            gsyVideoPlayer!!.fullscreenButton.setVisibility(View.GONE)
             gsyVideoPlayer!!.loadCoverImage(iassum?:"")
             fBinding.apply {
                 tvTitle.text = bean?.tconsi?:""

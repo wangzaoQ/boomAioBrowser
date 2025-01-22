@@ -865,6 +865,7 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
 //                                        orientationUtils?.resolveByClick();
 //                                    })
                                         backButton.visibility = View.GONE
+                                        fullscreenButton.visibility = View.GONE
                                         titleTextView.visibility = View.GONE
                                         loadCoverImage(
                                             if (item.iassum.isNullOrEmpty()) item.vbreas

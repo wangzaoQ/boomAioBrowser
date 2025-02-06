@@ -38,6 +38,7 @@ import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.CloakManager
+import com.boom.aiobrowser.tools.SubscribeManager
 import com.boom.aiobrowser.tools.UIManager
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.event.ProtectedUnPeekLiveData
@@ -255,7 +256,6 @@ class APP: Application(), ViewModelStoreOwner {
     }
 
     private fun initNFConfig() {
-
     }
 
     private fun initAdjust() {

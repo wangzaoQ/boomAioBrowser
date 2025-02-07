@@ -26,6 +26,7 @@ import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.other.isAndroid12
 import com.boom.aiobrowser.other.isAndroid14
+import com.boom.aiobrowser.tools.allowShowNF
 import com.boom.aiobrowser.tools.jobCancel
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
@@ -47,6 +48,7 @@ object NFManager {
     const val FROM_TIMER: String = "timer"
     const val FROM_WORK: String = "work"
     const val FROM_UNLOCK: String = "unlock"
+    const val FROM_FCM: String = "fcm"
 
     var nfRootBean: AioNFData? = null
 
@@ -319,7 +321,7 @@ object NFManager {
             this.tag = tag
             this.nId = Random.nextInt(300000 - 200000 + 1) + 200000
         }
-        NFShow.showNewsNF(data,NFEnum.NF_NEWS_FCM)
+        NFShow.showNewsNF(data,NFEnum.NF_NEWS_FCM,FROM_FCM)
     }
 
     fun needRefreshData(key:String): Boolean {
@@ -338,11 +340,7 @@ object NFManager {
     var timerJob: Job?=null
 
     fun notifyByTimerTask() {
-        var language = ""
-        runCatching {
-            language = Locale.getDefault().language
-        }
-        if (language != "ko"){
+        if (allowShowNF()){
             NFWorkManager.startNF()
         }
         timerJob.jobCancel()
@@ -351,7 +349,7 @@ object NFManager {
             startForeground("APP")
             delay(10*1000)
             while (true) {
-                if (language != "ko"){
+                if (allowShowNF()){
                     showNFByCount()
                     showCount++
                 }

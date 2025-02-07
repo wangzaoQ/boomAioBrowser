@@ -27,6 +27,7 @@ import com.boom.aiobrowser.tools.BrowserManager
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.GlideManager
 import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.tools.SubscribeManager
 import com.boom.aiobrowser.tools.UIManager
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.activity.AboutActivity
@@ -50,6 +51,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GetTokenResult
 import com.google.firebase.auth.GoogleAuthProvider
 import pop.basepopup.BasePopupWindow.OnDismissListener
+import java.lang.ref.WeakReference
 
 class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
 
@@ -140,15 +142,16 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
                 ShortManager.addWidgetToLaunch(rootActivity, true)
             }
             llAbout.setOnClickListener {
-                if (context is BaseActivity<*>) {
-                    (context as BaseActivity<*>).startActivity(
-                        Intent(
-                            context,
-                            AboutActivity::class.java
-                        )
-                    )
-                }
-                PointEvent.posePoint(PointEventKey.profile_about)
+//                if (context is BaseActivity<*>) {
+//                    (context as BaseActivity<*>).startActivity(
+//                        Intent(
+//                            context,
+//                            AboutActivity::class.java
+//                        )
+//                    )
+//                }
+//                PointEvent.posePoint(PointEventKey.profile_about)
+                SubscribeManager.subscribeShop(WeakReference(rootActivity),"vip")
             }
             llDownload.setOnClickListener {
                 if (context is BaseActivity<*>) {

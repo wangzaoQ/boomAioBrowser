@@ -157,6 +157,24 @@ fun getCurrentCountryCode(): String {
    return FirebaseManager.matchCountry()
 }
 
+fun allowShowNF():Boolean{
+    var language = ""
+    var country = ""
+    runCatching {
+        language = Locale.getDefault().language
+    }
+    runCatching {
+        country = Locale.getDefault().country
+    }
+    if (language.equals("ko",true) || country.equals("kr",true).not()){
+        return false
+    }else if (language == "" && country == "") {
+        return false
+    }else{
+        return true
+    }
+}
+
 
 fun isOtherPkg(context: Context): Boolean {
     runCatching {

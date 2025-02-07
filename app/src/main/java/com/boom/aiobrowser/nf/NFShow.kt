@@ -51,7 +51,7 @@ object NFShow {
                     showNewsNF(NewsData().apply {
                         nfSource = enum.menuName
                         trendList = newsList
-                    },enum)
+                    },enum,sourceType)
                 }
                 return
             }
@@ -103,11 +103,11 @@ object NFShow {
                     data = NFManager.defaultNewsList!!.get(index)
                     //原始来源
                     data.nfSource = enum.menuName
-                    showNewsNF(data, NFEnum.NF_DEFAULT)
+                    showNewsNF(data, NFEnum.NF_DEFAULT,sourceType)
                 }
             }else{
                 data.nfSource = enum.menuName
-                showNewsNF(data, enum)
+                showNewsNF(data, enum,sourceType)
             }
             CacheManager.saveNFNewsList(enum.menuName, newsList ?: mutableListOf())
             if (APP.isDebug){
@@ -201,13 +201,14 @@ object NFShow {
     }
 
     @SuppressLint("MissingPermission")
-    fun showNewsNF(data:NewsData,enum: NFEnum){
+    fun showNewsNF(data:NewsData,enum: NFEnum,sourceType: String){
         if (nfAllow().not())return
         PointEvent.posePoint(PointEventKey.all_noti_t,Bundle().apply {
             putString(PointValueKey.push_type, enum.menuName)
             if (enum == NFEnum.NF_DEFAULT && data.nfSource.isNullOrEmpty().not()){
                 putString(PointValueKey.source_from, data.nfSource)
             }
+            putString(PointValueKey.source_type,sourceType)
         })
         if (data.nfSource == NFEnum.NF_NEWS.menuName || data.nfSource == NFEnum.NF_NEW_USER.menuName || data.nfSource == NFEnum.NF_NEWS_FCM.menuName){
             WakeManager.wwakeUp()

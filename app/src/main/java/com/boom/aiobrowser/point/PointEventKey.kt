@@ -327,6 +327,7 @@ object PointValueKey{
 
     const val ponit_action = "ponit_action"
     const val push_type = "push_type"
+    const val source_type = "source_type"
     const val source_from = "source_from"
     const val from_type = "from_type"
     const val web_store = "web_store"

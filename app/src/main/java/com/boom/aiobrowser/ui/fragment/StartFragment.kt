@@ -23,6 +23,7 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.other.UrlConfig
 import com.boom.aiobrowser.tools.CloakManager
+import com.boom.aiobrowser.tools.SubscribeManager
 import com.boom.aiobrowser.tools.UIManager
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.WebActivity
@@ -206,6 +207,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             NFShow.showForegroundNF()
         }, onFail = {})
         CloakManager().getCloak()
+        SubscribeManager.queryShop()
     }
 
     var dataIntent :Intent?=null

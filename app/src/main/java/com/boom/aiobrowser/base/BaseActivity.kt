@@ -189,6 +189,7 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
 //                hideKeyBoard(v)
                 v?.apply {
                     KeyboardUtils.hideSoftInput(this)
+                    clearFocus()
                 }
             }
         }

@@ -304,7 +304,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
         fBinding.searchRv.apply {
             layoutManager = LinearLayoutManager(rootActivity,LinearLayoutManager.VERTICAL,false)
             adapter = searchResultAdapter
-            searchResultAdapter.setOnDebouncedItemClick{ adapter, view, position ->
+            searchResultAdapter.addOnDebouncedChildClick(R.id.rlRoot){ adapter, view, position ->
                 var data = searchResultAdapter.items.get(position)
                 var jumpData = JumpDataManager.getCurrentJumpData(tag = "searchFragment 点击联想搜索").apply {
                     jumpType = JumpConfig.JUMP_WEB
@@ -402,7 +402,9 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
     private fun toWebDetailsActivity(data:JumpData){
 //        APP.jumpLiveData.postValue(data)
 //        rootActivity.finish()
-        APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(data.jumpUrl, title = data.jumpTitle,"搜索",false))
+//        APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(data.jumpUrl, title = data.jumpTitle,"搜索",false))
+        JumpDataManager.updateCurrentJumpData(data,tag = "searchResult")
+        APP.jumpLiveData.postValue(data)
         rootActivity.finish()
     }
 

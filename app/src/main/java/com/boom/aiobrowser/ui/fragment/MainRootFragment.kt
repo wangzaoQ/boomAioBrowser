@@ -10,13 +10,14 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.databinding.BrowserFragmentMainRootBinding
-import com.boom.aiobrowser.tools.CacheManager
-import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.tools.toJson
 import com.boom.drag.EasyFloat
 import java.util.LinkedList
+
 
 class MainRootFragment :BaseFragment<BrowserFragmentMainRootBinding>() {
 
@@ -32,6 +33,14 @@ class MainRootFragment :BaseFragment<BrowserFragmentMainRootBinding>() {
             // 通过Action进行导航，跳转到secondFragment
             when (it.jumpType) {
                 JumpConfig.JUMP_WEB -> {
+//                    val navController = Navigation.findNavController(rootActivity, R.id.fragment_view)
+//                    val currentDestinationId = navController.currentDestination!!.id
+//                    if (currentDestinationId == R.id.fragmentWeb)
+                    val currentFragment = childFragmentManager.findFragmentById(R.id.fragment_view)?.getChildFragmentManager()?.primaryNavigationFragment
+                    if (currentFragment is WebFragment){
+                        currentFragment.mAgentWeb!!.go(it.jumpUrl)
+                        return@observe
+                    }
                     CacheManager.videoDownloadTempList = mutableListOf()
                     if (it.isJumpClick){
                         it.isJumpClick = false
@@ -40,6 +49,7 @@ class MainRootFragment :BaseFragment<BrowserFragmentMainRootBinding>() {
                     val navOptions = NavOptions.Builder()
                         .setEnterAnim(R.anim.in_alpha)
                         .setExitAnim(R.anim.out_alpha)
+                        .setPopUpTo(R.id.fragment_view, false)
                         .build()
 
                     navController?.navigate(R.id.fragmentWeb, Bundle().apply {

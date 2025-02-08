@@ -287,4 +287,11 @@ object SubscribeManager {
     }
 
 
+    fun unsubscribe(){
+        runCatching {
+            billingclient.endConnection()
+        }
+    }
+
+
 }

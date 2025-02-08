@@ -118,15 +118,15 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
                     button1.setTextColor(ContextCompat.getColor(rootActivity,R.color.color_blue_0066FF))
                 }
             }
-            llNewTab.setOnClickListener {
+            llNewTab.setOneClick {
                 showTabPop()
                 PointEvent.posePoint(PointEventKey.profile_newtab)
             }
-            llClearData.setOnClickListener {
+            llClearData.setOneClick {
                 clearData()
                 PointEvent.posePoint(PointEventKey.profile_cleardate)
             }
-            llHistory.setOnClickListener {
+            llHistory.setOneClick {
                 if (context is BaseActivity<*>) {
                     (context as BaseActivity<*>).startActivity(
                         Intent(
@@ -137,27 +137,36 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
                 }
                 PointEvent.posePoint(PointEventKey.profile_history)
             }
-            llWidget.setOnClickListener {
+            llWidget.setOneClick {
                 PointEvent.posePoint(PointEventKey.profile_add_widget)
                 ShortManager.addWidgetToLaunch(rootActivity, true)
             }
-            llAbout.setOnClickListener {
-//                if (context is BaseActivity<*>) {
-//                    (context as BaseActivity<*>).startActivity(
-//                        Intent(
-//                            context,
-//                            AboutActivity::class.java
-//                        )
-//                    )
-//                }
-//                PointEvent.posePoint(PointEventKey.profile_about)
-                SubscribeManager.subscribeShop(WeakReference(rootActivity),"vip")
+            llAbout.setOneClick {
+                if (context is BaseActivity<*>) {
+                    (context as BaseActivity<*>).startActivity(
+                        Intent(
+                            context,
+                            AboutActivity::class.java
+                        )
+                    )
+                }
+                PointEvent.posePoint(PointEventKey.profile_about)
             }
-            llDownload.setOnClickListener {
+            llDownload.setOneClick {
                 if (context is BaseActivity<*>) {
                     APP.downloadPageLiveData.postValue("home_more_pop")
                 }
                 PointEvent.posePoint(PointEventKey.profile_download)
+            }
+
+            llvip1.setOneClick {
+                SubscribeManager.subscribeShop(WeakReference(rootActivity),"vip_weekly")
+            }
+            llvip2.setOneClick {
+                SubscribeManager.subscribeShop(WeakReference(rootActivity),"vip_monthly")
+            }
+            llvip3.setOneClick {
+                SubscribeManager.subscribeShop(WeakReference(rootActivity),"vip_quarterly")
             }
             updateUI()
         }

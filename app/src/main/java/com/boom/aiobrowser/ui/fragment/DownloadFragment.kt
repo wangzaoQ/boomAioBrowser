@@ -127,18 +127,19 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
             var data = downloadAdapter.getItem(position)?:return@addOnDebouncedChildClick
             VideoMorePop(rootActivity).createPop(renameBack = {
                 rootActivity.addLaunch(success = {
-                    var file =  File(it)
-                    data.downloadFilePath = file.absolutePath
-                    data.downloadFileName = file.name
-                    var model = DownloadCacheManager.queryDownloadModel(data)
-                    if (model!=null){
-                        model.downloadFilePath = file.absolutePath
-                        model.downloadFileName = file.name
-                        DownloadCacheManager.updateModel(model)
-                    }
-                    withContext(Dispatchers.Main){
-                        startLoadData()
-                    }
+                    viewModel.value.queryDataByType(type)
+//                    var file =  File(it)
+//                    data.downloadFilePath = file.absolutePath
+//                    data.downloadFileName = file.name
+//                    var model = DownloadCacheManager.queryDownloadModel(data)
+//                    if (model!=null){
+//                        model.downloadFilePath = file.absolutePath
+//                        model.downloadFileName = file.name
+//                        DownloadCacheManager.updateModel(model)
+//                    }
+//                    withContext(Dispatchers.Main){
+//                        startLoadData()
+//                    }
                 }, failBack = {})
             }, deleteBack = {
                 downloadAdapter.remove(data)

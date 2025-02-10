@@ -28,6 +28,7 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.GlideManager
 import com.boom.aiobrowser.tools.WakeManager
 import com.boom.aiobrowser.tools.video.VideoManager
+import com.boom.aiobrowser.tools.video.VideoPreloadManager
 import com.boom.aiobrowser.tools.web.WebScan
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -91,7 +92,6 @@ object NFShow {
             )
 //            //TODO:TEST
 //            newsList = mutableListOf()
-
             var data = newsList?.removeFirstOrNull()
             if (data == null || data.itackl.isNullOrEmpty()){
                 AppLogs.dLog(NFManager.TAG,"name:${enum.menuName} sourceType:${sourceType} NFManager.defaultNewsList.size:${NFManager.defaultNewsList?.size}获取数据来源失败走本地通知")
@@ -112,6 +112,16 @@ object NFShow {
                 showNewsNF(data, enum,sourceType,newsList)
             }
             CacheManager.saveNFNewsList(enum.menuName, newsList ?: mutableListOf())
+            newsList?.apply {
+                if (size>0){
+                    var videoList = mutableListOf<NewsData>()
+                    for (i in 0 until size){
+                        videoList.add(get(i))
+                        VideoPreloadManager.serialList(1,videoList)
+                    }
+                }
+            }
+
             if (APP.isDebug){
                 AppLogs.dLog(NFManager.TAG, "name:${enum.menuName} 移除第一条后 新闻总size=${CacheManager.getNFNewsList(enum.menuName).size}")
             }

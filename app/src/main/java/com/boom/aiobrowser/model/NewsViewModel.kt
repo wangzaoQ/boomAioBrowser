@@ -6,7 +6,9 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADDataManager
+import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.NewsData
+import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.net.Net
 import com.boom.aiobrowser.net.NetController
 import com.boom.aiobrowser.net.NetParams
@@ -127,15 +129,28 @@ class NewsViewModel : BaseDataModel() {
     fun getNewsVideoList(enumName :String,data: NewsData?=null,dataList: MutableList<NewsData>?=null){
         loadData(loadBack = {
             var list:MutableList<NewsData>
-            if (enumName == ""){
+            var endEnumName = enumName
+            if (endEnumName == ""){
                 var url = NetParams.videoMapToUrl(NetParams.getParamsMap(NetParams.NEWS_HOME_VIDEO))
                 list = NetRequest.request(HashMap<String, Any>().apply { put("sessionKey", NetParams.NEWS_HOME_VIDEO) }){
                     NetController.getNewsList(url)
                 }.data ?: mutableListOf()
             }else{
                 //1 取当前访问的视频
-                var url = NetParams.videoMapToUrl(NetParams.getParamsMap("${NO_NF_VIDEO_TAG}${enumName}"))
-                list = NetRequest.request(HashMap<String, Any>().apply { put("sessionKey", "${NO_NF_VIDEO_TAG}${enumName}") }){
+                if (FirebaseConfig.isDownloadConfig){
+                    if (endEnumName == NFEnum.NF_EDITOR.menuName){
+                        endEnumName = NetParams.DOWNLOAD_EDITOR_PUSH
+                    }else if (endEnumName == NFEnum.NF_UNLOCK.menuName){
+                        endEnumName = NetParams.DOWNLOAD_UNLOCK_PUSH
+                    }else if (endEnumName == NFEnum.NF_NEWS.menuName){
+                        endEnumName = NetParams.DOWNLOAD_FOR_YOU_PUSH
+                    }else if (endEnumName == NFEnum.NF_NEW_USER.menuName){
+                        endEnumName = NetParams.DOWNLOAD_NEW_USER_PUSH
+                    }
+                }
+
+                var url = NetParams.videoMapToUrl(NetParams.getParamsMap("${NO_NF_VIDEO_TAG}${endEnumName}"))
+                list = NetRequest.request(HashMap<String, Any>().apply { put("sessionKey", "${endEnumName}") }){
                     NetController.getNewsList(url)
                 }.data ?: mutableListOf()
                 list = detailHistoryVideo(dataList?: mutableListOf(),list)
@@ -172,7 +187,7 @@ class NewsViewModel : BaseDataModel() {
             }
 
             newsVideoLiveData.postValue(list)
-            if (enumName == ""){
+            if (endEnumName == ""){
                 CacheManager.videoList = list
             }
             for (i in 0 until list.size){

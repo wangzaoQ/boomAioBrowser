@@ -637,7 +637,7 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                                             }
                                         }
                                     }
-                                    VideoListActivity.startVideoListActivity(context as BaseActivity<*>,position,item.videoList?: mutableListOf())
+                                    VideoListActivity.startVideoListActivity(context as BaseActivity<*>,position,item.videoList?: mutableListOf(),"")
                                 }
                                 clRoot.setTag(R.id.clRoot,item.videoList)
                             }

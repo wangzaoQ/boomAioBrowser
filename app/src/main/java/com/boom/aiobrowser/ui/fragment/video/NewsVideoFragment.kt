@@ -55,6 +55,7 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
     var list:MutableList<NewsData>?=null
 
     var page = 1
+    var enumName =""
 
     var firstLoad = true
 
@@ -64,6 +65,7 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
     override fun setShowView() {
         list = getListByGson(arguments?.getString("data",""),NewsData::class.java)
         var index = arguments?.getInt("index")?:0
+        enumName = arguments?.getString("enumName","")?:""
         dataList.addAll(list ?: ArrayList())
 
         fBinding.videoVp.apply {
@@ -79,7 +81,7 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
                         if (position >= dataList.size-3 && firstLoad){
                             firstLoad = false
                             page++
-                            viewModel.value.getNewsVideoList()
+                            viewModel.value.getNewsVideoList(enumName,list!!.get(index),dataList)
                         }
                     }
                 }
@@ -89,11 +91,11 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
         fBinding.smart.apply {
             setOnRefreshListener {
                 page=1
-                viewModel.value.getNewsVideoList()
+                viewModel.value.getNewsVideoList(enumName,list!!.get(index),dataList)
             }
             setOnLoadMoreListener {
                 page++
-                viewModel.value.getNewsVideoList()
+                viewModel.value.getNewsVideoList(enumName,list!!.get(index),dataList)
             }
         }
 
@@ -117,9 +119,10 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
     }
 
     companion object{
-        fun newInstance(index:Int,jsonString:String): NewsVideoFragment {
+        fun newInstance(index:Int,jsonString:String,enumName:String): NewsVideoFragment {
             val args = Bundle()
             args.putInt("index",index)
+            args.putString("enumName",enumName)
             if (jsonString.isNullOrEmpty().not()){
                 args.putString("data", jsonString)
             }

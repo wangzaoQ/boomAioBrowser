@@ -26,15 +26,20 @@ class VideoListActivity : BaseActivity<NewsActivityVideoListBinding>() {
         var manager = FragmentManager()
         var jsonString = intent.getStringExtra("data")?:""
         var index = intent.getIntExtra("index",0)
-        manager.addFragment(supportFragmentManager, NewsVideoFragment.newInstance(index,jsonString),
+        var enumName = intent.getStringExtra("enumName")?:""
+        manager.addFragment(supportFragmentManager, NewsVideoFragment.newInstance(index,jsonString,enumName),
             R.id.flRoot)
     }
 
     companion object{
-        fun startVideoListActivity(activity: BaseActivity<*>,index:Int,list: MutableList<NewsData>?){
+        /**
+         * enumName 有值则是从通知进入
+         */
+        fun startVideoListActivity(activity: BaseActivity<*>,index:Int,list: MutableList<NewsData>?,enumName:String){
             activity.jumpActivity<VideoListActivity>(Bundle().apply {
                 putString("data", toJson(list))
                 putInt("index", index)
+                putString("enumName", enumName)
             })
         }
     }

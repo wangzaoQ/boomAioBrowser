@@ -34,6 +34,7 @@ object CacheManager {
     const val KV_FIRST_DOWNLOAD_VIDEO_SUCCESS = "KV_FIRST_DOWNLOAD_VIDEO_SUCCESS"
     const val KV_IS_B_USER = "KV_IS_B_USER"
     const val KV_IS_A_USER = "KV_IS_A_USER"
+    const val KV_IS_SUBSCRIBE_MEMBER = "KV_IS_SUBSCRIBE_MEMBER"
     const val KV_IS_SEND_B = "KV_IS_SEND_B"
     const val KV_DAY_DOWNLOAD_COUNT = "KV_DAY_DOWNLOAD_COUNT"
     const val KV_FIRST_TIME = "KV_FIRST_TIME"
@@ -176,6 +177,14 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_IS_A_USER, value)
+        }
+
+    var isSubscribeMember: Boolean
+        get() {
+            return mmkv.decodeBool(KV_IS_SUBSCRIBE_MEMBER, false)
+        }
+        set(value) {
+            mmkv.encode(KV_IS_SUBSCRIBE_MEMBER, value)
         }
 
     var isSendB: Boolean

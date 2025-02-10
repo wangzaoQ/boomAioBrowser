@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
@@ -160,13 +161,25 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
             }
 
             llvip1.setOneClick {
-                SubscribeManager.subscribeShop(WeakReference(rootActivity),"vip_weekly")
+                if (CacheManager.isSubscribeMember.not()){
+                    SubscribeManager.subscribeShop(WeakReference(rootActivity),"vip_weekly")
+                }else{
+                    ToastUtils.showLong("当前已有订阅")
+                }
             }
             llvip2.setOneClick {
-                SubscribeManager.subscribeShop(WeakReference(rootActivity),"vip_monthly")
+                if (CacheManager.isSubscribeMember.not()){
+                    SubscribeManager.subscribeShop(WeakReference(rootActivity),"vip_monthly")
+                }else{
+                    ToastUtils.showLong("当前已有订阅")
+                }
             }
             llvip3.setOneClick {
-                SubscribeManager.subscribeShop(WeakReference(rootActivity),"vip_quarterly")
+                if (CacheManager.isSubscribeMember.not()){
+                    SubscribeManager.subscribeShop(WeakReference(rootActivity),"vip_quarterly")
+                }else{
+                    ToastUtils.showLong("当前已有订阅")
+                }
             }
             updateUI()
         }

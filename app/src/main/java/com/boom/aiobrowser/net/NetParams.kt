@@ -103,6 +103,8 @@ object NetParams {
             endKey = endKey.substringAfter(NewsConfig.NO_SESSION_TAG)
             sessionType = 1
             map.put("tearth",endKey)
+        }else if (endKey.startsWith(NewsConfig.NO_NF_VIDEO_TAG)){
+            endKey = endKey.substringAfter(NewsConfig.NO_NF_VIDEO_TAG)
         }
         /**
          *   aio_for_you: 1803

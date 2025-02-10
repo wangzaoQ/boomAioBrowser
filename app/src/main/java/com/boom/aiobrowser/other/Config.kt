@@ -25,6 +25,7 @@ object ParamsConfig{
     const val NF_DATA = "nf_data"
     const val NF_TO = "nf_to"
     const val NF_ENUM_NAME = "nf_enum_name"
+    const val NF_INDEX = "nf_index"
 
     const val JSON_PARAMS="JSON_PARAMS"
 
@@ -208,6 +209,7 @@ object NewsConfig{
     const val TOPIC_TAG="topic_"
     const val LOCAL_TAG="area_"
     const val NO_SESSION_TAG="no_session_"
+    const val NO_NF_VIDEO_TAG="nf_video_"
 
     var LOCAL_TOPIC_JSON= """
 [

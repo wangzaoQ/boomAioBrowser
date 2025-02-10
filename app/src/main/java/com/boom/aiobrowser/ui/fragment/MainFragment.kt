@@ -511,7 +511,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             fBinding.topSearch.binding.ivPrivate.visibility = View.VISIBLE
         }
         viewModel.value.getNewsData(newsAdapter.mutableItems,NetParams.MAIN, page = page)
-        viewModel.value.getNewsVideoList()
+        viewModel.value.getNewsVideoList("")
         fBinding.root.postDelayed({
             fBinding.topSearch.visibility = View.GONE
         },0)

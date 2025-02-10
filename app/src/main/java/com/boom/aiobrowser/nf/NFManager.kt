@@ -27,6 +27,7 @@ import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.other.isAndroid12
 import com.boom.aiobrowser.other.isAndroid14
 import com.boom.aiobrowser.tools.allowShowNF
+import com.boom.aiobrowser.tools.getListByGson
 import com.boom.aiobrowser.tools.jobCancel
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
@@ -136,7 +137,7 @@ object NFManager {
         }
     }
 
-    fun clickPoint(nfData: String, nfTo: Int,enumName: String,isLaunch:Boolean) {
+    fun clickPoint(nfData: String, nfTo: Int,enumName: String,isLaunch:Boolean,nfIndex:Int) {
 
         var from = ""
         if (isLaunch){
@@ -192,12 +193,18 @@ object NFManager {
                 })
             }
             NFEnum.NF_NEWS.menuName,NFEnum.NF_LOCAL.menuName,NFEnum.NF_HOT.menuName,NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName,NFEnum.NF_NEW_USER.menuName,NFEnum.NF_DEFAULT.menuName,NFEnum.NF_TREND.menuName -> {
-                var data = getBeanByGson(nfData,NewsData::class.java)
+                var data :NewsData?=null
+                var dataList = getListByGson(nfData,NewsData::class.java)
+                dataList?.apply {
+                    if (nfIndex<dataList.size){
+                        data = dataList.get(nfIndex)
+                    }
+                }
                 from = "news_push"
                 PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
                     putString(PointValueKey.push_type, enumName)
                     if (enumName == NFEnum.NF_DEFAULT.menuName && data!=null){
-                        putString(PointValueKey.source_from, data.nfSource)
+                        putString(PointValueKey.source_from, data!!.nfSource)
                     }
                 })
                 var id = NFEnum.NF_NEWS.position

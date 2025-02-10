@@ -1,15 +1,19 @@
 package com.boom.aiobrowser.model
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.data.NewsData
+import com.boom.aiobrowser.net.Net
 import com.boom.aiobrowser.net.NetController
 import com.boom.aiobrowser.net.NetParams
 import com.boom.aiobrowser.net.NetRequest
 import com.boom.aiobrowser.other.NewsConfig
+import com.boom.aiobrowser.other.NewsConfig.NO_NF_VIDEO_TAG
+import com.boom.aiobrowser.other.NewsConfig.NO_SESSION_TAG
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.video.VideoPreloadManager
@@ -120,14 +124,57 @@ class NewsViewModel : BaseDataModel() {
         }, failBack = {})
     }
 
-    fun getNewsVideoList(){
+    fun getNewsVideoList(enumName :String,data: NewsData?=null,dataList: MutableList<NewsData>?=null){
         loadData(loadBack = {
-            var url = NetParams.videoMapToUrl(NetParams.getParamsMap(NetParams.NEWS_HOME_VIDEO))
-            var list = NetRequest.request(HashMap<String, Any>().apply { put("sessionKey", NetParams.NEWS_HOME_VIDEO) }){
-                NetController.getNewsList(url)
-            }.data ?: mutableListOf()
+            var list:MutableList<NewsData>
+            if (enumName == ""){
+                var url = NetParams.videoMapToUrl(NetParams.getParamsMap(NetParams.NEWS_HOME_VIDEO))
+                list = NetRequest.request(HashMap<String, Any>().apply { put("sessionKey", NetParams.NEWS_HOME_VIDEO) }){
+                    NetController.getNewsList(url)
+                }.data ?: mutableListOf()
+            }else{
+                //1 取当前访问的视频
+                var url = NetParams.videoMapToUrl(NetParams.getParamsMap("${NO_NF_VIDEO_TAG}${enumName}"))
+                list = NetRequest.request(HashMap<String, Any>().apply { put("sessionKey", "${NO_NF_VIDEO_TAG}${enumName}") }){
+                    NetController.getNewsList(url)
+                }.data ?: mutableListOf()
+                list = detailHistoryVideo(dataList?: mutableListOf(),list)
+                //2.获取当前topic的视频
+                if (list.isNullOrEmpty()){
+                    var topics = data?.tdetai
+                    var session = ""
+                    if (topics.isNullOrEmpty().not()){
+                        var builder = StringBuilder()
+                        topics!!.forEach {
+                            session+=it
+                            builder.append("tweakn=${Uri.encode(it)}&")
+                        }
+                        var map = NetParams.getParamsMap(session)
+                        map.forEach {
+                            builder.append(it.key).append("=").append(Uri.encode(it.value)).append("&")
+                        }
+                        builder.append("vback=${true}")
+                        var url = "${Net.rootUrl}/api/nemplo?${builder.toString()}"
+                        AppLogs.dLog(Net.TAG,"getNewsVideoList: ${url}")
+                        list = NetRequest.request(HashMap<String, Any>().apply { put("sessionKey", session) }){
+                            NetController.getNewsList(url)
+                        }.data ?: mutableListOf()
+                    }
+                }
+                list = detailHistoryVideo(dataList?: mutableListOf(),list)
+                //3 拉正常视频
+                if (list.isNullOrEmpty()){
+                    var url = NetParams.videoMapToUrl(NetParams.getParamsMap(NetParams.NEWS_HOME_VIDEO))
+                    list = NetRequest.request(HashMap<String, Any>().apply { put("sessionKey", NetParams.NEWS_HOME_VIDEO) }){
+                        NetController.getNewsList(url)
+                    }.data ?: mutableListOf()
+                }
+            }
+
             newsVideoLiveData.postValue(list)
-            CacheManager.videoList = list
+            if (enumName == ""){
+                CacheManager.videoList = list
+            }
             for (i in 0 until list.size){
                 VideoPreloadManager.serialList(1, mutableListOf<NewsData>().apply {
                     add(list.get(i))
@@ -427,6 +474,23 @@ class NewsViewModel : BaseDataModel() {
                     if (it.itackl == oldData.itackl){
                         removeList.add(it)
                     }
+                }
+            }
+        }
+        newsList.removeAll(removeList)
+        AppLogs.dLog(TAG,"经过过滤后的数据长度:${newsList.size}  移除了:${removeList.size}")
+        return newsList
+    }
+    fun detailHistoryVideo(oldList:MutableList<NewsData>,newsList:MutableList<NewsData>):MutableList<NewsData>{
+        AppLogs.dLog(TAG,"请求的数据长度:${newsList.size}")
+        if (newsList.isNullOrEmpty())return mutableListOf()
+        if (oldList.isNullOrEmpty())return newsList
+        var removeList = mutableListOf<NewsData>()
+        newsList.forEach {
+            for (i in 0 until oldList.size){
+                var oldData = oldList.get(i)
+                if (it.itackl == oldData.itackl || it.vbreas.isNullOrEmpty()){
+                    removeList.add(it)
                 }
             }
         }

@@ -191,7 +191,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
 
     var nfTo = 0
-    var nfIndex = 0
     var nfData:String =""
     var enumName:String =""
 
@@ -239,7 +238,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         nfTo = intent.getIntExtra(ParamsConfig.NF_TO,0)
         nfData = intent.getStringExtra(ParamsConfig.NF_DATA)?:""
         enumName = intent.getStringExtra(ParamsConfig.NF_ENUM_NAME)?:""
-        nfIndex = intent.getIntExtra(ParamsConfig.NF_INDEX,0)
         var isLaunch = false
         runCatching {
             if (intent != null && Intent.ACTION_MAIN.equals(intent.getAction())) {
@@ -249,7 +247,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 }
             }
         }
-        NFManager.clickPoint(nfData,nfTo,enumName,isLaunch,nfIndex)
+        NFManager.clickPoint(nfData,nfTo,enumName,isLaunch)
 
         acBinding.root.postDelayed({
             var count = 0
@@ -425,8 +423,11 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 }
                 NFEnum.NF_NEWS.menuName,NFEnum.NF_HOT.menuName,NFEnum.NF_NEW_USER.menuName,NFEnum.NF_LOCAL.menuName,NFEnum.NF_EDITOR.menuName,NFEnum.NF_UNLOCK.menuName,NFEnum.NF_NEWS_FCM.menuName,NFEnum.NF_DEFAULT.menuName,NFEnum.NF_TREND.menuName->{
                     var dataList = getListByGson(nfData,NewsData::class.java)
-                    if (dataList.isNullOrEmpty() || nfIndex>dataList.size-1)return
-                    var data = dataList[nfIndex]
+                    var data =  if (dataList.isNullOrEmpty()){
+                        getBeanByGson(nfData,NewsData::class.java)
+                    }else{
+                        dataList[0]
+                    }
 //                    var jumpData = JumpDataManager.getCurrentJumpData(tag="首页通知新闻跳转")
 //                    jumpData.apply {
 //                        jumpUrl= data?.uweek?:""
@@ -446,10 +447,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                             })
                         }else{
                             var videoList = mutableListOf<NewsData>()
-                            for (i in nfIndex until dataList.size){
-                                var tempData = dataList.get(i)
-                                if (tempData.vbreas.isNullOrEmpty().not()){
-                                    videoList.add(tempData)
+                            dataList?.forEach {
+                                if (it.vbreas.isNullOrEmpty().not()){
+                                    videoList.add(it)
                                 }
                             }
                             VideoListActivity.startVideoListActivity(this,0,videoList,enumName)

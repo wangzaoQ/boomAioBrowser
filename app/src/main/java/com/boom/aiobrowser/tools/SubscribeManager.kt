@@ -229,7 +229,7 @@ object SubscribeManager {
                                         // For One-time products, "setOfferToken" method shouldn't be called.
                                         // For subscriptions, to get an offer token, call ProductDetails.subscriptionOfferDetails()
                                         // for a list of offers that are available to the user
-//                                    .setOfferToken(selectedOfferToken)
+                                        .setOfferToken(subscriptionOfferDetails?.get(0)?.offerToken ?:"")
                                         .build()
                                 )
                                 showTemp("启动购买2",false)

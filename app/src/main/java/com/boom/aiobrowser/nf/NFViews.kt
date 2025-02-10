@@ -119,15 +119,15 @@ object NFViews {
         return remoteViews
     }
 
-    fun getNewsRemoteView(enum: NFEnum, data: NewsData, isLargeView:Boolean=false): RemoteViews {
+    fun getNewsRemoteView(enum: NFEnum, data: NewsData, isLargeView:Boolean=false,newsList:MutableList<NewsData>?=null): RemoteViews {
         return if (enum == NFEnum.NF_TREND){
             getNewsTrendingView(enum,data,isLargeView)
         }else{
-            getNewsNormalView(enum,data,isLargeView)
+            getNewsNormalView(enum,data,isLargeView,newsList)
         }
     }
 
-    private fun getNewsNormalView(enum: NFEnum, data: NewsData, isLargeView: Boolean): RemoteViews {
+    private fun getNewsNormalView(enum: NFEnum, data: NewsData, isLargeView: Boolean,newsList:MutableList<NewsData>?=null): RemoteViews {
         var layoutId = if (isLargeView){
             R.layout.nf_news_large
         }else{
@@ -138,7 +138,7 @@ object NFViews {
             setTextViewText(R.id.tvTitle,data.tconsi)
             setOnClickPendingIntent(
                 R.id.llRoot,
-                getJumpIntent(0,data,enum)
+                getJumpIntent(0,data,enum,newsList)
             )
         }
         return remoteViews

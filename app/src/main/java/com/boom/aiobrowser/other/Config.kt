@@ -25,7 +25,6 @@ object ParamsConfig{
     const val NF_DATA = "nf_data"
     const val NF_TO = "nf_to"
     const val NF_ENUM_NAME = "nf_enum_name"
-    const val NF_INDEX = "nf_index"
 
     const val JSON_PARAMS="JSON_PARAMS"
 

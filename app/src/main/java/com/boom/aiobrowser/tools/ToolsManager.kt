@@ -166,7 +166,7 @@ fun allowShowNF():Boolean{
     runCatching {
         country = Locale.getDefault().country
     }
-    if (language.equals("ko",true) || country.equals("kr",true).not()){
+    if (language.equals("ko",true) || country.equals("kr",true)){
         return false
     }else if (language == "" && country == "") {
         return false

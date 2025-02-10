@@ -103,11 +103,13 @@ object NFShow {
                     data = NFManager.defaultNewsList!!.get(index)
                     //原始来源
                     data.nfSource = enum.menuName
-                    showNewsNF(data, NFEnum.NF_DEFAULT,sourceType)
+                    showNewsNF(data, NFEnum.NF_DEFAULT,sourceType, mutableListOf<NewsData>().apply {
+                        add(data)
+                    })
                 }
             }else{
                 data.nfSource = enum.menuName
-                showNewsNF(data, enum,sourceType)
+                showNewsNF(data, enum,sourceType,newsList)
             }
             CacheManager.saveNFNewsList(enum.menuName, newsList ?: mutableListOf())
             if (APP.isDebug){
@@ -145,7 +147,7 @@ object NFShow {
                     val smallRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data)
                     val largeRemote = NFViews.getDownLoadRemoteView(NFEnum.NF_DOWNLOAD_VIDEO,data, true)
                     var bulider = createBuilder(NFEnum.NF_DOWNLOAD_VIDEO,smallRemote,largeRemote)
-                    bulider.setOngoing(true)
+//                    bulider.setOngoing(true)
                     videoNFMap.put(data.videoId!!,nfId)
                     if (posePoint){
                         if (data.downloadType == VideoDownloadData.DOWNLOAD_LOADING || data.downloadType == VideoDownloadData.DOWNLOAD_PREPARE){
@@ -201,7 +203,7 @@ object NFShow {
     }
 
     @SuppressLint("MissingPermission")
-    fun showNewsNF(data:NewsData,enum: NFEnum,sourceType: String){
+    fun showNewsNF(data:NewsData,enum: NFEnum,sourceType: String,newsList:MutableList<NewsData>?=null){
         if (nfAllow().not())return
         PointEvent.posePoint(PointEventKey.all_noti_t,Bundle().apply {
             putString(PointValueKey.push_type, enum.menuName)
@@ -214,8 +216,8 @@ object NFShow {
             WakeManager.wwakeUp()
         }
         runCatching {
-            val smallRemote = NFViews.getNewsRemoteView(enum,data)
-            val largeRemote = NFViews.getNewsRemoteView(enum,data, true)
+            val smallRemote = NFViews.getNewsRemoteView(enum,data,newsList = newsList)
+            val largeRemote = NFViews.getNewsRemoteView(enum,data, true,newsList = newsList)
             var bulider = createBuilder(enum,smallRemote,largeRemote,data.channel?:"")
             if (data.tag.isNullOrEmpty()){
                 NFManager.manager.notify(enum.position, bulider.build())

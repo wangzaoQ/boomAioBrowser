@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.data.NFEnum
+import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.other.ParamsConfig
@@ -38,15 +39,19 @@ object NFJump {
     }
 
 
-    fun getJumpIntent(nfTo:Int,data: Any?=null,enum: NFEnum): PendingIntent {
+    fun getJumpIntent(nfTo:Int,data: Any?=null,enum: NFEnum,newsList:MutableList<NewsData>?=null): PendingIntent {
         val intent = Intent(APP.instance, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         //具体点的是当前通知哪一个区域 状态各有不同
         intent.putExtra(ParamsConfig.NF_TO, nfTo)
         //点击的是哪一种通知
         intent.putExtra(ParamsConfig.NF_ENUM_NAME,enum.menuName)
-        if (data!=null){
-            intent.putExtra(ParamsConfig.NF_DATA, toJson(data))
+        if (newsList.isNullOrEmpty()){
+            if (data!=null){
+                intent.putExtra(ParamsConfig.NF_DATA, toJson(data))
+            }
+        }else{
+            intent.putExtra(ParamsConfig.NF_DATA, toJson(newsList))
         }
         return PendingIntent.getActivity(APP.instance, getCode(), intent, getFlags())
     }

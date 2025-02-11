@@ -207,7 +207,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             NFShow.showForegroundNF()
         }, onFail = {})
         CloakManager().getCloak()
-        SubscribeManager.queryShop{}
+//        SubscribeManager.queryShop{}
     }
 
     var dataIntent :Intent?=null

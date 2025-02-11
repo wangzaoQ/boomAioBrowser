@@ -19,11 +19,14 @@ import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.viewbinding.ViewBinding
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.R
+import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.data.WebDetailsData
 import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.net.WebNet
+import com.boom.aiobrowser.other.WebConfig.HTML_LOCAL
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -33,6 +36,7 @@ import com.boom.aiobrowser.tools.extractDomain
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getMapByGson
 import com.boom.aiobrowser.tools.toJson
+import com.boom.aiobrowser.tools.web.WebConfig
 import com.boom.aiobrowser.tools.web.WebScan
 import com.boom.aiobrowser.tools.web.WebScan.extractResolution
 import com.boom.aiobrowser.ui.pop.TipsPop
@@ -50,25 +54,24 @@ import kotlinx.coroutines.withContext
 import okhttp3.Request
 import okhttp3.Response
 import java.lang.ref.WeakReference
+import java.math.BigDecimal
 import java.net.URL
 
 
 abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
     var mAgentWeb :AgentWeb?=null
+    var jumpData: JumpData? = null
+
 
     var back: () -> Unit = {}
 
     var allowNeedCommon = false
 
     var locationLoadResourceList = mutableListOf<String>()
-    var isGuide = false
     var isFirst = true
 //    var guideList = mutableListOf<>()
 
     fun initWeb(){
-        if (getUrl() == "https://mixkit.co/free-stock-video/woman-in-bikini-enjoying-sun-in-swimming-pool-36904/"){
-            isGuide = true
-        }
         runCatching {
             if (mAgentWeb != null){
                 mAgentWeb!!.go(getUrl())
@@ -102,6 +105,9 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                     .createAgentWeb() //创建AgentWeb。
                     .ready() //设置 WebSettings。
                     .go(getUrl()) //WebView载入该url地址的页面并显示。
+            }
+            if (jumpData?.jumpUrl == getString(R.string.video_local_title)){
+                mAgentWeb!!.webCreator.webView.loadDataWithBaseURL(null, HTML_LOCAL, "text/html", "utf-8", null);
             }
 
             if (APP.isDebug){
@@ -518,7 +524,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                                 "shouldInterceptRequest",
                                 "mWebViewClient shouldInterceptRequest:${requestUrl} cookie:${cookie}"
                             )
-                            WebScan.getResourceInfo(requestUrl,cookie,realUrl,hostList,isGuide)
+                            WebScan.getResourceInfo(requestUrl,cookie,realUrl,hostList)
                         }else{
                             AppLogs.dLog("shouldInterceptRequest","原生重复回调 url:${requestUrl}")
                         }
@@ -564,31 +570,31 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             WebScan.loadResourceList.clear()
             locationLoadResourceList.clear()
             CacheManager.videoDownloadTempList = mutableListOf()
-            if (isGuide){
-                var videoGuide = CacheManager.videoGuide
-                if (videoGuide!=null){
-                    var list = CacheManager.videoDownloadTempList
-                    list.add(videoGuide)
-                    CacheManager.videoDownloadTempList = list
-                    APP.videoScanLiveData.postValue(0)
-                }
-            }
+
             AppLogs.dLog(
                 fragmentTAG,
                 "mUrl:" + url + " onPageStarted  target:" + getUrl()
             )
-            loadWebOnPageStared(url)
+            if (jumpData?.jumpUrl == getString(R.string.video_local_title)){
+                loadWebOnPageStared(jumpData?.jumpUrl?:"")
+            }else{
+                loadWebOnPageStared(url)
+            }
             timer[url] = System.currentTimeMillis()
             var realUrl = getRealParseUrl()
             rootActivity.addLaunch(success = {
                 WebScan.getImg(realUrl)
             }, failBack = {})
+            if (jumpData?.jumpUrl == getString(R.string.video_local_title)){
+                addGuide()
+            }
 //            if (url == getUrl()) {
 //                pageNavigator(View.GONE)
 //            } else {
 //                pageNavigator(View.VISIBLE)
 //            }
         }
+
 
 
         override fun onPageFinished(view: WebView?, url: String) {
@@ -623,6 +629,28 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
         }
     }
 
+
+    fun addGuide() {
+        var list = CacheManager.videoDownloadTempList
+        var uiData = VideoUIData()
+        var url = "https://assets.mixkit.co/videos/36904/36904-720.mp4"
+        uiData.thumbnail = url
+        uiData.videoResultId = "${VideoDownloadUtils.computeMD5(url)}"
+        var videoDownloadData = VideoDownloadData().createDefault(
+            videoId = "${VideoDownloadUtils.computeMD5(url)}",
+            fileName = getString(R.string.video_local_title),
+            url = url,
+            imageUrl = url,
+            paramsMap = HashMap<String,Any>(),
+            size = BigDecimal(6.9*1024*1024).toLong(),
+            videoType = "mp4",
+            resolution = ""
+        )
+        uiData.formatsList.add(videoDownloadData)
+        list.add(uiData)
+        CacheManager.videoDownloadTempList = list
+        APP.videoScanLiveData.postValue(0)
+    }
 
     abstract fun getFromSource():String
 
@@ -670,15 +698,6 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
     open fun loadWebFinished(url:String){
 
-    }
-
-    override fun onDestroy() {
-        if (isGuide){
-            // 清除 WebView 缓存
-            mAgentWeb!!.getWebCreator().getWebView()?.clearCache(true);
-            mAgentWeb!!.getWebCreator().getWebView()?.clearHistory();
-        }
-        super.onDestroy()
     }
 
 

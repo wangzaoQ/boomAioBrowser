@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.databinding.BrowserFragmentVideoGuide3Binding
 import com.boom.aiobrowser.databinding.BrowserFragmentVideoGuideBinding
@@ -55,7 +56,8 @@ class GuideFragment3 :BaseFragment<BrowserFragmentVideoGuide3Binding>() {
             PointEvent.posePoint(PointEventKey.download_tutorial_try)
             var data = JumpDataManager.getCurrentJumpData(tag = "DownloadVideoGuidePop guide")
             data.jumpType = JumpConfig.JUMP_WEB
-            data.jumpUrl = "https://mixkit.co/free-stock-video/woman-in-bikini-enjoying-sun-in-swimming-pool-36904/"
+            data.jumpUrl = getString(R.string.video_local_title)
+            data.jumpTitle = getString(R.string.video_local_title)
 //                data.jumpUrl = "https://www.pexels.com/videos"
             JumpDataManager.updateCurrentJumpData(data,tag = "DownloadVideoGuidePop guide")
             APP.jumpLiveData.postValue(data)

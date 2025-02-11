@@ -79,7 +79,8 @@ class DownloadAdapter(): BaseQuickAdapter<VideoUIData, DownloadAdapter.VH>() {
                             GlideManager.loadImg(null,ivVideo,data.imageUrl,0,R.mipmap.ic_default_download,0)
                         }
                         ivPlay.visibility = View.VISIBLE
-                        ivSelected.visibility = View.GONE
+                        ivSelected.visibility = View.VISIBLE
+                        ivSelected.setImageResource(R.mipmap.ic_video_download_success)
                     }
                     VideoDownloadData.DOWNLOAD_ERROR -> {
                         ivSelected.setImageResource(R.mipmap.ic_video_error)

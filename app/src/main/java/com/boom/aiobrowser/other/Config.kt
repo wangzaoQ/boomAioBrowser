@@ -201,6 +201,46 @@ object WebConfig{
 
     // 巴西视频平台 URL
     const val URL_Kwai = "https://www.kwai.com/"
+
+
+    const val HTML_LOCAL = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>响应式视频播放示例</title>
+    <style>
+        /* 重置外边距 */
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        /* 视频容器设置为自适应宽度，最大宽度800px */
+        .video-container {
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        /* 视频宽度自适应 */
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div class="video-container">
+    <video controls autoplay muted loop >
+        <source src="https://assets.mixkit.co/videos/36904/36904-720.mp4" type="video/mp4">
+    </video>
+</div>
+</body>
+</html>
+<!DOCTYPE html>
+    """
 }
 
 object NewsConfig{

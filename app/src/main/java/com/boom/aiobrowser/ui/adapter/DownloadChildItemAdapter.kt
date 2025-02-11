@@ -30,9 +30,8 @@ class DownloadChildItemAdapter(): BaseQuickAdapter<VideoDownloadData, DownloadCh
         holder.viewBinding.apply{
             tvText.text = data.resolution
             if (data.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
-                ivSelected.visibility = View.INVISIBLE
+                ivSelected.setImageResource(R.mipmap.ic_video_download_success)
             }else{
-                ivSelected.visibility = View.VISIBLE
                 if (data.videoChecked){
                     ivSelected.setImageResource(R.mipmap.ic_video_selected)
                     tvSize.setTextColor(ContextCompat.getColor(context,R.color.black_33))

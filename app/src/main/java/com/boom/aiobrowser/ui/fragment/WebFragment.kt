@@ -31,6 +31,7 @@ import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.web.WebScan
 import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.other.WebConfig.HTML_LOCAL
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.extractDomain
 import com.boom.aiobrowser.ui.activity.MainActivity
@@ -56,7 +57,6 @@ import java.lang.ref.WeakReference
 
 class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 
-    var jumpData: JumpData? = null
 
 
     override fun getInsertParent(): ViewGroup {
@@ -66,50 +66,52 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
     override fun loadWebOnPageStared(url: String) {
         allowNeedCommon = false
         addLast(url)
-        var list = CacheManager.pageList
-        var index = -1
-        var hostList = extractDomain(url)
+        if (url != getString(R.string.video_local_title)){
+            var list = CacheManager.pageList
+            var index = -1
+            var hostList = extractDomain(url)
 
-        for (i in 0 until list.size) {
-            var pageData = list.get(i)
-            var splits = pageData.cUrl.split(".")
-            var host = ""
-            if (splits.size > 0) {
-                host = splits.get(0)
-            }
-            if (hostList.contains(host)) {
-                if (APP.isDebug) {
-                    AppLogs.dLog(
-                        "webReceive",
-                        "page 模式执行特定脚本:host:${host} js:${pageData.cDetail}"
-                    )
+            for (i in 0 until list.size) {
+                var pageData = list.get(i)
+                var splits = pageData.cUrl.split(".")
+                var host = ""
+                if (splits.size > 0) {
+                    host = splits.get(0)
                 }
+                if (hostList.contains(host)) {
+                    if (APP.isDebug) {
+                        AppLogs.dLog(
+                            "webReceive",
+                            "page 模式执行特定脚本:host:${host} js:${pageData.cDetail}"
+                        )
+                    }
 //                mAgentWeb!!.getWebCreator().getWebView().loadUrl("javascript:${pageData.cDetail}");
-                mAgentWeb!!.getWebCreator().getWebView().evaluateJavascript(pageData.cDetail) {
-                    AppLogs.dLog(
-                        "webReceive",
-                        "evaluateJavascript 接收:$it thread:${Thread.currentThread()}"
-                    )
+                    mAgentWeb!!.getWebCreator().getWebView().evaluateJavascript(pageData.cDetail) {
+                        AppLogs.dLog(
+                            "webReceive",
+                            "evaluateJavascript 接收:$it thread:${Thread.currentThread()}"
+                        )
+                    }
+                    index = i
+                    break
                 }
-                index = i
-                break
             }
-        }
-        if (index == -1) {
-            allowNeedCommon = true
-            if (FirebaseConfig.jsConfig.isNotEmpty()){
-                //通用
-                for (i in 0 until list.size) {
-                    var pageData = list.get(i)
-                    if (pageData.cUrl == "*") {
-                        AppLogs.dLog("webReceive", "page 模式执行通用脚本 js:${FirebaseConfig.jsConfig}")
-                        mAgentWeb!!.getWebCreator().getWebView().evaluateJavascript(FirebaseConfig.jsConfig) {
-                            AppLogs.dLog(
-                                "webReceive",
-                                "evaluateJavascript 接收:$it thread:${Thread.currentThread()}"
-                            )
+            if (index == -1) {
+                allowNeedCommon = true
+                if (FirebaseConfig.jsConfig.isNotEmpty()){
+                    //通用
+                    for (i in 0 until list.size) {
+                        var pageData = list.get(i)
+                        if (pageData.cUrl == "*") {
+                            AppLogs.dLog("webReceive", "page 模式执行通用脚本 js:${FirebaseConfig.jsConfig}")
+                            mAgentWeb!!.getWebCreator().getWebView().evaluateJavascript(FirebaseConfig.jsConfig) {
+                                AppLogs.dLog(
+                                    "webReceive",
+                                    "evaluateJavascript 接收:$it thread:${Thread.currentThread()}"
+                                )
+                            }
+                            break
                         }
-                        break
                     }
                 }
             }
@@ -355,7 +357,11 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 
     private fun refresh() {
         if (mAgentWeb != null) {
-            mAgentWeb!!.urlLoader.reload() // 刷新
+            if (jumpData?.jumpUrl == getString(R.string.video_local_title)){
+                mAgentWeb!!.webCreator.webView.loadDataWithBaseURL(null, HTML_LOCAL, "text/html", "utf-8", null);
+            }else{
+                mAgentWeb!!.urlLoader.reload() // 刷新
+            }
         }
     }
 
@@ -365,7 +371,9 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 //        if (allowShowTips()){
 //            showTipsPop()
 //        }
-        fBinding.flTop.binding.tvToolbarSearch.text = "${jumpData?.jumpTitle} ${getSearchTitle()}"
+        if (jumpData?.jumpUrl != getString(R.string.video_local_title)){
+            fBinding.flTop.binding.tvToolbarSearch.text = "${jumpData?.jumpTitle} ${getSearchTitle()}"
+        }
         fBinding.refreshLayout.isRefreshing = false
 //        var key = mAgentWeb?.webCreator?.webView?.url?:""
         addDownload()
@@ -593,6 +601,9 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
     }
 
     override fun getUrl(): String {
+        if (jumpData?.jumpUrl == getString(R.string.video_local_title)){
+            return ""
+        }
         return jumpData?.jumpUrl ?: ""
     }
 

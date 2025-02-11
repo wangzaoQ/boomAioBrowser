@@ -238,10 +238,8 @@ object WebScan {
         videoUrl: String,
         cookie: String,
         realUrl: String,
-        hostList:MutableList<String>,
-        isGuide:Boolean
-    ) {
-        var map = getVideoHeaderInfo(videoUrl, cookie,isGuide)
+        hostList:MutableList<String>) {
+        var map = getVideoHeaderInfo(videoUrl, cookie)
         var contentLength = 0L
         var contentType = ""
         contentType = map.get(content_type) as? String ?: ""
@@ -389,21 +387,10 @@ object WebScan {
             uiData.formatsList.add(videoDownloadData)
             uiData.videoResultId = "${VideoDownloadUtils.computeMD5(videoUrl)}"
             uiData.thumbnail = imageUrl
-            if (isGuide){
-                if (CacheManager.videoGuide == null){
-                    list.add(0, uiData)
-                    CacheManager.videoDownloadTempList = list
-                    AppLogs.dLog("urlAdd", "原生 过滤后 引导加入不同数据源url:${videoUrl}")
-                    APP.videoScanLiveData.postValue(0)
-                }else{
-                    CacheManager.videoGuide = uiData
-                }
-            }else{
-                list.add(0, uiData)
-                CacheManager.videoDownloadTempList = list
-                AppLogs.dLog("urlAdd", "原生 过滤后 非引导加入不同数据源:url:${videoUrl}")
-                APP.videoScanLiveData.postValue(0)
-            }
+            list.add(0, uiData)
+            CacheManager.videoDownloadTempList = list
+            AppLogs.dLog("urlAdd", "原生 过滤后 非引导加入不同数据源:url:${videoUrl}")
+            APP.videoScanLiveData.postValue(0)
         }else{
             CacheManager.videoDownloadTempList = list
             APP.videoScanLiveData.postValue(0)
@@ -420,7 +407,7 @@ object WebScan {
 
     var webTitle = ""
 
-    suspend fun getVideoHeaderInfo(videoUrl: String, cookie: String,isGuide: Boolean): Map<String, Any> {
+    suspend fun getVideoHeaderInfo(videoUrl: String, cookie: String): Map<String, Any> {
         var infoMap = HashMap<String, Any>()
         var connection: HttpURLConnection? = null
         var headers = HashMap<String, String>().apply {
@@ -475,14 +462,6 @@ object WebScan {
             if (contentLength == VideoDownloadUtils.DEFAULT_CONTENT_LENGTH || contentLength<1024 *1024) {
                 HttpUtils.closeConnection(connection)
                 return infoMap
-            }
-            if (isGuide ){
-                var startTime = System.currentTimeMillis()
-                runBlocking {
-                    while (webTitle.isNullOrEmpty()&&(System.currentTimeMillis()-startTime)<3000L){
-                        delay(500)
-                    }
-                }
             }
             infoMap.put(content_type, contentType)
             infoMap.put(content_length, contentLength)

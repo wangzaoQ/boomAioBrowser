@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rlTabRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="74dp"
+    android:orientation="vertical"
+    android:background="#1E1B20"
+    >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+<!--        <androidx.appcompat.widget.AppCompatImageView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            app:srcCompat="@mipmap/bg_sub_top"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent"-->
+<!--            app:layout_constraintDimensionRatio="h,360:462"-->
+<!--            ></androidx.appcompat.widget.AppCompatImageView>-->
+<!--        <androidx.appcompat.widget.AppCompatImageView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:srcCompat="@mipmap/ic_sub_close"-->
+<!--            ></androidx.appcompat.widget.AppCompatImageView>-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="13dp"
+        android:layout_marginBottom="14dp"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/shape_start_confirm"
+        android:text="@string/app_set_as_default"
+        android:textAllCaps="false"
+        android:textColor="@color/white"></androidx.appcompat.widget.AppCompatButton>
+
+</RelativeLayout>

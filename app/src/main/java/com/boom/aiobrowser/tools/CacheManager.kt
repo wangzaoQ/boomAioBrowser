@@ -783,13 +783,6 @@ object CacheManager {
             mmkv.encode(KV_DRAG_Y,value )
         }
 
-    var videoGuide:VideoUIData?
-        get() {
-            return getBeanByGson(mmkv.decodeString(KV_VIDEO_UI_DATA,""),VideoUIData::class.java)
-        }
-        set(value) {
-            mmkv.encode(KV_VIDEO_UI_DATA, toJson(value))
-        }
     fun saveUser(user:UserData?){
         mmkv.encode(KV_USER_DATA, toJson(user))
     }

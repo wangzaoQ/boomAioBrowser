@@ -56,6 +56,7 @@ import com.boom.aiobrowser.tools.getListByGson
 import com.boom.aiobrowser.ui.fragment.HomePageDownloadFragment
 import com.boom.aiobrowser.ui.fragment.MeFragment
 import com.boom.aiobrowser.ui.pop.DefaultPop
+import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.HomeGuidePop
 import com.boom.aiobrowser.ui.pop.MorePop
 import com.boom.aiobrowser.ui.pop.NFGuidePop
@@ -556,8 +557,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             if (CacheManager.isFirstShowDownloadGuide){
                 AppLogs.dLog(acTAG,"允许开启引导弹窗")
                 CacheManager.isFirstShowDownloadGuide = false
-                var homeGuidePop = HomeGuidePop(this@MainActivity)
-                homeGuidePop.createPop()
+//                var homeGuidePop = HomeGuidePop(this@MainActivity)
+//                homeGuidePop.createPop()
+                DownloadVideoGuidePop(this@MainActivity).createPop(0) {  }
             }else{
                 AppLogs.dLog(acTAG,"不允许开启引导弹窗")
                 PointEvent.posePoint(PointEventKey.home_page_first)

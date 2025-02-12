@@ -2,6 +2,7 @@ package com.boom.aiobrowser.ui.activity
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.NewsData
@@ -21,12 +22,12 @@ class VideoListActivity : BaseActivity<NewsActivityVideoListBinding>() {
 
     override fun setListener() {
     }
-
+    var enumName = ""
     override fun setShowView() {
         var manager = FragmentManager()
         var jsonString = intent.getStringExtra("data")?:""
         var index = intent.getIntExtra("index",0)
-        var enumName = intent.getStringExtra("enumName")?:""
+        enumName = intent.getStringExtra("enumName")?:""
         manager.addFragment(supportFragmentManager, NewsVideoFragment.newInstance(index,jsonString,enumName),
             R.id.flRoot)
     }
@@ -46,6 +47,9 @@ class VideoListActivity : BaseActivity<NewsActivityVideoListBinding>() {
 
     override fun onDestroy() {
         GSYVideoManager.releaseAllVideos()
+        if (enumName.isNullOrEmpty().not()){
+            APP.homeJumpLiveData.postValue(2)
+        }
         super.onDestroy()
     }
 

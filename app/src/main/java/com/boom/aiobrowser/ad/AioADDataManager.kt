@@ -94,6 +94,9 @@ object AioADDataManager {
                 ADEnum.BANNER_AD_NEWS_DETAILS ->{
                     it.adRequestList = bean.aobws_ban_newin ?: mutableListOf()
                 }
+                ADEnum.DEFAULT_AD ->{
+                    it.adRequestList = bean.aobws_default?: mutableListOf()
+                }
 
                 else -> {}
             }

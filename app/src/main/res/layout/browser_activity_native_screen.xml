@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.gms.ads.nativead.NativeAdView
+    android:id="@+id/nativeADView"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="9.5dp"
+        >
+
+        <FrameLayout
+            android:id="@+id/flNative"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="h,360:360"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+            <com.google.android.gms.ads.nativead.MediaView
+                android:id="@+id/is_media"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFEEEEEE" />
+            <TextView
+                android:layout_width="25dp"
+                android:layout_height="16dp"
+                android:background="@drawable/shape_ad_tips2"
+                android:gravity="center"
+                android:text="AD"
+                android:layout_gravity="end|top"
+                android:layout_marginEnd="6dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/white"
+                android:textSize="11sp" />
+
+        </FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/flNative"
+            android:layout_marginBottom="10dp"
+            >
+            <ImageView
+                android:id="@+id/is_icon"
+                android:layout_width="43dp"
+                android:layout_height="43dp"
+                android:layout_marginStart="10dp"
+                tools:background="@mipmap/ic_start_logo" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="5dp"
+                >
+                <TextView
+                    android:id="@+id/is_headline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="15sp"
+                    android:layout_weight="1"
+                    tools:text="amazon music" />
+                <TextView
+                    android:id="@+id/is_body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textStyle="bold"
+                    android:textColor="#99FFFFFF"
+                    android:textSize="14sp"
+                    tools:text="podcasts now streaming !" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/is_call"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/flNative"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape_bg_ad_install2"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            tools:text="install" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:background="@drawable/shape_native2"
+            app:layout_constraintBottom_toBottomOf="@+id/flNative"
+            ></View>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.gms.ads.nativead.NativeAdView>

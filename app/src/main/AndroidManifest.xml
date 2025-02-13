@@ -218,6 +218,10 @@
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:launchMode="singleTop"
             ></activity>
+        <activity android:name=".ui.NativeScreenActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            ></activity>
 
 <!--        <activity android:name=".ui.activity.MusicPlayActivity"-->
 <!--            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"-->

@@ -1,12 +1,16 @@
 package com.boom.aiobrowser.ad
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.get
+import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.AioADDataManager.platformMax
 import com.boom.aiobrowser.base.BaseActivity
@@ -15,6 +19,8 @@ import com.boom.aiobrowser.databinding.BrowserAdNativeBinding
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
+import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.ui.NativeScreenActivity
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.nativead.MediaView
 import com.google.android.gms.ads.nativead.NativeAd
@@ -27,11 +33,10 @@ class AioADShowManager(
     var result: (type: String) -> Unit
 ) {
 
-    var adResultData:ADResultData?=null
     var adShow:BaseShow?=null
 
     init {
-        adResultData = AioADDataManager.getCacheAD(adEnum)
+        var adResultData = AioADDataManager.getCacheAD(adEnum)
         when (adResultData?.adRequestData?.tybxumpn) {
             AioADDataManager.platformMax -> {
                 adShow = MaxShow(activity,adEnum,tag,result)
@@ -43,7 +48,8 @@ class AioADShowManager(
     }
 
     fun showScreenAD(pointTag: String) {
-        if (adResultData == null || activity == null || activity.getActivityStatus().not()) {
+        var adResultData = AioADDataManager.getCacheAD(adEnum)
+        if (activity == null || activity.getActivityStatus().not()) {
             adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "activity 状态异常")
             return
         }
@@ -53,12 +59,25 @@ class AioADShowManager(
                 putString(PointValueKey.ad_pos_id,pointTag)
             })
         }
-
-        if (AioADDataManager.getCacheAD(adEnum)!=null && AioADDataManager.adAllowShowScreen()) { // 插屏广告 冷却设置
+        if (AioADDataManager.adAllowShowScreen() && adResultData!=null){
             adShow?.showScreenAd(adResultData!!,pointTag)
             AioADDataManager.adCache.remove(adEnum)
-        } else {
-            adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "无缓存 或不在冷却范围内 ")
+        }else{
+            var defaultAD = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
+            if (defaultAD!=null) {
+                if (defaultAD.adShowType == 2 && APP.instance.lifecycleApp.stack.size>0){
+                    //native
+                    var currentTopActivity = (APP.instance.lifecycleApp.stack.get(APP.instance.lifecycleApp.stack.size-1) as BaseActivity<*>)
+                    currentTopActivity.startActivity(Intent(currentTopActivity,NativeScreenActivity::class.java))
+                    adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_SUCCESS, tag)
+                }else{
+                    //走通用的逻辑
+                    adShow?.showScreenAd(defaultAD,pointTag)
+                    AioADDataManager.adCache.remove(ADEnum.DEFAULT_AD)
+                }
+            } else {
+                adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "无缓存 或不在冷却范围内 ")
+            }
         }
     }
 

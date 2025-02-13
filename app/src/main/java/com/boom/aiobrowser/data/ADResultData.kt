@@ -6,4 +6,5 @@ class ADResultData {
     var adAny: Any? = Any()
     var adType= ""
     var adRequestTime:Long=0L
+    var adShowType = 0
 }

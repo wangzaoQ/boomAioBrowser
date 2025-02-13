@@ -36,9 +36,9 @@ class AdmobShow(activity: BaseActivity<*>, adEnum: ADEnum, tag: String,result: (
             override fun onAdShowedFullScreenContent() {
                 AppLogs.dLog(
                     AioADDataManager.TAG,
-                    "admob 广告展示:${adEnum.adName}-id:${adResultData.adRequestData?.ktygzdzn}"
+                    "admob 广告展示:${adEnum.adName}-id:${adResultData.adRequestData?.ktygzdzn} type:${getTypeContent(adResultData.adShowType)}"
                 )
-                adShowFullScreen(adEnum, tag = "admob 广告展示",pointTag)
+                adShowFullScreen(adEnum, tag = "admob 广告展示",adResultData,pointTag)
             }
 
             override fun onAdClicked() {
@@ -48,7 +48,7 @@ class AdmobShow(activity: BaseActivity<*>, adEnum: ADEnum, tag: String,result: (
             override fun onAdDismissedFullScreenContent() {
                 AppLogs.dLog(
                     AioADDataManager.TAG,
-                    "admob 广告关闭:${adEnum.adName}-id:${adResultData.adRequestData?.ktygzdzn}"
+                    "admob 广告关闭:${adEnum.adName}-id:${adResultData.adRequestData?.ktygzdzn} type:${getTypeContent(adResultData.adShowType)}"
                 )
                 adDismissFullScreen(adEnum, tag = "admob 广告关闭")
             }
@@ -56,7 +56,7 @@ class AdmobShow(activity: BaseActivity<*>, adEnum: ADEnum, tag: String,result: (
             override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                 AppLogs.dLog(
                     AioADDataManager.TAG,
-                    "admob 广告展示失败:${adEnum.adName}-id:${adResultData.adRequestData?.ktygzdzn}"
+                    "admob 广告展示失败:${adEnum.adName}-id:${adResultData.adRequestData?.ktygzdzn} type:${getTypeContent(adResultData.adShowType)}"
                 )
                 adShowFailed(adEnum, "admob 广告展示失败")
             }

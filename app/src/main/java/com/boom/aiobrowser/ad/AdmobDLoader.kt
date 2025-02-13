@@ -77,6 +77,9 @@ class AdmobDLoader(
                                 adAny = inAd
                                 adType = requestBean.pxdtzgho
                                 adRequestTime = (System.currentTimeMillis() - startTime) / 1000
+                                if (adEnum == ADEnum.DEFAULT_AD){
+                                    adShowType = 1
+                                }
                             })
                             if (APP.isDebug){
                                 PointEvent.adPoint(AdValue.zza(1*100000,"",1*100000),inAd,requestBean,adEnum)
@@ -119,6 +122,9 @@ class AdmobDLoader(
                             adAny = nativeAd
                             adType = requestBean.pxdtzgho
                             adRequestTime = (System.currentTimeMillis() - startTime) / 1000
+                            if (adEnum == ADEnum.DEFAULT_AD){
+                                adShowType = 2
+                            }
                         })
                         nativePoint(startTime)
                     }.withAdListener(object : AdListener() {

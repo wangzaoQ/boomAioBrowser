@@ -33,10 +33,14 @@ abstract class BaseShow(var activity: BaseActivity<*>, var adEnum: ADEnum,var  t
         setADDismissTime()
     }
 
-    fun adShowFullScreen(adEnum: ADEnum, tag: String, pointTag:String) {
+    fun adShowFullScreen(adEnum: ADEnum, tag: String, adResultData: ADResultData, pointTag: String) {
         AppLogs.dLog(AioADDataManager.TAG, "tag:${tag} 位置:${adEnum.adName}")
         AioADDataManager.addShowNumber(tag)
-        AioADDataManager.preloadAD(adEnum,"fullScreen 广告展示时")
+        if (adResultData.adShowType == 1){
+            AioADDataManager.preloadAD(ADEnum.DEFAULT_AD,"fullScreen 广告展示时")
+        }else{
+            AioADDataManager.preloadAD(adEnum,"fullScreen 广告展示时")
+        }
         APP.instance.lifecycleApp.adScreenType = 0
         PointEvent.posePoint(PointEventKey.aobws_ad_impression, Bundle().apply {
             putString(PointValueKey.ad_pos_id,pointTag)
@@ -48,5 +52,9 @@ abstract class BaseShow(var activity: BaseActivity<*>, var adEnum: ADEnum,var  t
         result?.invoke(type)
     }
 
+
+    fun getTypeContent(type:Int):String{
+        return if (type == 0 ) "广告池 视频池 " else "广告池 图片池"
+    }
 
 }

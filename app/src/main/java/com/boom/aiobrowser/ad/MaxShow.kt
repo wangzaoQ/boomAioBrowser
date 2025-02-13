@@ -36,7 +36,7 @@ class MaxShow(
                                 AioADDataManager.TAG,
                                 "max 广告展示:${adEnum.adName}-id:${adResultData.adRequestData?.ktygzdzn}"
                             )
-                            adShowFullScreen(adEnum, tag = "admob 广告展示", pointTag)
+                            adShowFullScreen(adEnum, tag = "admob 广告展示",adResultData, pointTag)
                         }
 
                         override fun onAdHidden(p0: MaxAd) {

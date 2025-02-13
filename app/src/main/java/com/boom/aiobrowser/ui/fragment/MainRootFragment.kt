@@ -37,7 +37,7 @@ class MainRootFragment :BaseFragment<BrowserFragmentMainRootBinding>() {
 //                    val currentDestinationId = navController.currentDestination!!.id
 //                    if (currentDestinationId == R.id.fragmentWeb)
                     val currentFragment = childFragmentManager.findFragmentById(R.id.fragment_view)?.getChildFragmentManager()?.primaryNavigationFragment
-                    if (currentFragment is WebFragment){
+                    if (currentFragment is WebFragment && it.autoDownload.not()){
                         currentFragment.mAgentWeb!!.go(it.jumpUrl)
                         return@observe
                     }

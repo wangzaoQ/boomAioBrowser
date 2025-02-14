@@ -53,8 +53,9 @@ object CacheManager {
     const val KV_HOME_TAB = "KV_HOME_TAB"
     const val KV_TAB_DATA_PRIVATE = "KV_TAB_DATA_PRIVATE"
     const val KV_VIDEO_DOWNLOAD = "KV_VIDEO_DOWNLOAD_2"
-    const val KV_VIDEO_PRE = "KV_VIDEO_PRE"
+    const val KV_VIDEO_DOWNLOAD_LIST = "KV_VIDEO_DOWNLOAD_LIST"
     const val KV_NEWS_LIST = "KV_NEWS_LIST"
+    const val KV_VIDEO_DOWNLOAD_SINGLE = "KV_NEWS_LIST"
     const val KV_NEWS_VIDEO_LIST = "KV_NEWS_VIDEO_LIST"
     const val KV_TREND_NEWS_LIST = "KV_TREND_NEWS_LIST"
     const val KV_WEB_PAGE_LIST = "KV_WEB_PAGE_LIST"
@@ -112,11 +113,20 @@ object CacheManager {
         }
     var videoPreTempList :MutableList<VideoUIData>
         get() {
-            var list = getListByGson(mmkv.decodeString(KV_VIDEO_PRE),VideoUIData::class.java)?: mutableListOf()
+            var list = getListByGson(mmkv.decodeString(KV_VIDEO_DOWNLOAD_LIST),VideoUIData::class.java)?: mutableListOf()
             return list
         }
         set(value) {
-            mmkv.encode(KV_VIDEO_PRE, toJson(value))
+            mmkv.encode(KV_VIDEO_DOWNLOAD_LIST, toJson(value))
+        }
+
+    var videoDownloadSingleTempList :MutableList<VideoUIData>
+        get() {
+            var list = getListByGson(mmkv.decodeString(KV_VIDEO_DOWNLOAD_SINGLE),VideoUIData::class.java)?: mutableListOf()
+            return list
+        }
+        set(value) {
+            mmkv.encode(KV_VIDEO_DOWNLOAD_SINGLE, toJson(value))
         }
     // 是否首次打开start
     var installRefer: String

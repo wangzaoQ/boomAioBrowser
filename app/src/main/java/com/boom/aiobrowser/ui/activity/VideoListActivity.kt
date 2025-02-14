@@ -13,6 +13,7 @@ import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.tools.video.VideoPreloadManager
 import com.boom.aiobrowser.ui.fragment.video.NewsVideoFragment
+import com.boom.drag.EasyFloat
 import com.boom.video.GSYVideoManager
 
 class VideoListActivity : BaseActivity<NewsActivityVideoListBinding>() {
@@ -50,6 +51,7 @@ class VideoListActivity : BaseActivity<NewsActivityVideoListBinding>() {
         if (enumName.isNullOrEmpty().not()){
             APP.homeJumpLiveData.postValue(2)
         }
+        EasyFloat.dismiss(tag = "download")
         super.onDestroy()
     }
 

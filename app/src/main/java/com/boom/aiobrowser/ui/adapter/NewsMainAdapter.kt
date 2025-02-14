@@ -7,6 +7,7 @@ import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.ViewItem
 import com.boom.aiobrowser.ui.adapter.item.ADItem
 import com.boom.aiobrowser.ui.adapter.item.DetailsRelatedItem
+import com.boom.aiobrowser.ui.adapter.item.DownloadVideoItem
 import com.boom.aiobrowser.ui.adapter.item.HomeLocalItem
 import com.boom.aiobrowser.ui.adapter.item.ImgItem
 import com.boom.aiobrowser.ui.adapter.item.NewsHomeItem
@@ -348,7 +349,6 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
 
 
                     override fun onBind(holder: NewsHomeItem, position: Int, item: NewsData?) {
-                        if (item == null) return
                         item?.let { holder.bind(it, fragmet) }
                     }
                 })
@@ -373,6 +373,29 @@ class NewsMainAdapter(var fragmet: BaseFragment<*>? = null) : BaseMultiItemAdapt
                     ) {
                     }
                 })
+            .addItemType(
+                NewsData.TYPE_DOWNLOAD_VIDEO,
+                object : OnMultiItemAdapterListener<NewsData, DownloadVideoItem> {
+
+                    override fun onCreate(
+                        context: Context,
+                        parent: ViewGroup,
+                        viewType: Int
+                    ): DownloadVideoItem {
+                        return DownloadVideoItem(
+                            parent
+                        );
+                    }
+
+                    override fun onBind(
+                        holder: DownloadVideoItem,
+                        position: Int,
+                        item: NewsData?
+                    ) {
+                        item?.let { holder.bind(it, fragmet,position,this@NewsMainAdapter) }
+                    }
+                })
+
             .onItemViewType { position, list -> list.get(position).dataType }
     }
 

@@ -1,8 +1,6 @@
 package com.boom.aiobrowser.ui.pop
 
 import android.content.Context
-import android.content.Intent
-import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,7 +10,6 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
-import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.databinding.VideoPopDownloadBinding
@@ -22,14 +19,9 @@ import com.boom.aiobrowser.other.ShortManager
 import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
-import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
-import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
-import com.boom.aiobrowser.tools.toJson
-import com.boom.aiobrowser.tools.video.VideoManager
-import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.VideoPreActivity
 import com.boom.aiobrowser.ui.adapter.DownloadAdapter
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
@@ -42,7 +34,7 @@ import pop.util.animation.AnimationHelper
 import pop.util.animation.TranslationConfig
 import java.lang.ref.WeakReference
 
-class DownLoadPop(context: Context) : BasePopupWindow(context) {
+class DownLoadPop(context: Context,var fromType:Int) : BasePopupWindow(context) {
 
     init {
         setContentView(R.layout.video_pop_download)
@@ -60,7 +52,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
     }
 
     fun updateItem() {
-        var list = CacheManager.videoDownloadTempList
+        var list = getDataList()
         var adapterList = downloadAdapter.items
         var endList = mutableListOf<VideoUIData>()
         if (adapterList.isNullOrEmpty()) {
@@ -72,6 +64,26 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             }
         }
         downloadAdapter.submitList(endList)
+    }
+
+    private fun getDataList(): MutableList<VideoUIData> {
+        return if (fromType== 1){
+            CacheManager.videoPreTempList
+        }else if (fromType == 2){
+            CacheManager.videoDownloadSingleTempList
+        }else{
+            CacheManager.videoDownloadTempList
+        }
+    }
+
+    private fun saveDataList(list: MutableList<VideoUIData>) {
+        if (fromType == 1){
+            CacheManager.videoPreTempList = list
+        }else if (fromType == 2){
+            CacheManager.videoDownloadSingleTempList = list
+        }else{
+            CacheManager.videoDownloadTempList = list
+        }
     }
 
     fun updateDataByNF(data: VideoDownloadData) {
@@ -104,7 +116,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
             DownloadCacheManager.queryAllModel().forEach {
                 modelList.add(VideoDownloadData().createVideoDownloadData(it))
             }
-            var list = CacheManager.videoDownloadTempList
+            var list = getDataList()
             var endList = mutableListOf<VideoUIData>()
             if (modelList.isNullOrEmpty()) {
                 //如果库里无数据则用临时缓存
@@ -399,7 +411,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
     }
 
     private fun download(callBack: () -> Unit) {
-        var list = CacheManager.videoDownloadTempList
+        var list = getDataList()
         var realDownload = false
         var downloadVideoIdList = mutableListOf<String>()
         for (i in 0 until downloadAdapter.items.size){
@@ -422,7 +434,7 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
                 }
             }
         }
-        CacheManager.videoDownloadTempList = list
+        saveDataList(list)
         callBack.invoke()
         if (ShortManager.allowRate()) {
             var count = CacheManager.dayDownloadCount
@@ -440,6 +452,8 @@ class DownLoadPop(context: Context) : BasePopupWindow(context) {
         }
         dismiss()
     }
+
+
 
     private fun clickDownload(data: VideoDownloadData) {
         data?.apply {

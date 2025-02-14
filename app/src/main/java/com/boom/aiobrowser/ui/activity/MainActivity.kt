@@ -25,42 +25,39 @@ import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
 import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.nf.NFManager
-import com.boom.aiobrowser.point.PointValue
-import com.boom.aiobrowser.tools.AppLogs
-import com.boom.aiobrowser.tools.BrowserManager
-import com.boom.aiobrowser.tools.CacheManager
-import com.boom.aiobrowser.tools.FragmentManager
-import com.boom.aiobrowser.tools.JumpDataManager
-import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
-import com.boom.aiobrowser.tools.getBeanByGson
-import com.boom.aiobrowser.tools.inputStream2Byte
-import com.boom.aiobrowser.tools.jobCancel
-import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.LoginConfig.SIGN_LOGIN
 import com.boom.aiobrowser.other.LoginConfig.SIGN_LOGIN_ONE_TAP
 import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.other.ShortManager
-import com.boom.aiobrowser.ui.fragment.MainRootFragment
-import com.boom.aiobrowser.ui.fragment.NewsHomeFragment
-import com.boom.aiobrowser.ui.fragment.StartFragment
-import com.boom.aiobrowser.ui.fragment.WebFragment
 import com.boom.aiobrowser.other.isAndroid12
 import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointManager.PointCallback
 import com.boom.aiobrowser.point.PointValueKey
+import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.BrowserManager
+import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.FragmentManager
+import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.UIManager
+import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getListByGson
-import com.boom.aiobrowser.ui.fragment.HomePageDownloadFragment
+import com.boom.aiobrowser.tools.inputStream2Byte
+import com.boom.aiobrowser.tools.jobCancel
+import com.boom.aiobrowser.tools.toJson
+import com.boom.aiobrowser.ui.fragment.DownloadManageFragment
+import com.boom.aiobrowser.ui.fragment.MainRootFragment
 import com.boom.aiobrowser.ui.fragment.MeFragment
+import com.boom.aiobrowser.ui.fragment.NewsHomeFragment
+import com.boom.aiobrowser.ui.fragment.StartFragment
+import com.boom.aiobrowser.ui.fragment.WebFragment
 import com.boom.aiobrowser.ui.pop.DefaultPop
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
-import com.boom.aiobrowser.ui.pop.HomeGuidePop
 import com.boom.aiobrowser.ui.pop.MorePop
 import com.boom.aiobrowser.ui.pop.NFGuidePop
-import com.boom.aiobrowser.ui.pop.ProcessingTextPop
 import com.boom.drag.EasyFloat
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
@@ -86,7 +83,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         NewsHomeFragment()
     }
     val downloadHomeFragment by lazy {
-        HomePageDownloadFragment()
+        DownloadManageFragment()
     }
 
     val meFragment by lazy {
@@ -150,11 +147,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     private fun clickIndex(index: Int) {
         acBinding.fragmentMain.setCurrentItem(index, false)
         updateUI(index)
-        var firstTime = CacheManager.firstTime
-        if ((System.currentTimeMillis()-firstTime) > 60*1000){
-            var manager = AioADShowManager(this, ADEnum.INT_AD, tag = "底部按钮切换") {}
-            manager.showScreenAD(AD_POINT.aobws_tap_int)
-        }
+        var manager = AioADShowManager(this, ADEnum.INT_AD, tag = "底部按钮切换") {}
+        manager.showScreenAD(AD_POINT.aobws_tap_int,false)
     }
 
 

@@ -311,7 +311,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 
 
     private fun showDownloadPop() {
-        popDown = DownLoadPop(rootActivity)
+        popDown = DownLoadPop(rootActivity,0)
         popDown?.createPop() {
             updateDownloadButtonStatus(true, 1)
         }

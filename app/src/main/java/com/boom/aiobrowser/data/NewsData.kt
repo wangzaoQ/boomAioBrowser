@@ -103,5 +103,7 @@ class NewsData {
 
         var TYPE_TOPIC_HEADER = 140
 
+        var TYPE_DOWNLOAD_VIDEO = 160
+
     }
 }

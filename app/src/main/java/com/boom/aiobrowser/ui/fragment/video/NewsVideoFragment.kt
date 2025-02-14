@@ -9,9 +9,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.blankj.utilcode.util.SizeUtils.dp2px
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
+import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.databinding.BrowserDragLayoutBinding
 import com.boom.aiobrowser.databinding.FragmentNewsVideoBinding
 import com.boom.aiobrowser.model.NewsViewModel
@@ -21,10 +23,12 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.getListByGson
 import com.boom.aiobrowser.tools.toJson
+import com.boom.aiobrowser.tools.web.PManager.getVideoSegmentSize
 import com.boom.aiobrowser.ui.adapter.VideoListAdapter
 import com.boom.aiobrowser.ui.pop.DisclaimerPop
 import com.boom.aiobrowser.ui.pop.DownLoadPop
 import com.boom.aiobrowser.ui.pop.FirstDownloadTips
+import com.boom.downloader.utils.VideoDownloadUtils
 import com.boom.drag.EasyFloat
 import com.boom.drag.enums.SidePattern
 import com.boom.drag.utils.DisplayUtils
@@ -32,6 +36,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import pop.basepopup.BasePopupWindow.OnDismissListener
+import java.math.BigDecimal
 
 class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
 
@@ -94,7 +99,7 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
                 .setImmersionStatusBar(true)
                 .setGravity(Gravity.START or Gravity.BOTTOM, offsetX = startX, offsetY = startY)
                 .setLocation(startX, startY)
-                .setTag("webPop")
+                .setTag("download")
                 // 传入View，传入布局文件皆可，如：MyCustomView(this)、R.layout.float_custom
                 .setLayout(root) {
                     ivDownload2.setOneClick {
@@ -177,7 +182,7 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
     }
 
     private fun showDownloadPop() {
-        popDown = DownLoadPop(rootActivity)
+        popDown = DownLoadPop(rootActivity,1)
         popDown?.createPop() {
             updateDownloadButtonStatus( 1)
         }
@@ -288,6 +293,39 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
                             viewModel.value.getNewsVideoList(enumName,list!!.get(index),dataList)
                         }
                     }
+                    rootActivity.addLaunch(success = {
+                        var list = CacheManager.videoPreTempList
+
+                        var newsData = dataList.get(position)
+                        var index = -1
+                        for (i in 0 until list.size){
+                            var data = list.get(i)
+                            if (data.videoResultId == VideoDownloadUtils.computeMD5(newsData.vbreas)){
+                                index = i
+                                break
+                            }
+                        }
+                        if(index>=0)return@addLaunch
+                        var uiData = VideoUIData()
+                        uiData.thumbnail = newsData.iassum
+                        uiData.videoResultId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}"
+                        var videoDownloadData = VideoDownloadData().createDefault(
+                            videoId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}",
+                            fileName = getString(R.string.video_local_title),
+                            url = newsData.vbreas?:"",
+                            imageUrl = newsData.iassum?:"",
+                            paramsMap = HashMap<String,Any>(),
+                            size = getVideoSegmentSize(newsData.vbreas?:"",HashMap()),
+                            videoType = "mp4",
+                            resolution = ""
+                        )
+                        uiData.formatsList.add(videoDownloadData)
+                        list.add(uiData)
+                        CacheManager.videoPreTempList = list
+                        withContext(Dispatchers.Main){
+                            updateDownloadButtonStatus(0)
+                        }
+                    }, failBack = {})
                 }
             })
 //            post(Runnable { playPosition(0) })
@@ -322,6 +360,7 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
         }
         dragBiding = BrowserDragLayoutBinding.inflate(layoutInflater, null, false)
         addDownload()
+        fBinding.videoVp.currentItem = 0
     }
 
     companion object{

@@ -27,8 +27,35 @@ class NewsViewModel : BaseDataModel() {
     var newsRecommendLiveData = MutableLiveData<MutableList<NewsData>>()
     var newsVideoLiveData = MutableLiveData<MutableList<NewsData>>()
     var newsTopicListLiveData = MutableLiveData<HashMap<Int,MutableList<NewsData>>>()
+    var newsDownloadVideoLiveData = MutableLiveData<MutableList<NewsData>>()
 
 
+    fun getDownloadVideo(dataList:MutableList<NewsData>,page:Int,refresh:Boolean=false) {
+        var newsList:MutableList<NewsData>?=null
+        if (page == 1){
+            newsList = CacheManager.getNewsSaveList("recommendVideo")
+        }
+        if (newsList.isNullOrEmpty() || refresh){
+            loadData(loadBack = {
+                var list = NetRequest.request(HashMap<String, Any>().apply {
+                    put("sessionKey", NetParams.DOWNLOAD_UNLOCK_PUSH)
+                }) { NetController.getNewsList(NetParams.getParamsMap(NetParams.DOWNLOAD_UNLOCK_PUSH)) }.data
+                    ?: mutableListOf()
+                list = detailHistoryVideo(dataList?: mutableListOf(),list)
+                if (list.isNullOrEmpty()){
+                    var url = NetParams.videoMapToUrl(NetParams.getParamsMap(NetParams.NEWS_HOME_VIDEO))
+                    list = NetRequest.request(HashMap<String, Any>().apply { put("sessionKey", NetParams.NEWS_HOME_VIDEO) }){
+                        NetController.getNewsList(url)
+                    }.data ?: mutableListOf()
+                    list = detailHistoryVideo(dataList?: mutableListOf(),list)
+                }
+                list.forEach {
+                    it.dataType = NewsData.TYPE_DOWNLOAD_VIDEO
+                }
+                newsDownloadVideoLiveData.postValue(list)
+            }, failBack = {})
+        }
+    }
 
     fun getNewsData(dataList:MutableList<NewsData>,topic:String,page:Int,refresh:Boolean=false) {
         var newsList:MutableList<NewsData>?=null
@@ -175,14 +202,15 @@ class NewsViewModel : BaseDataModel() {
                             NetController.getNewsList(url)
                         }.data ?: mutableListOf()
                     }
+                    list = detailHistoryVideo(dataList?: mutableListOf(),list)
                 }
-                list = detailHistoryVideo(dataList?: mutableListOf(),list)
                 //3 拉正常视频
                 if (list.isNullOrEmpty()){
                     var url = NetParams.videoMapToUrl(NetParams.getParamsMap(NetParams.NEWS_HOME_VIDEO))
                     list = NetRequest.request(HashMap<String, Any>().apply { put("sessionKey", NetParams.NEWS_HOME_VIDEO) }){
                         NetController.getNewsList(url)
                     }.data ?: mutableListOf()
+                    list = detailHistoryVideo(dataList?: mutableListOf(),list)
                 }
             }
 
@@ -513,4 +541,5 @@ class NewsViewModel : BaseDataModel() {
         AppLogs.dLog(TAG,"经过过滤后的数据长度:${newsList.size}  移除了:${removeList.size}")
         return newsList
     }
+
 }

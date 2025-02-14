@@ -47,7 +47,7 @@ class AioADShowManager(
         }
     }
 
-    fun showScreenAD(pointTag: String) {
+    fun showScreenAD(pointTag: String,allowShowDefaultAD:Boolean=true) {
         var adResultData = AioADDataManager.getCacheAD(adEnum)
         if (activity == null || activity.getActivityStatus().not()) {
             adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "activity 状态异常")
@@ -63,19 +63,23 @@ class AioADShowManager(
             adShow?.showScreenAd(adResultData!!,pointTag)
             AioADDataManager.adCache.remove(adEnum)
         }else{
-            var defaultAD = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
-            if (defaultAD!=null) {
-                if (defaultAD.adShowType == 2 && APP.instance.lifecycleApp.stack.size>0){
-                    //native
-                    var currentTopActivity = (APP.instance.lifecycleApp.stack.get(APP.instance.lifecycleApp.stack.size-1) as BaseActivity<*>)
-                    currentTopActivity.startActivity(Intent(currentTopActivity,NativeScreenActivity::class.java))
-                    adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_SUCCESS, tag)
-                }else{
-                    //走通用的逻辑
-                    adShow?.showScreenAd(defaultAD,pointTag)
-                    AioADDataManager.adCache.remove(ADEnum.DEFAULT_AD)
+            if (allowShowDefaultAD){
+                var defaultAD = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
+                if (defaultAD!=null) {
+                    if (defaultAD.adShowType == 2 && APP.instance.lifecycleApp.stack.size>0){
+                        //native
+                        var currentTopActivity = (APP.instance.lifecycleApp.stack.get(APP.instance.lifecycleApp.stack.size-1) as BaseActivity<*>)
+                        currentTopActivity.startActivity(Intent(currentTopActivity,NativeScreenActivity::class.java))
+                        adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_SUCCESS, tag)
+                    }else{
+                        //走通用的逻辑
+                        adShow?.showScreenAd(defaultAD,pointTag)
+                        AioADDataManager.adCache.remove(ADEnum.DEFAULT_AD)
+                    }
+                } else {
+                    adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "无缓存 或不在冷却范围内 ")
                 }
-            } else {
+            }else{
                 adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "无缓存 或不在冷却范围内 ")
             }
         }

@@ -89,9 +89,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         HomePageDownloadFragment()
     }
 
-//    val musicFragment by lazy {
-//        MusicFragment()
-//    }
     val meFragment by lazy {
         MeFragment()
     }

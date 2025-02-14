@@ -370,6 +370,10 @@
     <string name="app_video_guide2">Play Videos</string>
     <string name="app_video_guide3">Click the button to download the video</string>
     <string name="video_local_title">Woman in bikini enjoying the sun in swimming pool</string>
+    <string name="app_dailymotion">Dailymotion</string>
+    <string name="app_hot_videos">Hot Videos</string>
+    <string name="app_download_tutorial">Download\nTutorial</string>
+    <string name="app_download_manage">Download\nManager</string>
 
 
 </resources>

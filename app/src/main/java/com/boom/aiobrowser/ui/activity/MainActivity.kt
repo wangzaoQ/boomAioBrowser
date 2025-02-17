@@ -139,9 +139,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 })
             }
         }
-        APP.downloadPageLiveData.observe(this){
-            acBinding.fragmentMain.setCurrentItem(2,true)
-        }
+
     }
 
     private fun clickIndex(index: Int) {
@@ -393,7 +391,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                             putString("video_path", toJson(data))
                         })
                     }else{
-                        APP.downloadPageLiveData.postValue("nf_download")
+                        DownloadActivity.startActivity(this@MainActivity,"nf_download")
                     }
                     allowShowPop = false
                 }
@@ -401,7 +399,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     if (nfTo == 1){
                         jumpActivity<SearchActivity>()
                     }else if (nfTo == 4){
-                        APP.downloadPageLiveData.postValue("nf_fix")
+                        DownloadActivity.startActivity(this@MainActivity,"nf_fix")
                     }else if (nfTo == 2){
                         jumpActivity<HomeGuideActivity>(Bundle().apply {
                             putString(ParamsConfig.JUMP_FROM,getString(R.string.app_x))

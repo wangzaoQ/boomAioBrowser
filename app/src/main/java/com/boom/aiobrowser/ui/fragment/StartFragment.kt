@@ -41,13 +41,13 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
     }
 
     override fun setListener() {
-        fBinding.btnBrowser.setOneClick {
-            PointEvent.posePoint(PointEventKey.launch_page_start)
-            if (CacheManager.campaignId.isNullOrEmpty()){
-                APP.instance.appModel.getCampaign()
-            }
-            toMain("点击Start",true)
-        }
+//        fBinding.btnBrowser.setOneClick {
+//            PointEvent.posePoint(PointEventKey.launch_page_start)
+//            if (CacheManager.campaignId.isNullOrEmpty()){
+//                APP.instance.appModel.getCampaign()
+//            }
+//            toMain("点击Start",true)
+//        }
         fBinding.apply {
             tvPrivate.setOneClick {
                 startActivity(Intent(rootActivity, WebActivity::class.java).putExtra("url",
@@ -65,25 +65,29 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         if (isAdded.not())return
         fBinding.llLoadingRoot.visibility = View.VISIBLE
         fBinding.rlStart.visibility = View.GONE
-        startPb(0, 100, if (isFirst) 1000 else 10000, update = {
-            if (isFirst.not()){
-                if (AioADDataManager.getLaunchData() == null && AioADDataManager.adAllowShowScreen()) {
-                    fBinding.progress.progress = it
-                } else {
-                    showEnd()
-                }
-            }else{
-//                if (CacheManager.campaignId.isNullOrEmpty().not() && UIManager.isBuyUser()){
-//                    if (APP.isDebug){
-//                        AppLogs.dLog(APP.instance.TAG,"当前已查到归因:${CacheManager.campaignId}")
-//                    }
-//                    endProgress{
-//                        adLoadComplete(AioADDataManager.AD_SHOW_TYPE_SUCCESS)
-//                    }
-//                }else{
-//                    fBinding.progress.progress = it
-//                }
+        startPb(0, 100, 10000, update = {
+            if (isFirst && it<=30){
                 fBinding.progress.progress = it
+            }else{
+                if (AioADDataManager.adAllowShowScreen()){
+                    if (AioADDataManager.getLaunchData()== null){
+                        var defaultAd = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
+                        if (defaultAd!=null){
+                            showEnd()
+                        }else{
+                            fBinding.progress.progress = it
+                        }
+                    }else{
+                        showEnd()
+                    }
+                }else{
+                    var defaultAd = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
+                    if (defaultAd!=null){
+                        showEnd()
+                    }else{
+                        fBinding.progress.progress = it
+                    }
+                }
             }
         }, complete = {
             AppLogs.dLog(fragmentTAG, "10秒内没拿到ad")
@@ -132,6 +136,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
     }
 
     private fun loadAD() {
+        AioADDataManager.preloadAD(ADEnum.INT_AD,"app启动")
         AioADDataManager.preloadAD(ADEnum.NATIVE_AD,"首页展示时")
 //        AioADDataManager.preloadAD(ADEnum.BANNER_AD_NEWS_DETAILS_TOP,"首页展示时")
 //        AioADDataManager.preloadAD(ADEnum.BANNER_AD,"首页展示时")
@@ -180,10 +185,10 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
     override fun setShowView() {
         APP.instance.firstInsertHomeAD = true
         APP.instance.isAllowNFPreload = false
-        fBinding.btnBrowser.isEnabled = fBinding.btnCheck.isChecked
-        fBinding.btnCheck.setOnCheckedChangeListener { compoundButton, b ->
-            fBinding.btnBrowser.isEnabled = fBinding.btnCheck.isChecked
-        }
+//        fBinding.btnBrowser.isEnabled = fBinding.btnCheck.isChecked
+//        fBinding.btnCheck.setOnCheckedChangeListener { compoundButton, b ->
+//            fBinding.btnBrowser.isEnabled = fBinding.btnCheck.isChecked
+//        }
 
         if (CacheManager.isFirstStart){
             fBinding.rlStart.visibility = View.VISIBLE
@@ -192,6 +197,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
                 ConfigPop(rootActivity).createPop()
             }
             CacheManager.firstTime = System.currentTimeMillis()
+            toMain("首次",true)
         }else{
             toMain("非首次")
         }
@@ -199,7 +205,6 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             it.adLoadStatus = AioADDataManager.LOAD_STATUS_START
         }
         AioADDataManager.preloadAD(ADEnum.LAUNCH_AD,"app启动")
-        AioADDataManager.preloadAD(ADEnum.INT_AD,"app启动")
         AioADDataManager.preloadAD(ADEnum.DEFAULT_AD,"app启动")
         PointEvent.session()
         PointEvent.posePoint(PointEventKey.nn_session)

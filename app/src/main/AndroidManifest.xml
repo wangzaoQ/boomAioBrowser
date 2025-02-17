@@ -184,6 +184,10 @@
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:launchMode="singleTop"
             ></activity>
+        <activity android:name=".ui.activity.HotVideosActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            ></activity>
         <activity android:name=".ui.activity.VideoPreActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:launchMode="singleTop"

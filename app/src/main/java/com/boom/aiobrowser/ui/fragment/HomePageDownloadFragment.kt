@@ -64,6 +64,9 @@ class HomePageDownloadFragment : BaseFragment<BrowserHomeDownloadBinding>(){
 
     override fun setListener() {
         fBinding.apply {
+            ivBack.setOneClick {
+                rootActivity.finish()
+            }
             tvProgress.setOneClick {
                 vpRoot.currentItem = 0
             }
@@ -79,13 +82,7 @@ class HomePageDownloadFragment : BaseFragment<BrowserHomeDownloadBinding>(){
                 }
             }
         }
-        APP.downloadPageLiveData.observe(this){
-            if (it == "webpage_download_pop" || it == "webpage_download_task_pop_complete"){
-                fBinding.vpRoot.currentItem = 1
-            }else if (it == "webpage_download_task_pop"){
-                BatteryUtil(WeakReference(rootActivity)).requestIgnoreBatteryOptimizations()
-            }
-        }
+
     }
 
     override fun setShowView() {
@@ -121,6 +118,12 @@ class HomePageDownloadFragment : BaseFragment<BrowserHomeDownloadBinding>(){
                 }
             })
         }
+        var fromType = arguments?.getString("fromType")?:""
+        if (fromType == "webpage_download_pop" || fromType == "webpage_download_task_pop_complete"){
+            fBinding.vpRoot.currentItem = 1
+        }else if (fromType == "webpage_download_task_pop"){
+            BatteryUtil(WeakReference(rootActivity)).requestIgnoreBatteryOptimizations()
+        }
     }
 
     private fun updateUI(position: Int) {
@@ -129,10 +132,7 @@ class HomePageDownloadFragment : BaseFragment<BrowserHomeDownloadBinding>(){
     }
 
     override fun onDestroy() {
-        APP.jumpLiveData.removeObservers(this)
         APP.videoNFLiveData.removeObservers(this)
-        APP.videoLiveData.removeObservers(this)
-        APP.downloadPageLiveData.removeObservers(this)
         super.onDestroy()
     }
 
@@ -142,4 +142,15 @@ class HomePageDownloadFragment : BaseFragment<BrowserHomeDownloadBinding>(){
     ): BrowserHomeDownloadBinding {
         return BrowserHomeDownloadBinding.inflate(layoutInflater)
     }
+
+    companion object{
+        fun newInstance(fromType:String): HomePageDownloadFragment{
+            val args = Bundle()
+            args.putString("fromType",fromType)
+            val fragment = HomePageDownloadFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
 }

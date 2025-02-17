@@ -22,6 +22,7 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
+import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.VideoPreActivity
 import com.boom.aiobrowser.ui.adapter.DownloadAdapter
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
@@ -288,7 +289,7 @@ class DownLoadPop(context: Context,var fromType:Int) : BasePopupWindow(context) 
                 downloadAdapter.setPopContext(this@DownLoadPop)
             }
             tvDownload.setOnClickListener {
-                APP.downloadPageLiveData.postValue("webpage_download_pop")
+                DownloadActivity.startActivity(context as BaseActivity<*>,"webpage_download_pop")
                 PointEvent.posePoint(PointEventKey.webpage_download_pop_record)
             }
             tvClear.setOnClickListener {
@@ -335,7 +336,7 @@ class DownLoadPop(context: Context,var fromType:Int) : BasePopupWindow(context) 
                 PointEvent.posePoint(PointEventKey.download_click)
                 CacheManager.dayDownloadCount += 1
                 if (btnDownloadAll.text.toString() == context.getString(R.string.app_open)){
-                    APP.downloadPageLiveData.postValue("webpage_download_pop")
+                    DownloadActivity.startActivity(context as BaseActivity<*>,"webpage_download_pop")
                     dismiss()
                 }else{
                     showDownloadAD {

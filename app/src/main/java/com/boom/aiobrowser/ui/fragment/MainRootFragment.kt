@@ -37,8 +37,9 @@ class MainRootFragment :BaseFragment<BrowserFragmentMainRootBinding>() {
 //                    val currentDestinationId = navController.currentDestination!!.id
 //                    if (currentDestinationId == R.id.fragmentWeb)
                     val currentFragment = childFragmentManager.findFragmentById(R.id.fragment_view)?.getChildFragmentManager()?.primaryNavigationFragment
-                    if (currentFragment is WebFragment && it.autoDownload.not()){
-                        currentFragment.mAgentWeb!!.go(it.jumpUrl)
+                    if (currentFragment is WebFragment && it.autoDownload.not() && it.jumpUrl!= getString(R.string.video_local_title)){
+                        currentFragment.updateData(it)
+//                        currentFragment.mAgentWeb!!.go(it.jumpUrl)
                         return@observe
                     }
                     CacheManager.videoDownloadTempList = mutableListOf()

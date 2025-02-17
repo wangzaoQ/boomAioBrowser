@@ -155,7 +155,7 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
             }
             llDownload.setOneClick {
                 if (context is BaseActivity<*>) {
-                    APP.downloadPageLiveData.postValue("home_more_pop")
+                    DownloadActivity.startActivity(context as BaseActivity<*>,"home_more_pop")
                 }
                 PointEvent.posePoint(PointEventKey.profile_download)
             }

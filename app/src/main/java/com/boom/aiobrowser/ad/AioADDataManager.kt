@@ -3,7 +3,6 @@ package com.boom.aiobrowser.ad
 import com.applovin.sdk.AppLovinMediationProvider
 import com.applovin.sdk.AppLovinSdk
 import com.applovin.sdk.AppLovinSdkInitializationConfiguration
-import com.applovin.sdk.AppLovinSdkSettings
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.ad.ADEnum.INT_AD
 import com.boom.aiobrowser.ad.ADEnum.LAUNCH_AD
@@ -18,9 +17,6 @@ import com.boom.aiobrowser.tools.CacheManager.adLastTime
 import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.appDataReset
 import com.google.android.gms.ads.MobileAds
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 object AioADDataManager {
@@ -95,7 +91,7 @@ object AioADDataManager {
                     it.adRequestList = bean.aobws_ban_newin ?: mutableListOf()
                 }
                 ADEnum.DEFAULT_AD ->{
-                    it.adRequestList = bean.aobws_default?: mutableListOf()
+                    it.adRequestList = bean.aobws_refer_nat?: mutableListOf()
                 }
 
                 else -> {}

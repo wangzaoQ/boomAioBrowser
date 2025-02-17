@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.telephony.TelephonyManager
 import androidx.core.content.ContextCompat.getSystemService
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
@@ -68,6 +70,7 @@ object UIManager {
                         putLong(PointValueKey.load_time,(System.currentTimeMillis()-CacheManager.AUserTime)/1000)
                     })
                 }
+                AioADDataManager.preloadAD(ADEnum.DEFAULT_AD,"定位到b包用户")
                 return true
             }
         }

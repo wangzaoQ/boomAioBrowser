@@ -10,7 +10,7 @@ enum class ADEnum(var adName: String = "", var adLoadStatus: Int = LOAD_STATUS_S
     NATIVE_AD("aobws_detail_bnat",LOAD_STATUS_START,0),
     BANNER_AD_NEWS_DETAILS_TOP("aobws_ban_newtp",LOAD_STATUS_START,0),
     BANNER_AD_NEWS_DETAILS("aobws_ban_newin",LOAD_STATUS_START,0),
-    DEFAULT_AD("aobws_default",LOAD_STATUS_START,1),
+    DEFAULT_AD("aobws_refer_nat",LOAD_STATUS_START,1),
 }
 
 

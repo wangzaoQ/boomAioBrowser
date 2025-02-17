@@ -10,20 +10,28 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
+import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.databinding.BrowserFragmentDownloadManageBinding
 import com.boom.aiobrowser.model.NewsViewModel
+import com.boom.aiobrowser.other.JumpConfig
+import com.boom.aiobrowser.other.WebConfig
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.web.PManager.getVideoSegmentSize
+import com.boom.aiobrowser.ui.activity.DownloadActivity
+import com.boom.aiobrowser.ui.activity.HotVideosActivity
 import com.boom.aiobrowser.ui.activity.VideoListActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.DownLoadPop
+import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.base.adapter4.QuickAdapterHelper
 import com.boom.base.adapter4.loadState.LoadState
 import com.boom.base.adapter4.loadState.trailing.TrailingLoadStateAdapter
@@ -71,6 +79,21 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
     }
 
     override fun setListener() {
+        fBinding.apply {
+            llVimeo.setOneClick {
+                var data = JumpData().apply {
+                    jumpUrl = WebConfig.URL_Vimeo
+                    jumpTitle = APP.instance.getString(R.string.video_vimeo)
+                    jumpType = JumpConfig.JUMP_WEB
+                }
+                var jumpData = JumpDataManager.getCurrentJumpData(tag="download tab 点击", updateData = data)
+                JumpDataManager.updateCurrentJumpData(jumpData,tag = "download tab 点击")
+                APP.jumpLiveData.postValue(jumpData)
+            }
+            llHotVideos.setOneClick {
+                rootActivity.jumpActivity<HotVideosActivity>()
+            }
+        }
         viewModel.value.newsDownloadVideoLiveData.observe(this) {
             if (page == 1) {
                 videoAdapter.submitList(it)
@@ -121,6 +144,12 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
                     }
                 }, failBack = {})
             }
+        }
+        fBinding.llDownload.getChildAt(0).setOneClick {
+            DownloadVideoGuidePop(rootActivity).createPop(0) {  }
+        }
+        fBinding.llDownload.getChildAt(1).setOneClick {
+            rootActivity.jumpActivity<DownloadActivity>()
         }
     }
 

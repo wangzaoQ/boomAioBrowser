@@ -8,6 +8,7 @@ import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.NewsData
+import com.boom.aiobrowser.data.NewsData.Companion.TYPE_DOWNLOAD_VIDEO
 import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.net.Net
 import com.boom.aiobrowser.net.NetController
@@ -16,6 +17,7 @@ import com.boom.aiobrowser.net.NetRequest
 import com.boom.aiobrowser.other.NewsConfig
 import com.boom.aiobrowser.other.NewsConfig.NO_NF_VIDEO_TAG
 import com.boom.aiobrowser.other.NewsConfig.NO_SESSION_TAG
+import com.boom.aiobrowser.other.NewsConfig.TOPIC_TAG
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.video.VideoPreloadManager
@@ -28,6 +30,7 @@ class NewsViewModel : BaseDataModel() {
     var newsVideoLiveData = MutableLiveData<MutableList<NewsData>>()
     var newsTopicListLiveData = MutableLiveData<HashMap<Int,MutableList<NewsData>>>()
     var newsDownloadVideoLiveData = MutableLiveData<MutableList<NewsData>>()
+    var newsHotVideoLiveData = MutableLiveData<MutableList<NewsData>>()
 
 
     fun getDownloadVideo(dataList:MutableList<NewsData>,page:Int,refresh:Boolean=false) {
@@ -540,6 +543,20 @@ class NewsViewModel : BaseDataModel() {
         newsList.removeAll(removeList)
         AppLogs.dLog(TAG,"经过过滤后的数据长度:${newsList.size}  移除了:${removeList.size}")
         return newsList
+    }
+
+
+    fun getHotVideos(){
+        loadData(loadBack = {
+            var list = NetRequest.request(HashMap<String, Any>().apply {
+                put("sessionKey", "${TOPIC_TAG}hot dance")
+            }) { NetController.getNewsList(NetParams.getParamsMap("${TOPIC_TAG}hot dance")) }.data
+                ?: mutableListOf()
+            list.forEach {
+                it.dataType = TYPE_DOWNLOAD_VIDEO
+            }
+            newsHotVideoLiveData.postValue(list)
+        }, failBack = {})
     }
 
 }

@@ -393,20 +393,9 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 
     open fun updateData(data: JumpData?) {
         jumpData = data
+        isFirst = true
         initWeb()
-        fBinding.flTop.updateEngine(CacheManager.engineType)
-        fBinding.flTop.binding.tvToolbarSearch.text = jumpData?.jumpUrl
-        fBinding.refreshLayout.isEnabled = false
-        fBinding.flTop.setData(jumpData)
-        fBinding.root.postDelayed({
-            jumpData?.apply {
-                jumpType = JumpConfig.JUMP_WEB
-                JumpDataManager.updateCurrentJumpData(this, "MainFragment onResume 更新 jumpData")
-                if (CacheManager.browserStatus == 0) {
-                    CacheManager.saveRecentSearchData(this)
-                }
-            }
-        }, 0)
+        updateUI()
         back = {
 //            jumpData?.apply {
 //                nextJumpType = JumpConfig.JUMP_WEB
@@ -418,6 +407,20 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 //                    }
 //                }
 //            }
+        }
+    }
+
+    private fun updateUI() {
+        fBinding.flTop.updateEngine(CacheManager.engineType)
+        fBinding.flTop.binding.tvToolbarSearch.text = jumpData?.jumpUrl
+        fBinding.refreshLayout.isEnabled = false
+        fBinding.flTop.setData(jumpData)
+        jumpData?.apply {
+            jumpType = JumpConfig.JUMP_WEB
+            JumpDataManager.updateCurrentJumpData(this, "MainFragment onResume 更新 jumpData")
+            if (CacheManager.browserStatus == 0) {
+                CacheManager.saveRecentSearchData(this)
+            }
         }
     }
 

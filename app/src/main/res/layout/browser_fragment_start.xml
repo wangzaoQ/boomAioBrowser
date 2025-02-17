@@ -63,18 +63,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="60dp">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/btnBrowser"
-            android:layout_width="match_parent"
-            android:layout_height="47dp"
-            android:layout_marginHorizontal="40dp"
-            android:background="@drawable/shape_start_confirm"
-            android:gravity="center"
-            android:enabled="false"
-            android:text="@string/app_start"
-            android:textColor="@drawable/selector_color"></androidx.appcompat.widget.AppCompatTextView>
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_below="@+id/btnBrowser"
+   <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

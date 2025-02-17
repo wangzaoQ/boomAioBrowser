@@ -22,6 +22,9 @@ class NativeScreenActivity :BaseActivity<BrowserActivityNativeScreenBinding>(){
     }
 
     override fun setListener() {
+        acBinding.ivClose.setOneClick {
+            finish()
+        }
     }
 
     override fun setShowView() {

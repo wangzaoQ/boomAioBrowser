@@ -496,10 +496,14 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             view: WebView?,
             request: WebResourceRequest?
         ): WebResourceResponse? {
-            if (allowNeedCommon.not())return super.shouldInterceptRequest(view, request)
-            var requestUrl = request?.url?.toString()?:""
-            var webUrl = getUrl()?:""
-                rootActivity.addLaunch(success = {
+            var requestUrl = ""
+            var webUrl = ""
+            runCatching {
+                if (allowNeedCommon.not())return super.shouldInterceptRequest(view, request)
+                requestUrl = request?.url?.toString()?:""
+                webUrl = getUrl()
+            }
+            rootActivity.addLaunch(success = {
                     if (nonVideoExtensions.any { requestUrl.contains(it, true) }.not()){
                         AppLogs.dLog("shouldInterceptRequest","原生过滤非视频格式后 url:${requestUrl}")
                         if(WebScan.loadResourceList.contains(requestUrl).not() && locationLoadResourceList.contains(requestUrl).not()){

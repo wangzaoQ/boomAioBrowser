@@ -96,7 +96,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         return BrowserActivityMainBinding.inflate(layoutInflater)
     }
 
-
     override fun setListener() {
         for ( i in 0 until acBinding.llMainControl.childCount){
             acBinding.llMainControl.getChildAt(i).setOneClick {
@@ -262,6 +261,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                         add(meFragment)
                     }
                     offscreenPageLimit = fragments.size
+                    setCurrentItem(2,false)
                     adapter = object : FragmentPagerAdapter(
                         supportFragmentManager,
                         BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
@@ -604,7 +604,10 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                         true
                     } else {
                         AppLogs.dLog(acTAG,"返回 HomeFragment")
-                        JumpDataManager.toMain(true)
+                        var manager = AioADShowManager(this, ADEnum.INT_AD, tag = "浏览器结果页返回") {
+                            JumpDataManager.toMain(true)
+                        }
+                        manager.showScreenAD(AD_POINT.aobws_downreturn_int)
                         true
                     }
                 }

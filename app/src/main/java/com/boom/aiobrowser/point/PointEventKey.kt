@@ -359,4 +359,9 @@ object AD_POINT{
     const val aobws_download_one = "aobws_download_one"
     const val aobws_task_add = "aobws_task_add"
     const val aobws_play_bnat = "aobws_play_bnat"
+    const val aobws_try_int = "aobws_try_int"
+    const val aobws_newsclick_int = "aobws_newsclick_int"
+    const val aobws_downclick_int = "aobws_downclick_int"
+    const val aobws_downreturn_int = "aobws_downreturn_int"
+    const val aobws_downguide_int = "aobws_downguide_int"
 }

@@ -7,6 +7,7 @@ import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import com.adjust.sdk.Adjust
+import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.point.PointEvent
@@ -62,7 +63,7 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
             AppLogs.dLog(APP.instance.TAG,"onActivityStarted_isBackstage:${isBackstage}")
             isBackstage = false
 //            activity.startActivity(Intent(activity, NowStartActivity::class.java))
-            if (AioADDataManager.adAllowShowScreen()){
+            if (AioADDataManager.adAllowShowScreen() || AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)!=null){
                 val temp = mutableListOf<Activity>()
                 stack.forEach {
                     if ((it is BaseActivity<*>).not()) {
@@ -97,10 +98,8 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
             cancelJob?.cancel()
             cancelJob = CoroutineScope(Dispatchers.IO).launch{
                 startTime = 0L
-                if (AioADDataManager.adFilter1().not()){
-                    while (AioADDataManager.adAllowShowScreen().not()){
-                        delay(1000)
-                    }
+                while (System.currentTimeMillis()-startTime<2000){
+                    delay(1000)
                 }
                 APP.instance.isHideSplash = false
                 isBackstage = true

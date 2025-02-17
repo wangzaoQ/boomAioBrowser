@@ -53,7 +53,7 @@ class AioADShowManager(
             adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "activity 状态异常")
             return
         }
-        if (AioADDataManager.adAllowShowScreen()){
+        if (AioADDataManager.adAllowShowScreen() || AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)!=null){
             //有展示机会
             PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
                 putString(PointValueKey.ad_pos_id,pointTag)

@@ -224,7 +224,7 @@
             ></activity>
         <activity android:name=".ui.NativeScreenActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             ></activity>
 
 <!--        <activity android:name=".ui.activity.MusicPlayActivity"-->

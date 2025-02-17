@@ -198,6 +198,7 @@ object WebConfig{
     const val URL_Dailymotion = "https://www.dailymotion.com/"
     const val URL_Twitch = "https://www.twitch.tv/"
     const val URL_TikTok = "https://www.tiktok.com/"
+    const val URL_Instagram = "https://www.instagram.com/"
 
     // 巴西视频平台 URL
     const val URL_Kwai = "https://www.kwai.com/"

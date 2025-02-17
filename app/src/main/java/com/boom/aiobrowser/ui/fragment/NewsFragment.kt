@@ -7,6 +7,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.NewsFragmentBinding
@@ -15,6 +17,7 @@ import com.boom.aiobrowser.net.NetParams
 import com.boom.aiobrowser.other.NewsConfig
 import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.other.TopicConfig
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -88,21 +91,24 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
         }
         newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
             if (position>newsAdapter.items.size-1)return@setOnDebouncedItemClick
-            var data = newsAdapter.items.get(position)
-            if (data.dataType == NewsData.TYPE_DETAILS_NEWS_SEARCH_FILM){
-                rootActivity.jumpActivity<WebActivity>(Bundle().apply {
-                    putString("url", data.uweek)
-                })
-            }else if (data.dataType == NewsData.TYPE_NEWS || data.dataType == NewsData.TYPE_HOME_NEWS_TRENDING || data.dataType == NewsData.TYPE_DETAILS_NEWS_SEARCH){
-                rootActivity.jumpActivity<WebDetailsActivity>(Bundle().apply {
-                    putString(ParamsConfig.JSON_PARAMS, toJson(data))
-                })
+            var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "新闻列表点击的广告"){
+                var data = newsAdapter.items.get(position)
+                if (data.dataType == NewsData.TYPE_DETAILS_NEWS_SEARCH_FILM){
+                    rootActivity.jumpActivity<WebActivity>(Bundle().apply {
+                        putString("url", data.uweek)
+                    })
+                }else if (data.dataType == NewsData.TYPE_NEWS || data.dataType == NewsData.TYPE_HOME_NEWS_TRENDING || data.dataType == NewsData.TYPE_DETAILS_NEWS_SEARCH){
+                    rootActivity.jumpActivity<WebDetailsActivity>(Bundle().apply {
+                        putString(ParamsConfig.JSON_PARAMS, toJson(data))
+                    })
+                }
+                if (topic == rootActivity.getString(R.string.app_movie)){
+                    PointEvent.posePoint(PointEventKey.search_page_movie, Bundle().apply {
+                        putString(PointValueKey.type,data?.tconsi)
+                    })
+                }
             }
-            if (topic == rootActivity.getString(R.string.app_movie)){
-                PointEvent.posePoint(PointEventKey.search_page_movie, Bundle().apply {
-                    putString(PointValueKey.type,data?.tconsi)
-                })
-            }
+            manager.showScreenAD(AD_POINT.aobws_newsclick_int)
         }
         newsAdapter.addOnDebouncedChildClick(R.id.btnYes) { adapter, view, position ->
             var data = CacheManager.locationData

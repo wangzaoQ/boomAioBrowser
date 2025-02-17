@@ -38,12 +38,13 @@ class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
 
     companion object{
         fun startVideoPreActivity(context:BaseActivity<*>,data:VideoDownloadData){
-            var manager = AioADShowManager(context as BaseActivity<*>, ADEnum.INT_AD, tag = "播放视频") {
-                context.jumpActivity<VideoPreActivity>(Bundle().apply {
-                    putString("video_path", toJson(data))
-                })
-            }
-            manager.showScreenAD(AD_POINT.aobws_play_int)
+//            var manager = AioADShowManager(context as BaseActivity<*>, ADEnum.INT_AD, tag = "播放视频") {
+//
+//            }
+//            manager.showScreenAD(AD_POINT.aobws_play_int)
+            context.jumpActivity<VideoPreActivity>(Bundle().apply {
+                putString("video_path", toJson(data))
+            })
         }
     }
 
@@ -80,37 +81,37 @@ class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
                 .setShowFullAnimation(true)
                 .setNeedLockFull(true)
                 .setCacheWithPlay(false)
-                .setGSYStateUiListener(object : GSYStateUiListener {
-                    override fun onStateChanged(state: Int) {
-                        when (state) {
-                            CURRENT_STATE_PAUSE -> {
-                                if (showAd)return
-                                acBinding.flRoot.visibility = View.VISIBLE
-                                acBinding.ivClose.visibility = View.VISIBLE
-                                acBinding.ivClose.setOneClick {
-                                    acBinding.flRoot.visibility = View.GONE
-                                    acBinding.ivClose.visibility = View.GONE
-                                }
-                                if (AioADDataManager.adFilter1().not()) {
-                                    showAd = true
-                                    PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
-                                        putString(PointValueKey.ad_pos_id, AD_POINT.aobws_play_bnat)
-                                    })
-                                    val data = AioADDataManager.getCacheAD(ADEnum.BANNER_AD_NEWS_DETAILS)
-                                    data?.apply {
-                                        AioADShowManager(this@VideoPreActivity, ADEnum.BANNER_AD_NEWS_DETAILS,"播放视频"){
-                                        }.showNativeAD(acBinding.flRoot,AD_POINT.aobws_play_bnat)
-                                    }
-                                }
-                            }
-                            else -> {
-                                showAd = false
-                                acBinding.flRoot.visibility = View.GONE
-                                acBinding.ivClose.visibility = View.GONE
-                            }
-                        }
-                    }
-                })
+//                .setGSYStateUiListener(object : GSYStateUiListener {
+//                    override fun onStateChanged(state: Int) {
+//                        when (state) {
+//                            CURRENT_STATE_PAUSE -> {
+//                                if (showAd)return
+//                                acBinding.flRoot.visibility = View.VISIBLE
+//                                acBinding.ivClose.visibility = View.VISIBLE
+//                                acBinding.ivClose.setOneClick {
+//                                    acBinding.flRoot.visibility = View.GONE
+//                                    acBinding.ivClose.visibility = View.GONE
+//                                }
+//                                if (AioADDataManager.adFilter1().not()) {
+//                                    showAd = true
+//                                    PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
+//                                        putString(PointValueKey.ad_pos_id, AD_POINT.aobws_play_bnat)
+//                                    })
+//                                    val data = AioADDataManager.getCacheAD(ADEnum.BANNER_AD_NEWS_DETAILS)
+//                                    data?.apply {
+//                                        AioADShowManager(this@VideoPreActivity, ADEnum.BANNER_AD_NEWS_DETAILS,"播放视频"){
+//                                        }.showNativeAD(acBinding.flRoot,AD_POINT.aobws_play_bnat)
+//                                    }
+//                                }
+//                            }
+//                            else -> {
+//                                showAd = false
+//                                acBinding.flRoot.visibility = View.GONE
+//                                acBinding.ivClose.visibility = View.GONE
+//                            }
+//                        }
+//                    }
+//                })
                 .setVideoAllCallBack(object : GSYSampleCallBack() {
                     override fun onPrepared(url: String, vararg objects: Any) {
                         super.onPrepared(url, *objects)

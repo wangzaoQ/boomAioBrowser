@@ -30,7 +30,7 @@
             android:layout_alignParentBottom="true"
             android:background="#F5F5F5"></View>
     </RelativeLayout>
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <com.boom.refresh.layout.SmartRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -77,7 +77,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="13dp"
-                                android:text="venom:the last dance"
+                                android:text="@string/app_download_search"
                                 android:textColor="#801C274C"
                                 android:textSize="14sp"></androidx.appcompat.widget.AppCompatTextView>
 
@@ -327,5 +327,5 @@
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.boom.refresh.layout.SmartRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

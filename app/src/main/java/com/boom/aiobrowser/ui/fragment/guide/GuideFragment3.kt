@@ -9,10 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.databinding.BrowserFragmentVideoGuide3Binding
 import com.boom.aiobrowser.databinding.BrowserFragmentVideoGuideBinding
 import com.boom.aiobrowser.other.JumpConfig
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.JumpDataManager
@@ -53,17 +56,20 @@ class GuideFragment3 :BaseFragment<BrowserFragmentVideoGuide3Binding>() {
             }
         }
         fBinding.tvCommit.setOnClickListener {
-            PointEvent.posePoint(PointEventKey.download_tutorial_try)
-            var data = JumpDataManager.getCurrentJumpData(tag = "DownloadVideoGuidePop guide")
-            data.jumpType = JumpConfig.JUMP_WEB
-            data.jumpUrl = getString(R.string.video_local_title)
-            data.jumpTitle = getString(R.string.video_local_title)
+            var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "教程点击Try Now 增加广告") {
+                PointEvent.posePoint(PointEventKey.download_tutorial_try)
+                var data = JumpDataManager.getCurrentJumpData(tag = "DownloadVideoGuidePop guide")
+                data.jumpType = JumpConfig.JUMP_WEB
+                data.jumpUrl = getString(R.string.video_local_title)
+                data.jumpTitle = getString(R.string.video_local_title)
 //                data.jumpUrl = "https://www.pexels.com/videos"
-            JumpDataManager.updateCurrentJumpData(data,tag = "DownloadVideoGuidePop guide")
-            APP.jumpLiveData.postValue(data)
-            JumpDataManager.closeAll()
-            PointEvent.posePoint(PointEventKey.tutorial_webpage)
-            APP.videoGuideLiveData.postValue(10)
+                JumpDataManager.updateCurrentJumpData(data,tag = "DownloadVideoGuidePop guide")
+                APP.jumpLiveData.postValue(data)
+                JumpDataManager.closeAll()
+                PointEvent.posePoint(PointEventKey.tutorial_webpage)
+                APP.videoGuideLiveData.postValue(10)
+            }
+            manager.showScreenAD(AD_POINT.aobws_try_int)
         }
         fBinding.ivLeft.setOnClickListener {
             APP.videoGuideLiveData.postValue(11)

@@ -554,6 +554,9 @@ class NewsViewModel : BaseDataModel() {
                 ?: mutableListOf()
             list.forEach {
                 it.dataType = TYPE_DOWNLOAD_VIDEO
+                VideoPreloadManager.serialList(1, mutableListOf<NewsData>().apply {
+                    add(it)
+                })
             }
             newsHotVideoLiveData.postValue(list)
         }, failBack = {})

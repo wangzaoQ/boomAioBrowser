@@ -398,7 +398,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 NFEnum.NF_SEARCH_VIDEO.menuName->{
                     if (nfTo == 1){
                         jumpActivity<SearchActivity>(Bundle().apply {
-                            putString(PointValueKey.from_type,"nf")
+                            putString(PointValueKey.from_type,"app_nf")
                         })
                     }else if (nfTo == 4){
                         DownloadActivity.startActivity(this@MainActivity,"nf_fix")
@@ -444,7 +444,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                                     videoList.add(it)
                                 }
                             }
-                            VideoListActivity.startVideoListActivity(this,0,videoList,enumName,"nf")
+                            VideoListActivity.startVideoListActivity(this,0,videoList,enumName,"app_nf")
                         }
                     }
                     allowShowPop = false
@@ -457,7 +457,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                         })
                     }else if (nfTo == 0){
                         jumpActivity<SearchActivity>(Bundle().apply {
-                            putString(PointValueKey.from_type,"widget")
+                            putString(PointValueKey.from_type,"app_widget")
                         })
                     }
                     allowShowPop = false

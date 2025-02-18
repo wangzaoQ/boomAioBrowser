@@ -294,11 +294,11 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
         enumName = arguments?.getString("enumName","")?:""
         fromType = arguments?.getString(PointValueKey.from_type)?:""
         dataList.addAll(list ?: ArrayList())
-        list?.apply {
+        list?.let {
             PointEvent.posePoint(PointEventKey.download_videos_page,Bundle().apply {
                 putString(PointValueKey.from_type,fromType)
-                if(index<size){
-                    putString(PointValueKey.news_id,get(index).itackl)
+                if(index<it.size){
+                    putString(PointValueKey.news_id,it.get(index).itackl)
                 }
             })
         }

@@ -560,6 +560,13 @@ class NewsViewModel : BaseDataModel() {
                 put("sessionKey", NetParams.HOT_VIDEOS)
             }) { NetController.getNewsList(NetParams.getParamsMap(NetParams.HOT_VIDEOS))}.data
                 ?: mutableListOf()
+            if (list.isNullOrEmpty()){
+                CacheManager.saveSession(NetParams.HOT_VIDEOS,"")
+                list = NetRequest.request(HashMap<String, Any>().apply {
+                    put("sessionKey", NetParams.HOT_VIDEOS)
+                }) { NetController.getNewsList(NetParams.getParamsMap(NetParams.HOT_VIDEOS))}.data
+                    ?: mutableListOf()
+            }
             list.forEach {
                 it.dataType = TYPE_DOWNLOAD_VIDEO
                 VideoPreloadManager.serialList(1, mutableListOf<NewsData>().apply {

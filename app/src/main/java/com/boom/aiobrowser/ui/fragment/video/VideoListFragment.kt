@@ -5,9 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.NewsFragmentVideoListBinding
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -37,7 +40,10 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
 
     override fun setListener() {
         fBinding.ivBack.setOneClick {
-            rootActivity.finish()
+            var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "视频播放返回") {
+                rootActivity.finish()
+            }
+            manager.showScreenAD(AD_POINT.aobws_news_return_int)
         }
     }
 

@@ -71,6 +71,10 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
                     simplePagerTitleView.setSelectedBg(com.boom.indicator.R.drawable.shape_custom_tab_unable)
                     simplePagerTitleView.setUnSelectedBg(com.boom.indicator.R.drawable.shape_custom_tab_enable)
                     simplePagerTitleView.setOnClickListener(View.OnClickListener {
+//                        var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "homeTab切换插屏") {
+//
+//                        }
+//                        manager.showScreenAD(AD_POINT.aobws_news_return_int)
                         vp.setCurrentItem(
                             index
                         )
@@ -108,10 +112,6 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
                         PointEvent.posePoint(PointEventKey.news_tab, Bundle().apply {
                             putString(PointEventKey.news_tab,list.get(position).id)
                         })
-                        var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "homeTab切换插屏") {
-
-                        }
-                        manager.showScreenAD(AD_POINT.aobws_news_return_int)
                     }
 
                     override fun onPageScrollStateChanged(state: Int) {

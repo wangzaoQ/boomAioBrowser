@@ -144,8 +144,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     private fun clickIndex(index: Int) {
         acBinding.fragmentMain.setCurrentItem(index, false)
         updateUI(index)
-        var manager = AioADShowManager(this, ADEnum.INT_AD, tag = "底部按钮切换") {}
-        manager.showScreenAD(AD_POINT.aobws_tap_int,false)
+//        var manager = AioADShowManager(this, ADEnum.INT_AD, tag = "底部按钮切换") {}
+//        manager.showScreenAD(AD_POINT.aobws_tap_int,false)
     }
 
 
@@ -260,6 +260,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                         add(downloadHomeFragment)
                         add(meFragment)
                     }
+                    setCurrentItem(2,false)
                     offscreenPageLimit = fragments.size
                     adapter = object : FragmentPagerAdapter(
                         supportFragmentManager,

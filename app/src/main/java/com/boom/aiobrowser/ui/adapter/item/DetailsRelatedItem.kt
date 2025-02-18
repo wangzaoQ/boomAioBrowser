@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.base.BaseViewHolder
@@ -15,6 +17,7 @@ import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.NewsItemDetailsRelatedBinding
 import com.boom.aiobrowser.databinding.NewsItemTopicHeaderBinding
 import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.activity.WebDetailsActivity
@@ -66,13 +69,16 @@ internal class DetailsRelatedItem(parent: ViewGroup) : BaseViewHolder<NewsItemDe
                     recommendAdapter.setOnDebouncedItemClick { adapter, view, position ->
                         var data = recommendAdapter.items.get(position)
                         if (data.dataType == NewsData.TYPE_NEWS) {
-                            (context as BaseActivity<*>).jumpActivity<WebDetailsActivity>(
-                                Bundle().apply {
-                                    putString(
-                                        ParamsConfig.JSON_PARAMS,
-                                        toJson(data)
-                                    )
-                                })
+                            var manager = AioADShowManager(context as BaseActivity<*>, ADEnum.INT_AD, tag = "新闻详情相关推荐") {
+                                (context as BaseActivity<*>).jumpActivity<WebDetailsActivity>(
+                                    Bundle().apply {
+                                        putString(
+                                            ParamsConfig.JSON_PARAMS,
+                                            toJson(data)
+                                        )
+                                    })
+                            }
+                            manager.showScreenAD(AD_POINT.aobws_newsclick_int)
                         }
                     }
                 }

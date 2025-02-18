@@ -5,11 +5,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.NewsFragmentHomeTabBinding
 import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -32,12 +35,15 @@ class HomeTabFragment : BaseFragment<NewsFragmentHomeTabBinding>(){
             if (data.jumpType == JumpConfig.JUMP_WEB_TYPE){
                 rootActivity.jumpActivity<WebSourceActivity>()
             }else{
-                var jumpData = JumpDataManager.getCurrentJumpData(tag="homeTab点击", updateData = data)
-                jumpData.jumpType = JumpConfig.JUMP_WEB
-                APP.jumpLiveData.postValue(jumpData)
-                PointEvent.posePoint(PointEventKey.home_navigation_click,Bundle().apply {
-                    putString(PointValueKey.click_source,data.jumpTitle)
-                })
+                var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "下载页点击enum"){
+                    var jumpData = JumpDataManager.getCurrentJumpData(tag="homeTab点击", updateData = data)
+                    jumpData.jumpType = JumpConfig.JUMP_WEB
+                    APP.jumpLiveData.postValue(jumpData)
+                    PointEvent.posePoint(PointEventKey.home_navigation_click,Bundle().apply {
+                        putString(PointValueKey.click_source,data.jumpTitle)
+                    })
+                }
+                manager.showScreenAD(AD_POINT.aobws_downclick_int)
             }
         }
     }

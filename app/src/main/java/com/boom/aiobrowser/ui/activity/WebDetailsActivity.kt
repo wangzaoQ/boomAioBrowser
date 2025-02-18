@@ -123,7 +123,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
                         putString(ParamsConfig.JSON_PARAMS, toJson(data))
                     })
                 }
-                manager.showScreenAD(AD_POINT.aobws_news_other)
+                manager.showScreenAD(AD_POINT.aobws_newsclick_int)
             }
             if (data.dataType == NewsData.TYPE_NEWS) {
                 PointEvent.posePoint(PointEventKey.news_page_like,Bundle().apply {

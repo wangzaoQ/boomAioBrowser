@@ -121,15 +121,12 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
         videoAdapter.apply {
             setOnDebouncedItemClick{adapter, view, position ->
                 if (position>videoAdapter.items.size-1)return@setOnDebouncedItemClick
-                var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "新闻列表点击的广告"){
-                    VideoListActivity.startVideoListActivity(
-                        adapter.context as BaseActivity<*>,
-                        position,
-                        videoAdapter.mutableItems,
-                        ""
-                    )
-                }
-                manager.showScreenAD(AD_POINT.aobws_downclick_int)
+                VideoListActivity.startVideoListActivity(
+                    adapter.context as BaseActivity<*>,
+                    position,
+                    videoAdapter.mutableItems,
+                    ""
+                )
             }
             addOnDebouncedChildClick(R.id.llDownload) { adapter, view, position ->
                 rootActivity.addLaunch(success = {
@@ -168,14 +165,17 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
     }
 
     private fun toWeb(url:String,title:String) {
-        var data = JumpData().apply {
-            jumpUrl = url
-            jumpTitle = title
-            jumpType = JumpConfig.JUMP_WEB
+        var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "下载页点击enum") {
+            var data = JumpData().apply {
+                jumpUrl = url
+                jumpTitle = title
+                jumpType = JumpConfig.JUMP_WEB
+            }
+            var jumpData = JumpDataManager.getCurrentJumpData(tag="download tab 点击", updateData = data)
+            JumpDataManager.updateCurrentJumpData(jumpData,tag = "download tab 点击")
+            APP.jumpLiveData.postValue(jumpData)
         }
-        var jumpData = JumpDataManager.getCurrentJumpData(tag="download tab 点击", updateData = data)
-        JumpDataManager.updateCurrentJumpData(jumpData,tag = "download tab 点击")
-        APP.jumpLiveData.postValue(jumpData)
+        manager.showScreenAD(AD_POINT.aobws_downclick_int)
     }
 
     fun loadData() {

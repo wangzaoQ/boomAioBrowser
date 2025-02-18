@@ -55,6 +55,11 @@ class NewsViewModel : BaseDataModel() {
                 list.forEach {
                     it.dataType = NewsData.TYPE_DOWNLOAD_VIDEO
                 }
+                if(page == 1){
+                    list.add(0,NewsData().apply {
+                        dataType = NewsData.TYPE_DOWNLOAD_VIDEO_HEAD
+                    })
+                }
                 newsDownloadVideoLiveData.postValue(list)
             }, failBack = {})
         }

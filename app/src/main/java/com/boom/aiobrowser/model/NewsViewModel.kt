@@ -54,6 +54,9 @@ class NewsViewModel : BaseDataModel() {
                 }
                 list.forEach {
                     it.dataType = NewsData.TYPE_DOWNLOAD_VIDEO
+                    VideoPreloadManager.serialList(1, mutableListOf<NewsData>().apply {
+                        add(it)
+                    })
                 }
                 if(page == 1){
                     list.add(0,NewsData().apply {

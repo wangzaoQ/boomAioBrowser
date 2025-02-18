@@ -353,7 +353,7 @@ object AD_POINT{
     const val aobws_play_int = "aobws_play_int"
     const val aobws_tap_int = "aobws_tap_int"
     const val aobws_return_int = "aobws_return_int"
-    const val aobws_news_return_int = "aobws_news_int"
+    const val aobws_news_int = "aobws_news_int"
     const val aobws_news_other = "aobws_news_other"
     const val aobws_news_one = "aobws_news_one"
     const val aobws_download_one = "aobws_download_one"

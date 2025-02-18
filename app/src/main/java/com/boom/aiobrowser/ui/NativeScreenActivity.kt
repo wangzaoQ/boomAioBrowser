@@ -42,6 +42,10 @@ class NativeScreenActivity :BaseActivity<BrowserActivityNativeScreenBinding>(){
 
     fun showNativeAD() {
         val data = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
+        AppLogs.dLog(
+            AioADDataManager.TAG,
+            "admob 广告展示:${ADEnum.DEFAULT_AD}-id:${data?.adRequestData?.ktygzdzn} type:图片池"
+        )
         nativeAd = (data!!.adAny as NativeAd)
         nativeAd?.let {
             acBinding.nativeADView?.run {

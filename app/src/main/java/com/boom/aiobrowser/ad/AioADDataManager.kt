@@ -14,6 +14,7 @@ import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.CacheManager.adLastTime
+import com.boom.aiobrowser.tools.CacheManager.isBUser
 import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.appDataReset
 import com.google.android.gms.ads.MobileAds
@@ -142,6 +143,13 @@ object AioADDataManager {
 
 
     fun preloadAD(enum: ADEnum, tag: String = "") {
+        if (enum == ADEnum.DEFAULT_AD && isBUser.not()){
+            AppLogs.dLog(TAG, "图片类广告 只允许买量用户加载")
+            return
+        }
+        if (enum != ADEnum.DEFAULT_AD){
+            preloadAD(ADEnum.DEFAULT_AD,tag)
+        }
         AppLogs.dLog(TAG, "预加载位置:${tag} 加载类型:${enum.adName}")
         if (adFilter1()) return
         if (enum != NATIVE_AD){

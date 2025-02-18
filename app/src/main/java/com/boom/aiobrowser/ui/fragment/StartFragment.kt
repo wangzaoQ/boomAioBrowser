@@ -250,7 +250,6 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             it.adLoadStatus = AioADDataManager.LOAD_STATUS_START
         }
         AioADDataManager.preloadAD(ADEnum.LAUNCH_AD,"app启动")
-        AioADDataManager.preloadAD(ADEnum.DEFAULT_AD,"app启动")
         PointEvent.session()
         PointEvent.posePoint(PointEventKey.nn_session)
         APP.instance.getWebConfig()

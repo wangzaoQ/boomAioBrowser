@@ -254,6 +254,9 @@ object FirebaseManager {
             if (adRootBean == null){
                 adJson = Base64.decode(AD_DEFAULT_JSON, Base64.DEFAULT).decodeToString()
                 adRootBean =getBeanByGson(adJson, AioADData::class.java)
+                AppLogs.dLog(AioADDataManager.TAG,"走本地配置 adconfig:${toJson(adRootBean)}")
+            }else{
+                AppLogs.dLog(AioADDataManager.TAG,"走远程配置 adconfig:${toJson(adRootBean)}")
             }
             adRootBean?.apply {
                 AioADDataManager.initADConfig(this)

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.boom.aiobrowser.APP
@@ -190,31 +191,22 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
     override fun setShowView() {
         fBinding.apply {
             rv.apply {
-                layoutManager = GridLayoutManager(rootActivity, 2)
+                var manager = GridLayoutManager(rootActivity, 2)
+                manager.spanSizeLookup = object : SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        return if(position == 0){
+                            2
+                        }else{
+                            1
+                        }
+                    }
+
+                }
+                layoutManager = manager
                 adapter = adapterHelper.adapter
-//                addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                        super.onScrolled(recyclerView, dx, dy)
-//                        var topRowVerticalPosition = if (recyclerView == null || recyclerView.childCount === 0)
-//                                0 else recyclerView.getChildAt(0).top
-//                        AppLogs.dLog(fragmentTAG,"getChildAt:${topRowVerticalPosition}")
-//
-//
-//                        val firstItemView = rv.layoutManager?.findViewByPosition(0)
-//                        topRowVerticalPosition = firstItemView?.top ?: -1
-//                        AppLogs.dLog(fragmentTAG,"firstItemView?.top:${topRowVerticalPosition}")
-//                        topRowVerticalPosition =
-//                            (recyclerView.layoutManager as LinearLayoutManager?)!!.findFirstCompletelyVisibleItemPosition()
-//                        AppLogs.dLog(fragmentTAG,"findFirstCompletelyVisibleItemPosition:${topRowVerticalPosition}")
-//                        // 大于0表示正在向上滑动，小于等于0表示停止或向下滑动
-//                        fBinding.refreshLayout.isEnabled = topRowVerticalPosition >= 0
-//                    }
-//                })
             }
         }
         loadData()
-
-
     }
 
     override fun getBinding(

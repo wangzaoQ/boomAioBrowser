@@ -7,6 +7,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserPopDownloadVideoGuideBinding
 import com.boom.aiobrowser.firebase.FirebaseConfig
@@ -16,6 +18,7 @@ import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.other.JumpConfig
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.ui.adapter.PopGuideAdapter
 import com.zhpan.indicator.enums.IndicatorSlideMode
 import com.zhpan.indicator.enums.IndicatorStyle
@@ -94,10 +97,13 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
                 }
             }
             tvSkip.setOnClickListener {
-                PointEvent.posePoint(PointEventKey.download_tutorial_skip, Bundle().apply {
-                    putInt(PointValueKey.page,vp.currentItem)
-                })
-                dismiss()
+                var manager = AioADShowManager(context as BaseActivity<*>, ADEnum.INT_AD, tag = "下载弹窗skip"){
+                    PointEvent.posePoint(PointEventKey.download_tutorial_skip, Bundle().apply {
+                        putInt(PointValueKey.page,vp.currentItem)
+                    })
+                    dismiss()
+                }
+                manager.showScreenAD(AD_POINT.aobws_downguide_int)
             }
         }
         showPopupWindow()

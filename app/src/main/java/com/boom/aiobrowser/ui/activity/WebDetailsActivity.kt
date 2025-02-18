@@ -56,7 +56,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
                 var manager = AioADShowManager(this@WebDetailsActivity, ADEnum.INT_AD, tag = "新闻详情插屏") {
                     finish()
                 }
-                manager.showScreenAD(AD_POINT.aobws_news_return_int)
+                manager.showScreenAD(AD_POINT.aobws_return_int)
             }
             newsRv.apply {
                 layoutManager = LinearLayoutManager(
@@ -80,7 +80,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
                         ).putExtra("url", data.uweek)
                     )
                 }
-                manager.showScreenAD(AD_POINT.aobws_news_return_int)
+                manager.showScreenAD(AD_POINT.aobws_news_int)
             }
         }
         viewModel.value.newsDetailsLiveData.observe(this){

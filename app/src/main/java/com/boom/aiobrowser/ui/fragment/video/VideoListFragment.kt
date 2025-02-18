@@ -43,7 +43,7 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
             var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "视频播放返回") {
                 rootActivity.finish()
             }
-            manager.showScreenAD(AD_POINT.aobws_news_return_int)
+            manager.showScreenAD(AD_POINT.aobws_return_int)
         }
     }
 

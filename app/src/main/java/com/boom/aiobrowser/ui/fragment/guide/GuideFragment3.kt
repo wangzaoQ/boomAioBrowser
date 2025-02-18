@@ -69,7 +69,7 @@ class GuideFragment3 :BaseFragment<BrowserFragmentVideoGuide3Binding>() {
                 PointEvent.posePoint(PointEventKey.tutorial_webpage)
                 APP.videoGuideLiveData.postValue(10)
             }
-            manager.showScreenAD(AD_POINT.aobws_try_int)
+            manager.showScreenAD(AD_POINT.aobws_downguide_int)
         }
         fBinding.ivLeft.setOnClickListener {
             APP.videoGuideLiveData.postValue(11)

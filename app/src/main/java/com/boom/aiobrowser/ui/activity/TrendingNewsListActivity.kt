@@ -7,10 +7,13 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.NewsActivityTrendingListBinding
 import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointManager
@@ -44,14 +47,17 @@ class TrendingNewsListActivity :BaseActivity<NewsActivityTrendingListBinding>() 
             adapter = newsAdapter
             newsAdapter.submitList(trendNews)
             newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
-                var data = newsAdapter.items.get(position)
-                jumpActivity<WebDetailsActivity>(Bundle().apply {
-                    putString(ParamsConfig.JSON_PARAMS, toJson(data))
-                })
-                PointEvent.posePoint(PointEventKey.trend_news, Bundle().apply {
-                    putString(PointValueKey.from_type,"trend_today_page")
-                    putString(PointValueKey.news_id,data.itackl)
-                })
+                var manager = AioADShowManager(this@TrendingNewsListActivity, ADEnum.INT_AD, tag = "新闻列表点击的广告"){
+                    var data = newsAdapter.items.get(position)
+                    jumpActivity<WebDetailsActivity>(Bundle().apply {
+                        putString(ParamsConfig.JSON_PARAMS, toJson(data))
+                    })
+                    PointEvent.posePoint(PointEventKey.trend_news, Bundle().apply {
+                        putString(PointValueKey.from_type,"trend_today_page")
+                        putString(PointValueKey.news_id,data.itackl)
+                    })
+                }
+                manager.showScreenAD(AD_POINT.aobws_newsclick_int)
             }
             addItemDecoration(object : RecyclerView.ItemDecoration() {
 

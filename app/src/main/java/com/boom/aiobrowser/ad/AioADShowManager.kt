@@ -69,8 +69,8 @@ class AioADShowManager(
                     if (defaultAD.adShowType == 2 && APP.instance.lifecycleApp.stack.size>0){
                         //native
                         var currentTopActivity = (APP.instance.lifecycleApp.stack.get(APP.instance.lifecycleApp.stack.size-1) as BaseActivity<*>)
+                        adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_SUCCESS, tag = "图片池广告加载完毕")
                         currentTopActivity.startActivity(Intent(currentTopActivity,NativeScreenActivity::class.java))
-                        adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_SUCCESS, tag)
                     }else{
                         //走通用的逻辑
                         adShow?.showScreenAd(defaultAD,pointTag)

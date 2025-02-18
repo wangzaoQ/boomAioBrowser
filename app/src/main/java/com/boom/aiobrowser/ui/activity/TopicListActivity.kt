@@ -6,12 +6,15 @@ import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.TopicBean
 import com.boom.aiobrowser.databinding.NewsActivityTopicListBinding
 import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -114,12 +117,15 @@ class TopicListActivity :BaseActivity<NewsActivityTopicListBinding>() {
                 adapter = newsAdapter
                 newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
                     if (position>newsAdapter.items.size-1)return@setOnDebouncedItemClick
-                    var data = newsAdapter.items.get(position)
-                    if (data.dataType == NewsData.TYPE_NEWS) {
-                        jumpActivity<WebDetailsActivity>(Bundle().apply {
-                            putString(ParamsConfig.JSON_PARAMS, toJson(data))
-                        })
+                    var manager = AioADShowManager(this@TopicListActivity, ADEnum.INT_AD, tag = "新闻列表点击的广告") {
+                        var data = newsAdapter.items.get(position)
+                        if (data.dataType == NewsData.TYPE_NEWS) {
+                            jumpActivity<WebDetailsActivity>(Bundle().apply {
+                                putString(ParamsConfig.JSON_PARAMS, toJson(data))
+                            })
+                        }
                     }
+                    manager.showScreenAD(AD_POINT.aobws_newsclick_int)
                 }
             }
             newsSmart.autoRefresh()

@@ -261,7 +261,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                         add(meFragment)
                     }
                     offscreenPageLimit = fragments.size
-                    setCurrentItem(2,false)
                     adapter = object : FragmentPagerAdapter(
                         supportFragmentManager,
                         BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
@@ -486,6 +485,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     putString("from","download")
                 })
             }
+            acBinding.fragmentMain.setCurrentItem(2,false)
         }else if (jumpType == 2||jumpType==4){
             PointEvent.posePoint(PointEventKey.attribution_news)
             if (jumpType == 4){
@@ -493,7 +493,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     putString("from","news")
                 })
             }
-            acBinding.fragmentMain.setCurrentItem(1,true)
+            acBinding.fragmentMain.setCurrentItem(1,false)
+        }else{
+            acBinding.fragmentMain.setCurrentItem(2,false)
         }
 //        else{
 //            PointEvent.posePoint(PointEventKey.attribution_default,Bundle().apply {

@@ -549,8 +549,8 @@ class NewsViewModel : BaseDataModel() {
     fun getHotVideos(){
         loadData(loadBack = {
             var list = NetRequest.request(HashMap<String, Any>().apply {
-                put("sessionKey", "${TOPIC_TAG}hot dance")
-            }) { NetController.getNewsList(NetParams.getParamsMap("${TOPIC_TAG}hot dance")) }.data
+                put("sessionKey", NetParams.HOT_VIDEOS)
+            }) { NetController.getNewsList(NetParams.getParamsMap(NetParams.HOT_VIDEOS))}.data
                 ?: mutableListOf()
             list.forEach {
                 it.dataType = TYPE_DOWNLOAD_VIDEO

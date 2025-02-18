@@ -206,7 +206,7 @@ object WebConfig{
 
     const val HTML_LOCAL = """
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:margin-top="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -230,6 +230,13 @@ object WebConfig{
             height: auto;
             display: block;
         }
+        .label {
+            line-height: 50px;
+            color: black;
+            text-align: left;
+            margin-top: 20px;
+        }
+
     </style>
 </head>
 <body>
@@ -237,6 +244,9 @@ object WebConfig{
     <video controls autoplay muted loop >
         <source src="https://assets.mixkit.co/videos/36904/36904-720.mp4" type="video/mp4">
     </video>
+    <p class="label">1、Find video titles</p>
+    <p class="label">2、Watch the video</p>
+    <p class="label">3、Click the button to download video</p>
 </div>
 </body>
 </html>

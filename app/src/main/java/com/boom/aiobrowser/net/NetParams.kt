@@ -27,6 +27,7 @@ object NetParams {
     var NEWS_HOME_VIDEO = "NEWS_HOME_VIDEO"
     var MOVIE = "11370735975268352"
     var PUBLIC_SAFETY = "Public Safety"
+    var HOT_VIDEOS = "HOT_VIDEOS"
 
     //download
     /**
@@ -140,6 +141,9 @@ object NetParams {
             DOWNLOAD_UNLOCK_PUSH->{
                 isPush = true
                 map.put("opop","1802")
+            }
+            HOT_VIDEOS->{
+                map.put("opop","1805")
             }
             NFEnum.NF_EDITOR.menuName->{
 

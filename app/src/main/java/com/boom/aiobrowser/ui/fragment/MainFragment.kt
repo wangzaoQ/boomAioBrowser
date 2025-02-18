@@ -13,6 +13,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADDataManager
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.NewsData
@@ -22,6 +23,7 @@ import com.boom.aiobrowser.net.NetParams
 import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.other.ShortManager
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -415,15 +417,19 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 //                 helper.trailingLoadStateAdapter?.preloadSize = 1
                 adapter = adapterHelper.adapter
                 newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
-                    var data = newsAdapter.items.get(position)
-                    if (data.dataType == NewsData.TYPE_NEWS || data.dataType == NewsData.TYPE_HOME_NEWS_TRENDING || data.dataType == NewsData.TYPE_DETAILS_NEWS_SEARCH){
-                        rootActivity.jumpActivity<WebDetailsActivity>(Bundle().apply {
-                            putString(ParamsConfig.JSON_PARAMS, toJson(data))
-                        })
-                        PointEvent.posePoint(PointEventKey.home_page_feeds,Bundle().apply {
-                            putString(PointValueKey.news_id,data.itackl)
-                        })
+                    if (position>newsAdapter.items.size-1)return@setOnDebouncedItemClick
+                    var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "新闻列表点击的广告"){
+                        var data = newsAdapter.items.get(position)
+                        if (data.dataType == NewsData.TYPE_NEWS || data.dataType == NewsData.TYPE_HOME_NEWS_TRENDING || data.dataType == NewsData.TYPE_DETAILS_NEWS_SEARCH){
+                            rootActivity.jumpActivity<WebDetailsActivity>(Bundle().apply {
+                                putString(ParamsConfig.JSON_PARAMS, toJson(data))
+                            })
+                            PointEvent.posePoint(PointEventKey.home_page_feeds,Bundle().apply {
+                                putString(PointValueKey.news_id,data.itackl)
+                            })
+                        }
                     }
+                    manager.showScreenAD(AD_POINT.aobws_newsclick_int)
                 }
                 addDefault()
                 addOnScrollListener(object : RecyclerView.OnScrollListener(){

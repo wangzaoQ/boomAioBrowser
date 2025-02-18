@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.ui.fragment
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
@@ -27,6 +28,7 @@ import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.web.PManager.getVideoSegmentSize
 import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.HotVideosActivity
+import com.boom.aiobrowser.ui.activity.SearchActivity
 import com.boom.aiobrowser.ui.activity.VideoListActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.DownLoadPop
@@ -80,6 +82,12 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
 
     override fun setListener() {
         fBinding.apply {
+            rlSearch.setOneClick {
+                JumpDataManager.getCurrentJumpData(isReset = true,tag = "DownloadManageFragment 点击搜索").apply {
+                    jumpType = JumpConfig.JUMP_SEARCH
+                }
+                startActivity(Intent(rootActivity, SearchActivity::class.java))
+            }
             llVimeo.setOneClick {
                 toWeb(WebConfig.URL_Vimeo,rootActivity.getString(R.string.video_vimeo))
             }
@@ -152,16 +160,10 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
             }
         }
         fBinding.llDownload.getChildAt(0).setOneClick {
-            var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "下载管理点击教程") {
-                DownloadVideoGuidePop(rootActivity).createPop(0) {  }
-            }
-            manager.showScreenAD(AD_POINT.aobws_downguide_int)
+            DownloadVideoGuidePop(rootActivity).createPop(0) {  }
         }
         fBinding.llDownload.getChildAt(1).setOneClick {
-            var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "下载管理点击下载页") {
-                rootActivity.jumpActivity<DownloadActivity>()
-            }
-            manager.showScreenAD(AD_POINT.aobws_downguide_int)
+            rootActivity.jumpActivity<DownloadActivity>()
         }
     }
 

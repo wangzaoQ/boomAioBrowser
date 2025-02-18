@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.ui
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,8 +24,14 @@ class NativeScreenActivity :BaseActivity<BrowserActivityNativeScreenBinding>(){
 
     override fun setListener() {
         acBinding.ivClose.setOneClick {
+            val intent = Intent()
+            setResult(RESULT_OK, intent)
             finish()
         }
+    }
+
+    override fun onBackPressed() {
+        acBinding.ivClose.performClick()
     }
 
     override fun setShowView() {

@@ -1,7 +1,9 @@
 package com.boom.aiobrowser.ui.fragment
 
+import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,12 +27,14 @@ import com.boom.aiobrowser.other.UrlConfig
 import com.boom.aiobrowser.tools.CloakManager
 import com.boom.aiobrowser.tools.SubscribeManager
 import com.boom.aiobrowser.tools.UIManager
+import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.WebActivity
 import com.boom.aiobrowser.ui.pop.ConfigPop
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
@@ -59,40 +63,62 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             }
         }
     }
+    @Volatile
+    var currentTime = 0L
 
-    private fun toMain(tag: String,isFirst:Boolean = false) {
+    var job :Job?=null
+    private fun toMain(tag: String) {
         AppLogs.dLog(fragmentTAG,tag)
         if (isAdded.not())return
         fBinding.llLoadingRoot.visibility = View.VISIBLE
-        fBinding.rlStart.visibility = View.GONE
-        startPb(0, 100, 10000, update = {
-            if (isFirst && it<=30){
-                fBinding.progress.progress = it
-            }else{
-                if (AioADDataManager.adAllowShowScreen()){
-                    if (AioADDataManager.getLaunchData()== null){
+        toLoading()
+    }
+
+    private fun toLoading() {
+        var isFirst = CacheManager.isFirstStart
+        if (isFirst){
+            fBinding.rlStart.visibility = View.VISIBLE
+        }else{
+            fBinding.rlStart.visibility = View.GONE
+        }
+        job = rootActivity.addLaunch(success = {
+            while (true){
+                delay(1000)
+                currentTime+=1000
+            }
+        }, failBack = {})
+        if (currentTime>10000){
+            showEnd()
+        }else{
+            startPb(fBinding.progress.progress, 100, (10000-currentTime), update = {
+                if (isFirst && it<=30){
+                    fBinding.progress.progress = it
+                }else{
+                    if (AioADDataManager.adAllowShowScreen()){
+                        if (AioADDataManager.getLaunchData()== null){
+                            var defaultAd = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
+                            if (defaultAd!=null){
+                                showEnd()
+                            }else{
+                                fBinding.progress.progress = it
+                            }
+                        }else{
+                            showEnd()
+                        }
+                    }else{
                         var defaultAd = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
                         if (defaultAd!=null){
                             showEnd()
                         }else{
                             fBinding.progress.progress = it
                         }
-                    }else{
-                        showEnd()
-                    }
-                }else{
-                    var defaultAd = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
-                    if (defaultAd!=null){
-                        showEnd()
-                    }else{
-                        fBinding.progress.progress = it
                     }
                 }
-            }
-        }, complete = {
-            AppLogs.dLog(fragmentTAG, "10秒内没拿到ad")
-            adLoadComplete(AioADDataManager.AD_SHOW_TYPE_FAILED)
-        })
+            }, complete = {
+                AppLogs.dLog(fragmentTAG, "10秒内没拿到ad")
+                adLoadComplete(AioADDataManager.AD_SHOW_TYPE_FAILED)
+            })
+        }
     }
 
     private fun adLoadComplete(loadStatus:String) {
@@ -183,6 +209,25 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
     }
 
     override fun setShowView() {
+        fBinding.animalStart.apply {
+            setAnimation("start_data.json")
+            playAnimation()
+            addAnimatorListener(object : Animator.AnimatorListener{
+                override fun onAnimationStart(p0: Animator) {
+                    fBinding.rlRoot.setBackgroundColor(Color.BLACK)
+                }
+
+                override fun onAnimationEnd(p0: Animator) {
+                }
+
+                override fun onAnimationCancel(p0: Animator) {
+                }
+
+                override fun onAnimationRepeat(p0: Animator) {
+                }
+
+            })
+        }
         APP.instance.firstInsertHomeAD = true
         APP.instance.isAllowNFPreload = false
 //        fBinding.btnBrowser.isEnabled = fBinding.btnCheck.isChecked
@@ -197,7 +242,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
                 ConfigPop(rootActivity).createPop()
             }
             CacheManager.firstTime = System.currentTimeMillis()
-            toMain("首次",true)
+            toMain("首次")
         }else{
             toMain("非首次")
         }
@@ -224,6 +269,18 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         APP.instance.allowShowStart = false
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (isAdded&&isVisible)
+        cancelPb()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isAdded&&isVisible)
+        toLoading()
+    }
+
     override fun getBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -235,6 +292,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
     var pbAnimal: ValueAnimator? = null
 
     fun cancelPb() {
+        job.jobCancel()
         firstComplete = true
         runCatching {
             pbAnimal?.cancel()

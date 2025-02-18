@@ -6,8 +6,11 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.NewsActivityWebSourceBinding
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.WebSourceManager.getSourceDetailsList
@@ -33,12 +36,19 @@ class WebSourceActivity: BaseActivity<NewsActivityWebSourceBinding>() {
     var oldCheck = 0
     var mIndex = 0
 
+    override fun onBackPressed() {
+        acBinding.ivBack.performClick()
+    }
+
     override fun setListener() {
         acBinding.flExpand.setOneClick {
             switchUI()
         }
         acBinding.ivBack.setOneClick {
-            finish()
+            var manager = AioADShowManager(this@WebSourceActivity, ADEnum.INT_AD, tag = "WebSource"){
+                finish()
+            }
+            manager.showScreenAD(AD_POINT.aobws_return_int)
         }
         categorySmallAdapter.setOnDebouncedItemClick{adapter, view, position ->
             if (oldCheck == position || oldCheck<0)return@setOnDebouncedItemClick

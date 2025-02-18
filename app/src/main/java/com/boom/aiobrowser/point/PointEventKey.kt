@@ -352,7 +352,10 @@ object AD_POINT{
     const val aobws_download_int = "aobws_download_int"
     const val aobws_play_int = "aobws_play_int"
     const val aobws_tap_int = "aobws_tap_int"
+
     const val aobws_return_int = "aobws_return_int"
+    const val aobws_downreturn_int = "aobws_return_int"
+
     const val aobws_news_int = "aobws_news_int"
     const val aobws_news_other = "aobws_news_other"
     const val aobws_news_one = "aobws_news_one"
@@ -362,6 +365,5 @@ object AD_POINT{
     const val aobws_try_int = "aobws_try_int"
     const val aobws_newsclick_int = "aobws_newsclick_int"
     const val aobws_downclick_int = "aobws_downclick_int"
-    const val aobws_downreturn_int = "aobws_downreturn_int"
     const val aobws_downguide_int = "aobws_downguide_int"
 }

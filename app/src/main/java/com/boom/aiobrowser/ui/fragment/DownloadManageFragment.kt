@@ -108,8 +108,9 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
         viewModel.value.newsDownloadVideoLiveData.observe(this) {
             if (page == 1) {
                 videoAdapter.submitList(it)
+            }else{
+                videoAdapter.addAll(it)
             }
-            videoAdapter.addAll(it)
             videoAdapter.notifyDataSetChanged()
             adapterHelper.trailingLoadState = LoadState.NotLoading(false)
             fBinding.refreshLayout.finishRefresh()

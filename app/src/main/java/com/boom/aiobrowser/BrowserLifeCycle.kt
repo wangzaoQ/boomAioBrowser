@@ -97,7 +97,7 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
             AioADDataManager.setADDismissTime()
             cancelJob?.cancel()
             cancelJob = CoroutineScope(Dispatchers.IO).launch{
-                startTime = 0L
+                startTime = System.currentTimeMillis()
                 while (System.currentTimeMillis()-startTime<2000){
                     delay(1000)
                 }

@@ -36,8 +36,15 @@ class TrendingNewsListActivity :BaseActivity<NewsActivityTrendingListBinding>() 
 
     override fun setListener() {
         acBinding.ivBack.setOneClick {
-            finish()
+            var manager = AioADShowManager(this@TrendingNewsListActivity, ADEnum.INT_AD, tag = "TrendingNewsList"){
+                finish()
+            }
+            manager.showScreenAD(AD_POINT.aobws_return_int)
         }
+    }
+
+    override fun onBackPressed() {
+        acBinding.ivBack.performClick()
     }
 
     override fun setShowView() {

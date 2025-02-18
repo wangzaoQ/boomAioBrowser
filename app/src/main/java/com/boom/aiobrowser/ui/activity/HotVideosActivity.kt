@@ -8,11 +8,14 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.databinding.BrowserActivityHotVideosBinding
 import com.boom.aiobrowser.model.NewsViewModel
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.web.PManager.getVideoSegmentSize
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
@@ -36,13 +39,20 @@ class HotVideosActivity:BaseActivity<BrowserActivityHotVideosBinding>() {
         viewModels<NewsViewModel>()
     }
 
+    override fun onBackPressed() {
+        acBinding.ivBack.performClick()
+    }
+
     override fun getBinding(inflater: LayoutInflater): BrowserActivityHotVideosBinding {
         return BrowserActivityHotVideosBinding.inflate(layoutInflater)
     }
 
     override fun setListener() {
         acBinding.ivBack.setOneClick {
-            finish()
+            var manager = AioADShowManager(this@HotVideosActivity, ADEnum.INT_AD, tag = "hotVideos"){
+                finish()
+            }
+            manager.showScreenAD(AD_POINT.aobws_return_int)
         }
         acBinding.newsSmart.setOnLoadMoreListener {
             page++

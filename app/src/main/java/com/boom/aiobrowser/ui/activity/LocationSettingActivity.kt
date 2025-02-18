@@ -8,12 +8,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.BrowserActivityAboutBinding
 import com.boom.aiobrowser.databinding.BrowserActivityLocationSettingBinding
 import com.boom.aiobrowser.model.LocationViewModel
 import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -37,12 +40,17 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
     private val viewModel by lazy {
         viewModels<LocationViewModel>()
     }
-
+    override fun onBackPressed() {
+        acBinding.ivBack.performClick()
+    }
 
     override fun setListener() {
         acBinding.apply {
             ivBack.setOneClick {
-                finish()
+                var manager = AioADShowManager(this@LocationSettingActivity, ADEnum.INT_AD, tag = "localSetting"){
+                    finish()
+                }
+                manager.showScreenAD(AD_POINT.aobws_return_int)
             }
             ivGo.setOneClick {
                 LocationManager.requestGPSPermission(WeakReference(this@LocationSettingActivity), onSuccess = {

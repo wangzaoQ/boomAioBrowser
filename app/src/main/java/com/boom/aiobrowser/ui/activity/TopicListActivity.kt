@@ -46,7 +46,10 @@ class TopicListActivity :BaseActivity<NewsActivityTopicListBinding>() {
     override fun setListener() {
         acBinding.apply {
             ivBack.setOneClick {
-                finish()
+                var manager = AioADShowManager(this@TopicListActivity, ADEnum.INT_AD, tag = "topicList"){
+                    finish()
+                }
+                manager.showScreenAD(AD_POINT.aobws_return_int)
             }
             etSearch.setOnKeyListener { v, keyCode, event ->
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -135,5 +138,9 @@ class TopicListActivity :BaseActivity<NewsActivityTopicListBinding>() {
 
     fun loadData(){
         viewModel.value.getNewsByTopic(acBinding.etSearch.text.toString().trim(),page,isSearch)
+    }
+
+    override fun onBackPressed() {
+        acBinding.ivBack.performClick()
     }
 }

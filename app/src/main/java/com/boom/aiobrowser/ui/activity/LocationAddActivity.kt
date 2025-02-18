@@ -5,12 +5,15 @@ import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.databinding.BrowserActivityLocationAddBinding
 import com.boom.aiobrowser.model.LocationViewModel
 import com.boom.aiobrowser.net.NetController
 import com.boom.aiobrowser.net.NetRequest
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -31,12 +34,17 @@ class LocationAddActivity: BaseActivity<BrowserActivityLocationAddBinding>() {
     private val viewModel by lazy {
         viewModels<LocationViewModel>()
     }
-
+    override fun onBackPressed() {
+        acBinding.ivBack.performClick()
+    }
 
     override fun setListener() {
         acBinding.apply {
             ivBack.setOneClick {
-                finish()
+                var manager = AioADShowManager(this@LocationAddActivity, ADEnum.INT_AD, tag = "localAdd"){
+                    finish()
+                }
+                manager.showScreenAD(AD_POINT.aobws_return_int)
             }
             llRoot.setOneClick {
                 jumpActivity<LocationSettingActivity>(Bundle().apply {

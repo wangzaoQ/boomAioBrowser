@@ -65,7 +65,10 @@ class HomePageDownloadFragment : BaseFragment<BrowserHomeDownloadBinding>(){
     override fun setListener() {
         fBinding.apply {
             ivBack.setOneClick {
-                rootActivity.finish()
+                var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "下载管理插屏"){
+                    rootActivity.finish()
+                }
+                manager.showScreenAD(AD_POINT.aobws_return_int)
             }
             tvProgress.setOneClick {
                 vpRoot.currentItem = 0

@@ -3,9 +3,12 @@ package com.boom.aiobrowser.ui.activity
 import android.view.LayoutInflater
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.HistoryData
 import com.boom.aiobrowser.databinding.BrowserActivityHistoryBinding
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.TimeManager
@@ -19,7 +22,10 @@ class HistoryActivity: BaseActivity<BrowserActivityHistoryBinding>() {
 
     override fun setListener() {
         acBinding.ivBack.setOneClick {
-            finish()
+            var manager = AioADShowManager(this, ADEnum.INT_AD, tag = "历史记录"){
+                finish()
+            }
+            manager.showScreenAD(AD_POINT.aobws_return_int)
         }
         acBinding.ivDelete.setOneClick {
             CacheManager.recentSearchDataList = mutableListOf()
@@ -64,5 +70,9 @@ class HistoryActivity: BaseActivity<BrowserActivityHistoryBinding>() {
             finish()
         }
         historyAdapter.submitList(historyList)
+    }
+
+    override fun onBackPressed() {
+        acBinding.ivBack.performClick()
     }
 }

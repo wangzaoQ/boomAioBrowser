@@ -4,9 +4,12 @@ import android.content.Intent
 import android.view.LayoutInflater
 import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserActivityAboutBinding
 import com.boom.aiobrowser.other.UrlConfig
+import com.boom.aiobrowser.point.AD_POINT
 
 class AboutActivity: BaseActivity<BrowserActivityAboutBinding>()  {
     override fun getBinding(inflater: LayoutInflater): BrowserActivityAboutBinding {
@@ -15,7 +18,10 @@ class AboutActivity: BaseActivity<BrowserActivityAboutBinding>()  {
 
     override fun setListener() {
         acBinding.ivBack.setOneClick {
-            finish()
+            var manager = AioADShowManager(this, ADEnum.INT_AD, tag = "appAbout"){
+                finish()
+            }
+            manager.showScreenAD(AD_POINT.aobws_return_int)
         }
         acBinding.apply {
             tvPrivate.setOneClick {
@@ -27,6 +33,10 @@ class AboutActivity: BaseActivity<BrowserActivityAboutBinding>()  {
                     UrlConfig.SERVICE_URL).putExtra("title",getString(R.string.app_terms_of_service)))
             }
         }
+    }
+
+    override fun onBackPressed() {
+        acBinding.ivBack.performClick()
     }
 
     override fun setShowView() {

@@ -352,4 +352,27 @@
     <string name="app_remove">Rimuovi</string>
     <string name="app_follow">Segui</string>
     <string name="app_gps_fail">Acquisizione della posizione fallita</string>
+
+    <string name="app_related_news">Notizie correlate</string>
+    <string name="app_video_title">Video in evidenza</string>
+    <string name="app_topics">Argomenti</string>
+    <string name="app_topic_title">Nessuna notizia correlata trovata. Ti consigliamo informazioni di tuo interesse</string>
+    <string name="app_you_may_like">Potresti piacerti</string>
+    <string name="app_download_complete">Download completato</string>
+    <string name="app_allow_music_premission">Consenti l\'accesso ai tuoi file musicali.</string>
+    <string name="app_play_all">Riproduci tutto</string>
+    <string name="app_play_music">Riproduci musica</string>
+    <string name="app_delete_audio">Elimina audio</string>
+    <string name="app_close">Chiudi</string>
+    <string name="app_video_guide1">Visita il sito web</string>
+    <string name="app_video_guide2">Riproduci video</string>
+    <string name="app_video_guide3">Fai clic sul pulsante per scaricare il video</string>
+    <string name="video_local_title">Donna in bikini che si gode il sole in piscina</string>
+    <string name="app_dailymotion">Dailymotion</string>
+    <string name="app_hot_videos">Video popolari</string>
+    <string name="app_download_tutorial">Tutorial\nDownload</string>
+    <string name="app_download_manage">Gestore\nDownload</string>
+    <string name="app_download_video_tips">Video divertenti giornalieri</string>
+    <string name="app_download_search">Deadpool e Wolverine</string>
+    <string name="app_daily_funny_video">Video divertente giornaliero</string>
 </resources>

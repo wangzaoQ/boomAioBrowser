@@ -361,4 +361,22 @@
     <string name="app_topic_title">Nenhuma notícia relacionada encontrada Recomendar informações de seu interesse</string>
     <string name="app_you_may_like">Você pode gostar</string>
     <string name="app_download_complete">Download concluído</string>
+
+    <string name="app_download_search">Deadpool e Wolverine</string>
+
+    <string name="app_allow_music_premission">Permitir acesso aos seus arquivos de música.</string>
+    <string name="app_play_all">Reproduzir tudo</string>
+    <string name="app_play_music">Reproduzir música</string>
+    <string name="app_delete_audio">Excluir áudio</string>
+    <string name="app_close">Fechar</string>
+    <string name="app_video_guide1">Visitar site</string>
+    <string name="app_video_guide2">Reproduzir vídeos</string>
+    <string name="app_video_guide3">Clique no botão para baixar o vídeo</string>
+    <string name="video_local_title">Mulher de biquíni curtindo o sol na piscina</string>
+    <string name="app_dailymotion">Dailymotion</string>
+    <string name="app_hot_videos">Vídeos populares</string>
+    <string name="app_download_tutorial">Baixar\nTutorial</string>
+    <string name="app_download_manage">Baixar\nGerenciador</string>
+    <string name="app_download_video_tips">Vídeo engraçado do dia</string>
+    <string name="app_daily_funny_video">Vídeo engraçado do dia</string>
 </resources>

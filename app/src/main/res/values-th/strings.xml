@@ -353,4 +353,27 @@
     <string name="app_remove">ลบ</string>
     <string name="app_follow">ติดตาม</string>
     <string name="app_gps_fail">ไม่สามารถรับตำแหน่งได้</string>
+
+    <string name="app_related_news">ข่าวที่เกี่ยวข้อง</string>
+    <string name="app_video_title">วิดีโอเด่น</string>
+    <string name="app_topics">หัวข้อ</string>
+    <string name="app_topic_title">ไม่พบข่าวที่เกี่ยวข้อง แนะนำข้อมูลที่น่าสนใจสำหรับคุณ</string>
+    <string name="app_you_may_like">คุณอาจชอบ</string>
+    <string name="app_download_complete">ดาวน์โหลดเสร็จสิ้น</string>
+    <string name="app_allow_music_premission">อนุญาตการเข้าถึงไฟล์เพลงของคุณ</string>
+    <string name="app_play_all">เล่นทั้งหมด</string>
+    <string name="app_play_music">เล่นเพลง</string>
+    <string name="app_delete_audio">ลบเสียง</string>
+    <string name="app_close">ปิด</string>
+    <string name="app_video_guide1">เยี่ยมชมเว็บไซต์</string>
+    <string name="app_video_guide2">เล่นวิดีโอ</string>
+    <string name="app_video_guide3">คลิกปุ่มเพื่อดาวน์โหลดวิดีโอ</string>
+    <string name="video_local_title">ผู้หญิงใส่บิกินี่เพลิดเพลินกับแสงแดดในสระว่ายน้ำ</string>
+    <string name="app_dailymotion">Dailymotion</string>
+    <string name="app_hot_videos">วิดีโอที่ได้รับความนิยม</string>
+    <string name="app_download_tutorial">คู่มือ\nการดาวน์โหลด</string>
+    <string name="app_download_manage">การจัดการ\nดาวน์โหลด</string>
+    <string name="app_download_video_tips">วิดีโอขำๆประจำวัน</string>
+    <string name="app_download_search">Deadpool และ Wolverine</string>
+    <string name="app_daily_funny_video">วิดีโอขำๆประจำวัน</string>
 </resources>

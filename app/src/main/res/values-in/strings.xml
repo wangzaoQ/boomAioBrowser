@@ -353,4 +353,29 @@
     <string name="app_remove">Hapus</string>
     <string name="app_follow">Ikuti</string>
     <string name="app_gps_fail">Gagal mendapatkan lokasi</string>
+
+    <string name="app_download_search">Deadpool And Wolverine</string>
+
+    <string name="app_related_news">Berita Terkait</string>
+    <string name="app_video_title">Video Unggulan</string>
+    <string name="app_topics">Topik</string>
+    <string name="app_topic_title">Tidak Ada Berita Terkait Ditemukan. Rekomendasikan Informasi yang Anda Minati</string>
+    <string name="app_you_may_like">Anda Mungkin Suka</string>
+    <string name="app_download_complete">Unduhan Selesai</string>
+    <string name="app_allow_music_premission">Izinkan akses ke file musik Anda.</string>
+    <string name="app_play_all">Putar Semua</string>
+    <string name="app_play_music">Putar Musik</string>
+    <string name="app_delete_audio">Hapus Audio</string>
+    <string name="app_close">Tutup</string>
+    <string name="app_video_guide1">Kunjungi Situs Web</string>
+    <string name="app_video_guide2">Putar Video</string>
+    <string name="app_video_guide3">Klik tombol untuk mengunduh video</string>
+    <string name="video_local_title">Wanita dalam bikini menikmati sinar matahari di kolam renang</string>
+    <string name="app_dailymotion">Dailymotion</string>
+    <string name="app_hot_videos">Video Terpopuler</string>
+    <string name="app_download_tutorial">Unduh\nTutorial</string>
+    <string name="app_download_manage">Unduh\nPengelola</string>
+    <string name="app_download_video_tips">Video Lucu Harian</string>
+    <string name="app_daily_funny_video">Video Lucu Harian</string>
+
 </resources>

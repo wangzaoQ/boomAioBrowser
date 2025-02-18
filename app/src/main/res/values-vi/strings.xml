@@ -352,4 +352,27 @@
     <string name="app_remove">Xóa</string>
     <string name="app_follow">Theo dõi</string>
     <string name="app_gps_fail">Lỗi lấy vị trí</string>
+
+    <string name="app_related_news">Tin tức liên quan</string>
+    <string name="app_video_title">Video nổi bật</string>
+    <string name="app_topics">Chủ đề</string>
+    <string name="app_topic_title">Không tìm thấy tin tức liên quan. Đề xuất thông tin bạn quan tâm</string>
+    <string name="app_you_may_like">Bạn có thể thích</string>
+    <string name="app_download_complete">Tải xuống hoàn tất</string>
+    <string name="app_allow_music_premission">Cho phép truy cập vào các tệp nhạc của bạn.</string>
+    <string name="app_play_all">Phát tất cả</string>
+    <string name="app_play_music">Phát nhạc</string>
+    <string name="app_delete_audio">Xóa âm thanh</string>
+    <string name="app_close">Đóng</string>
+    <string name="app_video_guide1">Thăm website</string>
+    <string name="app_video_guide2">Phát video</string>
+    <string name="app_video_guide3">Nhấn nút để tải video</string>
+    <string name="video_local_title">Phụ nữ trong bộ bikini tận hưởng ánh nắng mặt trời trong hồ bơi</string>
+    <string name="app_dailymotion">Dailymotion</string>
+    <string name="app_hot_videos">Video hot</string>
+    <string name="app_download_tutorial">Hướng dẫn\nTải xuống</string>
+    <string name="app_download_manage">Quản lý\nTải xuống</string>
+    <string name="app_download_video_tips">Video hài hước hàng ngày</string>
+    <string name="app_download_search">Deadpool và Wolverine</string>
+    <string name="app_daily_funny_video">Video hài hước hàng ngày</string>
 </resources>

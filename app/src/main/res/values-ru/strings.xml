@@ -352,4 +352,27 @@
     <string name="app_remove">Удалить</string>
     <string name="app_follow">Следить</string>
     <string name="app_gps_fail">Не удалось получить местоположение</string>
+
+    <string name="app_related_news">Связанные новости</string>
+    <string name="app_video_title">Рекомендуемые видео</string>
+    <string name="app_topics">Темы</string>
+    <string name="app_topic_title">Не найдены связанные новости. Рекомендуем информацию, которая может вас заинтересовать</string>
+    <string name="app_you_may_like">Вам может понравиться</string>
+    <string name="app_download_complete">Загрузка завершена</string>
+    <string name="app_allow_music_premission">Разрешить доступ к вашим музыкальным файлам.</string>
+    <string name="app_play_all">Воспроизвести все</string>
+    <string name="app_play_music">Воспроизвести музыку</string>
+    <string name="app_delete_audio">Удалить аудио</string>
+    <string name="app_close">Закрыть</string>
+    <string name="app_video_guide1">Перейти на сайт</string>
+    <string name="app_video_guide2">Воспроизвести видео</string>
+    <string name="app_video_guide3">Нажмите кнопку для скачивания видео</string>
+    <string name="video_local_title">Женщина в бикини наслаждается солнцем в бассейне</string>
+    <string name="app_dailymotion">Dailymotion</string>
+    <string name="app_hot_videos">Горячие видео</string>
+    <string name="app_download_tutorial">Загрузка\nУчебник</string>
+    <string name="app_download_manage">Управление\nЗагрузками</string>
+    <string name="app_download_video_tips">Ежедневное смешное видео</string>
+    <string name="app_download_search">Deadpool и Wolverine</string>
+    <string name="app_daily_funny_video">Ежедневное смешное видео</string>
 </resources>

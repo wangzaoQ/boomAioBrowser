@@ -350,4 +350,29 @@
     <string name="app_remove">제거</string>
     <string name="app_follow">팔로우</string>
     <string name="app_gps_fail">위치 정보 획득 실패</string>
+
+    <string name="app_download_search">히든 페이스</string>
+
+    <string name="app_related_news">관련 뉴스</string>
+    <string name="app_video_title">추천 영상</string>
+    <string name="app_topics">주제</string>
+    <string name="app_topic_title">관련 뉴스를 찾을 수 없습니다. 관심 있을만한 정보를 추천드립니다</string>
+    <string name="app_you_may_like">추천</string>
+    <string name="app_download_complete">다운로드 완료</string>
+    <string name="app_allow_music_premission">음악 파일 접근을 허용하시겠습니까?</string>
+    <string name="app_play_all">모두 재생</string>
+    <string name="app_play_music">음악 재생</string>
+    <string name="app_delete_audio">오디오 삭제</string>
+    <string name="app_close">닫기</string>
+    <string name="app_video_guide1">웹사이트 방문</string>
+    <string name="app_video_guide2">동영상 재생</string>
+    <string name="app_video_guide3">버튼을 클릭하여 동영상을 다운로드</string>
+    <string name="video_local_title">비키니를 입은 여성이 수영장에서 햇볕을 즐기고 있음</string>
+    <string name="app_dailymotion">Dailymotion</string>
+    <string name="app_hot_videos">인기 동영상</string>
+    <string name="app_download_tutorial">다운로드\n튜토리얼</string>
+    <string name="app_download_manage">다운로드\n관리자</string>
+    <string name="app_download_video_tips">일일 재미있는 동영상</string>
+    <string name="app_daily_funny_video">일일 재미있는 동영상</string>
+
 </resources>

@@ -355,6 +355,8 @@
     <string name="app_remove">Remove</string>
     <string name="app_follow">Follow</string>
     <string name="app_gps_fail">Location acquisition failed</string>
+
+    <string name="app_download_search">Deadpool And Wolverine</string>
     <string name="app_related_news">Related News</string>
     <string name="app_video_title">Featured Videos</string>
     <string name="app_topics">Topics</string>
@@ -375,7 +377,6 @@
     <string name="app_download_tutorial">Download\nTutorial</string>
     <string name="app_download_manage">Download\nManager</string>
     <string name="app_download_video_tips">Daily Funny Video</string>
-    <string name="app_download_search">Deadpool And Wolverine</string>
     <string name="app_daily_funny_video">Daily Funny Video</string>
 
 

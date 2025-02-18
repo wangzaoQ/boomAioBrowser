@@ -352,4 +352,27 @@
     <string name="app_remove">Kaldır</string>
     <string name="app_follow">Takip Et</string>
     <string name="app_gps_fail">Konum alma başarısız oldu</string>
+
+    <string name="app_related_news">İlgili Haberler</string>
+    <string name="app_video_title">Öne Çıkan Videolar</string>
+    <string name="app_topics">Konu Başlıkları</string>
+    <string name="app_topic_title">İlgili Haber Bulunamadı, İlginizi Çekebilecek Bilgiler Öneriyoruz</string>
+    <string name="app_you_may_like">Beğenebileceğiniz</string>
+    <string name="app_download_complete">İndirme Tamamlandı</string>
+    <string name="app_allow_music_premission">Müzik dosyalarınıza erişime izin verin.</string>
+    <string name="app_play_all">Tümünü Oynat</string>
+    <string name="app_play_music">Müzik Çal</string>
+    <string name="app_delete_audio">Ses Dosyasını Sil</string>
+    <string name="app_close">Kapat</string>
+    <string name="app_video_guide1">Web Sitesini Ziyaret Et</string>
+    <string name="app_video_guide2">Videoları Oynat</string>
+    <string name="app_video_guide3">Videoyu indirmek için düğmeye tıklayın</string>
+    <string name="video_local_title">Bikinili Kadın, Yüzme Havuzunda Güneşin Tadını Çıkarıyor</string>
+    <string name="app_dailymotion">Dailymotion</string>
+    <string name="app_hot_videos">Sıcak Videolar</string>
+    <string name="app_download_tutorial">İndirme\nRehberi</string>
+    <string name="app_download_manage">İndirme\nYönetici</string>
+    <string name="app_download_video_tips">Günlük Komik Video</string>
+    <string name="app_download_search">Deadpool ve Wolverine</string>
+    <string name="app_daily_funny_video">Günlük Komik Video</string>
 </resources>

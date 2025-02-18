@@ -74,8 +74,14 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
                     it.finish()
                 }
                 AppLogs.dLog(APP.instance.TAG,"启动开屏")
-                if (APP.instance.allowShowStart) activity.startActivity(Intent(activity,MainActivity::class.java))
+                if (APP.instance.allowShowStart){
+                    activity.startActivity(Intent(activity,MainActivity::class.java))
+                }else{
+                    APP.instance.isHideSplash = true
+                }
             }
+        }else{
+            APP.instance.isHideSplash = true
         }
     }
 

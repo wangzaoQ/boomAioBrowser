@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.ui.fragment
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
@@ -22,6 +23,9 @@ import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.WebConfig
 import com.boom.aiobrowser.point.AD_POINT
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
@@ -84,10 +88,9 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
     override fun setListener() {
         fBinding.apply {
             rlSearch.setOneClick {
-                JumpDataManager.getCurrentJumpData(isReset = true,tag = "DownloadManageFragment 点击搜索").apply {
-                    jumpType = JumpConfig.JUMP_SEARCH
-                }
-                startActivity(Intent(rootActivity, SearchActivity::class.java))
+                rootActivity.jumpActivity<SearchActivity>(Bundle().apply {
+                    putString(PointValueKey.from_type,"download")
+                })
             }
             llVimeo.setOneClick {
                 toWeb(WebConfig.URL_Vimeo,rootActivity.getString(R.string.video_vimeo))
@@ -102,6 +105,7 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
                 toWeb(WebConfig.URL_Dailymotion,rootActivity.getString(R.string.app_dailymotion))
             }
             llHotVideos.setOneClick {
+                PointEvent.posePoint(PointEventKey.hot_videos)
                 rootActivity.jumpActivity<HotVideosActivity>()
             }
         }
@@ -127,7 +131,8 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
                     adapter.context as BaseActivity<*>,
                     position,
                     videoAdapter.mutableItems,
-                    ""
+                    "",
+                    "daily_video"
                 )
             }
             addOnDebouncedChildClick(R.id.llDownload) { adapter, view, position ->
@@ -135,7 +140,10 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
                     var list = mutableListOf<VideoUIData>()
                     CacheManager.videoDownloadSingleTempList = list
                     var newsData = videoAdapter.mutableItems.get(position)
-
+                    PointEvent.posePoint(PointEventKey.download_tab_dl,Bundle().apply {
+                        putString(PointValueKey.from_type,"daily_video")
+                        putString(PointValueKey.news_id,newsData.itackl)
+                    })
                     var uiData = VideoUIData()
                     uiData.thumbnail = newsData.iassum
                     uiData.videoResultId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}"
@@ -153,15 +161,16 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
                     list.add(uiData)
                     CacheManager.videoDownloadSingleTempList = list
                     withContext(Dispatchers.Main){
-                        DownLoadPop(rootActivity,2).createPop {  }
+                        DownLoadPop(rootActivity,2).createPop("download_tab"){  }
                     }
                 }, failBack = {})
             }
         }
         fBinding.llDownload.getChildAt(0).setOneClick {
-            DownloadVideoGuidePop(rootActivity).createPop(0) {  }
+            DownloadVideoGuidePop(rootActivity).createPop("download_tab") {  }
         }
         fBinding.llDownload.getChildAt(1).setOneClick {
+            PointEvent.posePoint(PointEventKey.download_manager)
             rootActivity.jumpActivity<DownloadActivity>()
         }
     }

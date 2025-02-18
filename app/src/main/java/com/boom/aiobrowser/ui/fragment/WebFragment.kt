@@ -312,7 +312,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 
     private fun showDownloadPop() {
         popDown = DownLoadPop(rootActivity,0)
-        popDown?.createPop() {
+        popDown?.createPop("web") {
             updateDownloadButtonStatus(true, 1)
         }
         popDown?.setOnDismissListener(object : OnDismissListener() {
@@ -500,6 +500,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
                             PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
                                 putString(PointValueKey.type, "no_have")
                                 putString(PointValueKey.url, jumpData?.jumpUrl)
+                                putString(PointValueKey.from_type,"web")
                                 putString(
                                     PointValueKey.model_type,
                                     if (CacheManager.browserStatus == 1) "private" else "normal"
@@ -525,6 +526,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
                             PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
                                 putString(PointValueKey.type, "have")
                                 putString(PointValueKey.url, jumpData?.jumpUrl)
+                                putString(PointValueKey.from_type,"web")
                                 putString(
                                     PointValueKey.model_type,
                                     if (CacheManager.browserStatus == 1) "private" else "normal"

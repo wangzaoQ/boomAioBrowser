@@ -56,9 +56,10 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
     var jumpData:JumpData?=null
 
     companion object{
-        fun newInstance(jsonData: String): SearchFragment{
+        fun newInstance(fromType:String,jsonData: String): SearchFragment{
             val args = Bundle()
             args.putString(ParamsConfig.JSON_PARAMS, jsonData)
+            args.putString(PointValueKey.from_type, fromType)
             val fragment = SearchFragment()
             fragment.arguments = args
             return fragment
@@ -315,7 +316,10 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 clickHistory(jumpData)
             }
         }
-        PointEvent.posePoint(PointEventKey.search_page)
+        PointEvent.posePoint(PointEventKey.search_page,Bundle().apply {
+            putString(PointValueKey.model_type, if (CacheManager.browserStatus == 1) "private" else "normal")
+            putString(PointValueKey.from_type,arguments?.getString(PointValueKey.from_type)?:"")
+        })
         initVp()
     }
 

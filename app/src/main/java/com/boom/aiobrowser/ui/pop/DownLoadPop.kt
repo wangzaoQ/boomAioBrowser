@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.ui.pop
 
 import android.content.Context
+import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ import com.boom.aiobrowser.other.ShortManager
 import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.clean.formatSize
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
@@ -274,7 +276,7 @@ class DownLoadPop(context: Context,var fromType:Int) : BasePopupWindow(context) 
     var isSelectedAll = false
     var tips2 :FirstDownloadTips?=null
 
-    fun createPop(callBack: () -> Unit) {
+    fun createPop(from:String,callBack: () -> Unit) {
         defaultBinding?.apply {
             root.postDelayed({
                 if (CacheManager.isFirstDownloadTips2) {
@@ -387,7 +389,9 @@ class DownLoadPop(context: Context,var fromType:Int) : BasePopupWindow(context) 
         setOutSideDismiss(true)
         setBackground(R.color.color_70_black)
         showPopupWindow()
-        PointEvent.posePoint(PointEventKey.webpage_download_pop)
+        PointEvent.posePoint(PointEventKey.webpage_download_pop, Bundle().apply {
+            putString(PointValueKey.from_type,from)
+        })
     }
 
     override fun dismiss() {

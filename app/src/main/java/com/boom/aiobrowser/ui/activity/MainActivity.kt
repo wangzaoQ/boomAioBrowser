@@ -397,7 +397,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 }
                 NFEnum.NF_SEARCH_VIDEO.menuName->{
                     if (nfTo == 1){
-                        jumpActivity<SearchActivity>()
+                        jumpActivity<SearchActivity>(Bundle().apply {
+                            putString(PointValueKey.from_type,"nf")
+                        })
                     }else if (nfTo == 4){
                         DownloadActivity.startActivity(this@MainActivity,"nf_fix")
                     }else if (nfTo == 2){
@@ -442,7 +444,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                                     videoList.add(it)
                                 }
                             }
-                            VideoListActivity.startVideoListActivity(this,0,videoList,enumName)
+                            VideoListActivity.startVideoListActivity(this,0,videoList,enumName,"nf")
                         }
                     }
                     allowShowPop = false
@@ -454,7 +456,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                             putString(ParamsConfig.JSON_PARAMS, toJson(data))
                         })
                     }else if (nfTo == 0){
-                        jumpActivity<SearchActivity>()
+                        jumpActivity<SearchActivity>(Bundle().apply {
+                            putString(PointValueKey.from_type,"widget")
+                        })
                     }
                     allowShowPop = false
                 }
@@ -551,7 +555,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 CacheManager.isFirstShowDownloadGuide = false
 //                var homeGuidePop = HomeGuidePop(this@MainActivity)
 //                homeGuidePop.createPop()
-                DownloadVideoGuidePop(this@MainActivity).createPop(0) {  }
+                DownloadVideoGuidePop(this@MainActivity).createPop("pop") {  }
             }else{
                 AppLogs.dLog(acTAG,"不允许开启引导弹窗")
                 PointEvent.posePoint(PointEventKey.home_page_first)

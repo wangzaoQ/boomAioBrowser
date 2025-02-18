@@ -177,10 +177,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             showTabPop()
         }
         newsAdapter.addOnDebouncedChildClick(R.id.rlSearch) { adapter, view, position ->
-            JumpDataManager.getCurrentJumpData(isReset = true,tag = "mainFragment 点击搜索").apply {
-                jumpType = JumpConfig.JUMP_SEARCH
-            }
-            startActivity(Intent(rootActivity,SearchActivity::class.java))
+            rootActivity.jumpActivity<SearchActivity>(Bundle().apply {
+                putString(PointValueKey.from_type,"home")
+            })
             PointEvent.posePoint(PointEventKey.home_page_search)
         }
 

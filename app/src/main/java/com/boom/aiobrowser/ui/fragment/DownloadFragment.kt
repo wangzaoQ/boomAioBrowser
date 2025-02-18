@@ -66,7 +66,7 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
                 fBinding.llEmpty.visibility = View.VISIBLE
                 fBinding.llGuide.visibility = View.VISIBLE
                 fBinding.llGuide.setOnClickListener {
-                    DownloadVideoGuidePop(rootActivity).createPop(1) {  }
+                    DownloadVideoGuidePop(rootActivity).createPop("download_page") {  }
                 }
             }else{
                 fBinding.llEmpty.visibility = View.GONE
@@ -231,7 +231,7 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
             fBinding.llEmpty.visibility = View.VISIBLE
             fBinding.llGuide.visibility = View.VISIBLE
             fBinding.llGuide.setOnClickListener {
-                DownloadVideoGuidePop(rootActivity).createPop(1) {  }
+                DownloadVideoGuidePop(rootActivity).createPop("download_page") {  }
             }
         }else{
             fBinding.llEmpty.visibility = View.GONE

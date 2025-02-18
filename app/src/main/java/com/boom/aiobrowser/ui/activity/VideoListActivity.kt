@@ -7,6 +7,9 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.databinding.NewsActivityVideoListBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.FragmentManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
@@ -29,19 +32,22 @@ class VideoListActivity : BaseActivity<NewsActivityVideoListBinding>() {
         var jsonString = intent.getStringExtra("data")?:""
         var index = intent.getIntExtra("index",0)
         enumName = intent.getStringExtra("enumName")?:""
-        manager.addFragment(supportFragmentManager, NewsVideoFragment.newInstance(index,jsonString,enumName),
+        var fromType = intent.getStringExtra(PointValueKey.from_type)
+        manager.addFragment(supportFragmentManager, NewsVideoFragment.newInstance(index,jsonString,enumName,fromType?:""),
             R.id.flRoot)
+
     }
 
     companion object{
         /**
          * enumName 有值则是从通知进入
          */
-        fun startVideoListActivity(activity: BaseActivity<*>,index:Int,list: MutableList<NewsData>?,enumName:String){
+        fun startVideoListActivity(activity: BaseActivity<*>,index:Int,list: MutableList<NewsData>?,enumName:String,fromType:String){
             activity.jumpActivity<VideoListActivity>(Bundle().apply {
                 putString("data", toJson(list))
                 putInt("index", index)
                 putString("enumName", enumName)
+                putString(PointValueKey.from_type, fromType)
             })
         }
     }

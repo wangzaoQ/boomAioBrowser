@@ -38,7 +38,7 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
     }
 
 
-    fun createPop(fromType:Int,callBack: () -> Unit){
+    fun createPop(fromType:String,callBack: () -> Unit){
         defaultBinding?.apply {
             vp.apply {
                 offscreenPageLimit = 3
@@ -109,6 +109,7 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
         showPopupWindow()
         PointEvent.posePoint(PointEventKey.download_tutorial, Bundle().apply {
             putInt(PointValueKey.open_type,if (CacheManager.isVideoFirst) 0 else 1)
+            putString(PointValueKey.from_type,fromType)
         })
         CacheManager.isVideoFirst = false
         APP.videoGuideLiveData.observe(context as BaseActivity<*>){

@@ -34,7 +34,7 @@ class HomeGuidePop(context: Context) : BasePopupWindow(context) {
             tvConfirm.setOnClickListener {
                 clickConfirm = true
                 PointEvent.posePoint(PointEventKey.guide_view)
-                DownloadVideoGuidePop(context).createPop(0) {  }
+                DownloadVideoGuidePop(context).createPop("pop") {  }
                 dismiss()
             }
             ivClose.setOnClickListener {

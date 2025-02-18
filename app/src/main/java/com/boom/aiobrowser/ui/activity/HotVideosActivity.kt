@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.ui.activity
 
 import android.graphics.Rect
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.viewModels
@@ -16,6 +17,9 @@ import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.databinding.BrowserActivityHotVideosBinding
 import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.point.AD_POINT
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.web.PManager.getVideoSegmentSize
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
@@ -68,7 +72,8 @@ class HotVideosActivity:BaseActivity<BrowserActivityHotVideosBinding>() {
                     adapter.context as BaseActivity<*>,
                     position,
                     videoAdapter.mutableItems,
-                    ""
+                    "",
+                    "hot_video"
                 )
             }
             addOnDebouncedChildClick(R.id.llDownload) { adapter, view, position ->
@@ -76,7 +81,10 @@ class HotVideosActivity:BaseActivity<BrowserActivityHotVideosBinding>() {
                     var list = mutableListOf<VideoUIData>()
                     CacheManager.videoDownloadSingleTempList = list
                     var newsData = videoAdapter.mutableItems.get(position)
-
+                    PointEvent.posePoint(PointEventKey.download_tab_dl, Bundle().apply {
+                        putString(PointValueKey.from_type,"hot_video")
+                        putString(PointValueKey.news_id,newsData.itackl)
+                    })
                     var uiData = VideoUIData()
                     uiData.thumbnail = newsData.iassum
                     uiData.videoResultId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}"
@@ -94,7 +102,7 @@ class HotVideosActivity:BaseActivity<BrowserActivityHotVideosBinding>() {
                     list.add(uiData)
                     CacheManager.videoDownloadSingleTempList = list
                     withContext(Dispatchers.Main){
-                        DownLoadPop(this@HotVideosActivity,2).createPop {  }
+                        DownLoadPop(this@HotVideosActivity,2,).createPop("hot_video") {  }
                     }
                 }, failBack = {})
             }

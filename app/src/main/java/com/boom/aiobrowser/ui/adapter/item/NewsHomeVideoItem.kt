@@ -89,7 +89,8 @@ internal class NewsHomeVideoItem(parent: ViewGroup) : BaseViewHolder<NewsItemHom
                         adapter.context as BaseActivity<*>,
                         position,
                         item.videoList ?: mutableListOf(),
-                        ""
+                        "",
+                        "home"
                     )
                 }
                 clRoot.setTag(R.id.clRoot, item.videoList)

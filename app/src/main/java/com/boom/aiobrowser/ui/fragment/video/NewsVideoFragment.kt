@@ -17,6 +17,9 @@ import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.databinding.BrowserDragLayoutBinding
 import com.boom.aiobrowser.databinding.FragmentNewsVideoBinding
 import com.boom.aiobrowser.model.NewsViewModel
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.CacheManager
@@ -117,7 +120,19 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
                                 }
                             }
                         }, failBack = {})
-
+                        PointEvent.posePoint(PointEventKey.webpage_download, Bundle().apply {
+                            putString(PointValueKey.type, "have")
+                            list?.apply {
+                                if(index<size){
+                                    putString(PointValueKey.url, get(index).itackl)
+                                }
+                            }
+                            putString(PointValueKey.from_type,fromType)
+                            putString(
+                                PointValueKey.model_type,
+                                if (CacheManager.browserStatus == 1) "private" else "normal"
+                            )
+                        })
                     }
 
                 }
@@ -183,7 +198,7 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
 
     private fun showDownloadPop() {
         popDown = DownLoadPop(rootActivity,1)
-        popDown?.createPop() {
+        popDown?.createPop("video") {
             updateDownloadButtonStatus( 1)
         }
         popDown?.setOnDismissListener(object : OnDismissListener() {
@@ -265,6 +280,8 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
 
     var page = 1
     var enumName =""
+    var fromType =""
+    var index = 0
 
     var firstLoad = true
 
@@ -273,9 +290,18 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
 
     override fun setShowView() {
         list = getListByGson(arguments?.getString("data",""),NewsData::class.java)
-        var index = arguments?.getInt("index")?:0
+        index = arguments?.getInt("index")?:0
         enumName = arguments?.getString("enumName","")?:""
+        fromType = arguments?.getString(PointValueKey.from_type)?:""
         dataList.addAll(list ?: ArrayList())
+        list?.apply {
+            PointEvent.posePoint(PointEventKey.download_videos_page,Bundle().apply {
+                putString(PointValueKey.from_type,fromType)
+                if(index<size){
+                    putString(PointValueKey.news_id,get(index).itackl)
+                }
+            })
+        }
 
         fBinding.videoVp.apply {
             setOrientation(ViewPager2.ORIENTATION_VERTICAL)
@@ -364,10 +390,11 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
     }
 
     companion object{
-        fun newInstance(index:Int,jsonString:String,enumName:String): NewsVideoFragment {
+        fun newInstance(index:Int,jsonString:String,enumName:String,fromType:String): NewsVideoFragment {
             val args = Bundle()
             args.putInt("index",index)
             args.putString("enumName",enumName)
+            args.putString(PointValueKey.from_type,fromType)
             if (jsonString.isNullOrEmpty().not()){
                 args.putString("data", jsonString)
             }

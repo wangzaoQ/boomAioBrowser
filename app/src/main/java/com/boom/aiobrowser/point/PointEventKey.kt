@@ -299,6 +299,15 @@ object PointEventKey {
     // 归因来源
     const val track_platform = "track_platform"
     const val attribution_other = "attribution_other"
+    //下载管理点击
+    const val download_manager = "download_manager"
+    //热门视频icon点击
+    const val hot_videos = "hot_videos"
+    //热门视频页展示
+    const val hot_videos_page = "hot_videos_page"
+    const val download_videos_page = "download_videos_page"
+    //资源视频download点击
+    const val download_tab_dl = "download_tab_dl"
 
 }
 

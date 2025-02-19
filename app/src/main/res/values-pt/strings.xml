@@ -379,4 +379,8 @@
     <string name="app_download_manage">Baixar\nGerenciador</string>
     <string name="app_download_video_tips">Vídeo engraçado do dia</string>
     <string name="app_daily_funny_video">Vídeo engraçado do dia</string>
+
+    <string name="app_web_guide1">1. Encontre os títulos dos vídeos</string>
+    <string name="app_web_guide2">2. Assista ao vídeo</string>
+    <string name="app_web_guide3">3. Clique no botão para baixar o vídeo</string>
 </resources>

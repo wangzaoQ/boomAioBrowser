@@ -375,4 +375,8 @@
     <string name="app_download_video_tips">Ежедневное смешное видео</string>
     <string name="app_download_search">Deadpool и Wolverine</string>
     <string name="app_daily_funny_video">Ежедневное смешное видео</string>
+
+    <string name="app_web_guide1">1. Найдите названия видео</string>
+    <string name="app_web_guide2">2. Посмотрите видео</string>
+    <string name="app_web_guide3">3. Нажмите кнопку для загрузки видео</string>
 </resources>

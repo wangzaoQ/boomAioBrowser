@@ -90,7 +90,7 @@ class HotVideosActivity:BaseActivity<BrowserActivityHotVideosBinding>() {
                     uiData.videoResultId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}"
                     var videoDownloadData = VideoDownloadData().createDefault(
                         videoId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}",
-                        fileName = getString(R.string.video_local_title),
+                        fileName = newsData.itackl?:"",
                         url = newsData.vbreas?:"",
                         imageUrl = newsData.iassum?:"",
                         paramsMap = HashMap<String,Any>(),

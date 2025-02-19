@@ -374,4 +374,8 @@
     <string name="app_download_video_tips">فيديو يومي مضحك</string>
     <string name="app_download_search">دDeadpool و Wolverine</string>
     <string name="app_daily_funny_video">فيديو يومي مضحك</string>
+
+    <string name="app_web_guide1">1. العثور على عناوين الفيديو</string>
+    <string name="app_web_guide2">2. مشاهدة الفيديو</string>
+    <string name="app_web_guide3">3. اضغط على الزر لتحميل الفيديو</string>
 </resources>

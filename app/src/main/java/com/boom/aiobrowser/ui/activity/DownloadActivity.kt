@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.VideoActivityDownloadBinding
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.FragmentManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.ui.fragment.HomePageDownloadFragment
@@ -28,6 +29,7 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
     override fun setShowView() {
         fManager.addFragment(supportFragmentManager, HomePageDownloadFragment.newInstance(intent.getStringExtra("fromType")?:"",intent.getBooleanExtra("backToDownload",false)),
             R.id.flSearch)
+        CacheManager.isFirstToDownload = false
     }
 
     companion object{

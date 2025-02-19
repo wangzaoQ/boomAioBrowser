@@ -1,6 +1,8 @@
 package com.boom.aiobrowser.other
 
 import android.os.Build
+import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.R
 
 object SearchConfig{
     const val SEARCH_ENGINE_GOOGLE = 0
@@ -204,54 +206,52 @@ object WebConfig{
     const val URL_Kwai = "https://www.kwai.com/"
 
 
-    const val HTML_LOCAL = """
-<!DOCTYPE html>
-<html lang="en" xmlns:margin-top="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>响应式视频播放示例</title>
-    <style>
-        /* 重置外边距 */
-        body {
-            margin: 0;
-            padding: 0;
-        }
-        /* 视频容器设置为自适应宽度，最大宽度800px */
-        .video-container {
-            width: 90%;
-            max-width: 800px;
-            margin: 20px auto;
-            text-align: center;
-        }
-        /* 视频宽度自适应 */
-        video {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        .label {
-            line-height: 50px;
-            color: black;
-            text-align: left;
-            margin-top: 20px;
-        }
-
-    </style>
-</head>
-<body>
-<div class="video-container">
-    <video controls autoplay muted loop >
-        <source src="https://assets.mixkit.co/videos/36904/36904-720.mp4" type="video/mp4">
-    </video>
-    <p class="label">1、Find video titles</p>
-    <p class="label">2、Watch the video</p>
-    <p class="label">3、Click the button to download video</p>
-</div>
-</body>
-</html>
-<!DOCTYPE html>
-    """
+    var HTML_LOCAL = "<!DOCTYPE html>\n" +
+            "<html lang=\"en\" xmlns:margin-top=\"http://www.w3.org/1999/xhtml\">\n" +
+            "<head>\n" +
+            "    <meta charset=\"UTF-8\">\n" +
+            "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+            "    <title></title>\n" +
+            "    <style>\n" +
+            "        /* 重置外边距 */\n" +
+            "        body {\n" +
+            "            margin: 0;\n" +
+            "            padding: 0;\n" +
+            "        }\n" +
+            "        /* 视频容器设置为自适应宽度，最大宽度800px */\n" +
+            "        .video-container {\n" +
+            "            width: 90%;\n" +
+            "            max-width: 800px;\n" +
+            "            margin: 20px auto;\n" +
+            "            text-align: center;\n" +
+            "        }\n" +
+            "        /* 视频宽度自适应 */\n" +
+            "        video {\n" +
+            "            width: 100%;\n" +
+            "            height: auto;\n" +
+            "            display: block;\n" +
+            "        }\n" +
+            "        .label {\n" +
+            "            line-height: 50px;\n" +
+            "            color: black;\n" +
+            "            text-align: left;\n" +
+            "            margin-top: 20px;\n" +
+            "        }\n" +
+            "\n" +
+            "    </style>\n" +
+            "</head>\n" +
+            "<body>\n" +
+            "<div class=\"video-container\">\n" +
+            "    <video controls autoplay muted loop >\n" +
+            "        <source src=\"https://assets.mixkit.co/videos/36904/36904-720.mp4\" type=\"video/mp4\">\n" +
+            "    </video>\n" +
+            "    <p class=\"label\">"+APP.instance.getString(R.string.app_web_guide1)+"</p>\n" +
+            "    <p class=\"label\">"+APP.instance.getString(R.string.app_web_guide2)+"</p>\n" +
+            "    <p class=\"label\">"+APP.instance.getString(R.string.app_web_guide3)+"</p>\n" +
+            "</div>\n" +
+            "</body>\n" +
+            "</html>\n" +
+            "<!DOCTYPE html>"
 }
 
 object NewsConfig{

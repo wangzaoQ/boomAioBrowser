@@ -379,4 +379,8 @@
     <string name="app_download_video_tips">Video divertido del día</string>
     <string name="app_download_search">Deadpool y Wolverine</string>
     <string name="app_daily_funny_video">Video divertido del día</string>
+
+    <string name="app_web_guide1">1、Find video titles</string>
+    <string name="app_web_guide2">2、Watch the video</string>
+    <string name="app_web_guide3">3、Click the button to download video</string>
 </resources>

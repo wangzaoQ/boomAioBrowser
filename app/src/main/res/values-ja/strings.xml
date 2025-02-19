@@ -374,4 +374,8 @@
     <string name="app_download_video_tips">日替わり面白い動画</string>
     <string name="app_download_search">デッドプールとウルヴァリン</string>
     <string name="app_daily_funny_video">日替わり面白い動画</string>
+
+    <string name="app_web_guide1">1. ビデオタイトルを探す</string>
+    <string name="app_web_guide2">2. ビデオを視聴する</string>
+    <string name="app_web_guide3">3. ボタンをクリックしてビデオをダウンロードする</string>
 </resources>

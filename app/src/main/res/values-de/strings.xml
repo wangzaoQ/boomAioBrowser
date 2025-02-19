@@ -376,4 +376,8 @@
     <string name="app_download_video_tips">Tägliche lustige Videos</string>
     <string name="app_download_search">Deadpool und Wolverine</string>
     <string name="app_daily_funny_video">Tägliches lustiges Video</string>
+
+    <string name="app_web_guide1">1. Finde Video-Titel</string>
+    <string name="app_web_guide2">2. Schau dir das Video an</string>
+    <string name="app_web_guide3">3. Klicke auf den Button, um das Video herunterzuladen</string>
 </resources>

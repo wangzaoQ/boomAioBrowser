@@ -243,6 +243,11 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
         APP.downloadButtonLiveData.observe(this) {
             addDownload()
         }
+//        APP.firstToDownloadLiveData.observe(this){
+//            if (rootActivity is MainActivity) {
+//                rootActivity.onKeyDown(KeyEvent.KEYCODE_BACK, null)
+//            }
+//        }
     }
 
 
@@ -635,6 +640,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
         APP.videoLiveData.removeObservers(this)
         APP.videoScanLiveData.removeObservers(this)
         APP.videoUpdateLiveData.removeObservers(this)
+//        APP.firstToDownloadLiveData.removeObservers(this)
         super.onDestroy()
     }
 }

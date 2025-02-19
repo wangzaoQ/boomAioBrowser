@@ -378,6 +378,9 @@
     <string name="app_download_manage">Download\nManager</string>
     <string name="app_download_video_tips">Daily Funny Video</string>
     <string name="app_daily_funny_video">Daily Funny Video</string>
+    <string name="app_web_guide1">1、Find video titles</string>
+    <string name="app_web_guide2">2、Watch the video</string>
+    <string name="app_web_guide3">3、Click the button to download video</string>
 
 
 </resources>

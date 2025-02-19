@@ -11,6 +11,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
@@ -107,7 +108,14 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             acBinding.fragmentMain.setCurrentItem(it,true)
         }
         APP.firstToDownloadLiveData.observe(this){
-            acBinding.fragmentMain.setCurrentItem(2,true)
+            var mMainNavFragment = fragments.get(0).childFragmentManager.findFragmentById(R.id.fragment_view)
+            var currentFragmentInstance = mMainNavFragment?.getChildFragmentManager()?.getPrimaryNavigationFragment();
+            if (currentFragmentInstance != null && currentFragmentInstance is WebFragment) {
+                JumpDataManager.toMain(true)
+            }
+            acBinding.root.postDelayed(500) {
+                acBinding.fragmentMain.setCurrentItem(2, true)
+            }
         }
         APP.jumpLiveData.observe(this){
             acBinding.fragmentMain.setCurrentItem(0,true)

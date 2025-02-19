@@ -377,5 +377,7 @@
     <string name="app_download_manage">Unduh\nPengelola</string>
     <string name="app_download_video_tips">Video Lucu Harian</string>
     <string name="app_daily_funny_video">Video Lucu Harian</string>
-
+    <string name="app_web_guide1">1. Temukan judul video</string>
+    <string name="app_web_guide2">2. Tonton video</string>
+    <string name="app_web_guide3">3. Klik tombol untuk mengunduh video</string>
 </resources>

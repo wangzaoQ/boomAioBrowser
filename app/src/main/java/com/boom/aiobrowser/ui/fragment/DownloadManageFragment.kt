@@ -149,7 +149,7 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
                     uiData.videoResultId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}"
                     var videoDownloadData = VideoDownloadData().createDefault(
                         videoId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}",
-                        fileName = rootActivity.getString(R.string.video_local_title),
+                        fileName = newsData.tconsi?:"",
                         url = newsData.vbreas?:"",
                         imageUrl = newsData.iassum?:"",
                         paramsMap = HashMap<String,Any>(),

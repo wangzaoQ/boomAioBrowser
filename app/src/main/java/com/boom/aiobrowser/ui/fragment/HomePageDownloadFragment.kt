@@ -2,7 +2,6 @@ package com.boom.aiobrowser.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
@@ -12,7 +11,6 @@ import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseFragment
-import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserHomeDownloadBinding
 import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
@@ -20,8 +18,6 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.BatteryUtil
 import com.boom.aiobrowser.tools.CacheManager
-import com.boom.aiobrowser.tools.download.DownloadCacheManager
-import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.FirstDownloadTips
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -122,12 +118,15 @@ class HomePageDownloadFragment : BaseFragment<BrowserHomeDownloadBinding>(){
             })
         }
         var fromType = arguments?.getString("fromType")?:""
+        backToDownload = arguments?.getBoolean("backToDownload",false)?:false
         if (fromType == "webpage_download_pop" || fromType == "webpage_download_task_pop_complete"){
             fBinding.vpRoot.currentItem = 1
         }else if (fromType == "webpage_download_task_pop"){
             BatteryUtil(WeakReference(rootActivity)).requestIgnoreBatteryOptimizations()
         }
     }
+
+    private var backToDownload = false
 
     private fun updateUI(position: Int) {
         fBinding.tvProgress.isEnabled = (position != 0)
@@ -136,6 +135,9 @@ class HomePageDownloadFragment : BaseFragment<BrowserHomeDownloadBinding>(){
 
     override fun onDestroy() {
         APP.videoNFLiveData.removeObservers(this)
+        if (backToDownload){
+            APP.firstToDownloadLiveData.postValue(2)
+        }
         super.onDestroy()
     }
 
@@ -147,9 +149,10 @@ class HomePageDownloadFragment : BaseFragment<BrowserHomeDownloadBinding>(){
     }
 
     companion object{
-        fun newInstance(fromType:String): HomePageDownloadFragment{
+        fun newInstance(fromType:String,backToDownload:Boolean): HomePageDownloadFragment{
             val args = Bundle()
             args.putString("fromType",fromType)
+            args.putBoolean("backToDownload",backToDownload)
             val fragment = HomePageDownloadFragment()
             fragment.arguments = args
             return fragment

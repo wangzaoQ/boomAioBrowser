@@ -26,13 +26,15 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
 
 
     override fun setShowView() {
-        fManager.addFragment(supportFragmentManager, HomePageDownloadFragment.newInstance(intent.getStringExtra("fromType")?:""), R.id.flSearch)
+        fManager.addFragment(supportFragmentManager, HomePageDownloadFragment.newInstance(intent.getStringExtra("fromType")?:"",intent.getBooleanExtra("backToDownload",false)),
+            R.id.flSearch)
     }
 
     companion object{
-        fun startActivity(context:BaseActivity<*>,fromType:String){
+        fun startActivity(context:BaseActivity<*>,fromType:String,backToDownload:Boolean = false){
             context.jumpActivity<DownloadActivity>(Bundle().apply {
                 putString("fromType",fromType)
+                putBoolean("backToDownload",backToDownload)
             })
         }
     }

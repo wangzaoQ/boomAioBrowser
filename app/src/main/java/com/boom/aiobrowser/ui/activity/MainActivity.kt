@@ -106,6 +106,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         APP.homeJumpLiveData.observe(this){
             acBinding.fragmentMain.setCurrentItem(it,true)
         }
+        APP.firstToDownloadLiveData.observe(this){
+            acBinding.fragmentMain.setCurrentItem(2,true)
+        }
         APP.jumpLiveData.observe(this){
             acBinding.fragmentMain.setCurrentItem(0,true)
         }
@@ -644,6 +647,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
     override fun onDestroy() {
         APP.homeJumpLiveData.removeObservers(this)
+        APP.firstToDownloadLiveData.removeObservers(this)
         APP.showRateLiveData.removeObservers(this)
         APP.jumpLiveData.removeObservers(this)
         APP.topicJumpData.removeObservers(this)

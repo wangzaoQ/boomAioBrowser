@@ -311,7 +311,11 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 
 
     private fun showDownloadPop() {
-        popDown = DownLoadPop(rootActivity,0)
+        var backToDownload = false
+        if (jumpData?.jumpUrl == rootActivity.getString(R.string.video_local_title) && CacheManager.isFirstToDownload){
+            backToDownload = true
+        }
+        popDown = DownLoadPop(rootActivity,0,backToDownload)
         popDown?.createPop("web") {
             updateDownloadButtonStatus(true, 1)
         }

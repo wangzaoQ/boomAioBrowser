@@ -27,6 +27,7 @@ object CacheManager {
 
     val mmkv = MMKV.mmkvWithID("${BuildConfig.APPLICATION_ID}kv", MMKV.MULTI_PROCESS_MODE)
     const val KV_FIRST_START = "KV_FIRST_START"
+    const val KV_FIRST_TO_DOWNLOAD = "KV_FIRST_TO_DOWNLOAD"
     const val KV_INSTALL_REFER = "KV_INSTALL_REFER"
     const val KV_ADJUST_FROM = "KV_ADJUST_FROM"
     const val KV_AF_FROM = "KV_AF_FROM"
@@ -156,6 +157,13 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_FIRST_START, value)
+        }
+    var isFirstToDownload: Boolean
+        get() {
+            return mmkv.decodeBool(KV_FIRST_TO_DOWNLOAD, true)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_TO_DOWNLOAD, value)
         }
 
     var isFirstVideoGuide: Boolean

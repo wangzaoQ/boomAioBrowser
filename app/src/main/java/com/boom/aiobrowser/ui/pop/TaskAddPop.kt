@@ -33,7 +33,7 @@ import pop.util.animation.AnimationHelper
 import pop.util.animation.TranslationConfig
 import java.lang.ref.WeakReference
 
-class TaskAddPop (context: Context) : BasePopupWindow(context){
+class TaskAddPop (context: Context,var backToDownload:Boolean = false) : BasePopupWindow(context){
 
     init {
         setContentView(R.layout.video_pop_task_add)
@@ -71,7 +71,8 @@ class TaskAddPop (context: Context) : BasePopupWindow(context){
                     PointEvent.posePoint(PointEventKey.download_task_view)
                 }
                 clickOther = false
-                DownloadActivity.startActivity(context as BaseActivity<*>,if (isComplete.not()) "webpage_download_task_pop" else "webpage_download_task_pop_complete")
+                DownloadActivity.startActivity(context as BaseActivity<*>,
+                    if (isComplete.not()) "webpage_download_task_pop" else "webpage_download_task_pop_complete",backToDownload)
 //                context.startActivity(Intent(context, DownloadActivity::class.java).apply {
 //                    putExtra("fromPage", "webpage_download_task_pop")
 //                    putExtra("jumpType", if (isComplete) 1 else 0)

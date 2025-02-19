@@ -37,7 +37,7 @@ import pop.util.animation.AnimationHelper
 import pop.util.animation.TranslationConfig
 import java.lang.ref.WeakReference
 
-class DownLoadPop(context: Context,var fromType:Int) : BasePopupWindow(context) {
+class DownLoadPop(context: Context,var fromType:Int,var backToDownload:Boolean = false) : BasePopupWindow(context) {
 
     init {
         setContentView(R.layout.video_pop_download)
@@ -291,7 +291,7 @@ class DownLoadPop(context: Context,var fromType:Int) : BasePopupWindow(context) 
                 downloadAdapter.setPopContext(this@DownLoadPop)
             }
             tvDownload.setOnClickListener {
-                DownloadActivity.startActivity(context as BaseActivity<*>,"webpage_download_pop")
+                DownloadActivity.startActivity(context as BaseActivity<*>,"webpage_download_pop",backToDownload)
                 PointEvent.posePoint(PointEventKey.webpage_download_pop_record)
             }
             tvClear.setOnClickListener {
@@ -338,7 +338,7 @@ class DownLoadPop(context: Context,var fromType:Int) : BasePopupWindow(context) 
                 PointEvent.posePoint(PointEventKey.download_click)
                 CacheManager.dayDownloadCount += 1
                 if (btnDownloadAll.text.toString() == context.getString(R.string.app_open)){
-                    DownloadActivity.startActivity(context as BaseActivity<*>,"webpage_download_pop")
+                    DownloadActivity.startActivity(context as BaseActivity<*>,"webpage_download_pop",backToDownload)
                     dismiss()
                 }else{
                     showDownloadAD {
@@ -447,12 +447,12 @@ class DownLoadPop(context: Context,var fromType:Int) : BasePopupWindow(context) 
                 ShortManager.addRate(WeakReference(context as BaseActivity<*>),realDownload,downloadVideoIdList)
             }else{
                 if (realDownload){
-                    TaskAddPop(context).createPop(downloadVideoIdList)
+                    TaskAddPop(context,backToDownload).createPop(downloadVideoIdList)
                 }
             }
         }else{
             if (realDownload){
-                TaskAddPop(context).createPop(downloadVideoIdList)
+                TaskAddPop(context,backToDownload).createPop(downloadVideoIdList)
             }
         }
         dismiss()

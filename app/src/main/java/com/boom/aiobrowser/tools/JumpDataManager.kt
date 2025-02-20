@@ -26,7 +26,7 @@ object JumpDataManager {
          AppLogs.dLog(TAG, "addTab $tag")
          var data = JumpData().apply {
             jumpType = JumpConfig.JUMP_HOME
-            jumpTitle = APP.instance.getString(R.string.app_home)
+            jumpTitle = APP.instance.getString(R.string.app_search)
             isCurrent = true
         }
         addBrowserTab(data,browserStatus,true,tag = "tabPop 增加tab")
@@ -90,7 +90,7 @@ object JumpDataManager {
         }
         var data = list.get(index)
         if (isReset){
-            data.jumpTitle = APP.instance.getString(R.string.app_home)
+            data.jumpTitle = APP.instance.getString(R.string.app_search)
             data.jumpUrl = ""
             data.jumpType = JumpConfig.JUMP_HOME
         }
@@ -167,7 +167,7 @@ object JumpDataManager {
     fun toMain(closeAll:Boolean = false){
         var data = getCurrentJumpData(tag = "toMain 方法").apply {
             jumpType = JumpConfig.JUMP_HOME
-            jumpTitle = APP.instance.getString(R.string.app_home)
+            jumpTitle = APP.instance.getString(R.string.app_search)
         }
         updateCurrentJumpData(data,tag = "toMain 方法")
         APP.jumpLiveData.postValue(data)

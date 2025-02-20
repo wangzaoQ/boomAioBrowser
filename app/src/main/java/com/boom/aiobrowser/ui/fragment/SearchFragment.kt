@@ -412,8 +412,13 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
 //        rootActivity.finish()
 //        APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(data.jumpUrl, title = data.jumpTitle,"搜索",false))
         CacheManager.saveRecentSearchData(data,fromType)
-        JumpDataManager.updateCurrentJumpData(data,tag = "searchResult")
-        APP.jumpLiveData.postValue(data)
+        if (fromType == "home" || fromType == "download"){
+            APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(data.jumpUrl, title = data.jumpTitle,"搜索",false))
+        }else{
+            JumpDataManager.updateCurrentJumpData(data,tag = "searchResult")
+            APP.jumpLiveData.postValue(data)
+        }
+//        JumpDataManager.updateCurrentJumpData(data,tag = "searchResult")
         rootActivity.finish()
     }
 

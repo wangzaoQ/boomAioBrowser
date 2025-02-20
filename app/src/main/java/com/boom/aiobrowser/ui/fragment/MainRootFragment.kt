@@ -68,7 +68,7 @@ class MainRootFragment :BaseFragment<BrowserFragmentMainRootBinding>() {
                 }
                 JumpConfig.JUMP_HOME ->{
                     it.jumpUrl=""
-                    it.jumpTitle = getString(R.string.app_home)
+                    it.jumpTitle = getString(R.string.app_search)
                     JumpDataManager.updateCurrentJumpData(it,"MainFragment onResume 更新 jumpData")
 
                     val navOptions = NavOptions.Builder()

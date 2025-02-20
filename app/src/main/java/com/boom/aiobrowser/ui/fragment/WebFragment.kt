@@ -613,6 +613,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
     override fun onResume() {
         super.onResume()
         updateDownloadButtonStatus(false, 1)
+        updateTabCount()
     }
 
     override fun getUrl(): String {

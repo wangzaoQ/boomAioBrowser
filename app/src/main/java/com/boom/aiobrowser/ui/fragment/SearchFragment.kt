@@ -56,6 +56,9 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
     var jumpData:JumpData?=null
 
     companion object{
+        /**
+         * search download home nf widget
+         */
         fun newInstance(fromType:String,jsonData: String): SearchFragment{
             val args = Bundle()
             args.putString(ParamsConfig.JSON_PARAMS, jsonData)
@@ -74,11 +77,11 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
             fBinding.searchRv.visibility = View.VISIBLE
             fBinding.searchEmptyRoot.visibility = View.GONE
             //进入就有数据
-            viewModel.searchResult(title)
+            viewModel.searchResult(title,fromType)
         }else{
             fBinding.searchRv.visibility = View.GONE
             fBinding.searchEmptyRoot.visibility = View.VISIBLE
-            var searchist = CacheManager.recentSearchDataList
+            var searchist = CacheManager.getRecentSearchDataList(fromType)
             if (searchist.isNotEmpty()){
                 fBinding.recentSearchRoot.visibility = View.VISIBLE
                 //默认展示小布局
@@ -156,7 +159,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
             recentView.setOneClick {
                 if (allowRecentDelete){
                     clickDelete(i)
-                    addSearchShrink(CacheManager.recentSearchDataList,true,false)
+                    addSearchShrink(CacheManager.getRecentSearchDataList(fromType),true,false)
                 }else{
                     var url = SearchNet.getSearchUrl(data.jumpTitle)
                     var jumpData = JumpDataManager.getCurrentJumpData(tag = "searchFragment 搜索").apply {
@@ -193,7 +196,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
             fBinding.llClearRoot.visibility = View.VISIBLE
             if (recentListType == 0){
                 allowRecentDelete = true
-                addSearchShrink(CacheManager.recentSearchDataList,true,false)
+                addSearchShrink(CacheManager.getRecentSearchDataList(fromType),true,false)
             }else if (recentListType == 1){
                 searchRecentAdapter.allowDelete = true
                 searchRecentAdapter.notifyDataSetChanged()
@@ -204,7 +207,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
             builder.setMessage(R.string.app_delete_msg)
             builder.setCancelable(true);
             builder.setNegativeButton(rootActivity.getString(R.string.app_yes)) { dialog, which ->
-                CacheManager.recentSearchDataList = mutableListOf()
+                CacheManager.saveRecentSearchDataList(fromType,mutableListOf())
                 startLoadData()
                 dialog.dismiss()
             }
@@ -220,7 +223,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
             fBinding.llClearRoot.visibility = View.GONE
             if (recentListType == 0){
                 allowRecentDelete = false
-                addSearchShrink(CacheManager.recentSearchDataList,false)
+                addSearchShrink(CacheManager.getRecentSearchDataList(fromType),false)
             }else if (recentListType == 1){
                 searchRecentAdapter.allowDelete = false
                 searchRecentAdapter.notifyDataSetChanged()
@@ -231,12 +234,12 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
                 recentListType = 1
                 fBinding.searchShrinkRoot.visibility = View.GONE
                 fBinding.searchExpendRv.visibility = View.VISIBLE
-                searchRecentAdapter.submitList(CacheManager.recentSearchDataList)
+                searchRecentAdapter.submitList(CacheManager.getRecentSearchDataList(fromType))
             }else{
                 recentListType = 0
                 fBinding.searchShrinkRoot.visibility = View.VISIBLE
                 fBinding.searchExpendRv.visibility = View.GONE
-                addSearchShrink(CacheManager.recentSearchDataList,false)
+                addSearchShrink(CacheManager.getRecentSearchDataList(fromType),false)
             }
         }
         viewModel.searchViewModel.observe(this){
@@ -255,15 +258,17 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
     }
 
     var changeJob: Job? = null
+    var fromType = ""
 
     override fun setShowView() {
         jumpData = getBeanByGson(arguments?.getString(ParamsConfig.JSON_PARAMS)?:"",JumpData::class.java)
+        fromType = arguments?.getString(PointValueKey.from_type)?:""
         fBinding.topRoot.updateTopView(1, searchRecent = {
             changeJob.jobCancel()
             if (it.isNullOrEmpty()){
                 startLoadData()
             }else{
-                viewModel.searchResult(it)
+                viewModel.searchResult(it,fromType)
             }
         }, searchResult = {
 //            viewModel.searchResult(it)
@@ -318,7 +323,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
         }
         PointEvent.posePoint(PointEventKey.search_page,Bundle().apply {
             putString(PointValueKey.model_type, if (CacheManager.browserStatus == 1) "private" else "normal")
-            putString(PointValueKey.from_type,arguments?.getString(PointValueKey.from_type)?:"")
+            putString(PointValueKey.from_type,fromType)
         })
         initVp()
     }
@@ -386,14 +391,13 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
     }
 
     private fun clickDelete(position: Int) {
-        var list = CacheManager.recentSearchDataList
+        var list = CacheManager.getRecentSearchDataList(fromType)
         list.removeAt(position)
-        CacheManager.recentSearchDataList = list
+        CacheManager.saveRecentSearchDataList(fromType,list)
         startLoadData()
     }
 
     private fun clickHistory(data: JumpData) {
-        CacheManager.saveRecentSearchData(data)
         toWebDetailsActivity(data)
         PointEvent.posePoint(PointEventKey.search_page_history, Bundle().apply {
             putString(
@@ -407,6 +411,7 @@ class SearchFragment : BaseFragment<BrowserFragmentSearchBinding>() {
 //        APP.jumpLiveData.postValue(data)
 //        rootActivity.finish()
 //        APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(data.jumpUrl, title = data.jumpTitle,"搜索",false))
+        CacheManager.saveRecentSearchData(data,fromType)
         JumpDataManager.updateCurrentJumpData(data,tag = "searchResult")
         APP.jumpLiveData.postValue(data)
         rootActivity.finish()

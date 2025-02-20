@@ -50,6 +50,7 @@ import com.boom.aiobrowser.tools.inputStream2Byte
 import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.fragment.DownloadManageFragment
+import com.boom.aiobrowser.ui.fragment.MainFragment
 import com.boom.aiobrowser.ui.fragment.MainRootFragment
 import com.boom.aiobrowser.ui.fragment.MeFragment
 import com.boom.aiobrowser.ui.fragment.NewsHomeFragment
@@ -79,6 +80,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
     val mainRootFragment by lazy {
         MainRootFragment()
+    }
+    val homeFragment by lazy {
+        MainFragment()
     }
     val newsHomeFragment by lazy {
         NewsHomeFragment()
@@ -114,11 +118,11 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 JumpDataManager.toMain(true)
             }
             acBinding.root.postDelayed(500) {
-                acBinding.fragmentMain.setCurrentItem(2, true)
+                acBinding.fragmentMain.setCurrentItem(0, true)
             }
         }
         APP.jumpLiveData.observe(this){
-            acBinding.fragmentMain.setCurrentItem(0,true)
+            acBinding.fragmentMain.setCurrentItem(1,true)
         }
         APP.showRateLiveData.observe(this){
             if (ShortManager.allowRate()){
@@ -135,9 +139,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 }
             }
             if (index>=0){
-                if (fragments.size == 3){
-                    acBinding.fragmentMain.currentItem = 1
-                    (fragments.get(1) as? NewsHomeFragment)?.apply {
+                if (fragments.size == 5){
+                    acBinding.fragmentMain.currentItem = 3
+                    (fragments.get(3) as? NewsHomeFragment)?.apply {
                         runCatching {
                             fBinding.vp.setCurrentItem(index,true)
                         }
@@ -266,12 +270,12 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             if (count == 1){
                 acBinding.fragmentMain.apply {
                     fragments.apply {
-                        add(mainRootFragment)
-                        add(newsHomeFragment)
                         add(downloadHomeFragment)
+                        add(mainRootFragment)
+                        add(homeFragment)
+                        add(newsHomeFragment)
                         add(meFragment)
                     }
-                    setCurrentItem(2,false)
                     offscreenPageLimit = fragments.size
                     adapter = object : FragmentPagerAdapter(
                         supportFragmentManager,
@@ -313,7 +317,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                                     putInt(PointValueKey.open_type,if (isFirst) 0 else 1)
                                 })
                             }
-                            if (position == 0){
+                            if (position == 1){
                                 APP.downloadButtonLiveData.postValue(0)
                             }else{
                                 EasyFloat.dismiss(tag = "webPop",true)
@@ -501,7 +505,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     putString("from","download")
                 })
             }
-            acBinding.fragmentMain.setCurrentItem(2,false)
         }else if (jumpType == 2||jumpType==4){
             PointEvent.posePoint(PointEventKey.attribution_news)
             if (jumpType == 4){
@@ -509,9 +512,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     putString("from","news")
                 })
             }
-            acBinding.fragmentMain.setCurrentItem(1,false)
-        }else{
-            acBinding.fragmentMain.setCurrentItem(2,false)
+            acBinding.fragmentMain.setCurrentItem(3,false)
         }
 //        else{
 //            PointEvent.posePoint(PointEventKey.attribution_default,Bundle().apply {
@@ -613,8 +614,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             var currentItem = acBinding.fragmentMain.currentItem
-            if (currentItem == 0 && fragments.isNotEmpty()){
-                var mMainNavFragment = fragments.get(0).childFragmentManager.findFragmentById(R.id.fragment_view)
+            if (currentItem == 1 && fragments.isNotEmpty()){
+                var mMainNavFragment = fragments.get(1).childFragmentManager.findFragmentById(R.id.fragment_view)
                 var currentFragmentInstance = mMainNavFragment?.getChildFragmentManager()?.getPrimaryNavigationFragment();
                 if (currentFragmentInstance != null && currentFragmentInstance is WebFragment) {
                     return if (currentFragmentInstance.goBack(keyCode, event)) {

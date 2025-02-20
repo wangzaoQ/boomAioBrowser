@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragmentMain"
+    app:startDestination="@id/fragmentSearch"
     >
 
 <!--    <fragment-->
@@ -26,20 +26,20 @@
 
     <fragment
         android:id="@+id/fragmentSearch"
-        android:name="com.boom.aiobrowser.ui.fragment.SearchFragment"
+        android:name="com.boom.aiobrowser.ui.fragment.SearchHomeFragment"
         android:label="SearchFragment"
-        tools:layout="@layout/browser_fragment_search">
+        tools:layout="@layout/browser_fragment_search_home">
 
     </fragment>
-    <fragment
-        android:id="@+id/fragmentMain"
-        android:name="com.boom.aiobrowser.ui.fragment.MainFragment"
-        android:label="MainFragment"
-        tools:layout="@layout/browser_fragment_main">
-        <action
-            android:id="@+id/action_fragment_main"
-            app:destination="@id/fragmentWeb" />
-    </fragment>
+<!--    <fragment-->
+<!--        android:id="@+id/fragmentMain"-->
+<!--        android:name="com.boom.aiobrowser.ui.fragment.MainFragment"-->
+<!--        android:label="MainFragment"-->
+<!--        tools:layout="@layout/browser_fragment_main">-->
+<!--        <action-->
+<!--            android:id="@+id/action_fragment_main"-->
+<!--            app:destination="@id/fragmentWeb" />-->
+<!--    </fragment>-->
 
 <!--    <fragment-->
 <!--        android:id="@+id/fragmentFile"-->

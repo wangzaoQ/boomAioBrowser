@@ -48,9 +48,15 @@ class TopTitleView : FrameLayout {
         binding.toolBarSearch.setOnClickListener {
             context.startActivity(Intent(context,SearchActivity::class.java).apply {
                 putExtra(ParamsConfig.JSON_PARAMS, toJson(data))
-                putExtra(PointValueKey.from_type,"home")
+                putExtra(PointValueKey.from_type,fromTypeString)
             })
         }
+    }
+
+    var fromTypeString:String = ""
+
+    fun setFromType(fromType:String){
+        this.fromTypeString = fromType
     }
 
     fun updateTopView(

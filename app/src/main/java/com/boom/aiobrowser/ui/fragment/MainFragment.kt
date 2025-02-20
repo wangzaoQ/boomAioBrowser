@@ -61,10 +61,11 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 
 
     override fun startLoadData() {
-
+        addDefault()
+        viewModel.value.getNewsData(newsAdapter.mutableItems,NetParams.MAIN, page = page)
+        viewModel.value.getNewsVideoList("")
     }
 
-    var absVerticalOffset = 0
 
     var firstLoad = true
 
@@ -168,7 +169,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
 //        })
         newsAdapter.addOnDebouncedChildClick(R.id.tvMoreNews) { adapter, view, position ->
             APP.instance.toNewsFrom = 1
-            APP.homeJumpLiveData.postValue(1)
+            APP.homeJumpLiveData.postValue(3)
         }
         newsAdapter.addOnDebouncedChildClick(R.id.rlMore) { adapter, view, position ->
             rootActivity.jumpActivity<TrendingNewsListActivity>()
@@ -430,7 +431,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                     }
                     manager.showScreenAD(AD_POINT.aobws_newsclick_int)
                 }
-                addDefault()
+//                addDefault()
                 addOnScrollListener(object : RecyclerView.OnScrollListener(){
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         super.onScrollStateChanged(recyclerView, newState)
@@ -509,14 +510,14 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             }
         }
         updateEngine(CacheManager.engineType)
+        fBinding.topSearch.setFromType("home")
         fBinding.topSearch.updateEngine(CacheManager.engineType)
         if (CacheManager.browserStatus == 0){
             fBinding.topSearch.binding.ivPrivate.visibility = View.GONE
         }else{
             fBinding.topSearch.binding.ivPrivate.visibility = View.VISIBLE
         }
-        viewModel.value.getNewsData(newsAdapter.mutableItems,NetParams.MAIN, page = page)
-        viewModel.value.getNewsVideoList("")
+
         fBinding.root.postDelayed({
             fBinding.topSearch.visibility = View.GONE
         },0)

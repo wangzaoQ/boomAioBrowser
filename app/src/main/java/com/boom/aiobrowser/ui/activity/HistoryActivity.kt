@@ -7,6 +7,7 @@ import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.HistoryData
+import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.databinding.BrowserActivityHistoryBinding
 import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.tools.CacheManager
@@ -28,7 +29,7 @@ class HistoryActivity: BaseActivity<BrowserActivityHistoryBinding>() {
             manager.showScreenAD(AD_POINT.aobws_return_int)
         }
         acBinding.ivDelete.setOneClick {
-            CacheManager.recentSearchDataList = mutableListOf()
+            CacheManager.historyDataList = mutableListOf()
             historyAdapter.submitList(mutableListOf())
         }
     }
@@ -46,7 +47,7 @@ class HistoryActivity: BaseActivity<BrowserActivityHistoryBinding>() {
             rv.layoutManager = LinearLayoutManager(this@HistoryActivity,LinearLayoutManager.VERTICAL,false)
             rv.adapter = historyAdapter
         }
-        var list = CacheManager.recentSearchDataList
+        var list = CacheManager.historyDataList
         var lastTime = ""
         for (i in 0 until list.size){
             var data = list.get(i)

@@ -57,7 +57,7 @@ class MainRootFragment :BaseFragment<BrowserFragmentMainRootBinding>() {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
                     },navOptions)
                     if (CacheManager.browserStatus == 0){
-                        CacheManager.saveRecentSearchData(it)
+                        CacheManager.saveHistoryData(it)
                     }
 //                    if (CacheManager.dayShowBattery){
 //                        rootActivity.addLaunch(success = {
@@ -76,7 +76,7 @@ class MainRootFragment :BaseFragment<BrowserFragmentMainRootBinding>() {
                         .setExitAnim(R.anim.out_alpha)
 //                        .setPopUpTo(R.id.fragmentFile, true) // 将目标Fragment从Back Stack中移除
                         .build()
-                    navController?.navigate(R.id.fragmentMain, Bundle().apply {
+                    navController?.navigate(R.id.fragmentSearch, Bundle().apply {
                         putString(ParamsConfig.JSON_PARAMS, toJson(it))
                     },navOptions)
                     EasyFloat.dismiss(tag = "webPop")

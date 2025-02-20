@@ -54,6 +54,50 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
+                    app:srcCompat="@drawable/selector_main_download"
+                    ></androidx.appcompat.widget.AppCompatImageView>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_download"
+                    android:textSize="10sp"
+                    android:layout_marginTop="3dp"
+                    style="@style/app_text_bold"
+                    android:textColor="@drawable/selector_tab_text"
+                    ></androidx.appcompat.widget.AppCompatTextView>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1"
+                >
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    app:srcCompat="@drawable/selector_main_download"
+                    ></androidx.appcompat.widget.AppCompatImageView>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_search"
+                    android:textSize="10sp"
+                    android:layout_marginTop="3dp"
+                    style="@style/app_text_bold"
+                    android:textColor="@drawable/selector_tab_text"
+                    ></androidx.appcompat.widget.AppCompatTextView>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1"
+                >
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     app:srcCompat="@drawable/selector_main_home"
                     ></androidx.appcompat.widget.AppCompatImageView>
                 <androidx.appcompat.widget.AppCompatTextView
@@ -89,28 +133,6 @@
                     ></androidx.appcompat.widget.AppCompatTextView>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_weight="1"
-                >
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    app:srcCompat="@drawable/selector_main_download"
-                    ></androidx.appcompat.widget.AppCompatImageView>
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/app_download"
-                    android:textSize="10sp"
-                    android:layout_marginTop="3dp"
-                    style="@style/app_text_bold"
-                    android:textColor="@drawable/selector_tab_text"
-                    ></androidx.appcompat.widget.AppCompatTextView>
-            </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

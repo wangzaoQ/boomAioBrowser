@@ -23,7 +23,7 @@ class SearchViewModel:BaseDataModel() {
     var searchViewModel = MutableLiveData<MutableList<SearchResultData>>()
 
 
-    fun searchResult(content:String){
+    fun searchResult(content:String,fromType:String){
         var url = "https://google.com/complete/search?output=toolbar&q=${content}&hl=${Locale.getDefault().language}"
         var request = Request.Builder().get().url(url).build()
         call?.cancel()
@@ -43,7 +43,7 @@ class SearchViewModel:BaseDataModel() {
                 }
                 AppLogs.dLog(TAG,"搜索出的数据:${toJson(list)}")
                 var dataList = mutableListOf<SearchResultData>()
-                var recentList = CacheManager.recentSearchDataList
+                var recentList = CacheManager.getRecentSearchDataList(fromType)
                 recentList.forEach {
                     if (it.jumpTitle.startsWith(content)){
                         dataList.add(SearchResultData().apply {

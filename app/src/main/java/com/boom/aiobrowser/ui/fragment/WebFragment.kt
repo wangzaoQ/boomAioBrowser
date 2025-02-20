@@ -428,7 +428,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
             jumpType = JumpConfig.JUMP_WEB
             JumpDataManager.updateCurrentJumpData(this, "MainFragment onResume 更新 jumpData")
             if (CacheManager.browserStatus == 0) {
-                CacheManager.saveRecentSearchData(this)
+                CacheManager.saveHistoryData(this)
             }
         }
     }
@@ -441,6 +441,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
      */
 
     override fun setShowView() {
+        fBinding.flTop.setFromType("search")
         dragBiding = BrowserDragLayoutBinding.inflate(layoutInflater, null, false)
         updateData(
             getBeanByGson(

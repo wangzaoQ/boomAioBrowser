@@ -55,7 +55,7 @@ class VideoListActivity : BaseActivity<NewsActivityVideoListBinding>() {
     override fun onDestroy() {
         GSYVideoManager.releaseAllVideos()
         if (enumName.isNullOrEmpty().not()){
-            APP.homeJumpLiveData.postValue(2)
+            APP.homeJumpLiveData.postValue(0)
         }
         EasyFloat.dismiss(tag = "download")
         super.onDestroy()

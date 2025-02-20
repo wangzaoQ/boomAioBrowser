@@ -63,11 +63,13 @@ object CacheManager {
     const val KV_WEB_FETCH_LIST = "KV_WEB_FETCH_LIST"
     const val KV_BROWSER_STATUS = "KV_BROWSER_STATUS"
     const val KV_RECENT_SEARCH_DATA = "KV_RECENT_SEARCH_DATA"
+    const val KV_RECENT_SEARCH_DATA_DOWNLOAD = "KV_RECENT_SEARCH_DATA_DOWNLOAD"
+    const val KV_RECENT_SEARCH_DATA_SEARCH = "KV_RECENT_SEARCH_DATA_SEARCH"
     const val KV_CITY_LIST = "KV_CITY_LIST"
     const val KV_LOCATION_DATA = "KV_LOCATION_DATA"
     const val KV_PHONE_ID = "KV_PHONE_ID"
     const val KV_NEWS_SAVE_TIME = "KV_NEWS_SAVE_TIME"
-    const val KV_HISTORY_DATA = "KV_HISTORY_DATA"
+    const val KV_HISTORY_DATA = "KV_HISTORY_DATA_NEW"
     const val KV_HISTORY_DATA_JUMP = "KV_HISTORY_DATA_JUMP"
     const val KV_URL_LIST = "KV_URL_LIST"
     const val KV_TOPIC_LIST = "KV_TOPIC_LIST_NEW"
@@ -592,9 +594,9 @@ object CacheManager {
         }
 
 
-    fun saveRecentSearchData(data: JumpData){
+    fun saveRecentSearchData(data: JumpData,fromType: String){
         if (data.jumpTitle.isNullOrEmpty())return
-        var list = recentSearchDataList
+        var list = getRecentSearchDataList(fromType)
         var index = -1
         for (i in 0 until list.size){
             if (list.get(i).jumpTitle == data.jumpTitle){
@@ -606,15 +608,85 @@ object CacheManager {
             list.removeAt(index)
         }
         list.add(0,data)
-        recentSearchDataList = list
+        saveRecentSearchDataList(fromType,list)
     }
 
-    var recentSearchDataList:MutableList<JumpData>
+    fun saveHistoryData(data: JumpData){
+        if (data.jumpTitle.isNullOrEmpty())return
+        var list = historyDataList
+        var index = -1
+        for (i in 0 until list.size){
+            if (list.get(i).jumpTitle == data.jumpTitle){
+                index = i
+                break
+            }
+        }
+        if (index>=0){
+            list.removeAt(index)
+        }
+        data.updateTime = System.currentTimeMillis()
+        list.add(0,data)
+        historyDataList = list
+    }
+
+    fun getRecentSearchDataList(fromType:String):MutableList<JumpData>{
+        return when (fromType) {
+            "home" -> {
+                recentSearchDataList
+            }
+            "download" -> {
+                recentSearchDataListDownload
+            }
+            else -> {
+                recentSearchDataListSearch
+            }
+        }
+    }
+
+    fun saveRecentSearchDataList(fromType:String, list:MutableList<JumpData>){
+        when (fromType) {
+            "home" -> {
+                recentSearchDataList = list
+            }
+            "download" -> {
+                recentSearchDataListDownload = list
+            }
+            else -> {
+                recentSearchDataListSearch = list
+            }
+        }
+    }
+
+    var historyDataList:MutableList<JumpData>
+        get() {
+            return getListByGson(mmkv.decodeString(KV_HISTORY_DATA),JumpData::class.java) ?: mutableListOf()
+        }
+        set(value) {
+            mmkv.encode(KV_HISTORY_DATA, toJson(value))
+        }
+
+    private var recentSearchDataList:MutableList<JumpData>
         get() {
             return getListByGson(mmkv.decodeString(KV_RECENT_SEARCH_DATA),JumpData::class.java) ?: mutableListOf()
         }
         set(value) {
             mmkv.encode(KV_RECENT_SEARCH_DATA, toJson(value))
+        }
+
+    private var recentSearchDataListDownload:MutableList<JumpData>
+        get() {
+            return getListByGson(mmkv.decodeString(KV_RECENT_SEARCH_DATA_DOWNLOAD),JumpData::class.java) ?: mutableListOf()
+        }
+        set(value) {
+            mmkv.encode(KV_RECENT_SEARCH_DATA_DOWNLOAD, toJson(value))
+        }
+
+    private var recentSearchDataListSearch:MutableList<JumpData>
+        get() {
+            return getListByGson(mmkv.decodeString(KV_RECENT_SEARCH_DATA_SEARCH),JumpData::class.java) ?: mutableListOf()
+        }
+        set(value) {
+            mmkv.encode(KV_RECENT_SEARCH_DATA_SEARCH, toJson(value))
         }
 
 //

@@ -274,7 +274,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-appset:16.0.2'
 
 //    implementation 'com.google.android.gms:play-services-wallet:19.0.0'
-//    implementation 'com.android.billingclient:billing:7.1.1'
+    implementation 'com.android.billingclient:billing:7.1.1'
 //    val billing_version = "7.0.0"
 
 //    implementation("com.android.billingclient:billing-ktx:7.1.1")

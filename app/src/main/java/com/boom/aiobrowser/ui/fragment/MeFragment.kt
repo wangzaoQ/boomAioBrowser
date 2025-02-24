@@ -38,6 +38,7 @@ import com.boom.aiobrowser.ui.pop.ClearPop
 import com.boom.aiobrowser.ui.pop.ConfigPop
 import com.boom.aiobrowser.ui.pop.DefaultPop
 import com.boom.aiobrowser.ui.pop.LoadingPop
+import com.boom.aiobrowser.ui.pop.SubPop
 import com.boom.aiobrowser.ui.pop.TabPop
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -159,6 +160,13 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
                 }
                 PointEvent.posePoint(PointEventKey.profile_download)
             }
+            llSub.setOneClick {
+                if (CacheManager.isSubscribeMember.not()){
+                    SubPop(rootActivity).createPop()
+                }else{
+                    ToastUtils.showLong("当前已有订阅")
+                }
+            }
 
 //            llvip1.setOneClick {
 //                if (CacheManager.isSubscribeMember.not()){
@@ -230,10 +238,8 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
             }
             if (isDefault) {
                 llBrowser.visibility = View.GONE
-                viewLine.visibility = View.GONE
             } else {
                 llBrowser.visibility = View.VISIBLE
-                viewLine.visibility = View.VISIBLE
                 switchBrowser.setChecked(isDefault)
                 switchBrowser.isClickable = false
                 llBrowser.setOnClickListener {

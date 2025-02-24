@@ -30,7 +30,9 @@
     <color name="color_70_black">#B3000000</color>
     <color name="color_blue_0066FF">#0066FF</color>
     <color name="color_blue_4442E7">#4442E7</color>
+    <color name="color_blue_2926D9">#2926D9</color>
     <color name="color_blue_nf">#5755D9</color>
     <color name="color_black_1c274c">#FF1C274C</color>
     <color name="color_black_F7F7F9">#F7F7F9</color>
+    <color name="color_black_3C3B72">#3C3B72</color>
 </resources>

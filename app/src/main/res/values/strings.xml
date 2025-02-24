@@ -381,6 +381,15 @@
     <string name="app_web_guide1">1、Find video titles</string>
     <string name="app_web_guide2">2、Watch the video</string>
     <string name="app_web_guide3">3、Click the button to download video</string>
+    <string name="app_sub_pop_text1">Ad-free mode, browse information easily</string>
+    <string name="app_sub_pop_text2">️High-speed download, enjoy faster download speed</string>
+    <string name="app_weekly">Weekly</string>
+    <string name="app_monthly">Monthly</string>
+    <string name="app_quarterly">Quarterly</string>
+    <string name="app_subscribe_now">Subscribe Now</string>
+    <string name="app_sub_tips">This subscription gives you ad-free browsing.  You can cancel your subscription in Google Play.</string>
+    <string name="app_no_ads">No Ads</string>
+    <string name="app_off">off</string>
 
 
 </resources>

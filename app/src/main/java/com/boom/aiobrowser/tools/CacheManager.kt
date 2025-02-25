@@ -43,6 +43,7 @@ object CacheManager {
     const val KV_DAY_SHOW_ADD_SHORT = "KV_DAY_SHOW_ADD_SHORT2"
     const val KV_DAY_SHOW_BATTERY = "KV_DAY_SHOW_BATTERY"
     const val KV_DAY_SHOW_ADD_WIDGET = "KV_DAY_SHOW_ADD_SHORT"
+    const val KV_DAY_SHOW_SUB_TEMP = "KV_DAY_SHOW_SUB_TEMP"
     const val KV_FIRST_VIDEO = "KV_FIRST_VIDEO"
     const val KV_FIRST_DISCLAIMER = "KV_FIRST_DISCLAIMER"
     const val KV_RATE5 = "KV_RATE5"
@@ -254,6 +255,13 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_DAY_SHOW_ADD_WIDGET, value)
+        }
+    var dayShowSubTemp: Boolean
+        get() {
+            return mmkv.decodeBool(KV_DAY_SHOW_SUB_TEMP, true)
+        }
+        set(value) {
+            mmkv.encode(KV_DAY_SHOW_SUB_TEMP, value)
         }
 
     var dayShowAddShort: Boolean

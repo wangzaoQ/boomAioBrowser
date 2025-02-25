@@ -20,7 +20,10 @@ import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.ui.NativeScreenActivity
+import com.boom.aiobrowser.ui.pop.SubInfoPop
+import com.boom.aiobrowser.ui.pop.SubTempPop
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.nativead.MediaView
 import com.google.android.gms.ads.nativead.NativeAd
@@ -60,25 +63,23 @@ class AioADShowManager(
             })
         }
         if (AioADDataManager.adAllowShowScreen() && adResultData!=null){
-            adShow?.showScreenAd(adResultData!!,pointTag)
-            AioADDataManager.adCache.remove(adEnum)
+            if (CacheManager.showEveryDay == 2 && CacheManager.dayShowSubTemp){
+                SubTempPop(activity,showADBack = {
+                    realShowScreenAD(adResultData,pointTag)
+                }).createPop()
+            }else{
+                realShowScreenAD(adResultData,pointTag)
+            }
         }else{
             if (allowShowDefaultAD){
                 var defaultAD = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
                 if (defaultAD!=null) {
-                    if (defaultAD.adShowType == 2){
-                        //native
-                        if (APP.instance.lifecycleApp.stack.size>0 && APP.instance.lifecycleApp.stack.get(APP.instance.lifecycleApp.stack.size-1) is BaseActivity<*>){
-                            var currentTopActivity = (APP.instance.lifecycleApp.stack.get(APP.instance.lifecycleApp.stack.size-1) as BaseActivity<*>)
-                            adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_SUCCESS, tag = "图片池广告加载完毕")
-                            currentTopActivity.startActivity(Intent(currentTopActivity,NativeScreenActivity::class.java))
-                        }else{
-                            adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "没有有效activity")
-                        }
+                    if (CacheManager.showEveryDay == 2 && CacheManager.dayShowSubTemp){
+                        SubTempPop(activity,showADBack = {
+                            realShowScreenAD2(defaultAD,pointTag)
+                        }).createPop()
                     }else{
-                        //走通用的逻辑
-                        adShow?.showScreenAd(defaultAD,pointTag)
-                        AioADDataManager.adCache.remove(ADEnum.DEFAULT_AD)
+                        realShowScreenAD2(defaultAD,pointTag)
                     }
                 } else {
                     adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "无缓存 或不在冷却范围内 ")
@@ -86,6 +87,29 @@ class AioADShowManager(
             }else{
                 adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "无缓存 或不在冷却范围内 ")
             }
+        }
+
+    }
+
+    private fun realShowScreenAD(adResultData:ADResultData,pointTag: String) {
+        adShow?.showScreenAd(adResultData!!,pointTag)
+        AioADDataManager.adCache.remove(adEnum)
+    }
+
+    private fun realShowScreenAD2(adResultData:ADResultData,pointTag: String) {
+        if (adResultData.adShowType == 2){
+            //native
+            if (APP.instance.lifecycleApp.stack.size>0 && APP.instance.lifecycleApp.stack.get(APP.instance.lifecycleApp.stack.size-1) is BaseActivity<*>){
+                var currentTopActivity = (APP.instance.lifecycleApp.stack.get(APP.instance.lifecycleApp.stack.size-1) as BaseActivity<*>)
+                adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_SUCCESS, tag = "图片池广告加载完毕")
+                currentTopActivity.startActivity(Intent(currentTopActivity,NativeScreenActivity::class.java))
+            }else{
+                adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "没有有效activity")
+            }
+        }else{
+            //走通用的逻辑
+            adShow?.showScreenAd(adResultData,pointTag)
+            AioADDataManager.adCache.remove(ADEnum.DEFAULT_AD)
         }
     }
 

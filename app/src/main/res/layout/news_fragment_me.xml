@@ -141,7 +141,7 @@
                 android:layout_marginHorizontal="13dp"
                 android:layout_marginBottom="19dp"
                 android:layout_marginTop="13dp"
-                android:background="@drawable/shape_more_text_bg"
+                android:background="@drawable/shape_more_sub_bg"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingHorizontal="13dp">
@@ -152,6 +152,7 @@
                     app:srcCompat="@mipmap/ic_no_ads"></androidx.appcompat.widget.AppCompatImageView>
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvAD"
                     style="@style/app_text_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

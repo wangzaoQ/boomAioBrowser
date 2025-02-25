@@ -5,6 +5,7 @@ import android.view.View
 import android.view.animation.Animation
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.work.ListenableWorker.Result.Retry
 import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
@@ -13,6 +14,7 @@ import com.boom.aiobrowser.databinding.BrowserPopDefaultBinding
 import com.boom.aiobrowser.databinding.BrowserPopSubBinding
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.SubscribeManager
+import kotlinx.coroutines.Dispatchers
 import pop.basepopup.BasePopupWindow
 import pop.util.animation.AnimationHelper
 import pop.util.animation.TranslationConfig
@@ -35,40 +37,76 @@ class SubPop(context: Context) : BasePopupWindow(context) {
     fun createPop() {
         defaultBinding?.apply {
             btnConfirm.setOnClickListener {
+                var subManager = SubscribeManager(successBack = {
+                    (context as BaseActivity<*>).addLaunch(success = {
+                        SubInfoPop(context).createPop()
+                        dismiss()
+                    }, failBack = {}, Dispatchers.Main)
+                }, failBack = {
+                    (context as BaseActivity<*>).addLaunch(success = {
+                        if (it == "0"){
+                            SubFailPop(context).createPop {
+                                btnConfirm.performClick()
+                            }
+                            dismiss()
+                        }else{
+                            ToastUtils.showShort(context.getString(R.string.app_sub_error))
+                        }
+                    }, failBack = {}, Dispatchers.Main)
+                })
                 when (checkPosition) {
                     0 -> {
                         if (CacheManager.isSubscribeMember.not()) {
-                            SubscribeManager.subscribeShop(
+                            subManager.subscribeShop(
                                 WeakReference(context as BaseActivity<*>),
                                 "vip_weekly"
                             )
                         } else {
-                            ToastUtils.showLong("当前已有订阅")
+                            ToastUtils.showShort(context.getString(R.string.app_current_sub))
                         }
                     }
 
                     1 -> {
                         if (CacheManager.isSubscribeMember.not()) {
-                            SubscribeManager.subscribeShop(
+                            subManager.subscribeShop(
                                 WeakReference(context as BaseActivity<*>),
                                 "vip_monthly"
                             )
                         } else {
-                            ToastUtils.showLong("当前已有订阅")
+                            ToastUtils.showShort(context.getString(R.string.app_current_sub))
                         }
                     }
                     2 -> {
                         if (CacheManager.isSubscribeMember.not()) {
-                            SubscribeManager.subscribeShop(
+                            subManager.subscribeShop(
                                 WeakReference(context as BaseActivity<*>),
                                 "vip_quarterly"
                             )
                         } else {
-                            ToastUtils.showLong("当前已有订阅")
+                            ToastUtils.showShort(context.getString(R.string.app_current_sub))
                         }
                     }
                     else -> {}
                 }
+            }
+            tvRestore.setOnClickListener {
+                var subManager = SubscribeManager(successBack = {
+                    (context as BaseActivity<*>).addLaunch(success = {
+                        SubInfoPop(context).createPop()
+                        dismiss()
+                    }, failBack = {}, Dispatchers.Main)
+                }, failBack = {
+                    (context as BaseActivity<*>).addLaunch(success = {
+                        if (it == "-1"){
+                            ToastUtils.showShort(APP.instance.getString(R.string.app_restore_error))
+                        }else if (it == "2"){
+                            ToastUtils.showShort(context.getString(R.string.app_sub_error))
+                        }
+                    }, failBack = {
+                    }, Dispatchers.Main)
+
+                })
+                subManager.queryShop()
             }
             ivClose.setOnClickListener {
                 dismiss()

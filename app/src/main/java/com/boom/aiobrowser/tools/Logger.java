@@ -15,7 +15,7 @@ public class Logger {
     public static void writeLog(Context context, String message) {
         // 获取应用私有目录的日志文件路径
 //        File logFile = new File(context.getExternalFilesDir(null), "app_log.txt");
-        File logFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "app_pay_log.txt");
+        File logFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "app_pay_log_temp.txt");
 
         try {
             // 如果文件不存在则创建它

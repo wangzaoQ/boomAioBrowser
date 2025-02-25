@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="bottom"
+    android:background="@drawable/shape_sub_pop_info_bg"
+    >
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivClose"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:srcCompat="@mipmap/ic_close_nf"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"
+        ></androidx.appcompat.widget.AppCompatImageView>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_gravity="center_horizontal"
+            app:srcCompat="@mipmap/ic_member"
+            ></androidx.appcompat.widget.AppCompatImageView>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTimeInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Valid until January 1, 2025"
+            android:textSize="15sp"
+            android:layout_marginTop="8dp"
+            style="@style/app_text_bold"
+            android:textColor="@color/black"
+            ></androidx.appcompat.widget.AppCompatTextView>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llSubInfo"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:layout_marginHorizontal="13dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/shape_more_text_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="13dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/app_text_bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/app_query_status"
+                android:textColor="@color/black"
+                android:textSize="15sp"></androidx.appcompat.widget.AppCompatTextView>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                app:srcCompat="@mipmap/ic_guide_enter"></androidx.appcompat.widget.AppCompatImageView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llUnSub"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:layout_marginHorizontal="13dp"
+            android:layout_marginBottom="74dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/shape_more_text_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="13dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/app_text_bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/app_unsub"
+                android:textColor="@color/black"
+                android:textSize="15sp"></androidx.appcompat.widget.AppCompatTextView>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                app:srcCompat="@mipmap/ic_guide_enter"></androidx.appcompat.widget.AppCompatImageView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -194,6 +194,7 @@ fun appDataReset(){
         AppLogs.dLog(APP.instance.TAG,"每日数据重置")
         CacheManager.clickEveryDay = 0
         CacheManager.showEveryDay = 0
+        CacheManager.dayShowSubTemp = true
         CacheManager.saveDay = tmpDate
         CacheManager.adLastTime = 0
         CacheManager.dayShowAddWidget = true

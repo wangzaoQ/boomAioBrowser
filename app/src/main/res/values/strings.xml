@@ -390,6 +390,21 @@
     <string name="app_sub_tips">This subscription gives you ad-free browsing.  You can cancel your subscription in Google Play.</string>
     <string name="app_no_ads">No Ads</string>
     <string name="app_off">off</string>
+    <string name="app_sub_info_manage">Subscription Management</string>
+    <string name="app_query_status">Query Status</string>
+    <string name="app_unsub">Unsubscribe</string>
+    <string name="app_sub_failed">Subscribe failed</string>
+    <string name="app_sub_failed_tips">Oops！subscribe tale took a turn！</string>
+    <string name="app_retry">Retry</string>
+    <string name="app_restore_sub">Restore Subscription</string>
+    <string name="app_open_error">Unable to open</string>
+    <string name="app_restore_error">restore failed</string>
+    <string name="app_ad_free_reading">AD-free reading</string>
+    <string name="app_ad_free_reading_tips">Enjoy a distraction-free experience</string>
+    <string name="app_buy_now">Buy Now</string>
+    <string name="app_current_sub">Currently subscribed</string>
+    <string name="app_vip_user">VIP User</string>
+    <string name="app_sub_error">Server error</string>
 
 
 </resources>

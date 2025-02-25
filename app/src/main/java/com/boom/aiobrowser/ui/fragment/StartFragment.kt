@@ -31,6 +31,8 @@ import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.WebActivity
 import com.boom.aiobrowser.ui.pop.ConfigPop
+import com.boom.aiobrowser.ui.pop.SubFailPop
+import com.boom.aiobrowser.ui.pop.SubInfoPop
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
 import kotlinx.coroutines.Dispatchers
@@ -255,7 +257,16 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             NFShow.showForegroundNF()
         }, onFail = {})
         CloakManager().getCloak()
-//        SubscribeManager.queryShop{}
+        if (CacheManager.isSubscribeMember){
+            var subManager = SubscribeManager(successBack = {
+
+            }, failBack = {
+
+            })
+            subManager.queryShop()
+        }
+
+//
     }
 
     var dataIntent :Intent?=null
@@ -268,14 +279,16 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
 
     override fun onPause() {
         super.onPause()
-        if (isAdded&&isVisible)
-        cancelPb()
+        if (isAdded&&isVisible){
+            cancelPb()
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        if (isAdded&&isVisible)
-        toLoading()
+        if (isAdded&&isVisible){
+            toLoading()
+        }
     }
 
     override fun getBinding(

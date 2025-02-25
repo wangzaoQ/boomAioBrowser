@@ -66,7 +66,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
     override fun loadWebOnPageStared(url: String) {
         allowNeedCommon = false
         addLast(url)
-        if (url != getString(R.string.video_local_title)){
+        if (url != rootActivity.getString(R.string.video_local_title)){
             var list = CacheManager.pageList
             var index = -1
             var hostList = extractDomain(url)
@@ -366,7 +366,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 
     private fun refresh() {
         if (mAgentWeb != null) {
-            if (jumpData?.jumpUrl == getString(R.string.video_local_title)){
+            if (jumpData?.jumpUrl == rootActivity.getString(R.string.video_local_title)){
                 mAgentWeb!!.webCreator.webView.loadDataWithBaseURL(null, HTML_LOCAL, "text/html", "utf-8", null);
             }else{
                 mAgentWeb!!.urlLoader.reload() // 刷新
@@ -380,7 +380,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 //        if (allowShowTips()){
 //            showTipsPop()
 //        }
-        if (jumpData?.jumpUrl != getString(R.string.video_local_title)){
+        if (jumpData?.jumpUrl != rootActivity.getString(R.string.video_local_title)){
             fBinding.flTop.binding.tvToolbarSearch.text = "${jumpData?.jumpTitle} ${getSearchTitle()}"
         }
         fBinding.refreshLayout.isRefreshing = false
@@ -617,7 +617,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
     }
 
     override fun getUrl(): String {
-        if (jumpData?.jumpUrl == getString(R.string.video_local_title)){
+        if (jumpData?.jumpUrl == rootActivity.getString(R.string.video_local_title)){
             return ""
         }
         return jumpData?.jumpUrl ?: ""

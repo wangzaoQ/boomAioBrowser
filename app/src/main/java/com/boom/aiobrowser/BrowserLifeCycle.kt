@@ -13,6 +13,7 @@ import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.WakeManager
 import com.boom.aiobrowser.ui.activity.MainActivity
 import kotlinx.coroutines.CoroutineScope
@@ -74,7 +75,7 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
                     it.finish()
                 }
                 AppLogs.dLog(APP.instance.TAG,"启动开屏")
-                if (APP.instance.allowShowStart){
+                if (APP.instance.allowShowStart && CacheManager.isSubscribeMember.not()){
                     activity.startActivity(Intent(activity,MainActivity::class.java))
                 }
             }

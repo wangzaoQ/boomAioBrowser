@@ -46,28 +46,52 @@ object GlideManager {
             return
         }
         GlideApp.with(mContext)
-            .asBitmap()
+//            .asBitmap()
             .load(url)
+            .override(width,height)
             .centerCrop()
-            .into(object : CustomTarget<Bitmap>() {
-
-                override fun onLoadCleared(placeholder: Drawable?) {
-                    // 在此处处理加载清除时的操作
+            .into(object : CustomTarget<Drawable?>() {
+                override fun onResourceReady(
+                    resource: Drawable,
+                    transition: com.bumptech.glide.request.transition.Transition<in Drawable?>?
+                ) {
+                    runCatching {
+                        bitmapCall(resource.toBitmap(width, height, Bitmap.Config.RGB_565))
+                    }.onFailure {
+                        AppLogs.eLog("GlideManager", "通知图片获取失败")
+                        callFail?.invoke()
+                    }
                 }
 
                 override fun onLoadFailed(errorDrawable: Drawable?) {
                     super.onLoadFailed(errorDrawable)
-                    // 在此处处理加载失败时的操作
+                    AppLogs.eLog("GlideManager", "通知图片获取失败")
                     callFail?.invoke()
                 }
 
-                override fun onResourceReady(
-                    resource: Bitmap,
-                    transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
-                ) {
-                    bitmapCall.invoke(resource)
+                override fun onLoadCleared(placeholder: Drawable?) {
+
                 }
             })
+//            .into(object : CustomTarget<Bitmap>() {
+//
+//                override fun onLoadCleared(placeholder: Drawable?) {
+//                    // 在此处处理加载清除时的操作
+//                }
+//
+//                override fun onLoadFailed(errorDrawable: Drawable?) {
+//                    super.onLoadFailed(errorDrawable)
+//                    // 在此处处理加载失败时的操作
+//                    callFail?.invoke()
+//                }
+//
+//                override fun onResourceReady(
+//                    resource: Bitmap,
+//                    transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
+//                ) {
+//                    bitmapCall.invoke(resource)
+//                }
+//            })
     }
 
 }

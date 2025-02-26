@@ -13,6 +13,7 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserPopConfigBinding
 import com.boom.aiobrowser.firebase.FirebaseConfig
@@ -53,6 +54,12 @@ class ConfigPop(context: Context) : BasePopupWindow(context) {
                 withContext(Dispatchers.Main){
                     defaultBinding?.llRoot?.apply {
                         removeAllViews()
+                        addTest("VIP用户状态:${CacheManager.isSubscribeMember}") {
+                            CacheManager.isSubscribeMember = CacheManager.isSubscribeMember.not()
+                            if (CacheManager.isSubscribeMember){
+                                AioADDataManager.clearAllAD()
+                            }
+                        }
                         addTest("买量用户状态:${UIManager.isBuyUser()}") {
                         }
                         addTest("cloak:${UIManager.cloakValue}") {
@@ -107,6 +114,7 @@ class ConfigPop(context: Context) : BasePopupWindow(context) {
                         }
                         addTest("是否归到下载类型通知:${FirebaseConfig.isDownloadConfig}") {
                         }
+
 //
 //                        addTest("a包具体弹窗逻辑  a包：默认浏览器、教程 不走任何配置直接展示") {
 //

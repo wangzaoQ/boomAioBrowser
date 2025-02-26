@@ -117,6 +117,10 @@ object AioADDataManager {
         }
     }
 
+    fun clearAllAD(){
+        adCache.clear()
+    }
+
     fun saveCacheAD(enum: ADEnum, mcadpBean: ADResultData) {
         AppLogs.dLog(TAG, "putCache enum:${enum} oldSize:${adCache.size}")
         adCache.put(enum, mcadpBean)
@@ -143,6 +147,10 @@ object AioADDataManager {
 
 
     fun preloadAD(enum: ADEnum, tag: String = "") {
+        if (CacheManager.isSubscribeMember){
+            AppLogs.dLog(TAG, "图片类广告 只允许买量用户加载")
+            return
+        }
         if (enum == ADEnum.DEFAULT_AD && isBUser.not()){
             AppLogs.dLog(TAG, "图片类广告 只允许买量用户加载")
             return

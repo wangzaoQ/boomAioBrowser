@@ -1,8 +1,8 @@
 package com.boom.aiobrowser.tools
 
 import com.android.billingclient.api.AcknowledgePurchaseParams
-import com.android.billingclient.api.AcknowledgePurchaseResponseListener
 import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClient.SkuType
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
@@ -18,14 +18,13 @@ import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
 import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.google.common.collect.ImmutableList
-import com.ironsource.ac
-import com.ironsource.da
 import java.lang.ref.WeakReference
 
 
-object SubscribeManager {
+class SubscribeManager(var successBack: () -> Unit,var failBack: (content:String) -> Unit) {
 
     var TAG = "SubscribeManager"
 
@@ -40,29 +39,28 @@ object SubscribeManager {
     val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, list ->
             showTemp("启动购买回调 debugMessage:${billingResult.debugMessage}")
             if (list != null && list.size > 0) {
+                var listCount = 0
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     for (purchase in list) {
                         showTemp("验证购买状态 :${purchase.purchaseState}")
-                        if (purchase == null) {
-                            continue
-                        }
                         //通知服务器支付成功，服务端验证后，消费商品
 //                        VerifyProduct(purchase)
                         //TODO客户端同步回调支付成功
                         acknowledged(purchase,tag="UpdatedListener"){
+                            listCount++
                             if (it !=null){
+                                successBack.invoke()
                                 showTemp("验证购买状态 : 成功 变为会员")
                                 CacheManager.isSubscribeMember = true
                             }else{
+                                failBack.invoke("0")
                                 showTemp("验证购买状态 : 失败 不是会员")
                                 CacheManager.isSubscribeMember = false
                             }
+                            if (listCount == list.size){
+                                billingComplete()
+                            }
                         }
-//                        if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED){
-//                            billingComplete()
-//                        }else{
-//                            showTemp("启动购买回调 支付失败")
-//                        }
                     }
                 }
             } else {
@@ -110,11 +108,15 @@ object SubscribeManager {
                         showTemp("启动购买回调 BillingResponseCode.ITEM_NOT_OWNED")
                     }
                 }
+                failBack.invoke("0")
+                billingComplete()
             }
         }
 
     private fun billingComplete() {
-        billingclient.endConnection()
+        runCatching {
+            billingclient.endConnection()
+        }
     }
 
 //    {
@@ -125,19 +127,20 @@ object SubscribeManager {
 //            showTemp("验证购买状态 : 失败 不是会员")
 //        }
 //    }
-    fun queryShop(callBack: () -> Unit){
+    fun queryShop(){
         billingclient.startConnection(object : BillingClientStateListener {
             override fun onBillingServiceDisconnected() {
                 // 连接断开
                 showTemp("onBillingServiceDisconnected: 连接断开1 queryShop")
 //                retryBillingServiceConnection(productId);
+                failBack.invoke("2")
+                billingComplete()
             }
 
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 // 连接成功
                 if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
                     showTemp("连接成功")
-
                     val params =
                         QueryPurchasesParams.newBuilder()
                             .setProductType(BillingClient.ProductType.SUBS).build()
@@ -149,9 +152,10 @@ object SubscribeManager {
                             var allount = 0
                             var successCount = 0
                             if (p1.isNullOrEmpty()){
-                                showTemp("queryShop 不是会员 无订阅数据")
+                                showTemp("queryShop 不是会员 无订阅数据1")
                                 CacheManager.isSubscribeMember = false
-                                callBack.invoke()
+                                billingComplete()
+                                failBack.invoke("-1")
                             }else{
                                 p1.forEach {
                                     acknowledged(it, tag = "queryShop"){
@@ -159,14 +163,17 @@ object SubscribeManager {
                                         if (it!=null){
                                             successCount++
                                             showTemp("queryShop 是会员")
+                                            successBack.invoke()
                                             CacheManager.isSubscribeMember = true
-                                            callBack.invoke()
                                         }else{
                                             if (allount == p1.size && successCount == 0){
-                                                showTemp("queryShop 不是会员 无有效订阅")
+                                                failBack.invoke("-1")
+                                                showTemp("queryShop 不是会员 无有效订阅2")
                                                 CacheManager.isSubscribeMember = false
-                                                callBack.invoke()
                                             }
+                                        }
+                                        if (allount == p1.size){
+                                            billingComplete()
                                         }
                                     }
                                 }
@@ -176,7 +183,8 @@ object SubscribeManager {
                 } else {
                     // TODO 连接失败
                     showTemp("onBillingServiceDisconnected: 连接断开2 queryShop")
-
+                    failBack.invoke("2")
+                    billingComplete()
                 }
             }
         })
@@ -188,72 +196,120 @@ object SubscribeManager {
                 // 连接断开
                 showTemp("onBillingServiceDisconnected: 连接断开1 queryShop")
 //                retryBillingServiceConnection(productId);
+                failBack.invoke("2")
+                billingComplete()
             }
 
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 // 连接成功
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     showTemp("连接成功")
-                    val queryProductDetailsParams =
-                        QueryProductDetailsParams.newBuilder()
-                            .setProductList(
-                                ImmutableList.of(
-                                    QueryProductDetailsParams.Product.newBuilder()
-                                        .setProductId(productId)
-                                        .setProductType(BillingClient.ProductType.SUBS)
-                                        .build()
-                                )
-                            )
-                            .build()
-                    //查询商品详情
-                    billingclient.queryProductDetailsAsync(queryProductDetailsParams) { billingResult, productDetailsList ->
-                        // check billingResult
-                        // process returned productDetailsList
-                        showTemp("查询商品详情成功 dataList:${toJson(productDetailsList)}")
-                        var tempDetail:ProductDetails?=null
-                        for (i in 0 until productDetailsList.size){
-                            var data = productDetailsList.get(i)
-                            if (productId == data.productId){
-                                //找到商品
-                                tempDetail = data
-                                break
+                    //仅返回有效订阅和未消费的一次性购买。
+                    val params =
+                        QueryPurchasesParams.newBuilder()
+                            .setProductType(BillingClient.ProductType.SUBS).build()
+
+                    billingclient.queryPurchasesAsync(params,object :PurchasesResponseListener{
+                        override fun onQueryPurchasesResponse(p0: BillingResult, p1: MutableList<Purchase>) {
+                            showTemp("查询商品成功 dataList:${toJson(p1)}")
+                            var allount = 0
+                            var successCount = 0
+                            if (p1.isNullOrEmpty()){
+                                showTemp("queryShop 不是会员 开始订阅1")
+                                sub(reference,productId)
+                            }else{
+                                p1.forEach {
+                                    acknowledged(it, tag = "queryShop"){
+                                        allount++
+                                        if (it!=null){
+                                            successCount++
+                                            showTemp("queryShop 是会员")
+                                            successBack.invoke()
+                                            CacheManager.isSubscribeMember = true
+                                        }else{
+                                            if (allount == p1.size && successCount == 0){
+                                                showTemp("queryShop 不是会员 开始订阅2")
+                                                sub(reference,productId)
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
-                        tempDetail?.apply {
-                            showTemp("找到对应商品")
-                            runCatching {
-                                showTemp("启动购买1",false)
-                                val productDetailsParamsList = listOf(
-                                    BillingFlowParams.ProductDetailsParams.newBuilder()
-                                        // retrieve a value for "productDetails" by calling queryProductDetailsAsync()
-                                        .setProductDetails(tempDetail)
-                                        // For One-time products, "setOfferToken" method shouldn't be called.
-                                        // For subscriptions, to get an offer token, call ProductDetails.subscriptionOfferDetails()
-                                        // for a list of offers that are available to the user
-                                        .setOfferToken(subscriptionOfferDetails?.get(0)?.offerToken ?:"")
-                                        .build()
-                                )
-                                showTemp("启动购买2",false)
-                                val billingFlowParams = BillingFlowParams.newBuilder()
-                                    .setProductDetailsParamsList(productDetailsParamsList)
-                                    .build()
-                                var activity = reference.get()
-                                showTemp("启动购买3",false)
-                                // Launch the billing flow
-                                val billingResult = billingclient.launchBillingFlow(activity!!, billingFlowParams)
-                                showTemp("启动购买4",false)
-                            }.onFailure {
-                                showTemp("error 对应商品 ${it.stackTraceToString()}")
-                            }
-                        }
-                    }
+                    })
+
                 } else {
+                    failBack.invoke("2")
                     // TODO 连接失败
                     showTemp("onBillingServiceDisconnected: 连接断开2 subscribeShop")
+                    billingComplete()
                 }
             }
         })
+    }
 
+
+    private fun sub(reference: WeakReference<BaseActivity<*>>, productId: String){
+
+        val queryProductDetailsParams =
+            QueryProductDetailsParams.newBuilder()
+                .setProductList(
+                    ImmutableList.of(
+                        QueryProductDetailsParams.Product.newBuilder()
+                            .setProductId(productId)
+                            .setProductType(BillingClient.ProductType.SUBS)
+                            .build()
+                    )
+                )
+                .build()
+        //查询商品详情
+        billingclient.queryProductDetailsAsync(queryProductDetailsParams) { billingResult, productDetailsList ->
+            // check billingResult
+            // process returned productDetailsList
+            showTemp("查询商品详情成功 dataList:${toJson(productDetailsList)}")
+            var tempDetail:ProductDetails?=null
+            for (i in 0 until productDetailsList.size){
+                var data = productDetailsList.get(i)
+                if (productId == data.productId){
+                    //找到商品
+                    tempDetail = data
+                    break
+                }
+            }
+            if (tempDetail == null){
+                billingComplete()
+                failBack.invoke("4")
+            }
+            tempDetail?.apply {
+                showTemp("找到对应商品")
+                runCatching {
+                    showTemp("启动购买1",false)
+                    val productDetailsParamsList = listOf(
+                        BillingFlowParams.ProductDetailsParams.newBuilder()
+                            // retrieve a value for "productDetails" by calling queryProductDetailsAsync()
+                            .setProductDetails(tempDetail)
+                            // For One-time products, "setOfferToken" method shouldn't be called.
+                            // For subscriptions, to get an offer token, call ProductDetails.subscriptionOfferDetails()
+                            // for a list of offers that are available to the user
+                            .setOfferToken(subscriptionOfferDetails?.get(0)?.offerToken ?:"")
+                            .build()
+                    )
+                    showTemp("启动购买2",false)
+                    val billingFlowParams = BillingFlowParams.newBuilder()
+                        .setProductDetailsParamsList(productDetailsParamsList)
+                        .build()
+                    var activity = reference.get()
+                    showTemp("启动购买3",false)
+                    // Launch the billing flow
+                    val billingResult = billingclient.launchBillingFlow(activity!!, billingFlowParams)
+                    showTemp("启动购买4",false)
+                }.onFailure {
+                    failBack.invoke("0")
+                    billingComplete()
+                    showTemp("error 对应商品 ${it.stackTraceToString()}")
+                }
+            }
+        }
     }
 
     private fun showTemp(content: String,showToast:Boolean = true) {
@@ -261,7 +317,7 @@ object SubscribeManager {
         if (showToast){
             ToastUtils.showLong(content)
         }
-        Logger.writeLog(APP.instance,content)
+        Logger.writeLog(APP.instance,"${TimeManager.getADTime()}: ${content}")
     }
 
 

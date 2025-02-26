@@ -63,7 +63,7 @@ class AioADShowManager(
             })
         }
         if (AioADDataManager.adAllowShowScreen() && adResultData!=null){
-            if (CacheManager.showEveryDay == 2 && CacheManager.dayShowSubTemp){
+            if (CacheManager.showEveryDay >= 2 && CacheManager.dayShowSubTemp && adEnum != ADEnum.LAUNCH_AD){
                 SubTempPop(activity,showADBack = {
                     realShowScreenAD(adResultData,pointTag)
                 }).createPop()
@@ -74,7 +74,7 @@ class AioADShowManager(
             if (allowShowDefaultAD){
                 var defaultAD = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
                 if (defaultAD!=null) {
-                    if (CacheManager.showEveryDay == 2 && CacheManager.dayShowSubTemp){
+                    if (CacheManager.showEveryDay >= 2 && CacheManager.dayShowSubTemp && adEnum != ADEnum.LAUNCH_AD){
                         SubTempPop(activity,showADBack = {
                             realShowScreenAD2(defaultAD,pointTag)
                         }).createPop()

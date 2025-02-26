@@ -34,11 +34,12 @@ class SubPop(context: Context) : BasePopupWindow(context) {
 
     var checkPosition = 0
 
-    fun createPop() {
+    fun createPop(successBack: () -> Unit) {
         defaultBinding?.apply {
             btnConfirm.setOnClickListener {
                 var subManager = SubscribeManager(successBack = {
                     (context as BaseActivity<*>).addLaunch(success = {
+                        successBack.invoke()
                         SubInfoPop(context).createPop()
                         dismiss()
                     }, failBack = {}, Dispatchers.Main)
@@ -92,6 +93,7 @@ class SubPop(context: Context) : BasePopupWindow(context) {
             tvRestore.setOnClickListener {
                 var subManager = SubscribeManager(successBack = {
                     (context as BaseActivity<*>).addLaunch(success = {
+                        successBack.invoke()
                         SubInfoPop(context).createPop()
                         dismiss()
                     }, failBack = {}, Dispatchers.Main)

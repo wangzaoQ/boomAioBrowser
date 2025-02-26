@@ -12,6 +12,7 @@ import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.clean.formatSize
+import com.boom.aiobrowser.tools.extractDomain
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.toJson
 import com.boom.downloader.VideoInfoParserManager
@@ -239,7 +240,7 @@ object WebScan {
         cookie: String,
         realUrl: String,
         hostList:MutableList<String>) {
-        var map = getVideoHeaderInfo(videoUrl, cookie)
+        var map = getVideoHeaderInfo(videoUrl, cookie,realUrl)
         var contentLength = 0L
         var contentType = ""
         contentType = map.get(content_type) as? String ?: ""
@@ -407,7 +408,7 @@ object WebScan {
 
     var webTitle = ""
 
-    suspend fun getVideoHeaderInfo(videoUrl: String, cookie: String): Map<String, Any> {
+    suspend fun getVideoHeaderInfo(videoUrl: String, cookie: String,realUrl:String): Map<String, Any> {
         var infoMap = HashMap<String, Any>()
         var connection: HttpURLConnection? = null
         var headers = HashMap<String, String>().apply {
@@ -445,15 +446,22 @@ object WebScan {
             infoMap.put(content_type, "m3u8")
             AppLogs.dLog("m3u8","calculateM3U8Size Start")
 
+            var m3u8Size = PManager.calculateM3U8Size(finalUrl,headers)
             AppLogs.dLog("m3u8","calculateM3U8Size end")
-            infoMap.put(content_length, PManager.calculateM3U8Size(finalUrl,headers))
-            infoMap.put(content_img, imageUrl)
+
+            var hostList = extractDomain(realUrl)
+            if (WebScan.isXhaMaster(hostList) && m3u8Size<10*1024*1024){
+                AppLogs.dLog("webReceive","过滤调广告 url:${finalUrl}")
+                return infoMap
+            }
             var startTime = System.currentTimeMillis()
             runBlocking {
                 while (webTitle.isNullOrEmpty()&&(System.currentTimeMillis()-startTime)<3000L){
                     delay(500)
                 }
             }
+            infoMap.put(content_length,m3u8Size)
+            infoMap.put(content_img, imageUrl)
             infoMap.put(content_title, webTitle)
         } else {
             //这是非M3U8类型, 需要获取视频的totalLength ===> contentLength
@@ -508,13 +516,11 @@ object WebScan {
         }
         return (index == -1).not()
     }
-
-
     fun isXhaMaster(urlList: MutableList<String>): Boolean {
         var index = -1
         for (i in 0 until urlList.size) {
             var url = urlList.get(i)
-            if (url.equals(WebConfig.Xhamster, true)) {
+            if (url.startsWith(WebConfig.Xhamster, true)) {
                 index = i
                 break
             }

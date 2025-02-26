@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.transition.Transition
 import android.widget.ImageView
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
@@ -44,26 +45,27 @@ object GlideManager {
             callFail?.invoke()
             return
         }
-
         GlideApp.with(mContext)
+            .asBitmap()
             .load(url)
-            .override(width,height)
-            .into(object : CustomTarget<Drawable?>() {
-                override fun onResourceReady(resource: Drawable, transition: com.bumptech.glide.request.transition.Transition<in Drawable?>?) {
-                    runCatching {
-                        bitmapCall(resource.toBitmap(width, height, Bitmap.Config.RGB_565))
-                    }.onFailure {
-                        AppLogs.eLog("GlideManager","通知图片获取失败")
-                        callFail?.invoke()
-                    }
-                }
-                override fun onLoadCleared(placeholder: Drawable?) {
+            .centerCrop()
+            .into(object : CustomTarget<Bitmap>() {
 
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    // 在此处处理加载清除时的操作
                 }
 
                 override fun onLoadFailed(errorDrawable: Drawable?) {
                     super.onLoadFailed(errorDrawable)
+                    // 在此处处理加载失败时的操作
                     callFail?.invoke()
+                }
+
+                override fun onResourceReady(
+                    resource: Bitmap,
+                    transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
+                ) {
+                    bitmapCall.invoke(resource)
                 }
             })
     }

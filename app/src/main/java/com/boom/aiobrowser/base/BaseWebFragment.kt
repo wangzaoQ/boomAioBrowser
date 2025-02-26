@@ -202,6 +202,15 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                             AppLogs.dLog("shouldInterceptRequest","js 无视频大小 url:${url}")
                             return@forEach
                         }
+                        var hostList = extractDomain(url)
+                        if (WebScan.isXhaMaster(hostList)){
+                            AppLogs.dLog("shouldInterceptRequest","过滤调广告 url:${it.url}")
+                            if (it.format == "m3u8" && (it.size ?: 0) <= 10*1024*1024){
+                                AppLogs.dLog("shouldInterceptRequest","js 无视频大小 url:${url}")
+                                return@forEach
+                            }
+                        }
+
                         hostList?.apply {
                             if (WebScan.isContinueMp4Host(this) && it.format == "mp4"){
                                 AppLogs.dLog("shouldInterceptRequest","js 过滤mp4")
@@ -519,9 +528,11 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                             }
                             var hostList = extractDomain(webUrl)
                             if (WebScan.isXhaMaster(hostList)){
-                                var sourceUrl = WebScan.getQueryParam(requestUrl,"sourceURL")?:""
-                                if (sourceUrl.contains("m3u8")){
-                                    requestUrl = sourceUrl
+                                runCatching {
+                                    var sourceUrl = WebScan.getQueryParam(requestUrl,"sourceURL")?:""
+                                    if (sourceUrl.contains("m3u8")){
+                                        requestUrl = sourceUrl
+                                    }
                                 }
                             }
                             AppLogs.dLog(

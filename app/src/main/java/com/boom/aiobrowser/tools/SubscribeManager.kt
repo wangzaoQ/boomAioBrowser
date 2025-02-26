@@ -65,50 +65,65 @@ class SubscribeManager(var successBack: () -> Unit,var failBack: (content:String
                 }
             } else {
                 when (billingResult.responseCode) {
+                    //取消
+                    BillingClient.BillingResponseCode.USER_CANCELED -> {
+                        showTemp("启动购买回调 BillingResponseCode.USER_CANCELED")
+                        failBack.invoke("1")
+                    }
                     BillingClient.BillingResponseCode.NETWORK_ERROR -> {
                         showTemp("启动购买回调 BillingResponseCode.NETWORK_ERROR")
+                        failBack.invoke("0")
                     }
                     BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED -> {
                         showTemp("启动购买回调 BillingResponseCode.FEATURE_NOT_SUPPORTED")
+                        failBack.invoke("0")
                     }
                     //服务未连接
                     BillingClient.BillingResponseCode.SERVICE_DISCONNECTED -> {
                         showTemp("启动购买回调 BillingResponseCode.SERVICE_DISCONNECTED")
+                        failBack.invoke("0")
                     }
-                    //取消
-                    BillingClient.BillingResponseCode.USER_CANCELED -> {
-                        showTemp("启动购买回调 BillingResponseCode.USER_CANCELED")
-                    }
+
                     //服务不可用
                     BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE -> {
                         showTemp("启动购买回调 BillingResponseCode.SERVICE_UNAVAILABLE")
+                        failBack.invoke("0")
                     }
                     //购买不可用
                     BillingClient.BillingResponseCode.BILLING_UNAVAILABLE -> {
                         showTemp("启动购买回调 BillingResponseCode.BILLING_UNAVAILABLE")
+                        failBack.invoke("0")
                     }
                     //商品不存在
                     BillingClient.BillingResponseCode.ITEM_UNAVAILABLE -> {
                         showTemp("启动购买回调 BillingResponseCode.ITEM_UNAVAILABLE")
+                        failBack.invoke("0")
                     }
                     //提供给 API 的无效参数
                     BillingClient.BillingResponseCode.DEVELOPER_ERROR -> {
                         showTemp("启动购买回调 BillingResponseCode.DEVELOPER_ERROR")
+                        failBack.invoke("0")
                     }
                     //错误
                     BillingClient.BillingResponseCode.ERROR -> {
                         showTemp("启动购买回调 BillingResponseCode.ERROR")
+                        failBack.invoke("0")
                     }
                     //未消耗掉
                     BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
                         showTemp("启动购买回调 BillingResponseCode.ITEM_ALREADY_OWNED")
+                        failBack.invoke("0")
                     }
                     //不可购买
                     BillingClient.BillingResponseCode.ITEM_NOT_OWNED -> {
                         showTemp("启动购买回调 BillingResponseCode.ITEM_NOT_OWNED")
+                        failBack.invoke("0")
+                    }
+                    else ->{
+                        showTemp("启动购买回调 ${billingResult.debugMessage}")
+                        failBack.invoke("0")
                     }
                 }
-                failBack.invoke("0")
                 billingComplete()
             }
         }

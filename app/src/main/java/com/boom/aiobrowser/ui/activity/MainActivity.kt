@@ -185,12 +185,12 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         }
     }
 
-    var morePop : MorePop?=null
+//    var morePop : MorePop?=null
 
 
     override fun onResume() {
         super.onResume()
-        morePop?.updateUI()
+//        morePop?.updateUI()
     }
 
 

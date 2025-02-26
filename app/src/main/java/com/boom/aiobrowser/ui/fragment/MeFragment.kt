@@ -164,7 +164,9 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
             }
             llSub.setOneClick {
                 if (CacheManager.isSubscribeMember.not()){
-                    SubPop(rootActivity).createPop()
+                    SubPop(rootActivity).createPop{
+                        updateVIPUI()
+                    }
                 }else{
                     SubInfoPop(rootActivity).createPop()
                 }
@@ -238,11 +240,7 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
                 APP.instance.clickSetBrowser = false
                 PointEvent.posePoint(if (isDefault) PointEventKey.default_pop_set_s else PointEventKey.default_pop_set_f)
             }
-            if (CacheManager.isSubscribeMember){
-                tvAD.text = rootActivity.getString(R.string.app_vip_user)
-            }else{
-                tvAD.text = rootActivity.getString(R.string.app_no_ads)
-            }
+            updateVIPUI()
             if (isDefault) {
                 llBrowser.visibility = View.GONE
             } else {
@@ -277,6 +275,14 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
             }else{
                 fBinding.tvLocation.text = data.locationCity
             }
+        }
+    }
+
+    private fun updateVIPUI() {
+        if (CacheManager.isSubscribeMember){
+            fBinding.tvAD.text = rootActivity.getString(R.string.app_vip_user)
+        }else{
+            fBinding.tvAD.text = rootActivity.getString(R.string.app_no_ads)
         }
     }
 

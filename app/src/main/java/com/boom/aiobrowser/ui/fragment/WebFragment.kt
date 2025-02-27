@@ -159,6 +159,12 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
         }
 
         APP.videoScanLiveData.observe(this) {
+            if (allowPointResult){
+                allowPointResult = false
+                PointEvent.posePoint(PointEventKey.webpage_download_show, Bundle().apply {
+                    putString(PointValueKey.type,"have")
+                })
+            }
             if (jumpData?.autoDownload == true) {
                 var videoDownloadTempList = CacheManager.videoDownloadTempList
                 if (videoDownloadTempList.isNotEmpty()){

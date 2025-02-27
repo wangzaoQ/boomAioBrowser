@@ -41,7 +41,9 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
     override fun setListener() {
         fBinding.ivBack.setOneClick {
             var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "视频播放返回") {
+                AppLogs.dLog(fragmentTAG,"VideoListFragment 执行finish1")
                 rootActivity.finish()
+                AppLogs.dLog(fragmentTAG,"VideoListFragment 执行finish2")
             }
             manager.showScreenAD(AD_POINT.aobws_return_int)
         }
@@ -49,13 +51,13 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
 
     override fun onResume() {
         super.onResume()
-        AppLogs.dLog(VideoPreloadManager.TAG,"VideoListFragment onResume currentIndex:${index}")
+        AppLogs.dLog(fragmentTAG,"VideoListFragment onResume currentIndex:${index}")
         playVideo()
     }
 
     override fun onPause() {
         super.onPause()
-        AppLogs.dLog(VideoPreloadManager.TAG,"VideoListFragment onPause currentIndex:${index}")
+        AppLogs.dLog(fragmentTAG,"VideoListFragment onPause currentIndex:${index}")
 //        stopDownLoad()
     }
 
@@ -71,6 +73,7 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
             list =  getListByGson(getString("data"),NewsData::class.java)
             index = getInt("index")
         }
+        AppLogs.dLog(fragmentTAG,"VideoListFragment setShowView currentIndex:${index}")
         bean = list?.get(index)
         //防止错位，离开释放
         //gsyVideoPlayer.initUIState();
@@ -139,7 +142,7 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
 
     fun playVideo() {
         if (APP.instance.isHideSplash.not())return
-        AppLogs.dLog(VideoPreloadManager.TAG,"VideoListFragment playVideo currentIndex:${index}")
+        AppLogs.dLog(fragmentTAG,"VideoListFragment playVideo currentIndex:${index}")
         gsyVideoPlayer?.startPlayLogic()
         if(list.isNullOrEmpty())return
         if (index+1>=list!!.size)return
@@ -147,7 +150,7 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
         var cacheList = mutableListOf<NewsData>()
         loadJob = rootActivity.addLaunch(success = {
             while (GSYVideoManager.instance().isPlaying.not()){
-                AppLogs.dLog(VideoPreloadManager.TAG,"等待播放中")
+                AppLogs.dLog(fragmentTAG,"等待播放中")
                 delay(500)
             }
             for (i in index+1 until list!!.size){
@@ -179,6 +182,11 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
         container: ViewGroup?
     ): NewsFragmentVideoListBinding {
         return NewsFragmentVideoListBinding.inflate(layoutInflater)
+    }
+
+    override fun onDestroy() {
+        AppLogs.dLog(fragmentTAG,"VideoListFragment onDestroy currentIndex:${index}")
+        super.onDestroy()
     }
 
     companion object {

@@ -123,6 +123,15 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
         }
     }
 
+    override fun onBackPressed(): Boolean {
+        PointEvent.posePoint(PointEventKey.tutorial_cancel)
+        var manager = AioADShowManager(context as BaseActivity<*>, ADEnum.INT_AD, tag = "下载弹窗back"){
+            dismiss()
+        }
+        manager.showScreenAD(AD_POINT.aobws_downguide_int)
+        return true
+    }
+
     override fun dismiss() {
         APP.videoGuideLiveData.removeObservers(context as BaseActivity<*>)
         super.dismiss()

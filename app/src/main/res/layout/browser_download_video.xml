@@ -21,6 +21,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_height="0dp"
+            app:srcCompat="@mipmap/bg_video_default"
             android:scaleType="centerCrop"
             app:layout_constraintDimensionRatio="h,162:212"
             ></androidx.appcompat.widget.AppCompatImageView>

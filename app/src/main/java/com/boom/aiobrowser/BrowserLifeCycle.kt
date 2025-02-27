@@ -128,6 +128,7 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
     override fun onActivityDestroyed(activity: Activity) {
         stack.remove(activity)
         AppLogs.dLog(APP.instance.TAG, "onActivityDestroyed() activity=" + activity + " stack.size=" + stack.size)
+//        AppLogs.dLog("VideoListFragment", "onActivityDestroyed() activity=" + activity + " stack.size=" + stack.size)
     }
 
     fun isBackGround(): Boolean {

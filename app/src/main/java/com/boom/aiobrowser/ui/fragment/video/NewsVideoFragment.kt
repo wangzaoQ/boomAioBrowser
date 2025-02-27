@@ -306,9 +306,9 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
         fBinding.videoVp.apply {
             setOrientation(ViewPager2.ORIENTATION_VERTICAL)
             adapter = videoListAdapter
+            fBinding.videoVp.setCurrentItem(index,false)
             videoListAdapter.notifyDataSetChanged()
             offscreenPageLimit = 1
-
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
@@ -385,8 +385,8 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
             }
         }
         dragBiding = BrowserDragLayoutBinding.inflate(layoutInflater, null, false)
-        addDownload()
-        fBinding.videoVp.setCurrentItem(index,false)
+//        addDownload()
+
     }
 
     companion object{

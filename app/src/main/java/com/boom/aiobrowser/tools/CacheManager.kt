@@ -638,31 +638,33 @@ object CacheManager {
     }
 
     fun getRecentSearchDataList(fromType:String):MutableList<JumpData>{
-        return when (fromType) {
-            "home" -> {
-                recentSearchDataList
-            }
-            "download" -> {
-                recentSearchDataListDownload
-            }
-            else -> {
-                recentSearchDataListSearch
-            }
-        }
+//        return when (fromType) {
+//            "home" -> {
+//                recentSearchDataList
+//            }
+//            "download" -> {
+//                recentSearchDataListDownload
+//            }
+//            else -> {
+//                recentSearchDataListSearch
+//            }
+//        }
+        return recentSearchDataListSearch
     }
 
     fun saveRecentSearchDataList(fromType:String, list:MutableList<JumpData>){
-        when (fromType) {
-            "home" -> {
-                recentSearchDataList = list
-            }
-            "download" -> {
-                recentSearchDataListDownload = list
-            }
-            else -> {
-                recentSearchDataListSearch = list
-            }
-        }
+//        when (fromType) {
+//            "home" -> {
+//                recentSearchDataList = list
+//            }
+//            "download" -> {
+//                recentSearchDataListDownload = list
+//            }
+//            else -> {
+//                recentSearchDataListSearch = list
+//            }
+//        }
+        recentSearchDataListSearch = list
     }
 
     var historyDataList:MutableList<JumpData>

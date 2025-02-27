@@ -80,8 +80,8 @@ object PointEventKey {
     const val profile_about = "profile_about"
     //更多-下载
     const val profile_download = "profile_download"
-    //下载列表页
-    const val download_page = "download_page"
+    //下载页
+    const val download_tab = "download_tab"
     //下载完成
     const val download_success = "download_success"
     //播放
@@ -96,6 +96,8 @@ object PointEventKey {
     const val download_tutorial = "download_tutorial"
     // 下载教程 跳过
     const val download_tutorial_skip = "download_tutorial_skip"
+    // 下载教程回退键
+    const val tutorial_cancel = "tutorial_cancel"
     // 下载教程 确认
     const val download_tutorial_try = "download_tutorial_try"
     //搜索结果页返回
@@ -308,6 +310,21 @@ object PointEventKey {
     const val download_videos_page = "download_videos_page"
     //资源视频download点击
     const val download_tab_dl = "download_tab_dl"
+    //订阅页展示
+    const val subscribe_impression = "subscribe_impression"
+    //用户点击订阅按钮
+    const val subscribe_click = "subscribe_click"
+    //订阅成功回调
+    const val payment_success = "payment_success"
+    //订阅失败回调
+    const val payment_failed = "payment_failed"
+    //恢复订阅点击
+    const val restore_subscription = "restore_subscription"
+    //订阅管理
+    const val subscription_management = "subscription_management"
+    //订阅闪购
+    const val subscribe_pop = "subscribe_pop"
+    const val webpage_show = "webpage_show"
 
 }
 

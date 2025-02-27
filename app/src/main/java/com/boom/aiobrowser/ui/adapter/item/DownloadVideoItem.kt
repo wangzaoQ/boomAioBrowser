@@ -17,6 +17,9 @@ internal class DownloadVideoItem(parent: ViewGroup) : BaseViewHolder<BrowserDown
 
     fun bind(item: NewsData, fragment: BaseFragment<*>?,position:Int,adapter: BaseQuickAdapter<*, *>) {
         viewBinding?.apply {
+            if (item.iassum.isNullOrEmpty()){
+                return
+            }
             GlideManager.loadImg(
                 fragment,
                 ivPic,

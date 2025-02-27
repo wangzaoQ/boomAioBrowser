@@ -69,6 +69,8 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
     var locationLoadResourceList = mutableListOf<String>()
     var isFirst = true
+
+    var allowPointResult = true
 //    var guideList = mutableListOf<>()
 
     fun initWeb(){
@@ -154,15 +156,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             fragmentWebReference.get()?.rootActivity?.addLaunch(success = {
                 allow = true
                 var hostList :MutableList<String>?=null
-                if (kind == "ERROR"){
-                    PointEvent.posePoint(PointEventKey.webpage_download_show, Bundle().apply {
-                        putString(PointValueKey.type,"no_have")
-                    })
-                }else{
-                    PointEvent.posePoint(PointEventKey.webpage_download_show, Bundle().apply {
-                        putString(PointValueKey.type,"have")
-                    })
-                }
+
                 var url = ""
                 withContext(Dispatchers.Main){
                     if (fragmentWebReference.get()?.allowShowTips() == true){
@@ -585,7 +579,8 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             WebScan.loadResourceList.clear()
             locationLoadResourceList.clear()
             CacheManager.videoDownloadTempList = mutableListOf()
-
+            PointEvent.posePoint(PointEventKey.webpage_show)
+            allowPointResult = true
             AppLogs.dLog(
                 fragmentTAG,
                 "mUrl:" + url + " onPageStarted  target:" + getUrl()

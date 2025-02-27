@@ -23,6 +23,12 @@
             android:textColor="@color/black"
             android:textSize="29sp"></androidx.appcompat.widget.AppCompatTextView>
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivVIP"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+
+            ></androidx.appcompat.widget.AppCompatImageView>
 
         <View
             android:layout_width="match_parent"

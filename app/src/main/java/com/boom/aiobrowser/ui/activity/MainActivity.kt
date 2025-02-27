@@ -299,24 +299,29 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
                         override fun onPageSelected(position: Int) {
                             updateUI(position)
-                            if (position == 1){
-                                PointEvent.posePoint(PointEventKey.news,Bundle().apply {
-                                    putString(PointValueKey.from_type,if (APP.instance.toNewsFrom == 1)"home_news_more" else "news")
-                                },true,object : PointCallback{
-                                    override fun onSuccess(response: Response) {
-                                        APP.instance.toNewsFrom = 0
-                                    }
-                                })
-                            }else if (position == 2){
-                                var isFirst = false
-                                if (CacheManager.isFirstShowDownload){
-                                    isFirst = true
-                                    CacheManager.isFirstShowDownload = false
+                            when (position) {
+                                0 -> {
+//                                    var isFirst = false
+//                                    if (CacheManager.isFirstShowDownload){
+//                                        isFirst = true
+//                                        CacheManager.isFirstShowDownload = false
+//                                    }
+                                    PointEvent.posePoint(PointEventKey.download_tab)
                                 }
-                                PointEvent.posePoint(PointEventKey.download_page, Bundle().apply {
-                                    putInt(PointValueKey.open_type,if (isFirst) 0 else 1)
-                                })
+                                2 -> {
+                                    PointEvent.posePoint(PointEventKey.home_page)
+                                }
+                                3 -> {
+                                    PointEvent.posePoint(PointEventKey.news,Bundle().apply {
+                                        putString(PointValueKey.from_type,if (APP.instance.toNewsFrom == 1)"home_news_more" else "news")
+                                    },true,object : PointCallback{
+                                        override fun onSuccess(response: Response) {
+                                            APP.instance.toNewsFrom = 0
+                                        }
+                                    })
+                                }
                             }
+
                             if (position == 1){
                                 APP.downloadButtonLiveData.postValue(0)
                             }else{
@@ -496,6 +501,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             finish()
             return
         }
+        downloadHomeFragment.loadData()
         fManager.hideFragment(supportFragmentManager, startFragment!!)
         acBinding.llMainControl.visibility = View.VISIBLE
         if (jumpType == 1||jumpType==3){
@@ -631,6 +637,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     }
                 }
                 AppLogs.dLog(acTAG,"返回 activity super.onKeyDown")
+            }else if (APP.instance.isHideSplash.not()){
+                return true
             }
             return try {
                 val intent = Intent(Intent.ACTION_MAIN)
@@ -649,8 +657,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         AppLogs.dLog(acTAG,"onActivityResult  requestCode:${requestCode}  resultCode:${resultCode}")
-        if (requestCode == SIGN_LOGIN || resultCode == SIGN_LOGIN_ONE_TAP && fragments.size>2 && fragments.get(3) is MeFragment ){
-            (fragments.get(3) as MeFragment).result(requestCode, resultCode, data)
+        if (requestCode == SIGN_LOGIN || resultCode == SIGN_LOGIN_ONE_TAP && fragments.size>2 && fragments.get(4) is MeFragment ){
+            (fragments.get(4) as MeFragment).result(requestCode, resultCode, data)
         }
     }
 

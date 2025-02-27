@@ -110,7 +110,6 @@
                 android:background="@drawable/shape_sub_pop_tips"
                 android:gravity="center"
                 android:paddingHorizontal="7dp"
-                android:text="$3.96/weekly 50%off"
                 android:textColor="@color/white"
                 android:textSize="11sp"
                 app:layout_constraintEnd_toEndOf="@+id/llSubWeekly"

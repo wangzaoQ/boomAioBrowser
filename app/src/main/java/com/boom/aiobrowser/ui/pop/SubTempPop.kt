@@ -7,6 +7,8 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserPopSubBinding
 import com.boom.aiobrowser.databinding.BrowserPopSubTempBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.SubscribeManager
 import kotlinx.coroutines.Dispatchers
@@ -54,9 +56,12 @@ class SubTempPop(context: Context,var showADBack: () -> Unit) : BasePopupWindow(
                 clickBuy = true
                 subVIP(subManager)
             }
+            tvTipsMonthly.text =
+                "\$1.5/${context.getString(R.string.app_weekly)} ${context.getString(R.string.app_flash_sale)} 66%${context.getString(R.string.app_off)}"
         }
         setBackground(R.color.color_70_black)
         showPopupWindow()
+        PointEvent.posePoint(PointEventKey.subscribe_pop)
     }
 
     var clickBuy = false

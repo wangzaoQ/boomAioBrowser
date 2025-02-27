@@ -16,6 +16,7 @@ import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
+import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.databinding.BrowserFragmentDownloadManageBinding
@@ -38,6 +39,8 @@ import com.boom.aiobrowser.ui.activity.VideoListActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
 import com.boom.aiobrowser.ui.pop.DownLoadPop
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
+import com.boom.aiobrowser.ui.pop.SubInfoPop
+import com.boom.aiobrowser.ui.pop.SubPop
 import com.boom.base.adapter4.QuickAdapterHelper
 import com.boom.base.adapter4.loadState.LoadState
 import com.boom.base.adapter4.loadState.trailing.TrailingLoadStateAdapter
@@ -82,11 +85,38 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
     }
 
     override fun startLoadData() {
+        videoAdapter.submitList(mutableListOf<NewsData>().apply {
+            add(0,NewsData().apply {
+                dataType = NewsData.TYPE_DOWNLOAD_VIDEO_HEAD
+            })
+            for (i in 0 until 10){
+                add(NewsData().apply {
+                    dataType = NewsData.TYPE_DOWNLOAD_VIDEO
+                })
+            }
+        })
 
+    }
+
+    private fun updateVIPUI() {
+//        if (CacheManager.isSubscribeMember){
+//            fBinding.ivVIP.setImageResource(R.mipmap)
+//        }else{
+//            fBinding.ivVIP.setImageResource(R.mipmap)
+//        }
     }
 
     override fun setListener() {
         fBinding.apply {
+            ivVIP.setOneClick {
+                if (CacheManager.isSubscribeMember.not()){
+                    SubPop(rootActivity).createPop{
+                        updateVIPUI()
+                    }
+                }else{
+                    SubInfoPop(rootActivity).createPop()
+                }
+            }
             rlSearch.setOneClick {
                 rootActivity.jumpActivity<SearchActivity>(Bundle().apply {
                     putString(PointValueKey.from_type,"download")
@@ -127,10 +157,15 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
         videoAdapter.apply {
             setOnDebouncedItemClick{adapter, view, position ->
                 if (position>videoAdapter.items.size-1)return@setOnDebouncedItemClick
+                if (videoAdapter.items.get(position).vbreas.isNullOrEmpty())return@setOnDebouncedItemClick
+                var videoList = mutableListOf<NewsData>()
+                for (i in 1 until videoAdapter.mutableItems.size){
+                    videoList.add(videoAdapter.mutableItems.get(i))
+                }
                 VideoListActivity.startVideoListActivity(
                     adapter.context as BaseActivity<*>,
-                    position,
-                    videoAdapter.mutableItems,
+                    position-1,
+                    videoList,
                     "",
                     "daily_video"
                 )
@@ -216,7 +251,7 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
                 adapter = adapterHelper.adapter
             }
         }
-        loadData()
+        PointEvent.posePoint(PointEventKey.download_tab)
     }
 
     override fun getBinding(

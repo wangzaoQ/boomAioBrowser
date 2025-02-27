@@ -405,6 +405,7 @@
     <string name="app_current_sub">Currently subscribed</string>
     <string name="app_vip_user">VIP User</string>
     <string name="app_sub_error">Server error</string>
+    <string name="app_flash_sale">flash sale</string>
 
 
 </resources>

@@ -21,6 +21,8 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.base.BaseActivity
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import com.google.common.collect.ImmutableList
 import java.lang.ref.WeakReference
 
@@ -54,10 +56,12 @@ class SubscribeManager(var successBack: () -> Unit,var failBack: (content:String
                                 showTemp("验证购买状态 : 成功 变为会员")
                                 CacheManager.isSubscribeMember = true
                                 AioADDataManager.clearAllAD()
+                                PointEvent.posePoint(PointEventKey.payment_success)
                             }else{
                                 failBack.invoke("0")
                                 showTemp("验证购买状态 : 失败 不是会员")
                                 CacheManager.isSubscribeMember = false
+                                PointEvent.posePoint(PointEventKey.payment_failed)
                             }
                             if (listCount == list.size){
                                 billingComplete()
@@ -126,6 +130,7 @@ class SubscribeManager(var successBack: () -> Unit,var failBack: (content:String
                         failBack.invoke("0")
                     }
                 }
+                PointEvent.posePoint(PointEventKey.payment_failed)
                 billingComplete()
             }
         }
@@ -245,6 +250,7 @@ class SubscribeManager(var successBack: () -> Unit,var failBack: (content:String
                                             successBack.invoke()
                                             CacheManager.isSubscribeMember = true
                                             AioADDataManager.clearAllAD()
+                                            PointEvent.posePoint(PointEventKey.payment_success)
                                         }else{
                                             if (allount == p1.size && successCount == 0){
                                                 showTemp("queryShop 不是会员 开始订阅2")

@@ -204,8 +204,9 @@ object NFManager {
                 from = "news_push"
                 PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
                     putString(PointValueKey.push_type, enumName)
+                    putString(PointValueKey.news_id, data?.itackl?:"")
                     if (enumName == NFEnum.NF_DEFAULT.menuName && data!=null){
-                        putString(PointValueKey.source_from, data!!.nfSource)
+                        putString(PointValueKey.source_from, data?.nfSource?:"")
                     }
                 })
                 var id = NFEnum.NF_NEWS.position
@@ -238,9 +239,12 @@ object NFManager {
                 }
             }
             NFEnum.NF_NEWS_FCM.menuName->{
+                var data = getBeanByGson(nfData,NewsData::class.java)
+
                 from = "push"
                 PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
                     putString(PointValueKey.push_type, enumName)
+                    putString(PointValueKey.news_id, data?.itackl?:"")
                 })
                 getBeanByGson(nfData,NewsData::class.java)?.apply {
                     runCatching {

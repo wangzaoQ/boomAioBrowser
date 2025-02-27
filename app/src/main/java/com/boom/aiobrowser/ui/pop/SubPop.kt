@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.ui.pop
 
 import android.content.Context
+import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import androidx.appcompat.widget.AppCompatTextView
@@ -12,6 +13,9 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserPopDefaultBinding
 import com.boom.aiobrowser.databinding.BrowserPopSubBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.SubscribeManager
 import kotlinx.coroutines.Dispatchers
@@ -37,6 +41,7 @@ class SubPop(context: Context) : BasePopupWindow(context) {
     fun createPop(successBack: () -> Unit) {
         defaultBinding?.apply {
             btnConfirm.setOnClickListener {
+                PointEvent.posePoint(PointEventKey.subscribe_click)
                 var subManager = SubscribeManager(successBack = {
                     (context as BaseActivity<*>).addLaunch(success = {
                         successBack.invoke()
@@ -91,6 +96,7 @@ class SubPop(context: Context) : BasePopupWindow(context) {
                 }
             }
             tvRestore.setOnClickListener {
+                PointEvent.posePoint(PointEventKey.restore_subscription)
                 var subManager = SubscribeManager(successBack = {
                     (context as BaseActivity<*>).addLaunch(success = {
                         successBack.invoke()
@@ -132,12 +138,15 @@ class SubPop(context: Context) : BasePopupWindow(context) {
                 updateUI(llSubQuarterly, true)
             }
             tvTipsMonthly.text =
-                "\$3.96/${context.getString(R.string.app_weekly)} 50%${context.getString(R.string.app_off)}"
+                "\$3.96/${context.getString(R.string.app_monthly)} 50%${context.getString(R.string.app_off)}"
             tvTipsQuarterly.text =
                 "\$15.84/${context.getString(R.string.app_quarterly)} 80%${context.getString(R.string.app_off)}"
             llSubWeekly.performClick()
         }
         showPopupWindow()
+        PointEvent.posePoint(PointEventKey.subscribe_impression, Bundle().apply {
+            putString(PointValueKey.type,"no_vip")
+        })
     }
 
     private fun updateUI(llRoot: LinearLayoutCompat, isCheck: Boolean) {

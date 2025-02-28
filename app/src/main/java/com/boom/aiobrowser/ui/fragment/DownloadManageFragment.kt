@@ -99,11 +99,11 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
     }
 
     private fun updateVIPUI() {
-//        if (CacheManager.isSubscribeMember){
-//            fBinding.ivVIP.setImageResource(R.mipmap)
-//        }else{
-//            fBinding.ivVIP.setImageResource(R.mipmap)
-//        }
+        if (CacheManager.isSubscribeMember){
+            fBinding.ivVIP.setImageResource(R.mipmap.ic_vip_2)
+        }else{
+            fBinding.ivVIP.setImageResource(R.mipmap.ic_vip_1)
+        }
     }
 
     override fun setListener() {
@@ -252,6 +252,11 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
             }
         }
         PointEvent.posePoint(PointEventKey.download_tab)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateVIPUI()
     }
 
     override fun getBinding(

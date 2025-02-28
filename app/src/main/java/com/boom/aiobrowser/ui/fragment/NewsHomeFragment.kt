@@ -22,6 +22,8 @@ import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.ui.adapter.NewsPagerStateAdapter
+import com.boom.aiobrowser.ui.pop.SubInfoPop
+import com.boom.aiobrowser.ui.pop.SubPop
 import com.boom.indicator.ViewPagerHelper
 import com.boom.indicator.buildins.commonnavigator.CommonNavigator
 import com.boom.indicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
@@ -47,6 +49,28 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
             }
         } else {
             updateNewsHome(list)
+        }
+        fBinding.ivVIP.setOneClick {
+            if (CacheManager.isSubscribeMember.not()){
+                SubPop(rootActivity).createPop{
+                    updateVIPUI()
+                }
+            }else{
+                SubInfoPop(rootActivity).createPop()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateVIPUI()
+    }
+
+    private fun updateVIPUI() {
+        if (CacheManager.isSubscribeMember){
+            fBinding.ivVIP.setImageResource(R.mipmap.ic_vip_2)
+        }else{
+            fBinding.ivVIP.setImageResource(R.mipmap.ic_vip_1)
         }
     }
 

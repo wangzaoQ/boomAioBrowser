@@ -179,8 +179,9 @@ class SubscribeManager(var successBack: () -> Unit,var failBack: (content:String
                                 billingComplete()
                                 failBack.invoke("-1")
                             }else{
-                                p1.forEach {
-                                    acknowledged(it, tag = "queryShop"){
+                                for (i in 0 until p1.size){
+                                    var purchase = p1[i]
+                                    acknowledged(purchase, tag = "queryShop"){
                                         allount++
                                         if (it!=null){
                                             successCount++
@@ -350,7 +351,7 @@ class SubscribeManager(var successBack: () -> Unit,var failBack: (content:String
      * 确认购买
      */
     fun acknowledged(purchase: Purchase,tag:String,callBack: (purchase:Purchase?) -> Unit) {
-        showTemp("acknowledged tag:${tag}",false)
+        showTemp("acknowledged tag:${tag} purchaseState:${purchase.purchaseState} isAcknowledged:${purchase.isAcknowledged}",false)
         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
             if (!purchase.isAcknowledged) {
                 var acknowledgePurchaseParams =

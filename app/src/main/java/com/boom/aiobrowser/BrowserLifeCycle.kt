@@ -75,7 +75,7 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
                     it.finish()
                 }
                 AppLogs.dLog(APP.instance.TAG,"启动开屏")
-                if (APP.instance.allowShowStart && CacheManager.isSubscribeMember.not()){
+                if (APP.instance.allowShowStart){
                     activity.startActivity(Intent(activity,MainActivity::class.java))
                 }
             }

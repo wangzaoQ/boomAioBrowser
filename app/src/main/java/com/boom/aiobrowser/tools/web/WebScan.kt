@@ -449,6 +449,7 @@ object WebScan {
             var m3u8Size = PManager.calculateM3U8Size(finalUrl,headers)
             AppLogs.dLog("m3u8","calculateM3U8Size end")
 
+            AppLogs.dLog("m3u8","realUrl:${realUrl}")
             var hostList = extractDomain(realUrl)
             if (WebScan.isXhaMaster(hostList) && m3u8Size<10*1024*1024){
                 AppLogs.dLog("webReceive","过滤调广告 url:${finalUrl}")
@@ -520,7 +521,7 @@ object WebScan {
         var index = -1
         for (i in 0 until urlList.size) {
             var url = urlList.get(i)
-            if (url.startsWith(WebConfig.Xhamster, true)) {
+            if (url.startsWith(WebConfig.Xhamster, true)||url.startsWith(WebConfig.faphouse, true)) {
                 index = i
                 break
             }

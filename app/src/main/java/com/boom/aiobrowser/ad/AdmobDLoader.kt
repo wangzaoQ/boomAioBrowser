@@ -45,7 +45,7 @@ class AdmobDLoader(
                                 adRequestTime = (System.currentTimeMillis() - startTime) / 1000
                             })
                             if (APP.isDebug){
-                                PointEvent.adPoint(AdValue.zza(1*100000,"",1*100000),appOpenAd,requestBean,adEnum)
+//                                PointEvent.adPoint(AdValue.zza(1*100000,"",1*100000),appOpenAd,requestBean,adEnum)
                             }
                             appOpenAd.setOnPaidEventListener {
                                 PointEvent.adPoint(it,appOpenAd,requestBean,adEnum)
@@ -82,7 +82,7 @@ class AdmobDLoader(
                                 }
                             })
                             if (APP.isDebug){
-                                PointEvent.adPoint(AdValue.zza(1*100000,"",1*100000),inAd,requestBean,adEnum)
+//                                PointEvent.adPoint(AdValue.zza(1*100000,"",1*100000),inAd,requestBean,adEnum)
                             }
                             inAd.setOnPaidEventListener {
                                 PointEvent.adPoint(it,inAd,requestBean,adEnum)

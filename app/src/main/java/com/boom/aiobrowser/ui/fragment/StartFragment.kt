@@ -83,6 +83,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         }else{
             fBinding.rlStart.visibility = View.GONE
         }
+        job?.jobCancel()
         job = rootActivity.addLaunch(success = {
             while (true){
                 delay(1000)
@@ -92,8 +93,9 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         if (currentTime>10000){
             showEnd()
         }else{
-            startPb(fBinding.progress.progress, 100, (10000-currentTime), update = {
-                if (isFirst && it<=30){
+            var isSubscribeMember = CacheManager.isSubscribeMember
+            startPb(fBinding.progress.progress, 100, if (isSubscribeMember) 1000 else (10000-currentTime), update = {
+                if (isFirst && it<=30 || isSubscribeMember){
                     fBinding.progress.progress = it
                 }else{
                     if (AioADDataManager.adAllowShowScreen()){

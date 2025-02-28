@@ -51,6 +51,11 @@ class AioADShowManager(
     }
 
     fun showScreenAD(pointTag: String,allowShowDefaultAD:Boolean=true) {
+        if (CacheManager.isSubscribeMember){
+            AppLogs.dLog(AioADDataManager.TAG,"已是会员不展示广告")
+            adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "是会员")
+            return
+        }
         var adResultData = AioADDataManager.getCacheAD(adEnum)
         if (activity == null || activity.getActivityStatus().not()) {
             adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "activity 状态异常")
@@ -117,6 +122,10 @@ class AioADShowManager(
         flRoot: FrameLayout,
         pointTag:String
     ) {
+        if (CacheManager.isSubscribeMember){
+            AppLogs.dLog(AioADDataManager.TAG,"已是会员不展示广告")
+            return
+        }
         val data = AioADDataManager.getCacheAD(adEnum)
         var status = activity?.getActivityStatus()?.not()?:true
         if (adEnum == ADEnum.NATIVE_AD || adEnum == ADEnum.BANNER_AD_NEWS_DETAILS_TOP){
@@ -141,6 +150,10 @@ class AioADShowManager(
     }
 
     fun showADBanner(parent:ViewGroup, data: ADResultData,pointTag:String) {
+        if (CacheManager.isSubscribeMember){
+            AppLogs.dLog(AioADDataManager.TAG,"已是会员不展示广告")
+            return
+        }
         adShow?.showADBanner(parent,data,pointTag)
         AioADDataManager.adCache.remove(adEnum)
         AioADDataManager.preloadAD(adEnum,"showADBanner 广告展示时")

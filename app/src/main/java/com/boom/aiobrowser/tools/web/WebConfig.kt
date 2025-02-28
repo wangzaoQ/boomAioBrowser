@@ -15,5 +15,6 @@ object WebConfig {
     const val YOUTUBE = "youtube"
     const val VIMEO = "vimeo"
     const val Xhamster = "xhamster"
+    const val faphouse = "faphouse"
 
 }

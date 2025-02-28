@@ -31,7 +31,7 @@ public abstract class BaseAnimationConfig<T> {
     }
 
     void reset() {
-        duration = DEFAULT_DURATION;
+        duration = 200;
         interpolator = DEFAULT_INTERPOLATOR;
         pivotX = pivotY = pivotY2 = 0;
         fillBefore = false;

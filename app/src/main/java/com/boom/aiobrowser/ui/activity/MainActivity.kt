@@ -113,7 +113,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             acBinding.fragmentMain.setCurrentItem(it,true)
         }
         APP.firstToDownloadLiveData.observe(this){
-            var mMainNavFragment = fragments.get(0).childFragmentManager.findFragmentById(R.id.fragment_view)
+            var mMainNavFragment = fragments.get(1).childFragmentManager.findFragmentById(R.id.fragment_view)
             var currentFragmentInstance = mMainNavFragment?.getChildFragmentManager()?.getPrimaryNavigationFragment();
             if (currentFragmentInstance != null && currentFragmentInstance is WebFragment) {
                 JumpDataManager.toMain(true)
@@ -160,6 +160,11 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     private fun clickIndex(index: Int) {
         acBinding.fragmentMain.setCurrentItem(index, false)
         updateUI(index)
+        if (index == 1){
+            jumpActivity<SearchActivity>(Bundle().apply {
+                putString(PointValueKey.from_type,"search")
+            })
+        }
 //        var manager = AioADShowManager(this, ADEnum.INT_AD, tag = "底部按钮切换") {}
 //        manager.showScreenAD(AD_POINT.aobws_tap_int,false)
     }
@@ -370,6 +375,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     }
 
     fun hideStart(isNormal: Boolean) {
+        APP.instance.appModel.getWebConfig()
         APP.instance.isHideSplash = true
         var allowShowPop = true
         // 0 默认  1 browser 2 news
@@ -636,31 +642,38 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                         manager.showScreenAD(AD_POINT.aobws_downreturn_int)
                         true
                     }
+                }else{
+                    showBackPop()
+                    return true
                 }
                 AppLogs.dLog(acTAG,"返回 activity super.onKeyDown")
             }else if (APP.instance.isHideSplash.not()){
                 return true
             }else{
-                BackPop(this).createPop {
-                    try {
-                        val intent = Intent(Intent.ACTION_MAIN)
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        intent.addCategory(Intent.CATEGORY_HOME)
-                        this.startActivity(intent)
-                    } catch (e: Throwable) {
-                        var temp = mutableListOf<Activity>()
-                        APP.instance.lifecycleApp.stack.forEach {
-                            temp.add(it)
-                        }
-                        temp.forEach {
-                            it.finish()
-                        }
-                    }
-                }
+                showBackPop()
                 return true
             }
         }
         return super.onKeyDown(keyCode, event)
+    }
+
+    private fun showBackPop() {
+        BackPop(this).createPop {
+            try {
+                val intent = Intent(Intent.ACTION_MAIN)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                intent.addCategory(Intent.CATEGORY_HOME)
+                this.startActivity(intent)
+            } catch (e: Throwable) {
+                var temp = mutableListOf<Activity>()
+                APP.instance.lifecycleApp.stack.forEach {
+                    temp.add(it)
+                }
+                temp.forEach {
+                    it.finish()
+                }
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

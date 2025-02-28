@@ -325,6 +325,10 @@ object PointEventKey {
     //订阅闪购
     const val subscribe_pop = "subscribe_pop"
     const val webpage_show = "webpage_show"
+    //退出APP挽留弹窗展示
+    const val exit_pop = "exit_pop"
+//    退出APP挽留弹窗【退出】点击
+    const val exit_pop_exit = "exit_pop_exit"
 
 }
 

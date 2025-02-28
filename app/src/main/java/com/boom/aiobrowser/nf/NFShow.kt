@@ -220,6 +220,7 @@ object NFShow {
             if (enum == NFEnum.NF_DEFAULT && data.nfSource.isNullOrEmpty().not()){
                 putString(PointValueKey.source_from, data.nfSource)
             }
+            putString(PointValueKey.news_id, data?.itackl?:"")
             putString(PointValueKey.source_type,sourceType)
         })
         if (data.nfSource == NFEnum.NF_NEWS.menuName || data.nfSource == NFEnum.NF_NEW_USER.menuName || data.nfSource == NFEnum.NF_NEWS_FCM.menuName){

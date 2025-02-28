@@ -324,6 +324,7 @@ class NewsViewModel : BaseDataModel() {
                     isLoading = true
                     this.topicList = mutableListOf()
                 } else {
+                    isLoading = false
                     this.topicList = topicList
                 }
                 dataType = NewsData.TYPE_HOME_NEWS_TOPIC

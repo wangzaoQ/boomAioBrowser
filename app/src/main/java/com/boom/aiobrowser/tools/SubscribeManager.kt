@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.tools
 
+import android.os.Bundle
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClient.SkuType
@@ -214,7 +215,11 @@ class SubscribeManager(var successBack: () -> Unit,var failBack: (content:String
         })
     }
 
-    fun subscribeShop(reference: WeakReference<BaseActivity<*>>, productId: String) {
+    fun subscribeShop(reference: WeakReference<BaseActivity<*>>, productId: String,fromType:Int = 0) {
+        PointEvent.posePoint(PointEventKey.subscribe_click, Bundle().apply {
+            putString("type",productId)
+            putString("from",if (fromType == 0) "subscribe_impression" else "subscribe_pop")
+        })
         billingclient.startConnection(object : BillingClientStateListener {
             override fun onBillingServiceDisconnected() {
                 // 连接断开

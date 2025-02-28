@@ -109,6 +109,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             }
             if (index>=0){
                 newsAdapter.mutableItems.get(index).topicList = it
+                newsAdapter.mutableItems.get(index).isLoading = false
                 newsAdapter.notifyItemChanged(index)
             }
         }

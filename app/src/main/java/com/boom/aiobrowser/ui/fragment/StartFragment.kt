@@ -258,7 +258,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
             NFShow.showForegroundNF()
         }, onFail = {})
-        CloakManager().getCloak()
+
         if (CacheManager.isSubscribeMember){
             var subManager = SubscribeManager(successBack = {
 

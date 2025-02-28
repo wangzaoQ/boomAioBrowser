@@ -39,6 +39,7 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
     var fragmentAdapter: NewsPagerStateAdapter? = null
 
     override fun startLoadData() {
+        APP.instance.appModel.getTopics()
     }
 
     override fun setListener() {

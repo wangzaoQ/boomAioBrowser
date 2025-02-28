@@ -77,7 +77,8 @@ class SubTempPop(context: Context,var showADBack: () -> Unit) : BasePopupWindow(
         if (CacheManager.isSubscribeMember.not()) {
             subManager.subscribeShop(
                 WeakReference(context as BaseActivity<*>),
-                "vip_weekly"
+                "vip_weekly",
+                1
             )
         } else {
             ToastUtils.showShort(context.getString(R.string.app_current_sub))

@@ -107,7 +107,7 @@ class AdmobShow(activity: BaseActivity<*>, adEnum: ADEnum, tag: String,result: (
         val data = AioADDataManager.getCacheAD(adEnum)
         nativeAd = (data!!.adAny as NativeAd)
         if (flRoot.childCount == 0 || (flRoot.get(0) is NativeAdView).not()) {
-            if (pointTag == AD_POINT.aobws_task_add){
+            if (pointTag == AD_POINT.aobws_task_add || pointTag == AD_POINT.aobws_back){
                 val binding: BrowserAdNative2Binding = BrowserAdNative2Binding.inflate(activity.layoutInflater)
                 nativeAdView = binding.root
             }else if (pointTag == ADEnum.BANNER_AD_NEWS_DETAILS.adName){

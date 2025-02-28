@@ -41,7 +41,6 @@ class SubPop(context: Context) : BasePopupWindow(context) {
     fun createPop(successBack: () -> Unit) {
         defaultBinding?.apply {
             btnConfirm.setOnClickListener {
-                PointEvent.posePoint(PointEventKey.subscribe_click)
                 var subManager = SubscribeManager(successBack = {
                     (context as BaseActivity<*>).addLaunch(success = {
                         successBack.invoke()

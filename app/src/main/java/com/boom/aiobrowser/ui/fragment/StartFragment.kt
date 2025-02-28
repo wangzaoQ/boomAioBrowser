@@ -90,11 +90,11 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
                 currentTime+=1000
             }
         }, failBack = {})
-        if (currentTime>10000){
+        if (currentTime>11000){
             showEnd()
         }else{
             var isSubscribeMember = CacheManager.isSubscribeMember
-            startPb(fBinding.progress.progress, 100, if (isSubscribeMember) 1000 else (10000-currentTime), update = {
+            startPb(fBinding.progress.progress, 100, if (isSubscribeMember) 1000 else (11000-currentTime), update = {
                 if (isFirst && it<=30 || isSubscribeMember){
                     fBinding.progress.progress = it
                 }else{

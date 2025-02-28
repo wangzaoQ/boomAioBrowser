@@ -52,10 +52,12 @@ object AioADDataManager {
 
 
     fun initAD(){
-        AppLogs.dLog(APP.instance.TAG,"max 初始化")
-        MobileAds.initialize(APP.instance){
-            AppLogs.dLog(APP.instance.TAG,"admob 初始化结束")
-        }
+        AppLogs.dLog(APP.instance.TAG,"广告 初始化")
+        MobileAds.initialize(APP.instance)
+        AppLogs.dLog(APP.instance.TAG,"admob 初始化结束")
+//        MobileAds.initialize(APP.instance){
+//            AppLogs.dLog(APP.instance.TAG,"admob 初始化结束")
+//        }
         // Create the initialization configuration
         val initConfig = AppLovinSdkInitializationConfiguration.builder("9Aoo-xD1yqU_6ut1GkUtMgMK3r7KCRfQoVUUO_sdl6idKtF_d1Tz7_Zs4rk0ESL1O31oO8ygDloEzMIMgBbKFT", APP.instance)
             .setMediationProvider(AppLovinMediationProvider.MAX)

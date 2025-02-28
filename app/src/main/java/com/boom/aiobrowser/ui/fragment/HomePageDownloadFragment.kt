@@ -46,14 +46,14 @@ class HomePageDownloadFragment : BaseFragment<BrowserHomeDownloadBinding>(){
                 delay(1000)
             }
             withContext(Dispatchers.Main){
-                if (AioADDataManager.adFilter1().not()) {
+                if (CacheManager.isVIP().not()){
                     PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
                         putString(PointValueKey.ad_pos_id, AD_POINT.aobws_download_one)
                     })
-                    AioADShowManager(rootActivity, ADEnum.BANNER_AD_NEWS_DETAILS_TOP,"下载页原生"){
-
-                    }.showNativeAD(fBinding.flRoot, AD_POINT.aobws_download_one)
                 }
+                AioADShowManager(rootActivity, ADEnum.BANNER_AD_NEWS_DETAILS_TOP,"下载页原生"){
+
+                }.showNativeAD(fBinding.flRoot, AD_POINT.aobws_download_one)
             }
         }, failBack = {})
     }

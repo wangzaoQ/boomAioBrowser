@@ -406,6 +406,9 @@
     <string name="app_vip_user">VIP User</string>
     <string name="app_sub_error">Server error</string>
     <string name="app_flash_sale">flash sale</string>
+    <string name="app_clear_browsing_history">Clear browsing history</string>
+    <string name="app_clear_all_tabs">Close all tabs</string>
+    <string name="app_exit_app">Exit the App</string>
 
 
 </resources>

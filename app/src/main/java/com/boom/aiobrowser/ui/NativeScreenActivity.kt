@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.ui
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,9 @@ import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserActivityNativeScreenBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.google.android.gms.ads.nativead.MediaView
 import com.google.android.gms.ads.nativead.NativeAd
@@ -85,6 +89,10 @@ class NativeScreenActivity :BaseActivity<BrowserActivityNativeScreenBinding>(){
             if(it!=0)return@add
             destoryNative()
         }
+        var tag = intent.getStringExtra("pointTag")?:""
+        PointEvent.posePoint(PointEventKey.aobws_ad_impression, Bundle().apply {
+            putString(PointValueKey.ad_pos_id,tag)
+        })
         AioADDataManager.adCache.remove(ADEnum.DEFAULT_AD)
     }
 

@@ -107,7 +107,9 @@ class AioADShowManager(
             if (APP.instance.lifecycleApp.stack.size>0 && APP.instance.lifecycleApp.stack.get(APP.instance.lifecycleApp.stack.size-1) is BaseActivity<*>){
                 var currentTopActivity = (APP.instance.lifecycleApp.stack.get(APP.instance.lifecycleApp.stack.size-1) as BaseActivity<*>)
                 adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_SUCCESS, tag = "图片池广告加载完毕")
-                currentTopActivity.startActivity(Intent(currentTopActivity,NativeScreenActivity::class.java))
+                currentTopActivity.startActivity(Intent(currentTopActivity,NativeScreenActivity::class.java).apply {
+                    putExtra("pointTag",pointTag)
+                })
             }else{
                 adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "没有有效activity")
             }

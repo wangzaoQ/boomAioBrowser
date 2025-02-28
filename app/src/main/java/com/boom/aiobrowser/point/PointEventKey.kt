@@ -374,7 +374,8 @@ object PointValue{
 
 
 object AD_POINT{
-    const val aobws_launch = "aobws_launch"
+    const val aobws_launch = "aobws_launch_new"
+    const val aobws_launch_other = "aobws_launch_other"
     const val aobws_download_int = "aobws_download_int"
     const val aobws_play_int = "aobws_play_int"
     const val aobws_tap_int = "aobws_tap_int"
@@ -392,4 +393,5 @@ object AD_POINT{
     const val aobws_newsclick_int = "aobws_newsclick_int"
     const val aobws_downclick_int = "aobws_downclick_int"
     const val aobws_downguide_int = "aobws_downguide_int"
+    const val aobws_back = "aobws_back"
 }

@@ -186,7 +186,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
                         var manager = AioADShowManager(rootActivity,ADEnum.LAUNCH_AD, tag = "开屏") {
                             adLoadComplete(it)
                         }
-                        manager.showScreenAD(AD_POINT.aobws_launch)
+                        manager.showScreenAD(if (CacheManager.isFirstStart) AD_POINT.aobws_launch else AD_POINT.aobws_launch_other)
                     } else {
                         AppLogs.dLog(fragmentTAG, "不展示广告直接跳转")
                         adLoadComplete(AioADDataManager.AD_SHOW_TYPE_FAILED)

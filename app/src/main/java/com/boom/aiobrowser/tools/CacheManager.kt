@@ -525,7 +525,7 @@ object CacheManager {
             if (list.isNullOrEmpty()){
                 list = mutableListOf<JumpData>().apply {
                     add(JumpData().apply {
-                        jumpTitle = APP.instance.getString(R.string.app_home)
+                        jumpTitle = APP.instance.getString(R.string.app_search)
                         jumpType = JumpConfig.JUMP_HOME
                         isCurrent = true
                     })
@@ -937,6 +937,10 @@ object CacheManager {
             list.add(data)
         }
         alreadyAddCityList = list
+    }
+
+    fun isVIP(): Boolean {
+        return isSubscribeMember
     }
 
     var dayPreloadCount: Int

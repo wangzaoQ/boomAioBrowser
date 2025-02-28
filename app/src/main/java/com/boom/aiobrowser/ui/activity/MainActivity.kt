@@ -56,6 +56,7 @@ import com.boom.aiobrowser.ui.fragment.MeFragment
 import com.boom.aiobrowser.ui.fragment.NewsHomeFragment
 import com.boom.aiobrowser.ui.fragment.StartFragment
 import com.boom.aiobrowser.ui.fragment.WebFragment
+import com.boom.aiobrowser.ui.pop.BackPop
 import com.boom.aiobrowser.ui.pop.DefaultPop
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.MorePop
@@ -639,16 +640,24 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 AppLogs.dLog(acTAG,"返回 activity super.onKeyDown")
             }else if (APP.instance.isHideSplash.not()){
                 return true
-            }
-            return try {
-                val intent = Intent(Intent.ACTION_MAIN)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                intent.addCategory(Intent.CATEGORY_HOME)
-                this.startActivity(intent)
-                true
-            } catch (e: Throwable) {
-                e.printStackTrace()
-                super.onKeyDown(keyCode, event)
+            }else{
+                BackPop(this).createPop {
+                    try {
+                        val intent = Intent(Intent.ACTION_MAIN)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        intent.addCategory(Intent.CATEGORY_HOME)
+                        this.startActivity(intent)
+                    } catch (e: Throwable) {
+                        var temp = mutableListOf<Activity>()
+                        APP.instance.lifecycleApp.stack.forEach {
+                            temp.add(it)
+                        }
+                        temp.forEach {
+                            it.finish()
+                        }
+                    }
+                }
+                return true
             }
         }
         return super.onKeyDown(keyCode, event)

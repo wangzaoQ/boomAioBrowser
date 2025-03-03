@@ -378,4 +378,33 @@
     <string name="app_web_guide1">1. ビデオタイトルを探す</string>
     <string name="app_web_guide2">2. ビデオを視聴する</string>
     <string name="app_web_guide3">3. ボタンをクリックしてビデオをダウンロードする</string>
+
+    <string name="app_sub_pop_text1">広告なしモードで、情報を快適に閲覧</string>
+    <string name="app_sub_pop_text2">高速ダウンロードで、より速いダウンロード速度を体験</string>
+    <string name="app_weekly">毎週</string>
+    <string name="app_monthly">毎月</string>
+    <string name="app_quarterly">四半期ごと</string>
+    <string name="app_subscribe_now">今すぐ購読</string>
+    <string name="app_sub_tips">このサブスクリプションで広告なしの閲覧が可能になります。Google Playでいつでもキャンセルできます。</string>
+    <string name="app_no_ads">広告なし</string>
+    <string name="app_off">オフ</string>
+    <string name="app_sub_info_manage">サブスクリプション管理</string>
+    <string name="app_query_status">ステータスを確認</string>
+    <string name="app_unsub">購読を解除</string>
+    <string name="app_sub_failed">購読に失敗しました</string>
+    <string name="app_sub_failed_tips">おっと！購読処理で問題が発生しました！</string>
+    <string name="app_retry">再試行</string>
+    <string name="app_restore_sub">購読を復元</string>
+    <string name="app_open_error">開けません</string>
+    <string name="app_restore_error">復元に失敗しました</string>
+    <string name="app_ad_free_reading">広告なしで読む</string>
+    <string name="app_ad_free_reading_tips">邪魔されない快適な体験を</string>
+    <string name="app_buy_now">今すぐ購入</string>
+    <string name="app_current_sub">現在の購読</string>
+    <string name="app_vip_user">VIPユーザー</string>
+    <string name="app_sub_error">サーバーエラー</string>
+    <string name="app_flash_sale">フラッシュセール</string>
+    <string name="app_clear_browsing_history">閲覧履歴を削除</string>
+    <string name="app_clear_all_tabs">すべてのタブを閉じる</string>
+    <string name="app_exit_app">アプリを終了</string>
 </resources>

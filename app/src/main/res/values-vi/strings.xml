@@ -379,4 +379,33 @@
     <string name="app_web_guide1">1. Tìm tiêu đề video</string>
     <string name="app_web_guide2">2. Xem video</string>
     <string name="app_web_guide3">3. Nhấn nút để tải video</string>
+
+    <string name="app_sub_pop_text1">Chế độ không quảng cáo, duyệt thông tin dễ dàng</string>
+    <string name="app_sub_pop_text2">Tải xuống tốc độ cao, thưởng thức tốc độ tải nhanh hơn</string>
+    <string name="app_weekly">Hàng tuần</string>
+    <string name="app_monthly">Hàng tháng</string>
+    <string name="app_quarterly">Hàng quý</string>
+    <string name="app_subscribe_now">Đăng ký ngay</string>
+    <string name="app_sub_tips">Đăng ký này giúp bạn duyệt web không có quảng cáo. Bạn có thể hủy đăng ký trong Google Play.</string>
+    <string name="app_no_ads">Không có quảng cáo</string>
+    <string name="app_off">Tắt</string>
+    <string name="app_sub_info_manage">Quản lý đăng ký</string>
+    <string name="app_query_status">Kiểm tra trạng thái</string>
+    <string name="app_unsub">Hủy đăng ký</string>
+    <string name="app_sub_failed">Đăng ký thất bại</string>
+    <string name="app_sub_failed_tips">Ôi! Đã có sự cố khi đăng ký!</string>
+    <string name="app_retry">Thử lại</string>
+    <string name="app_restore_sub">Khôi phục đăng ký</string>
+    <string name="app_open_error">Không thể mở</string>
+    <string name="app_restore_error">Khôi phục thất bại</string>
+    <string name="app_ad_free_reading">Đọc không quảng cáo</string>
+    <string name="app_ad_free_reading_tips">Tận hưởng trải nghiệm không bị phân tâm</string>
+    <string name="app_buy_now">Mua ngay</string>
+    <string name="app_current_sub">Đã đăng ký</string>
+    <string name="app_vip_user">Người dùng VIP</string>
+    <string name="app_sub_error">Lỗi máy chủ</string>
+    <string name="app_flash_sale">Khuyến mãi chớp nhoáng</string>
+    <string name="app_clear_browsing_history">Xóa lịch sử duyệt web</string>
+    <string name="app_clear_all_tabs">Đóng tất cả các tab</string>
+    <string name="app_exit_app">Thoát ứng dụng</string>
 </resources>

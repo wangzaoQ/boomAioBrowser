@@ -377,4 +377,33 @@
     <string name="app_web_guide1">1. 비디오 제목 찾기</string>
     <string name="app_web_guide2">2. 비디오 시청하기</string>
     <string name="app_web_guide3">3. 버튼을 클릭하여 비디오 다운로드</string>
+
+    <string name="app_sub_pop_text1">광고 없는 모드로 정보를 쉽게 탐색하세요</string>
+    <string name="app_sub_pop_text2">고속 다운로드로 더 빠른 속도를 즐기세요</string>
+    <string name="app_weekly">주간</string>
+    <string name="app_monthly">월간</string>
+    <string name="app_quarterly">분기별</string>
+    <string name="app_subscribe_now">지금 구독하기</string>
+    <string name="app_sub_tips">이 구독을 통해 광고 없이 탐색할 수 있습니다. Google Play에서 언제든지 취소할 수 있습니다.</string>
+    <string name="app_no_ads">광고 없음</string>
+    <string name="app_off">끄기</string>
+    <string name="app_sub_info_manage">구독 관리</string>
+    <string name="app_query_status">상태 조회</string>
+    <string name="app_unsub">구독 취소</string>
+    <string name="app_sub_failed">구독 실패</string>
+    <string name="app_sub_failed_tips">앗! 구독 과정에서 문제가 발생했습니다!</string>
+    <string name="app_retry">다시 시도</string>
+    <string name="app_restore_sub">구독 복원</string>
+    <string name="app_open_error">열 수 없음</string>
+    <string name="app_restore_error">복원 실패</string>
+    <string name="app_ad_free_reading">광고 없는 읽기</string>
+    <string name="app_ad_free_reading_tips">방해 없는 몰입형 경험을 즐기세요</string>
+    <string name="app_buy_now">지금 구매</string>
+    <string name="app_current_sub">현재 구독 중</string>
+    <string name="app_vip_user">VIP 사용자</string>
+    <string name="app_sub_error">서버 오류</string>
+    <string name="app_flash_sale">한정 특가</string>
+    <string name="app_clear_browsing_history">검색 기록 삭제</string>
+    <string name="app_clear_all_tabs">모든 탭 닫기</string>
+    <string name="app_exit_app">앱 종료</string>
 </resources>

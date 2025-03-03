@@ -380,4 +380,33 @@
     <string name="app_web_guide1">1. Finde Video-Titel</string>
     <string name="app_web_guide2">2. Schau dir das Video an</string>
     <string name="app_web_guide3">3. Klicke auf den Button, um das Video herunterzuladen</string>
+
+    <string name="app_sub_pop_text1">Werbefreier Modus, einfaches Durchsuchen von Informationen</string>
+    <string name="app_sub_pop_text2">Highspeed-Download, genießen Sie eine schnellere Download-Geschwindigkeit</string>
+    <string name="app_weekly">Wöchentlich</string>
+    <string name="app_monthly">Monatlich</string>
+    <string name="app_quarterly">Vierteljährlich</string>
+    <string name="app_subscribe_now">Jetzt abonnieren</string>
+    <string name="app_sub_tips">Dieses Abonnement bietet Ihnen ein werbefreies Erlebnis. Sie können Ihr Abonnement in Google Play kündigen.</string>
+    <string name="app_no_ads">Keine Werbung</string>
+    <string name="app_off">Aus</string>
+    <string name="app_sub_info_manage">Abonnementverwaltung</string>
+    <string name="app_query_status">Status abfragen</string>
+    <string name="app_unsub">Abonnement kündigen</string>
+    <string name="app_sub_failed">Abonnement fehlgeschlagen</string>
+    <string name="app_sub_failed_tips">Ups! Bei der Anmeldung ist ein Fehler aufgetreten!</string>
+    <string name="app_retry">Erneut versuchen</string>
+    <string name="app_restore_sub">Abonnement wiederherstellen</string>
+    <string name="app_open_error">Kann nicht geöffnet werden</string>
+    <string name="app_restore_error">Wiederherstellung fehlgeschlagen</string>
+    <string name="app_ad_free_reading">Werbefreies Lesen</string>
+    <string name="app_ad_free_reading_tips">Genießen Sie ein ablenkungsfreies Erlebnis</string>
+    <string name="app_buy_now">Jetzt kaufen</string>
+    <string name="app_current_sub">Aktuelles Abonnement</string>
+    <string name="app_vip_user">VIP-Nutzer</string>
+    <string name="app_sub_error">Serverfehler</string>
+    <string name="app_flash_sale">Blitzangebot</string>
+    <string name="app_clear_browsing_history">Browserverlauf löschen</string>
+    <string name="app_clear_all_tabs">Alle Tabs schließen</string>
+    <string name="app_exit_app">App beenden</string>
 </resources>

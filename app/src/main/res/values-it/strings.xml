@@ -378,4 +378,33 @@
     <string name="app_web_guide1">1. Trova i titoli dei video</string>
     <string name="app_web_guide2">2. Guarda il video</string>
     <string name="app_web_guide3">3. Clicca il bottone per scaricare il video</string>
+
+    <string name="app_sub_pop_text1">Modalità senza pubblicità, naviga facilmente tra le informazioni</string>
+    <string name="app_sub_pop_text2">Download ad alta velocità, goditi una velocità maggiore</string>
+    <string name="app_weekly">Settimanale</string>
+    <string name="app_monthly">Mensile</string>
+    <string name="app_quarterly">Trimestrale</string>
+    <string name="app_subscribe_now">Abbonati Ora</string>
+    <string name="app_sub_tips">Questo abbonamento ti offre una navigazione senza pubblicità. Puoi annullare il tuo abbonamento su Google Play.</string>
+    <string name="app_no_ads">Nessuna Pubblicità</string>
+    <string name="app_off">Disattivato</string>
+    <string name="app_sub_info_manage">Gestione Abbonamento</string>
+    <string name="app_query_status">Verifica Stato</string>
+    <string name="app_unsub">Annulla Abbonamento</string>
+    <string name="app_sub_failed">Abbonamento non riuscito</string>
+    <string name="app_sub_failed_tips">Oops! Qualcosa è andato storto con l\'abbonamento!</string>
+    <string name="app_retry">Riprova</string>
+    <string name="app_restore_sub">Ripristina Abbonamento</string>
+    <string name="app_open_error">Impossibile aprire</string>
+    <string name="app_restore_error">Ripristino non riuscito</string>
+    <string name="app_ad_free_reading">Lettura senza pubblicità</string>
+    <string name="app_ad_free_reading_tips">Goditi un\'esperienza senza distrazioni</string>
+    <string name="app_buy_now">Acquista Ora</string>
+    <string name="app_current_sub">Abbonamento Attuale</string>
+    <string name="app_vip_user">Utente VIP</string>
+    <string name="app_sub_error">Errore del server</string>
+    <string name="app_flash_sale">Offerta Lampo</string>
+    <string name="app_clear_browsing_history">Cancella cronologia di navigazione</string>
+    <string name="app_clear_all_tabs">Chiudi tutte le schede</string>
+    <string name="app_exit_app">Esci dall\'App</string>
 </resources>

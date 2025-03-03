@@ -379,4 +379,33 @@
     <string name="app_web_guide1">1. Video başlıklarını bulun</string>
     <string name="app_web_guide2">2. Videoyu izleyin</string>
     <string name="app_web_guide3">3. Videoyu indirmek için düğmeye tıklayın</string>
+
+    <string name="app_sub_pop_text1">Reklamsız mod, bilgileri kolayca görüntüleyin</string>
+    <string name="app_sub_pop_text2">Yüksek hızlı indirme, daha hızlı indirme keyfi</string>
+    <string name="app_weekly">Haftalık</string>
+    <string name="app_monthly">Aylık</string>
+    <string name="app_quarterly">Üç Aylık</string>
+    <string name="app_subscribe_now">Şimdi Abone Ol</string>
+    <string name="app_sub_tips">Bu abonelik size reklamsız gezinme imkanı sunar. Aboneliğinizi Google Play üzerinden iptal edebilirsiniz.</string>
+    <string name="app_no_ads">Reklamsız</string>
+    <string name="app_off">Kapalı</string>
+    <string name="app_sub_info_manage">Abonelik Yönetimi</string>
+    <string name="app_query_status">Durumu Sorgula</string>
+    <string name="app_unsub">Aboneliği İptal Et</string>
+    <string name="app_sub_failed">Abonelik başarısız</string>
+    <string name="app_sub_failed_tips">Üzgünüz! Abonelik işlemi başarısız oldu!</string>
+    <string name="app_retry">Tekrar Dene</string>
+    <string name="app_restore_sub">Aboneliği Geri Yükle</string>
+    <string name="app_open_error">Açılamıyor</string>
+    <string name="app_restore_error">Geri yükleme başarısız</string>
+    <string name="app_ad_free_reading">Reklamsız Okuma</string>
+    <string name="app_ad_free_reading_tips">Dikkatiniz dağılmadan keyif alın</string>
+    <string name="app_buy_now">Şimdi Satın Al</string>
+    <string name="app_current_sub">Şu Anda Abone</string>
+    <string name="app_vip_user">VIP Kullanıcı</string>
+    <string name="app_sub_error">Sunucu Hatası</string>
+    <string name="app_flash_sale">Flaş İndirim</string>
+    <string name="app_clear_browsing_history">Gezinme geçmişini temizle</string>
+    <string name="app_clear_all_tabs">Tüm sekmeleri kapat</string>
+    <string name="app_exit_app">Uygulamadan Çık</string>
 </resources>

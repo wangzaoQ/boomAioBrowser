@@ -379,4 +379,33 @@
     <string name="app_web_guide1">1. Найдите названия видео</string>
     <string name="app_web_guide2">2. Посмотрите видео</string>
     <string name="app_web_guide3">3. Нажмите кнопку для загрузки видео</string>
+
+    <string name="app_sub_pop_text1">Режим без рекламы, удобный просмотр информации</string>
+    <string name="app_sub_pop_text2">Высокоскоростная загрузка, наслаждайтесь более быстрой загрузкой</string>
+    <string name="app_weekly">Еженедельно</string>
+    <string name="app_monthly">Ежемесячно</string>
+    <string name="app_quarterly">Ежеквартально</string>
+    <string name="app_subscribe_now">Подписаться сейчас</string>
+    <string name="app_sub_tips">Эта подписка предоставляет вам просмотр без рекламы. Вы можете отменить подписку в Google Play.</string>
+    <string name="app_no_ads">Без рекламы</string>
+    <string name="app_off">Выкл.</string>
+    <string name="app_sub_info_manage">Управление подпиской</string>
+    <string name="app_query_status">Проверить статус</string>
+    <string name="app_unsub">Отменить подписку</string>
+    <string name="app_sub_failed">Ошибка подписки</string>
+    <string name="app_sub_failed_tips">Ой! Что-то пошло не так с подпиской!</string>
+    <string name="app_retry">Повторить</string>
+    <string name="app_restore_sub">Восстановить подписку</string>
+    <string name="app_open_error">Не удалось открыть</string>
+    <string name="app_restore_error">Ошибка восстановления</string>
+    <string name="app_ad_free_reading">Чтение без рекламы</string>
+    <string name="app_ad_free_reading_tips">Наслаждайтесь просмотром без отвлекающих факторов</string>
+    <string name="app_buy_now">Купить сейчас</string>
+    <string name="app_current_sub">Текущая подписка</string>
+    <string name="app_vip_user">VIP-пользователь</string>
+    <string name="app_sub_error">Ошибка сервера</string>
+    <string name="app_flash_sale">Мгновенная распродажа</string>
+    <string name="app_clear_browsing_history">Очистить историю просмотров</string>
+    <string name="app_clear_all_tabs">Закрыть все вкладки</string>
+    <string name="app_exit_app">Выйти из приложения</string>
 </resources>

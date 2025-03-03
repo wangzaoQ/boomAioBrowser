@@ -380,4 +380,33 @@
     <string name="app_web_guide1">1. Temukan judul video</string>
     <string name="app_web_guide2">2. Tonton video</string>
     <string name="app_web_guide3">3. Klik tombol untuk mengunduh video</string>
+
+    <string name="app_sub_pop_text1">Mode bebas iklan, jelajahi informasi dengan mudah</string>
+    <string name="app_sub_pop_text2">️Unduhan kecepatan tinggi, nikmati kecepatan unduh lebih cepat</string>
+    <string name="app_weekly">Mingguan</string>
+    <string name="app_monthly">Bulanan</string>
+    <string name="app_quarterly">Triwulanan</string>
+    <string name="app_subscribe_now">Langganan Sekarang</string>
+    <string name="app_sub_tips">Langganan ini memberi Anda pengalaman menjelajah tanpa iklan. Anda dapat membatalkan langganan di Google Play.</string>
+    <string name="app_no_ads">Tanpa Iklan</string>
+    <string name="app_off">mati</string>
+    <string name="app_sub_info_manage">Kelola Langganan</string>
+    <string name="app_query_status">Periksa Status</string>
+    <string name="app_unsub">Berhenti Berlangganan</string>
+    <string name="app_sub_failed">Gagal berlangganan</string>
+    <string name="app_sub_failed_tips">Ups! Ada masalah dengan langganan!</string>
+    <string name="app_retry">Coba Lagi</string>
+    <string name="app_restore_sub">Pulihkan Langganan</string>
+    <string name="app_open_error">Tidak dapat membuka</string>
+    <string name="app_restore_error">Gagal memulihkan</string>
+    <string name="app_ad_free_reading">Membaca tanpa iklan</string>
+    <string name="app_ad_free_reading_tips">Nikmati pengalaman tanpa gangguan</string>
+    <string name="app_buy_now">Beli Sekarang</string>
+    <string name="app_current_sub">Saat ini berlangganan</string>
+    <string name="app_vip_user">Pengguna VIP</string>
+    <string name="app_sub_error">Kesalahan server</string>
+    <string name="app_flash_sale">Penjualan kilat</string>
+    <string name="app_clear_browsing_history">Hapus riwayat penelusuran</string>
+    <string name="app_clear_all_tabs">Tutup semua tab</string>
+    <string name="app_exit_app">Keluar dari Aplikasi</string>
 </resources>

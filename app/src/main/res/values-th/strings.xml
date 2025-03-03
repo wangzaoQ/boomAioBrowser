@@ -380,4 +380,33 @@
     <string name="app_web_guide1">1. ค้นหาชื่อวิดีโอ</string>
     <string name="app_web_guide2">2. ดูวิดีโอ</string>
     <string name="app_web_guide3">3. คลิกปุ่มเพื่อดาวน์โหลดวิดีโอ</string>
+
+    <string name="app_sub_pop_text1">โหมดไม่มีโฆษณา, ท่องเว็บได้ง่าย</string>
+    <string name="app_sub_pop_text2">ดาวน์โหลดความเร็วสูง, เพลิดเพลินกับความเร็วในการดาวน์โหลดที่เร็วขึ้น</string>
+    <string name="app_weekly">รายสัปดาห์</string>
+    <string name="app_monthly">รายเดือน</string>
+    <string name="app_quarterly">รายไตรมาส</string>
+    <string name="app_subscribe_now">สมัครสมาชิกตอนนี้</string>
+    <string name="app_sub_tips">การสมัครสมาชิกนี้ช่วยให้คุณท่องเว็บโดยไม่มีโฆษณา คุณสามารถยกเลิกการสมัครสมาชิกได้ใน Google Play</string>
+    <string name="app_no_ads">ไม่มีโฆษณา</string>
+    <string name="app_off">ปิด</string>
+    <string name="app_sub_info_manage">การจัดการสมาชิก</string>
+    <string name="app_query_status">ตรวจสอบสถานะ</string>
+    <string name="app_unsub">ยกเลิกการสมัคร</string>
+    <string name="app_sub_failed">การสมัครสมาชิกล้มเหลว</string>
+    <string name="app_sub_failed_tips">อุ๊ปส์! การสมัครสมาชิกเกิดข้อผิดพลาด!</string>
+    <string name="app_retry">ลองใหม่</string>
+    <string name="app_restore_sub">กู้คืนการสมัครสมาชิก</string>
+    <string name="app_open_error">ไม่สามารถเปิดได้</string>
+    <string name="app_restore_error">การกู้คืนล้มเหลว</string>
+    <string name="app_ad_free_reading">อ่านโดยไม่มีโฆษณา</string>
+    <string name="app_ad_free_reading_tips">เพลิดเพลินกับประสบการณ์ที่ไม่มีสิ่งรบกวน</string>
+    <string name="app_buy_now">ซื้อเลย</string>
+    <string name="app_current_sub">สมัครสมาชิกปัจจุบัน</string>
+    <string name="app_vip_user">ผู้ใช้ VIP</string>
+    <string name="app_sub_error">ข้อผิดพลาดของเซิร์ฟเวอร์</string>
+    <string name="app_flash_sale">การขายด่วน</string>
+    <string name="app_clear_browsing_history">ล้างประวัติการท่องเว็บ</string>
+    <string name="app_clear_all_tabs">ปิดแท็บทั้งหมด</string>
+    <string name="app_exit_app">ออกจากแอป</string>
 </resources>

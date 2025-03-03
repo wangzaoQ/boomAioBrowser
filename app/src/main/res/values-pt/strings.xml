@@ -383,4 +383,33 @@
     <string name="app_web_guide1">1. Encontre os títulos dos vídeos</string>
     <string name="app_web_guide2">2. Assista ao vídeo</string>
     <string name="app_web_guide3">3. Clique no botão para baixar o vídeo</string>
+
+    <string name="app_sub_pop_text1">Modo sem anúncios, navegue com facilidade</string>
+    <string name="app_sub_pop_text2">️Download em alta velocidade, aproveite uma velocidade maior</string>
+    <string name="app_weekly">Semanal</string>
+    <string name="app_monthly">Mensal</string>
+    <string name="app_quarterly">Trimestral</string>
+    <string name="app_subscribe_now">Assine agora</string>
+    <string name="app_sub_tips">Esta assinatura oferece navegação sem anúncios. Você pode cancelar sua assinatura no Google Play.</string>
+    <string name="app_no_ads">Sem anúncios</string>
+    <string name="app_off">desativado</string>
+    <string name="app_sub_info_manage">Gerenciar assinatura</string>
+    <string name="app_query_status">Consultar status</string>
+    <string name="app_unsub">Cancelar assinatura</string>
+    <string name="app_sub_failed">Falha na assinatura</string>
+    <string name="app_sub_failed_tips">Ops! Houve um problema com a assinatura!</string>
+    <string name="app_retry">Tentar novamente</string>
+    <string name="app_restore_sub">Restaurar assinatura</string>
+    <string name="app_open_error">Não foi possível abrir</string>
+    <string name="app_restore_error">Falha ao restaurar</string>
+    <string name="app_ad_free_reading">Leitura sem anúncios</string>
+    <string name="app_ad_free_reading_tips">Desfrute de uma experiência sem distrações</string>
+    <string name="app_buy_now">Comprar agora</string>
+    <string name="app_current_sub">Atualmente assinado</string>
+    <string name="app_vip_user">Usuário VIP</string>
+    <string name="app_sub_error">Erro no servidor</string>
+    <string name="app_flash_sale">Promoção relâmpago</string>
+    <string name="app_clear_browsing_history">Limpar histórico de navegação</string>
+    <string name="app_clear_all_tabs">Fechar todas as abas</string>
+    <string name="app_exit_app">Sair do aplicativo</string>
 </resources>

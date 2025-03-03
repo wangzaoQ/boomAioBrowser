@@ -379,4 +379,33 @@
     <string name="app_web_guide1">1. Trouver les titres des vidéos</string>
     <string name="app_web_guide2">2. Regarder la vidéo</string>
     <string name="app_web_guide3">3. Cliquez sur le bouton pour télécharger la vidéo</string>
+
+    <string name="app_sub_pop_text1">Mode sans publicité, navigation facile</string>
+    <string name="app_sub_pop_text2">Téléchargement à grande vitesse, profitez d\'une vitesse de téléchargement plus rapide</string>
+    <string name="app_weekly">Hebdomadaire</string>
+    <string name="app_monthly">Mensuel</string>
+    <string name="app_quarterly">Trimestriel</string>
+    <string name="app_subscribe_now">Abonnez-vous maintenant</string>
+    <string name="app_sub_tips">Cet abonnement vous permet de naviguer sans publicité. Vous pouvez annuler votre abonnement dans Google Play.</string>
+    <string name="app_no_ads">Pas de publicité</string>
+    <string name="app_off">Désactivé</string>
+    <string name="app_sub_info_manage">Gestion de l\'abonnement</string>
+    <string name="app_query_status">Vérifier l\'état</string>
+    <string name="app_unsub">Se désabonner</string>
+    <string name="app_sub_failed">Échec de l\'abonnement</string>
+    <string name="app_sub_failed_tips">Oups ! Un problème est survenu lors de l\'abonnement !</string>
+    <string name="app_retry">Réessayer</string>
+    <string name="app_restore_sub">Restaurer l\'abonnement</string>
+    <string name="app_open_error">Impossible d\'ouvrir</string>
+    <string name="app_restore_error">Échec de la restauration</string>
+    <string name="app_ad_free_reading">Lecture sans publicité</string>
+    <string name="app_ad_free_reading_tips">Profitez d\'une expérience sans distraction</string>
+    <string name="app_buy_now">Achetez maintenant</string>
+    <string name="app_current_sub">Abonnement actuel</string>
+    <string name="app_vip_user">Utilisateur VIP</string>
+    <string name="app_sub_error">Erreur serveur</string>
+    <string name="app_flash_sale">Vente flash</string>
+    <string name="app_clear_browsing_history">Effacer l\'historique de navigation</string>
+    <string name="app_clear_all_tabs">Fermer tous les onglets</string>
+    <string name="app_exit_app">Quitter l\'application</string>
 </resources>

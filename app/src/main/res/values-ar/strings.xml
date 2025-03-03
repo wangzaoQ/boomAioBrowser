@@ -378,4 +378,33 @@
     <string name="app_web_guide1">1. العثور على عناوين الفيديو</string>
     <string name="app_web_guide2">2. مشاهدة الفيديو</string>
     <string name="app_web_guide3">3. اضغط على الزر لتحميل الفيديو</string>
+
+    <string name="app_sub_pop_text1">وضع خالٍ من الإعلانات، تصفح المعلومات بسهولة</string>
+    <string name="app_sub_pop_text2">تحميل عالي السرعة، استمتع بسرعة تنزيل أسرع</string>
+    <string name="app_weekly">أسبوعي</string>
+    <string name="app_monthly">شهري</string>
+    <string name="app_quarterly">ربع سنوي</string>
+    <string name="app_subscribe_now">اشترك الآن</string>
+    <string name="app_sub_tips">يتيح لك هذا الاشتراك تصفحًا خاليًا من الإعلانات. يمكنك إلغاء الاشتراك في أي وقت عبر Google Play.</string>
+    <string name="app_no_ads">بدون إعلانات</string>
+    <string name="app_off">إيقاف</string>
+    <string name="app_sub_info_manage">إدارة الاشتراك</string>
+    <string name="app_query_status">التحقق من الحالة</string>
+    <string name="app_unsub">إلغاء الاشتراك</string>
+    <string name="app_sub_failed">فشل الاشتراك</string>
+    <string name="app_sub_failed_tips">عذرًا! حدث خطأ أثناء الاشتراك!</string>
+    <string name="app_retry">إعادة المحاولة</string>
+    <string name="app_restore_sub">استعادة الاشتراك</string>
+    <string name="app_open_error">غير قادر على الفتح</string>
+    <string name="app_restore_error">فشل الاستعادة</string>
+    <string name="app_ad_free_reading">قراءة بدون إعلانات</string>
+    <string name="app_ad_free_reading_tips">استمتع بتجربة خالية من الإلهاء</string>
+    <string name="app_buy_now">اشترِ الآن</string>
+    <string name="app_current_sub">مشترك حاليًا</string>
+    <string name="app_vip_user">مستخدم VIP</string>
+    <string name="app_sub_error">خطأ في الخادم</string>
+    <string name="app_flash_sale">تخفيضات فلاش</string>
+    <string name="app_clear_browsing_history">مسح سجل التصفح</string>
+    <string name="app_clear_all_tabs">إغلاق جميع التبويبات</string>
+    <string name="app_exit_app">الخروج من التطبيق</string>
 </resources>

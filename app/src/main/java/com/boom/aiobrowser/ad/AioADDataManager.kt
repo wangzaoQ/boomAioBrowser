@@ -105,7 +105,7 @@ object AioADDataManager {
 
     fun getCacheAD(enum: ADEnum): ADResultData? {
         val adPreloadBean = adCache[enum]
-        if (adPreloadBean?.adRequestData == null) {
+        if (adPreloadBean?.adRequestData == null || adPreloadBean?.adAny == null) {
             adCache.remove(enum)
             return null
         }

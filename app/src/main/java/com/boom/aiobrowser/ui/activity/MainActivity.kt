@@ -20,6 +20,7 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
+import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
@@ -161,9 +162,12 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         acBinding.fragmentMain.setCurrentItem(index, false)
         updateUI(index)
         if (index == 1){
-            jumpActivity<SearchActivity>(Bundle().apply {
-                putString(PointValueKey.from_type,"search")
-            })
+            var jumpData = JumpDataManager.getCurrentJumpData(tag = "MainFragment onResume 首次")
+            if (jumpData.jumpType == JumpConfig.JUMP_HOME){
+                jumpActivity<SearchActivity>(Bundle().apply {
+                    putString(PointValueKey.from_type,"search")
+                })
+            }
         }
 //        var manager = AioADShowManager(this, ADEnum.INT_AD, tag = "底部按钮切换") {}
 //        manager.showScreenAD(AD_POINT.aobws_tap_int,false)
@@ -196,7 +200,11 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
     override fun onResume() {
         super.onResume()
-//        morePop?.updateUI()
+        if (APP.instance.isHideSplash.not())return
+        acBinding.root.postDelayed(Runnable {
+            ShortManager.addWidgetToLaunch(APP.instance)
+            ShortManager.addPinShortcut(WeakReference(this))
+        },1000)
     }
 
 
@@ -509,7 +517,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             finish()
             return
         }
-        downloadHomeFragment.loadData()
         fManager.hideFragment(supportFragmentManager, startFragment!!)
         acBinding.llMainControl.visibility = View.VISIBLE
         if (jumpType == 1||jumpType==3){
@@ -570,7 +577,28 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             showPopCount++
             showDownloadGuide(showPopCount, allowShowPop,jumpType)
         }
-        APP.jumpResumeData.postValue(if (allowShowPop.not()) 1 else 0)
+        downloadHomeFragment.loadData()
+//        APP.jumpResumeData.postValue(if (allowShowPop.not()) 1 else 0)
+        var jumpData: JumpData
+        if (allowShowPop){
+            jumpData = JumpDataManager.getCurrentJumpData(tag = "MainFragment onResume 首次")
+            if (jumpData.jumpType == JumpConfig.JUMP_WEB){
+                APP.jumpLiveData.postValue(jumpData)
+            }
+        }
+        acBinding.root.postDelayed(Runnable {
+            ShortManager.addWidgetToLaunch(APP.instance)
+            ShortManager.addPinShortcut(WeakReference(this))
+        },1000)
+//        else{
+//            jumpData = JumpDataManager.getCurrentJumpData(isReset = true,tag = "MainFragment onResume 非首次")
+//            JumpDataManager.updateCurrentJumpData(jumpData,"MainFragment onResume 更新 jumpData")
+//            if (jumpData.jumpType != JumpConfig.JUMP_HOME ){
+//                APP.bottomLiveData.postValue(JumpConfig.JUMP_HOME)
+//            }else{
+//                acBinding.llMainControl.visibility = View.VISIBLE
+//            }
+//        }
     }
 
     private fun showDownloadGuide(showPopCount: Int, allowShowPop: Boolean,jumpType:Int) {

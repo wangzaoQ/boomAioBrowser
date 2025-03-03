@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat
+    android:id="@+id/llBg"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/shape_bg_no_vip"
+    >
 
     <RelativeLayout
         android:id="@+id/rlTop"
@@ -72,6 +76,14 @@
                     android:layout_height="25dp"
                     android:layout_marginStart="5dp"
                     app:srcCompat="@mipmap/ic_google_login"></androidx.appcompat.widget.AppCompatImageView>
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivVipTips"
+                    android:layout_width="36dp"
+                    android:layout_height="16dp"
+                    app:srcCompat="@mipmap/ic_user_vip"
+                    android:layout_marginStart="5dp"
+                    android:visibility="gone"
+                    ></androidx.appcompat.widget.AppCompatImageView>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat

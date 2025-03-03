@@ -79,9 +79,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
             updateEngine(it)
             fBinding.topSearch.updateEngine(it)
         }
-        APP.jumpResumeData.observe(this){
-            jump(it == 1)
-        }
         APP.homeTabLiveData.observe(this){
             updateTopTab()
         }
@@ -294,7 +291,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     override fun onResume() {
         super.onResume()
         AppLogs.dLog(fragmentTAG,"onResume")
-        jump()
+//        jump()
         fBinding.root.postDelayed({
             updateTopUI()
         },500)
@@ -317,39 +314,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         if (APP.instance.isHideSplash.not())return
         AppLogs.dLog(fragmentTAG,"jump 跳过限制")
         AppLogs.dLog(fragmentTAG,"onResume")
-        var jumpData:JumpData
-        if (firstLoad && isNfClick.not()){
-            firstLoad = false
-            jumpData = JumpDataManager.getCurrentJumpData(tag = "MainFragment onResume 首次")
-            if (jumpData.jumpType == JumpConfig.JUMP_WEB){
-                APP.jumpLiveData.postValue(jumpData)
-            }
-        }else{
-            jumpData = JumpDataManager.getCurrentJumpData(isReset = true,tag = "MainFragment onResume 非首次")
-            JumpDataManager.updateCurrentJumpData(jumpData,"MainFragment onResume 更新 jumpData")
-//            if (CacheManager.engineGuideFirst){
-//                CacheManager.engineGuideFirst = false
-//                EngineGuidePop(rootActivity).createPop(fBinding.ivSearchEngine)
-//            }
-//            if (fBinding.refreshLayout.isRefreshing == true){
-//                fBinding.refreshLayout.isRefreshing = false
-//            }
-            if (jumpData.jumpType != JumpConfig.JUMP_HOME ){
-                APP.bottomLiveData.postValue(JumpConfig.JUMP_HOME)
-            }else{
-                if (rootActivity is MainActivity){
-                    (rootActivity as MainActivity).apply {
-//                    acBinding.llWebControl.visibility = View.GONE
-                        acBinding.llMainControl.visibility = View.VISIBLE
-                    }
-                }
-            }
-        }
 
-        fBinding.root.postDelayed(Runnable {
-            ShortManager.addWidgetToLaunch(APP.instance)
-            ShortManager.addPinShortcut(WeakReference(rootActivity))
-        },1000)
+
+
     }
 
     private fun updateTopUI() {
@@ -628,7 +595,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     override fun onDestroy() {
         APP.engineLiveData.removeObservers(this)
         APP.bottomLiveData.removeObservers(this)
-        APP.jumpResumeData.removeObservers(this)
         APP.homeTabLiveData.removeObservers(this)
         APP.locationListUpdateLiveData.removeObservers(this)
         APP.trendNewsComplete.removeObservers(this)

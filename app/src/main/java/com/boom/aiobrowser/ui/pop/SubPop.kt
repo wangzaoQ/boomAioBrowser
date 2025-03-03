@@ -1,17 +1,19 @@
 package com.boom.aiobrowser.ui.pop
 
 import android.content.Context
+import android.graphics.Paint
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.StrikethroughSpan
 import android.view.View
 import android.view.animation.Animation
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.work.ListenableWorker.Result.Retry
 import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
-import com.boom.aiobrowser.databinding.BrowserPopDefaultBinding
 import com.boom.aiobrowser.databinding.BrowserPopSubBinding
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
@@ -23,6 +25,7 @@ import pop.basepopup.BasePopupWindow
 import pop.util.animation.AnimationHelper
 import pop.util.animation.TranslationConfig
 import java.lang.ref.WeakReference
+
 
 class SubPop(context: Context) : BasePopupWindow(context) {
     init {
@@ -138,8 +141,16 @@ class SubPop(context: Context) : BasePopupWindow(context) {
             }
             tvTipsMonthly.text =
                 "\$3.96/${context.getString(R.string.app_monthly)} 50%${context.getString(R.string.app_off)}"
+            var ssb1 = SpannableStringBuilder(tvTipsMonthly.text)
+            ssb1.setSpan(StrikethroughSpan(), 0, "\$3.96/${context.getString(R.string.app_monthly)}".length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            tvTipsMonthly.setText(ssb1)
+
             tvTipsQuarterly.text =
                 "\$15.84/${context.getString(R.string.app_quarterly)} 80%${context.getString(R.string.app_off)}"
+            var ssb2 = SpannableStringBuilder(tvTipsQuarterly.text)
+            ssb2.setSpan(StrikethroughSpan(), 0, "\$15.84/${context.getString(R.string.app_quarterly)}".length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            tvTipsQuarterly.setText(ssb2)
+
             llSubWeekly.performClick()
         }
         showPopupWindow()

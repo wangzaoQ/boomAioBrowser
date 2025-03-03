@@ -280,8 +280,12 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
 
     private fun updateVIPUI() {
         if (CacheManager.isSubscribeMember){
+            fBinding.llBg.setBackgroundResource(R.drawable.shape_bg_vip)
+            fBinding.ivVipTips.visibility = View.VISIBLE
             fBinding.tvAD.text = rootActivity.getString(R.string.app_vip_user)
         }else{
+            fBinding.llBg.setBackgroundResource(R.drawable.shape_bg_no_vip)
+            fBinding.ivVipTips.visibility = View.GONE
             fBinding.tvAD.text = rootActivity.getString(R.string.app_no_ads)
         }
     }

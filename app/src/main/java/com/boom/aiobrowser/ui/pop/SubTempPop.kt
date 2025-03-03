@@ -1,6 +1,10 @@
 package com.boom.aiobrowser.ui.pop
 
 import android.content.Context
+import android.graphics.Paint
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.StrikethroughSpan
 import android.view.View
 import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.R
@@ -58,6 +62,10 @@ class SubTempPop(context: Context,var showADBack: () -> Unit) : BasePopupWindow(
             }
             tvTipsMonthly.text =
                 "\$1.5/${context.getString(R.string.app_weekly)} ${context.getString(R.string.app_flash_sale)} 66%${context.getString(R.string.app_off)}"
+            var ssb2 = SpannableStringBuilder(tvTipsMonthly.text)
+
+            ssb2.setSpan(StrikethroughSpan(), 0, "\$1.5/${context.getString(R.string.app_weekly)}".length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            tvTipsMonthly.setText(ssb2)
         }
         setBackground(R.color.color_70_black)
         showPopupWindow()

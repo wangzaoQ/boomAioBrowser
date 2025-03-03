@@ -316,6 +316,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                                 }
                                 2 -> {
                                     PointEvent.posePoint(PointEventKey.home_page)
+//                                    APP.newsUpdateLiveData.postValue("home")
                                 }
                                 3 -> {
                                     PointEvent.posePoint(PointEventKey.news,Bundle().apply {

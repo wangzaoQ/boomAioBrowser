@@ -64,6 +64,19 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
     }
 
     override fun setListener() {
+//        APP.newsUpdateLiveData.observe(this){
+//            if (it == "home"){
+//                var middleTime = System.currentTimeMillis()-CacheManager.getNewsSaveTime(topic)
+//                if (middleTime>1*60*1000){
+//                    loadData(true)
+//                }
+//            }else if (it == topic){
+//                var middleTime = System.currentTimeMillis()-CacheManager.getNewsSaveTime(topic)
+//                if (middleTime>1*60*1000){
+//                    loadData(true)
+//                }
+//            }
+//        }
         viewModel.value.newsLiveData.observe(this){
             if (page == 1){
                 newsAdapter.submitList(it)
@@ -205,6 +218,7 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
             APP.locationListUpdateLiveData.removeObservers(this)
             APP.homeTopicLiveData.removeObservers(this)
         }
+//        APP.newsUpdateLiveData.removeObservers(this)
         super.onDestroy()
     }
 

@@ -418,9 +418,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 adapter = adapterHelper.adapter
                 newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
                     if (position>newsAdapter.items.size-1)return@setOnDebouncedItemClick
-                    var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "新闻列表点击的广告"){
-                        var data = newsAdapter.items.get(position)
-                        if (data.dataType == NewsData.TYPE_NEWS || data.dataType == NewsData.TYPE_HOME_NEWS_TRENDING || data.dataType == NewsData.TYPE_DETAILS_NEWS_SEARCH){
+                    var data = newsAdapter.items.get(position)
+                    if (data.dataType == NewsData.TYPE_NEWS || data.dataType == NewsData.TYPE_DETAILS_NEWS_SEARCH){
+                        var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "新闻列表点击的广告"){
                             rootActivity.jumpActivity<WebDetailsActivity>(Bundle().apply {
                                 putString(ParamsConfig.JSON_PARAMS, toJson(data))
                             })
@@ -428,8 +428,8 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                                 putString(PointValueKey.news_id,data.itackl)
                             })
                         }
+                        manager.showScreenAD(AD_POINT.aobws_newsclick_int)
                     }
-                    manager.showScreenAD(AD_POINT.aobws_newsclick_int)
                 }
 //                addDefault()
                 addOnScrollListener(object : RecyclerView.OnScrollListener(){

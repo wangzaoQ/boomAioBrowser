@@ -137,6 +137,7 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
                         PointEvent.posePoint(PointEventKey.news_tab, Bundle().apply {
                             putString(PointEventKey.news_tab,list.get(position).id)
                         })
+//                        APP.newsUpdateLiveData.postValue(list.get(position).id)
                     }
 
                     override fun onPageScrollStateChanged(state: Int) {

@@ -509,8 +509,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             var index = APP.instance.shareText.indexOf("http")
             if (index>=0){
                 APP.instance.shareText = APP.instance.shareText.substring(index,APP.instance.shareText.length)
+                APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(APP.instance.shareText,title="","分享网页",true))
             }
-            APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(APP.instance.shareText,title="","分享网页",true))
         }
 
         if (isNormal.not()){
@@ -577,7 +577,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             showPopCount++
             showDownloadGuide(showPopCount, allowShowPop,jumpType)
         }
-        downloadHomeFragment.loadData()
+        APP.firstDownloadLoadLiveData.postValue(0)
 //        APP.jumpResumeData.postValue(if (allowShowPop.not()) 1 else 0)
         var jumpData: JumpData
         if (allowShowPop){

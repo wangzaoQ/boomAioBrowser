@@ -107,6 +107,9 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
     }
 
     override fun setListener() {
+        APP.firstDownloadLoadLiveData.observe(this){
+            loadData()
+        }
         fBinding.apply {
             ivVIP.setOneClick {
                 if (CacheManager.isSubscribeMember.not()){
@@ -257,6 +260,11 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
     override fun onResume() {
         super.onResume()
         updateVIPUI()
+    }
+
+    override fun onDestroy() {
+        APP.firstDownloadLoadLiveData.removeObservers(this)
+        super.onDestroy()
     }
 
     override fun getBinding(

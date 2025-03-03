@@ -120,7 +120,7 @@ class APP: Application(), ViewModelStoreOwner {
         val downloadButtonLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
         val videoGuideLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
         val firstToDownloadLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
-//        val newsUpdateLiveData by lazy { ProtectedUnPeekLiveData<String>() }
+        val firstDownloadLoadLiveData by lazy { ProtectedUnPeekLiveData<Int>() }
 
     }
 

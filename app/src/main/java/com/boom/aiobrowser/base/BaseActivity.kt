@@ -82,12 +82,12 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
                         AppLogs.dLog(acTAG,"is MainActivity:${topActivity is MainActivity}")
                         if (topActivity is MainActivity){
                             withContext(Dispatchers.Main){
-                                ProcessingTextPop(this@BaseActivity).createPop(copy?:"", PointValue.clipboard){
-                                    var index = copy.indexOf("http")
-                                    if (index>=0){
-                                        copy = copy.substring(index,copy.length)
+                                var index = copy.indexOf("http")
+                                if (index>=0){
+                                    copy = copy.substring(index,copy.length)
+                                    ProcessingTextPop(this@BaseActivity).createPop(copy?:"", PointValue.clipboard){
+                                        APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(copy, title = "","复制链接",true))
                                     }
-                                    APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(copy, title = "","复制链接",true))
                                 }
                             }
                         }

@@ -280,6 +280,11 @@ class SubscribeManager(var successBack: () -> Unit,var failBack: (content:String
     }
 
     fun getSubPrice(contentBack: (dataMap:HashMap<String,String>) -> Unit){
+//        var map = HashMap<String,String>()
+//        map.put("vip_weekly","RF 31245")
+//        map.put("vip_monthly","RF 3124523123")
+//        map.put("vip_quarterly","RF 124633")
+//        contentBack.invoke(map)
         billingclient.startConnection(object : BillingClientStateListener {
             override fun onBillingServiceDisconnected() {
                 // 连接断开
@@ -327,11 +332,11 @@ class SubscribeManager(var successBack: () -> Unit,var failBack: (content:String
                                 if (it.pricingPhases.pricingPhaseList.size>0){
                                     map.put(data.productId,it.pricingPhases.pricingPhaseList.get(0).formattedPrice)
                                 }
-                                showTemp("id:${data.productId} pricingPhases:${toJson(it.pricingPhases)}")
-                                it.pricingPhases.pricingPhaseList.forEachIndexed { index, pricingPhase ->
-                                    showTemp("id:${data.productId} pricingPhase:${toJson(pricingPhase)}")
-                                    showTemp("id:${data.productId} pricingPhases.price:${pricingPhase.formattedPrice}")
-                                }
+//                                showTemp("id:${data.productId} pricingPhases:${toJson(it.pricingPhases)}")
+//                                it.pricingPhases.pricingPhaseList.forEachIndexed { index, pricingPhase ->
+//                                    showTemp("id:${data.productId} pricingPhase:${toJson(pricingPhase)}")
+//                                    showTemp("id:${data.productId} pricingPhases.price:${pricingPhase.formattedPrice}")
+//                                }
                             }
                         }
                         contentBack.invoke(map)

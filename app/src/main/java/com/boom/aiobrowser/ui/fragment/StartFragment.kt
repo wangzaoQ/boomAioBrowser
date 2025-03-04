@@ -99,7 +99,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
                     fBinding.progress.progress = it
                 }else{
                     if (AioADDataManager.adAllowShowScreen()){
-                        if (AioADDataManager.getLaunchData()== null){
+                        if (AioADDataManager.getCacheAD(ADEnum.LAUNCH_AD)== null){
                             var defaultAd = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
                             if (defaultAd!=null){
                                 showEnd()
@@ -251,6 +251,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         ADEnum.values().forEach {
             it.adLoadStatus = AioADDataManager.LOAD_STATUS_START
         }
+        AioADDataManager.getCacheAD(ADEnum.LAUNCH_AD)
         AioADDataManager.preloadAD(ADEnum.LAUNCH_AD,"app启动")
         PointEvent.session()
         PointEvent.posePoint(PointEventKey.nn_session)

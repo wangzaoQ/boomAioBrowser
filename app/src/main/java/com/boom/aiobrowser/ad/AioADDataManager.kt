@@ -157,7 +157,7 @@ object AioADDataManager {
             AppLogs.dLog(TAG, "图片类广告 只允许买量用户加载")
             return
         }
-        if (enum != ADEnum.DEFAULT_AD){
+        if (enum == LAUNCH_AD || enum == INT_AD){
             preloadAD(ADEnum.DEFAULT_AD,tag)
         }
         AppLogs.dLog(TAG, "预加载位置:${tag} 加载类型:${enum.adName}")
@@ -257,10 +257,5 @@ object AioADDataManager {
         CacheManager.clickEveryDay = (CacheManager.clickEveryDay+1)
         AppLogs.dLog(TAG,"${tag} 触发广告点击次数增加 当前:${CacheManager.clickEveryDay}")
     }
-
-    fun getLaunchData(): ADResultData? {
-       return adCache[LAUNCH_AD]
-    }
-
 
 }

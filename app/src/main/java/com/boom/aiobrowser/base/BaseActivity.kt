@@ -17,6 +17,8 @@ import androidx.viewbinding.ViewBinding
 import com.blankj.utilcode.util.KeyboardUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.point.PointValue
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.JumpDataManager
@@ -139,6 +141,11 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
         setShowView()
         setListener()
         setDataListener()
+        if ((this is MainActivity).not()){
+            acBinding.root.postDelayed({
+                AioADDataManager.preloadAD(ADEnum.INT_AD,"activity onCreate 预加载插屏")
+            },0)
+        }
     }
 
 

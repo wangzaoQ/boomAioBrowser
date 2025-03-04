@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center"
     android:layout_marginHorizontal="27dp"
     android:background="@mipmap/bg_sub_temp">
@@ -84,11 +85,12 @@
                 android:textSize="13sp"></androidx.appcompat.widget.AppCompatTextView>
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvWeeklyPrice"
                 style="@style/app_text_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:text="$0.99/"
+                tools:text="$0.99/"
                 android:textColor="#2926D9"
                 android:textSize="15sp"></androidx.appcompat.widget.AppCompatTextView>
 

@@ -124,7 +124,9 @@ class DownloadVideoGuidePop(context: Context) : BasePopupWindow(context) {
     }
 
     override fun onBackPressed(): Boolean {
-        PointEvent.posePoint(PointEventKey.tutorial_cancel)
+        PointEvent.posePoint(PointEventKey.tutorial_cancel,Bundle().apply {
+            putInt(PointValueKey.type,defaultBinding?.vp?.currentItem?:10)
+        })
         var manager = AioADShowManager(context as BaseActivity<*>, ADEnum.INT_AD, tag = "下载弹窗back"){
             dismiss()
         }

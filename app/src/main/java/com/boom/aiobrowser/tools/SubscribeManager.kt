@@ -136,7 +136,7 @@ class SubscribeManager(var successBack: () -> Unit,var failBack: (content:String
             }
         }
 
-    private fun billingComplete() {
+    fun billingComplete() {
         runCatching {
             billingclient.endConnection()
         }
@@ -279,7 +279,7 @@ class SubscribeManager(var successBack: () -> Unit,var failBack: (content:String
         })
     }
 
-    fun getSubPrice(){
+    fun getSubPrice(contentBack: (dataMap:HashMap<String,String>) -> Unit){
         billingclient.startConnection(object : BillingClientStateListener {
             override fun onBillingServiceDisconnected() {
                 // 连接断开
@@ -317,19 +317,24 @@ class SubscribeManager(var successBack: () -> Unit,var failBack: (content:String
                         // check billingResult
                         // process returned productDetailsList
                         showTemp("查询所有商品详情成功 dataList:${toJson(productDetailsList)}")
+                        var map = HashMap<String,String>()
                         for (i in 0 until productDetailsList.size){
                             var data = productDetailsList.get(i)
-                            var price = data.oneTimePurchaseOfferDetails?.formattedPrice
-                            showTemp("id:${data.productId} oneTimePurchaseOfferDetails?.formattedPrice:${price}")
+//                            var price = data.oneTimePurchaseOfferDetails?.formattedPrice
+//                            showTemp("id:${data.productId} oneTimePurchaseOfferDetails?.formattedPrice:${price}")
                             showTemp("id:${data.productId} subscriptionOfferDetails:${toJson(data.subscriptionOfferDetails)}")
                             data.subscriptionOfferDetails?.forEach {
+                                if (it.pricingPhases.pricingPhaseList.size>0){
+                                    map.put(data.productId,it.pricingPhases.pricingPhaseList.get(0).formattedPrice)
+                                }
                                 showTemp("id:${data.productId} pricingPhases:${toJson(it.pricingPhases)}")
                                 it.pricingPhases.pricingPhaseList.forEachIndexed { index, pricingPhase ->
-                                    showTemp("id:${data.productId} pricingPhases:${toJson(pricingPhase)}")
+                                    showTemp("id:${data.productId} pricingPhase:${toJson(pricingPhase)}")
                                     showTemp("id:${data.productId} pricingPhases.price:${pricingPhase.formattedPrice}")
                                 }
                             }
                         }
+                        contentBack.invoke(map)
                         billingComplete()
                     }
                 } else {

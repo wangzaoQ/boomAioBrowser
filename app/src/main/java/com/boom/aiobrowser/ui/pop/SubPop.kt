@@ -64,6 +64,10 @@ class SubPop(context: Context) : BasePopupWindow(context) {
                 })
                 when (checkPosition) {
                     0 -> {
+                        if (tvWeeklyPrice.text.isNullOrEmpty()){
+                            subManager.billingComplete()
+                            return@setOnClickListener
+                        }
                         if (CacheManager.isSubscribeMember.not()) {
                             subManager.subscribeShop(
                                 WeakReference(context as BaseActivity<*>),
@@ -75,6 +79,10 @@ class SubPop(context: Context) : BasePopupWindow(context) {
                     }
 
                     1 -> {
+                        if (tvMonthlyPrice.text.isNullOrEmpty()){
+                            subManager.billingComplete()
+                            return@setOnClickListener
+                        }
                         if (CacheManager.isSubscribeMember.not()) {
                             subManager.subscribeShop(
                                 WeakReference(context as BaseActivity<*>),
@@ -85,6 +93,10 @@ class SubPop(context: Context) : BasePopupWindow(context) {
                         }
                     }
                     2 -> {
+                        if (tvQuarterly.text.isNullOrEmpty()){
+                            subManager.billingComplete()
+                            return@setOnClickListener
+                        }
                         if (CacheManager.isSubscribeMember.not()) {
                             subManager.subscribeShop(
                                 WeakReference(context as BaseActivity<*>),
@@ -139,17 +151,9 @@ class SubPop(context: Context) : BasePopupWindow(context) {
                 updateUI(llSubMonthly, false)
                 updateUI(llSubQuarterly, true)
             }
-            tvTipsMonthly.text =
-                "\$3.96/${context.getString(R.string.app_monthly)} 50%${context.getString(R.string.app_off)}"
-            var ssb1 = SpannableStringBuilder(tvTipsMonthly.text)
-            ssb1.setSpan(StrikethroughSpan(), 0, "\$3.96/${context.getString(R.string.app_monthly)}".length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            tvTipsMonthly.setText(ssb1)
 
-            tvTipsQuarterly.text =
-                "\$15.84/${context.getString(R.string.app_quarterly)} 80%${context.getString(R.string.app_off)}"
-            var ssb2 = SpannableStringBuilder(tvTipsQuarterly.text)
-            ssb2.setSpan(StrikethroughSpan(), 0, "\$15.84/${context.getString(R.string.app_quarterly)}".length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            tvTipsQuarterly.setText(ssb2)
+
+
 
             llSubWeekly.performClick()
         }
@@ -160,7 +164,26 @@ class SubPop(context: Context) : BasePopupWindow(context) {
         var subManager = SubscribeManager(successBack = {
 
         }, failBack = {})
-        subManager.getSubPrice()
+        subManager.getSubPrice{
+            (context as BaseActivity<*>).addLaunch(success = {
+                defaultBinding?.apply {
+                    tvWeeklyPrice.text = it.get("vip_weekly")?:""
+                    tvMonthlyPrice.text = it.get("vip_monthly")?:""
+                    tvQuarterly.text = it.get("vip_quarterly")?:""
+
+                    tvTipsMonthly.text = "${tvMonthlyPrice.text}${context.getString(R.string.app_monthly)} 50%${context.getString(R.string.app_off)}"
+                    var ssb1 = SpannableStringBuilder(tvTipsMonthly.text)
+                    ssb1.setSpan(StrikethroughSpan(), 0, "${tvMonthlyPrice.text}${context.getString(R.string.app_monthly)}".length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    tvTipsMonthly.setText(ssb1)
+
+                    tvTipsQuarterly.text =
+                        "${tvQuarterly.text}${context.getString(R.string.app_quarterly)} 80%${context.getString(R.string.app_off)}"
+                    var ssb2 = SpannableStringBuilder(tvTipsQuarterly.text)
+                    ssb2.setSpan(StrikethroughSpan(), 0, "${tvQuarterly.text}${context.getString(R.string.app_quarterly)}".length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    tvTipsQuarterly.setText(ssb2)
+                }
+            }, failBack = {},Dispatchers.Main)
+        }
     }
 
     private fun updateUI(llRoot: LinearLayoutCompat, isCheck: Boolean) {

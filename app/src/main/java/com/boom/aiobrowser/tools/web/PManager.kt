@@ -109,7 +109,7 @@ object PManager {
         return segmentUrls
     }
 
-    suspend fun calculateM3U8Size(m3u8Url: String,headers:HashMap<String, String>):Long {
+    suspend fun calculateM3U8Size(m3u8Url: String,headers:HashMap<String, String>,hostList:MutableList<String>):Long {
 //        val m3u8Text = fetchM3U8File(m3u8Url)
 //        val segmentUrls = parseM3U8(m3u8Url,m3u8Text)
         var sizePromises = 0L
@@ -126,6 +126,11 @@ object PManager {
 //        }
 
         val m3u8Text = fetchM3U8File(m3u8Url,headers)
+//        if (WebScan.isDailymotion(hostList)){
+//            //Dailymotion
+//        }else{
+//
+//        }
         if (m3u8Text.isNullOrEmpty() || !m3u8Text.contains("#EXTINF")) {
             return 0L // 没有有效的 M3U8 数据
         }
@@ -152,23 +157,6 @@ object PManager {
                 }
             }
         }
-//        // 解析 M3U8 文件
-//        for (line in lines) {
-//
-//            if (line.startsWith("#")) {
-//                val match = durationPattern.find(line)
-//                match?.let {
-//                    duration += it.groupValues[1].toDouble()
-//                    if (samples.size < 2) {
-//                        sampleDuration = duration
-//                    }
-//                }
-//            } else {
-//                if (samples.size < 2) {
-//                    samples.add(getFullUrl(m3u8Url,line.trim()))  // 绝对路径化 .ts 文件
-//                }
-//            }
-//        }
 
         if (sampleDuration == 0.0) {
             return 0L  // 没有有效的样本时返回 0

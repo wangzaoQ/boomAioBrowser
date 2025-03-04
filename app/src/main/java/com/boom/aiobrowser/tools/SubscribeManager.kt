@@ -279,6 +279,69 @@ class SubscribeManager(var successBack: () -> Unit,var failBack: (content:String
         })
     }
 
+    fun getSubPrice(){
+        billingclient.startConnection(object : BillingClientStateListener {
+            override fun onBillingServiceDisconnected() {
+                // 连接断开
+                showTemp("onBillingServiceDisconnected: 连接断开1 getSubPrice")
+//                retryBillingServiceConnection(productId);
+                failBack.invoke("2")
+                billingComplete()
+            }
+
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                // 连接成功
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    showTemp("连接成功")
+                    val queryProductDetailsParams =
+                        QueryProductDetailsParams.newBuilder()
+                            .setProductList(
+                                ImmutableList.of(
+                                    QueryProductDetailsParams.Product.newBuilder()
+                                        .setProductId("vip_weekly")
+                                        .setProductType(BillingClient.ProductType.SUBS)
+                                        .build(),
+                                    QueryProductDetailsParams.Product.newBuilder()
+                                        .setProductId("vip_monthly")
+                                        .setProductType(BillingClient.ProductType.SUBS)
+                                        .build(),
+                                    QueryProductDetailsParams.Product.newBuilder()
+                                        .setProductId("vip_quarterly")
+                                        .setProductType(BillingClient.ProductType.SUBS)
+                                        .build()
+                                )
+                            )
+                            .build()
+                    //查询商品详情
+                    billingclient.queryProductDetailsAsync(queryProductDetailsParams) { billingResult, productDetailsList ->
+                        // check billingResult
+                        // process returned productDetailsList
+                        showTemp("查询所有商品详情成功 dataList:${toJson(productDetailsList)}")
+                        for (i in 0 until productDetailsList.size){
+                            var data = productDetailsList.get(i)
+                            var price = data.oneTimePurchaseOfferDetails?.formattedPrice
+                            showTemp("id:${data.productId} oneTimePurchaseOfferDetails?.formattedPrice:${price}")
+                            showTemp("id:${data.productId} subscriptionOfferDetails:${toJson(data.subscriptionOfferDetails)}")
+                            data.subscriptionOfferDetails?.forEach {
+                                showTemp("id:${data.productId} pricingPhases:${toJson(it.pricingPhases)}")
+                                it.pricingPhases.pricingPhaseList.forEachIndexed { index, pricingPhase ->
+                                    showTemp("id:${data.productId} pricingPhases:${toJson(pricingPhase)}")
+                                    showTemp("id:${data.productId} pricingPhases.price:${pricingPhase.formattedPrice}")
+                                }
+                            }
+                        }
+                        billingComplete()
+                    }
+                } else {
+                    failBack.invoke("2")
+                    // TODO 连接失败
+                    showTemp("onBillingServiceDisconnected: 连接断开2 getSubPrice")
+                    billingComplete()
+                }
+            }
+        })
+    }
+
 
     private fun sub(reference: WeakReference<BaseActivity<*>>, productId: String){
 

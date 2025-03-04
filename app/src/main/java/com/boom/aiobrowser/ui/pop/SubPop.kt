@@ -157,6 +157,10 @@ class SubPop(context: Context) : BasePopupWindow(context) {
         PointEvent.posePoint(PointEventKey.subscribe_impression, Bundle().apply {
             putString(PointValueKey.type,"no_vip")
         })
+        var subManager = SubscribeManager(successBack = {
+
+        }, failBack = {})
+        subManager.getSubPrice()
     }
 
     private fun updateUI(llRoot: LinearLayoutCompat, isCheck: Boolean) {

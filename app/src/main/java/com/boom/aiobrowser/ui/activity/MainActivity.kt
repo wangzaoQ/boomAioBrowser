@@ -533,7 +533,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     putString("from","news")
                 })
             }
-            acBinding.fragmentMain.setCurrentItem(3,false)
+//            acBinding.fragmentMain.setCurrentItem(3,false)
         }
 //        else{
 //            PointEvent.posePoint(PointEventKey.attribution_default,Bundle().apply {

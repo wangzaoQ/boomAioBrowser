@@ -28,15 +28,42 @@ object NFData {
             return newsList
         }else{
             if (refreshSession) {
-                AppLogs.dLog(
-                    NFManager.TAG,
-                    "${key}推送 强制刷新session 原始值为 :${CacheManager.getSession(key)}"
-                )
-                CacheManager.saveSession(key, "")
-                AppLogs.dLog(
-                    NFManager.TAG,
-                    "${key}推送 强制刷新session 刷新后为 :${CacheManager.getSession(key)}"
-                )
+                if (FirebaseConfig.isDownloadConfig){
+                    var endKey = key
+                    AppLogs.dLog(
+                        NFManager.TAG,
+                        "${endKey}推送 强制刷新session 原始值为 :${CacheManager.getSession(endKey)}"
+                    )
+                    when(key){
+                        NFEnum.NF_EDITOR.menuName->{
+                            endKey = NetParams.DOWNLOAD_EDITOR_PUSH
+                        }
+                        NFEnum.NF_UNLOCK.menuName->{
+                            endKey = NetParams.DOWNLOAD_UNLOCK_PUSH
+                        }
+                        NFEnum.NF_NEWS.menuName->{
+                            endKey = NetParams.DOWNLOAD_FOR_YOU_PUSH
+                        }
+                        NFEnum.NF_NEW_USER.menuName->{
+                            endKey = NetParams.DOWNLOAD_NEW_USER_PUSH
+                        }
+                    }
+                    CacheManager.saveSession(endKey, "")
+                    AppLogs.dLog(
+                        NFManager.TAG,
+                        "${endKey}推送 强制刷新session 刷新后为 :${CacheManager.getSession(endKey)}"
+                    )
+                }else{
+                    AppLogs.dLog(
+                        NFManager.TAG,
+                        "${key}推送 强制刷新session 原始值为 :${CacheManager.getSession(key)}"
+                    )
+                    CacheManager.saveSession(key, "")
+                    AppLogs.dLog(
+                        NFManager.TAG,
+                        "${key}推送 强制刷新session 刷新后为 :${CacheManager.getSession(key)}"
+                    )
+                }
             }
             var list = mutableListOf<NewsData>()
             runCatching {

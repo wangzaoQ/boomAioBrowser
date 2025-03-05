@@ -33,12 +33,12 @@ class NewsViewModel : BaseDataModel() {
     var newsHotVideoLiveData = MutableLiveData<MutableList<NewsData>>()
 
 
-    fun getDownloadVideo(dataList:MutableList<NewsData>,page:Int,refresh:Boolean=false) {
+    fun getDownloadVideo(dataList:MutableList<NewsData>,page:Int,refresh:Boolean=false,onlyCache:Boolean=false) {
         var newsList:MutableList<NewsData>?=null
         if (page == 1){
             newsList = CacheManager.getNewsSaveList("recommendVideo")
         }
-        if (newsList.isNullOrEmpty() || refresh){
+        if (newsList.isNullOrEmpty() || refresh || onlyCache){
             loadData(loadBack = {
                 var list = NetRequest.request(HashMap<String, Any>().apply {
                     put("sessionKey", NetParams.DOWNLOAD_UNLOCK_PUSH)
@@ -52,20 +52,42 @@ class NewsViewModel : BaseDataModel() {
                     }.data ?: mutableListOf()
                     list = detailHistoryVideo(dataList?: mutableListOf(),list)
                 }
-                list.forEach {
-                    it.dataType = NewsData.TYPE_DOWNLOAD_VIDEO
-                    VideoPreloadManager.serialList(1, mutableListOf<NewsData>().apply {
-                        add(it)
-                    })
+                if (onlyCache){
+                   var cacheList =  mutableListOf<NewsData>()
+                    list.forEach {
+                        it.dataType = NewsData.TYPE_DOWNLOAD_VIDEO
+                        cacheList.add(it)
+                    }
+                    VideoPreloadManager.serialList(1, cacheList)
+                }else{
+                    list.forEach {
+                        it.dataType = NewsData.TYPE_DOWNLOAD_VIDEO
+                        VideoPreloadManager.serialList(1, mutableListOf<NewsData>().apply {
+                            add(it)
+                        })
+                    }
                 }
+                CacheManager.saveNewsSaveList("recommendVideo",list)
                 if(page == 1){
                     list.add(0,NewsData().apply {
                         dataType = NewsData.TYPE_DOWNLOAD_VIDEO_HEAD
                     })
                 }
-                newsDownloadVideoLiveData.postValue(list)
-                CacheManager.downloadVideoList = list
+                if (onlyCache.not()){
+                    newsDownloadVideoLiveData.postValue(list)
+                }
+                if (CacheManager.isFirstShowDownloadList){
+                    CacheManager.isFirstShowDownloadList = false
+                    getDownloadVideo(list,2,false,true)
+                }
             }, failBack = {})
+        }else{
+            if(page == 1){
+                newsList.add(0,NewsData().apply {
+                    dataType = NewsData.TYPE_DOWNLOAD_VIDEO_HEAD
+                })
+            }
+            newsDownloadVideoLiveData.postValue(newsList!!)
         }
     }
 

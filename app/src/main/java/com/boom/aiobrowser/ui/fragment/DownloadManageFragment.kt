@@ -57,27 +57,6 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
         NewsMainAdapter(this)
     }
 
-    val adapterHelper by lazy {
-        QuickAdapterHelper.Builder(videoAdapter)
-            .setTrailingLoadStateAdapter(object :
-                TrailingLoadStateAdapter.OnTrailingListener {
-                override fun onLoad() {
-                    AppLogs.dLog(fragmentTAG, "加载更多")
-                    page++
-                    loadData()
-                }
-
-                override fun onFailRetry() {
-
-                }
-
-                override fun isAllowLoading(): Boolean {
-                    return fBinding.refreshLayout.isRefreshing.not()
-                }
-
-            }).build()
-    }
-
     var page = 1
 
     private val viewModel by lazy {
@@ -86,21 +65,23 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
 
     override fun startLoadData() {
         videoAdapter.submitList(mutableListOf<NewsData>().apply {
-            add(0,NewsData().apply {
-                dataType = NewsData.TYPE_DOWNLOAD_VIDEO_HEAD
-            })
-            var dataList = CacheManager.downloadVideoList
+            var dataList = CacheManager.getNewsSaveList("recommendVideo")
             if (dataList.isNullOrEmpty()){
+                add(0,NewsData().apply {
+                    dataType = NewsData.TYPE_DOWNLOAD_VIDEO_HEAD
+                })
                 for (i in 0 until 10){
                     add(NewsData().apply {
                         dataType = NewsData.TYPE_DOWNLOAD_VIDEO
                     })
                 }
             }else{
+                add(0,NewsData().apply {
+                    dataType = NewsData.TYPE_DOWNLOAD_VIDEO_HEAD
+                })
                 addAll(dataList)
             }
         })
-
     }
 
     private fun updateVIPUI() {
@@ -113,8 +94,11 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
 
     override fun setListener() {
         APP.firstDownloadLoadLiveData.observe(this){
-            if (CacheManager.downloadVideoList.isNullOrEmpty()){
+            var newsList = CacheManager.getNewsSaveList("recommendVideo")
+            if (newsList.isNullOrEmpty()){
                 loadData()
+            }else{
+                loadData(true)
             }
         }
         fBinding.apply {
@@ -156,12 +140,15 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
                 videoAdapter.addAll(it)
             }
             videoAdapter.notifyDataSetChanged()
-            adapterHelper.trailingLoadState = LoadState.NotLoading(false)
             fBinding.refreshLayout.finishRefresh()
             fBinding.refreshLayout.finishLoadMore()
         }
         fBinding.refreshLayout.setOnRefreshListener {
             page = 1
+            loadData()
+        }
+        fBinding.refreshLayout.setOnLoadMoreListener {
+            page++
             loadData()
         }
         videoAdapter.apply {
@@ -234,14 +221,8 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
         manager.showScreenAD(AD_POINT.aobws_downclick_int)
     }
 
-    fun loadData() {
-        if (page > 1) {
-            adapterHelper.trailingLoadState = LoadState.Loading
-        } else {
-            adapterHelper.trailingLoadState = LoadState.None
-        }
-
-        viewModel.value.getDownloadVideo(videoAdapter.mutableItems, page, false)
+    fun loadData(onlyCache:Boolean=false) {
+        viewModel.value.getDownloadVideo(videoAdapter.mutableItems, page, false,onlyCache)
     }
 
     override fun setShowView() {
@@ -259,7 +240,7 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
 
                 }
                 layoutManager = manager
-                adapter = adapterHelper.adapter
+                adapter = videoAdapter
             }
         }
         PointEvent.posePoint(PointEventKey.download_tab)

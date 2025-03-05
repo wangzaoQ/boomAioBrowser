@@ -111,11 +111,17 @@ object NFShow {
                 data.nfSource = enum.menuName
                 showNewsNF(data, enum,sourceType,newsList)
             }
+            if (data!=null && data.vbreas.isNullOrEmpty().not()){
+                VideoPreloadManager.serialList(1,mutableListOf<NewsData>().apply {
+                    add(data)
+                })
+            }
             CacheManager.saveNFNewsList(enum.menuName, newsList ?: mutableListOf())
             newsList?.apply {
                 if (size>0){
-                    var videoList = mutableListOf<NewsData>()
                     for (i in 0 until size){
+                        if (get(i).vbreas.isNullOrEmpty())continue
+                        var videoList = mutableListOf<NewsData>()
                         videoList.add(get(i))
                         VideoPreloadManager.serialList(1,videoList)
                     }

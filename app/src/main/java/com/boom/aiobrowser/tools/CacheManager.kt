@@ -28,6 +28,7 @@ object CacheManager {
     val mmkv = MMKV.mmkvWithID("${BuildConfig.APPLICATION_ID}kv", MMKV.MULTI_PROCESS_MODE)
     const val KV_FIRST_START = "KV_FIRST_START"
     const val KV_FIRST_TO_DOWNLOAD = "KV_FIRST_TO_DOWNLOAD"
+    const val KV_FIRST_SHOW_DOWNLOAD_LIST = "KV_FIRST_SHOW_DOWNLOAD_LIST"
     const val KV_INSTALL_REFER = "KV_INSTALL_REFER"
     const val KV_ADJUST_FROM = "KV_ADJUST_FROM"
     const val KV_AF_FROM = "KV_AF_FROM"
@@ -161,6 +162,13 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_FIRST_START, value)
+        }
+    var isFirstShowDownloadList: Boolean
+        get() {
+            return mmkv.decodeBool(KV_FIRST_SHOW_DOWNLOAD_LIST, true)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_SHOW_DOWNLOAD_LIST, value)
         }
     var isFirstToDownload: Boolean
         get() {
@@ -570,14 +578,7 @@ object CacheManager {
         set(value) {
             mmkv.encode(KV_NEWS_VIDEO_LIST, toJson(value))
         }
-    var downloadVideoList:MutableList<NewsData>
-        get() {
 
-            return getListByGson(mmkv.decodeString(KV_NEWS_VIDEO_LIST_DOWNLOAD),NewsData::class.java) ?: mutableListOf()
-        }
-        set(value) {
-            mmkv.encode(KV_NEWS_VIDEO_LIST_DOWNLOAD, toJson(value))
-        }
     var trendNews:MutableList<NewsData>
         get() {
 

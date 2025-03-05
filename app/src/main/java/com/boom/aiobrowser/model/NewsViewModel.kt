@@ -64,6 +64,7 @@ class NewsViewModel : BaseDataModel() {
                     })
                 }
                 newsDownloadVideoLiveData.postValue(list)
+                CacheManager.downloadVideoList = list
             }, failBack = {})
         }
     }

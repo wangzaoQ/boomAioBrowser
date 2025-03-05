@@ -59,6 +59,7 @@ object CacheManager {
     const val KV_NEWS_LIST = "KV_NEWS_LIST"
     const val KV_VIDEO_DOWNLOAD_SINGLE = "KV_NEWS_LIST"
     const val KV_NEWS_VIDEO_LIST = "KV_NEWS_VIDEO_LIST"
+    const val KV_NEWS_VIDEO_LIST_DOWNLOAD = "KV_NEWS_VIDEO_LIST_DOWNLOAD"
     const val KV_TREND_NEWS_LIST = "KV_TREND_NEWS_LIST"
     const val KV_WEB_PAGE_LIST = "KV_WEB_PAGE_LIST"
     const val KV_WEB_FETCH_LIST = "KV_WEB_FETCH_LIST"
@@ -568,6 +569,14 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_NEWS_VIDEO_LIST, toJson(value))
+        }
+    var downloadVideoList:MutableList<NewsData>
+        get() {
+
+            return getListByGson(mmkv.decodeString(KV_NEWS_VIDEO_LIST_DOWNLOAD),NewsData::class.java) ?: mutableListOf()
+        }
+        set(value) {
+            mmkv.encode(KV_NEWS_VIDEO_LIST_DOWNLOAD, toJson(value))
         }
     var trendNews:MutableList<NewsData>
         get() {

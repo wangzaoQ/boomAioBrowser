@@ -474,6 +474,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                 page = 1
                 loadData()
                 viewModel.value.getNewsData(newsAdapter.mutableItems,NetParams.MAIN, page = page,true)
+                viewModel.value.getNewsVideoList("")
             }
         }
         updateEngine(CacheManager.engineType)

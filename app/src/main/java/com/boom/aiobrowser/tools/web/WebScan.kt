@@ -240,7 +240,14 @@ object WebScan {
         cookie: String,
         realUrl: String,
         hostList:MutableList<String>) {
-        var map = getVideoHeaderInfo(videoUrl, cookie,realUrl)
+        var map:Map<String, Any>
+//        if (isDailymotion(hostList)){
+//            //Dailymotion
+//            map = getVideoHeaderInfo(videoUrl, cookie,realUrl)
+//        }else{
+//            map = getVideoHeaderInfo(videoUrl, cookie,realUrl)
+//        }
+        map = getVideoHeaderInfo(videoUrl, cookie,realUrl)
         var contentLength = 0L
         var contentType = ""
         contentType = map.get(content_type) as? String ?: ""

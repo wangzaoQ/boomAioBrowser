@@ -61,6 +61,7 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
         }else{
             viewModel.value.getNewsData(newsAdapter.mutableItems,"${NewsConfig.TOPIC_TAG}${topic}",page,refresh)
         }
+        viewModel.value.getNewsVideoList("")
     }
 
     override fun setListener() {

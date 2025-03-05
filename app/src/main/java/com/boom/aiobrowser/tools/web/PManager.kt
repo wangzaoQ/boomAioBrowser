@@ -126,11 +126,6 @@ object PManager {
 //        }
 
         val m3u8Text = fetchM3U8File(m3u8Url,headers)
-//        if (WebScan.isDailymotion(hostList)){
-//            //Dailymotion
-//        }else{
-//
-//        }
         if (m3u8Text.isNullOrEmpty() || !m3u8Text.contains("#EXTINF")) {
             return 0L // 没有有效的 M3U8 数据
         }

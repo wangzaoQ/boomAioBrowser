@@ -60,12 +60,7 @@ class SubTempPop(context: Context,var showADBack: () -> Unit) : BasePopupWindow(
                 clickBuy = true
                 subVIP(subManager)
             }
-//            tvTipsMonthly.text =
-//                "\$1.5/${context.getString(R.string.app_weekly)} ${context.getString(R.string.app_flash_sale)} 66%${context.getString(R.string.app_off)}"
-//            var ssb2 = SpannableStringBuilder(tvTipsMonthly.text)
-//
-//            ssb2.setSpan(StrikethroughSpan(), 0, "\$1.5/${context.getString(R.string.app_weekly)}".length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-//            tvTipsMonthly.setText(ssb2)
+
         }
         setBackground(R.color.color_70_black)
         showPopupWindow()
@@ -77,10 +72,10 @@ class SubTempPop(context: Context,var showADBack: () -> Unit) : BasePopupWindow(
             (context as BaseActivity<*>).addLaunch(success = {
                 defaultBinding?.apply {
                     tvWeeklyPrice.text = "${it.get("vip_weekly")?:""}/"
-                    tvTipsMonthly.text = "${tvWeeklyPrice.text}${context.getString(R.string.app_weekly)} ${context.getString(R.string.app_flash_sale)} 66%${context.getString(R.string.app_off)}"
-                    var ssb1 = SpannableStringBuilder(tvTipsMonthly.text)
-                    ssb1.setSpan(StrikethroughSpan(), 0, "${tvWeeklyPrice.text}${context.getString(R.string.app_weekly)}".length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    tvTipsMonthly.setText(ssb1)
+//                    tvTipsMonthly.text = "${tvWeeklyPrice.text}${context.getString(R.string.app_weekly)} ${context.getString(R.string.app_flash_sale)} 66%${context.getString(R.string.app_off)}"
+//                    var ssb1 = SpannableStringBuilder(tvTipsMonthly.text)
+//                    ssb1.setSpan(StrikethroughSpan(), 0, "${tvWeeklyPrice.text}${context.getString(R.string.app_weekly)}".length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+//                    tvTipsMonthly.setText(ssb1)
                 }
             }, failBack = {},Dispatchers.Main)
         }

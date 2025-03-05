@@ -185,6 +185,7 @@
             android:paddingHorizontal="7dp"
             tools:text="$3.96/weekly 50%off"
             android:textColor="@color/white"
+            android:visibility="gone"
             android:textSize="11sp"
             app:layout_constraintEnd_toEndOf="@+id/llSubMonthly"
             app:layout_constraintTop_toTopOf="@+id/llSubMonthly">
@@ -248,6 +249,7 @@
             android:layout_marginEnd="-7dp"
             android:background="@drawable/shape_sub_pop_tips"
             android:gravity="center"
+            android:visibility="gone"
             android:paddingHorizontal="7dp"
             android:textColor="@color/white"
             android:textSize="11sp"

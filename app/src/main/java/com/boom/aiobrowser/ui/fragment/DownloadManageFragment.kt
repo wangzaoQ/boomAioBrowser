@@ -89,10 +89,15 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
             add(0,NewsData().apply {
                 dataType = NewsData.TYPE_DOWNLOAD_VIDEO_HEAD
             })
-            for (i in 0 until 10){
-                add(NewsData().apply {
-                    dataType = NewsData.TYPE_DOWNLOAD_VIDEO
-                })
+            var dataList = CacheManager.downloadVideoList
+            if (dataList.isNullOrEmpty()){
+                for (i in 0 until 10){
+                    add(NewsData().apply {
+                        dataType = NewsData.TYPE_DOWNLOAD_VIDEO
+                    })
+                }
+            }else{
+                addAll(dataList)
             }
         })
 
@@ -108,7 +113,9 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
 
     override fun setListener() {
         APP.firstDownloadLoadLiveData.observe(this){
-            loadData()
+            if (CacheManager.downloadVideoList.isNullOrEmpty()){
+                loadData()
+            }
         }
         fBinding.apply {
             ivVIP.setOneClick {
@@ -233,6 +240,7 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
         } else {
             adapterHelper.trailingLoadState = LoadState.None
         }
+
         viewModel.value.getDownloadVideo(videoAdapter.mutableItems, page, false)
     }
 

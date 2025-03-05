@@ -162,37 +162,16 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
                 }
                 PointEvent.posePoint(PointEventKey.profile_download)
             }
-            llSub.setOneClick {
-                if (CacheManager.isSubscribeMember.not()){
-                    SubPop(rootActivity).createPop{
-                        updateVIPUI()
-                    }
-                }else{
-                    SubInfoPop(rootActivity).createPop()
-                }
-            }
+//            llSub.setOneClick {
+//                if (CacheManager.isSubscribeMember.not()){
+//                    SubPop(rootActivity).createPop{
+//                        updateVIPUI()
+//                    }
+//                }else{
+//                    SubInfoPop(rootActivity).createPop()
+//                }
+//            }
 
-//            llvip1.setOneClick {
-//                if (CacheManager.isSubscribeMember.not()){
-//                    SubscribeManager.subscribeShop(WeakReference(rootActivity),"vip_weekly")
-//                }else{
-//                    ToastUtils.showLong("当前已有订阅")
-//                }
-//            }
-//            llvip2.setOneClick {
-//                if (CacheManager.isSubscribeMember.not()){
-//                    SubscribeManager.subscribeShop(WeakReference(rootActivity),"vip_monthly")
-//                }else{
-//                    ToastUtils.showLong("当前已有订阅")
-//                }
-//            }
-//            llvip3.setOneClick {
-//                if (CacheManager.isSubscribeMember.not()){
-//                    SubscribeManager.subscribeShop(WeakReference(rootActivity),"vip_quarterly")
-//                }else{
-//                    ToastUtils.showLong("当前已有订阅")
-//                }
-//            }
             updateUI()
         }
         viewModel.value.uerLiveData.observe(this){

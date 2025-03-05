@@ -169,7 +169,7 @@ class SubPop(context: Context) : BasePopupWindow(context) {
                 defaultBinding?.apply {
                     tvWeeklyPrice.text = "${it.get("vip_weekly")?:""}/"
                     tvMonthlyPrice.text = "${it.get("vip_monthly")?:""}/"
-                    tvQuarterly.text = "${it.get("vip_quarterly")?:""}/"
+//                    tvQuarterly.text = "${it.get("vip_quarterly")?:""}/"
 
 //                    tvTipsMonthly.text = "${tvMonthlyPrice.text}${context.getString(R.string.app_monthly)} 50%${context.getString(R.string.app_off)}"
 //                    var ssb1 = SpannableStringBuilder(tvTipsMonthly.text)

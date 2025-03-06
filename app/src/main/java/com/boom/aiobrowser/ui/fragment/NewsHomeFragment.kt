@@ -38,19 +38,14 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
 
     var fragmentAdapter: NewsPagerStateAdapter? = null
 
+    var dataList = mutableListOf<TopicBean>()
+
     override fun startLoadData() {
-        APP.instance.appModel.getTopics()
+        var list = CacheManager.defaultTopicList
+        updateNewsHome(list)
     }
 
     override fun setListener() {
-        var list = CacheManager.defaultTopicList
-        if (list.isNullOrEmpty()) {
-            APP.topicLiveData.observe(this) {
-                updateNewsHome(it)
-            }
-        } else {
-            updateNewsHome(list)
-        }
         fBinding.ivVIP.setOneClick {
             if (CacheManager.isSubscribeMember.not()){
                 SubPop(rootActivity).createPop{
@@ -76,6 +71,8 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
     }
 
     private fun updateNewsHome(list: MutableList<TopicBean>) {
+        dataList.clear()
+        dataList.addAll(list)
         fBinding.apply {
 //            tabLayout.setBackgroundColor(Color.WHITE)
             val commonNavigator: CommonNavigator = CommonNavigator(rootActivity)
@@ -85,12 +82,12 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
             commonNavigator.isIndicatorOnTop = true
             commonNavigator.setAdapter(object : CommonNavigatorAdapter() {
                 override fun getCount(): Int {
-                    return list.size
+                    return dataList.size
                 }
 
                 override fun getTitleView(context: Context?, index: Int): IPagerTitleView {
                     val simplePagerTitleView: SimplePagerTitleView = SimplePagerTitleView(context)
-                    simplePagerTitleView.setText(list.get(index).topic)
+                    simplePagerTitleView.setText(dataList.get(index).topic)
                     simplePagerTitleView.setNormalColor(Color.BLACK)
                     simplePagerTitleView.setSelectedColor(Color.WHITE)
                     simplePagerTitleView.setSelectedBg(com.boom.indicator.R.drawable.shape_custom_tab_unable)
@@ -120,7 +117,7 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
 
             vp.apply {
                 fragmentAdapter = NewsPagerStateAdapter(
-                    list,
+                    dataList,
                     childFragmentManager,
                     FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
                 )
@@ -135,7 +132,7 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
 
                     override fun onPageSelected(position: Int) {
                         PointEvent.posePoint(PointEventKey.news_tab, Bundle().apply {
-                            putString(PointEventKey.news_tab,list.get(position).id)
+                            putString(PointEventKey.news_tab,dataList.get(position).id)
                         })
 //                        APP.newsUpdateLiveData.postValue(list.get(position).id)
                     }
@@ -151,7 +148,7 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
     }
 
     override fun setShowView() {
-
+        APP.instance.appModel.getTopics()
     }
 
     override fun getBinding(
@@ -162,7 +159,7 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
     }
 
     override fun onDestroy() {
-        APP.topicLiveData.removeObservers(this)
+//        APP.topicLiveData.removeObservers(this)
         super.onDestroy()
     }
 }

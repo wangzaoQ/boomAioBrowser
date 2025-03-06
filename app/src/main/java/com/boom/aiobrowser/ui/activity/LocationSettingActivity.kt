@@ -87,6 +87,7 @@ class LocationSettingActivity: BaseActivity<BrowserActivityLocationSettingBindin
         }
         viewModel.value.failLiveData.observe(this){
             hidePop()
+            ToastUtils.showShort(getString(R.string.net_error))
         }
         viewModel.value.completeLiveData.observe(this){
             if (fromType == 1){

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
@@ -267,6 +268,7 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         viewModel.value.failLiveData.observe(rootActivity){
             adapterHelper.trailingLoadState = LoadState.NotLoading(false)
             fBinding.refreshLayout.isRefreshing = false
+            ToastUtils.showShort(rootActivity.getString(R.string.net_error))
         }
 //        fBinding.ivDownload.setOneClick {
 //            PointEvent.posePoint(PointEventKey.home_page_dl)

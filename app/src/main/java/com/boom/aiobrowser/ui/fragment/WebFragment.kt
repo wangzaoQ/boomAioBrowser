@@ -388,6 +388,9 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 //        }
         if (jumpData?.jumpUrl != rootActivity.getString(R.string.video_local_title)){
             fBinding.flTop.binding.tvToolbarSearch.text = "${jumpData?.jumpTitle} ${getSearchTitle()}"
+        }else{
+           var title =  mAgentWeb?.webCreator?.webView?.title?:""
+            fBinding.flTop.binding.tvToolbarSearch.text = if (title.isNullOrEmpty()) getRealParseUrl() else title
         }
         fBinding.refreshLayout.isRefreshing = false
 //        var key = mAgentWeb?.webCreator?.webView?.url?:""

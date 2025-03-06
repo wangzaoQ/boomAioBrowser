@@ -15,8 +15,10 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.NFEnum
+import com.boom.aiobrowser.data.TopicBean
 import com.boom.aiobrowser.data.TopicData
 import com.boom.aiobrowser.firebase.FirebaseManager
+import com.boom.aiobrowser.other.TopicConfig
 import com.boom.aiobrowser.other.isAndroid11
 import com.boom.aiobrowser.tools.web.WebScan
 import com.google.gson.Gson
@@ -473,5 +475,59 @@ fun String.encryptECB(key: String): String {
 
 }
 
+ fun getTopicByLanguage(topic: String): TopicBean {
+    var topicBean = TopicBean()
+    topicBean.id = topic
+    topicBean.topic = when (Locale.getDefault().language) {
+        "pt" -> {
+            when (topic) {
+                TopicConfig.TOPIC_LOCAL -> {
+                    "Local"
+                }
+
+                TopicConfig.TOPIC_POLITICS -> {
+                    "Política"
+                }
+
+                TopicConfig.TOPIC_ENTERTAINMENT -> {
+                    "Entretenimento"
+                }
+
+                TopicConfig.TOPIC_PUBLIC_SAFETY -> {
+                    "Segurança Pública"
+                }
+
+                else -> {
+                    "Para Você"
+                }
+            }
+        }
+
+        else -> {
+            when (topic) {
+                TopicConfig.TOPIC_LOCAL -> {
+                    TopicConfig.TOPIC_LOCAL
+                }
+
+                TopicConfig.TOPIC_POLITICS -> {
+                    TopicConfig.TOPIC_POLITICS
+                }
+
+                TopicConfig.TOPIC_ENTERTAINMENT -> {
+                    TopicConfig.TOPIC_ENTERTAINMENT
+                }
+
+                TopicConfig.TOPIC_PUBLIC_SAFETY -> {
+                    TopicConfig.TOPIC_PUBLIC_SAFETY
+                }
+
+                else -> {
+                    TopicConfig.TOPIC_FOR_YOU
+                }
+            }
+        }
+    }
+    return topicBean
+}
 
 

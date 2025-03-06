@@ -16,6 +16,7 @@ import com.boom.aiobrowser.data.model.DownloadModel
 import com.boom.aiobrowser.net.NetRequest
 import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.other.JumpConfig
+import com.boom.aiobrowser.other.TopicConfig
 import com.tencent.mmkv.MMKV
 import java.util.LinkedList
 import java.util.UUID
@@ -778,7 +779,13 @@ object CacheManager {
 
     var defaultTopicList :MutableList<TopicBean>
         get() {
-            return getListByGson(mmkv.decodeString(KV_TOPIC_LIST,""),TopicBean::class.java)?: mutableListOf()
+            var list = getListByGson(mmkv.decodeString(KV_TOPIC_LIST,""),TopicBean::class.java)?: mutableListOf()
+            if (list.isNullOrEmpty()){
+                list.add(0, getTopicByLanguage(TopicConfig.TOPIC_FOR_YOU))
+                list.add(1, getTopicByLanguage(TopicConfig.TOPIC_LOCAL))
+            }
+            defaultTopicList = list
+            return list
         }
         set(value) {
             mmkv.encode(KV_TOPIC_LIST, toJson(value))

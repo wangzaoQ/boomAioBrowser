@@ -87,7 +87,6 @@
     </RelativeLayout>
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/llLoadingRoot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -96,13 +95,25 @@
         android:layout_marginBottom="110dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:visibility="gone"
         tools:visibility="visible">
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btnBrowser"
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:layout_marginHorizontal="40dp"
+            android:background="@drawable/shape_start_confirm"
+            android:gravity="center"
+            android:enabled="true"
+            android:text="@string/app_start"
+            android:textColor="@drawable/selector_color"></androidx.appcompat.widget.AppCompatTextView>
+
         <FrameLayout
+            android:id="@+id/llLoadingRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_progress_bg"
+            android:visibility="gone"
             android:padding="1.6dp">
 
             <ProgressBar

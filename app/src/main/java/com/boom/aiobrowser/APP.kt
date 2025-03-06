@@ -177,7 +177,26 @@ class APP: Application(), ViewModelStoreOwner {
 //                CleanConfig.initCleanConfig()
 
                 initVideo()
-                initOther()
+
+                CacheManager.videoDownloadTempList = mutableListOf()
+                runCatching {
+                    var gid = CacheManager.GID
+                    if (gid.isNullOrEmpty()) {
+                        GID = Uri.encode(AdvertisingIdClient.getAdvertisingIdInfo(APP.instance).id)
+                        CacheManager.GID = GID
+                    } else {
+                        GID = gid
+                    }
+                    AppLogs.dLog(TAG, "gid获取成功---${GID}")
+                }.onFailure {
+                    AppLogs.dLog(TAG, "gid获取失败---${it.stackTraceToString()}")
+                }
+
+                runCatching {
+                    webUA = WebSettings.getDefaultUserAgent(APP.instance) ?: ""
+                }.onFailure {
+                    AppLogs.eLog(TAG,"webConfig获取失败---"+it.stackTraceToString())
+                }
             }
             delay(3000)
             if (APP.instance.lifecycleApp.stack.isNullOrEmpty()){
@@ -324,28 +343,6 @@ class APP: Application(), ViewModelStoreOwner {
                 addAction(Intent.ACTION_USER_PRESENT)
                 addAction(NFEnum.NF_DOWNLOAD_VIDEO.channelId)
             })
-        }
-    }
-
-    suspend fun initOther() {
-        CacheManager.videoDownloadTempList = mutableListOf()
-        runCatching {
-            var gid = CacheManager.GID
-            if (gid.isNullOrEmpty()) {
-                GID = Uri.encode(AdvertisingIdClient.getAdvertisingIdInfo(APP.instance).id)
-                CacheManager.GID = GID
-            } else {
-                GID = gid
-            }
-            AppLogs.dLog(TAG, "gid获取成功---${GID}")
-        }.onFailure {
-            AppLogs.dLog(TAG, "gid获取失败---${it.stackTraceToString()}")
-        }
-
-        runCatching {
-            webUA = WebSettings.getDefaultUserAgent(APP.instance) ?: ""
-        }.onFailure {
-            AppLogs.eLog(TAG,"webConfig获取失败---"+it.stackTraceToString())
         }
     }
 

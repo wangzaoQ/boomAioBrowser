@@ -409,6 +409,7 @@
     <string name="app_clear_browsing_history">Clear browsing history</string>
     <string name="app_clear_all_tabs">Close all tabs</string>
     <string name="app_exit_app">Exit the App</string>
+    <string name="net_error">Request failed, please try again</string>
 
 
 </resources>

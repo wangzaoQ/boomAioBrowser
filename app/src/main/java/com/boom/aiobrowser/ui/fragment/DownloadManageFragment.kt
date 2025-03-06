@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
@@ -48,6 +49,7 @@ import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import com.boom.downloader.utils.VideoDownloadUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 
@@ -140,8 +142,17 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
                 videoAdapter.addAll(it)
             }
             videoAdapter.notifyDataSetChanged()
+            if (it.isNullOrEmpty()){
+                fBinding.refreshLayout.setNoMoreData(true)
+            }else{
+                fBinding.refreshLayout.finishRefresh()
+            }
+            fBinding.refreshLayout.finishLoadMore()
+        }
+        viewModel.value.failLiveData.observe(this){
             fBinding.refreshLayout.finishRefresh()
             fBinding.refreshLayout.finishLoadMore()
+            ToastUtils.showShort(rootActivity.getString(R.string.net_error))
         }
         fBinding.refreshLayout.setOnRefreshListener {
             page = 1
@@ -168,6 +179,8 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
                 )
             }
             addOnDebouncedChildClick(R.id.llDownload) { adapter, view, position ->
+                rootActivity.showPop()
+                var currentTime = System.currentTimeMillis()
                 rootActivity.addLaunch(success = {
                     var list = mutableListOf<VideoUIData>()
                     CacheManager.videoDownloadSingleTempList = list
@@ -192,7 +205,12 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
                     uiData.formatsList.add(videoDownloadData)
                     list.add(uiData)
                     CacheManager.videoDownloadSingleTempList = list
+                    var middleTime = System.currentTimeMillis()-currentTime
+                    if (middleTime<1000){
+                        delay(1000-middleTime)
+                    }
                     withContext(Dispatchers.Main){
+                        rootActivity.hidePop()
                         DownLoadPop(rootActivity,2).createPop("download_tab"){  }
                     }
                 }, failBack = {})

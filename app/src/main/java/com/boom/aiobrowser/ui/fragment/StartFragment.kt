@@ -47,13 +47,13 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
     }
 
     override fun setListener() {
-//        fBinding.btnBrowser.setOneClick {
-//            PointEvent.posePoint(PointEventKey.launch_page_start)
+        fBinding.btnBrowser.setOneClick {
+            PointEvent.posePoint(PointEventKey.launch_page_start)
 //            if (CacheManager.campaignId.isNullOrEmpty()){
 //                APP.instance.appModel.getCampaign()
 //            }
-//            toMain("点击Start",true)
-//        }
+            toMain("点击Start")
+        }
         fBinding.apply {
             tvPrivate.setOneClick {
                 startActivity(Intent(rootActivity, WebActivity::class.java).putExtra("url",
@@ -72,7 +72,6 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
     private fun toMain(tag: String) {
         AppLogs.dLog(fragmentTAG,tag)
         if (isAdded.not())return
-        fBinding.llLoadingRoot.visibility = View.VISIBLE
         toLoading()
     }
 
@@ -83,46 +82,50 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         }else{
             fBinding.rlStart.visibility = View.GONE
         }
-        job?.jobCancel()
-        job = rootActivity.addLaunch(success = {
-            while (true){
-                delay(1000)
-                currentTime+=1000
-            }
-        }, failBack = {})
-        if (currentTime>11000){
-            showEnd()
-        }else{
-            var isSubscribeMember = CacheManager.isSubscribeMember
-            startPb(fBinding.progress.progress, 100, if (isSubscribeMember) 1000 else (11000-currentTime), update = {
-                if (isFirst && it<=30 || isSubscribeMember){
-                    fBinding.progress.progress = it
-                }else{
-                    if (AioADDataManager.adAllowShowScreen()){
-                        if (AioADDataManager.getCacheAD(ADEnum.LAUNCH_AD)== null){
+        fBinding.btnBrowser.visibility = View.GONE
+        fBinding.root.postDelayed({
+            fBinding.llLoadingRoot.visibility = View.VISIBLE
+            job?.jobCancel()
+            job = rootActivity.addLaunch(success = {
+                while (true){
+                    delay(1000)
+                    currentTime+=1000
+                }
+            }, failBack = {})
+            if (currentTime>11000){
+                showEnd()
+            }else{
+                var isSubscribeMember = CacheManager.isSubscribeMember
+                startPb(fBinding.progress.progress, 100, if (isSubscribeMember) 1000 else (11000-currentTime), update = {
+                    if (isFirst || isSubscribeMember){
+                        fBinding.progress.progress = it
+                    }else{
+                        if (AioADDataManager.adAllowShowScreen()){
+                            if (AioADDataManager.getCacheAD(ADEnum.LAUNCH_AD)== null){
+                                var defaultAd = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
+                                if (defaultAd!=null){
+                                    showEnd()
+                                }else{
+                                    fBinding.progress.progress = it
+                                }
+                            }else{
+                                showEnd()
+                            }
+                        }else{
                             var defaultAd = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
                             if (defaultAd!=null){
                                 showEnd()
                             }else{
                                 fBinding.progress.progress = it
                             }
-                        }else{
-                            showEnd()
-                        }
-                    }else{
-                        var defaultAd = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
-                        if (defaultAd!=null){
-                            showEnd()
-                        }else{
-                            fBinding.progress.progress = it
                         }
                     }
-                }
-            }, complete = {
-                AppLogs.dLog(fragmentTAG, "10秒内没拿到ad")
-                adLoadComplete(AioADDataManager.AD_SHOW_TYPE_FAILED)
-            })
-        }
+                }, complete = {
+                    AppLogs.dLog(fragmentTAG, "10秒内没拿到ad")
+                    adLoadComplete(AioADDataManager.AD_SHOW_TYPE_FAILED)
+                })
+            }
+        },if (isFirst) 0 else 1000)
     }
 
     private fun adLoadComplete(loadStatus:String) {
@@ -211,31 +214,12 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
     }
 
     override fun setShowView() {
-        fBinding.animalStart.apply {
-            setAnimation("start_data.json")
-            playAnimation()
-            addAnimatorListener(object : Animator.AnimatorListener{
-                override fun onAnimationStart(p0: Animator) {
-                    fBinding.rlRoot.setBackgroundColor(Color.BLACK)
-                }
-
-                override fun onAnimationEnd(p0: Animator) {
-                }
-
-                override fun onAnimationCancel(p0: Animator) {
-                }
-
-                override fun onAnimationRepeat(p0: Animator) {
-                }
-
-            })
-        }
         APP.instance.firstInsertHomeAD = true
         APP.instance.isAllowNFPreload = false
-//        fBinding.btnBrowser.isEnabled = fBinding.btnCheck.isChecked
-//        fBinding.btnCheck.setOnCheckedChangeListener { compoundButton, b ->
-//            fBinding.btnBrowser.isEnabled = fBinding.btnCheck.isChecked
-//        }
+        fBinding.btnBrowser.isEnabled = fBinding.btnCheck.isChecked
+        fBinding.btnCheck.setOnCheckedChangeListener { compoundButton, b ->
+            fBinding.btnBrowser.isEnabled = fBinding.btnCheck.isChecked
+        }
 
         if (CacheManager.isFirstStart){
             fBinding.rlStart.visibility = View.VISIBLE
@@ -244,7 +228,6 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
                 ConfigPop(rootActivity).createPop()
             }
             CacheManager.firstTime = System.currentTimeMillis()
-            toMain("首次")
         }else{
             toMain("非首次")
         }
@@ -268,7 +251,27 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             })
             subManager.queryShop()
         }
+        fBinding.root.postDelayed({
+            fBinding.animalStart.apply {
+                setAnimation("start_data.json")
+                playAnimation()
+                addAnimatorListener(object : Animator.AnimatorListener{
+                    override fun onAnimationStart(p0: Animator) {
+                        fBinding.rlRoot.setBackgroundColor(Color.BLACK)
+                    }
 
+                    override fun onAnimationEnd(p0: Animator) {
+                    }
+
+                    override fun onAnimationCancel(p0: Animator) {
+                    }
+
+                    override fun onAnimationRepeat(p0: Animator) {
+                    }
+
+                })
+            }
+        },0)
 //
     }
 

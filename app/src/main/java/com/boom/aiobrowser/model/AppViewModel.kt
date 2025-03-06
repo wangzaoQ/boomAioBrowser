@@ -81,11 +81,10 @@ class AppViewModel : BaseDataModel() {
             TopicConfig.TOPIC_PUBLIC_SAFETY
         )
         var homeTopicList = CacheManager.homeTopicList
-        var defaultTopicList = CacheManager.defaultTopicList
+        var defaultTopicList = mutableListOf<TopicBean>()
         var allTopicList = CacheManager.allTopicList
         if (allTopicList.isNullOrEmpty()) {
             homeTopicList.clear()
-            defaultTopicList.clear()
             loadData(loadBack = {
                 var data = NetController.getTopic().data
                 topStringHomeTab.forEachIndexed { index, s ->
@@ -111,10 +110,10 @@ class AppViewModel : BaseDataModel() {
                         }
                     }
                 }
-                defaultTopicList.add(0, getTopicByLanguage(TopicConfig.TOPIC_FOR_YOU))
-                defaultTopicList.add(1, getTopicByLanguage(TopicConfig.TOPIC_LOCAL))
-                CacheManager.defaultTopicList = defaultTopicList
-                APP.topicLiveData.postValue(defaultTopicList)
+                var topicList = CacheManager.defaultTopicList
+                topicList.addAll(defaultTopicList)
+                CacheManager.defaultTopicList = topicList
+//                APP.topicLiveData.postValue(topicList)
 
                 data?.forEachIndexed { index, nowTopicData ->
                     allTopicList.add(TopicBean().apply {
@@ -128,65 +127,12 @@ class AppViewModel : BaseDataModel() {
         } else {
             CacheManager.homeTopicList = homeTopicList
             APP.homeTopicLiveData.postValue(homeTopicList)
-            CacheManager.defaultTopicList = defaultTopicList
-            APP.topicLiveData.postValue(defaultTopicList)
+//            CacheManager.defaultTopicList = defaultTopicList
+//            APP.topicLiveData.postValue(defaultTopicList)
         }
     }
 
-    private fun getTopicByLanguage(topic: String): TopicBean {
-        var topicBean = TopicBean()
-        topicBean.id = topic
-        topicBean.topic = when (Locale.getDefault().language) {
-            "pt" -> {
-                when (topic) {
-                    TopicConfig.TOPIC_LOCAL -> {
-                        "Local"
-                    }
 
-                    TopicConfig.TOPIC_POLITICS -> {
-                        "Política"
-                    }
-
-                    TopicConfig.TOPIC_ENTERTAINMENT -> {
-                        "Entretenimento"
-                    }
-
-                    TopicConfig.TOPIC_PUBLIC_SAFETY -> {
-                        "Segurança Pública"
-                    }
-
-                    else -> {
-                        "Para Você"
-                    }
-                }
-            }
-
-            else -> {
-                when (topic) {
-                    TopicConfig.TOPIC_LOCAL -> {
-                        TopicConfig.TOPIC_LOCAL
-                    }
-
-                    TopicConfig.TOPIC_POLITICS -> {
-                        TopicConfig.TOPIC_POLITICS
-                    }
-
-                    TopicConfig.TOPIC_ENTERTAINMENT -> {
-                        TopicConfig.TOPIC_ENTERTAINMENT
-                    }
-
-                    TopicConfig.TOPIC_PUBLIC_SAFETY -> {
-                        TopicConfig.TOPIC_PUBLIC_SAFETY
-                    }
-
-                    else -> {
-                        TopicConfig.TOPIC_FOR_YOU
-                    }
-                }
-            }
-        }
-        return topicBean
-    }
 
     fun getTrendsNews() {
         loadData(loadBack = {

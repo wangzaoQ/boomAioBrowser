@@ -370,17 +370,17 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     var foregroundJob:Job?=null
 
     private fun showForeground() {
-        if (isAndroid12()){
-            foregroundJob.jobCancel()
-            foregroundJob = addLaunch(success = {
-                while (APP.instance.lifecycleApp.isBackGround()){
-                    delay(1000)
-                }
-                runCatching {
-                    NFManager.startForeground("mainActivity")
-                }
-            }, failBack = {})
-        }
+//        if (isAndroid12()){
+//            foregroundJob.jobCancel()
+//            foregroundJob = addLaunch(success = {
+//                while (APP.instance.lifecycleApp.isBackGround()){
+//                    delay(1000)
+//                }
+//                runCatching {
+//                    NFManager.startForeground("mainActivity")
+//                }
+//            }, failBack = {})
+//        }
     }
 
     fun hideStart(isNormal: Boolean) {

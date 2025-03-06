@@ -275,27 +275,28 @@ object NFManager {
     }
 
     fun startForeground(tag: String) {
-        AppLogs.dLog(NFManager.TAG,"前台服务 触发 ${tag}-${Build.VERSION.SDK_INT}")
-        if (nfAllow().not())return
-        if (isAndroid12() && APP.instance.lifecycleApp.isBackGround()){
-            AppLogs.dLog(NFManager.TAG,"大于12 不允许后台展示前台服务${Build.VERSION.SDK_INT}")
-            return
-        }
-        if (isAndroid14()){
-//            if (XXPermissions.isGranted(APP.instance, Permissions.FOREGROUND_SERVICE_DATA_SYNC, Permission.ACCESS_COARSE_LOCATION).not())return
-        }
-        AppLogs.dLog(NFManager.TAG,"前台服务 允许展示 ${tag}-${Build.VERSION.SDK_INT}")
-        runCatching {
-            if (APP.instance.showForeground.not()){
-                ContextCompat.startForegroundService(APP.instance,
-                    Intent(APP.instance, NFService::class.java)
-                )
-            }else{
-                AppLogs.dLog(NFManager.TAG,"前台服务 正在展示中不需要重复启动 ${tag}-${Build.VERSION.SDK_INT}")
-            }
-        }.onFailure {
-            AppLogs.eLog(NFManager.TAG,it.stackTraceToString())
-        }
+//
+//        AppLogs.dLog(NFManager.TAG,"前台服务 触发 ${tag}-${Build.VERSION.SDK_INT}")
+//        if (nfAllow().not())return
+//        if (isAndroid12() && APP.instance.lifecycleApp.isBackGround()){
+//            AppLogs.dLog(NFManager.TAG,"大于12 不允许后台展示前台服务${Build.VERSION.SDK_INT}")
+//            return
+//        }
+//        if (isAndroid14()){
+////            if (XXPermissions.isGranted(APP.instance, Permissions.FOREGROUND_SERVICE_DATA_SYNC, Permission.ACCESS_COARSE_LOCATION).not())return
+//        }
+//        AppLogs.dLog(NFManager.TAG,"前台服务 允许展示 ${tag}-${Build.VERSION.SDK_INT}")
+//        runCatching {
+//            if (APP.instance.showForeground.not()){
+//                ContextCompat.startForegroundService(APP.instance,
+//                    Intent(APP.instance, NFService::class.java)
+//                )
+//            }else{
+//                AppLogs.dLog(NFManager.TAG,"前台服务 正在展示中不需要重复启动 ${tag}-${Build.VERSION.SDK_INT}")
+//            }
+//        }.onFailure {
+//            AppLogs.eLog(NFManager.TAG,it.stackTraceToString())
+//        }
     }
 
     /**
@@ -358,7 +359,7 @@ object NFManager {
         timerJob.jobCancel()
         timerJob = CoroutineScope(Dispatchers.IO).launch{
             appDataReset()
-            startForeground("APP")
+//            startForeground("APP")
             delay(10*1000)
             while (true) {
                 if (allowShowNF()){

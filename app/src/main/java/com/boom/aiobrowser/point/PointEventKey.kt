@@ -308,6 +308,7 @@ object PointEventKey {
     //热门视频页展示
     const val hot_videos_page = "hot_videos_page"
     const val download_videos_page = "download_videos_page"
+    const val video_stay_time = "video_stay_time"
     //资源视频download点击
     const val download_tab_dl = "download_tab_dl"
     //订阅页展示
@@ -364,6 +365,7 @@ object PointValueKey{
     const val adjust_user = "adjust_user"
     const val load_time = "load_time"
     const val network = "network"
+    const val stay_time = "stay_time"
 
 
 }

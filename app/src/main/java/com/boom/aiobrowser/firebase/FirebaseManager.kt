@@ -222,9 +222,9 @@ object FirebaseManager {
                 newsJson = firebaseRemoteConfig?.getString("aobws_default_news_config")?:""
             }
             defaultNewsList = getListByGson(newsJson, NewsData::class.java)
-            if (defaultNewsList.isNullOrEmpty()){
-                defaultNewsList = getListByGson(FirebaseConfig.DEFAULT_NEWS_JSON, NewsData::class.java)
-            }
+//            if (defaultNewsList.isNullOrEmpty()){
+//                defaultNewsList = getListByGson(FirebaseConfig.DEFAULT_NEWS_JSON, NewsData::class.java)
+//            }
         }
     }
 

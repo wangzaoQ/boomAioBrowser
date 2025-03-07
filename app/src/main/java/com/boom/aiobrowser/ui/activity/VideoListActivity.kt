@@ -27,15 +27,16 @@ class VideoListActivity : BaseActivity<NewsActivityVideoListBinding>() {
     override fun setListener() {
     }
     var enumName = ""
+    var fromType = ""
     override fun setShowView() {
         var manager = FragmentManager()
         var jsonString = intent.getStringExtra("data")?:""
         var index = intent.getIntExtra("index",0)
         enumName = intent.getStringExtra("enumName")?:""
-        var fromType = intent.getStringExtra(PointValueKey.from_type)
+        fromType = intent.getStringExtra(PointValueKey.from_type)?:""
         manager.addFragment(supportFragmentManager, NewsVideoFragment.newInstance(index,jsonString,enumName,fromType?:""),
             R.id.flRoot)
-
+        saveStayTime = true
     }
 
     companion object{
@@ -53,6 +54,12 @@ class VideoListActivity : BaseActivity<NewsActivityVideoListBinding>() {
     }
 
     override fun onDestroy() {
+        if (saveStayTime){
+            PointEvent.posePoint(PointEventKey.video_stay_time,Bundle().apply {
+                putLong(PointValueKey.stay_time,stayTime)
+                putString(PointValueKey.from_type,fromType)
+            })
+        }
         AppLogs.dLog("VideoListFragment","activity onDestroy1")
 //        GSYVideoManager.releaseAllVideos()
         AppLogs.dLog("VideoListFragment","activity onDestroy2")

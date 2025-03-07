@@ -169,6 +169,7 @@ class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
                 JumpDataManager.closeAll()
             }
         }
+        saveStayTime = true
     }
 
 
@@ -193,6 +194,12 @@ class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
     }
 
     override fun onDestroy() {
+        if (saveStayTime){
+            PointEvent.posePoint(PointEventKey.video_stay_time,Bundle().apply {
+                putLong(PointValueKey.stay_time,stayTime)
+                putString(PointValueKey.from_type,"local_download")
+            })
+        }
         orientationUtils?.releaseListener()
         GSYVideoManager.releaseAllVideos()
         super.onDestroy()

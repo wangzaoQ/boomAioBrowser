@@ -203,22 +203,6 @@ object FirebaseConfig {
 """
 
     const val DEFAULT_NEWS_JSON = """
-[
-{
-	"itackl": "11257553494212609",
-	"tconsi": "Downloads gratuitos e instantâneos de vídeos",
-	"iassum": "https://images-01.ottvs.com.br/0067617/looke_4001.jpg?152923629"
-},
-{
-	"itackl": "11257397135278081",
-	"tconsi": "Local breaking news",
-	"iassum": "https://media.phillyvoice.com/media/images/10192024_North_Philly_mass_shootin.2e16d0ba.fill-735x490.jpg"
-},
-{
-	"itackl": "11257255977025537",
-	"tconsi": "See What is Happening",
-	"iassum": "https://cdn.dol.com.br/img/Categoria-Destaque/880000/0x0/CasalPudor_00881365_0_-t.webp?fallback=https%3A%2F%2Fcdn.dol.com.br%2Fimg%2FCategoria-Destaque%2F880000%2FCasalPudor_00881365_0_.jpg%3Fxid%3D2953450&xid=2953450"
-}]
 """
     const val LTV_DEFAULT = """
 {

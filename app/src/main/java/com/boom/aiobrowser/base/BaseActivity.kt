@@ -25,6 +25,7 @@ import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.clearClipboard
 import com.boom.aiobrowser.tools.getClipContent
+import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.WebParseActivity
 import com.boom.aiobrowser.ui.pop.LoadingPop
@@ -49,8 +50,9 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
 
     var acTAG =javaClass.simpleName
 
+    @Volatile
     var stayTime = 0L
-    var timeResult: ((Long) -> Unit?)? =null
+    var saveStayTime = false
 
     var life = BaseActivityLife()
 
@@ -66,7 +68,6 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
         super.onResume()
         APP.instance.isGoOther = false
         status = true
-        stayTime = System.currentTimeMillis()
         if (APP.instance.isHideSplash.not())return
         job?.cancel()
         job = addLaunch(success = {
@@ -97,16 +98,14 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
                 }
             }
         }, failBack = {})
+        addTime()
     }
 
     abstract fun getBinding(inflater: LayoutInflater): V
 
     override fun onPause() {
         status = false
-        if (stayTime == 0L)return
-        var time = (System.currentTimeMillis()-stayTime)/1000
-        timeResult?.invoke(time)
-        stayTime = 0
+        timeJob?.jobCancel()
         super.onPause()
     }
 
@@ -148,6 +147,19 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
         }
     }
 
+    private fun addTime() {
+        if (saveStayTime){
+            timeJob?.jobCancel()
+            timeJob = addLaunch(success = {
+                while (true){
+                    stayTime+=1
+                    delay(1000)
+                }
+            }, failBack = {})
+        }
+    }
+
+    var timeJob:Job?=null
 
     abstract fun setListener()
     open fun setDataListener(){}

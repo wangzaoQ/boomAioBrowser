@@ -67,6 +67,7 @@ class APP: Application(), ViewModelStoreOwner {
     var isGoOther = false
 
     var cleanComplete = false
+    @Volatile
     var isHideSplash = false
     var GID=""
     var webUA=""

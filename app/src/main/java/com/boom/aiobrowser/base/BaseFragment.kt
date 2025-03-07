@@ -92,16 +92,16 @@ abstract class BaseFragment<V : ViewBinding> :Fragment(){
         AppLogs.dLog(fragmentTAG,"onPause")
     }
 
-    fun View.setOneClick(action: suspend (View) -> Unit) {
+    fun View.setOneClick(action: (View) -> Unit) {
         // 启动一个 actor
-        val eventActor = rootActivity.newsScope.actor<View>(Dispatchers.Main) { // 执行时不接收新来的消息
-            for (event in channel) {
-                action(event) // 将事件传递给 action
-            }
-        }
+//        val eventActor = rootActivity.newsScope.actor<View>(Dispatchers.Main) { // 执行时不接收新来的消息
+//            for (event in channel) {
+//                action(event) // 将事件传递给 action
+//            }
+//        }
         // 设置一个监听器来启用 actor
         setOnClickListener {
-            eventActor.trySend(it).isSuccess
+            action.invoke(it)
         }
     }
 

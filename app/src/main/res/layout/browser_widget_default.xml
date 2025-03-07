@@ -45,7 +45,9 @@
         <ImageView
             android:id="@+id/ivNews"
             android:layout_width="68dp"
-            android:layout_height="51dp"></ImageView>
+            android:layout_height="51dp"
+            android:scaleType="centerCrop"
+            ></ImageView>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

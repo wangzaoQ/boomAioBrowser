@@ -677,6 +677,11 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 }
                 AppLogs.dLog(acTAG,"返回 activity super.onKeyDown")
             }else if (APP.instance.isHideSplash.not()){
+                if (APP.instance.isClickStart){
+                    return true
+                }else{
+                    toHome()
+                }
                 return true
             }else{
                 showBackPop()
@@ -686,22 +691,26 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         return super.onKeyDown(keyCode, event)
     }
 
+    private fun toHome() {
+        try {
+            val intent = Intent(Intent.ACTION_MAIN)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.addCategory(Intent.CATEGORY_HOME)
+            this.startActivity(intent)
+        } catch (e: Throwable) {
+            var temp = mutableListOf<Activity>()
+            APP.instance.lifecycleApp.stack.forEach {
+                temp.add(it)
+            }
+            temp.forEach {
+                it.finish()
+            }
+        }
+    }
+
     private fun showBackPop() {
         BackPop(this).createPop {
-            try {
-                val intent = Intent(Intent.ACTION_MAIN)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                intent.addCategory(Intent.CATEGORY_HOME)
-                this.startActivity(intent)
-            } catch (e: Throwable) {
-                var temp = mutableListOf<Activity>()
-                APP.instance.lifecycleApp.stack.forEach {
-                    temp.add(it)
-                }
-                temp.forEach {
-                    it.finish()
-                }
-            }
+            toHome()
         }
     }
 

@@ -13,6 +13,7 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
+import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.databinding.BrowserActivityHotVideosBinding
@@ -22,8 +23,10 @@ import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.video.VideoPreloadManager
 import com.boom.aiobrowser.tools.web.PManager.getVideoSegmentSize
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
+import com.boom.aiobrowser.ui.pop.DisclaimerPop
 import com.boom.aiobrowser.ui.pop.DownLoadPop
 import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
@@ -79,41 +82,14 @@ class HotVideosActivity:BaseActivity<BrowserActivityHotVideosBinding>() {
                 )
             }
             addOnDebouncedChildClick(R.id.llDownload) { adapter, view, position ->
-                showPop()
-                var currentTime = System.currentTimeMillis()
-                addLaunch(success = {
-                    var list = mutableListOf<VideoUIData>()
-                    CacheManager.videoDownloadSingleTempList = list
-                    var newsData = videoAdapter.mutableItems.get(position)
-                    PointEvent.posePoint(PointEventKey.download_tab_dl, Bundle().apply {
-                        putString(PointValueKey.from_type,"hot_video")
-                        putString(PointValueKey.news_id,newsData.itackl)
-                    })
-                    var uiData = VideoUIData()
-                    uiData.thumbnail = newsData.iassum
-                    uiData.videoResultId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}"
-                    var videoDownloadData = VideoDownloadData().createDefault(
-                        videoId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}",
-                        fileName = newsData.itackl?:"",
-                        url = newsData.vbreas?:"",
-                        imageUrl = newsData.iassum?:"",
-                        paramsMap = HashMap<String,Any>(),
-                        size = getVideoSegmentSize(newsData.vbreas?:"",HashMap()),
-                        videoType = "mp4",
-                        resolution = ""
-                    )
-                    uiData.formatsList.add(videoDownloadData)
-                    list.add(uiData)
-                    CacheManager.videoDownloadSingleTempList = list
-                    var middleTime = System.currentTimeMillis()-currentTime
-                    if (middleTime<1000){
-                        delay(1000-middleTime)
+                if (CacheManager.isDisclaimerFirst) {
+                    CacheManager.isDisclaimerFirst = false
+                    DisclaimerPop(this@HotVideosActivity).createPop {
+                        clickDownload(position)
                     }
-                    withContext(Dispatchers.Main){
-                        hidePop()
-                        DownLoadPop(this@HotVideosActivity,2,).createPop("hot_video") {  }
-                    }
-                }, failBack = {})
+                } else {
+                    clickDownload(position)
+                }
             }
         }
         viewModel.value.newsHotVideoLiveData.observe(this){
@@ -129,12 +105,55 @@ class HotVideosActivity:BaseActivity<BrowserActivityHotVideosBinding>() {
             }
             acBinding.newsSmart.finishRefresh()
             acBinding.newsSmart.finishLoadMore()
+            it.forEach {
+                VideoPreloadManager.serialList(1, mutableListOf<NewsData>().apply {
+                    add(it)
+                })
+            }
         }
         viewModel.value.failLiveData.observe(this){
             acBinding.newsSmart.finishRefresh()
             acBinding.newsSmart.finishLoadMore()
             ToastUtils.showShort(this@HotVideosActivity.getString(R.string.net_error))
         }
+    }
+
+    private fun clickDownload(position: Int) {
+        showPop()
+        var currentTime = System.currentTimeMillis()
+        addLaunch(success = {
+            var list = mutableListOf<VideoUIData>()
+            CacheManager.videoDownloadSingleTempList = list
+            var newsData = videoAdapter.mutableItems.get(position)
+            PointEvent.posePoint(PointEventKey.download_tab_dl, Bundle().apply {
+                putString(PointValueKey.from_type, "hot_video")
+                putString(PointValueKey.news_id, newsData.itackl)
+            })
+            var uiData = VideoUIData()
+            uiData.thumbnail = newsData.iassum
+            uiData.videoResultId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}"
+            var videoDownloadData = VideoDownloadData().createDefault(
+                videoId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}",
+                fileName = newsData.itackl ?: "",
+                url = newsData.vbreas ?: "",
+                imageUrl = newsData.iassum ?: "",
+                paramsMap = HashMap<String, Any>(),
+                size = getVideoSegmentSize(newsData.vbreas ?: "", HashMap()),
+                videoType = "mp4",
+                resolution = ""
+            )
+            uiData.formatsList.add(videoDownloadData)
+            list.add(uiData)
+            CacheManager.videoDownloadSingleTempList = list
+            var middleTime = System.currentTimeMillis() - currentTime
+            if (middleTime < 1000) {
+                delay(1000 - middleTime)
+            }
+            withContext(Dispatchers.Main) {
+                hidePop()
+                DownLoadPop(this@HotVideosActivity, 2).createPop("hot_video") { }
+            }
+        }, failBack = {})
     }
 
     fun loadData(){

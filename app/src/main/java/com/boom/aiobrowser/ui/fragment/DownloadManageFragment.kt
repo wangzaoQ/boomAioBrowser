@@ -32,12 +32,14 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.video.VideoPreloadManager
 import com.boom.aiobrowser.tools.web.PManager.getVideoSegmentSize
 import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.HotVideosActivity
 import com.boom.aiobrowser.ui.activity.SearchActivity
 import com.boom.aiobrowser.ui.activity.VideoListActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
+import com.boom.aiobrowser.ui.pop.DisclaimerPop
 import com.boom.aiobrowser.ui.pop.DownLoadPop
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.SubInfoPop
@@ -150,6 +152,13 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
             }
             fBinding.refreshLayout.finishRefresh()
             fBinding.refreshLayout.finishLoadMore()
+            it.forEach {
+                if (it.vbreas.isNullOrEmpty().not()){
+                    VideoPreloadManager.serialList(1, mutableListOf<NewsData>().apply {
+                        add(it)
+                    })
+                }
+            }
         }
         viewModel.value.failLiveData.observe(this){
             fBinding.refreshLayout.finishRefresh()
@@ -181,41 +190,14 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
                 )
             }
             addOnDebouncedChildClick(R.id.llDownload) { adapter, view, position ->
-                rootActivity.showPop()
-                var currentTime = System.currentTimeMillis()
-                rootActivity.addLaunch(success = {
-                    var list = mutableListOf<VideoUIData>()
-                    CacheManager.videoDownloadSingleTempList = list
-                    var newsData = videoAdapter.mutableItems.get(position)
-                    PointEvent.posePoint(PointEventKey.download_tab_dl,Bundle().apply {
-                        putString(PointValueKey.from_type,"daily_video")
-                        putString(PointValueKey.news_id,newsData.itackl)
-                    })
-                    var uiData = VideoUIData()
-                    uiData.thumbnail = newsData.iassum
-                    uiData.videoResultId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}"
-                    var videoDownloadData = VideoDownloadData().createDefault(
-                        videoId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}",
-                        fileName = newsData.tconsi?:"",
-                        url = newsData.vbreas?:"",
-                        imageUrl = newsData.iassum?:"",
-                        paramsMap = HashMap<String,Any>(),
-                        size = getVideoSegmentSize(newsData.vbreas?:"",HashMap()),
-                        videoType = "mp4",
-                        resolution = ""
-                    )
-                    uiData.formatsList.add(videoDownloadData)
-                    list.add(uiData)
-                    CacheManager.videoDownloadSingleTempList = list
-                    var middleTime = System.currentTimeMillis()-currentTime
-                    if (middleTime<1000){
-                        delay(1000-middleTime)
+                if (CacheManager.isDisclaimerFirst) {
+                    CacheManager.isDisclaimerFirst = false
+                    DisclaimerPop(rootActivity).createPop {
+                        clickDownload(position)
                     }
-                    withContext(Dispatchers.Main){
-                        rootActivity.hidePop()
-                        DownLoadPop(rootActivity,2).createPop("download_tab"){  }
-                    }
-                }, failBack = {})
+                } else {
+                    clickDownload(position)
+                }
             }
         }
         fBinding.llDownload.getChildAt(0).setOneClick {
@@ -225,6 +207,44 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
             PointEvent.posePoint(PointEventKey.download_manager)
             rootActivity.jumpActivity<DownloadActivity>()
         }
+    }
+
+    private fun clickDownload(position: Int) {
+        rootActivity.showPop()
+        var currentTime = System.currentTimeMillis()
+        rootActivity.addLaunch(success = {
+            var list = mutableListOf<VideoUIData>()
+            CacheManager.videoDownloadSingleTempList = list
+            var newsData = videoAdapter.mutableItems.get(position)
+            PointEvent.posePoint(PointEventKey.download_tab_dl, Bundle().apply {
+                putString(PointValueKey.from_type, "daily_video")
+                putString(PointValueKey.news_id, newsData.itackl)
+            })
+            var uiData = VideoUIData()
+            uiData.thumbnail = newsData.iassum
+            uiData.videoResultId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}"
+            var videoDownloadData = VideoDownloadData().createDefault(
+                videoId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}",
+                fileName = newsData.tconsi ?: "",
+                url = newsData.vbreas ?: "",
+                imageUrl = newsData.iassum ?: "",
+                paramsMap = HashMap<String, Any>(),
+                size = getVideoSegmentSize(newsData.vbreas ?: "", HashMap()),
+                videoType = "mp4",
+                resolution = ""
+            )
+            uiData.formatsList.add(videoDownloadData)
+            list.add(uiData)
+            CacheManager.videoDownloadSingleTempList = list
+            var middleTime = System.currentTimeMillis() - currentTime
+            if (middleTime < 1000) {
+                delay(1000 - middleTime)
+            }
+            withContext(Dispatchers.Main) {
+                rootActivity.hidePop()
+                DownLoadPop(rootActivity, 2).createPop("download_tab") { }
+            }
+        }, failBack = {})
     }
 
     private fun toWeb(url:String,title:String) {

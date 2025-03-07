@@ -74,12 +74,6 @@ class NewsViewModel : BaseDataModel() {
                         cacheList.add(it)
                     }
                     VideoPreloadManager.serialList(1, cacheList)
-                }else{
-                    list.forEach {
-                        VideoPreloadManager.serialList(1, mutableListOf<NewsData>().apply {
-                            add(it)
-                        })
-                    }
                 }
             }, failBack = {},1)
         }else{
@@ -597,19 +591,10 @@ class NewsViewModel : BaseDataModel() {
                 }) { NetController.getNewsList(NetParams.getParamsMap(NetParams.HOT_VIDEOS))}.data
                     ?: mutableListOf()
             }
-//            list.forEach {
-//                it.dataType = TYPE_DOWNLOAD_VIDEO
-//                VideoPreloadManager.serialList(1, mutableListOf<NewsData>().apply {
-//                    add(it)
-//                })
-//            }
-            newsHotVideoLiveData.postValue(list)
-            var cacheList =  mutableListOf<NewsData>()
             list.forEach {
                 it.dataType = TYPE_DOWNLOAD_VIDEO
-                cacheList.add(it)
             }
-            VideoPreloadManager.serialList(1, cacheList)
+            newsHotVideoLiveData.postValue(list)
         }, failBack = {},1)
     }
 

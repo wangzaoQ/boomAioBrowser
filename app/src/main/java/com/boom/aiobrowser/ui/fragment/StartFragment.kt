@@ -50,10 +50,8 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
 
     override fun setListener() {
         fBinding.btnBrowser.setOneClick {
+            APP.instance.isClickStart = true
             PointEvent.posePoint(PointEventKey.launch_page_start)
-//            if (CacheManager.campaignId.isNullOrEmpty()){
-//                APP.instance.appModel.getCampaign()
-//            }
             clickBtn = true
             toMain("点击Start")
         }
@@ -80,11 +78,6 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
 
     private fun toLoading() {
         var isFirst = CacheManager.isFirstStart
-        if (isFirst){
-            fBinding.rlStart.visibility = View.VISIBLE
-        }else{
-            fBinding.rlStart.visibility = View.GONE
-        }
         fBinding.btnBrowser.visibility = View.GONE
         fBinding.root.postDelayed({
             fBinding.llLoadingRoot.visibility = View.VISIBLE
@@ -235,7 +228,10 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
                 ConfigPop(rootActivity).createPop()
             }
             CacheManager.firstTime = System.currentTimeMillis()
+            APP.instance.isClickStart = false
         }else{
+            fBinding.rlStart.visibility = View.GONE
+            APP.instance.isClickStart = true
             clickBtn = true
             toMain("非首次")
         }

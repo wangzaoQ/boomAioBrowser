@@ -75,6 +75,8 @@ class APP: Application(), ViewModelStoreOwner {
 
     var clickSetBrowser = false
 
+    var isClickStart = false
+
     @Volatile
     var shareText = ""
     var copyText = ""

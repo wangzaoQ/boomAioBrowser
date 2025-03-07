@@ -69,7 +69,7 @@ object CacheManager {
     const val KV_RECENT_SEARCH_DATA = "KV_RECENT_SEARCH_DATA"
     const val KV_RECENT_SEARCH_DATA_DOWNLOAD = "KV_RECENT_SEARCH_DATA_DOWNLOAD"
     const val KV_RECENT_SEARCH_DATA_SEARCH = "KV_RECENT_SEARCH_DATA_SEARCH"
-    const val KV_CITY_LIST = "KV_CITY_LIST"
+    const val KV_FIRST_CLICK_START = "KV_FIRST_CLICK_START"
     const val KV_LOCATION_DATA = "KV_LOCATION_DATA"
     const val KV_PHONE_ID = "KV_PHONE_ID"
     const val KV_NEWS_SAVE_TIME = "KV_NEWS_SAVE_TIME"
@@ -711,13 +711,6 @@ object CacheManager {
         }
 
 //
-//    var firstOpenApp:Boolean
-//        get(){
-//            return mmkv.decodeBool(KV_FIRST_OPEN_APP, true)
-//        }
-//        set(value) {
-//            mmkv.encode(KV_FIRST_OPEN_APP,value)
-//        }
 
     fun getID():String{
         var phoneId = mmkv.decodeString(KV_PHONE_ID,"")?:""

@@ -46,12 +46,15 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
 
     }
 
+    var clickBtn = false
+
     override fun setListener() {
         fBinding.btnBrowser.setOneClick {
             PointEvent.posePoint(PointEventKey.launch_page_start)
 //            if (CacheManager.campaignId.isNullOrEmpty()){
 //                APP.instance.appModel.getCampaign()
 //            }
+            clickBtn = true
             toMain("点击Start")
         }
         fBinding.apply {
@@ -233,6 +236,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             }
             CacheManager.firstTime = System.currentTimeMillis()
         }else{
+            clickBtn = true
             toMain("非首次")
         }
         ADEnum.values().forEach {
@@ -288,6 +292,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
 
     override fun onPause() {
         super.onPause()
+        if (clickBtn.not())return
         if (isAdded&&isVisible){
             cancelPb()
         }
@@ -295,6 +300,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
 
     override fun onResume() {
         super.onResume()
+        if (clickBtn.not())return
         if (isAdded&&isVisible){
             toLoading()
         }

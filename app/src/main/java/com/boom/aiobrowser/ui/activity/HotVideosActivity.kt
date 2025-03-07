@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADShowManager
@@ -29,6 +30,7 @@ import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import com.boom.downloader.utils.VideoDownloadUtils
 import com.boom.drag.utils.DisplayUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 class HotVideosActivity:BaseActivity<BrowserActivityHotVideosBinding>() {
@@ -77,6 +79,8 @@ class HotVideosActivity:BaseActivity<BrowserActivityHotVideosBinding>() {
                 )
             }
             addOnDebouncedChildClick(R.id.llDownload) { adapter, view, position ->
+                showPop()
+                var currentTime = System.currentTimeMillis()
                 addLaunch(success = {
                     var list = mutableListOf<VideoUIData>()
                     CacheManager.videoDownloadSingleTempList = list
@@ -101,7 +105,12 @@ class HotVideosActivity:BaseActivity<BrowserActivityHotVideosBinding>() {
                     uiData.formatsList.add(videoDownloadData)
                     list.add(uiData)
                     CacheManager.videoDownloadSingleTempList = list
+                    var middleTime = System.currentTimeMillis()-currentTime
+                    if (middleTime<1000){
+                        delay(1000-middleTime)
+                    }
                     withContext(Dispatchers.Main){
+                        hidePop()
                         DownLoadPop(this@HotVideosActivity,2,).createPop("hot_video") {  }
                     }
                 }, failBack = {})
@@ -113,8 +122,18 @@ class HotVideosActivity:BaseActivity<BrowserActivityHotVideosBinding>() {
             }else{
                 videoAdapter.addAll(it)
             }
+            if (it.isNullOrEmpty()){
+                acBinding.newsSmart.setNoMoreData(true)
+            }else{
+                acBinding.newsSmart.setNoMoreData(false)
+            }
             acBinding.newsSmart.finishRefresh()
             acBinding.newsSmart.finishLoadMore()
+        }
+        viewModel.value.failLiveData.observe(this){
+            acBinding.newsSmart.finishRefresh()
+            acBinding.newsSmart.finishLoadMore()
+            ToastUtils.showShort(this@HotVideosActivity.getString(R.string.net_error))
         }
     }
 
@@ -157,6 +176,6 @@ class HotVideosActivity:BaseActivity<BrowserActivityHotVideosBinding>() {
                 })
             }
         }
-        loadData()
+        acBinding.newsSmart.autoRefresh()
     }
 }

@@ -97,7 +97,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             }else{
                 var isSubscribeMember = CacheManager.isSubscribeMember
                 startPb(fBinding.progress.progress, 100, if (isSubscribeMember) 1000 else (11000-currentTime), update = {
-                    if (isFirst || isSubscribeMember){
+                    if (isSubscribeMember){
                         fBinding.progress.progress = it
                     }else{
                         if (AioADDataManager.adAllowShowScreen()){
@@ -165,6 +165,10 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
                 (rootActivity as MainActivity).hideStart(true)
                 AppLogs.dLog("testAPP","启动页 隐藏")
             }
+        }
+        cancelPb()
+        runCatching {
+            fBinding.animalStart.cancelAnimation()
         }
     }
 
@@ -251,27 +255,26 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             })
             subManager.queryShop()
         }
-        fBinding.root.postDelayed({
-            fBinding.animalStart.apply {
-                setAnimation("start_data.json")
-                playAnimation()
-                addAnimatorListener(object : Animator.AnimatorListener{
-                    override fun onAnimationStart(p0: Animator) {
-                        fBinding.rlRoot.setBackgroundColor(Color.BLACK)
-                    }
+        fBinding.animalStart.apply {
+            setAnimation("start_data.json")
+            playAnimation()
+            addAnimatorListener(object : Animator.AnimatorListener{
+                override fun onAnimationStart(p0: Animator) {
+                    fBinding.rlRoot.setBackgroundColor(Color.BLACK)
 
-                    override fun onAnimationEnd(p0: Animator) {
-                    }
+                }
 
-                    override fun onAnimationCancel(p0: Animator) {
-                    }
+                override fun onAnimationEnd(p0: Animator) {
+                }
 
-                    override fun onAnimationRepeat(p0: Animator) {
-                    }
+                override fun onAnimationCancel(p0: Animator) {
+                }
 
-                })
-            }
-        },0)
+                override fun onAnimationRepeat(p0: Animator) {
+                }
+
+            })
+        }
 //
     }
 

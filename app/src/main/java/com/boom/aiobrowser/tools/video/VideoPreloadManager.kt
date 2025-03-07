@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.tools.video
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Environment
 import androidx.media3.common.C
@@ -34,27 +35,31 @@ object VideoPreloadManager {
         cacheMap.clear()
     }
 
-    fun release(url:String){
-        AppLogs.dLog(TAG, "单个取消前 size:${cacheMap.size}")
+    fun release(url:String,tag:String){
+        AppLogs.dLog(TAG, "${tag}__ 单个取消前 size:${cacheMap.size}")
         runCatching {
             cacheMap.get(url)?.cancel()
             cacheMap.remove(url)
         }
-        AppLogs.dLog(TAG, "单个取消后 size:${cacheMap.size}")
+        AppLogs.dLog(TAG, "${tag}__ 单个取消后 size:${cacheMap.size}")
     }
 
 
 
     //串行
-    @androidx.media3.common.util.UnstableApi
-    fun serialList(page:Int,videoList: MutableList<NewsData>?) {
+    @SuppressLint("UnsafeOptInUsageError")
+    fun serialList(page:Int, videoList: MutableList<NewsData>?) {
         releaseAll = false
-        CoroutineScope(Dispatchers.IO).launch{
-            runCatching {
-                saveVideo2(page,videoList)
-            }
+        runCatching {
+            saveVideo2(page,videoList)
         }
     }
+
+    fun <T> splitIntoThreeParts(list: List<T>): List<List<T>> {
+        val chunkSize = (list.size + 2) / 3 // 计算每个子集合的大小，处理有余数的情况
+        return list.chunked(chunkSize).take(3) // 将集合划分并取前三部分
+    }
+
 
 
     @androidx.media3.common.util.UnstableApi
@@ -98,7 +103,7 @@ object VideoPreloadManager {
 //                                        TAG,
 //                                        "url:${videoData.vbreas} requestLength " + requestLength + " bytesCached " + bytesCached + " newBytesCached  " + newBytesCached
 //                                    )
-                                    release(videoData!!.vbreas?:"")
+                                    release(videoData!!.vbreas?:"","没有时间的数据")
                                     saveVideo2(page,this@apply)
                                     AppLogs.dLog(TAG, "saveVideo2${videoData!!.vbreas} 缓存成功_ 无时间")
                                 }
@@ -116,26 +121,26 @@ object VideoPreloadManager {
                                     10,
                                     BigDecimal.ROUND_HALF_UP
                                 ).toLong() * videoTime
-                                AppLogs.dLog(
-                                    TAG,
-                                    "url:${videoData.vbreas} requestLength " + requestLength + " bytesCached " + bytesCached + " newBytesCached  " + newBytesCached+" end "+end
-                                )
+//                                AppLogs.dLog(
+//                                    TAG,
+//                                    "url:${videoData.vbreas} requestLength " + requestLength + " bytesCached " + bytesCached + " newBytesCached  " + newBytesCached+" end "+end
+//                                )
                                 if (bytesCached > end && end > 0) {
-                                    release(videoData!!.vbreas?:"")
+                                    release(videoData!!.vbreas?:"","成功")
                                     AppLogs.dLog(TAG, "saveVideo2 缓存成功  有时间 :${videoData!!.vbreas} ")
                                     saveVideo2(page,this@apply)
                                 }
                             }
                         }
-
                     })
             }.onFailure {
 //                AppLogs.dLog(
 //                    TAG,
 //                    it.stackTraceToString()
 //                )
-//                release(videoData!!.vbreas?:"")
+                release(videoData!!.vbreas?:"","失败")
 //                saveVideo2(page,this@apply)
+                saveVideo2(page,this@apply)
             }
         }
     }
@@ -147,10 +152,10 @@ object VideoPreloadManager {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
             || !Environment.isExternalStorageRemovable()) {
             cachePath = APP.instance.externalCacheDir?.path ?:""
-            AppLogs.dLog(TAG,"getCachePath 1")
+//            AppLogs.dLog(TAG,"getCachePath 1")
         } else {
             cachePath = APP.instance.cacheDir.path
-            AppLogs.dLog(TAG,"getCachePath 2")
+//            AppLogs.dLog(TAG,"getCachePath 2")
         }
 //        cachePath = FileUtils.getAppPath(cachePath,name)
         cachePath = FileUtils.getAppPath(cachePath,"videoCache")
@@ -159,7 +164,7 @@ object VideoPreloadManager {
         if (!file.exists()) {
             file.mkdirs()
         }
-        AppLogs.dLog(TAG,"getCachePath:${file.absolutePath}")
+//        AppLogs.dLog(TAG,"getCachePath:${file.absolutePath}")
         return file.absolutePath
     }
 

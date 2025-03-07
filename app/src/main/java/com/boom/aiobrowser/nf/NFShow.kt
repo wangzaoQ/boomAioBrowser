@@ -111,22 +111,22 @@ object NFShow {
                 data.nfSource = enum.menuName
                 showNewsNF(data, enum,sourceType,newsList)
             }
+            CacheManager.saveNFNewsList(enum.menuName, newsList ?: mutableListOf())
             if (data!=null && data.vbreas.isNullOrEmpty().not()){
                 VideoPreloadManager.serialList(1,mutableListOf<NewsData>().apply {
                     add(data)
                 })
             }
-            CacheManager.saveNFNewsList(enum.menuName, newsList ?: mutableListOf())
+            var cacheList =  mutableListOf<NewsData>()
             newsList?.apply {
                 if (size>0){
                     for (i in 0 until size){
                         if (get(i).vbreas.isNullOrEmpty())continue
-                        var videoList = mutableListOf<NewsData>()
-                        videoList.add(get(i))
-                        VideoPreloadManager.serialList(1,videoList)
+                        cacheList.add(get(i))
                     }
                 }
             }
+            VideoPreloadManager.serialList(1, cacheList)
 
             if (APP.isDebug){
                 AppLogs.dLog(NFManager.TAG, "name:${enum.menuName} 移除第一条后 新闻总size=${CacheManager.getNFNewsList(enum.menuName).size}")

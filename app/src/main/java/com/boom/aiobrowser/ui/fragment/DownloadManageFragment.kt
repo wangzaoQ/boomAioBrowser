@@ -78,9 +78,11 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
                     })
                 }
             }else{
-                add(0,NewsData().apply {
-                    dataType = NewsData.TYPE_DOWNLOAD_VIDEO_HEAD
-                })
+                if (dataList.get(0).dataType!=NewsData.TYPE_DOWNLOAD_VIDEO_HEAD){
+                    add(0,NewsData().apply {
+                        dataType = NewsData.TYPE_DOWNLOAD_VIDEO_HEAD
+                    })
+                }
                 addAll(dataList)
             }
         })
@@ -100,7 +102,7 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
             if (newsList.isNullOrEmpty()){
                 loadData()
             }else{
-                loadData(true)
+                loadData(onlyCache = true)
             }
         }
         fBinding.apply {
@@ -141,12 +143,12 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
             }else{
                 videoAdapter.addAll(it)
             }
-            videoAdapter.notifyDataSetChanged()
             if (it.isNullOrEmpty()){
                 fBinding.refreshLayout.setNoMoreData(true)
             }else{
-                fBinding.refreshLayout.finishRefresh()
+                fBinding.refreshLayout.setNoMoreData(false)
             }
+            fBinding.refreshLayout.finishRefresh()
             fBinding.refreshLayout.finishLoadMore()
         }
         viewModel.value.failLiveData.observe(this){
@@ -156,7 +158,7 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
         }
         fBinding.refreshLayout.setOnRefreshListener {
             page = 1
-            loadData()
+            loadData(refresh = true)
         }
         fBinding.refreshLayout.setOnLoadMoreListener {
             page++
@@ -239,8 +241,8 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
         manager.showScreenAD(AD_POINT.aobws_downclick_int)
     }
 
-    fun loadData(onlyCache:Boolean=false) {
-        viewModel.value.getDownloadVideo(videoAdapter.mutableItems, page, false,onlyCache)
+    fun loadData(refresh:Boolean = false,onlyCache:Boolean=false) {
+        viewModel.value.getDownloadVideo(videoAdapter.mutableItems, page, refresh,onlyCache)
     }
 
     override fun setShowView() {

@@ -27,6 +27,7 @@ import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
 import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.nf.NFManager
+import com.boom.aiobrowser.nf.NFShow
 import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.LoginConfig.SIGN_LOGIN
 import com.boom.aiobrowser.other.LoginConfig.SIGN_LOGIN_ONE_TAP
@@ -202,7 +203,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         super.onResume()
         if (APP.instance.isHideSplash.not())return
         acBinding.root.postDelayed(Runnable {
-            ShortManager.addWidgetToLaunch(APP.instance)
+            ShortManager.addWidgetToLaunch(this)
             ShortManager.addPinShortcut(WeakReference(this))
         },1000)
     }
@@ -370,17 +371,17 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     var foregroundJob:Job?=null
 
     private fun showForeground() {
-//        if (isAndroid12()){
-//            foregroundJob.jobCancel()
-//            foregroundJob = addLaunch(success = {
-//                while (APP.instance.lifecycleApp.isBackGround()){
-//                    delay(1000)
-//                }
-//                runCatching {
-//                    NFManager.startForeground("mainActivity")
-//                }
-//            }, failBack = {})
-//        }
+        if (isAndroid12()){
+            foregroundJob.jobCancel()
+            foregroundJob = addLaunch(success = {
+                while (APP.instance.lifecycleApp.isBackGround()){
+                    delay(1000)
+                }
+                runCatching {
+                    NFShow.showForegroundNF()
+                }
+            }, failBack = {})
+        }
     }
 
     fun hideStart(isNormal: Boolean) {
@@ -587,7 +588,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             }
         }
         acBinding.root.postDelayed(Runnable {
-            ShortManager.addWidgetToLaunch(APP.instance)
+            ShortManager.addWidgetToLaunch(this)
             ShortManager.addPinShortcut(WeakReference(this))
         },1000)
 //        else{

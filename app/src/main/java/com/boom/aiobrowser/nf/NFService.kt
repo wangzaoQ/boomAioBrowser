@@ -20,11 +20,7 @@ class NFService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         APP.instance.showForeground = true
         showNF()
-        return if (isAndroid12()){
-            START_NOT_STICKY
-        }else{
-            START_STICKY
-        }
+        return START_NOT_STICKY
     }
 
     private fun showNF() {

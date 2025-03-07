@@ -70,7 +70,7 @@ class MorePop(context: Context) : BasePopupWindow(context) {
             }
             llWidget.setOnClickListener {
                 PointEvent.posePoint(PointEventKey.profile_add_widget)
-                ShortManager.addWidgetToLaunch(context,true)
+//                ShortManager.addWidgetToLaunch(context,true)
             }
             llAbout.setOnClickListener {
                 if (context is BaseActivity<*>){

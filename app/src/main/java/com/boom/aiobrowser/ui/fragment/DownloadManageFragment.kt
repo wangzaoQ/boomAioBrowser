@@ -152,13 +152,15 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
             }
             fBinding.refreshLayout.finishRefresh()
             fBinding.refreshLayout.finishLoadMore()
-            it.forEach {
-                if (it.vbreas.isNullOrEmpty().not()){
-                    VideoPreloadManager.serialList(1, mutableListOf<NewsData>().apply {
-                        add(it)
-                    })
+            rootActivity.addLaunch(success = {
+                it.forEach {
+                    if (it.vbreas.isNullOrEmpty().not()){
+                        VideoPreloadManager.serialList(1, mutableListOf<NewsData>().apply {
+                            add(it)
+                        })
+                    }
                 }
-            }
+            }, failBack = {})
         }
         viewModel.value.failLiveData.observe(this){
             fBinding.refreshLayout.finishRefresh()

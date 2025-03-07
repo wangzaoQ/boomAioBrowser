@@ -105,11 +105,15 @@ class HotVideosActivity:BaseActivity<BrowserActivityHotVideosBinding>() {
             }
             acBinding.newsSmart.finishRefresh()
             acBinding.newsSmart.finishLoadMore()
-            it.forEach {
-                VideoPreloadManager.serialList(1, mutableListOf<NewsData>().apply {
-                    add(it)
-                })
-            }
+            addLaunch(success = {
+                it.forEach {
+                    if (it.vbreas.isNullOrEmpty().not()){
+                        VideoPreloadManager.serialList(1, mutableListOf<NewsData>().apply {
+                            add(it)
+                        })
+                    }
+                }
+            }, failBack = {})
         }
         viewModel.value.failLiveData.observe(this){
             acBinding.newsSmart.finishRefresh()

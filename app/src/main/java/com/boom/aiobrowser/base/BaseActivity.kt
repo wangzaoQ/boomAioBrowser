@@ -153,6 +153,7 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
             timeJob = addLaunch(success = {
                 while (true){
                     stayTime+=1
+                    AppLogs.dLog("Point_Net","计时:${stayTime}")
                     delay(1000)
                 }
             }, failBack = {})

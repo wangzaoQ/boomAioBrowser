@@ -22,6 +22,9 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.pop.RatePop
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
 
 
@@ -118,7 +121,7 @@ object ShortManager {
         context.sendBroadcast(Intent(APP_WIDGET_UPDATE, null, context, WidgetProvider::class.java))
     }
 
-    fun addWidgetToLaunch(context: Context,continueFilter:Boolean=false) { // 添加组件到桌面
+    fun addWidgetToLaunch(context: BaseActivity<*>,continueFilter:Boolean=false) { // 添加组件到桌面
         if (continueFilter.not()){
             if (CacheManager.isFirstClickDownloadButton){
                 AppLogs.dLog(TAG,"Widget添加失败 新用户未使用下载功能")
@@ -154,7 +157,12 @@ object ShortManager {
                         PointEvent.posePoint(PointEventKey.widget_pop,Bundle().apply {
                             putString(PointValueKey.source_from,if(continueFilter)"profile_pop" else "other" )
                         })
-                        ToastUtils.showLong(APP.instance.getString(R.string.app_add_widget_success))
+                        context.addLaunch(success = {
+                            delay(500)
+                            withContext(Dispatchers.Main){
+                                ToastUtils.showLong(context.getString(R.string.app_add_widget_success))
+                            }
+                        }, failBack = {})
                     }
                 }
             }

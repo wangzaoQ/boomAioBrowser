@@ -588,7 +588,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             }
         }
         acBinding.root.postDelayed(Runnable {
-            ShortManager.addWidgetToLaunch(this)
+            if (CacheManager.isBUser){
+                ShortManager.addWidgetToLaunch(this)
+            }
             ShortManager.addPinShortcut(WeakReference(this))
         },1000)
 //        else{

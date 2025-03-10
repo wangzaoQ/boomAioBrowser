@@ -1,5 +1,6 @@
 package com.boom.aiobrowser.nf
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.content.Intent
@@ -14,6 +15,7 @@ import com.boom.aiobrowser.data.AioNFData
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
+import com.boom.aiobrowser.nf.NFShow.getForegroundNF
 import com.boom.aiobrowser.other.ShortManager
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
@@ -99,7 +101,6 @@ object NFManager {
             AppLogs.dLog(NFManager.TAG,"NF refuse: $refuseContent")
             return false
         }
-        return true
     }
 
     fun requestNotifyPermission(weakReference: WeakReference<BaseActivity<*>>,onSuccess: () -> Unit = {}, onFail: () -> Unit = {}) {
@@ -274,8 +275,8 @@ object NFManager {
         }
     }
 
+    @SuppressLint("MissingPermission")
     fun startForeground(tag: String) {
-
         AppLogs.dLog(NFManager.TAG,"前台服务 触发 ${tag}-${Build.VERSION.SDK_INT}")
         if (nfAllow().not())return
         if (isAndroid12() && APP.instance.lifecycleApp.isBackGround()){
@@ -288,6 +289,8 @@ object NFManager {
         AppLogs.dLog(NFManager.TAG,"前台服务 允许展示 ${tag}-${Build.VERSION.SDK_INT}")
         runCatching {
             if (APP.instance.showForeground.not()){
+                getForegroundNF()
+                NFManager.manager.notify(NFEnum.NF_SEARCH_VIDEO.position,NFManager.nfForeground!!)
                 ContextCompat.startForegroundService(APP.instance,
                     Intent(APP.instance, NFService::class.java)
                 )

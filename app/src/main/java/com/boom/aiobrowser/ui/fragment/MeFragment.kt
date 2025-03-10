@@ -254,6 +254,11 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
             }else{
                 fBinding.tvLocation.text = data.locationCity
             }
+            if (CacheManager.isBUser){
+                fBinding.llWidget.visibility = View.VISIBLE
+            }else{
+                fBinding.llWidget.visibility = View.GONE
+            }
         }
     }
 

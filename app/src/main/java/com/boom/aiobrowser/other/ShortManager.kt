@@ -14,6 +14,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
+import com.boom.aiobrowser.nf.NFJump
 import com.boom.aiobrowser.nf.NFJump.getFlags
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
@@ -142,12 +143,17 @@ object ShortManager {
                 val appWidgetManager: AppWidgetManager? = context.getSystemService(AppWidgetManager::class.java) as AppWidgetManager
                 appWidgetManager?.let {
                     if (appWidgetManager.isRequestPinAppWidgetSupported) {
+                        val pinnedWidgetCallbackIntent = Intent(
+                            context,
+                            WidgetReceiver::class.java
+                        )
+
                         val myProvider = ComponentName(context, WidgetProvider::class.java)
-                        val addWidgetCallIntent = Intent(context, WidgetProvider::class.java)
+//                        val addWidgetCallIntent = Intent(context, WidgetProvider::class.java)
                         val successCallback: PendingIntent = PendingIntent.getBroadcast(
                             context,
                             0,
-                            addWidgetCallIntent, PendingIntent.FLAG_IMMUTABLE
+                            pinnedWidgetCallbackIntent, NFJump.getFlags()
 //                    PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
 //                    PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_IMMUTABLE
 //                    PendingIntent.FLAG_UPDATE_CURRENT
@@ -157,12 +163,12 @@ object ShortManager {
                         PointEvent.posePoint(PointEventKey.widget_pop,Bundle().apply {
                             putString(PointValueKey.source_from,if(continueFilter)"profile_pop" else "other" )
                         })
-                        context.addLaunch(success = {
-                            delay(500)
-                            withContext(Dispatchers.Main){
-                                ToastUtils.showLong(context.getString(R.string.app_add_widget_success))
-                            }
-                        }, failBack = {})
+//                        context.addLaunch(success = {
+//                            delay(500)
+//                            withContext(Dispatchers.Main){
+//                                ToastUtils.showLong(context.getString(R.string.app_add_widget_success))
+//                            }
+//                        }, failBack = {})
                     }
                 }
             }

@@ -201,8 +201,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
 
     override fun onResume() {
         super.onResume()
-        if (APP.instance.isHideSplash.not())return
         acBinding.root.postDelayed(Runnable {
+            if (APP.instance.isHideSplash.not())return@Runnable
             ShortManager.addWidgetToLaunch(this)
             ShortManager.addPinShortcut(WeakReference(this))
         },1000)

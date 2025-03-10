@@ -210,8 +210,6 @@ object NFShow {
     fun showForegroundNF(){
         if (nfAllow().not())return
         runCatching {
-            getForegroundNF()
-            NFManager.manager.notify(NFEnum.NF_SEARCH_VIDEO.position,NFManager.nfForeground!!)
             NFManager.startForeground("showForegroundNF")
         }.onFailure {
             AppLogs.eLog(NFManager.TAG,it.stackTraceToString())

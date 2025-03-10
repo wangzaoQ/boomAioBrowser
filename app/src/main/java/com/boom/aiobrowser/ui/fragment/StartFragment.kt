@@ -175,9 +175,12 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         AioADDataManager.preloadAD(ADEnum.BANNER_AD_NEWS_DETAILS,"首页展示时")
     }
 
+    var showEnd = false
+
     private fun showEnd() {
         fBinding.progress.visibility = View.VISIBLE
         endProgress(end = {
+            showEnd = true
             rootActivity.addLaunch(success = {
                 while (!rootActivity.getActivityStatus()) {
                     delay(100)
@@ -214,6 +217,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
     }
 
     override fun setShowView() {
+        showEnd = false
         APP.instance.firstInsertHomeAD = true
         APP.instance.isAllowNFPreload = false
         fBinding.btnBrowser.isEnabled = fBinding.btnCheck.isChecked
@@ -225,7 +229,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             fBinding.rlStart.visibility = View.VISIBLE
             fBinding.llLoadingRoot.visibility = View.GONE
             if (APP.isDebug){
-                ConfigPop(rootActivity).createPop()
+//                ConfigPop(rootActivity).createPop()
             }
             CacheManager.firstTime = System.currentTimeMillis()
             APP.instance.isClickStart = false
@@ -289,7 +293,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
     override fun onPause() {
         super.onPause()
         if (clickBtn.not())return
-        if (isAdded&&isVisible){
+        if (isAdded&&isVisible && showEnd.not()){
             cancelPb()
         }
     }
@@ -297,7 +301,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
     override fun onResume() {
         super.onResume()
         if (clickBtn.not())return
-        if (isAdded&&isVisible){
+        if (isAdded&&isVisible && showEnd.not()){
             toLoading()
         }
     }

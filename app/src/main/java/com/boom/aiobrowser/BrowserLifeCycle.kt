@@ -32,6 +32,7 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
     @Volatile
     var isBackstage = false
 
+    @Volatile
     var count = 0
 
     // 0 开屏广告 1 插屏广告 2 激励广告
@@ -54,9 +55,10 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
 
         var allowContinue = false
         runCatching {
-            allowContinue = WakeManager.isScreenOn()&& WakeManager.isDeviceLocked().not()
+            allowContinue = WakeManager.isScreenOn()
         }
         if (allowContinue.not()){
+            AppLogs.dLog(APP.instance.TAG,"onActivityStarted 终止 screen:${WakeManager.isScreenOn()}  devicelock:${WakeManager.isDeviceLocked().not()}")
             return
         }
 

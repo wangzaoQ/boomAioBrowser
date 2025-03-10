@@ -222,6 +222,12 @@
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/llWidget"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    >
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="54dp"
                     android:gravity="center_vertical"
@@ -248,7 +254,7 @@
                     android:layout_height="0.5dp"
                     android:layout_marginStart="40dp"
                     android:background="#29000000"></View>
-
+                </androidx.appcompat.widget.LinearLayoutCompat>
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/llDownload"
                     android:layout_width="match_parent"

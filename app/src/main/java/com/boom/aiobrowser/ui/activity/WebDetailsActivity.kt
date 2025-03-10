@@ -89,6 +89,11 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
             page = 1
             viewModel.value.getNewsLike()
             acBinding.newsSmart.setEnableLoadMore(true)
+            acBinding.newsSmart.finishRefresh()
+        }
+        viewModel.value.failLiveData.observe(this){
+            acBinding.newsSmart.finishRefresh()
+            acBinding.newsSmart.finishLoadMore()
         }
         viewModel.value.newsRelatedLiveData.observe(this){
             var index = -1
@@ -112,6 +117,12 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         acBinding.newsSmart.setOnLoadMoreListener {
             page++
             viewModel.value.getNewsLike()
+        }
+        acBinding.newsSmart.setOnRefreshListener {
+            page = 1
+            newData?.apply {
+                viewModel.value.getNewsDetails(this)
+            }
         }
 
         newsAdapter.setOnDebouncedItemClick{adapter, view, position ->
@@ -168,9 +179,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
             intent.getStringExtra(ParamsConfig.JSON_PARAMS),
             NewsData::class.java
         )
-        newData?.apply {
-            viewModel.value.getNewsDetails(this)
-        }
+        acBinding.newsSmart.autoRefresh()
         PointEvent.posePoint(PointEventKey.news_page, Bundle().apply {
             putString(PointValueKey.news_id,newData?.itackl)
             putString(PointValueKey.news_topic,newData?.tdetai?.getNewsTopic())

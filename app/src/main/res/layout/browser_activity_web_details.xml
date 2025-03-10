@@ -53,7 +53,6 @@
         app:srlEnableOverScrollBounce="true"
         app:srlEnableOverScrollDrag="true"
         app:srlEnablePreviewInEditMode="true"
-        app:srlEnableRefresh="false"
         app:srlEnableLoadMore="false"
         >
         <androidx.recyclerview.widget.RecyclerView

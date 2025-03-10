@@ -412,4 +412,6 @@
     <string name="app_clear_browsing_history">Limpar histórico de navegação</string>
     <string name="app_clear_all_tabs">Fechar todas as abas</string>
     <string name="app_exit_app">Sair do aplicativo</string>
+
+    <string name="net_error">A solicitação falhou, tente novamente</string>
 </resources>

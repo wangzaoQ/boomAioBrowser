@@ -407,4 +407,5 @@
     <string name="app_clear_browsing_history">閲覧履歴を削除</string>
     <string name="app_clear_all_tabs">すべてのタブを閉じる</string>
     <string name="app_exit_app">アプリを終了</string>
+    <string name="net_error">リクエストに失敗しました。もう一度お試しください。</string>
 </resources>

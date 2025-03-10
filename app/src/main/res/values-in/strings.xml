@@ -409,4 +409,5 @@
     <string name="app_clear_browsing_history">Hapus riwayat penelusuran</string>
     <string name="app_clear_all_tabs">Tutup semua tab</string>
     <string name="app_exit_app">Keluar dari Aplikasi</string>
+    <string name="net_error">Permintaan gagal, silakan coba lagi</string>
 </resources>

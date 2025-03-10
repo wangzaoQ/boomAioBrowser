@@ -409,4 +409,5 @@
     <string name="app_clear_browsing_history">Browserverlauf löschen</string>
     <string name="app_clear_all_tabs">Alle Tabs schließen</string>
     <string name="app_exit_app">App beenden</string>
+    <string name="net_error">Anfrage fehlgeschlagen, bitte versuchen Sie es erneut</string>
 </resources>

@@ -408,4 +408,5 @@
     <string name="app_clear_browsing_history">Effacer l\'historique de navigation</string>
     <string name="app_clear_all_tabs">Fermer tous les onglets</string>
     <string name="app_exit_app">Quitter l\'application</string>
+    <string name="net_error">La demande a échoué, veuillez réessayer</string>
 </resources>

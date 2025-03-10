@@ -409,4 +409,5 @@
     <string name="app_clear_browsing_history">ล้างประวัติการท่องเว็บ</string>
     <string name="app_clear_all_tabs">ปิดแท็บทั้งหมด</string>
     <string name="app_exit_app">ออกจากแอป</string>
+    <string name="net_error">การร้องขอล้มเหลว กรุณาลองอีกครั้ง</string>
 </resources>

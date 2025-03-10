@@ -407,4 +407,5 @@
     <string name="app_clear_browsing_history">مسح سجل التصفح</string>
     <string name="app_clear_all_tabs">إغلاق جميع التبويبات</string>
     <string name="app_exit_app">الخروج من التطبيق</string>
+    <string name="net_error">فشل الطلب، يرجى المحاولة مرة أخرى</string>
 </resources>

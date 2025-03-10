@@ -489,9 +489,11 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 ParamsConfig.WIDGET->{
                     if (nfTo == 1){
                         var data = getBeanByGson(nfData,NewsData::class.java)
-                        jumpActivity<WebDetailsActivity>(Bundle().apply {
-                            putString(ParamsConfig.JSON_PARAMS, toJson(data))
-                        })
+                        if (data!=null){
+                            jumpActivity<WebDetailsActivity>(Bundle().apply {
+                                putString(ParamsConfig.JSON_PARAMS, toJson(data))
+                            })
+                        }
                     }else if (nfTo == 0){
                         jumpActivity<SearchActivity>(Bundle().apply {
                             putString(PointValueKey.from_type,"app_widget")

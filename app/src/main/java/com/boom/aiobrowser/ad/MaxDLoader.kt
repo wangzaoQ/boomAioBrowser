@@ -210,5 +210,9 @@ class MaxDLoader(
         adView?.loadAd()
     }
 
+    override fun rewarded() {
+
+    }
+
 
 }

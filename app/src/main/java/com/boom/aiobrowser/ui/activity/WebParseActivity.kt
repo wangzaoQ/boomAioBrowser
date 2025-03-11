@@ -6,6 +6,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
+import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserActivityWebParseBinding
 import com.boom.aiobrowser.nf.NFManager
@@ -15,6 +16,9 @@ import com.boom.aiobrowser.tools.FragmentManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.ui.fragment.TestWebFragment
 import com.boom.aiobrowser.ui.pop.DisclaimerPop
 import com.boom.downloader.VideoDownloadManager
@@ -93,6 +97,11 @@ class WebParseActivity: BaseActivity<BrowserActivityWebParseBinding>() {
                         VideoDownloadManager.getInstance()
                             .startDownload(data.createDownloadData(data), headerMap)
                         NFShow.showDownloadNF(data,true)
+                        PointEvent.posePoint(PointEventKey.all_noti_t,Bundle().apply {
+                            putString(PointValueKey.video_url, data?.url?:"")
+                            putString(PointValueKey.push_type, PointEventKey.download_push_conduct)
+
+                        })
                         finish()
                     }
                 } else {

@@ -151,21 +151,21 @@ object NFManager {
                 // 0 进度中点击 1 失败点击 2成功点击  3 成功点击观看视频
                 when (nfTo) {
                      0-> {
-                         PointEvent.posePoint(PointEventKey.download_push_conduct, Bundle().apply {
-                             putString(PointValueKey.ponit_action, PointValue.click)
+                         PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
                              putString(PointValueKey.video_url, data?.url?:"")
+                             putString(PointValueKey.push_type, PointEventKey.download_push_conduct)
                          })
                      }
                     1->{
-                        PointEvent.posePoint(PointEventKey.download_push_fail, Bundle().apply {
-                            putString(PointValueKey.ponit_action, PointValue.click)
+                        PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
                             putString(PointValueKey.video_url, data?.url?:"")
+                            putString(PointValueKey.push_type, PointEventKey.download_push_fail)
                         })
                     }
                     2,3->{
-                        PointEvent.posePoint(PointEventKey.download_push_success, Bundle().apply {
-                            putString(PointValueKey.ponit_action, PointValue.click)
+                        PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
                             putString(PointValueKey.video_url, data?.url?:"")
+                            putString(PointValueKey.push_type, PointEventKey.download_push_success)
                         })
                         runCatching {
                             manager.cancel(data?.nfId?:0)

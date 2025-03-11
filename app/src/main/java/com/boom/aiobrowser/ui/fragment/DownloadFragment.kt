@@ -19,6 +19,7 @@ import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.nf.NFShow
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
@@ -85,6 +86,11 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
                     downloadType = VideoDownloadData.DOWNLOAD_LOADING
                     NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
                         NFShow.showDownloadNF(data,true)
+                        PointEvent.posePoint(PointEventKey.all_noti_t,Bundle().apply {
+                            putString(PointValueKey.video_url, data?.url?:"")
+                            putString(PointValueKey.push_type, PointEventKey.download_push_conduct)
+
+                        })
                     }, onFail = {})
                     var isSuccess = VideoDownloadManager.getInstance().resumeDownload(url)
                     if (isSuccess.not()){
@@ -99,6 +105,11 @@ class DownloadFragment : BaseFragment<VideoFragmentDownloadBinding>()  {
                     downloadType = VideoDownloadData.DOWNLOAD_PAUSE
                     NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
                         NFShow.showDownloadNF(data,true)
+                        PointEvent.posePoint(PointEventKey.all_noti_t,Bundle().apply {
+                            putString(PointValueKey.video_url, data?.url?:"")
+                            putString(PointValueKey.push_type, PointEventKey.download_push_conduct)
+
+                        })
                     }, onFail = {})
                     VideoDownloadManager.getInstance().pauseDownloadTask(url)
                     downloadAdapter.notifyItemChanged(position,"updateLoading")

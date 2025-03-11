@@ -28,6 +28,7 @@ import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.firebase.analytics.FirebaseAnalytics
 import okhttp3.Response
 import org.json.JSONObject
@@ -125,7 +126,7 @@ object PointEvent {
             val customParams: MutableMap<String, String> = HashMap()
             customParams[Scheme.COUNTRY] = "US"
             customParams[Scheme.AD_UNIT] = requestBean.ktygzdzn
-            customParams[Scheme.AD_TYPE] = getAdType(requestBean,ad)
+            customParams[Scheme.AD_TYPE] = adPointManager.getAdType(requestBean,ad)
             var from = "admob"
             var netWork = MediationNetwork.googleadmob
             if (requestBean.tybxumpn == AioADDataManager.AD_PLATFORM_MAX){
@@ -196,27 +197,7 @@ object PointEvent {
 
     }
 
-    private fun getAdType(requestBean: AioRequestData,ad: Any): String {
-        if (requestBean.tybxumpn == AioADDataManager.AD_PLATFORM_ADMOB){
-            return when (ad) {
-                is AppOpenAd ->{
-                    AppsFlyerAdNetworkEventType.APP_OPEN.toString()
-                }
-                is InterstitialAd ->{
-                    AppsFlyerAdNetworkEventType.INTERSTITIAL.toString()
-                }
-                is NativeAd ->{
-                    AppsFlyerAdNetworkEventType.NATIVE.toString()
-                }
-                is AdView ->{
-                    AppsFlyerAdNetworkEventType.BANNER.toString()
-                }
-                else -> "Unknown"
-            }
-        }else{
-          return  "Unknown"
-        }
-    }
+
 
     fun getLTVList(): MutableList<Double> {
         val ad = mutableListOf<Double>()

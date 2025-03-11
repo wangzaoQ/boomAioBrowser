@@ -181,6 +181,10 @@ object VideoManager {
                     removeJob(item,job,"onDownloadError")
                 }
                 addJob(item,job,"onDownloadError")
+                PointEvent.posePoint(PointEventKey.all_noti_t,Bundle().apply {
+                    putString(PointValueKey.video_url, item?.url?:"")
+                    putString(PointValueKey.push_type, PointEventKey.download_push_fail)
+                })
             }
 
             override fun onDownloadSuccess(item: VideoTaskItem?) {
@@ -243,6 +247,10 @@ object VideoManager {
                         add(it)
                     }
                 }
+                PointEvent.posePoint(PointEventKey.all_noti_t,Bundle().apply {
+                    putString(PointValueKey.video_url, item?.url?:"")
+                    putString(PointValueKey.push_type, PointEventKey.download_push_success)
+                })
             }
         })
 

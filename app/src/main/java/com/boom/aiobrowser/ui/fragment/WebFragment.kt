@@ -189,6 +189,11 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
                                                 WeakReference((context as BaseActivity<*>)),
                                                 onSuccess = {
                                                     NFShow.showDownloadNF(data, true)
+                                                    PointEvent.posePoint(PointEventKey.all_noti_t,Bundle().apply {
+                                                        putString(PointValueKey.video_url, data?.url?:"")
+                                                        putString(PointValueKey.push_type, PointEventKey.download_push_conduct)
+
+                                                    })
                                                 },
                                                 onFail = {})
                                         }

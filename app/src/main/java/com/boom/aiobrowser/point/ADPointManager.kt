@@ -3,6 +3,7 @@ package com.boom.aiobrowser.point
 import android.text.TextUtils
 import com.applovin.mediation.MaxAd
 import com.applovin.sdk.AppLovinSdk
+import com.appsflyer.adrevenue.adnetworks.AppsFlyerAdNetworkEventType
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.data.AioRequestData
@@ -13,6 +14,7 @@ import com.google.android.gms.ads.ResponseInfo
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.rewarded.RewardedAd
 import java.math.BigDecimal
 
 class ADPointManager(var adValue: Any, var ad: Any, var requestBean: AioRequestData, var adEnum: ADEnum) {
@@ -90,6 +92,9 @@ class ADPointManager(var adValue: Any, var ad: Any, var requestBean: AioRequestD
                 is AdView ->{
                     getADFillByAdmob((ad as AdView).responseInfo)
                 }
+                is RewardedAd->{
+                    getADFillByAdmob((ad as RewardedAd).responseInfo)
+                }
                 else -> "Unknown"
             }
         }
@@ -104,6 +109,7 @@ class ADPointManager(var adValue: Any, var ad: Any, var requestBean: AioRequestD
                         is AppOpenAd -> "AppOpenAd"
                         is InterstitialAd -> "InterstitialAd"
                         is NativeAd -> "NativeAd"
+                        is RewardedAd -> "RewardedAd"
                         else -> "Unknown"
                     }
                 }
@@ -146,5 +152,30 @@ class ADPointManager(var adValue: Any, var ad: Any, var requestBean: AioRequestD
         else adapterClassName
     }
 
+
+    fun getAdType(requestBean: AioRequestData,ad: Any): String {
+        if (requestBean.tybxumpn == AioADDataManager.AD_PLATFORM_ADMOB){
+            return when (ad) {
+                is AppOpenAd ->{
+                    AppsFlyerAdNetworkEventType.APP_OPEN.toString()
+                }
+                is InterstitialAd ->{
+                    AppsFlyerAdNetworkEventType.INTERSTITIAL.toString()
+                }
+                is NativeAd ->{
+                    AppsFlyerAdNetworkEventType.NATIVE.toString()
+                }
+                is AdView ->{
+                    AppsFlyerAdNetworkEventType.BANNER.toString()
+                }
+                is RewardedAd->{
+                    AppsFlyerAdNetworkEventType.REWARDED.toString()
+                }
+                else -> "Unknown"
+            }
+        }else{
+            return  "Unknown"
+        }
+    }
 
 }

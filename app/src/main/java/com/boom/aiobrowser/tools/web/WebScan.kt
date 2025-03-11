@@ -20,6 +20,7 @@ import com.boom.downloader.model.Video
 import com.boom.downloader.model.Video.Mime.MIME_TYPE_MP4
 import com.boom.downloader.utils.HttpUtils
 import com.boom.downloader.utils.VideoDownloadUtils
+import com.google.gson.JsonParser
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import okhttp3.Call
@@ -240,14 +241,17 @@ object WebScan {
         cookie: String,
         realUrl: String,
         hostList:MutableList<String>) {
-        var map:Map<String, Any>
-//        if (isDailymotion(hostList)){
-//            //Dailymotion
-//            map = getVideoHeaderInfo(videoUrl, cookie,realUrl)
-//        }else{
-//            map = getVideoHeaderInfo(videoUrl, cookie,realUrl)
-//        }
-        map = getVideoHeaderInfo(videoUrl, cookie,realUrl)
+        var map:Map<String, Any>?=null
+        if (isDailymotion(hostList)){
+//            AppLogs.dLog("webReceive","命中 Dailymotion:${realUrl}")
+            //Dailymotion
+            if (realUrl.contains("video")){
+                WebDailymotion.getVideoHeaderInfo(videoUrl, cookie,realUrl)
+            }
+        }else{
+            map = getVideoHeaderInfo(videoUrl, cookie,realUrl)
+        }
+        if (map == null)return
         var contentLength = 0L
         var contentType = ""
         contentType = map.get(content_type) as? String ?: ""
@@ -330,22 +334,11 @@ object WebScan {
         var isAdd = false
         list.forEach {
             if (it.formatsList.isNotEmpty()&& videoType == "m3u8"){
-//                var isOldData = false
-//                for (j in 0 until it.formatsList.size){
-//                    if (videoUrl == it.formatsList.get(j).url){
-//                        isOldData = true
-//                        break
-//                    }
-//                }
-//                if (isOldData){
-//                    AppLogs.dLog("webReceive","js 过滤重复数据2")
-//                    return@forEach
-//                }
-
                 var tempDownloadData =  it.formatsList.get(0)
                 var tempDataBaseUrl = URL(tempDownloadData.url).host
                 if (tempDataBaseUrl == baseUrl){
-                    var resolution = extractResolution(videoUrl)?:""
+                    var resolution = ""
+                    resolution = extractResolution(videoUrl)?:""
                     if (resolution.isNullOrEmpty()){
                         var index = videoUrl?.lastIndexOf("/")?:0
                         if (index>0){
@@ -384,7 +377,8 @@ object WebScan {
         if (isAdd.not()){
             var uiData = VideoUIData()
             uiData.description = map.get(content_title) as? String?:""
-            var resolution = extractResolution(videoUrl)
+            var resolution = ""
+            resolution = extractResolution(videoUrl)?:""
             if (resolution.isNullOrEmpty()){
                 var urlIndex = videoUrl?.lastIndexOf("/")?:0
                 if (urlIndex>0){
@@ -444,6 +438,9 @@ object WebScan {
             HttpUtils.closeConnection(connection)
             return infoMap
         }
+        if (videoUrl!=finalUrl){
+            AppLogs.dLog("webReceive","videoUrl:${videoUrl} finalUrl:${finalUrl}")
+        }
         val contentType = connection.contentType
 //        finalUrl = "https://cdn77-vid.xnxx-cdn.com/g_RrfJQs9IIf11KsD3AkWQ==,1736930045/videos/hls/bf/5d/ca/bf5dcaaf9b3e82dff80c3ebb0ea7f9da/hls-250p-0b616.m3u8"
         if (finalUrl.contains(Video.TypeInfo.M3U8) || VideoDownloadUtils.isM3U8Mimetype(contentType)) {
@@ -454,7 +451,7 @@ object WebScan {
             AppLogs.dLog("m3u8","calculateM3U8Size Start")
             AppLogs.dLog("m3u8","realUrl:${realUrl}")
             var hostList = extractDomain(realUrl)
-            var m3u8Size = PManager.calculateM3U8Size(finalUrl,headers,hostList)
+            var m3u8Size = PManager.calculateM3U8Size(finalUrl,headers)
             AppLogs.dLog("m3u8","calculateM3U8Size end")
 
             if (isXhaMaster(hostList) && m3u8Size<10*1024*1024){
@@ -617,25 +614,53 @@ object WebScan {
    suspend fun getImg(realUrl: String) {
        imageUrl = ""
        webTitle = ""
-        AppLogs.dLog("m3u8","获取 title 和 img start")
+        AppLogs.dLog("webReceive","获取 title 和 img start")
         var doc: Document?=null
         runCatching {
             doc = Jsoup.connect(realUrl).get()
         }
+       var hostList = extractDomain(realUrl)
+       if (isDailymotion(hostList) && realUrl.contains("video")){
+           val scripts = doc!!.select("script")
+           for (script in scripts) {
+               val scriptContent = script.html()
+               // 判断是否包含 window.videoInfo 字符串
+               if (scriptContent.contains("window.videoInfo")) {
+                   // 提取 JSON 部分，去掉 "window.videoInfo =" 和结尾的分号
+                   val start =
+                       scriptContent.indexOf("window.videoInfo =") + "window.videoInfo =".length
+                   var end = scriptContent.indexOf(";", start)
+                   if (end == -1) {
+                       end = scriptContent.length
+                   }
+                   val jsonString = scriptContent.substring(start, end).trim { it <= ' ' }
 
+
+                   // 解析 JSON 字符串
+                   val videoInfoObj = JsonParser.parseString(jsonString).asJsonObject
+                   val videoObj = videoInfoObj.getAsJsonObject("video")
+                   val title: String = videoObj.get("title").getAsString()
+                   val thumbnail: String = videoObj.get("thumbnail").getAsString()
+                   imageUrl = thumbnail
+                   webTitle = title
+                   AppLogs.dLog("webReceive","Dailymotion title:${title}  Dailymotion imageUrl:${imageUrl}")
+               }
+           }
+       }
+       if (imageUrl.isNullOrEmpty()){
+           val videoOtherImg = getVideoCoverImageFromNearbyImages(doc)?:""
+           AppLogs.dLog("webReceive","loadWebFinished 图片3:${videoOtherImg}")
+           imageUrl = videoOtherImg
+       }
         val ogImage = doc?.select("meta[property=og:image]")?.attr("content")?:""
         if (imageUrl.isNullOrEmpty()){
             AppLogs.dLog("webReceive","loadWebFinished 图片1:${ogImage}")
             imageUrl = ogImage
         }
-
-        if (imageUrl.isNullOrEmpty()){
-            val videoOtherImg = getVideoCoverImageFromNearbyImages(doc)?:""
-            AppLogs.dLog("webReceive","loadWebFinished 图片3:${videoOtherImg}")
-            imageUrl = videoOtherImg
-        }
-       val videoElement = doc!!.select("video").first()
-       webTitle = videoElement?.attr("alt")?:"" // 如果视频有 alt 属性，可以获取
+       if (webTitle.isNullOrEmpty()){
+           val videoElement = doc!!.select("video").first()
+           webTitle = videoElement?.attr("alt")?:"" // 如果视频有 alt 属性，可以获取
+       }
        if (webTitle.isNullOrEmpty()){
            webTitle = doc?.title()?:""
        }

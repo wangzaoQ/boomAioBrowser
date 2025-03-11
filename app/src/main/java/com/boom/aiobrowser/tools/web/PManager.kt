@@ -1,10 +1,10 @@
 package com.boom.aiobrowser.tools.web
 
 import android.text.TextUtils
+import com.boom.aiobrowser.data.ParseData
 import com.boom.aiobrowser.net.WebNet
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
-import com.boom.downloader.VideoInfoParserManager
 import com.boom.downloader.common.DownloadConstants
 import com.boom.downloader.utils.HttpUtils
 import com.boom.downloader.utils.LogUtils
@@ -96,20 +96,55 @@ object PManager {
         }
     }
 
-    fun parseM3U8(baseUrl: String,m3u8Text: String): List<String> {
-        val segmentUrls = mutableListOf<String>()
-        val lines = m3u8Text.split("\n")
+//    fun parseM3U8(baseUrl: String,m3u8Text: String): List<String> {
+//        val segmentUrls = mutableListOf<String>()
+//        val lines = m3u8Text.split("\n")
+//
+//        for (line in lines) {
+//            if (line.isNotEmpty() && !line.startsWith("#")) {
+//                segmentUrls.add(getFullUrl(baseUrl,line.trim()))
+//            }
+//        }
+//
+//        return segmentUrls
+//    }
 
-        for (line in lines) {
-            if (line.isNotEmpty() && !line.startsWith("#")) {
-                segmentUrls.add(getFullUrl(baseUrl,line.trim()))
+    suspend fun parseM3U8(m3u8Url: String,headers:HashMap<String, String>):MutableList<ParseData> {
+        var sizePromises = 0L
+        val m3u8Text = fetchM3U8File(m3u8Url,headers)
+        val samples = mutableListOf<ParseData>()
+        var sampleDuration = 0.0
+        var duration = 0.0
+        val lines = m3u8Text.split("\n")
+        var parseData :ParseData?=null
+        for (i in 0 until lines.size){
+            var line = lines.get(i)
+            if (line.isBlank()) continue
+            if (i ==0 )continue
+            if (line.startsWith("#")){
+                parseData = ParseData()
+                samples.add(parseData)
+                val patternTime = Pattern.compile("BANDWIDTH=(\\d+)")
+                val matcherTime = patternTime.matcher(line)
+                if (matcherTime.find()) {
+                    val bandwidth = matcherTime.group(1)
+                    parseData.time = bandwidth.toLong()
+                    AppLogs.dLog("webReceive", "Bandwidth: $bandwidth") // 输出: 836280
+                }
+                val patternName = Pattern.compile("NAME=\"([^\"]+)\"")
+                val matcherName = patternName.matcher(line)
+                if (matcherName.find()) {
+                    val nameValue: String = matcherName.group(1)
+                    parseData.resolution = nameValue
+                    AppLogs.dLog("webReceive", "NAME: $nameValue") // 输出: 836280
+                }
+            }else{
+                parseData?.url = line
             }
         }
-
-        return segmentUrls
+        return samples
     }
-
-    suspend fun calculateM3U8Size(m3u8Url: String,headers:HashMap<String, String>,hostList:MutableList<String>):Long {
+    suspend fun calculateM3U8Size(m3u8Url: String,headers:HashMap<String, String>):Long {
 //        val m3u8Text = fetchM3U8File(m3u8Url)
 //        val segmentUrls = parseM3U8(m3u8Url,m3u8Text)
         var sizePromises = 0L
@@ -126,7 +161,7 @@ object PManager {
 //        }
 
         val m3u8Text = fetchM3U8File(m3u8Url,headers)
-        if (m3u8Text.isNullOrEmpty() || !m3u8Text.contains("#EXTINF")) {
+        if (m3u8Text.isNullOrEmpty() || !(m3u8Text.contains("#EXTINF")|| m3u8Text.contains("#EXTM3U"))) {
             return 0L // 没有有效的 M3U8 数据
         }
 

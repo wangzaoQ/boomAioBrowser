@@ -31,7 +31,6 @@ class SubInfoPop(context: Context) : BasePopupWindow(context) {
     }
 
     fun createPop(){
-        showPopupWindow()
         defaultBinding?.apply {
             ivClose.setOnClickListener {
                 dismiss()
@@ -43,6 +42,8 @@ class SubInfoPop(context: Context) : BasePopupWindow(context) {
         PointEvent.posePoint(PointEventKey.subscribe_impression, Bundle().apply {
             putString(PointValueKey.type,"vip")
         })
+        setBackground(R.color.color_70_black)
+        showPopupWindow()
     }
 
     private fun openPlayStoreAccount() {

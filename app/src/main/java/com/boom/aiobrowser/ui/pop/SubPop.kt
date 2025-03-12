@@ -27,7 +27,7 @@ import pop.util.animation.TranslationConfig
 import java.lang.ref.WeakReference
 
 
-class SubPop(context: Context) : BasePopupWindow(context) {
+class SubPop(context: Context,var updateBack: () -> Unit) : BasePopupWindow(context) {
     init {
         setContentView(R.layout.browser_pop_sub)
     }
@@ -41,12 +41,11 @@ class SubPop(context: Context) : BasePopupWindow(context) {
 
     var checkPosition = 0
 
-    fun createPop(successBack: () -> Unit) {
+    fun createPop() {
         defaultBinding?.apply {
             btnConfirm.setOnClickListener {
                 var subManager = SubscribeManager(successBack = {
                     (context as BaseActivity<*>).addLaunch(success = {
-                        successBack.invoke()
                         SubInfoPop(context).createPop()
                         dismiss()
                     }, failBack = {}, Dispatchers.Main)
@@ -65,7 +64,7 @@ class SubPop(context: Context) : BasePopupWindow(context) {
                 when (checkPosition) {
                     0 -> {
                         if (tvWeeklyPrice.text.isNullOrEmpty()){
-                            subManager.billingComplete()
+                            ToastUtils.showShort(context.getString(R.string.net_error))
                             return@setOnClickListener
                         }
                         if (CacheManager.isSubscribeMember.not()) {
@@ -80,7 +79,7 @@ class SubPop(context: Context) : BasePopupWindow(context) {
 
                     1 -> {
                         if (tvMonthlyPrice.text.isNullOrEmpty()){
-                            subManager.billingComplete()
+                            ToastUtils.showShort(context.getString(R.string.net_error))
                             return@setOnClickListener
                         }
                         if (CacheManager.isSubscribeMember.not()) {
@@ -94,7 +93,7 @@ class SubPop(context: Context) : BasePopupWindow(context) {
                     }
                     2 -> {
                         if (tvQuarterly.text.isNullOrEmpty()){
-                            subManager.billingComplete()
+                            ToastUtils.showShort(context.getString(R.string.net_error))
                             return@setOnClickListener
                         }
                         if (CacheManager.isSubscribeMember.not()) {
@@ -113,7 +112,6 @@ class SubPop(context: Context) : BasePopupWindow(context) {
                 PointEvent.posePoint(PointEventKey.restore_subscription)
                 var subManager = SubscribeManager(successBack = {
                     (context as BaseActivity<*>).addLaunch(success = {
-                        successBack.invoke()
                         SubInfoPop(context).createPop()
                         dismiss()
                     }, failBack = {}, Dispatchers.Main)
@@ -151,10 +149,6 @@ class SubPop(context: Context) : BasePopupWindow(context) {
                 updateUI(llSubMonthly, false)
                 updateUI(llSubQuarterly, true)
             }
-
-
-
-
             llSubWeekly.performClick()
         }
         showPopupWindow()
@@ -195,6 +189,7 @@ class SubPop(context: Context) : BasePopupWindow(context) {
     }
 
     override fun onDismiss() {
+        updateBack.invoke()
         super.onDismiss()
     }
 

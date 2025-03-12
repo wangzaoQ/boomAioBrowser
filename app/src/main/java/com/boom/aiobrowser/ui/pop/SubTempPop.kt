@@ -40,6 +40,10 @@ class SubTempPop(context: Context,var showADBack: () -> Unit) : BasePopupWindow(
                 dismiss()
             }
             tvConfirm.setOnClickListener {
+                if (tvWeeklyPrice.text.isNullOrEmpty()){
+                    ToastUtils.showShort(context.getString(R.string.net_error))
+                    return@setOnClickListener
+                }
                 var subManager= SubscribeManager(successBack = {
                     (context as BaseActivity<*>).addLaunch(success = {
                         SubInfoPop(context).createPop()

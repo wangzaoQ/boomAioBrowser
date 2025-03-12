@@ -26,9 +26,9 @@ class SearchHomeFragment: BaseFragment<BrowserFragmentSearchHomeBinding>() {
         }
         fBinding.ivVIP.setOneClick {
             if (CacheManager.isSubscribeMember.not()){
-                SubPop(rootActivity).createPop{
+                SubPop(rootActivity, updateBack = {
                     updateVIPUI()
-                }
+                }).createPop()
             }else{
                 SubInfoPop(rootActivity).createPop()
             }

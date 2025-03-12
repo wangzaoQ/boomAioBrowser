@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap
  */
 internal object FloatingWindowManager {
 
-    private const val DEFAULT_TAG = "default"
+    const val DEFAULT_TAG = "default"
     val windowMap = ConcurrentHashMap<String, FloatingWindowHelper>()
 
     /**
@@ -69,7 +69,7 @@ internal object FloatingWindowManager {
     /**
      * 获取浮窗tag，为空则使用默认值
      */
-    private fun getTag(tag: String?) = tag ?: DEFAULT_TAG
+    fun getTag(tag: String?) = tag ?: DEFAULT_TAG
 
     /**
      * 获取具体的系统浮窗管理类

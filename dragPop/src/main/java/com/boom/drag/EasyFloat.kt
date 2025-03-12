@@ -79,6 +79,10 @@ class EasyFloat {
         @JvmOverloads
         fun isShow(tag: String? = null) = getConfig(tag)?.isShow ?: false
 
+        fun isCreated(tag: String):Boolean{
+            return getConfig(tag) != null
+        }
+
         /**
          * 获取当前浮窗中，我们传入的View
          * @param tag   浮窗标签

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADShowManager
@@ -15,6 +16,7 @@ import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.GlideManager
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getListByGson
@@ -23,8 +25,10 @@ import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.tools.video.VideoPreloadManager
 import com.boom.aiobrowser.tools.video.VideoPreloadManager.getCachePath
+import com.boom.aiobrowser.ui.activity.VideoListActivity
 import com.boom.aiobrowser.ui.view.CustomVideoView
 import com.boom.downloader.utils.VideoDownloadUtils.computeMD5
+import com.boom.drag.EasyFloat
 import com.boom.video.GSYVideoManager
 import com.boom.video.builder.GSYVideoOptionBuilder
 import com.boom.video.listener.GSYSampleCallBack
@@ -135,12 +139,32 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
             }
 //            AppLogs.dLog(VideoCacheUtils.TAG,"current:${list!!.get(index).mLRqPtKJX}")
         }
+        fBinding.rlIntercept.setOneClick {
+            ToastUtils.showShort("click Intercept")
+        }
     }
 
     var loadJob : Job?=null
 
 
     fun playVideo() {
+        var videoUrl = bean?.vbreas?:""
+        if (videoUrl.isNullOrEmpty())return
+        var firstPlayVideoUrl = CacheManager.firstPlayVideoUrl
+        if (firstPlayVideoUrl.isNullOrEmpty()){
+            CacheManager.firstPlayVideoUrl = videoUrl
+            fBinding.rlIntercept.visibility = View.VISIBLE
+            hideDownloadPop()
+            return
+        }else{
+            if (firstPlayVideoUrl == videoUrl){
+                fBinding.rlIntercept.visibility = View.VISIBLE
+                hideDownloadPop()
+                return
+            }else{
+                showDownloadPop()
+            }
+        }
         if (APP.instance.isHideSplash.not())return
         AppLogs.dLog(fragmentTAG,"VideoListFragment playVideo currentIndex:${index}")
         gsyVideoPlayer?.startPlayLogic()
@@ -168,6 +192,26 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
             putString(PointValueKey.news_id,bean?.itackl)
             putString(PointValueKey.news_topic,bean?.tdetai?.getNewsTopic())
         })
+    }
+
+    private fun hideDownloadPop() {
+        runCatching {
+            if (EasyFloat.isShow("download")){
+                EasyFloat.hide("download")
+            }
+        }
+    }
+
+    private fun showDownloadPop() {
+        runCatching {
+            if (EasyFloat.isCreated("download")){
+                if (EasyFloat.isShow("download").not()){
+                    EasyFloat.show("download")
+                }
+            }else{
+                (rootActivity as VideoListActivity).addDownload()
+            }
+        }
     }
 
     private fun stopDownLoad() {

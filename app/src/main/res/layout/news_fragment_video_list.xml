@@ -10,14 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <ImageView
-        android:id="@+id/ivBack"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@mipmap/ic_video_back"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="53dp"
-        ></ImageView>
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,4 +55,27 @@
         android:layout_gravity="bottom"
         android:layout_marginStart="14dp"
         ></androidx.appcompat.widget.AppCompatTextView>
+    <RelativeLayout
+        android:id="@+id/rlIntercept"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#CC000000"
+        android:visibility="gone"
+        >
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="test"
+            android:textColor="@color/white"
+            ></androidx.appcompat.widget.AppCompatTextView>
+    </RelativeLayout>
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@mipmap/ic_video_back"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="53dp"
+        ></ImageView>
 </FrameLayout>

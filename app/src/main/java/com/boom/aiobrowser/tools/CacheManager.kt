@@ -108,7 +108,7 @@ object CacheManager {
     const val KV_AD_001_VALUE = "KV_AD_001_VALUE"
     const val KV_AD_DAY_VALUE = "KV_AD_DAY_VALUE"
     const val KV_FIRST_VIDEO_GUIDE = "KV_FIRST_VIDEO_GUIDE"
-    const val KV_FIRST_PLAY_VIDEO_URL = "KV_FIRST_PLAY_VIDEO_URL"
+    const val KV_REWARDED_SHOW_COUNT = "KV_REWARDED_SHOW_COUNT"
 
 
     var videoDownloadTempList :MutableList<VideoUIData>
@@ -196,12 +196,12 @@ object CacheManager {
             mmkv.encode(KV_FIRST_CLICK_DOWNLOAD_BUTTON, value)
         }
 
-    var firstPlayVideoUrl: String
+    var rewardedShowCount: Int
         get() {
-            return mmkv.decodeString(KV_FIRST_PLAY_VIDEO_URL,"")?:""
+            return mmkv.decodeInt(KV_REWARDED_SHOW_COUNT,1)
         }
         set(value) {
-            mmkv.encode(KV_FIRST_PLAY_VIDEO_URL, value)
+            mmkv.encode(KV_REWARDED_SHOW_COUNT, toJson(value))
         }
 
     var dayFirstDownloadVideoSuccess: Boolean

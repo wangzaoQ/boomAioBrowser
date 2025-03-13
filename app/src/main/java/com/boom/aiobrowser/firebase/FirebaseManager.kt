@@ -245,10 +245,10 @@ object FirebaseManager {
     fun getADConfig() {
         runCatching {
             var adJson = ""
-            runCatching {
-                //ad
-                adJson = firebaseRemoteConfig?.getString("aobws_ad_config")?:""
-            }
+//            runCatching {
+//                //ad
+//                adJson = firebaseRemoteConfig?.getString("aobws_ad_config")?:""
+//            }
             adJson = Base64.decode(adJson!!.toByteArray(), Base64.DEFAULT).decodeToString()
             adRootBean = getBeanByGson(adJson, AioADData::class.java)
             if (adRootBean == null){

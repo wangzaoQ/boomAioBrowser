@@ -162,14 +162,14 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
     private fun clickIndex(index: Int) {
         acBinding.fragmentMain.setCurrentItem(index, false)
         updateUI(index)
-//        if (index == 1){
-//            var jumpData = JumpDataManager.getCurrentJumpData(tag = "MainFragment onResume 首次")
-//            if (jumpData.jumpType == JumpConfig.JUMP_HOME){
-//                jumpActivity<SearchActivity>(Bundle().apply {
-//                    putString(PointValueKey.from_type,"search")
-//                })
-//            }
-//        }
+        if (index == 1){
+            var jumpData = JumpDataManager.getCurrentJumpData(tag = "MainFragment onResume 首次")
+            if (jumpData.jumpType == JumpConfig.JUMP_HOME){
+                jumpActivity<SearchActivity>(Bundle().apply {
+                    putString(PointValueKey.from_type,"search")
+                })
+            }
+        }
 //        var manager = AioADShowManager(this, ADEnum.INT_AD, tag = "底部按钮切换") {}
 //        manager.showScreenAD(AD_POINT.aobws_tap_int,false)
     }

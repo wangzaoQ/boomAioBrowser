@@ -177,24 +177,25 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
             }
         }
 
-        runCatching {
-            var bean = list?.get(index)
-            var videoUrl = bean?.vbreas?:""
-            if (videoUrl.isNullOrEmpty())return
-            firstPlayVideoUrl = CacheManager.firstPlayVideoUrl
-            if (firstPlayVideoUrl.isNullOrEmpty()){
-                CacheManager.firstPlayVideoUrl = videoUrl
-                firstPlayVideoUrl = videoUrl
-                EasyFloat.dismiss(tag = "download")
-            }else{
-                if (firstPlayVideoUrl != videoUrl){
-                    (rootActivity as VideoListActivity).addDownload()
-                    showGuideAnimal()
-                }else{
-                    EasyFloat.dismiss(tag = "download")
-                }
-            }
-        }
+//        runCatching {
+//            var bean = list?.get(index)
+//            var videoUrl = bean?.vbreas?:""
+//            if (videoUrl.isNullOrEmpty())return
+//
+//            firstPlayVideoUrl = CacheManager.firstPlayVideoUrl
+//            if (firstPlayVideoUrl.isNullOrEmpty()){
+//                CacheManager.firstPlayVideoUrl = videoUrl
+//                firstPlayVideoUrl = videoUrl
+//                EasyFloat.dismiss(tag = "download")
+//            }else{
+//                if (firstPlayVideoUrl != videoUrl){
+//                    (rootActivity as VideoListActivity).addDownload()
+//                    showGuideAnimal()
+//                }else{
+//                    EasyFloat.dismiss(tag = "download")
+//                }
+//            }
+//        }
         fBinding.videoVp.setCurrentItem(index,false)
     }
 

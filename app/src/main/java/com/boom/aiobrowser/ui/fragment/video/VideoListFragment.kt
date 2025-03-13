@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.NewsData
@@ -150,20 +151,13 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
     fun playVideo() {
         var videoUrl = bean?.vbreas?:""
         if (videoUrl.isNullOrEmpty())return
-        var firstPlayVideoUrl = CacheManager.firstPlayVideoUrl
-        if (firstPlayVideoUrl.isNullOrEmpty()){
-            CacheManager.firstPlayVideoUrl = videoUrl
+        var allowShowRewarded = AioADDataManager.adAllowShowRewarded()
+        if (allowShowRewarded.not()){
             fBinding.rlIntercept.visibility = View.VISIBLE
             hideDownloadPop()
             return
         }else{
-            if (firstPlayVideoUrl == videoUrl){
-                fBinding.rlIntercept.visibility = View.VISIBLE
-                hideDownloadPop()
-                return
-            }else{
-                showDownloadPop()
-            }
+            showDownloadPop()
         }
         if (APP.instance.isHideSplash.not())return
         AppLogs.dLog(fragmentTAG,"VideoListFragment playVideo currentIndex:${index}")

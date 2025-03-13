@@ -62,13 +62,56 @@
         android:background="#CC000000"
         android:visibility="gone"
         >
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            >
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                app:srcCompat="@mipmap/ic_rewarded_video_tips"
+                ></androidx.appcompat.widget.AppCompatImageView>
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="test"
+            android:text="@string/app_unlock_video"
             android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp"
+            style="@style/app_text_bold"
             ></androidx.appcompat.widget.AppCompatTextView>
+            <RelativeLayout
+                android:id="@+id/rlPlayRewarded"
+                android:layout_width="match_parent"
+                android:layout_marginHorizontal="65dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="49dp"
+                android:background="@drawable/shape_commit"
+                >
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:layout_centerInParent="true"
+                    android:text="@string/app_play"
+                    android:textSize="17sp"
+                    style="@style/app_text_bold"
+                    android:drawableStart="@mipmap/ic_rewarded_play_tips"
+                    android:drawablePadding="3dp"
+                    ></androidx.appcompat.widget.AppCompatTextView>
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="14dp"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginTop="7dp"
+                    app:srcCompat="@mipmap/ic_rewarded_ad_tips"
+                    ></androidx.appcompat.widget.AppCompatImageView>
+            </RelativeLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </RelativeLayout>
     <ImageView
         android:id="@+id/ivBack"

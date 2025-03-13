@@ -50,7 +50,7 @@ class AioADShowManager(
         }
     }
 
-    fun showScreenAD(pointTag: String,allowShowDefaultAD:Boolean=true) {
+    fun showScreenAD(pointTag: String) {
         if (CacheManager.isSubscribeMember){
             AppLogs.dLog(AioADDataManager.TAG,"已是会员不展示广告")
             adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "是会员")
@@ -70,28 +70,24 @@ class AioADShowManager(
         if (AioADDataManager.adAllowShowScreen() && adResultData!=null){
             if (CacheManager.showEveryDay >= 2 && CacheManager.dayShowSubTemp && adEnum != ADEnum.LAUNCH_AD){
                 SubTempPop(activity,showADBack = {
-                    realShowScreenAD(adResultData,pointTag)
+                    realShowScreenAD2(adResultData,pointTag)
                 }).createPop()
 //                realShowScreenAD(adResultData,pointTag)
             }else{
-                realShowScreenAD(adResultData,pointTag)
+                realShowScreenAD2(adResultData,pointTag)
             }
         }else{
-            if (allowShowDefaultAD){
-                var defaultAD = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
-                if (defaultAD!=null) {
-                    if (CacheManager.showEveryDay >= 2 && CacheManager.dayShowSubTemp && adEnum != ADEnum.LAUNCH_AD){
-                        SubTempPop(activity,showADBack = {
-                            realShowScreenAD2(defaultAD,pointTag)
-                        }).createPop()
-//                        realShowScreenAD2(defaultAD,pointTag)
-                    }else{
+            var defaultAD = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
+            if (defaultAD!=null) {
+                if (CacheManager.showEveryDay >= 2 && CacheManager.dayShowSubTemp && adEnum != ADEnum.LAUNCH_AD){
+                    SubTempPop(activity,showADBack = {
                         realShowScreenAD2(defaultAD,pointTag)
-                    }
-                } else {
-                    adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "无缓存 或不在冷却范围内 ")
+                    }).createPop()
+//                        realShowScreenAD2(defaultAD,pointTag)
+                }else{
+                    realShowScreenAD2(defaultAD,pointTag)
                 }
-            }else{
+            } else {
                 adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "无缓存 或不在冷却范围内 ")
             }
         }
@@ -118,7 +114,7 @@ class AioADShowManager(
         }else{
             //走通用的逻辑
             adShow?.showScreenAd(adResultData,pointTag)
-            AioADDataManager.adCache.remove(ADEnum.DEFAULT_AD)
+            AioADDataManager.adCache.remove(adEnum)
         }
     }
 

@@ -124,7 +124,7 @@ class AdmobDLoader(
                             adAny = nativeAd
                             adType = requestBean.pxdtzgho
                             adRequestTime = (System.currentTimeMillis() - startTime) / 1000
-                            if (adEnum == ADEnum.DEFAULT_AD){
+                            if (adEnum == ADEnum.DEFAULT_AD || adEnum == ADEnum.LAUNCH_AD || adEnum == ADEnum.INT_AD){
                                 adShowType = 2
                             }
                         })

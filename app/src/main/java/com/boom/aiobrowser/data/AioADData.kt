@@ -23,7 +23,8 @@ data class AioADData(
     val aobws_ban_one: MutableList<AioRequestData>?=null,
     val aobws_ban_newtp: MutableList<AioRequestData>?=null,
     val aobws_ban_newin: MutableList<AioRequestData>?=null,
-    val aobws_refer_nat: MutableList<AioRequestData>?=null
+    val aobws_refer_nat: MutableList<AioRequestData>?=null,
+    val aobws_local_reward: MutableList<AioRequestData>?=null
 )
 
 data class AioRequestData(

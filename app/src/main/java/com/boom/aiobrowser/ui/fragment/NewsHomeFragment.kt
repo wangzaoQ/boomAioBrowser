@@ -46,15 +46,15 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
     }
 
     override fun setListener() {
-        fBinding.ivVIP.setOneClick {
-            if (CacheManager.isSubscribeMember.not()){
-                SubPop(rootActivity, updateBack = {
-                    updateVIPUI()
-                }).createPop()
-            }else{
-                SubInfoPop(rootActivity).createPop()
-            }
-        }
+//        fBinding.ivVIP.setOneClick {
+//            if (CacheManager.isSubscribeMember.not()){
+//                SubPop(rootActivity, updateBack = {
+//                    updateVIPUI()
+//                }).createPop()
+//            }else{
+//                SubInfoPop(rootActivity).createPop()
+//            }
+//        }
     }
 
     override fun onResume() {
@@ -63,11 +63,11 @@ class NewsHomeFragment : BaseFragment<NewsFragmentHomeBinding>() {
     }
 
     private fun updateVIPUI() {
-        if (CacheManager.isSubscribeMember){
-            fBinding.ivVIP.setImageResource(R.mipmap.ic_vip_2)
-        }else{
-            fBinding.ivVIP.setImageResource(R.mipmap.ic_vip_1)
-        }
+//        if (CacheManager.isSubscribeMember){
+//            fBinding.ivVIP.setImageResource(R.mipmap.ic_vip_2)
+//        }else{
+//            fBinding.ivVIP.setImageResource(R.mipmap.ic_vip_1)
+//        }
     }
 
     private fun updateNewsHome(list: MutableList<TopicBean>) {

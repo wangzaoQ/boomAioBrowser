@@ -155,6 +155,7 @@
                 android:layout_marginBottom="13dp"
                 android:background="@drawable/shape_more_sub_bg"
                 android:gravity="center_vertical"
+                android:visibility="gone"
                 android:orientation="horizontal"
                 android:paddingHorizontal="13dp">
 

@@ -24,15 +24,15 @@ class SearchHomeFragment: BaseFragment<BrowserFragmentSearchHomeBinding>() {
                 putString(PointValueKey.from_type,"search")
             })
         }
-        fBinding.ivVIP.setOneClick {
-            if (CacheManager.isSubscribeMember.not()){
-                SubPop(rootActivity, updateBack = {
-                    updateVIPUI()
-                }).createPop()
-            }else{
-                SubInfoPop(rootActivity).createPop()
-            }
-        }
+//        fBinding.ivVIP.setOneClick {
+//            if (CacheManager.isSubscribeMember.not()){
+//                SubPop(rootActivity, updateBack = {
+//                    updateVIPUI()
+//                }).createPop()
+//            }else{
+//                SubInfoPop(rootActivity).createPop()
+//            }
+//        }
     }
 
     override fun onResume() {
@@ -44,11 +44,11 @@ class SearchHomeFragment: BaseFragment<BrowserFragmentSearchHomeBinding>() {
     }
 
     private fun updateVIPUI() {
-        if (CacheManager.isSubscribeMember){
-            fBinding.ivVIP.setImageResource(R.mipmap.ic_vip_2)
-        }else{
-            fBinding.ivVIP.setImageResource(R.mipmap.ic_vip_1)
-        }
+//        if (CacheManager.isSubscribeMember){
+//            fBinding.ivVIP.setImageResource(R.mipmap.ic_vip_2)
+//        }else{
+//            fBinding.ivVIP.setImageResource(R.mipmap.ic_vip_1)
+//        }
     }
 
     override fun getBinding(

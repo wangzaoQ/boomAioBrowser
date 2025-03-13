@@ -162,15 +162,15 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
                 }
                 PointEvent.posePoint(PointEventKey.profile_download)
             }
-            llSub.setOneClick {
-                if (CacheManager.isSubscribeMember.not()){
-                    SubPop(rootActivity, updateBack = {
-                        updateVIPUI()
-                    }).createPop()
-                }else{
-                    SubInfoPop(rootActivity).createPop()
-                }
-            }
+//            llSub.setOneClick {
+//                if (CacheManager.isSubscribeMember.not()){
+//                    SubPop(rootActivity, updateBack = {
+//                        updateVIPUI()
+//                    }).createPop()
+//                }else{
+//                    SubInfoPop(rootActivity).createPop()
+//                }
+//            }
 
             updateUI()
         }

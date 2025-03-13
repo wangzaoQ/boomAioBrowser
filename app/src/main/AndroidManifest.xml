@@ -19,7 +19,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <uses-permission android:name="com.android.vending.BILLING" />
+<!--    <uses-permission android:name="com.android.vending.BILLING" />-->
 
 
 <!--    &lt;!&ndash; 需要访问其他应用创建的音频时申请 &ndash;&gt;-->

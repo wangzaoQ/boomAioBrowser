@@ -91,11 +91,11 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
     }
 
     private fun updateVIPUI() {
-        if (CacheManager.isSubscribeMember){
-            fBinding.ivVIP.setImageResource(R.mipmap.ic_vip_2)
-        }else{
-            fBinding.ivVIP.setImageResource(R.mipmap.ic_vip_1)
-        }
+//        if (CacheManager.isSubscribeMember){
+//            fBinding.ivVIP.setImageResource(R.mipmap.ic_vip_2)
+//        }else{
+//            fBinding.ivVIP.setImageResource(R.mipmap.ic_vip_1)
+//        }
     }
 
     override fun setListener() {
@@ -108,15 +108,15 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
             }
         }
         fBinding.apply {
-            ivVIP.setOneClick {
-                if (CacheManager.isSubscribeMember.not()){
-                    SubPop(rootActivity, updateBack = {
-                        updateVIPUI()
-                    }).createPop()
-                }else{
-                    SubInfoPop(rootActivity).createPop()
-                }
-            }
+//            ivVIP.setOneClick {
+//                if (CacheManager.isSubscribeMember.not()){
+//                    SubPop(rootActivity, updateBack = {
+//                        updateVIPUI()
+//                    }).createPop()
+//                }else{
+//                    SubInfoPop(rootActivity).createPop()
+//                }
+//            }
             rlSearch.setOneClick {
                 rootActivity.jumpActivity<SearchActivity>(Bundle().apply {
                     putString(PointValueKey.from_type,"download")

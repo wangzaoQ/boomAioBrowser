@@ -69,10 +69,10 @@ class AioADShowManager(
         }
         if (AioADDataManager.adAllowShowScreen() && adResultData!=null){
             if (CacheManager.showEveryDay >= 2 && CacheManager.dayShowSubTemp && adEnum != ADEnum.LAUNCH_AD){
-                SubTempPop(activity,showADBack = {
-                    realShowScreenAD2(adResultData,pointTag)
-                }).createPop()
-//                realShowScreenAD(adResultData,pointTag)
+//                SubTempPop(activity,showADBack = {
+//                    realShowScreenAD2(adResultData,pointTag)
+//                }).createPop()
+                realShowScreenAD2(adResultData,pointTag)
             }else{
                 realShowScreenAD2(adResultData,pointTag)
             }
@@ -80,10 +80,10 @@ class AioADShowManager(
             var defaultAD = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
             if (defaultAD!=null) {
                 if (CacheManager.showEveryDay >= 2 && CacheManager.dayShowSubTemp && adEnum != ADEnum.LAUNCH_AD){
-                    SubTempPop(activity,showADBack = {
-                        realShowScreenAD2(defaultAD,pointTag)
-                    }).createPop()
+//                    SubTempPop(activity,showADBack = {
 //                        realShowScreenAD2(defaultAD,pointTag)
+//                    }).createPop()
+                    realShowScreenAD2(defaultAD,pointTag)
                 }else{
                     realShowScreenAD2(defaultAD,pointTag)
                 }
@@ -107,6 +107,7 @@ class AioADShowManager(
                 adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_SUCCESS, tag = "图片池广告加载完毕")
                 currentTopActivity.startActivity(Intent(currentTopActivity,NativeScreenActivity::class.java).apply {
                     putExtra("pointTag",pointTag)
+                    putExtra("enum_name",adEnum.adName)
                 })
             }else{
                 adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "没有有效activity")

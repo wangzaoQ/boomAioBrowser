@@ -45,10 +45,18 @@ class NativeScreenActivity :BaseActivity<BrowserActivityNativeScreenBinding>(){
     var nativeAd:NativeAd?=null
 
     fun showNativeAD() {
-        val data = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
+        var enum_name = intent.getStringExtra("enum_name")
+        val data = if (enum_name == ADEnum.LAUNCH_AD.adName){
+            AioADDataManager.getCacheAD(ADEnum.LAUNCH_AD)
+        }else if (enum_name == ADEnum.INT_AD.adName){
+            AioADDataManager.getCacheAD(ADEnum.INT_AD)
+        }else{
+            AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
+        }
+
         AppLogs.dLog(
             AioADDataManager.TAG,
-            "admob 广告展示:${ADEnum.DEFAULT_AD}-id:${data?.adRequestData?.ktygzdzn} type:图片池"
+            "admob 广告展示:${enum_name}-id:${data?.adRequestData?.ktygzdzn} type:图片池"
         )
         nativeAd = (data!!.adAny as NativeAd)
         nativeAd?.let {
@@ -93,7 +101,13 @@ class NativeScreenActivity :BaseActivity<BrowserActivityNativeScreenBinding>(){
         PointEvent.posePoint(PointEventKey.aobws_ad_impression, Bundle().apply {
             putString(PointValueKey.ad_pos_id,tag)
         })
-        AioADDataManager.adCache.remove(ADEnum.DEFAULT_AD)
+        if (enum_name == ADEnum.LAUNCH_AD.adName){
+            AioADDataManager.adCache.remove(ADEnum.LAUNCH_AD)
+        }else if (enum_name == ADEnum.INT_AD.adName){
+            AioADDataManager.adCache.remove(ADEnum.INT_AD)
+        }else{
+            AioADDataManager.adCache.remove(ADEnum.DEFAULT_AD)
+        }
     }
 
     private fun destoryNative() {

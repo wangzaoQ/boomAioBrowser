@@ -58,6 +58,7 @@ object NFManager {
     val videoNFMap = LinkedHashMap<String,Int>()
     val videoTimeMap = HashMap<String,Long>()
 
+    @Volatile
     var nfForeground:Notification?=null
     var defaultNewsList:MutableList<NewsData>?=null
 
@@ -376,7 +377,6 @@ object NFManager {
     }
 
     private suspend fun showNFByCount() {
-        NFShow.showNewsNFFilter(NFEnum.NF_TREND)
         var count = showCount%4
         when (count) {
             0 -> {

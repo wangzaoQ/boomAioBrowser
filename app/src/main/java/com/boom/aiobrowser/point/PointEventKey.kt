@@ -149,6 +149,7 @@ object PointEventKey {
     const val all_noti_c = "all_noti_c"
     //通知触发
     const val all_noti_t = "all_noti_t"
+    const val all_noti_theory_t = "all_noti_theory_t"
     //通知二次开启页面展示
     const val noti_confirm_pop = "noti_confirm_pop"
     //通知二次开启页面允许

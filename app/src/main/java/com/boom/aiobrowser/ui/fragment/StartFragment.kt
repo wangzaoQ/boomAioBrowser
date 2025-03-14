@@ -168,7 +168,6 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         AioADDataManager.preloadAD(ADEnum.NATIVE_AD,"首页展示时")
         AioADDataManager.preloadAD(ADEnum.BANNER_AD_NEWS_DETAILS_TOP,"首页展示时")
         AioADDataManager.preloadAD(ADEnum.BANNER_AD_NEWS_DETAILS,"首页展示时")
-        AioADDataManager.preloadAD(ADEnum.REWARD_AD,"首页展示时")
     }
 
     var showEnd = false

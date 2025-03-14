@@ -8,6 +8,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.firebase.FirebaseConfig
+import com.boom.aiobrowser.firebase.FirebaseManager
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointManager.PointCallback
@@ -64,6 +65,7 @@ object UIManager {
             } else if (cloakData == "B" && referData == "B") {
                 AppLogs.dLog(TAG, "正常用户:cloakData B referData B")
                 CacheManager.isBUser = true
+                FirebaseManager.getADConfig()
                 sendBPoint()
                 if (CacheManager.isAUser) {
                     PointEvent.posePoint(PointEventKey.user_a_b,Bundle().apply {

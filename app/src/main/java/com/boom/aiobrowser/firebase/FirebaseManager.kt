@@ -151,16 +151,16 @@ object FirebaseManager {
         if (FirebaseConfig.referConfig.isNullOrEmpty()){
             FirebaseConfig.referConfig = FirebaseConfig.DEFAULT_REFER_CONFIG
         }
-//        runCatching {
-//            var push_rule = firebaseRemoteConfig?.getString("push_rule")?:""
-//            var data = getBeanByGson(push_rule,PushRuleData::class.java)
-//            var downloadSplit = (data?.download?:"").split(",")
-//            var country = matchCountry()
-//            if (downloadSplit.contains(country)){
-//                FirebaseConfig.isDownloadConfig = true
-//            }
-//        }
-        FirebaseConfig.isDownloadConfig = true
+        runCatching {
+            var push_rule = firebaseRemoteConfig?.getString("push_rule")?:""
+            var data = getBeanByGson(push_rule,PushRuleData::class.java)
+            var downloadSplit = (data?.download?:"").split(",")
+            var country = matchCountry()
+            if (downloadSplit.contains(country)){
+                FirebaseConfig.isDownloadConfig = true
+            }
+        }
+//        FirebaseConfig.isDownloadConfig = true
         getADConfig()
         getNFConfig()
         getDefaultConfig()
@@ -246,7 +246,6 @@ object FirebaseManager {
     fun getADConfig() {
         runCatching {
             var adJson = ""
-            //TODO:release 需要解除注释
             runCatching {
                 //ad
                 if (CacheManager.isBUser){

@@ -7,6 +7,7 @@ import com.boom.aiobrowser.data.AioRequestData
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
+import com.boom.aiobrowser.tools.Logger
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -40,12 +41,14 @@ class AdmobDLoader(
                     build,
                     object : AppOpenAd.AppOpenAdLoadCallback() {
                         override fun onAdLoaded(appOpenAd: AppOpenAd) {
-                            successCallBack(ADResultData().apply {
+                            var resultData = ADResultData().apply {
                                 adRequestData = requestBean
                                 adAny = appOpenAd
                                 adType = requestBean.pxdtzgho
                                 adRequestTime = (System.currentTimeMillis() - startTime) / 1000
-                            })
+                            }
+                            successCallBack(resultData)
+                            Logger.writeLog(APP.instance,"广告请求时间:${resultData.adRequestTime} id:${requestBean.ktygzdzn}")
                             if (APP.isDebug){
 //                                PointEvent.adPoint(AdValue.zza(1*100000,"",1*100000),appOpenAd,requestBean,adEnum)
                             }
@@ -128,6 +131,7 @@ class AdmobDLoader(
                                 adShowType = 2
                             }
                         })
+                        Logger.writeLog(APP.instance,"广告请求时间:${(System.currentTimeMillis() - startTime) / 1000} id:${requestBean.ktygzdzn}")
                         nativePoint(startTime)
                     }.withAdListener(object : AdListener() {
                         override fun onAdImpression() {

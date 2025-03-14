@@ -48,7 +48,7 @@ class AdmobDLoader(
                                 adRequestTime = (System.currentTimeMillis() - startTime) / 1000
                             }
                             successCallBack(resultData)
-                            Logger.writeLog(APP.instance,"广告请求时间:${resultData.adRequestTime} id:${requestBean.ktygzdzn}")
+                            Logger.writeLog(APP.instance,"广告请求时间 op:${resultData.adRequestTime} id:${requestBean.ktygzdzn}")
                             if (APP.isDebug){
 //                                PointEvent.adPoint(AdValue.zza(1*100000,"",1*100000),appOpenAd,requestBean,adEnum)
                             }
@@ -86,6 +86,8 @@ class AdmobDLoader(
                                     adShowType = 1
                                 }
                             })
+                            Logger.writeLog(APP.instance,"广告请求时间 int:${(System.currentTimeMillis() - startTime) / 1000} id:${requestBean.ktygzdzn}")
+
                             if (APP.isDebug){
 //                                PointEvent.adPoint(AdValue.zza(1*100000,"",1*100000),inAd,requestBean,adEnum)
                             }
@@ -131,7 +133,7 @@ class AdmobDLoader(
                                 adShowType = 2
                             }
                         })
-                        Logger.writeLog(APP.instance,"广告请求时间:${(System.currentTimeMillis() - startTime) / 1000} id:${requestBean.ktygzdzn}")
+                        Logger.writeLog(APP.instance,"广告请求时间 native:${(System.currentTimeMillis() - startTime) / 1000} id:${requestBean.ktygzdzn}")
                         nativePoint(startTime)
                     }.withAdListener(object : AdListener() {
                         override fun onAdImpression() {
@@ -215,6 +217,11 @@ class AdmobDLoader(
                         if (APP.isDebug){
 //                                PointEvent.adPoint(AdValue.zza(1*100000,"",1*100000),appOpenAd,requestBean,adEnum)
                         }
+                        PointEvent.posePoint(PointEventKey.aobws_ad_load, Bundle().apply {
+                            putString(PointValueKey.ad_pos_id,adEnum.adName)
+                            putString(PointValueKey.ad_key,requestBean.ktygzdzn)
+                            putLong(PointValueKey.ad_time, (System.currentTimeMillis() - startTime) / 1000)
+                        })
                         ad.setOnPaidEventListener {
                             PointEvent.adPoint(it,ad,requestBean,adEnum)
                         }

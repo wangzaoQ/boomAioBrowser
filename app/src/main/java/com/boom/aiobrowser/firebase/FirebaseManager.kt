@@ -22,6 +22,7 @@ import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getListByGson
 import com.boom.aiobrowser.tools.toJson
@@ -245,10 +246,15 @@ object FirebaseManager {
     fun getADConfig() {
         runCatching {
             var adJson = ""
-//            runCatching {
-//                //ad
-//                adJson = firebaseRemoteConfig?.getString("aobws_ad_config")?:""
-//            }
+            //TODO:release 需要解除注释
+            runCatching {
+                //ad
+                if (CacheManager.isBUser){
+                    adJson = firebaseRemoteConfig?.getString("aobws_refer_ad_config")?:""
+                }else{
+                    adJson = firebaseRemoteConfig?.getString("aobws_new_ad_config")?:""
+                }
+            }
             adJson = Base64.decode(adJson!!.toByteArray(), Base64.DEFAULT).decodeToString()
             adRootBean = getBeanByGson(adJson, AioADData::class.java)
             if (adRootBean == null){

@@ -220,7 +220,6 @@ object NFShow {
 
     @SuppressLint("MissingPermission")
     fun showNewsNF(data:NewsData,enum: NFEnum,sourceType: String,newsList:MutableList<NewsData>?=null){
-        if (nfAllow().not())return
         PointEvent.posePoint(PointEventKey.all_noti_t,Bundle().apply {
             putString(PointValueKey.push_type, enum.menuName)
             if (enum == NFEnum.NF_DEFAULT && data.nfSource.isNullOrEmpty().not()){
@@ -229,6 +228,7 @@ object NFShow {
             putString(PointValueKey.news_id, data?.itackl?:"")
             putString(PointValueKey.source_type,sourceType)
         })
+        if (nfAllow().not())return
         if (data.nfSource == NFEnum.NF_NEWS.menuName || data.nfSource == NFEnum.NF_NEW_USER.menuName || data.nfSource == NFEnum.NF_NEWS_FCM.menuName){
             WakeManager.wwakeUp()
         }

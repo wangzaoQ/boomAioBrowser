@@ -69,18 +69,20 @@ object WebDailymotion {
             uiData.videoResultId = "${VideoDownloadUtils.computeMD5(videoUrl)}"
             list.forEach {
                 var m3u8Size = PManager.calculateM3U8Size(it.url,HashMap())
-                it.size = m3u8Size
-                var videoDownloadData = VideoDownloadData().createDefault(
-                    videoId = "${VideoDownloadUtils.computeMD5(it.url)}",
-                    fileName = webTitle+it.resolution+"p",
-                    url = videoUrl,
-                    imageUrl = imageUrl,
-                    paramsMap = HashMap(),
-                    size = it.size,
-                    videoType = "m3u8",
-                    resolution = it.resolution+"p"
-                )
-                uiData.formatsList.add(videoDownloadData)
+                if (m3u8Size>0L){
+                    it.size = m3u8Size
+                    var videoDownloadData = VideoDownloadData().createDefault(
+                        videoId = "${VideoDownloadUtils.computeMD5(it.url)}",
+                        fileName = webTitle+it.resolution+"p",
+                        url = videoUrl,
+                        imageUrl = imageUrl,
+                        paramsMap = HashMap(),
+                        size = it.size,
+                        videoType = "m3u8",
+                        resolution = it.resolution+"p"
+                    )
+                    uiData.formatsList.add(videoDownloadData)
+                }
             }
             uiData.thumbnail = imageUrl
             uiData.description = webTitle

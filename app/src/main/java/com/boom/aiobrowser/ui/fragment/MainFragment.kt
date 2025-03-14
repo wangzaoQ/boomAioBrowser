@@ -316,9 +316,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         if (APP.instance.isHideSplash.not())return
         AppLogs.dLog(fragmentTAG,"jump 跳过限制")
         AppLogs.dLog(fragmentTAG,"onResume")
-
-
-
     }
 
     private fun updateTopUI() {

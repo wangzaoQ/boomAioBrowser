@@ -159,7 +159,7 @@ object PManager {
 //            // 等待所有任务完成并累加文件大小
 //            sizePromises = deferredResults.sumOf { it.await() }
 //        }
-
+        if (m3u8Url.isNullOrEmpty())return 0L
         val m3u8Text = fetchM3U8File(m3u8Url,headers)
         if (m3u8Text.isNullOrEmpty() || !(m3u8Text.contains("#EXTINF")|| m3u8Text.contains("#EXTM3U"))) {
             return 0L // 没有有效的 M3U8 数据

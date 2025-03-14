@@ -85,9 +85,6 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
                     putString(PointValueKey.news_id,it.get(index).itackl)
                 }
             })
-            if (CacheManager.rewardedUrl.isNullOrEmpty()){
-                CacheManager.rewardedUrl = list?.get(index)?.vbreas?:""
-            }
         }
 
         fBinding.videoVp.apply {

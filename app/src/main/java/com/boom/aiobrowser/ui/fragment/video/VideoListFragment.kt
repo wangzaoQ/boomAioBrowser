@@ -148,7 +148,7 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
                 fBinding.rlIntercept.visibility = View.GONE
                 playVideo()
             }
-            manager.showScreenAD(AD_POINT.aobws_tap_int)
+            manager.showScreenAD(AD_POINT.aobws_video_rewarded)
         }
     }
 

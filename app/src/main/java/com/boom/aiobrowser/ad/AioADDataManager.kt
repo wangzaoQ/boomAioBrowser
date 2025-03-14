@@ -238,7 +238,11 @@ object AioADDataManager {
         return allow
     }
 
-    fun adAllowShowRewarded(videoUrl:String):Boolean{
+    fun adAllowShowRewarded(videoUrl:String = ""):Boolean{
+        if (CacheManager.isBUser){
+            AppLogs.dLog(TAG,"买量用户不展示")
+            return false
+        }
         if (getCacheAD(REWARD_AD) == null){
             AppLogs.dLog(TAG,"rewarded 无缓存")
             return false
@@ -247,6 +251,9 @@ object AioADDataManager {
         if (rewardedUrl.isNotEmpty() && rewardedUrl != videoUrl){
             AppLogs.dLog(TAG,"rewarded 已有锁住")
             return false
+        }
+        if (videoUrl.isNotEmpty()){
+            CacheManager.rewardedUrl = videoUrl
         }
         return true
     }

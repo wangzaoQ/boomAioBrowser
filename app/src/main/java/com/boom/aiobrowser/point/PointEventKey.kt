@@ -384,7 +384,7 @@ object AD_POINT{
     const val aobws_launch_other = "aobws_launch_other"
     const val aobws_download_int = "aobws_download_int"
     const val aobws_play_int = "aobws_play_int"
-    const val aobws_tap_int = "aobws_tap_int"
+    const val aobws_video_rewarded = "aobws_video_rewarded"
 
     const val aobws_return_int = "aobws_return_int"
     const val aobws_downreturn_int = "aobws_return_int"

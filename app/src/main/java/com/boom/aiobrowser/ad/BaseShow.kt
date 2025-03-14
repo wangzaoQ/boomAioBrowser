@@ -11,6 +11,7 @@ import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.CacheManager
 
 abstract class BaseShow(var activity: BaseActivity<*>, var adEnum: ADEnum,var  tag: String,var result: (type: String) -> Unit) {
 
@@ -27,7 +28,7 @@ abstract class BaseShow(var activity: BaseActivity<*>, var adEnum: ADEnum,var  t
 
     fun adDismissFullScreen(adEnum: ADEnum, tag: String) {
         AppLogs.dLog(AioADDataManager.TAG, "tag:${tag} 位置:${adEnum.adName}")
-        if (adEnum == ADEnum.LAUNCH_AD) {
+        if (adEnum == ADEnum.LAUNCH_AD || adEnum == ADEnum.REWARD_AD) {
             loadComplete(type = AioADDataManager.AD_SHOW_TYPE_SUCCESS, tag)
         }
         setADDismissTime()
@@ -36,6 +37,9 @@ abstract class BaseShow(var activity: BaseActivity<*>, var adEnum: ADEnum,var  t
     fun adShowFullScreen(adEnum: ADEnum, tag: String, adResultData: ADResultData, pointTag: String) {
         AppLogs.dLog(AioADDataManager.TAG, "tag:${tag} 位置:${adEnum.adName}")
         AioADDataManager.addShowNumber(tag)
+        if (adEnum == ADEnum.REWARD_AD){
+            CacheManager.rewardedUrl = "default"
+        }
         if (adResultData.adShowType == 1){
             AioADDataManager.preloadAD(ADEnum.DEFAULT_AD,"fullScreen 广告展示时")
         }else{

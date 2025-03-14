@@ -196,12 +196,12 @@ object CacheManager {
             mmkv.encode(KV_FIRST_CLICK_DOWNLOAD_BUTTON, value)
         }
 
-    var rewardedShowCount: Int
+    var rewardedUrl: String
         get() {
-            return mmkv.decodeInt(KV_REWARDED_SHOW_COUNT,1)
+            return mmkv.decodeString(KV_REWARDED_SHOW_COUNT,"")?:""
         }
         set(value) {
-            mmkv.encode(KV_REWARDED_SHOW_COUNT, toJson(value))
+            mmkv.encode(KV_REWARDED_SHOW_COUNT, value)
         }
 
     var dayFirstDownloadVideoSuccess: Boolean

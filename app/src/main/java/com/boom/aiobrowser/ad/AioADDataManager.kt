@@ -7,7 +7,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.ad.ADEnum.INT_AD
 import com.boom.aiobrowser.ad.ADEnum.LAUNCH_AD
 import com.boom.aiobrowser.ad.ADEnum.NATIVE_AD
-import com.boom.aiobrowser.ad.ADEnum.REWARD__AD
+import com.boom.aiobrowser.ad.ADEnum.REWARD_AD
 import com.boom.aiobrowser.data.ADResultData
 import com.boom.aiobrowser.data.AioADData
 import com.boom.aiobrowser.data.AioRequestData
@@ -96,8 +96,8 @@ object AioADDataManager {
                 ADEnum.DEFAULT_AD ->{
                     it.adRequestList = bean.aobws_refer_nat?: mutableListOf()
                 }
-                ADEnum.REWARD__AD->{
-
+                ADEnum.REWARD_AD->{
+                    it.adRequestList = bean.aobws_local_reward?: mutableListOf()
                 }
 
                 else -> {}
@@ -238,18 +238,14 @@ object AioADDataManager {
         return allow
     }
 
-    fun adAllowShowRewarded():Boolean{
-        var adAllowShowScreen = adAllowShowScreen()
-        if (adAllowShowScreen.not()){
-            return false
-        }
-        if (AioADDataManager.getCacheAD(REWARD__AD) == null){
+    fun adAllowShowRewarded(videoUrl:String):Boolean{
+        if (getCacheAD(REWARD_AD) == null){
             AppLogs.dLog(TAG,"rewarded 无缓存")
             return false
         }
-        var rewardedShowCount = CacheManager.rewardedShowCount
-        if (rewardedShowCount%4 != 1){
-            AppLogs.dLog(TAG,"rewardedShowCount:${rewardedShowCount%4} 不达标 ")
+        var rewardedUrl = CacheManager.rewardedUrl
+        if (rewardedUrl.isNotEmpty() && rewardedUrl != videoUrl){
+            AppLogs.dLog(TAG,"rewarded 已有锁住")
             return false
         }
         return true

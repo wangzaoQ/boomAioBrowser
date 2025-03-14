@@ -9,8 +9,14 @@ import com.boom.aiobrowser.point.GeneralParams.urlEncoder
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointManager
+import com.boom.aiobrowser.point.PointManager.sendValue
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager.getID
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Request
@@ -62,7 +68,12 @@ class CloakManager {
     fun cloakFailedTry(url: String,tag:String?=null,callBack: (content:String) -> Unit={}) {
         if (clockTryCount > 0) {
             clockTryCount--
-            getNewsClock(url,tag,callBack)
+            CoroutineScope(Dispatchers.IO).launch {
+                delay(1000L)
+                withContext(Dispatchers.Main){
+                    getNewsClock(url,tag,callBack)
+                }
+            }
         }
     }
 }

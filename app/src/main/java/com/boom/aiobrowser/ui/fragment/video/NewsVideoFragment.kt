@@ -85,6 +85,9 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
                     putString(PointValueKey.news_id,it.get(index).itackl)
                 }
             })
+            if (CacheManager.rewardedUrl.isNullOrEmpty()){
+                CacheManager.rewardedUrl = list?.get(index)?.vbreas?:""
+            }
         }
 
         fBinding.videoVp.apply {
@@ -99,48 +102,7 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
                             viewModel.value.getNewsVideoList(enumName,list!!.get(index),dataList)
                         }
                     }
-                    var allowDownload = false
-                    runCatching {
-                        var bean = dataList?.get(position)
-                        var videoUrl = bean?.vbreas?:""
-                        if (firstPlayVideoUrl.isNotEmpty() && videoUrl != firstPlayVideoUrl){
-                            allowDownload = true
-                        }
-                    }
-                    if (allowDownload.not())return
-                    rootActivity.addLaunch(success = {
-                        var list = CacheManager.videoPreTempList
-
-                        var newsData = dataList.get(position)
-                        var index = -1
-                        for (i in 0 until list.size){
-                            var data = list.get(i)
-                            if (data.videoResultId == VideoDownloadUtils.computeMD5(newsData.vbreas)){
-                                index = i
-                                break
-                            }
-                        }
-                        if(index>=0)return@addLaunch
-                        var uiData = VideoUIData()
-                        uiData.thumbnail = newsData.iassum
-                        uiData.videoResultId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}"
-                        var videoDownloadData = VideoDownloadData().createDefault(
-                            videoId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}",
-                            fileName = newsData.tconsi?:"",
-                            url = newsData.vbreas?:"",
-                            imageUrl = newsData.iassum?:"",
-                            paramsMap = HashMap<String,Any>(),
-                            size = getVideoSegmentSize(newsData.vbreas?:"",HashMap()),
-                            videoType = "mp4",
-                            resolution = ""
-                        )
-                        uiData.formatsList.add(videoDownloadData)
-                        list.add(uiData)
-                        CacheManager.videoPreTempList = list
-                        withContext(Dispatchers.Main){
-                            (rootActivity as VideoListActivity).updateDownloadButtonStatus(0)
-                        }
-                    }, failBack = {})
+//                    if (AioADDataManager.adAllowShowRewarded(dataList.get(position).vbreas?:""))return
                 }
             })
             adapter = videoListAdapter

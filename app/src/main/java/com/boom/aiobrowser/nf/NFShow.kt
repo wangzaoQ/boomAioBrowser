@@ -30,8 +30,7 @@ import com.boom.aiobrowser.tools.WakeManager
 import com.boom.aiobrowser.tools.video.VideoManager
 import com.boom.aiobrowser.tools.video.VideoPreloadManager
 import com.boom.aiobrowser.tools.web.WebScan
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.delay
 import kotlin.random.Random
 
 object NFShow {
@@ -80,6 +79,9 @@ object NFShow {
                 if (newsList.isNullOrEmpty().not()){
                     newsList = NFData.filterList2(enum, sourceType, newsList)
                     newsList = NFData.filterList3(enum, sourceType, newsList)
+                }
+                if (count>0){
+                    delay(1000)
                 }
                 count++
                 if (count == 7) {
@@ -251,6 +253,9 @@ object NFShow {
                         largeRemote?.setImageViewResource(R.id.ivImg, R.mipmap.ic_default_nf_small)
                         NFManager.manager.notify(enum.position, bulider.build())
                     })
+                }else{
+                    largeRemote?.setImageViewResource(R.id.ivImg,R.mipmap.ic_nf_default_news_small)
+                    NFManager.manager.notify(enum.position, bulider.build())
                 }
                 if (list.size>1 && list[1].iassum.isNullOrEmpty().not()){
                     GlideManager.loadNFBitmap(APP.instance,list[1].iassum?:"",width,height, bitmapCall ={
@@ -260,6 +265,9 @@ object NFShow {
                         largeRemote?.setImageViewResource(R.id.ivImg2, R.mipmap.ic_default_nf_small)
                         NFManager.manager.notify(enum.position, bulider.build())
                     })
+                }else{
+                    largeRemote?.setImageViewResource(R.id.ivImg2,R.mipmap.ic_nf_default_news_small)
+                    NFManager.manager.notify(enum.position, bulider.build())
                 }
                 if (list.size>2 && list[2].iassum.isNullOrEmpty().not()){
                     GlideManager.loadNFBitmap(APP.instance,list[2].iassum?:"",width,height, bitmapCall ={
@@ -269,29 +277,42 @@ object NFShow {
                         largeRemote?.setImageViewResource(R.id.ivImg3, R.mipmap.ic_default_nf_small)
                         NFManager.manager.notify(enum.position, bulider.build())
                     })
+                }else{
+                    largeRemote?.setImageViewResource(R.id.ivImg3,R.mipmap.ic_nf_default_news_small)
+                    NFManager.manager.notify(enum.position, bulider.build())
                 }
             }else{
                 var width = dp2px(331f)
                 var height = dp2px(181f)
-                GlideManager.loadNFBitmap(APP.instance,data.iassum?:"",width,height, bitmapCall ={
-                    smallRemote?.setImageViewBitmap(R.id.ivPic, it)
-                    largeRemote?.setImageViewBitmap(R.id.ivPic, it)
-                    largeRemote.setViewVisibility(R.id.ivBg,View.VISIBLE)
-                    smallRemote.setViewVisibility(R.id.ivBg,View.VISIBLE)
+                if (data.iassum.isNullOrEmpty()){
+                    largeRemote?.setImageViewResource(R.id.ivPic, R.mipmap.ic_nf_default_news_large)
+                    smallRemote?.setImageViewResource(R.id.ivPic, R.mipmap.ic_nf_default_news_small)
                     if (data.tag.isNullOrEmpty()){
                         NFManager.manager.notify(enum.position, bulider.build())
                     }else{
                         NFManager.manager.notify(data.nId,bulider.build())
                     }
-                },callFail ={
-                    smallRemote?.setImageViewResource(R.id.ivPic, R.mipmap.ic_default_nf)
-                    largeRemote?.setImageViewResource(R.id.ivPic, R.mipmap.ic_default_nf)
-                    if (data.tag.isNullOrEmpty()){
-                        NFManager.manager.notify(enum.position, bulider.build())
-                    }else{
-                        NFManager.manager.notify(data.nId,bulider.build())
-                    }
-                })
+                }else{
+                    GlideManager.loadNFBitmap(APP.instance,data.iassum?:"",width,height, bitmapCall ={
+                        smallRemote?.setImageViewBitmap(R.id.ivPic, it)
+                        largeRemote?.setImageViewBitmap(R.id.ivPic, it)
+                        largeRemote.setViewVisibility(R.id.ivBg,View.VISIBLE)
+                        smallRemote.setViewVisibility(R.id.ivBg,View.VISIBLE)
+                        if (data.tag.isNullOrEmpty()){
+                            NFManager.manager.notify(enum.position, bulider.build())
+                        }else{
+                            NFManager.manager.notify(data.nId,bulider.build())
+                        }
+                    },callFail ={
+                        smallRemote?.setImageViewResource(R.id.ivPic, R.mipmap.ic_default_nf)
+                        largeRemote?.setImageViewResource(R.id.ivPic, R.mipmap.ic_default_nf)
+                        if (data.tag.isNullOrEmpty()){
+                            NFManager.manager.notify(enum.position, bulider.build())
+                        }else{
+                            NFManager.manager.notify(data.nId,bulider.build())
+                        }
+                    })
+                }
             }
             var key = data.nfSource
             if (key.isNullOrEmpty()){

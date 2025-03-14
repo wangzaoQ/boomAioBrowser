@@ -24,15 +24,10 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.other.UrlConfig
-import com.boom.aiobrowser.tools.CloakManager
 import com.boom.aiobrowser.tools.SubscribeManager
-import com.boom.aiobrowser.tools.UIManager
 import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.WebActivity
-import com.boom.aiobrowser.ui.pop.ConfigPop
-import com.boom.aiobrowser.ui.pop.SubFailPop
-import com.boom.aiobrowser.ui.pop.SubInfoPop
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
 import kotlinx.coroutines.Dispatchers
@@ -173,6 +168,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         AioADDataManager.preloadAD(ADEnum.NATIVE_AD,"首页展示时")
         AioADDataManager.preloadAD(ADEnum.BANNER_AD_NEWS_DETAILS_TOP,"首页展示时")
         AioADDataManager.preloadAD(ADEnum.BANNER_AD_NEWS_DETAILS,"首页展示时")
+        AioADDataManager.preloadAD(ADEnum.REWARD_AD,"首页展示时")
     }
 
     var showEnd = false

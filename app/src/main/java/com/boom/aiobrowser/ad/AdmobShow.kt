@@ -80,7 +80,6 @@ class AdmobShow(activity: BaseActivity<*>, adEnum: ADEnum, tag: String,result: (
             }
             AioADDataManager.AD_TYPE_RV -> (adResultData.adAny as RewardedAd).run {
                 fullScreenContentCallback = callback
-                loadComplete(type = AioADDataManager.AD_SHOW_TYPE_SUCCESS, tag)
                 show(activity!!, OnUserEarnedRewardListener { rewardItem ->
                     // Handle the reward.
                     val rewardAmount = rewardItem.amount

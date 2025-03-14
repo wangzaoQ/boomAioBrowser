@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.NewsData
+import com.boom.aiobrowser.data.VideoDownloadData
+import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.databinding.NewsFragmentVideoListBinding
 import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
@@ -19,15 +20,16 @@ import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.GlideManager
-import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getListByGson
 import com.boom.aiobrowser.tools.getNewsTopic
 import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.tools.video.VideoPreloadManager
 import com.boom.aiobrowser.tools.video.VideoPreloadManager.getCachePath
+import com.boom.aiobrowser.tools.web.PManager.getVideoSegmentSize
 import com.boom.aiobrowser.ui.activity.VideoListActivity
 import com.boom.aiobrowser.ui.view.CustomVideoView
+import com.boom.downloader.utils.VideoDownloadUtils
 import com.boom.downloader.utils.VideoDownloadUtils.computeMD5
 import com.boom.drag.EasyFloat
 import com.boom.video.GSYVideoManager
@@ -36,6 +38,7 @@ import com.boom.video.listener.GSYSampleCallBack
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
@@ -141,7 +144,11 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
 //            AppLogs.dLog(VideoCacheUtils.TAG,"current:${list!!.get(index).mLRqPtKJX}")
         }
         fBinding.rlIntercept.setOneClick {
-            ToastUtils.showShort("click Intercept")
+            var manager = AioADShowManager(rootActivity,ADEnum.REWARD_AD, tag = "视频播放激励") {
+                fBinding.rlIntercept.visibility = View.GONE
+                playVideo()
+            }
+            manager.showScreenAD(AD_POINT.aobws_tap_int)
         }
     }
 
@@ -151,8 +158,8 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
     fun playVideo() {
         var videoUrl = bean?.vbreas?:""
         if (videoUrl.isNullOrEmpty())return
-        var allowShowRewarded = AioADDataManager.adAllowShowRewarded()
-        if (allowShowRewarded.not()){
+        var allowShowRewarded = AioADDataManager.adAllowShowRewarded(videoUrl)
+        if (allowShowRewarded){
             fBinding.rlIntercept.visibility = View.VISIBLE
             hideDownloadPop()
             return
@@ -162,6 +169,7 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
         if (APP.instance.isHideSplash.not())return
         AppLogs.dLog(fragmentTAG,"VideoListFragment playVideo currentIndex:${index}")
         gsyVideoPlayer?.startPlayLogic()
+        addDownloadData()
         if(list.isNullOrEmpty())return
         if (index+1>=list!!.size)return
         loadJob?.jobCancel()
@@ -187,6 +195,44 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
             putString(PointValueKey.news_topic,bean?.tdetai?.getNewsTopic())
         })
     }
+
+    private fun addDownloadData() {
+        if (bean == null || bean!!.vbreas.isNullOrEmpty())return
+        rootActivity.addLaunch(success = {
+            var list = CacheManager.videoPreTempList
+
+            var newsData = bean
+            var index = -1
+            for (i in 0 until list.size) {
+                var data = list.get(i)
+                if (data.videoResultId == VideoDownloadUtils.computeMD5(newsData!!.vbreas)) {
+                    index = i
+                    break
+                }
+            }
+            if (index >= 0) return@addLaunch
+            var uiData = VideoUIData()
+            uiData.thumbnail = newsData!!.iassum
+            uiData.videoResultId = "${VideoDownloadUtils.computeMD5(newsData!!.vbreas)}"
+            var videoDownloadData = VideoDownloadData().createDefault(
+                videoId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}",
+                fileName = newsData.tconsi ?: "",
+                url = newsData.vbreas ?: "",
+                imageUrl = newsData.iassum ?: "",
+                paramsMap = HashMap<String, Any>(),
+                size = getVideoSegmentSize(newsData.vbreas ?: "", HashMap()),
+                videoType = "mp4",
+                resolution = ""
+            )
+            uiData.formatsList.add(videoDownloadData)
+            list.add(uiData)
+            CacheManager.videoPreTempList = list
+            withContext(Dispatchers.Main) {
+                (rootActivity as VideoListActivity).updateDownloadButtonStatus(0)
+            }
+        }, failBack = {})
+    }
+
 
     private fun hideDownloadPop() {
         runCatching {

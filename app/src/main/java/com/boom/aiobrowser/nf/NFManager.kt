@@ -279,7 +279,7 @@ object NFManager {
     fun startForeground(tag: String) {
         AppLogs.dLog(NFManager.TAG,"前台服务 触发 ${tag}-${Build.VERSION.SDK_INT}")
         if (nfAllow().not())return
-        if (isAndroid12() && APP.instance.lifecycleApp.isBackGround()){
+        if (isAndroid12() ){
             AppLogs.dLog(NFManager.TAG,"大于12 不允许后台展示前台服务${Build.VERSION.SDK_INT}")
             return
         }
@@ -376,6 +376,7 @@ object NFManager {
     }
 
     private suspend fun showNFByCount() {
+        NFShow.showNewsNFFilter(NFEnum.NF_TREND)
         var count = showCount%4
         when (count) {
             0 -> {

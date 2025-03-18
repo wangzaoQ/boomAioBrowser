@@ -24,6 +24,7 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.other.UrlConfig
+import com.boom.aiobrowser.tools.PointsManager
 import com.boom.aiobrowser.tools.SubscribeManager
 import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.ui.activity.MainActivity
@@ -274,7 +275,10 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
 
             })
         }
-//
+        fBinding.rlRoot.postDelayed({
+            PointsManager.login()
+            PointsManager.resetTempVip{}
+        },0)
     }
 
     var dataIntent :Intent?=null

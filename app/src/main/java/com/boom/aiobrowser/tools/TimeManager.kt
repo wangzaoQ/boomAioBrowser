@@ -1,6 +1,7 @@
 package com.boom.aiobrowser.tools
 
 import java.text.SimpleDateFormat
+import java.time.ZoneId
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -38,10 +39,43 @@ object TimeManager {
         return SimpleDateFormat("yyyy.MM.dd").format(Date(time?:System.currentTimeMillis()))
     }
 
-    fun getAudioTime(time:Long): String {
-        val tmpDate = SimpleDateFormat("mm:ss", Locale.getDefault()).format(Date(time)).toString()
-        return "$tmpDate"
+    fun getSignTime(time:Long?): String {
+        return SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(Date(time?:System.currentTimeMillis()))
     }
+
+    fun isSameDay(serverTime: Long):Boolean{
+        val localDate = SimpleDateFormat("yyyyMMdd").format(Date(System.currentTimeMillis())).toString()
+        val serverDate = SimpleDateFormat("yyyyMMdd").format(Date(serverTime)).toString()
+        return localDate == serverDate
+    }
+    fun isSameMinutes(serverTime: Long):Boolean{
+        val localDate = SimpleDateFormat("yyyyMMdd HH:mm").format(Date(System.currentTimeMillis())).toString()
+        val serverDate = SimpleDateFormat("yyyyMMdd HH:mm").format(Date(serverTime)).toString()
+        return localDate == serverDate
+    }
+
+    fun areConsecutiveDays(timestamp1: Long, timestamp2: Long): Boolean {
+        val cal1 = Calendar.getInstance().apply {
+            timeInMillis = timestamp1
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        val cal2 = Calendar.getInstance().apply {
+            timeInMillis = timestamp2
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        // 将第一个日期加一天
+        cal1.add(Calendar.DAY_OF_YEAR, 1)
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
+    }
+
+
 
 
     fun getHistoryDay(time:Long): String {

@@ -19,8 +19,10 @@
     <color name="tran">#00000000</color>
     <color name="bg_scan_complete">#FFD24836</color>
     <color name="red_FF3B30">#FF3B30</color>
+    <color name="red_FF1803">#FF1803</color>
     <color name="color_red_fc0000">#FC0000</color>
     <color name="color_red_fc5d00">#FC5D00</color>
+    <color name="color_red_FF4000">#FF4000</color>
     <color name="color_red_fca800">#FCA800</color>
 
     <color name="color_tab_n">#80FFFFFF</color>
@@ -35,4 +37,6 @@
     <color name="color_black_1c274c">#FF1C274C</color>
     <color name="color_black_F7F7F9">#F7F7F9</color>
     <color name="color_black_3C3B72">#3C3B72</color>
+    <color name="color_black_C2C2C2">#C2C2C2</color>
+    <color name="color_black_4C4C4C">#4C4C4C</color>
 </resources>

@@ -8,6 +8,7 @@ import com.boom.aiobrowser.data.JumpData
 import com.boom.aiobrowser.data.LocationData
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.NewsTempData
+import com.boom.aiobrowser.data.PointsData
 import com.boom.aiobrowser.data.TopicBean
 import com.boom.aiobrowser.data.UserData
 import com.boom.aiobrowser.data.VideoUIData
@@ -17,6 +18,7 @@ import com.boom.aiobrowser.net.NetRequest
 import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.TopicConfig
+import com.ironsource.be
 import com.tencent.mmkv.MMKV
 import java.util.LinkedList
 import java.util.UUID
@@ -61,7 +63,7 @@ object CacheManager {
     const val KV_NEWS_LIST = "KV_NEWS_LIST"
     const val KV_VIDEO_DOWNLOAD_SINGLE = "KV_NEWS_LIST"
     const val KV_NEWS_VIDEO_LIST = "KV_NEWS_VIDEO_LIST"
-    const val KV_NEWS_VIDEO_LIST_DOWNLOAD = "KV_NEWS_VIDEO_LIST_DOWNLOAD"
+    const val KV_POINTS = "KV_POINTS"
     const val KV_TREND_NEWS_LIST = "KV_TREND_NEWS_LIST"
     const val KV_WEB_PAGE_LIST = "KV_WEB_PAGE_LIST"
     const val KV_WEB_FETCH_LIST = "KV_WEB_FETCH_LIST"
@@ -136,6 +138,20 @@ object CacheManager {
         set(value) {
             mmkv.encode(KV_VIDEO_DOWNLOAD_SINGLE, toJson(value))
         }
+
+    var pointsData:PointsData
+        get() {
+            var bean = getBeanByGson(mmkv.decodeString(KV_POINTS),PointsData::class.java)
+            if (bean == null){
+                bean = PointsData()
+            }
+            pointsData = bean
+            return bean
+        }
+        set(value) {
+            mmkv.encode(KV_POINTS, toJson(value))
+        }
+
     // 是否首次打开start
     var installRefer: String
         get() {

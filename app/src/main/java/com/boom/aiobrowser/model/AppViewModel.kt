@@ -1,34 +1,40 @@
 package com.boom.aiobrowser.model
 
-import android.os.Build
 import android.os.Bundle
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.BuildConfig
-import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.SourceData
 import com.boom.aiobrowser.data.TopicBean
 import com.boom.aiobrowser.data.WebConfigData
+import com.boom.aiobrowser.net.Net
 import com.boom.aiobrowser.net.NetController
-import com.boom.aiobrowser.nf.NFShow
-import com.boom.aiobrowser.tools.AppLogs
-import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.other.TopicConfig
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointManager
 import com.boom.aiobrowser.point.PointValueKey
+import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.encryptECB
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getTopicDataLan
 import com.boom.aiobrowser.tools.toJson
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
 import okhttp3.RequestBody
+import okhttp3.Response
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 import kotlin.random.Random
+
 
 class AppViewModel : BaseDataModel() {
 
@@ -60,6 +66,33 @@ class AppViewModel : BaseDataModel() {
         }, failBack = {
             AppLogs.eLog(TAG, it.stackTraceToString())
         }, 1)
+    }
+
+    fun getCurrentTime(timeBack:(time:Long)->Unit){
+        loadData(loadBack={
+            val builder = Request.Builder()
+                .url(Net.rootUrl)
+            .head() // 只请求头信息
+            var result: Response?=null
+            runCatching {
+                result = Net.netClient.newCall(builder.build()).execute()
+            }
+            var serverTimestamp = 0L
+            runCatching {
+                val dateStr: String = result?.header("Date")?:""
+                val sdf: SimpleDateFormat =
+                    SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
+                sdf.setTimeZone(TimeZone.getTimeZone("GMT"))
+                val serverDate: Date = sdf.parse(dateStr)
+                serverTimestamp = serverDate.getTime()
+                timeBack.invoke(serverTimestamp)
+            }.onFailure {
+                timeBack.invoke(0L)
+            }
+            AppLogs.dLog(TAG,"getCurrentTime:${TimeManager.getSignTime(serverTimestamp)}")
+        }, failBack = {
+            timeBack.invoke(0L)
+        },1)
     }
 
     fun getTopics() {

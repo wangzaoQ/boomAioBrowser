@@ -210,6 +210,7 @@ fun appDataReset(){
             CacheManager.saveNFShowLastTime(it.menuName,0)
             CacheManager.saveDayNFShowCount(it.menuName,0)
         }
+        PointsManager.resetData()
     }
 }
 

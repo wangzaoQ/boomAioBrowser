@@ -52,6 +52,26 @@
         <item name="android:layout_marginStart">13dp</item>
     </style>
 
+    <style name="app_text_points_daily_quests" parent="app_text_bold">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_marginStart">12dp</item>
+
+    </style>
+
+    <style name="style_points_sign_ll">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:layout_marginStart">4.5dp</item>
+        <item name="android:layout_marginEnd">4.5dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/shape_check_in_uncheck</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">vertical</item>
+
+    </style>
+
     <!--    <declare-styleable name="ScanItemStyle">-->
 <!--        <attr name="itemIcon" format="reference" />-->
 <!--        <attr name="itemTitle" format="string" />-->

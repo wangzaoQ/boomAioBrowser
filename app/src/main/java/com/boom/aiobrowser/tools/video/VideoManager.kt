@@ -16,6 +16,7 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.PointsManager
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.tools.web.WebScan
@@ -210,6 +211,7 @@ object VideoManager {
                     videoLiveData.postValue(HashMap<Int, VideoTaskItem>().apply {
                         put(VideoDownloadData.DOWNLOAD_SUCCESS, item)
                     })
+                    PointsManager.downloadVideo()
                     withContext(Dispatchers.Main){
                         PointEvent.posePoint(PointEventKey.download_success, Bundle().apply {
                             var source = ""

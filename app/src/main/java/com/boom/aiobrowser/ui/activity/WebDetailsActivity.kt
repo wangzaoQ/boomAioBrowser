@@ -24,6 +24,7 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.PointsManager
 import com.boom.aiobrowser.tools.getNewsTopic
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
@@ -204,7 +205,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
                 }.showNativeAD(acBinding.flRoot,ADEnum.BANNER_AD_NEWS_DETAILS_TOP.adName)
             }
         }, failBack = {})
-
+        PointsManager.readNews(newData?.itackl?:"")
     }
 
     override fun onDestroy() {

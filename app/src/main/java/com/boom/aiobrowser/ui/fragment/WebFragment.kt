@@ -32,6 +32,7 @@ import com.boom.aiobrowser.tools.web.WebScan
 import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.other.WebConfig.HTML_LOCAL
+import com.boom.aiobrowser.tools.PointsManager
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.extractDomain
 import com.boom.aiobrowser.ui.activity.MainActivity
@@ -216,6 +217,12 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
                 popDown?.updateData(false)
             }
             updateDownloadButtonStatus(true, 0)
+            rootActivity.addLaunch(success = {
+                CacheManager.videoDownloadTempList.forEach {
+                    PointsManager.showVideo(it.videoResultId)
+                }
+            }, failBack = {})
+
         }
         APP.videoNFLiveData.observe(this) {
             popDown?.updateDataByNF(it)

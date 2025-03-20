@@ -26,6 +26,7 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.other.UrlConfig
 import com.boom.aiobrowser.tools.PointsManager
 import com.boom.aiobrowser.tools.SubscribeManager
+import com.boom.aiobrowser.tools.UIManager
 import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.WebActivity
@@ -87,7 +88,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             if (currentTime>11000){
                 showEnd()
             }else{
-                var isSubscribeMember = CacheManager.isSubscribeMember
+                var isSubscribeMember = UIManager.isSpecialUsers()
                 startPb(fBinding.progress.progress, 100, if (isSubscribeMember) 1000 else (11000-currentTime), update = {
                     if (isSubscribeMember){
                         fBinding.progress.progress = it

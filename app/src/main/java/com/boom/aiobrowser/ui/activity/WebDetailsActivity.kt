@@ -25,6 +25,7 @@ import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.PointsManager
+import com.boom.aiobrowser.tools.UIManager
 import com.boom.aiobrowser.tools.getNewsTopic
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
@@ -195,7 +196,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
                 delay(1000)
             }
             withContext(Dispatchers.Main){
-                if (CacheManager.isVIP().not()){
+                if (UIManager.isSpecialUsers().not()){
                     PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
                         putString(PointValueKey.ad_pos_id, ADEnum.BANNER_AD_NEWS_DETAILS_TOP.adName)
                     })

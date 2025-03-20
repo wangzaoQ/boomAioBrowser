@@ -27,6 +27,7 @@ import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
 import com.boom.aiobrowser.firebase.FirebaseConfig
+import com.boom.aiobrowser.net.NetParams
 import com.boom.aiobrowser.nf.NFManager
 import com.boom.aiobrowser.nf.NFShow
 import com.boom.aiobrowser.other.JumpConfig
@@ -502,7 +503,42 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                     }
                     allowShowPop = false
                 }
-
+                NFEnum.NF_POINTS_DAY0.menuName->{
+                    var pointsData = CacheManager.pointsData
+                    pointsData.allPoints+=100
+                    CacheManager.pointsData = pointsData
+                    jumpActivity<PointsActivity>()
+                }
+                NFEnum.NF_POINTS_DAY1.menuName->{
+                    var pointsData = CacheManager.pointsData
+                    var idList = mutableListOf<String>()
+                    pointsData.readNewsList.forEach {
+                        idList.add(it.id)
+                    }
+                    var newsList = CacheManager.getNewsSaveList(NetParams.MAIN)
+                    var index = -1
+                    if (newsList.isNullOrEmpty().not()){
+                        for (i in 0 until newsList.size){
+                            if (idList.contains(newsList.get(i).itackl)){
+                                continue
+                            }
+                            index = i
+                        }
+                    }
+                    if (index>=0){
+                        jumpActivity<WebDetailsActivity>(Bundle().apply {
+                            putString(ParamsConfig.JSON_PARAMS, toJson(newsList.get(index)))
+                        })
+                    }else{
+                        jumpActivity<PointsActivity>()
+                    }
+                }
+                NFEnum.NF_POINTS_DAY3.menuName->{
+                    var pointsData = CacheManager.pointsData
+                    pointsData.allPoints+=200
+                    CacheManager.pointsData = pointsData
+                    jumpActivity<PointsActivity>()
+                }
                 else -> {}
             }
         }

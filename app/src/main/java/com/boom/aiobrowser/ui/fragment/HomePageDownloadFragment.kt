@@ -18,6 +18,7 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.BatteryUtil
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.UIManager
 import com.boom.aiobrowser.ui.pop.FirstDownloadTips
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -46,7 +47,7 @@ class HomePageDownloadFragment : BaseFragment<BrowserHomeDownloadBinding>(){
                 delay(1000)
             }
             withContext(Dispatchers.Main){
-                if (CacheManager.isVIP().not()){
+                if (UIManager.isSpecialUsers().not()){
                     PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
                         putString(PointValueKey.ad_pos_id, AD_POINT.aobws_download_one)
                     })

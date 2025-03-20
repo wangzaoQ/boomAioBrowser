@@ -1,11 +1,13 @@
 package com.boom.aiobrowser.data
 
+import com.boom.aiobrowser.tools.PointsManager
+
 class PointsData {
     //每日登陆
     var isDailyLogin = false
-    var readNewsIds = mutableListOf<String>()
-    var downloadVideoCount = 0
-    var showVideoIds = mutableListOf<String>()
+    var readNewsList = mutableListOf<DailyQuestsData>()
+    var downloadVideoList = mutableListOf<DailyQuestsData>()
+    var showVideoList = mutableListOf<DailyQuestsData>()
 
     var checkInCount = 0
     var todaySignIn = false
@@ -13,20 +15,49 @@ class PointsData {
 
     var allPoints = 0
 
-    var vip30MinutesStartTime = 0L
-    var vip2HoursStartTime = 0L
-    var vip3DayStartTime = 0L
+//    var vip30MinutesStartTime = 0L
+//    var vip2HoursStartTime = 0L
+//    var vip3DayStartTime = 0L
+
+    var tempVipStartTime = 0L
+    var tempVipDuration = 0L
+
+    var tempNoADStartTime = 0L
+    var tempNoADDuration = 0L
 
 
-    fun isReadNewsComplete():Boolean{
-        return readNewsIds.size>=10
+    fun dailyLoginPoints():Int{
+       return if (isDailyLogin) 50 else 0
     }
 
-    fun isDownloadVideoComplete():Boolean{
-        return downloadVideoCount>=3
+    fun newsPoints():Int{
+        var unclaimedPoints:Int = 0
+        readNewsList.forEach {
+            if (it.isReceive.not()){
+                unclaimedPoints+= PointsManager.READ_NEWS_POINTS
+            }
+        }
+        return unclaimedPoints
     }
 
-    fun isShowVideoComplete():Boolean{
-        return showVideoIds.size>=5
+    fun showVideoPoints():Int{
+        var unclaimedPoints:Int = 0
+        showVideoList.forEach {
+            if (it.isReceive.not()){
+                unclaimedPoints+= PointsManager.SHOW_VIDEO_POINTS
+            }
+        }
+        return unclaimedPoints
     }
+
+    fun downloadVideoPoints():Int{
+        var unclaimedPoints:Int = 0
+        downloadVideoList.forEach {
+            if (it.isReceive.not()){
+                unclaimedPoints+= PointsManager.DOWNLOAD_VIDEO_POINTS
+            }
+        }
+        return unclaimedPoints
+    }
+
 }

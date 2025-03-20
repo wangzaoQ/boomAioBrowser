@@ -17,6 +17,7 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.CacheManager.adLastTime
 import com.boom.aiobrowser.tools.CacheManager.isBUser
 import com.boom.aiobrowser.tools.TimeManager
+import com.boom.aiobrowser.tools.UIManager
 import com.boom.aiobrowser.tools.appDataReset
 import com.google.android.gms.ads.MobileAds
 
@@ -152,7 +153,7 @@ object AioADDataManager {
 
 
     fun preloadAD(enum: ADEnum, tag: String = "") {
-        if (CacheManager.isSubscribeMember){
+        if (UIManager.isSpecialUsers()){
             AppLogs.dLog(TAG, "图片类广告 只允许买量用户加载")
             return
         }

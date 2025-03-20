@@ -20,6 +20,7 @@ import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BatteryUtil
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.UIManager
 import com.boom.aiobrowser.tools.download.DownloadCacheManager
 import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.ui.activity.DownloadActivity
@@ -54,7 +55,7 @@ class TaskAddPop (context: Context,var backToDownload:Boolean = false) : BasePop
 
     fun createPop(downloadVideoIdList:MutableList<String>){
         defaultBinding?.apply {
-            if (CacheManager.isVIP().not()){
+            if (UIManager.isSpecialUsers().not()){
                 PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
                     putString(PointValueKey.ad_pos_id, AD_POINT.aobws_task_add)
                 })

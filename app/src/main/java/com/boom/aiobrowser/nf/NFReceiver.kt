@@ -14,6 +14,8 @@ import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.tools.video.VideoManager
 import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.allowShowNF
 import com.boom.aiobrowser.ui.activity.VideoPreActivity
 import com.boom.downloader.VideoDownloadManager
@@ -74,6 +76,14 @@ class NFReceiver: BroadcastReceiver()  {
                 CoroutineScope(Dispatchers.IO).launch{
                     if (allowShowNF()){
                         NFShow.showNewsNFFilter(NFEnum.NF_UNLOCK,NFManager.FROM_UNLOCK)
+                        var day = TimeManager.getUserRetention(CacheManager.firstUseTime, CacheManager.currentUseTime)
+                        if (day == 1 && CacheManager.isFirstShowD1NF){
+                            CacheManager.isFirstShowD1NF = false
+                            NFShow.showPointsNF(NFEnum.NF_POINTS_DAY1)
+                        }else if (day == 2 && CacheManager.isFirstShowD3NF){
+                            CacheManager.isFirstShowD3NF = false
+                            NFShow.showPointsNF(NFEnum.NF_POINTS_DAY3)
+                        }
                     }
                 }
             }

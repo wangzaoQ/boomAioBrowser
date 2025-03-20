@@ -21,6 +21,7 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.UIManager
 import com.boom.aiobrowser.ui.NativeScreenActivity
 import com.boom.aiobrowser.ui.pop.SubInfoPop
 import com.boom.aiobrowser.ui.pop.SubTempPop
@@ -51,8 +52,8 @@ class AioADShowManager(
     }
 
     fun showScreenAD(pointTag: String) {
-        if (CacheManager.isSubscribeMember){
-            AppLogs.dLog(AioADDataManager.TAG,"已是会员不展示广告")
+        if (UIManager.isSpecialUsers()){
+            AppLogs.dLog(AioADDataManager.TAG,"已是特殊用户不展示广告")
             adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "是会员")
             return
         }
@@ -130,8 +131,9 @@ class AioADShowManager(
         flRoot: FrameLayout,
         pointTag:String
     ) {
-        if (CacheManager.isSubscribeMember){
-            AppLogs.dLog(AioADDataManager.TAG,"已是会员不展示广告")
+        if (UIManager.isSpecialUsers()){
+            AppLogs.dLog(AioADDataManager.TAG,"已是特殊用户不展示广告")
+            adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag)
             return
         }
         val data = AioADDataManager.getCacheAD(adEnum)
@@ -158,8 +160,8 @@ class AioADShowManager(
     }
 
     fun showADBanner(parent:ViewGroup, data: ADResultData,pointTag:String) {
-        if (CacheManager.isSubscribeMember){
-            AppLogs.dLog(AioADDataManager.TAG,"已是会员不展示广告")
+        if (UIManager.isSpecialUsers()){
+            AppLogs.dLog(AioADDataManager.TAG,"已是特殊用户不展示广告")
             return
         }
         adShow?.showADBanner(parent,data,pointTag)

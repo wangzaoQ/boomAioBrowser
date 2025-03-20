@@ -20,6 +20,7 @@ import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.GlideManager
+import com.boom.aiobrowser.tools.PointsManager
 import com.boom.aiobrowser.tools.getListByGson
 import com.boom.aiobrowser.tools.getNewsTopic
 import com.boom.aiobrowser.tools.jobCancel
@@ -71,6 +72,7 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
 
     var list:MutableList<NewsData>?=null
     var index = 0
+    var fromType = ""
     var gsyVideoPlayer: CustomVideoView? = null
     var gsyVideoOptionBuilder: GSYVideoOptionBuilder? = GSYVideoOptionBuilder()
 
@@ -80,6 +82,7 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
         arguments?.apply {
             list =  getListByGson(getString("data"),NewsData::class.java)
             index = getInt("index")
+            fromType = getString("fromType")?:""
         }
         AppLogs.dLog(fragmentTAG,"VideoListFragment setShowView currentIndex:${index}")
         bean = list?.get(index)
@@ -158,8 +161,14 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
     fun playVideo() {
         var videoUrl = bean?.vbreas?:""
         if (videoUrl.isNullOrEmpty())return
+        if (fromType == "points_download" || fromType == "points_download"){
+            //从积分来第一个不展示激励
+            (rootActivity as VideoListActivity).isContinueRewardedCount += 1
+        }else{
+            (rootActivity as VideoListActivity).isContinueRewardedCount = 2
+        }
         var allowShowRewarded = AioADDataManager.adAllowShowRewarded(videoUrl)
-        if (allowShowRewarded){
+        if (allowShowRewarded&&(rootActivity as VideoListActivity).isContinueRewardedCount == 2){
             fBinding.rlIntercept.visibility = View.VISIBLE
             hideDownloadPop()
             return
@@ -190,10 +199,12 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
         }, failBack = {
         }, Dispatchers.Main)
         PointEvent.posePoint(PointEventKey.featured_videos_page,Bundle().apply {
-            putString(PointValueKey.from_type,bean?.fromType)
+            putString(PointValueKey.from_type,fromType)
             putString(PointValueKey.news_id,bean?.itackl)
             putString(PointValueKey.news_topic,bean?.tdetai?.getNewsTopic())
         })
+        PointsManager.showVideo(bean?.itackl?:"")
+
     }
 
     private fun addDownloadData() {
@@ -274,9 +285,10 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
     }
 
     companion object {
-        fun newInstance(data: MutableList<NewsData>, position: Int): VideoListFragment {
+        fun newInstance(data: MutableList<NewsData>, position: Int,fromType:String): VideoListFragment {
             val args = Bundle()
             args.putString("data", toJson(data))
+            args.putString("fromType", fromType)
             args.putInt("index", position)
             val fragment = VideoListFragment()
             fragment.arguments = args

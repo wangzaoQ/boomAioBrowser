@@ -207,11 +207,11 @@ object VideoManager {
                         DownloadCacheManager.updateModel(model)
                         CacheManager.updateTempList(model)
                         NFShow.showDownloadNF(VideoDownloadData().createVideoDownloadData(model),true)
+                        PointsManager.downloadVideo(model.videoId?:"")
                     }
                     videoLiveData.postValue(HashMap<Int, VideoTaskItem>().apply {
                         put(VideoDownloadData.DOWNLOAD_SUCCESS, item)
                     })
-                    PointsManager.downloadVideo()
                     withContext(Dispatchers.Main){
                         PointEvent.posePoint(PointEventKey.download_success, Bundle().apply {
                             var source = ""

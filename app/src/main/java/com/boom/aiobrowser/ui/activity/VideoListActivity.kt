@@ -50,6 +50,8 @@ class VideoListActivity : BaseActivity<NewsActivityVideoListBinding>() {
     var fromType = ""
     var list:MutableList<NewsData>?=null
     var index = 0
+    var isContinueRewardedCount = 0
+
 
     override fun setShowView() {
         var manager = FragmentManager()

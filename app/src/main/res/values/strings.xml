@@ -430,6 +430,17 @@
     <string name="app_exchange">Exchange</string>
     <string name="app_completed">Completed</string>
     <string name="sign_in_error">Sign in failed</string>
+    <string name="app_exchange_error">Exchange error</string>
+    <string name="app_exchange_refuse">Not enough points</string>
+    <string name="app_points_vip3">Ad-free for 30 minutes</string>
+    <string name="app_nf_points_d0">Expires today at 23:59!</string>
+    <string name="app_act_now">Act Now</string>
+    <string name="app_nf_points_d1">Today\'s task is incomplete!</string>
+    <string name="app_nf_points_d3">Limited-time offer of 200 points!</string>
+    <string name="app_nf_points_d0_content">Congratulations! You\'ve earned 100 newbie points!</string>
+    <string name="app_nf_points_d1_content">Complete the reading to enjoy free membership benefits</string>
+    <string name="app_nf_points_d3_content">Third consecutive sign-in.Interrupting the sign-in will reset the rewards</string>
+    <string name="app_no_ad_tips">Welfare redemption successful</string>
 
 
 </resources>

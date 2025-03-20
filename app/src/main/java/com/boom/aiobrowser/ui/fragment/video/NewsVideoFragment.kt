@@ -70,7 +70,7 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
     var firstLoad = true
 
 
-    val videoListAdapter by lazy {VideoListAdapter(rootActivity,dataList) }
+    val videoListAdapter by lazy {VideoListAdapter(rootActivity,dataList,fromType) }
 
     override fun setShowView() {
         list = getListByGson(arguments?.getString("data",""),NewsData::class.java)

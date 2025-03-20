@@ -346,6 +346,15 @@ object NFShow {
         }
     }
 
+    fun showPointsNF(enum: NFEnum){
+        if (nfAllow().not())return
+        val smallRemote = NFViews.getPointsRemoteView(enum)
+        val largeRemote = NFViews.getPointsRemoteView(enum, true)
+        if (smallRemote == null || largeRemote == null)return
+        var bulider = createBuilder(enum,smallRemote,largeRemote)
+        NFManager.manager.notify(enum.position, bulider.build())
+    }
+
     fun getForegroundNF(): Notification? {
         val smallRemote = NFViews.getForegroundRemoteView(NFEnum.NF_SEARCH_VIDEO)
         val largeRemote = NFViews.getForegroundRemoteView(NFEnum.NF_SEARCH_VIDEO, true)

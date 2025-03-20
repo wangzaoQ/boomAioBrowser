@@ -6,13 +6,13 @@ import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.ui.fragment.video.VideoListFragment
 
-class VideoListAdapter(var activity: BaseActivity<*>,var list: MutableList<NewsData>)  : FragmentStateAdapter(activity) {
+class VideoListAdapter(var activity: BaseActivity<*>,var list: MutableList<NewsData>,var fromType:String)  : FragmentStateAdapter(activity) {
     override fun getItemCount(): Int {
         return list.size
     }
 
     override fun createFragment(position: Int): Fragment {
-        var fragment = VideoListFragment.newInstance(list,position)
+        var fragment = VideoListFragment.newInstance(list,position,fromType)
         return fragment
     }
 

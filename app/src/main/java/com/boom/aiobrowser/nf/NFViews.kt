@@ -8,6 +8,7 @@ import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.nf.NFJump.getJumpIntent
+import com.boom.aiobrowser.nf.NFJump.getPointsJumpIntent
 import com.boom.aiobrowser.nf.NFJump.getRefreshIntent
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.BigDecimalUtils
@@ -84,6 +85,37 @@ object NFViews {
                 AppLogs.eLog(NFManager.TAG,"getDownLoadRemoteView error:${it.stackTraceToString()}")
             }
         }
+        return remoteViews
+    }
+
+    fun getPointsRemoteView(enum: NFEnum,isLargeView:Boolean=false):RemoteViews?{
+        var layoutId = if (enum == NFEnum.NF_POINTS_DAY0){
+            if (isLargeView){
+                R.layout.nf_points_day0_large
+            }else{
+                R.layout.nf_points_day0_small
+            }
+        }else if (enum == NFEnum.NF_POINTS_DAY1){
+            if (isLargeView){
+                R.layout.nf_points_day1_large
+            }else{
+                R.layout.nf_points_day1_small
+            }
+        }else if (enum == NFEnum.NF_POINTS_DAY3){
+            if (isLargeView){
+                R.layout.nf_points_day3_large
+            }else{
+                R.layout.nf_points_day3_small
+            }
+        }else{
+            0
+        }
+        if (layoutId == 0)return null
+        var remoteViews = RemoteViews(APP.instance.packageName, layoutId)
+        remoteViews.setOnClickPendingIntent(
+            R.id.llPointsRoot,
+            getPointsJumpIntent(enum)
+        )
         return remoteViews
     }
 

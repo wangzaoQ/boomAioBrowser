@@ -19,6 +19,7 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.tools.UIManager
 import pop.basepopup.BasePopupWindow
 import pop.util.animation.AnimationHelper
 import pop.util.animation.TranslationConfig
@@ -75,7 +76,7 @@ class BackPop (context: Context) : BasePopupWindow(context) {
                 })
                 dismiss()
             }
-            if (CacheManager.isVIP().not()){
+            if (UIManager.isSpecialUsers().not()){
                 PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
                     putString(PointValueKey.ad_pos_id, AD_POINT.aobws_back)
                 })

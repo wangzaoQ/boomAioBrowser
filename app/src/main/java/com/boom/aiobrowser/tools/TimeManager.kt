@@ -54,6 +54,36 @@ object TimeManager {
         return localDate == serverDate
     }
 
+    fun getUserRetention(firstUseTimestamp: Long, currentTimestamp: Long = System.currentTimeMillis()): Int {
+        // 将首次使用时间转换成只保留年月日的日期
+        val calFirst = Calendar.getInstance().apply {
+            timeInMillis = firstUseTimestamp
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        // 将当前时间转换成只保留年月日的日期
+        val calCurrent = Calendar.getInstance().apply {
+            timeInMillis = currentTimestamp
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        // 计算两者之间相差的天数
+        val daysDiff = ((calCurrent.timeInMillis - calFirst.timeInMillis) / (24 * 3600 * 1000)).toInt()
+//        return when (daysDiff) {
+//            0 -> "d0" // 同一天
+//            1 -> "d1" // 跨天后第二天（次日），即使不到24小时
+//            2 -> "d2" // 第二天之后的第三天
+//            else -> "d$daysDiff"
+//        }
+        return daysDiff
+    }
+
+
+
     fun areConsecutiveDays(timestamp1: Long, timestamp2: Long): Boolean {
         val cal1 = Calendar.getInstance().apply {
             timeInMillis = timestamp1

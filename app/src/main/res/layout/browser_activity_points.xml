@@ -384,8 +384,9 @@
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="58dp"
-                        android:layout_marginStart="10dp"
+                        android:paddingStart="10dp"
                         android:gravity="center_vertical"
+                        android:background="@drawable/shape_ripple_item"
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatImageView
@@ -394,6 +395,7 @@
                             app:srcCompat="@mipmap/ic_points_daily_login"></androidx.appcompat.widget.AppCompatImageView>
 
                         <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvDailyLoginPoints"
                             style="@style/app_text_points_daily_quests"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -424,7 +426,8 @@
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="58dp"
-                        android:layout_marginStart="10dp"
+                        android:paddingStart="10dp"
+                        android:background="@drawable/shape_ripple_item"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -434,6 +437,7 @@
                             app:srcCompat="@mipmap/ic_points_read_news"></androidx.appcompat.widget.AppCompatImageView>
 
                         <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvReadNewsPoints"
                             style="@style/app_text_points_daily_quests"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -474,6 +478,7 @@
                             app:srcCompat="@mipmap/ic_points_download_video"></androidx.appcompat.widget.AppCompatImageView>
 
                         <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvDownloadVideoPoints"
                             style="@style/app_text_points_daily_quests"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -514,6 +519,7 @@
                             app:srcCompat="@mipmap/ic_points_show_video"></androidx.appcompat.widget.AppCompatImageView>
 
                         <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvShowVideoPoints"
                             style="@style/app_text_points_daily_quests"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -561,6 +567,7 @@
                         android:layout_height="74dp"
                         android:layout_marginStart="10dp"
                         android:gravity="center_vertical"
+                        android:visibility="gone"
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatImageView
@@ -611,6 +618,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginHorizontal="10dp"
+                        android:visibility="gone"
                         android:background="#F5F5F5"></View>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
@@ -696,7 +704,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="0dp"
                                 android:layout_marginEnd="5dp"
-                                android:text="@string/app_daily_login"></androidx.appcompat.widget.AppCompatTextView>
+                                android:text="@string/app_points_vip3"></androidx.appcompat.widget.AppCompatTextView>
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:layout_width="wrap_content"

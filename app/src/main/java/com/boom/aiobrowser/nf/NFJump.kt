@@ -61,6 +61,13 @@ object NFJump {
         return PendingIntent.getActivity(APP.instance, getCode(), intent, getFlags())
     }
 
+    fun getPointsJumpIntent(enum: NFEnum): PendingIntent{
+        val intent = Intent(APP.instance, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        intent.putExtra(ParamsConfig.NF_ENUM_NAME,enum.menuName)
+        return PendingIntent.getActivity(APP.instance, getCode(), intent, getFlags())
+    }
+
 
     fun getCode() = (1001..99998).random(Random(System.currentTimeMillis()))
 

@@ -126,4 +126,22 @@ object UIManager {
         AppLogs.dLog(TAG, "归因未命中买量当前为非买量用户")
         return "A"
     }
+
+    fun isSpecialUsers():Boolean{
+        var isSubscribe = CacheManager.isSubscribeMember
+        if (isSubscribe){
+            AppLogs.dLog(TAG, "当前用户是订阅会员")
+            return true
+        }
+        var data = CacheManager.pointsData
+        if ((System.currentTimeMillis()-data.tempVipDuration)<=data.tempVipStartTime){
+            AppLogs.dLog(TAG, "当前用户是临时vip")
+            return true
+        }
+        if ((System.currentTimeMillis()-data.tempNoADDuration)<=data.tempNoADStartTime){
+            AppLogs.dLog(TAG, "当前用户使用了临时免ad")
+            return true
+        }
+        return false
+    }
 }

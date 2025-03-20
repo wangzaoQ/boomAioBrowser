@@ -30,6 +30,9 @@ object CacheManager {
 
     val mmkv = MMKV.mmkvWithID("${BuildConfig.APPLICATION_ID}kv", MMKV.MULTI_PROCESS_MODE)
     const val KV_FIRST_START = "KV_FIRST_START"
+    const val KV_FIRST_SHOW_DO_NF = "KV_FIRST_SHOW_DO_NF"
+    const val KV_FIRST_SHOW_D1_NF = "KV_FIRST_SHOW_D1_NF"
+    const val KV_FIRST_SHOW_D3_NF = "KV_FIRST_SHOW_D3_NF"
     const val KV_FIRST_TO_DOWNLOAD = "KV_FIRST_TO_DOWNLOAD"
     const val KV_FIRST_SHOW_DOWNLOAD_LIST = "KV_FIRST_SHOW_DOWNLOAD_LIST"
     const val KV_INSTALL_REFER = "KV_INSTALL_REFER"
@@ -111,6 +114,8 @@ object CacheManager {
     const val KV_AD_DAY_VALUE = "KV_AD_DAY_VALUE"
     const val KV_FIRST_VIDEO_GUIDE = "KV_FIRST_VIDEO_GUIDE"
     const val KV_REWARDED_SHOW_COUNT = "KV_REWARDED_SHOW_COUNT"
+    const val KV_FIRST_USE_TIME = "KV_FIRST_USE_TIME"
+    const val KV_CURRENT_USE_TIME = "KV_CURRENT_USE_TIME"
 
 
     var videoDownloadTempList :MutableList<VideoUIData>
@@ -180,6 +185,27 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_FIRST_START, value)
+        }
+    var isFirstShowD0NF: Boolean
+        get() {
+            return mmkv.decodeBool(KV_FIRST_SHOW_DO_NF, true)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_SHOW_DO_NF, value)
+        }
+    var isFirstShowD1NF: Boolean
+        get() {
+            return mmkv.decodeBool(KV_FIRST_SHOW_D1_NF, true)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_SHOW_D1_NF, value)
+        }
+    var isFirstShowD3NF: Boolean
+        get() {
+            return mmkv.decodeBool(KV_FIRST_SHOW_D3_NF, true)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_SHOW_D3_NF, value)
         }
     var isFirstShowDownloadList: Boolean
         get() {
@@ -974,10 +1000,6 @@ object CacheManager {
         alreadyAddCityList = list
     }
 
-    fun isVIP(): Boolean {
-        return isSubscribeMember
-    }
-
     var dayPreloadCount: Int
         get(){
             return mmkv.decodeInt(KV_PRELOAD_AD_COUNT, 0)
@@ -1011,4 +1033,18 @@ object CacheManager {
             mmkv.encode(KV_AD_DAY_VALUE, value)
         }
 
+    var firstUseTime: Long
+        get(){
+            return mmkv.decodeLong(KV_FIRST_USE_TIME, 0L)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_USE_TIME,value)
+        }
+    var currentUseTime: Long
+        get(){
+            return mmkv.decodeLong(KV_CURRENT_USE_TIME, System.currentTimeMillis())
+        }
+        set(value) {
+            mmkv.encode(KV_CURRENT_USE_TIME,value)
+        }
 }

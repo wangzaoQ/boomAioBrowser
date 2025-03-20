@@ -20,6 +20,7 @@ import com.boom.aiobrowser.other.NewsConfig.NO_SESSION_TAG
 import com.boom.aiobrowser.other.NewsConfig.TOPIC_TAG
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.PointsManager
 import com.boom.aiobrowser.tools.video.VideoPreloadManager
 
 class NewsViewModel : BaseDataModel() {
@@ -595,6 +596,108 @@ class NewsViewModel : BaseDataModel() {
                 it.dataType = TYPE_DOWNLOAD_VIDEO
             }
             newsHotVideoLiveData.postValue(list)
+        }, failBack = {},1)
+    }
+
+    fun getPointsNews(result: (data:NewsData) -> Unit) {
+        loadData(loadBack = {
+            var pointsData = CacheManager.pointsData
+            var idList = mutableListOf<String>()
+            pointsData.readNewsList.forEach {
+                idList.add(it.id)
+            }
+            var newsList = CacheManager.getNewsSaveList(NetParams.POINTS_NEWS)
+            var index = -1
+            if (newsList.isNullOrEmpty().not()){
+                for (i in 0 until newsList.size){
+                    if (idList.contains(newsList.get(i).itackl)){
+                        continue
+                    }
+                    index = i
+                }
+            }
+            if (index>=0){
+                AppLogs.dLog(PointsManager.TAG,"从缓存中命中到未阅读的新闻 data.title:${newsList.get(index).tconsi}")
+                result.invoke(newsList.get(index))
+                return@loadData
+            }
+            if (index == -1){
+                AppLogs.dLog(PointsManager.TAG,"未命中缓存重新请求新闻")
+                var list = NetRequest.request(HashMap<String, Any>().apply {
+                    put("sessionKey",NetParams.POINTS_NEWS)
+                }) { NetController.getNewsList(NetParams.getParamsMap(NetParams.POINTS_NEWS)) }.data
+                    ?: mutableListOf()
+                CacheManager.saveNewsSaveList(NetParams.POINTS_NEWS,list)
+                getPointsNews(result)
+            }
+
+        }, failBack = {},1)
+
+    }
+
+    fun getPointsDownloadVideo(result: (videoList:MutableList<NewsData>) -> Unit) {
+        loadData(loadBack = {
+            var pointsData = CacheManager.pointsData
+            var idList = mutableListOf<String>()
+            var videoList = mutableListOf<NewsData>()
+            pointsData.downloadVideoList.forEach {
+                idList.add(it.id)
+            }
+            var rewardedUrl = CacheManager.rewardedUrl
+            var newsList = CacheManager.getNewsSaveList("recommendVideo")
+            if (newsList.isNullOrEmpty().not()){
+                for (i in 0 until newsList.size){
+                    if (idList.contains(newsList.get(i).itackl)){
+                        continue
+                    }
+                    if (newsList.get(i).vbreas == rewardedUrl){
+                        continue
+                    }
+                    videoList.add(newsList.get(i))
+                }
+            }
+            if (videoList.size>0){
+                AppLogs.dLog(PointsManager.TAG,"从缓存中找到未下载的视频有:${videoList.size}个")
+                result.invoke(videoList)
+                return@loadData
+            }else{
+                AppLogs.dLog(PointsManager.TAG,"缓存中的视频都已浏览")
+                result.invoke(newsList)
+                return@loadData
+            }
+        }, failBack = {},1)
+    }
+
+    fun getPointsShowVideo(result: (videoList:MutableList<NewsData>) -> Unit) {
+        loadData(loadBack = {
+            var pointsData = CacheManager.pointsData
+            var idList = mutableListOf<String>()
+            var videoList = mutableListOf<NewsData>()
+            pointsData.showVideoList.forEach {
+                idList.add(it.id)
+            }
+            var rewardedUrl = CacheManager.rewardedUrl
+            var newsList = CacheManager.getNewsSaveList("recommendVideo")
+            if (newsList.isNullOrEmpty().not()){
+                for (i in 0 until newsList.size){
+                    if (idList.contains(newsList.get(i).itackl)){
+                        continue
+                    }
+                    if (newsList.get(i).vbreas == rewardedUrl){
+                        continue
+                    }
+                    videoList.add(newsList.get(i))
+                }
+            }
+            if (videoList.size>0){
+                AppLogs.dLog(PointsManager.TAG,"从缓存中找到未观看的视频有:${videoList.size}个")
+                result.invoke(videoList)
+                return@loadData
+            }else{
+                AppLogs.dLog(PointsManager.TAG,"缓存中的视频都已浏览")
+                result.invoke(newsList)
+                return@loadData
+            }
         }, failBack = {},1)
     }
 

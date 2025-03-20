@@ -193,7 +193,7 @@ fun appDataReset(){
     var todayDate = CacheManager.saveDay
     val tmpDate = SimpleDateFormat("yyyyMMdd").format(Date(System.currentTimeMillis())).toString()
     if (todayDate != tmpDate) {
-        AppLogs.dLog(APP.instance.TAG,"每日数据重置")
+        AppLogs.dLog(APP.instance.TAG,"每日数据重置开始")
         CacheManager.clickEveryDay = 0
         CacheManager.showEveryDay = 0
         CacheManager.dayShowSubTemp = true
@@ -211,6 +211,14 @@ fun appDataReset(){
             CacheManager.saveDayNFShowCount(it.menuName,0)
         }
         PointsManager.resetData()
+        var firstUseTime = CacheManager.firstUseTime
+        if (firstUseTime == 0L){
+            //d0
+            CacheManager.firstUseTime = System.currentTimeMillis()
+        }else{
+            CacheManager.currentUseTime = System.currentTimeMillis()
+        }
+        AppLogs.dLog(APP.instance.TAG,"每日数据重置结束")
     }
 }
 

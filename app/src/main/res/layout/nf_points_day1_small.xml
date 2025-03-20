@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="54dp"
+    android:orientation="horizontal"
+    android:id="@+id/llPointsRoot"
+    >
+    <ImageView
+        android:layout_width="59dp"
+        android:layout_height="match_parent"
+        android:src="@mipmap/ic_nf_points_d1"
+        ></ImageView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:text="@string/app_nf_points_d1"
+        style="@style/app_text_bold"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="2dp"
+        ></TextView>
+    <TextView
+        android:layout_width="79dp"
+        android:layout_height="27dp"
+        android:background="@drawable/shape_84r_5755d9"
+        android:layout_gravity="center_vertical"
+        android:text="@string/app_act_now"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        android:layout_marginEnd="7dp"
+        ></TextView>
+</LinearLayout>

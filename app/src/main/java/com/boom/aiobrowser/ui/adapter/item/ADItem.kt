@@ -18,6 +18,7 @@ import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.UIManager
 import com.boom.base.adapter4.BaseQuickAdapter
 
 internal class ADItem(parent: ViewGroup) : BaseViewHolder<BrowserItemHomeAdBinding>(
@@ -45,7 +46,7 @@ internal class ADItem(parent: ViewGroup) : BaseViewHolder<BrowserItemHomeAdBindi
                     )
                 )
             }
-            if (CacheManager.isVIP().not()){
+            if (UIManager.isSpecialUsers().not()){
                 PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
                     putString(PointValueKey.ad_pos_id, adPosId)
                 })

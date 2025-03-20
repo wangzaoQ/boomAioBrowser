@@ -5,6 +5,8 @@ import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
@@ -12,6 +14,9 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.TimeManager
+import com.boom.videocache.Cache
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -27,6 +32,7 @@ object NFWorkManager {
 //            start(APP.instance,HotNewsWork::class.java,NFEnum.NF_HOT.menuName,30*60*1000,15*60*1000)
             start(APP.instance,TrendNewsWork::class.java,NFEnum.NF_TREND.menuName,30*60*1000,15*60*1000)
             start(APP.instance,NewUserNewsWork::class.java,NFEnum.NF_NEW_USER.menuName,5*60*1000,15*60*1000)
+
         }else{
             start(APP.instance,NormalNewsWork::class.java,NFEnum.NF_NEWS.menuName,10*60*1000,15*60*1000)
             start(APP.instance,EditorNewsWork::class.java,NFEnum.NF_EDITOR.menuName,15*60*1000,60*60*1000)
@@ -34,6 +40,12 @@ object NFWorkManager {
 //            start(APP.instance,HotNewsWork::class.java,NFEnum.NF_HOT.menuName,30*60*1000,3*60*60*1000)
             start(APP.instance,TrendNewsWork::class.java,NFEnum.NF_TREND.menuName,30*60*1000,60*60*1000)
             start(APP.instance,NewUserNewsWork::class.java,NFEnum.NF_NEW_USER.menuName,40*60*1000,60*60*1000)
+            startOneWork(APP.instance,D0Work::class.java,NFEnum.NF_POINTS_DAY0.menuName,10*60*1000)
+        }
+        var day = TimeManager.getUserRetention(CacheManager.firstUseTime,CacheManager.currentUseTime)
+        if (day == 0 && CacheManager.isFirstShowD0NF){
+            CacheManager.isFirstShowD0NF = false
+            startOneWork(APP.instance,D0Work::class.java,NFEnum.NF_POINTS_DAY0.menuName,1*60*1000)
         }
     }
 
@@ -61,4 +73,17 @@ object NFWorkManager {
         //开始执行任务
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(workUniqueName, ExistingPeriodicWorkPolicy.KEEP, workRequest);
     }
+
+    fun startOneWork(context: Context,clazz: Class<out BaseNotifyWork>,workTag:String,delayMilli: Long){
+        val uploadWorkRequest: WorkRequest =
+            OneTimeWorkRequest.Builder(clazz)
+                .setInitialDelay(delayMilli, TimeUnit.MILLISECONDS) //延迟10秒执行0
+                .addTag(workTag) //设置tag标签
+                .build()
+        WorkManager
+            .getInstance(context)
+            .enqueue(uploadWorkRequest)
+
+    }
+
 }

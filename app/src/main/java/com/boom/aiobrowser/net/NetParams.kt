@@ -17,6 +17,7 @@ object NetParams {
     var TAG = "NetParams"
 
     var MAIN = "Main"
+    var POINTS_NEWS = "POINTS_NEWS"
     var FOR_YOU = "For You"
 
     var WIDGET = "widget"
@@ -120,7 +121,7 @@ object NetParams {
                 if (endKey == NFEnum.NF_NEWS.menuName || endKey == WIDGET){
                     map.put("fit","3:AIOPUSH")
                     isPush = true
-                }else if (endKey == MAIN || endKey == FOR_YOU){
+                }else if (endKey == MAIN || endKey == FOR_YOU || endKey == POINTS_NEWS){
                     map.put("fit","3:BROWSER")
                 }else if (endKey == NEWS_RECOMMEND){
                     map.put("fit","3:USER")

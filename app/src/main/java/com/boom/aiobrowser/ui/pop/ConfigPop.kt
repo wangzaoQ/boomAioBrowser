@@ -19,8 +19,10 @@ import com.boom.aiobrowser.databinding.BrowserPopConfigBinding
 import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.UIManager
+import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.tools.toJson
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import pop.basepopup.BasePopupWindow
@@ -45,15 +47,19 @@ class ConfigPop(context: Context) : BasePopupWindow(context) {
         showPopupWindow()
     }
 
+    var job :Job?= null
     private fun addPop() {
         allowRefresh = true
-        (context as BaseActivity<*>).addLaunch(success = {
+        job = (context as BaseActivity<*>).addLaunch(success = {
             while (allowRefresh) {
                 delay(500)
                 if (allowRefresh.not())return@addLaunch
                 withContext(Dispatchers.Main){
                     defaultBinding?.llRoot?.apply {
                         removeAllViews()
+                        addTest("签到配置开关(true 可直接连续签到):${CacheManager.testSignIn}") {
+                            CacheManager.testSignIn = CacheManager.testSignIn.not()
+                        }
                         addTest("VIP用户状态:${CacheManager.isSubscribeMember}") {
                             CacheManager.isSubscribeMember = CacheManager.isSubscribeMember.not()
                             if (CacheManager.isSubscribeMember){
@@ -127,6 +133,12 @@ class ConfigPop(context: Context) : BasePopupWindow(context) {
                 }
             }
         }, failBack = {})
+    }
+
+
+    override fun dismiss() {
+        job.jobCancel()
+        super.dismiss()
     }
 
 

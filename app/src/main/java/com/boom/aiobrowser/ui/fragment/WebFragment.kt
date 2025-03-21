@@ -484,7 +484,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 
     private fun addDownload() {
         if (allowShowTips().not() && isAdded) {
-            if (EasyFloat.isShow()){
+            if (EasyFloat.isShow("download")){
                 updateDownloadButtonStatus(true, 0)
                 return
             }

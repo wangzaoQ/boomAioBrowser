@@ -7,14 +7,19 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
 import android.view.KeyEvent
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.RotateAnimation
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
@@ -26,6 +31,7 @@ import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
+import com.boom.aiobrowser.databinding.BrowserDragPointsLayoutBinding
 import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.net.NetParams
 import com.boom.aiobrowser.nf.NFManager
@@ -42,6 +48,7 @@ import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointManager.PointCallback
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.BigDecimalUtils
 import com.boom.aiobrowser.tools.BrowserManager
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.FragmentManager
@@ -66,6 +73,8 @@ import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.aiobrowser.ui.pop.MorePop
 import com.boom.aiobrowser.ui.pop.NFGuidePop
 import com.boom.drag.EasyFloat
+import com.boom.drag.enums.SidePattern
+import com.boom.drag.utils.DisplayUtils
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import kotlinx.coroutines.Job
@@ -207,9 +216,12 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             if (APP.instance.isHideSplash.not())return@Runnable
             ShortManager.addWidgetToLaunch(this)
             ShortManager.addPinShortcut(WeakReference(this))
-        },1000)
+        },500)
     }
 
+    val pointsPopBiding  by lazy {
+        BrowserDragPointsLayoutBinding.inflate(layoutInflater, null, false)
+    }
 
     var nfTo = 0
     var nfData:String =""
@@ -633,7 +645,9 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 ShortManager.addWidgetToLaunch(this)
             }
             ShortManager.addPinShortcut(WeakReference(this))
+
         },1000)
+        addPointsEntrance()
 //        else{
 //            jumpData = JumpDataManager.getCurrentJumpData(isReset = true,tag = "MainFragment onResume 非首次")
 //            JumpDataManager.updateCurrentJumpData(jumpData,"MainFragment onResume 更新 jumpData")
@@ -660,6 +674,89 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             }
         }
     }
+
+    private fun addPointsEntrance() {
+        EasyFloat.dismiss(tag = "points", true)
+        if (EasyFloat.isShow("points")){
+            return
+        }
+        var startX = 0
+        var startY = 0
+        var dragX = CacheManager.dragPointsX
+        var dragY = CacheManager.dragPointsY
+        startX = dragX
+        startY = if (dragY == 0) {
+            DisplayUtils.getScreenHeight(this) - (BigDecimalUtils.div(
+                DisplayUtils.getScreenWidth(
+                    this
+                ).toDouble(), 3.0
+            ).toInt() * 2)
+        } else {
+            dragY
+        }
+        AppLogs.dLog(acTAG, "startX:${startX} startY:${startY}")
+        pointsPopBiding?.apply {
+            EasyFloat.with(this@MainActivity)
+                .setSidePattern(SidePattern.RESULT_HORIZONTAL)
+                .setImmersionStatusBar(true)
+                .setGravity(Gravity.START or Gravity.BOTTOM, offsetX = startX, offsetY = startY)
+                .setLocation(startX, startY)
+                .setTag("points")
+                // 传入View，传入布局文件皆可，如：MyCustomView(this)、R.layout.float_custom
+                .setLayout(root) {
+                    root.setOneClick {
+                        jumpActivity<PointsActivity>()
+                    }
+                }
+                .registerCallback {
+                    // 在此处设置view也可以，建议在setLayout进行view操作
+                    createResult { isCreated, msg, _ ->
+                        var rotateAnim = RotateAnimation(
+                            0f,
+                            360f,
+                            RotateAnimation.RELATIVE_TO_SELF,
+                            0.5f,
+                            RotateAnimation.RELATIVE_TO_SELF,
+                            0.5f
+                        )
+//                        rotateAnim?.setRepeatCount(Animation.INFINITE)
+                        rotateAnim?.setDuration(3000)
+                        ivToPointsBg.startAnimation(rotateAnim)
+                    }
+                    show {
+
+                    }
+                    hide {
+                    }
+                    dismiss {
+                    }
+
+                    touchEvent { view, event ->
+                        if (event.action == MotionEvent.ACTION_DOWN) {
+
+                        }
+                    }
+
+                    drag { view, motionEvent ->
+
+                    }
+
+                    dragEnd {
+                        root?.apply {
+                            val location = IntArray(2)
+                            this.getLocationOnScreen(location)
+                            val x = location[0] // view距离 屏幕左边的距离（即x轴方向）
+                            val y = location[1] // view距离 屏幕顶边的距离（即y轴方向）
+                            CacheManager.dragPointsX = x
+                            CacheManager.dragPointsY = y
+                            AppLogs.dLog("dragParams", "拖拽后x:${x} 拖拽后y:${y}")
+                        }
+                    }
+                }
+                .show()
+        }
+    }
+
 
     private fun showTips() {
         return

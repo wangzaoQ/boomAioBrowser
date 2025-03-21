@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+    <FrameLayout
+        android:layout_width="82dp"
+        android:layout_height="82dp">
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivToPointsBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@mipmap/bg_to_points"
+        android:scaleType="centerCrop"
+        ></androidx.appcompat.widget.AppCompatImageView>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerInside"
+        app:srcCompat="@mipmap/ic_to_points"></androidx.appcompat.widget.AppCompatImageView>
+    </FrameLayout>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
+        android:minHeight="18dp"
+        android:minWidth="65dp"
+        android:paddingHorizontal="4dp"
+        android:layout_marginBottom="2dp"
+        android:background="@drawable/shape_to_points"
+        android:text="@string/app_receive_points"
+        android:gravity="center"
+        android:textSize="9sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="-25dp"
+        ></androidx.appcompat.widget.AppCompatTextView>
+</androidx.appcompat.widget.LinearLayoutCompat>

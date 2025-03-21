@@ -15,28 +15,35 @@ object PointsManager {
     const val DOWNLOAD_VIDEO_POINTS = 20
     const val READ_NEWS_POINTS = 10
     const val SHOW_VIDEO_POINTS = 10
+    const val DAILY_LOGIN_POINTS = 10
 
     /**
      * 每日签到梯度积分值：第一天50，第二天50，第三天80，第四天50，第五天50，第六天50，第七天80
      */
     fun signPoints(result:(pointData:PointsData?)-> Unit) {
         APP.instance.appModel.getCurrentTime {
-            if (it == 0L){
-                AppLogs.dLog(TAG,"sign error 获取服务器时间失败")
-                result.invoke(null)
-                return@getCurrentTime
-            }
-            if (TimeManager.isSameDay(it).not()){
-                AppLogs.dLog(TAG,"sign error 当前时间和本地时间不同")
-                result.invoke(null)
-                return@getCurrentTime
-            }
             var data = CacheManager.pointsData
-            if (data.lastCheckInTime>0){
-                if (TimeManager.areConsecutiveDays(data.lastCheckInTime,it).not()){
-                    AppLogs.dLog(TAG,"sign error 上次签到时间和服务器时间不连续")
+            var allowContinue = false
+            if (APP.isDebug){
+                allowContinue = CacheManager.testSignIn
+            }
+            if (allowContinue.not()){
+                if (it == 0L){
+                    AppLogs.dLog(TAG,"sign error 获取服务器时间失败")
                     result.invoke(null)
                     return@getCurrentTime
+                }
+                if (TimeManager.isSameDay(it).not()){
+                    AppLogs.dLog(TAG,"sign error 当前时间和本地时间不同")
+                    result.invoke(null)
+                    return@getCurrentTime
+                }
+                if (data.lastCheckInTime>0){
+                    if (TimeManager.areConsecutiveDays(data.lastCheckInTime,it).not()){
+                        AppLogs.dLog(TAG,"sign error 上次签到时间和服务器时间不连续")
+                        result.invoke(null)
+                        return@getCurrentTime
+                    }
                 }
             }
             when (data.checkInCount) {
@@ -55,13 +62,16 @@ object PointsManager {
         }
     }
 
-    fun login(){
+    fun login(result:(type:Int)-> Unit){
         var data = CacheManager.pointsData
         if (data.isDailyLogin.not()){
-            data.allPoints+=50
+            data.allPoints+=DAILY_LOGIN_POINTS
+        }else{
+            result.invoke(-1)
         }
         data.isDailyLogin = true
         CacheManager.pointsData = data
+        result.invoke(0)
     }
 
     fun readNews(newsId:String){
@@ -271,5 +281,32 @@ object PointsManager {
         result.invoke(points)
     }
 
+    fun inspectSignIn(result:(type:Int)-> Unit){
+        var data = CacheManager.pointsData
+        if (data.todaySignIn){
+            result.invoke(0)
+            return
+        }
+        APP.instance.appModel.getCurrentTime {
+            if (data.lastCheckInTime>0){
+                if (it == 0L){
+                    AppLogs.dLog(TAG,"检查签到 获取服务器时间失败")
+                    result.invoke(-1)
+                    return@getCurrentTime
+                }
+                if (TimeManager.isSameMinutes(it).not()){
+                    AppLogs.dLog(TAG,"检查签到 当前时间和本地时间不同")
+                    result.invoke(-1)
+                    return@getCurrentTime
+                }
+                if (TimeManager.areConsecutiveDays(data.lastCheckInTime,it).not()){
+                    AppLogs.dLog(TAG,"检查签到 上次签到时间和服务器时间不连续")
+                    result.invoke(1)
+                    return@getCurrentTime
+                }
+            }
+            result.invoke(0)
+        }
+    }
 
 }

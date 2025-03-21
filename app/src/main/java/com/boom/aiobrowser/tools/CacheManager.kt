@@ -43,6 +43,7 @@ object CacheManager {
     const val KV_IS_B_USER = "KV_IS_B_USER"
     const val KV_IS_A_USER = "KV_IS_A_USER"
     const val KV_IS_SUBSCRIBE_MEMBER = "KV_IS_SUBSCRIBE_MEMBER"
+    const val KV_TEST_SIGN_IN = "KV_TEST_SIGN_IN"
     const val KV_IS_SEND_B = "KV_IS_SEND_B"
     const val KV_DAY_DOWNLOAD_COUNT = "KV_DAY_DOWNLOAD_COUNT"
     const val KV_FIRST_TIME = "KV_FIRST_TIME"
@@ -99,6 +100,8 @@ object CacheManager {
     const val KV_DAY_NF_SHOW_COUNT = "KV_DAY_NF_SHOW_COUNT"
     const val KV_DRAG_X = "KV_DRAG_X"
     const val KV_DRAG_Y = "KV_DRAG_Y"
+    const val KV_DRAG_POINTS_X = "KV_DRAG_POINTS_X"
+    const val KV_DRAG_POINTS_Y = "KV_DRAG_POINTS_Y"
     const val KV_FIRST_DOWNLOAD_TIPS = "KV_FIRST_DOWNLOAD_TIPS"
     const val KV_FIRST_DOWNLOAD_TIPS2 = "KV_FIRST_DOWNLOAD_TIPS2"
     const val KV_FIRST_DOWNLOAD_TIPS3 = "KV_FIRST_DOWNLOAD_TIPS3"
@@ -276,6 +279,14 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_IS_SUBSCRIBE_MEMBER, value)
+        }
+
+    var testSignIn: Boolean
+        get() {
+            return mmkv.decodeBool(KV_TEST_SIGN_IN, false)
+        }
+        set(value) {
+            mmkv.encode(KV_TEST_SIGN_IN, value)
         }
 
     var isSendB: Boolean
@@ -951,6 +962,20 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_DRAG_Y,value )
+        }
+    var dragPointsX: Int
+        get() {
+            return mmkv.decodeInt(KV_DRAG_POINTS_X,0)
+        }
+        set(value) {
+            mmkv.encode(KV_DRAG_POINTS_X,value )
+        }
+    var dragPointsY: Int
+        get() {
+            return mmkv.decodeInt(KV_DRAG_POINTS_Y,0)
+        }
+        set(value) {
+            mmkv.encode(KV_DRAG_POINTS_Y,value )
         }
 
     fun saveUser(user:UserData?){

@@ -27,7 +27,7 @@ class PointsData {
 
 
     fun dailyLoginPoints():Int{
-       return if (isDailyLogin) 50 else 0
+       return PointsManager.DAILY_LOGIN_POINTS
     }
 
     fun newsPoints():Int{

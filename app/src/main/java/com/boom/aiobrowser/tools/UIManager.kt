@@ -127,7 +127,7 @@ object UIManager {
         return "A"
     }
 
-    fun isSpecialUsers():Boolean{
+    fun isSpecialUsers(jumpNoAD:Boolean=false):Boolean{
         var isSubscribe = CacheManager.isSubscribeMember
         if (isSubscribe){
             AppLogs.dLog(TAG, "当前用户是订阅会员")
@@ -138,9 +138,11 @@ object UIManager {
             AppLogs.dLog(TAG, "当前用户是临时vip")
             return true
         }
-        if ((System.currentTimeMillis()-data.tempNoADDuration)<=data.tempNoADStartTime){
-            AppLogs.dLog(TAG, "当前用户使用了临时免ad")
-            return true
+        if (jumpNoAD.not()){
+            if ((System.currentTimeMillis()-data.tempNoADDuration)<=data.tempNoADStartTime){
+                AppLogs.dLog(TAG, "当前用户使用了临时免ad")
+                return true
+            }
         }
         return false
     }

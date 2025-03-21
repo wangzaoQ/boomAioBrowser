@@ -421,12 +421,14 @@
     <string name="app_sign_in7">High points to enjoy VIP 🎉</string>
     <string name="app_daily_quests">Daily Quests</string>
     <string name="app_daily_login">Daily login</string>
-    <string name="app_receive">Receive</string>
+    <string name="app_receive">Get</string>
     <string name="app_points_read_news">Read 1 news</string>
     <string name="app_points_completed_download">Completed 1 download</string>
     <string name="app_points_watch_video">Watch 1 video</string>
     <string name="app_points_redemption">Points Redemption</string>
-    <string name="app_points_vip2">Ad-free for 2 hours</string>
+    <string name="app_points_ad_free_for">Ad-free for </string>
+    <string name="app_points_2_hours">2 hours</string>
+    <string name="app_points_30_m">30 minutes</string>
     <string name="app_exchange">Exchange</string>
     <string name="app_completed">Completed</string>
     <string name="sign_in_error">Sign in failed</string>
@@ -441,6 +443,12 @@
     <string name="app_nf_points_d1_content">Complete the reading to enjoy free membership benefits</string>
     <string name="app_nf_points_d3_content">Third consecutive sign-in.Interrupting the sign-in will reset the rewards</string>
     <string name="app_no_ad_tips">Welfare redemption successful</string>
+    <string name="app_receive_points">Receive Points</string>
+    <string name="app_points_rejoin">Rejoin +50</string>
+    <string name="app_net_error">network error</string>
+    <string name="app_sign_error">Sign in failed</string>
+    <string name="app_sign_complete">Sign in completed</string>
+    <string name="app_success_receive">Successfully received</string>
 
 
 </resources>

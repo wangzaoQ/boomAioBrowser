@@ -28,12 +28,14 @@ import com.boom.aiobrowser.tools.BrowserManager
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.GlideManager
 import com.boom.aiobrowser.tools.JumpDataManager
+import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.SubscribeManager
 import com.boom.aiobrowser.tools.UIManager
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.activity.AboutActivity
 import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.HistoryActivity
+import com.boom.aiobrowser.ui.activity.PointsActivity
 import com.boom.aiobrowser.ui.pop.ClearPop
 import com.boom.aiobrowser.ui.pop.ConfigPop
 import com.boom.aiobrowser.ui.pop.DefaultPop
@@ -263,7 +265,7 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
     }
 
     private fun updateVIPUI() {
-        if (CacheManager.isSubscribeMember){
+        if (UIManager.isSpecialUsers(true)){
             fBinding.llBg.setBackgroundResource(R.drawable.shape_bg_vip)
             fBinding.ivVipTips.visibility = View.VISIBLE
             fBinding.tvAD.text = rootActivity.getString(R.string.app_vip_user)

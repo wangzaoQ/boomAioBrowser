@@ -23,8 +23,9 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.PointsManager
-import com.boom.aiobrowser.tools.TimeManager
+import com.boom.aiobrowser.tools.appDataReset
 import com.boom.aiobrowser.tools.toJson
+import com.boom.aiobrowser.ui.pop.SignRejoinPop
 import com.boom.aiobrowser.ui.pop.TempNoADPop
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -46,8 +47,11 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
                 finish()
             }
             tvSign.setOneClick {
+                appDataReset()
+                showPop()
                 PointsManager.signPoints{
                     addLaunch(success = {
+                        hidePop()
                         if (it == null){
                             ToastUtils.showShort(APP.instance.getString(R.string.sign_in_error))
                             return@addLaunch
@@ -90,8 +94,9 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
                         }, failBack = {})
 
                     }else{
+                        ToastUtils.showShort(getString(R.string.app_success_receive))
                         updateAllPoints()
-                        updateDailyPoints(tvReadNewsPoints,getString(R.string.app_points_read_news),CacheManager.pointsData.newsPoints())
+                        updateDailyPoints(tvReadNews,getString(R.string.app_receive),CacheManager.pointsData.newsPoints())
                     }
                 }
             }
@@ -111,8 +116,9 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
                             }, failBack = {},Dispatchers.Main)
                         }
                     }else{
+                        ToastUtils.showShort(getString(R.string.app_success_receive))
                         updateAllPoints()
-                        updateDailyPoints(tvDownloadVideoPoints,getString(R.string.app_points_completed_download),CacheManager.pointsData.downloadVideoPoints())
+                        updateDailyPoints(tvDownloadVideo,getString(R.string.app_receive),CacheManager.pointsData.downloadVideoPoints())
                     }
                 }
             }
@@ -132,8 +138,18 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
                             }, failBack = {},Dispatchers.Main)
                         }
                     }else{
+                        ToastUtils.showShort(getString(R.string.app_success_receive))
                         updateAllPoints()
-                        updateDailyPoints(tvShowVideoPoints,getString(R.string.app_points_watch_video),CacheManager.pointsData.showVideoPoints())
+                        updateDailyPoints(tvShowVideo,getString(R.string.app_receive),CacheManager.pointsData.showVideoPoints())
+                    }
+                }
+            }
+            tvDailyLogin.setOneClick {
+                PointsManager.login{
+                    if (it == 0){
+                        ToastUtils.showShort(getString(R.string.app_success_receive))
+                        updateAllPoints()
+                        updateDailyQuests(tvDailyLogin)
                     }
                 }
             }
@@ -211,6 +227,9 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
                         textView.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.red_FF1803))
                         textView2.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.red_FF1803))
                         childRoot.setBackgroundResource(R.drawable.shape_check_in_check)
+                        childRoot.setOneClick {
+                            tvSign.performClick()
+                        }
                     }
                 }else if (pointsData.checkInCount>i){
                     //已签到过
@@ -221,7 +240,13 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
                     }
                     textView.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.color_black_C2C2C2))
                     textView2.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.color_black_C2C2C2))
+                    childRoot.setOneClick {
+                        ToastUtils.showShort(getString(R.string.app_sign_complete))
+                    }
                 }else{
+                    childRoot.setOneClick {
+                        ToastUtils.showShort(getString(R.string.app_sign_error))
+                    }
                     //未签到
                     if (i == 2){
                         imageView.setImageResource(R.mipmap.ic_check3)
@@ -259,8 +284,14 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
                     if (checkInCount == i){
                         if (pointsData.todaySignIn){
                             imageView.setImageResource(R.mipmap.ic_check0)
+                            childRoot.setOneClick {
+                                ToastUtils.showShort(getString(R.string.app_sign_error))
+                            }
                         }else{
                             imageView.setImageResource(R.mipmap.ic_check2)
+                            childRoot.setOneClick {
+                                tvSign.performClick()
+                            }
                         }
                         textView.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.red_FF1803))
                         textView2.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.red_FF1803))
@@ -268,10 +299,16 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
                         imageView.setImageResource(R.mipmap.ic_check0)
                         textView.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.color_black_C2C2C2))
                         textView2.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.color_black_C2C2C2))
+                        childRoot.setOneClick {
+                            ToastUtils.showShort(getString(R.string.app_sign_error))
+                        }
                     }else{
                         imageView.setImageResource(R.mipmap.ic_check2)
                         textView.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.color_black_4C4C4C))
                         textView2.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.color_black_4C4C4C))
+                        childRoot.setOneClick {
+                            ToastUtils.showShort(getString(R.string.app_sign_error))
+                        }
                     }
                 }
             }
@@ -279,6 +316,24 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
     }
 
     override fun setShowView() {
+        appDataReset()
+        PointsManager.inspectSignIn{
+            addLaunch(success = {
+                withContext(Dispatchers.Main){
+                    if (it == -1){
+                        ToastUtils.showShort(R.string.app_net_error)
+                    }else if (it == 1){
+                        SignRejoinPop(this@PointsActivity){
+                            acBinding.tvSign.performClick()
+                        }.createPop()
+                    }
+                }
+            }, failBack = {})
+        }
+        var content = "${getString(R.string.app_points_ad_free_for)} ${getString(R.string.app_points_2_hours)}"
+        var content2 = "${getString(R.string.app_points_ad_free_for)} ${getString(R.string.app_points_30_m)}"
+        acBinding.tvExchange1Content.setText(updateTextColor(content,getString(R.string.app_points_ad_free_for).length,content.length))
+        acBinding.tvExchange2Content.setText(updateTextColor(content2,getString(R.string.app_points_ad_free_for).length,content2.length))
     }
 
     private fun loadData() {
@@ -286,16 +341,19 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
         acBinding.apply {
             tvPoints.text = "${data.allPoints}"
             tvSignDay.text = "${data.checkInCount}"
-            updateDailyQuests(tvDailyLogin,data.isDailyLogin.not())
-//            updateDailyQuests(tvReadNews,data.isReadNewsComplete().not())
-//            updateDailyQuests(tvDownloadVideo,data.isReadNewsComplete().not())
-//            updateDailyQuests(tvShowVideo,data.isShowVideoComplete().not())
+
             updateDailyPoints(tvDailyLoginPoints,getString(R.string.app_daily_login),data.dailyLoginPoints())
             updateDailyPoints(tvReadNewsPoints,getString(R.string.app_points_read_news),data.newsPoints())
             updateDailyPoints(tvDownloadVideoPoints,getString(R.string.app_points_completed_download),data.downloadVideoPoints())
             updateDailyPoints(tvShowVideoPoints,getString(R.string.app_points_watch_video),data.showVideoPoints())
+
+            updateDailyQuests(acBinding.tvDailyLogin)
+            updateDailyPoints(tvReadNews,getString(R.string.app_receive),data.newsPoints())
+            updateDailyPoints(tvDownloadVideo,getString(R.string.app_receive),data.downloadVideoPoints())
+            updateDailyPoints(tvShowVideo,getString(R.string.app_receive),data.showVideoPoints())
             updateSignUI(data)
         }
+        CacheManager.pointsData = data
     }
 
     private fun updateDailyPoints(
@@ -307,10 +365,12 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
         textView.setText(updateTextColor(textView.text.toString(),content.length+2,textView.text.length))
     }
 
-    private fun updateDailyQuests(textView: AppCompatTextView, enableShow: Boolean) {
-        textView.isEnabled = enableShow
-        if (enableShow){
+    private fun updateDailyQuests(textView: AppCompatTextView) {
+        var pointsData = CacheManager.pointsData
+        textView.isEnabled = pointsData.isDailyLogin.not()
+        if (pointsData.isDailyLogin.not()){
             textView.text = getString(R.string.app_receive)
+            updateDailyPoints(textView,getString(R.string.app_receive),pointsData.dailyLoginPoints())
         }else{
             textView.text = getString(R.string.app_done)
         }

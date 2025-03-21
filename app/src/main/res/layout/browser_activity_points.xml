@@ -50,7 +50,8 @@
         <com.boom.refresh.layout.SmartRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
+            app:srlEnableRefresh="false"
+            app:srlEnableLoadMore="false"
             app:srlEnableOverScrollBounce="true"
             app:srlEnableOverScrollDrag="true"
             app:srlEnablePreviewInEditMode="true">
@@ -642,12 +643,13 @@
                             android:orientation="vertical">
 
                             <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvExchange1Content"
                                 style="@style/app_text_points_daily_quests"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="0dp"
                                 android:layout_marginEnd="5dp"
-                                android:text="@string/app_points_vip2"></androidx.appcompat.widget.AppCompatTextView>
+                                tools:text="123333333"></androidx.appcompat.widget.AppCompatTextView>
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:layout_width="wrap_content"
@@ -699,12 +701,13 @@
                             android:orientation="vertical">
 
                             <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvExchange2Content"
                                 style="@style/app_text_points_daily_quests"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="0dp"
                                 android:layout_marginEnd="5dp"
-                                android:text="@string/app_points_vip3"></androidx.appcompat.widget.AppCompatTextView>
+                                tools:text="123333333"></androidx.appcompat.widget.AppCompatTextView>
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:layout_width="wrap_content"

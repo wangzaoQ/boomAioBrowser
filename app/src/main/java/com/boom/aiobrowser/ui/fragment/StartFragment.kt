@@ -277,7 +277,6 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             })
         }
         fBinding.rlRoot.postDelayed({
-            PointsManager.login()
             PointsManager.resetTempVip{}
         },0)
     }

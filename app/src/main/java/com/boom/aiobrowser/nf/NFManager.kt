@@ -6,6 +6,8 @@ import android.app.NotificationChannel
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.boom.aiobrowser.APP
@@ -254,6 +256,25 @@ object NFManager {
                     }
                 }
             }
+            NFEnum.NF_POINTS_DAY0.menuName,NFEnum.NF_POINTS_DAY1.menuName,NFEnum.NF_POINTS_DAY3.menuName->{
+                from = enumName
+                PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
+                    putString(PointValueKey.push_type, enumName)
+                })
+                var id = NFEnum.NF_POINTS_DAY0.position
+                when (enumName) {
+                    NFEnum.NF_POINTS_DAY1.menuName -> {
+                        id = NFEnum.NF_POINTS_DAY1.position
+                    }
+                    NFEnum.NF_POINTS_DAY3.menuName -> {
+                        id = NFEnum.NF_POINTS_DAY3.position
+                    }
+                    else -> {}
+                }
+                runCatching {
+                    manager.cancel(id)
+                }
+            }
             ParamsConfig.WIDGET->{
                 from = "widget_short"
                 if (nfTo == 1){
@@ -290,11 +311,13 @@ object NFManager {
         AppLogs.dLog(NFManager.TAG,"前台服务 允许展示 ${tag}-${Build.VERSION.SDK_INT}")
         runCatching {
             if (APP.instance.showForeground.not()){
-                getForegroundNF()
-                NFManager.manager.notify(NFEnum.NF_SEARCH_VIDEO.position,NFManager.nfForeground!!)
-                ContextCompat.startForegroundService(APP.instance,
-                    Intent(APP.instance, NFService::class.java)
-                )
+                Handler(Looper.getMainLooper()).post{
+                    getForegroundNF()
+                    NFManager.manager.notify(NFEnum.NF_SEARCH_VIDEO.position,NFManager.nfForeground!!)
+                    ContextCompat.startForegroundService(APP.instance,
+                        Intent(APP.instance, NFService::class.java)
+                    )
+                }
             }else{
                 AppLogs.dLog(NFManager.TAG,"前台服务 正在展示中不需要重复启动 ${tag}-${Build.VERSION.SDK_INT}")
             }
@@ -357,12 +380,12 @@ object NFManager {
     var timerJob: Job?=null
 
     fun notifyByTimerTask() {
-        if (allowShowNF()){
-            NFWorkManager.startNF()
-        }
         timerJob.jobCancel()
         timerJob = CoroutineScope(Dispatchers.IO).launch{
             appDataReset()
+            if (allowShowNF()){
+                NFWorkManager.startNF()
+            }
             NFShow.showForegroundNF()
             delay(10*1000)
             while (true) {

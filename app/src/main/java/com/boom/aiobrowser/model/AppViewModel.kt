@@ -16,6 +16,7 @@ import com.boom.aiobrowser.point.PointManager
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
+import com.boom.aiobrowser.tools.PointsManager
 import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.encryptECB
 import com.boom.aiobrowser.tools.getBeanByGson
@@ -85,6 +86,7 @@ class AppViewModel : BaseDataModel() {
                 sdf.setTimeZone(TimeZone.getTimeZone("GMT"))
                 val serverDate: Date = sdf.parse(dateStr)
                 serverTimestamp = serverDate.getTime()
+                AppLogs.dLog(PointsManager.TAG,"serverTime:${TimeManager.getSignTime(serverTimestamp)} localTime:${TimeManager.getSignTime(serverTimestamp)}")
                 timeBack.invoke(serverTimestamp)
             }.onFailure {
                 timeBack.invoke(0L)

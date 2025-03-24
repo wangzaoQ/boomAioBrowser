@@ -10,31 +10,19 @@
     <FrameLayout
         android:layout_width="82dp"
         android:layout_height="82dp">
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivToPointsBg"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@mipmap/bg_to_points"
-        android:scaleType="centerCrop"
-        ></androidx.appcompat.widget.AppCompatImageView>
-    <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerInside"
-        app:srcCompat="@mipmap/ic_to_points"></androidx.appcompat.widget.AppCompatImageView>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnim"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_gravity="center"
+            app:lottie_autoPlay="false"
+            app:lottie_fileName="animal_points.json"
+            app:lottie_loop="true"
+            />
     </FrameLayout>
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="18dp"
-        android:minHeight="18dp"
-        android:minWidth="65dp"
-        android:paddingHorizontal="4dp"
-        android:layout_marginBottom="2dp"
-        android:background="@drawable/shape_to_points"
-        android:text="@string/app_receive_points"
-        android:gravity="center"
-        android:textSize="9sp"
-        android:textColor="@color/white"
-        android:layout_marginTop="-25dp"
-        ></androidx.appcompat.widget.AppCompatTextView>
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -682,13 +682,14 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         var startY = 0
         var dragX = CacheManager.dragPointsX
         var dragY = CacheManager.dragPointsY
-        startX = dragX
+        startX = if (dragX == 0) {
+            DisplayUtils.getScreenWidth(this@MainActivity) - dp2px(85f) - dp2px(28f)
+        } else {
+            dragX
+        }
         startY = if (dragY == 0) {
-            DisplayUtils.getScreenHeight(this) - (BigDecimalUtils.div(
-                DisplayUtils.getScreenWidth(
-                    this
-                ).toDouble(), 3.0
-            ).toInt() * 2)
+            DisplayUtils.getScreenHeight(this) - (BigDecimalUtils.div(DisplayUtils.getScreenWidth(this).toDouble(), 3.0
+            ).toInt() * 3)
         } else {
             dragY
         }
@@ -728,17 +729,10 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 .registerCallback {
                     // 在此处设置view也可以，建议在setLayout进行view操作
                     createResult { isCreated, msg, _ ->
-                        var rotateAnim = RotateAnimation(
-                            0f,
-                            360f,
-                            RotateAnimation.RELATIVE_TO_SELF,
-                            0.5f,
-                            RotateAnimation.RELATIVE_TO_SELF,
-                            0.5f
-                        )
-//                        rotateAnim?.setRepeatCount(Animation.INFINITE)
-                        rotateAnim?.setDuration(3000)
-                        ivToPointsBg.startAnimation(rotateAnim)
+                        lottieAnim.apply {
+                            setAnimation("animal_points.json")
+                            playAnimation()
+                        }
                     }
                     show {
 
@@ -887,6 +881,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         APP.jumpLiveData.removeObservers(this)
         APP.topicJumpData.removeObservers(this)
         APP.downloadPageLiveData.removeObservers(this)
+        pointsPopBiding?.lottieAnim?.cancelAnimation()
         super.onDestroy()
     }
 }

@@ -185,8 +185,6 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         manager.showScreenAD(AD_POINT.aobws_tap_int,false)
     }
 
-
-
     private fun updateUI(index: Int) {
         var endIndex = index
 //        if (index == 2 ){
@@ -705,7 +703,26 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 // 传入View，传入布局文件皆可，如：MyCustomView(this)、R.layout.float_custom
                 .setLayout(root) {
                     root.setOneClick {
-                        jumpActivity<PointsActivity>()
+                        var from = when (acBinding.fragmentMain.currentItem) {
+                            1->{
+                                "search"
+                            }
+                            2->{
+                                "home"
+                            }
+                            3->{
+                                "news"
+                            }
+                            4->{
+                                "me"
+                            }
+                            else -> {
+                                "download"
+                            }
+                        }
+                        jumpActivity<PointsActivity>(Bundle().apply {
+                            putString(PointValueKey.from_type,from)
+                        })
                     }
                 }
                 .registerCallback {

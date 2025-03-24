@@ -6,6 +6,8 @@ import com.boom.aiobrowser.R
 import com.boom.aiobrowser.databinding.BrowserPopNoAdBinding
 import com.boom.aiobrowser.databinding.BrowserPopRewardedBinding
 import com.boom.aiobrowser.databinding.BrowserPopSignRejoinBinding
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
 import pop.basepopup.BasePopupWindow
 
 class SignRejoinPop(context: Context, var callBack: (type:Int) -> Unit) : BasePopupWindow(context)  {
@@ -27,6 +29,7 @@ class SignRejoinPop(context: Context, var callBack: (type:Int) -> Unit) : BasePo
                 dismiss()
             }
             tvConfirm.setOnClickListener {
+                PointEvent.posePoint(PointEventKey.daily_interrupt_rc)
                 callBack.invoke(0)
                 dismiss()
             }

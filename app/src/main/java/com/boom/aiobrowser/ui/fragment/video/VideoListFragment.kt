@@ -146,7 +146,8 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
             }
 //            AppLogs.dLog(VideoCacheUtils.TAG,"current:${list!!.get(index).mLRqPtKJX}")
         }
-        fBinding.rlIntercept.setOneClick {
+        fBinding.rlPlayRewarded.setOneClick {
+            PointEvent.posePoint(PointEventKey.rewarded_ads_play)
             var manager = AioADShowManager(rootActivity,ADEnum.REWARD_AD, tag = "视频播放激励") {
                 fBinding.rlIntercept.visibility = View.GONE
                 playVideo()
@@ -170,7 +171,9 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
         var allowShowRewarded = AioADDataManager.adAllowShowRewarded(videoUrl)
         if (allowShowRewarded&&(rootActivity as VideoListActivity).isContinueRewardedCount == 2){
             fBinding.rlIntercept.visibility = View.VISIBLE
+            GSYVideoManager.releaseAllVideos()
             hideDownloadPop()
+            PointEvent.posePoint(PointEventKey.rewarded_ads)
             return
         }else{
             showDownloadPop()

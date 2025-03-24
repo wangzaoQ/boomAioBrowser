@@ -258,8 +258,22 @@ object NFManager {
             }
             NFEnum.NF_POINTS_DAY0.menuName,NFEnum.NF_POINTS_DAY1.menuName,NFEnum.NF_POINTS_DAY3.menuName->{
                 from = enumName
-                PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
-                    putString(PointValueKey.push_type, enumName)
+                var fromType = when (enumName) {
+                    NFEnum.NF_POINTS_DAY0.menuName -> {
+                        "d0"
+                    }
+                    NFEnum.NF_POINTS_DAY1.menuName -> {
+                        "d1"
+                    }
+                    NFEnum.NF_POINTS_DAY3.menuName -> {
+                        "d2"
+                    }
+                    else -> {
+                        "other"
+                    }
+                }
+                PointEvent.posePoint(PointEventKey.points_push_c, Bundle().apply {
+                    putString(PointValueKey.push_type, fromType)
                 })
                 var id = NFEnum.NF_POINTS_DAY0.position
                 when (enumName) {

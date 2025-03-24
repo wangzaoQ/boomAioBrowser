@@ -204,4 +204,14 @@ class VideoPreActivity :BaseActivity<VideoActivityPreviewBinding>(){
         GSYVideoManager.releaseAllVideos()
         super.onDestroy()
     }
+
+    override fun onPause() {
+        super.onPause()
+        GSYVideoManager.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        GSYVideoManager.onResume()
+    }
 }

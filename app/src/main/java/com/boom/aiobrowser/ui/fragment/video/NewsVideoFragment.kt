@@ -99,7 +99,6 @@ class NewsVideoFragment :  BaseFragment<FragmentNewsVideoBinding>(){
                             viewModel.value.getNewsVideoList(enumName,list!!.get(index),dataList)
                         }
                     }
-//                    if (AioADDataManager.adAllowShowRewarded(dataList.get(position).vbreas?:""))return
                 }
             })
             adapter = videoListAdapter

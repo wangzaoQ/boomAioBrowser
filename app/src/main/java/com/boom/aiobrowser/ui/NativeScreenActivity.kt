@@ -46,14 +46,19 @@ class NativeScreenActivity :BaseActivity<BrowserActivityNativeScreenBinding>(){
 
     fun showNativeAD() {
         var enum_name = intent.getStringExtra("enum_name")
-        val data = if (enum_name == ADEnum.LAUNCH_AD.adName){
+        var data = if (enum_name == ADEnum.LAUNCH_AD.adName){
             AioADDataManager.getCacheAD(ADEnum.LAUNCH_AD)
         }else if (enum_name == ADEnum.INT_AD.adName){
             AioADDataManager.getCacheAD(ADEnum.INT_AD)
         }else{
             AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
         }
-
+        if (data == null){
+            data = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
+        }
+        if (data == null || data.adAny == null || (data!!.adAny is NativeAd).not()){
+            finish()
+        }
         AppLogs.dLog(
             AioADDataManager.TAG,
             "admob 广告展示:${enum_name}-id:${data?.adRequestData?.ktygzdzn} type:图片池"

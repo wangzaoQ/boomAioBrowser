@@ -346,8 +346,26 @@ object NFShow {
         }
     }
 
+    @SuppressLint("MissingPermission")
     fun showPointsNF(enum: NFEnum){
         if (nfAllow().not())return
+        var fromType = when (enum.menuName) {
+            NFEnum.NF_POINTS_DAY0.menuName -> {
+                "d0"
+            }
+            NFEnum.NF_POINTS_DAY1.menuName -> {
+                "d1"
+            }
+            NFEnum.NF_POINTS_DAY3.menuName -> {
+                "d2"
+            }
+            else -> {
+                "other"
+            }
+        }
+        PointEvent.posePoint(PointEventKey.points_push_t,Bundle().apply {
+            putString(PointValueKey.push_type,fromType)
+        })
         val smallRemote = NFViews.getPointsRemoteView(enum)
         val largeRemote = NFViews.getPointsRemoteView(enum, true)
         if (smallRemote == null || largeRemote == null)return

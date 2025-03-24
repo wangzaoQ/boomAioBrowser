@@ -163,7 +163,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
             if (allowPointResult){
                 allowPointResult = false
                 PointEvent.posePoint(PointEventKey.webpage_download_show, Bundle().apply {
-                    putString(PointValueKey.type,"have")
+                    putString(PointValueKey.from_type,"web")
                 })
             }
             if (jumpData?.autoDownload == true) {

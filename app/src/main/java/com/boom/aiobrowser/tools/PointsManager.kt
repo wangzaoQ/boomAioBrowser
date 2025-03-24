@@ -1,13 +1,18 @@
 package com.boom.aiobrowser.tools
 
+import android.os.Bundle
 import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.DailyQuestsData
 import com.boom.aiobrowser.data.PointsData
 import com.boom.aiobrowser.nf.NFWorkManager
+import com.boom.aiobrowser.point.PointEvent
+import com.boom.aiobrowser.point.PointEventKey
+import com.boom.aiobrowser.point.PointValueKey
 import com.ironsource.da
 import kotlinx.coroutines.Dispatchers
+import kotlin.math.abs
 
 object PointsManager {
 
@@ -322,6 +327,10 @@ object PointsManager {
                     CacheManager.currentUseTime = 0L
                     NFWorkManager.startOneWorkManager()
                     result.invoke(1)
+                    var day = TimeManager.getUserRetention(data.lastCheckInTime,System.currentTimeMillis())
+                    PointEvent.posePoint(PointEventKey.daily_interrupt_pop, Bundle().apply {
+                        putInt(PointValueKey.sign_day,abs(day))
+                    })
                     return@getCurrentTime
                 }
             }

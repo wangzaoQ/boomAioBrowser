@@ -149,6 +149,10 @@ object PointEventKey {
     const val all_noti_c = "all_noti_c"
     //通知触发
     const val all_noti_t = "all_noti_t"
+    //积分通知
+    const val points_push_t = "points_push_t"
+    const val points_push_c = "points_push_c"
+
     const val all_noti_theory_t = "all_noti_theory_t"
     //通知二次开启页面展示
     const val noti_confirm_pop = "noti_confirm_pop"
@@ -332,6 +336,24 @@ object PointEventKey {
 //    退出APP挽留弹窗【退出】点击
     const val exit_pop_exit = "exit_pop_exit"
 
+    //积分活动
+    const val points_act = "points_act"
+    //每日签到
+    const val daily_sign_in = "daily_sign_in"
+    const val daily_login = "daily_login"
+    const val points_news = "points_news"
+    const val points_dl = "points_dl"
+    const val points_watch = "points_watch"
+    const val points_ad_pop = "points_ad_pop"
+    //激励广告展示
+    const val rewarded_ads = "rewarded_ads"
+    //激励广告按钮点击
+    const val rewarded_ads_play = "rewarded_ads_play"
+    //打卡中断弹窗显示
+    const val daily_interrupt_pop = "daily_interrupt_pop"
+    //签到打断弹窗重启按钮点击
+    const val daily_interrupt_rc = "daily_interrupt_rc"
+
 }
 
 
@@ -367,6 +389,7 @@ object PointValueKey{
     const val load_time = "load_time"
     const val network = "network"
     const val stay_time = "stay_time"
+    const val sign_day = "sign_day"
 
 
 }

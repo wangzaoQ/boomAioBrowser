@@ -64,6 +64,9 @@ class VideoListActivity : BaseActivity<NewsActivityVideoListBinding>() {
         manager.addFragment(supportFragmentManager, NewsVideoFragment.newInstance(index,jsonString,enumName,fromType?:""),
             R.id.flRoot)
         saveStayTime = true
+        PointEvent.posePoint(PointEventKey.webpage_download_show, Bundle().apply {
+            putString(PointValueKey.from_type,fromType)
+        })
     }
     var dragBiding: BrowserDragLayoutBinding? = null
     var tips1: FirstDownloadTips? = null
@@ -255,8 +258,8 @@ class VideoListActivity : BaseActivity<NewsActivityVideoListBinding>() {
 
     private fun showDownloadPop() {
         popDown = DownLoadPop(this,1)
-        popDown?.createPop("video") {
-//        popDown?.createPop(fromType) {
+//        popDown?.createPop("video") {
+        popDown?.createPop(fromType) {
             updateDownloadButtonStatus( 1)
         }
         popDown?.setOnDismissListener(object : OnDismissListener() {

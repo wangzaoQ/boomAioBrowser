@@ -650,7 +650,7 @@ class NewsViewModel : BaseDataModel() {
                     if (idList.contains(newsList.get(i).itackl)){
                         continue
                     }
-                    if (newsList.get(i).vbreas == rewardedUrl){
+                    if (newsList.get(i).vbreas == rewardedUrl || newsList.get(i).vbreas.isNullOrEmpty()){
                         continue
                     }
                     videoList.add(newsList.get(i))

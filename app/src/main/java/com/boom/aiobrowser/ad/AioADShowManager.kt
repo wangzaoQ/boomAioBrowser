@@ -12,6 +12,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.get
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum.REWARD_AD
+import com.boom.aiobrowser.ad.AioADDataManager.getCacheAD
 import com.boom.aiobrowser.ad.AioADDataManager.platformMax
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.ADResultData
@@ -84,40 +86,49 @@ class AioADShowManager(
                 }
             }
         }
-        if (showDefaultAD){
-            if (AioADDataManager.adAllowShowScreen() && adResultData!=null){
-                if (CacheManager.showEveryDay >= 2 && CacheManager.dayShowSubTemp && adEnum != ADEnum.LAUNCH_AD){
+        if (adEnum == REWARD_AD){
+            var rewardAd = getCacheAD(REWARD_AD)
+            if (rewardAd == null){
+                adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "无缓存 或不在冷却范围内 ")
+            }else{
+                realShowScreenAD2(rewardAd,pointTag,adEnum.adName)
+            }
+        }else{
+            if (showDefaultAD){
+                if (AioADDataManager.adAllowShowScreen() && adResultData!=null){
+                    if (CacheManager.showEveryDay >= 2 && CacheManager.dayShowSubTemp && adEnum != ADEnum.LAUNCH_AD){
 //                SubTempPop(activity,showADBack = {
 //                    realShowScreenAD2(adResultData,pointTag)
 //                }).createPop()
-                    realShowScreenAD2(adResultData,pointTag)
+                        realShowScreenAD2(adResultData,pointTag,adEnum.adName)
+                    }else{
+                        realShowScreenAD2(adResultData,pointTag,adEnum.adName)
+                    }
                 }else{
-                    realShowScreenAD2(adResultData,pointTag)
-                }
-            }else{
-                var defaultAD = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
-                if (defaultAD!=null) {
-                    if (CacheManager.showEveryDay >= 2 && CacheManager.dayShowSubTemp && adEnum != ADEnum.LAUNCH_AD){
+                    var defaultAD = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
+                    if (defaultAD!=null) {
+                        if (CacheManager.showEveryDay >= 2 && CacheManager.dayShowSubTemp && adEnum != ADEnum.LAUNCH_AD){
 //                    SubTempPop(activity,showADBack = {
 //                        realShowScreenAD2(defaultAD,pointTag)
 //                    }).createPop()
-                        realShowScreenAD2(defaultAD,pointTag)
-                    }else{
-                        realShowScreenAD2(defaultAD,pointTag)
+                            realShowScreenAD2(defaultAD,pointTag,ADEnum.DEFAULT_AD.adName)
+                        }else{
+                            realShowScreenAD2(defaultAD,pointTag,ADEnum.DEFAULT_AD.adName)
+                        }
+                    } else {
+                        adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "无缓存 或不在冷却范围内 ")
                     }
-                } else {
-                    adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "无缓存 或不在冷却范围内 ")
                 }
-            }
-        }else{
-            if (AioADDataManager.adAllowShowScreen() && adResultData!=null){
-                if (CacheManager.showEveryDay >= 2 && CacheManager.dayShowSubTemp && adEnum != ADEnum.LAUNCH_AD){
+            }else{
+                if (AioADDataManager.adAllowShowScreen() && adResultData!=null){
+                    if (CacheManager.showEveryDay >= 2 && CacheManager.dayShowSubTemp && adEnum != ADEnum.LAUNCH_AD){
 //                SubTempPop(activity,showADBack = {
 //                    realShowScreenAD2(adResultData,pointTag)
 //                }).createPop()
-                    realShowScreenAD2(adResultData,pointTag)
-                }else{
-                    realShowScreenAD2(adResultData,pointTag)
+                        realShowScreenAD2(adResultData,pointTag,adEnum.adName)
+                    }else{
+                        realShowScreenAD2(adResultData,pointTag,adEnum.adName)
+                    }
                 }
             }
         }
@@ -128,7 +139,7 @@ class AioADShowManager(
         AioADDataManager.adCache.remove(adEnum)
     }
 
-    private fun realShowScreenAD2(adResultData:ADResultData,pointTag: String) {
+    private fun realShowScreenAD2(adResultData:ADResultData,pointTag: String,enumName:String) {
         if (adResultData.adShowType == 2){
             //native
             if (APP.instance.lifecycleApp.stack.size>0 && APP.instance.lifecycleApp.stack.get(APP.instance.lifecycleApp.stack.size-1) is BaseActivity<*>){
@@ -136,7 +147,7 @@ class AioADShowManager(
                 adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_SUCCESS, tag = "图片池广告加载完毕")
                 currentTopActivity.startActivity(Intent(currentTopActivity,NativeScreenActivity::class.java).apply {
                     putExtra("pointTag",pointTag)
-                    putExtra("enum_name",adEnum.adName)
+                    putExtra("enum_name",enumName)
                 })
             }else{
                 adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "没有有效activity")

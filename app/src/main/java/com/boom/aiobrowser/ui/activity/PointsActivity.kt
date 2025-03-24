@@ -145,11 +145,15 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
                 }
             }
             tvDailyLogin.setOneClick {
-                PointsManager.login{
-                    if (it == 0){
-                        ToastUtils.showShort(getString(R.string.app_success_receive))
-                        updateAllPoints()
-                        updateDailyQuests(tvDailyLogin)
+                if (CacheManager.pointsData.isDailyLogin){
+                    ToastUtils.showShort(getString(R.string.app_receive_points_already))
+                }else{
+                    PointsManager.login{
+                        if (it == 0){
+                            ToastUtils.showShort(getString(R.string.app_success_receive))
+                            updateAllPoints()
+                            updateDailyQuests(tvDailyLogin)
+                        }
                     }
                 }
             }
@@ -271,7 +275,11 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
                 for (i in 0 until llSignRoot2.childCount){
                     var childRoot = llSignRoot2.getChildAt(i) as LinearLayoutCompat
                     if (checkInCount == i){
-                        childRoot.setBackgroundResource(R.drawable.shape_check_in_check)
+                        if (pointsData.todaySignIn){
+                            childRoot.setBackgroundResource(R.drawable.shape_check_in_uncheck)
+                        }else{
+                            childRoot.setBackgroundResource(R.drawable.shape_check_in_check)
+                        }
                     }else if (checkInCount>i){
                         childRoot.setBackgroundResource(R.drawable.shape_check_in_uncheck)
                     }else{
@@ -287,14 +295,16 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
                             childRoot.setOneClick {
                                 ToastUtils.showShort(getString(R.string.app_sign_error))
                             }
+                            textView.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.color_black_C2C2C2))
+                            textView2.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.color_black_C2C2C2))
                         }else{
                             imageView.setImageResource(R.mipmap.ic_check2)
                             childRoot.setOneClick {
                                 tvSign.performClick()
                             }
+                            textView.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.red_FF1803))
+                            textView2.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.red_FF1803))
                         }
-                        textView.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.red_FF1803))
-                        textView2.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.red_FF1803))
                     }else if (checkInCount>i){
                         imageView.setImageResource(R.mipmap.ic_check0)
                         textView.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.color_black_C2C2C2))
@@ -311,41 +321,48 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
                         }
                     }
                 }
+                if (pointsData.checkInCount == 6){
+                    if (pointsData.todaySignIn){
+                        llSign7.setBackgroundResource(R.drawable.shape_check_in_uncheck)
+                        ivSign7.setImageResource(R.mipmap.ic_check4)
+                        tvSign7.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.color_black_C2C2C2))
+                        tvSign7Time.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.color_black_C2C2C2))
+                    }else{
+                        ivSign7.setImageResource(R.mipmap.ic_check3)
+                        llSign7.setBackgroundResource(R.drawable.shape_check_in_check)
+                        tvSign7.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.color_black_4C4C4C))
+                        tvSign7Time.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.color_black_4C4C4C))
+                    }
+                }else{
+                    ivSign7.setImageResource(R.mipmap.ic_check3)
+                    llSign7.setBackgroundResource(R.drawable.shape_check_in_uncheck)
+                    tvSign7.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.color_black_4C4C4C))
+                    tvSign7Time.setTextColor(ContextCompat.getColor(this@PointsActivity,R.color.color_black_4C4C4C))
+                }
             }
         }
     }
 
     override fun setShowView() {
-        appDataReset()
-        PointsManager.inspectSignIn{
-            addLaunch(success = {
-                withContext(Dispatchers.Main){
-                    if (it == -1){
-                        ToastUtils.showShort(R.string.app_net_error)
-                    }else if (it == 1){
-                        SignRejoinPop(this@PointsActivity){
-                            acBinding.tvSign.performClick()
-                        }.createPop()
-                    }
-                }
-            }, failBack = {})
-        }
         var content = "${getString(R.string.app_points_ad_free_for)} ${getString(R.string.app_points_2_hours)}"
         var content2 = "${getString(R.string.app_points_ad_free_for)} ${getString(R.string.app_points_30_m)}"
         acBinding.tvExchange1Content.setText(updateTextColor(content,getString(R.string.app_points_ad_free_for).length,content.length))
         acBinding.tvExchange2Content.setText(updateTextColor(content2,getString(R.string.app_points_ad_free_for).length,content2.length))
     }
 
+    var first = true
+
     private fun loadData() {
+        appDataReset()
         var data = CacheManager.pointsData
         acBinding.apply {
             tvPoints.text = "${data.allPoints}"
             tvSignDay.text = "${data.checkInCount}"
 
-            updateDailyPoints(tvDailyLoginPoints,getString(R.string.app_daily_login),data.dailyLoginPoints())
-            updateDailyPoints(tvReadNewsPoints,getString(R.string.app_points_read_news),data.newsPoints())
-            updateDailyPoints(tvDownloadVideoPoints,getString(R.string.app_points_completed_download),data.downloadVideoPoints())
-            updateDailyPoints(tvShowVideoPoints,getString(R.string.app_points_watch_video),data.showVideoPoints())
+            updateDailyPoints(tvDailyLoginPoints,getString(R.string.app_daily_login),PointsManager.DAILY_LOGIN_POINTS)
+            updateDailyPoints(tvReadNewsPoints,getString(R.string.app_points_read_news),PointsManager.READ_NEWS_POINTS)
+            updateDailyPoints(tvDownloadVideoPoints,getString(R.string.app_points_completed_download),PointsManager.DOWNLOAD_VIDEO_POINTS)
+            updateDailyPoints(tvShowVideoPoints,getString(R.string.app_points_watch_video),PointsManager.SHOW_VIDEO_POINTS)
 
             updateDailyQuests(acBinding.tvDailyLogin)
             updateDailyPoints(tvReadNews,getString(R.string.app_receive),data.newsPoints())
@@ -354,6 +371,20 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
             updateSignUI(data)
         }
         CacheManager.pointsData = data
+        PointsManager.inspectSignIn{
+            addLaunch(success = {
+                withContext(Dispatchers.Main){
+                    if (it == -1){
+                        ToastUtils.showShort(R.string.app_net_error)
+                    }else if (it == 1){
+                        updateSignUI(CacheManager.pointsData)
+                        SignRejoinPop(this@PointsActivity){
+                            acBinding.tvSign.performClick()
+                        }.createPop()
+                    }
+                }
+            }, failBack = {})
+        }
     }
 
     private fun updateDailyPoints(
@@ -367,12 +398,13 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
 
     private fun updateDailyQuests(textView: AppCompatTextView) {
         var pointsData = CacheManager.pointsData
-        textView.isEnabled = pointsData.isDailyLogin.not()
         if (pointsData.isDailyLogin.not()){
             textView.text = getString(R.string.app_receive)
+            textView.setBackgroundResource(R.drawable.shape_points_receive)
             updateDailyPoints(textView,getString(R.string.app_receive),pointsData.dailyLoginPoints())
         }else{
             textView.text = getString(R.string.app_done)
+            textView.setBackgroundResource(R.drawable.shape_points_done)
         }
     }
 

@@ -276,7 +276,10 @@ class DownLoadPop(context: Context,var fromType:Int,var backToDownload:Boolean =
     var isSelectedAll = false
     var tips2 :FirstDownloadTips?=null
 
+    var popFrom = ""
+
     fun createPop(from:String,callBack: () -> Unit) {
+        popFrom = from
         defaultBinding?.apply {
             root.postDelayed({
                 if (CacheManager.isFirstDownloadTips2) {
@@ -390,7 +393,7 @@ class DownLoadPop(context: Context,var fromType:Int,var backToDownload:Boolean =
         setBackground(R.color.color_70_black)
         showPopupWindow()
         PointEvent.posePoint(PointEventKey.webpage_download_pop, Bundle().apply {
-            putString(PointValueKey.from_type,from)
+            putString(PointValueKey.from_type,popFrom)
         })
     }
 
@@ -463,7 +466,9 @@ class DownLoadPop(context: Context,var fromType:Int,var backToDownload:Boolean =
     private fun clickDownload(data: VideoDownloadData) {
         data?.apply {
             if (data.downloadType!=VideoDownloadData.DOWNLOAD_NOT)return
-            PointEvent.posePoint(PointEventKey.webpage_download_pop_dl)
+            PointEvent.posePoint(PointEventKey.webpage_download_pop_dl, Bundle().apply {
+                putString(PointValueKey.from_type,popFrom)
+            })
             (context as BaseActivity<*>).addLaunch(success = {
                 var model = DownloadCacheManager.queryDownloadModel(data)
                 if (model == null) {

@@ -28,6 +28,7 @@ class SignRejoinPop(context: Context, var callBack: (type:Int) -> Unit) : BasePo
             }
             tvConfirm.setOnClickListener {
                 callBack.invoke(0)
+                dismiss()
             }
         }
         showPopupWindow()

@@ -400,5 +400,6 @@ object AD_POINT{
     const val aobws_newsclick_int = "aobws_newsclick_int"
     const val aobws_downclick_int = "aobws_downclick_int"
     const val aobws_downguide_int = "aobws_downguide_int"
+    const val aobws_tap_int = "aobws_tap_int"
     const val aobws_back = "aobws_back"
 }

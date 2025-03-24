@@ -17,6 +17,7 @@ import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.allowShowNF
+import com.boom.aiobrowser.tools.appDataReset
 import com.boom.aiobrowser.ui.activity.VideoPreActivity
 import com.boom.downloader.VideoDownloadManager
 import kotlinx.coroutines.CoroutineScope
@@ -74,6 +75,7 @@ class NFReceiver: BroadcastReceiver()  {
             }
             Intent.ACTION_USER_PRESENT ->{
                 CoroutineScope(Dispatchers.IO).launch{
+                    appDataReset()
                     if (allowShowNF()){
                         NFShow.showNewsNFFilter(NFEnum.NF_UNLOCK,NFManager.FROM_UNLOCK)
                         var day = TimeManager.getUserRetention(CacheManager.firstUseTime, CacheManager.currentUseTime)

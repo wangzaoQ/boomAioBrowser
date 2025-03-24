@@ -449,6 +449,8 @@
     <string name="app_sign_error">Sign in failed</string>
     <string name="app_sign_complete">Sign in completed</string>
     <string name="app_success_receive">Successfully received</string>
+    <string name="app_receive_points_already">Points received</string>
+    <string name="app_sign_interrupt">Continuous sign-in interrupted</string>
 
 
 </resources>

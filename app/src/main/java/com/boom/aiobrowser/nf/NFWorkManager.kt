@@ -45,8 +45,13 @@ object NFWorkManager {
         var day = TimeManager.getUserRetention(CacheManager.firstUseTime,CacheManager.currentUseTime)
         if (day == 0 && CacheManager.isFirstShowD0NF){
             CacheManager.isFirstShowD0NF = false
-            startOneWork(APP.instance,D0Work::class.java,NFEnum.NF_POINTS_DAY0.menuName,1*60*1000)
+            startOneWork(APP.instance,D0Work::class.java,NFEnum.NF_POINTS_DAY0.menuName,if (APP.isDebug)1*60*1000 else 60*60*1000)
         }
+    }
+
+
+    fun startOneWorkManager(){
+        startOneWork(APP.instance,D0Work::class.java,NFEnum.NF_POINTS_DAY0.menuName,if (APP.isDebug)1*60*1000 else 60*60*1000)
     }
 
     fun start(context: Context, clazz: Class<out BaseNotifyWork>, workTag:String, delayMilli: Long, time:Long) {

@@ -51,7 +51,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivTop"
-        android:text="@string/app_no_ad_tips"
+        android:text="@string/app_sign_interrupt"
         style="@style/app_text_bold"
         ></androidx.appcompat.widget.AppCompatTextView>
     <androidx.appcompat.widget.AppCompatTextView

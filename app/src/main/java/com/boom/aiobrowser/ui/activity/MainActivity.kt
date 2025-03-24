@@ -181,8 +181,8 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 })
             }
         }
-//        var manager = AioADShowManager(this, ADEnum.INT_AD, tag = "底部按钮切换") {}
-//        manager.showScreenAD(AD_POINT.aobws_tap_int,false)
+        var manager = AioADShowManager(this, ADEnum.INT_AD, tag = "底部按钮切换") {}
+        manager.showScreenAD(AD_POINT.aobws_tap_int,false)
     }
 
 

@@ -256,6 +256,7 @@ class VideoListActivity : BaseActivity<NewsActivityVideoListBinding>() {
     private fun showDownloadPop() {
         popDown = DownLoadPop(this,1)
         popDown?.createPop("video") {
+//        popDown?.createPop(fromType) {
             updateDownloadButtonStatus( 1)
         }
         popDown?.setOnDismissListener(object : OnDismissListener() {

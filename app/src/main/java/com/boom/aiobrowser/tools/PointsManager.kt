@@ -5,6 +5,7 @@ import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.DailyQuestsData
 import com.boom.aiobrowser.data.PointsData
+import com.boom.aiobrowser.nf.NFWorkManager
 import com.ironsource.da
 import kotlinx.coroutines.Dispatchers
 
@@ -178,15 +179,21 @@ object PointsManager {
                 result.invoke(-2)
                 return@getCurrentTime
             }
-            if (it == 0L){
-                AppLogs.dLog(TAG,"exchange error 获取服务器时间失败")
-                result.invoke(-1)
-                return@getCurrentTime
+            var allowContinue = false
+            if (APP.isDebug){
+                allowContinue = CacheManager.testSignIn
             }
-            if (TimeManager.isSameMinutes(it).not()){
-                AppLogs.dLog(TAG,"exchange error 当前时间和本地时间不同")
-                result.invoke(-1)
-                return@getCurrentTime
+            if (allowContinue.not()){
+                if (it == 0L){
+                    AppLogs.dLog(TAG,"exchange error 获取服务器时间失败")
+                    result.invoke(-1)
+                    return@getCurrentTime
+                }
+                if (TimeManager.isSameMinutes(it).not()){
+                    AppLogs.dLog(TAG,"exchange error 当前时间和本地时间不同")
+                    result.invoke(-1)
+                    return@getCurrentTime
+                }
             }
             if (type == 0){
                 if ((System.currentTimeMillis()-data.tempVipDuration)>data.tempVipStartTime){
@@ -199,7 +206,6 @@ object PointsManager {
                     data.tempNoADDuration = 0
                 }
             }
-
             if (type == 0){
                 data.tempVipDuration+= 3*24*60*60*1000
                 data.tempVipStartTime = System.currentTimeMillis()
@@ -214,6 +220,7 @@ object PointsManager {
                 data.allPoints -= 100
             }
             CacheManager.pointsData = data
+            AppLogs.dLog(TAG,"当前临时免广告到期时间为:${TimeManager.getSignTime(data.tempNoADStartTime+data.tempNoADDuration)}")
             result.invoke(type)
         }
     }
@@ -289,18 +296,31 @@ object PointsManager {
         }
         APP.instance.appModel.getCurrentTime {
             if (data.lastCheckInTime>0){
-                if (it == 0L){
-                    AppLogs.dLog(TAG,"检查签到 获取服务器时间失败")
-                    result.invoke(-1)
-                    return@getCurrentTime
+                var allowContinue = false
+                if (APP.isDebug){
+                    allowContinue = CacheManager.testSignIn
                 }
-                if (TimeManager.isSameMinutes(it).not()){
-                    AppLogs.dLog(TAG,"检查签到 当前时间和本地时间不同")
-                    result.invoke(-1)
-                    return@getCurrentTime
+                if (allowContinue.not()){
+                    if (it == 0L){
+                        AppLogs.dLog(TAG,"检查签到 获取服务器时间失败")
+                        result.invoke(-1)
+                        return@getCurrentTime
+                    }
+                    if (TimeManager.isSameMinutes(it).not()){
+                        AppLogs.dLog(TAG,"检查签到 当前时间和本地时间不同")
+                        result.invoke(-1)
+                        return@getCurrentTime
+                    }
                 }
-                if (TimeManager.areConsecutiveDays(data.lastCheckInTime,it).not()){
+                if (TimeManager.areConsecutiveDays(data.lastCheckInTime,System.currentTimeMillis()).not()){
                     AppLogs.dLog(TAG,"检查签到 上次签到时间和服务器时间不连续")
+                    var pointsData = CacheManager.pointsData
+                    pointsData.todaySignIn = false
+                    pointsData.checkInCount = 0
+                    CacheManager.pointsData = pointsData
+                    CacheManager.firstUseTime = System.currentTimeMillis()
+                    CacheManager.currentUseTime = 0L
+                    NFWorkManager.startOneWorkManager()
                     result.invoke(1)
                     return@getCurrentTime
                 }

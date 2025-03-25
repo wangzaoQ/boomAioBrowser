@@ -207,6 +207,7 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
             }
         }, failBack = {})
         PointsManager.readNews(newData?.itackl?:"")
+        GSYVideoManager.releaseAllVideos()
     }
 
     override fun onDestroy() {

@@ -18,6 +18,7 @@ import com.boom.aiobrowser.tools.CacheManager.adLastTime
 import com.boom.aiobrowser.tools.CacheManager.isBUser
 import com.boom.aiobrowser.tools.TimeManager
 import com.boom.aiobrowser.tools.UIManager
+import com.boom.aiobrowser.tools.UIManager.isSpecialUsers
 import com.boom.aiobrowser.tools.appDataReset
 import com.google.android.gms.ads.MobileAds
 
@@ -240,8 +241,8 @@ object AioADDataManager {
     }
 
     fun adAllowShowRewarded(videoUrl:String = ""):Boolean{
-        if (CacheManager.isBUser){
-            AppLogs.dLog(TAG,"买量用户不展示")
+        if (CacheManager.isBUser || isSpecialUsers()){
+            AppLogs.dLog(TAG,"买量用户/特殊用户不展示")
             return false
         }
         if (getCacheAD(REWARD_AD) == null){

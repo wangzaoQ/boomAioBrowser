@@ -324,7 +324,9 @@ object PointsManager {
                     pointsData.checkInCount = 0
                     CacheManager.pointsData = pointsData
                     CacheManager.firstUseTime = System.currentTimeMillis()
-                    CacheManager.currentUseTime = 0L
+                    CacheManager.currentUseTime = System.currentTimeMillis()
+                    CacheManager.isFirstShowD1NF = true
+                    CacheManager.isFirstShowD3NF = true
                     NFWorkManager.startOneWorkManager()
                     result.invoke(1)
                     var day = TimeManager.getUserRetention(data.lastCheckInTime,System.currentTimeMillis())

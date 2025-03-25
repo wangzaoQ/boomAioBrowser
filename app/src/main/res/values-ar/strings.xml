@@ -408,4 +408,47 @@
     <string name="app_clear_all_tabs">إغلاق جميع التبويبات</string>
     <string name="app_exit_app">الخروج من التطبيق</string>
     <string name="net_error">فشل الطلب، يرجى المحاولة مرة أخرى</string>
+
+    <string name="app_rewarded_tips">شاهد إعلانًا بمكافأة لتنزيل هذا الفيديو</string>
+    <string name="app_unlock_video">افتح لمشاهدة الفيديو</string>
+    <string name="app_play">تشغيل</string>
+    <string name="app_points_center">مركز النقاط</string>
+    <string name="app_my_points">نقاطي</string>
+    <string name="app_check_in_tips">تسجيلات دخول متواصلة</string>
+    <string name="app_day">يوم</string>
+    <string name="sign_in_now">سجل الدخول الآن</string>
+    <string name="app_sign_in7">نقاط عالية للاستمتاع بـ VIP 🎉</string>
+    <string name="app_daily_quests">المهام اليومية</string>
+    <string name="app_daily_login">تسجيل الدخول اليومي</string>
+    <string name="app_receive">أكمل</string>
+    <string name="app_claim">يطالب</string>
+    <string name="app_points_read_news">قراءة %d من الأخبار</string>
+    <string name="app_points_completed_download">اكتمل تنزيل %d</string>
+    <string name="app_points_watch_video">مشاهدة %d من الفيديو</string>
+    <string name="app_points_redemption">استبدال النقاط</string>
+    <string name="app_points_ad_free_for">خالٍ من الإعلانات لمدة </string>
+    <string name="app_points_2_hours">ساعتان</string>
+    <string name="app_points_30_m">30 دقيقة</string>
+    <string name="app_exchange">تبادل</string>
+    <string name="app_completed">مكتمل</string>
+    <string name="sign_in_error">فشل تسجيل الدخول</string>
+    <string name="app_exchange_error">خطأ في التبادل</string>
+    <string name="app_exchange_refuse">نقاط غير كافية</string>
+    <string name="app_points_vip3">خالٍ من الإعلانات لمدة 30 دقيقة</string>
+    <string name="app_nf_points_d0">تنتهي صلاحيته اليوم الساعة 23:59!</string>
+    <string name="app_act_now">تصرف الآن</string>
+    <string name="app_nf_points_d1">مهمة اليوم غير مكتملة!</string>
+    <string name="app_nf_points_d3">عرض محدود المدة بقيمة 200 نقطة!</string>
+    <string name="app_nf_points_d0_content">تهانينا! لقد ربحت 100 نقطة للمستخدمين الجدد!</string>
+    <string name="app_nf_points_d1_content">أكمل القراءة للاستمتاع بمزايا العضوية المجانية</string>
+    <string name="app_nf_points_d3_content">تسجيل الدخول الثالث على التوالي. سيؤدي مقاطعة تسجيل الدخول إلى إعادة تعيين المكافآت</string>
+    <string name="app_no_ad_tips">تم استبدال الرصيد بنجاح</string>
+    <string name="app_receive_points">استلام النقاط</string>
+    <string name="app_points_rejoin">انضمام مجددًا +50</string>
+    <string name="app_net_error">خطأ في الشبكة</string>
+    <string name="app_sign_error">فشل تسجيل الدخول</string>
+    <string name="app_sign_complete">اكتمل تسجيل الدخول</string>
+    <string name="app_success_receive">تم الاستلام بنجاح</string>
+    <string name="app_receive_points_already">تم استلام النقاط</string>
+    <string name="app_sign_interrupt">تمت مقاطعة تسجيل الدخول المستمر</string>
 </resources>

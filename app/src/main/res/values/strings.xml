@@ -410,6 +410,7 @@
     <string name="app_clear_all_tabs">Close all tabs</string>
     <string name="app_exit_app">Exit the App</string>
     <string name="net_error">Request failed, please try again</string>
+
     <string name="app_rewarded_tips">Watch a Rewarded ad to download this video</string>
     <string name="app_unlock_video">Unlock to watch video</string>
     <string name="app_play">Play</string>

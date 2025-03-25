@@ -325,13 +325,13 @@ object NFManager {
         AppLogs.dLog(NFManager.TAG,"前台服务 允许展示 ${tag}-${Build.VERSION.SDK_INT}")
         runCatching {
             if (APP.instance.showForeground.not()){
-                Handler(Looper.getMainLooper()).post{
+                Handler(Looper.getMainLooper()).postDelayed({
                     getForegroundNF()
                     NFManager.manager.notify(NFEnum.NF_SEARCH_VIDEO.position,NFManager.nfForeground!!)
                     ContextCompat.startForegroundService(APP.instance,
                         Intent(APP.instance, NFService::class.java)
                     )
-                }
+                },3000)
             }else{
                 AppLogs.dLog(NFManager.TAG,"前台服务 正在展示中不需要重复启动 ${tag}-${Build.VERSION.SDK_INT}")
             }
@@ -395,12 +395,12 @@ object NFManager {
 
     fun notifyByTimerTask() {
         timerJob.jobCancel()
+        NFShow.showForegroundNF()
         timerJob = CoroutineScope(Dispatchers.IO).launch{
             appDataReset()
             if (allowShowNF()){
                 NFWorkManager.startNF()
             }
-            NFShow.showForegroundNF()
             delay(10*1000)
             while (true) {
                 if (allowShowNF()){

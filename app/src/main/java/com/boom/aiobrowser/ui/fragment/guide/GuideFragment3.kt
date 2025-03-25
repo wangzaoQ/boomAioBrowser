@@ -60,8 +60,8 @@ class GuideFragment3 :BaseFragment<BrowserFragmentVideoGuide3Binding>() {
                 PointEvent.posePoint(PointEventKey.download_tutorial_try)
                 var data = JumpDataManager.getCurrentJumpData(tag = "DownloadVideoGuidePop guide")
                 data.jumpType = JumpConfig.JUMP_WEB
-                data.jumpUrl = getString(R.string.video_local_title)
-                data.jumpTitle = getString(R.string.video_local_title)
+                data.jumpUrl = rootActivity.getString(R.string.video_local_title)
+                data.jumpTitle = rootActivity.getString(R.string.video_local_title)
 //                data.jumpUrl = "https://www.pexels.com/videos"
                 JumpDataManager.updateCurrentJumpData(data,tag = "DownloadVideoGuidePop guide")
                 APP.jumpLiveData.postValue(data)

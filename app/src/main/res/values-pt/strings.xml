@@ -414,4 +414,47 @@
     <string name="app_exit_app">Sair do aplicativo</string>
 
     <string name="net_error">A solicitação falhou, tente novamente</string>
+
+    <string name="app_rewarded_tips">Assista a um anúncio premiado para baixar este vídeo</string>
+    <string name="app_unlock_video">Desbloquear para assistir ao vídeo</string>
+    <string name="app_play">Tocar</string>
+    <string name="app_points_center">Central de pontos</string>
+    <string name="app_my_points">Meus Pontos</string>
+    <string name="app_check_in_tips">Check-ins contínuos</string>
+    <string name="app_day">dia</string>
+    <string name="sign_in_now">Fazer login agora</string>
+    <string name="app_sign_in7">Muitos pontos para aproveitar o VIP 🎉</string>
+    <string name="app_daily_quests">Quests Diárias</string>
+    <string name="app_daily_login">Login diário</string>
+    <string name="app_receive">Concluir</string>
+    <string name="app_claim">Reivindicar</string>
+    <string name="app_points_read_news">Ler %d notícias</string>
+    <string name="app_points_completed_download">Download concluído %d</string>
+    <string name="app_points_watch_video">Assistir %d vídeo</string>
+    <string name="app_points_redemption">Resgate de Pontos</string>
+    <string name="app_points_ad_free_for">Sem anúncios por </string>
+    <string name="app_points_2_hours">2 horas</string>
+    <string name="app_points_30_m">30 minutos</string>
+    <string name="app_exchange">Trocar</string>
+    <string name="app_completed">Concluído</string>
+    <string name="sign_in_error">Falha ao fazer login</string>
+    <string name="app_exchange_error">Erro de troca</string>
+    <string name="app_exchange_refuse">Pontos insuficientes</string>
+    <string name="app_points_vip3">Sem anúncios por 30 minutos</string>
+    <string name="app_nf_points_d0">Expira hoje às 23:59!</string>
+    <string name="app_act_now">Aja agora</string>
+    <string name="app_nf_points_d1">A tarefa de hoje está incompleta!</string>
+    <string name="app_nf_points_d3">Oferta por tempo limitado de 200 pontos!</string>
+    <string name="app_nf_points_d0_content">Parabéns! Você ganhou 100 pontos de novato!</string>
+    <string name="app_nf_points_d1_content">Complete a leitura para aproveitar os benefícios da assinatura gratuita</string>
+    <string name="app_nf_points_d3_content">Terceiro login consecutivo.Interromper o login irá redefinir as recompensas</string>
+    <string name="app_no_ad_tips">Resgate de benefícios bem-sucedido</string>
+    <string name="app_receive_points">Receber Pontos</string>
+    <string name="app_points_rejoin">Retornar +50</string>
+    <string name="app_net_error">erro de rede</string>
+    <string name="app_sign_error">Falha ao fazer login</string>
+    <string name="app_sign_complete">Login concluído</string>
+    <string name="app_success_receive">Recebido com sucesso</string>
+    <string name="app_receive_points_already">Pontos recebidos</string>
+    <string name="app_sign_interrupt">Login contínuo interrompido</string>
 </resources>

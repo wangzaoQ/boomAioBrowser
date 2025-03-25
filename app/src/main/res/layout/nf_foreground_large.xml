@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    android:id="@+id/llRoot"
+    android:id="@+id/llRootForeground"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="80dp"
@@ -20,7 +20,7 @@
             android:layout_height="29dp"
             android:gravity="center"
             android:text="@string/app_name"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:textSize="16sp"></TextView>
     </LinearLayout>
 
@@ -31,34 +31,34 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvSearch"
+            android:id="@+id/tvSearchForeground"
             android:layout_width="match_parent"
             android:layout_height="29dp"
             android:layout_marginStart="7dp"
             android:layout_weight="1"
             android:text="@string/app_search_video"
             android:textSize="12sp"
-            android:textColor="#80000000"
+            android:textColor="@color/black"
             android:gravity="center_vertical"
             android:paddingStart="8dp"
             android:background="@drawable/shape_nf_search"></TextView>
 
         <ImageView
-            android:id="@+id/ivX"
+            android:id="@+id/ivXForeground"
             android:layout_width="29dp"
             android:layout_height="29dp"
             android:layout_marginStart="15dp"
             android:src="@mipmap/ic_nf_x"></ImageView>
 
         <ImageView
-            android:id="@+id/ivIns"
+            android:id="@+id/ivInsForeground"
             android:layout_width="29dp"
             android:layout_height="29dp"
             android:layout_marginStart="15dp"
             android:src="@mipmap/ic_nf_ins"></ImageView>
 
         <ImageView
-            android:id="@+id/ivDownload"
+            android:id="@+id/ivDownloadForeground"
             android:layout_width="29dp"
             android:layout_height="29dp"
             android:layout_marginStart="15dp"

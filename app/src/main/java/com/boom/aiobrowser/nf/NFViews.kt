@@ -3,6 +3,7 @@ package com.boom.aiobrowser.nf
 import android.view.View
 import android.widget.RemoteViews
 import com.boom.aiobrowser.APP
+import com.boom.aiobrowser.BuildConfig
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.NewsData
@@ -125,26 +126,26 @@ object NFViews {
         }else{
             R.layout.nf_foreground_small
         }
-        var remoteViews = RemoteViews(APP.instance.packageName, layoutId)
+        var remoteViews = RemoteViews(BuildConfig.APPLICATION_ID, layoutId)
         remoteViews.apply {
             setOnClickPendingIntent(
-                R.id.llRoot,
+                R.id.llRootForeground,
                 getJumpIntent(0,null,enum)
             )
             setOnClickPendingIntent(
-                R.id.tvSearch,
+                R.id.tvSearchForeground,
                 getJumpIntent(1,null,enum)
             )
             setOnClickPendingIntent(
-                R.id.ivX,
+                R.id.ivXForeground,
                 getJumpIntent(2,null,enum)
             )
             setOnClickPendingIntent(
-                R.id.ivIns,
+                R.id.ivInsForeground,
                 getJumpIntent(3,null,enum)
             )
             setOnClickPendingIntent(
-                R.id.ivDownload,
+                R.id.ivDownloadForeground,
                 getJumpIntent(4,null,enum)
             )
         }

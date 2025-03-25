@@ -8,11 +8,14 @@ import android.view.View
 import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserDragLayoutBinding
 import com.boom.aiobrowser.databinding.NewsActivityVideoListBinding
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -314,5 +317,12 @@ class VideoListActivity : BaseActivity<NewsActivityVideoListBinding>() {
         super.onResume()
         AppLogs.dLog(VideoPreloadManager.TAG,"VideoListActivity onResume")
         GSYVideoManager.onResume()
+    }
+
+    override fun onBackPressed() {
+        var manager = AioADShowManager(this, ADEnum.INT_AD, tag = "视频播放返回") {
+            finish()
+        }
+        manager.showScreenAD(AD_POINT.aobws_return_int)
     }
 }

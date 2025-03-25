@@ -30,6 +30,36 @@ class PointsData {
        return PointsManager.DAILY_LOGIN_POINTS
     }
 
+    fun newReadCount():Int{
+        var unclaimedCounts = 0
+        readNewsList.forEach {
+            if (it.isReceive.not()){
+                unclaimedCounts+= 1
+            }
+        }
+        return unclaimedCounts
+    }
+
+    fun showVideoCount():Int{
+        var unclaimedCounts = 0
+        showVideoList.forEach {
+            if (it.isReceive.not()){
+                unclaimedCounts+= 1
+            }
+        }
+        return unclaimedCounts
+    }
+
+    fun downVideoCount():Int{
+        var unclaimedCounts = 0
+        downloadVideoList.forEach {
+            if (it.isReceive.not()){
+                unclaimedCounts+= 1
+            }
+        }
+        return unclaimedCounts
+    }
+
     fun newsPoints():Int{
         var unclaimedPoints:Int = 0
         readNewsList.forEach {

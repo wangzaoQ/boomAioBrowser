@@ -108,7 +108,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                     .ready() //设置 WebSettings。
                     .go(getUrl()) //WebView载入该url地址的页面并显示。
             }
-            if (jumpData?.jumpUrl == getString(R.string.video_local_title)){
+            if (jumpData?.jumpUrl == rootActivity.getString(R.string.video_local_title)){
                 mAgentWeb!!.webCreator.webView.loadDataWithBaseURL(null, HTML_LOCAL, "text/html", "utf-8", null);
             }
 
@@ -585,7 +585,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                 fragmentTAG,
                 "mUrl:" + url + " onPageStarted  target:" + getUrl()
             )
-            if (jumpData?.jumpUrl == getString(R.string.video_local_title)){
+            if (jumpData?.jumpUrl == rootActivity.getString(R.string.video_local_title)){
                 loadWebOnPageStared(jumpData?.jumpUrl?:"")
             }else{
                 loadWebOnPageStared(url)
@@ -595,7 +595,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             rootActivity.addLaunch(success = {
                 WebScan.getImg(realUrl)
             }, failBack = {})
-            if (jumpData?.jumpUrl == getString(R.string.video_local_title)){
+            if (jumpData?.jumpUrl == rootActivity.getString(R.string.video_local_title)){
                 addGuide()
             }
 //            if (url == getUrl()) {
@@ -648,7 +648,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
         uiData.videoResultId = "${VideoDownloadUtils.computeMD5(url)}"
         var videoDownloadData = VideoDownloadData().createDefault(
             videoId = "${VideoDownloadUtils.computeMD5(url)}",
-            fileName = getString(R.string.video_local_title),
+            fileName = rootActivity.getString(R.string.video_local_title),
             url = url,
             imageUrl = url,
             paramsMap = HashMap<String,Any>(),

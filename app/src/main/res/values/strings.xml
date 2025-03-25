@@ -421,10 +421,11 @@
     <string name="app_sign_in7">High points to enjoy VIP 🎉</string>
     <string name="app_daily_quests">Daily Quests</string>
     <string name="app_daily_login">Daily login</string>
-    <string name="app_receive">Get</string>
-    <string name="app_points_read_news">Read 1 news</string>
-    <string name="app_points_completed_download">Completed 1 download</string>
-    <string name="app_points_watch_video">Watch 1 video</string>
+    <string name="app_receive">Complete</string>
+    <string name="app_claim">Claim</string>
+    <string name="app_points_read_news">Read %d news</string>
+    <string name="app_points_completed_download">Completed %d download</string>
+    <string name="app_points_watch_video">Watch %d video</string>
     <string name="app_points_redemption">Points Redemption</string>
     <string name="app_points_ad_free_for">Ad-free for </string>
     <string name="app_points_2_hours">2 hours</string>

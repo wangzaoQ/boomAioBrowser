@@ -125,20 +125,21 @@
                             android:textSize="13sp"></androidx.appcompat.widget.AppCompatTextView>
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/tvSign"
                         android:layout_width="wrap_content"
                         android:layout_height="32dp"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="13dp"
                         android:layout_marginEnd="11dp"
+                        android:textAllCaps="false"
                         android:background="@drawable/selector_points_exchange"
                         android:paddingHorizontal="15dp"
                         android:paddingTop="6dp"
                         android:paddingBottom="6dp"
                         android:text="@string/sign_in_now"
                         android:textColor="@drawable/selector_color_points_exchange"
-                        android:textSize="12sp"></androidx.appcompat.widget.AppCompatTextView>
+                        android:textSize="12sp"></androidx.appcompat.widget.AppCompatButton>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/llSignRoot1"
@@ -312,7 +313,7 @@
                             android:layout_marginHorizontal="4.5dp"
                             android:layout_weight="1"
                             android:background="@drawable/shape_check_in_uncheck"
-                            android:gravity="center_horizontal"
+                            android:gravity="center"
                             android:orientation="vertical">
 
                             <androidx.appcompat.widget.LinearLayoutCompat
@@ -338,17 +339,17 @@
                                     android:textSize="13sp"></androidx.appcompat.widget.AppCompatTextView>
                             </androidx.appcompat.widget.LinearLayoutCompat>
 
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="2.5dp"
-                                android:layout_marginTop="3dp"
-                                android:background="@drawable/shape_day7_tips"
-                                android:paddingTop="0.5dp"
-                                android:paddingBottom="0.5dp"
-                                android:text="@string/app_sign_in7"
-                                android:textColor="#E7710A"
-                                android:textSize="9sp"></androidx.appcompat.widget.AppCompatTextView>
+<!--                            <androidx.appcompat.widget.AppCompatTextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginHorizontal="2.5dp"-->
+<!--                                android:layout_marginTop="3dp"-->
+<!--                                android:background="@drawable/shape_day7_tips"-->
+<!--                                android:paddingTop="0.5dp"-->
+<!--                                android:paddingBottom="0.5dp"-->
+<!--                                android:text="@string/app_sign_in7"-->
+<!--                                android:textColor="#E7710A"-->
+<!--                                android:textSize="9sp"></androidx.appcompat.widget.AppCompatTextView>-->
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/tvSign7Time"
@@ -383,6 +384,7 @@
                         android:textSize="15sp"></androidx.appcompat.widget.AppCompatTextView>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/llDailyLogin"
                         android:layout_width="match_parent"
                         android:layout_height="58dp"
                         android:paddingStart="10dp"
@@ -410,11 +412,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="26dp"
                             android:layout_marginEnd="10dp"
-                            android:background="@drawable/selector_bg_daily_quests"
+                            android:background="@drawable/shape_84r_5755d9"
+                            android:textColor="@color/white"
+                            android:textAllCaps="false"
                             android:gravity="center"
                             android:minWidth="72dp"
+                            android:enabled="false"
                             android:text="@string/app_receive"
-                            android:textColor="@drawable/selector_color_daily_quests"
                             android:textSize="12sp"></androidx.appcompat.widget.AppCompatTextView>
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -425,6 +429,7 @@
                         android:background="#F5F5F5"></View>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/llReadNews"
                         android:layout_width="match_parent"
                         android:layout_height="58dp"
                         android:paddingStart="10dp"
@@ -452,11 +457,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="26dp"
                             android:layout_marginEnd="10dp"
-                            android:background="@drawable/selector_bg_daily_quests"
+                            android:background="@drawable/shape_84r_5755d9"
+                            android:textColor="@color/white"
+                            android:textAllCaps="false"
+                            android:enabled="false"
                             android:gravity="center"
                             android:minWidth="72dp"
                             android:text="@string/app_receive"
-                            android:textColor="@drawable/selector_color_daily_quests"
                             android:textSize="12sp"></androidx.appcompat.widget.AppCompatTextView>
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -467,9 +474,11 @@
                         android:background="#F5F5F5"></View>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/llDownload"
                         android:layout_width="match_parent"
                         android:layout_height="58dp"
-                        android:layout_marginStart="10dp"
+                        android:paddingStart="10dp"
+                        android:background="@drawable/shape_ripple_item"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -493,11 +502,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="26dp"
                             android:layout_marginEnd="10dp"
-                            android:background="@drawable/selector_bg_daily_quests"
+                            android:background="@drawable/shape_84r_5755d9"
+                            android:textColor="@color/white"
+                            android:textAllCaps="false"
                             android:gravity="center"
                             android:minWidth="72dp"
+                            android:enabled="false"
                             android:text="@string/app_receive"
-                            android:textColor="@drawable/selector_color_daily_quests"
                             android:textSize="12sp"></androidx.appcompat.widget.AppCompatTextView>
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -508,9 +519,11 @@
                         android:background="#F5F5F5"></View>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/llWatchVideo"
                         android:layout_width="match_parent"
                         android:layout_height="58dp"
-                        android:layout_marginStart="10dp"
+                        android:paddingStart="10dp"
+                        android:background="@drawable/shape_ripple_item"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -534,11 +547,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="26dp"
                             android:layout_marginEnd="10dp"
-                            android:background="@drawable/selector_bg_daily_quests"
+                            android:background="@drawable/shape_84r_5755d9"
+                            android:textColor="@color/white"
+                            android:textAllCaps="false"
                             android:gravity="center"
                             android:minWidth="72dp"
+                            android:enabled="false"
                             android:text="@string/app_receive"
-                            android:textColor="@drawable/selector_color_daily_quests"
                             android:textSize="12sp"></androidx.appcompat.widget.AppCompatTextView>
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -623,9 +638,11 @@
                         android:background="#F5F5F5"></View>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/llVip2Exchange"
+                        android:background="@drawable/shape_ripple_item"
                         android:layout_width="match_parent"
                         android:layout_height="74dp"
-                        android:layout_marginStart="10dp"
+                        android:paddingStart="10dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -665,6 +682,7 @@
                             style="@style/app_text_bold"
                             android:layout_width="wrap_content"
                             android:layout_height="26dp"
+                            android:textAllCaps="false"
                             android:layout_marginEnd="10dp"
                             android:background="@drawable/selector_points_exchange"
                             android:gravity="center"
@@ -681,9 +699,11 @@
                         android:background="#F5F5F5"></View>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/llVip3Exchange"
+                        android:background="@drawable/shape_ripple_item"
                         android:layout_width="match_parent"
                         android:layout_height="74dp"
-                        android:layout_marginStart="10dp"
+                        android:paddingStart="10dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -718,18 +738,19 @@
                                 android:textSize="11sp"></androidx.appcompat.widget.AppCompatTextView>
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/tvVip3Exchange"
                             style="@style/app_text_bold"
                             android:layout_width="wrap_content"
                             android:layout_height="26dp"
                             android:layout_marginEnd="10dp"
                             android:background="@drawable/selector_points_exchange"
+                            android:textColor="@drawable/selector_color_points_exchange"
+                            android:textAllCaps="false"
                             android:gravity="center"
                             android:minWidth="72dp"
                             android:text="@string/app_exchange"
-                            android:textColor="@drawable/selector_color_points_exchange"
-                            android:textSize="12sp"></androidx.appcompat.widget.AppCompatTextView>
+                            android:textSize="12sp"></androidx.appcompat.widget.AppCompatButton>
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>

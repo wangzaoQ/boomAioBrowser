@@ -40,4 +40,15 @@ class DownloadActivity : BaseActivity<VideoActivityDownloadBinding>() {
             })
         }
     }
+
+    override fun onBackPressed() {
+        runCatching {
+            var homePageDownloadFragment = supportFragmentManager.findFragmentById(R.id.flSearch)
+            if (homePageDownloadFragment!=null){
+                (homePageDownloadFragment as HomePageDownloadFragment).fBinding.ivBack.performClick()
+            }
+        }.onFailure {
+            super.onBackPressed()
+        }
+    }
 }

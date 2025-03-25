@@ -6,6 +6,7 @@ import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import androidx.activity.viewModels
+import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.LinearLayoutCompat
@@ -14,11 +15,14 @@ import androidx.core.view.get
 import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.PointsData
 import com.boom.aiobrowser.databinding.BrowserActivityPointsBinding
 import com.boom.aiobrowser.model.NewsViewModel
 import com.boom.aiobrowser.other.ParamsConfig
+import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
@@ -47,7 +51,10 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
     override fun setListener() {
         acBinding.apply {
             ivBack.setOneClick {
-                finish()
+                var manager = AioADShowManager(this@PointsActivity, ADEnum.INT_AD, tag = "积分页面") {
+                    finish()
+                }
+                manager.showScreenAD(AD_POINT.aobws_return_int)
             }
             tvSign.setOneClick {
                 appDataReset()
@@ -70,13 +77,13 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
             tvVip1Exchange.setOneClick {
                 exchange(0)
             }
-            tvVip2Exchange.setOneClick {
+            llVip2Exchange.setOneClick {
                 exchange(1)
             }
-            tvVip3Exchange.setOneClick {
+            llVip3Exchange.setOneClick {
                 exchange(2)
             }
-            tvReadNews.setOneClick {
+            llReadNews.setOneClick {
                 PointEvent.posePoint(PointEventKey.points_news)
                 PointsManager.receiveReadNewsPoints{
                     if (it == 0){
@@ -103,11 +110,11 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
                     }else{
                         ToastUtils.showShort(getString(R.string.app_success_receive))
                         updateAllPoints()
-                        updateDailyPoints(tvReadNews,getString(R.string.app_receive),CacheManager.pointsData.newsPoints())
+                        loadData()
                     }
                 }
             }
-            tvDownloadVideo.setOneClick {
+            llDownload.setOneClick {
                 PointEvent.posePoint(PointEventKey.points_dl)
                 PointsManager.receiveDownloadVideoPoints{
                     if (it == 0){
@@ -126,11 +133,11 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
                     }else{
                         ToastUtils.showShort(getString(R.string.app_success_receive))
                         updateAllPoints()
-                        updateDailyPoints(tvDownloadVideo,getString(R.string.app_receive),CacheManager.pointsData.downloadVideoPoints())
+                        loadData()
                     }
                 }
             }
-            tvShowVideo.setOneClick {
+            llWatchVideo.setOneClick {
                 PointEvent.posePoint(PointEventKey.points_watch)
                 PointsManager.receiveShowVideoPoints{
                     if (it == 0){
@@ -149,11 +156,11 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
                     }else{
                         ToastUtils.showShort(getString(R.string.app_success_receive))
                         updateAllPoints()
-                        updateDailyPoints(tvShowVideo,getString(R.string.app_receive),CacheManager.pointsData.showVideoPoints())
+                        loadData()
                     }
                 }
             }
-            tvDailyLogin.setOneClick {
+            llDailyLogin.setOneClick {
                 PointEvent.posePoint(PointEventKey.daily_login)
                 if (CacheManager.pointsData.isDailyLogin){
                     ToastUtils.showShort(getString(R.string.app_receive_points_already))
@@ -162,7 +169,7 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
                         if (it == 0){
                             ToastUtils.showShort(getString(R.string.app_success_receive))
                             updateAllPoints()
-                            updateDailyQuests(tvDailyLogin)
+                            loadData()
                         }
                     }
                 }
@@ -378,16 +385,43 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
         acBinding.apply {
             tvPoints.text = "${data.allPoints}"
             tvSignDay.text = "${data.checkInCount}"
+            var dailyContent = "${getString(R.string.app_daily_login)} +${PointsManager.DAILY_LOGIN_POINTS}"
+            tvDailyLoginPoints.setText(updateTextColor(dailyContent,getString(R.string.app_daily_login).length+1,dailyContent.length))
+            var newsCount = data.newReadCount()
+            if (newsCount == 0){
+                var newsStart = String.format(getString(R.string.app_points_read_news),1)
+                var newContent = "${newsStart} +${1*PointsManager.READ_NEWS_POINTS}"
+                tvReadNewsPoints.setText(updateTextColor(newContent,newsStart.length+1,newContent.length))
+            }else{
+                var newsStart = String.format(getString(R.string.app_points_read_news),newsCount)
+                var newContent = "${newsStart} +${newsCount*PointsManager.READ_NEWS_POINTS}"
+                tvReadNewsPoints.setText(updateTextColor(newContent,newsStart.length+1,newContent.length))
+            }
+            var downloadCount = data.downVideoCount()
+            if (downloadCount == 0){
+                var downloadStart = String.format(getString(R.string.app_points_completed_download),1)
+                var downloadContent = "${downloadStart} +${1*PointsManager.DOWNLOAD_VIDEO_POINTS}"
+                tvDownloadVideoPoints.setText(updateTextColor(downloadContent,downloadStart.length+1,downloadContent.length))
+            }else{
+                var downloadStart = String.format(getString(R.string.app_points_completed_download),downloadCount)
+                var downloadContent = "${downloadStart} +${downloadCount*PointsManager.DOWNLOAD_VIDEO_POINTS}"
+                tvDownloadVideoPoints.setText(updateTextColor(downloadContent,downloadStart.length+1,downloadContent.length))
+            }
+            var showVideoCount = data.showVideoCount()
+            if (showVideoCount == 0){
+                var showVideoStart = String.format(getString(R.string.app_points_watch_video),1)
+                var showVideoContent = "${showVideoStart} +${1*PointsManager.SHOW_VIDEO_POINTS}"
+                tvShowVideoPoints.setText(updateTextColor(showVideoContent,showVideoStart.length+1,showVideoContent.length))
+            }else{
+                var showVideoStart = String.format(getString(R.string.app_points_watch_video),showVideoCount)
+                var showVideoContent = "${showVideoStart} +${showVideoCount*PointsManager.SHOW_VIDEO_POINTS}"
+                tvShowVideoPoints.setText(updateTextColor(showVideoContent,showVideoStart.length+1,showVideoContent.length))
+            }
 
-            updateDailyPoints(tvDailyLoginPoints,getString(R.string.app_daily_login),PointsManager.DAILY_LOGIN_POINTS)
-            updateDailyPoints(tvReadNewsPoints,getString(R.string.app_points_read_news),PointsManager.READ_NEWS_POINTS)
-            updateDailyPoints(tvDownloadVideoPoints,getString(R.string.app_points_completed_download),PointsManager.DOWNLOAD_VIDEO_POINTS)
-            updateDailyPoints(tvShowVideoPoints,getString(R.string.app_points_watch_video),PointsManager.SHOW_VIDEO_POINTS)
-
-            updateDailyQuests(acBinding.tvDailyLogin)
-            updateDailyPoints(tvReadNews,getString(R.string.app_receive),data.newsPoints())
-            updateDailyPoints(tvDownloadVideo,getString(R.string.app_receive),data.downloadVideoPoints())
-            updateDailyPoints(tvShowVideo,getString(R.string.app_receive),data.showVideoPoints())
+            updateDailyPoints(tvDailyLogin,data.isDailyLogin.not())
+            updateDailyPoints(tvReadNews,data.newsPoints()>0)
+            updateDailyPoints(tvDownloadVideo,data.downloadVideoPoints()>0)
+            updateDailyPoints(tvShowVideo,data.showVideoPoints()>0)
             updateSignUI(data)
         }
         CacheManager.pointsData = data
@@ -407,26 +441,25 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
         }
     }
 
-    private fun updateDailyPoints(
-        textView: AppCompatTextView,
-        content: String,
-        points: Int
-    ) {
-        textView.text = "${content}  +${points}"
-        textView.setText(updateTextColor(textView.text.toString(),content.length+2,textView.text.length))
+    override fun onBackPressed() {
+        acBinding.ivBack.performClick()
     }
 
-    private fun updateDailyQuests(textView: AppCompatTextView) {
-        var pointsData = CacheManager.pointsData
-        if (pointsData.isDailyLogin.not()){
-            textView.text = getString(R.string.app_receive)
-            textView.setBackgroundResource(R.drawable.shape_points_receive)
-            updateDailyPoints(textView,getString(R.string.app_receive),pointsData.dailyLoginPoints())
+    private fun updateDailyPoints(
+        textView: AppCompatTextView,
+        enable:Boolean
+    ) {
+        if (enable){
+            textView.text = getString(R.string.app_claim)
+            textView.setBackgroundResource(R.drawable.shape_84r_5755d9)
+            textView.setTextColor(ContextCompat.getColor(this,R.color.white))
         }else{
-            textView.text = getString(R.string.app_done)
-            textView.setBackgroundResource(R.drawable.shape_points_done)
+            textView.text = getString(R.string.app_completed)
+            textView.setBackgroundResource(R.drawable.shape_84r_f4f4ff)
+            textView.setTextColor(ContextCompat.getColor(this,R.color.color_blue_B5B5EA))
         }
     }
+
 
     fun updateTextColor(content:String,startIndex:Int,endIndex:Int):SpannableStringBuilder{
         var s = SpannableStringBuilder(content)

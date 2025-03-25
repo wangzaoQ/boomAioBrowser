@@ -49,12 +49,7 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
 
     override fun setListener() {
         fBinding.ivBack.setOneClick {
-            var manager = AioADShowManager(rootActivity, ADEnum.INT_AD, tag = "视频播放返回") {
-                AppLogs.dLog(fragmentTAG,"VideoListFragment 执行finish1")
-                rootActivity.finish()
-                AppLogs.dLog(fragmentTAG,"VideoListFragment 执行finish2")
-            }
-            manager.showScreenAD(AD_POINT.aobws_return_int)
+            rootActivity.onBackPressed()
         }
     }
 

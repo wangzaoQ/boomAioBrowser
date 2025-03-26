@@ -120,36 +120,41 @@ object NFViews {
         return remoteViews
     }
 
-    fun getForegroundRemoteView(enum: NFEnum,isLargeView:Boolean=false): RemoteViews {
-        var layoutId = if (isLargeView){
-            R.layout.nf_foreground_large
-        }else{
-            R.layout.nf_foreground_small
+    fun getForegroundRemoteView(enum: NFEnum,isLargeView:Boolean=false): RemoteViews? {
+        runCatching {
+            var layoutId = if (isLargeView){
+                R.layout.nf_foreground_large
+            }else{
+                R.layout.nf_foreground_small
+            }
+            var remoteViews = RemoteViews(BuildConfig.APPLICATION_ID, layoutId)
+            remoteViews.apply {
+                setOnClickPendingIntent(
+                    R.id.llRootForeground,
+                    getJumpIntent(0,null,enum)
+                )
+                setOnClickPendingIntent(
+                    R.id.tvSearchForeground,
+                    getJumpIntent(1,null,enum)
+                )
+                setOnClickPendingIntent(
+                    R.id.ivXForeground,
+                    getJumpIntent(2,null,enum)
+                )
+                setOnClickPendingIntent(
+                    R.id.ivInsForeground,
+                    getJumpIntent(3,null,enum)
+                )
+                setOnClickPendingIntent(
+                    R.id.ivDownloadForeground,
+                    getJumpIntent(4,null,enum)
+                )
+            }
+            return remoteViews
+        }.onFailure {
+
         }
-        var remoteViews = RemoteViews(BuildConfig.APPLICATION_ID, layoutId)
-        remoteViews.apply {
-            setOnClickPendingIntent(
-                R.id.llRootForeground,
-                getJumpIntent(0,null,enum)
-            )
-            setOnClickPendingIntent(
-                R.id.tvSearchForeground,
-                getJumpIntent(1,null,enum)
-            )
-            setOnClickPendingIntent(
-                R.id.ivXForeground,
-                getJumpIntent(2,null,enum)
-            )
-            setOnClickPendingIntent(
-                R.id.ivInsForeground,
-                getJumpIntent(3,null,enum)
-            )
-            setOnClickPendingIntent(
-                R.id.ivDownloadForeground,
-                getJumpIntent(4,null,enum)
-            )
-        }
-        return remoteViews
+        return null
     }
 
     fun getNewsRemoteView(enum: NFEnum, data: NewsData, isLargeView:Boolean=false,newsList:MutableList<NewsData>?=null): RemoteViews {

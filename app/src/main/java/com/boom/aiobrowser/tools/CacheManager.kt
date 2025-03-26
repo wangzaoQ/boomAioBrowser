@@ -30,6 +30,7 @@ object CacheManager {
 
     val mmkv = MMKV.mmkvWithID("${BuildConfig.APPLICATION_ID}kv", MMKV.MULTI_PROCESS_MODE)
     const val KV_FIRST_START = "KV_FIRST_START"
+    const val KV_FIRST_SHOW_FOREGROUND = "KV_FIRST_SHOW_FOREGROUND"
     const val KV_FIRST_SHOW_DO_NF = "KV_FIRST_SHOW_DO_NF"
     const val KV_FIRST_SHOW_D1_NF = "KV_FIRST_SHOW_D1_NF"
     const val KV_FIRST_SHOW_D3_NF = "KV_FIRST_SHOW_D3_NF"
@@ -188,6 +189,13 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_FIRST_START, value)
+        }
+    var showForeground: Int
+        get() {
+            return mmkv.decodeInt(KV_FIRST_SHOW_FOREGROUND, 0)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_SHOW_FOREGROUND, value)
         }
     var isFirstShowD0NF: Boolean
         get() {

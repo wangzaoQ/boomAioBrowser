@@ -219,7 +219,7 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
             if (pointsData.todaySignIn){
                 signInCount+=1
                 tvSign.isEnabled = false
-                tvSign.text = this@PointsActivity.getString(R.string.app_completed)
+                tvSign.text = this@PointsActivity.getString(R.string.app_receive)
             }else{
                 tvSign.isEnabled = true
                 tvSign.text = this@PointsActivity.getString(R.string.sign_in_now)
@@ -432,14 +432,18 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
                         ToastUtils.showShort(R.string.app_net_error)
                     }else if (it == 1){
                         updateSignUI(CacheManager.pointsData)
-                        SignRejoinPop(this@PointsActivity){
+                        signRejoinPop?.dismiss()
+                        signRejoinPop = SignRejoinPop(this@PointsActivity){
                             acBinding.tvSign.performClick()
-                        }.createPop()
+                        }
+                        signRejoinPop?.createPop()
                     }
                 }
             }, failBack = {})
         }
     }
+
+    var signRejoinPop:SignRejoinPop?=null
 
     override fun onBackPressed() {
         acBinding.ivBack.performClick()
@@ -454,8 +458,8 @@ class PointsActivity: BaseActivity<BrowserActivityPointsBinding>() {
             textView.setBackgroundResource(R.drawable.shape_84r_5755d9)
             textView.setTextColor(ContextCompat.getColor(this,R.color.white))
         }else{
-            textView.text = getString(R.string.app_completed)
-            textView.setBackgroundResource(R.drawable.shape_84r_f4f4ff)
+            textView.text = getString(R.string.app_receive)
+            textView.setBackgroundResource(R.drawable.shape_points_receive)
             textView.setTextColor(ContextCompat.getColor(this,R.color.color_blue_B5B5EA))
         }
     }

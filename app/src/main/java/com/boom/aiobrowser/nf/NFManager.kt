@@ -322,16 +322,23 @@ object NFManager {
         if (isAndroid14()){
 //            if (XXPermissions.isGranted(APP.instance, Permissions.FOREGROUND_SERVICE_DATA_SYNC, Permission.ACCESS_COARSE_LOCATION).not())return
         }
-        AppLogs.dLog(NFManager.TAG,"前台服务 允许展示 ${tag}-${Build.VERSION.SDK_INT}")
+//        if (RomUtils.isOneplus() && CacheManager.showForeground <=1){
+        if (CacheManager.showForeground <=1){
+            AppLogs.dLog(NFManager.TAG,"前台服务 第一次不启动")
+            return
+        }
+//        AppLogs.dLog(NFManager.TAG,"前台服务 允许展示 ${tag}-${Build.VERSION.SDK_INT}")
         runCatching {
             if (APP.instance.showForeground.not()){
                 Handler(Looper.getMainLooper()).postDelayed({
-                    getForegroundNF()
-                    NFManager.manager.notify(NFEnum.NF_SEARCH_VIDEO.position,NFManager.nfForeground!!)
-                    ContextCompat.startForegroundService(APP.instance,
-                        Intent(APP.instance, NFService::class.java)
-                    )
-                },3000)
+                    var nf = getForegroundNF()
+                    if (nf!=null){
+                        NFManager.manager.notify(NFEnum.NF_SEARCH_VIDEO.position,NFManager.nfForeground!!)
+                        ContextCompat.startForegroundService(APP.instance,
+                            Intent(APP.instance, NFService::class.java)
+                        )
+                    }
+                },1000)
             }else{
                 AppLogs.dLog(NFManager.TAG,"前台服务 正在展示中不需要重复启动 ${tag}-${Build.VERSION.SDK_INT}")
             }

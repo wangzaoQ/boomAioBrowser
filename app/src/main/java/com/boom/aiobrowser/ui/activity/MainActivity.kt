@@ -377,28 +377,26 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             updateUI(intent)
             fManager.addFragmentTag(supportFragmentManager,this,R.id.fragmentStart,"StartFragment")
         }
-        showForeground()
     }
 
     var foregroundJob:Job?=null
 
     private fun showForeground() {
-        if (isAndroid12()){
-            foregroundJob.jobCancel()
-            foregroundJob = addLaunch(success = {
-                while (APP.instance.lifecycleApp.isBackGround()){
-                    delay(1000)
-                }
-                runCatching {
-                    NFShow.showForegroundNF()
-                }
-            }, failBack = {})
-        }
+        foregroundJob.jobCancel()
+        foregroundJob = addLaunch(success = {
+            while (this@MainActivity.getActivityStatus().not()){
+                delay(1000)
+            }
+            runCatching {
+                NFShow.showForegroundNF()
+            }
+        }, failBack = {})
     }
 
     fun hideStart(isNormal: Boolean) {
         APP.instance.appModel.getWebConfig()
         APP.instance.isHideSplash = true
+        var isFirstStart = CacheManager.isFirstStart
         var allowShowPop = true
         // 0 默认  1 browser 2 news
         var jumpType = 0
@@ -626,6 +624,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
                 }
             })
         }else{
+            showForeground()
             showPopCount++
             showDownloadGuide(showPopCount, allowShowPop,jumpType)
         }

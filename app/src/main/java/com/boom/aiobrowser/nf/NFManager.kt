@@ -312,10 +312,10 @@ object NFManager {
     }
 
     @SuppressLint("MissingPermission")
-    fun startForeground(tag: String) {
+    fun startForeground(tag: String,forceShow:Boolean = false) {
         AppLogs.dLog(NFManager.TAG,"前台服务 触发 ${tag}-${Build.VERSION.SDK_INT}")
         if (nfAllow().not())return
-        if (isAndroid12() ){
+        if (isAndroid12() && forceShow.not()){
             AppLogs.dLog(NFManager.TAG,"大于12 不允许后台展示前台服务${Build.VERSION.SDK_INT}")
             return
         }

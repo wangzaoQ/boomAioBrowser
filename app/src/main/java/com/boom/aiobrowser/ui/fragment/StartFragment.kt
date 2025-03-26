@@ -245,7 +245,7 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
         PointEvent.posePoint(PointEventKey.nn_session)
         APP.instance.getWebConfig()
         NFManager.requestNotifyPermission(WeakReference((context as BaseActivity<*>)), onSuccess = {
-            NFShow.showForegroundNF()
+            showForeground()
         }, onFail = {})
 
         if (CacheManager.isSubscribeMember){
@@ -280,6 +280,20 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
             PointsManager.resetTempVip{}
         },0)
     }
+    var foregroundJob:Job?=null
+
+    private fun showForeground() {
+        foregroundJob.jobCancel()
+        foregroundJob = rootActivity.addLaunch(success = {
+            while (rootActivity.getActivityStatus().not()){
+                delay(500)
+            }
+            runCatching {
+                NFShow.showForegroundNF(true)
+            }
+        }, failBack = {})
+    }
+
 
     var dataIntent :Intent?=null
 

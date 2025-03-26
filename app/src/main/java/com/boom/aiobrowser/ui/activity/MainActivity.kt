@@ -385,10 +385,10 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         foregroundJob.jobCancel()
         foregroundJob = addLaunch(success = {
             while (this@MainActivity.getActivityStatus().not()){
-                delay(1000)
+                delay(500)
             }
             runCatching {
-                NFShow.showForegroundNF()
+                NFShow.showForegroundNF(true)
             }
         }, failBack = {})
     }

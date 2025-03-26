@@ -209,10 +209,10 @@ object NFShow {
     }
 
     @SuppressLint("MissingPermission")
-    fun showForegroundNF(){
+    fun showForegroundNF(forceShow:Boolean = false){
         if (nfAllow().not())return
         runCatching {
-            NFManager.startForeground("showForegroundNF")
+            NFManager.startForeground("showForegroundNF",forceShow)
         }.onFailure {
             AppLogs.eLog(NFManager.TAG,it.stackTraceToString())
         }
@@ -374,14 +374,16 @@ object NFShow {
     }
 
     fun getForegroundNF(): Notification? {
-        val smallRemote = NFViews.getForegroundRemoteView(NFEnum.NF_SEARCH_VIDEO)
-        val largeRemote = NFViews.getForegroundRemoteView(NFEnum.NF_SEARCH_VIDEO, true)
-        if (smallRemote == null || largeRemote == null){
-            return null
+        if (NFManager.nfForeground == null){
+            val smallRemote = NFViews.getForegroundRemoteView(NFEnum.NF_SEARCH_VIDEO)
+            val largeRemote = NFViews.getForegroundRemoteView(NFEnum.NF_SEARCH_VIDEO, true)
+            if (smallRemote == null || largeRemote == null){
+                return null
+            }
+            var bulider = createBuilder(NFEnum.NF_SEARCH_VIDEO,smallRemote,largeRemote)
+            bulider.setOngoing(true)
+            NFManager.nfForeground = bulider.build()
         }
-        var bulider = createBuilder(NFEnum.NF_SEARCH_VIDEO,smallRemote,largeRemote)
-        bulider.setOngoing(true)
-        NFManager.nfForeground = bulider.build()
         return NFManager.nfForeground
     }
 

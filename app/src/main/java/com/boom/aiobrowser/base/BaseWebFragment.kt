@@ -69,6 +69,8 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
     var locationLoadResourceList = mutableListOf<String>()
     var isFirst = true
+
+    var allowPointResult = true
 //    var guideList = mutableListOf<>()
 
     fun initWeb(){
@@ -106,7 +108,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                     .ready() //设置 WebSettings。
                     .go(getUrl()) //WebView载入该url地址的页面并显示。
             }
-            if (jumpData?.jumpUrl == getString(R.string.video_local_title)){
+            if (jumpData?.jumpUrl == rootActivity.getString(R.string.video_local_title)){
                 mAgentWeb!!.webCreator.webView.loadDataWithBaseURL(null, HTML_LOCAL, "text/html", "utf-8", null);
             }
 
@@ -154,15 +156,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             fragmentWebReference.get()?.rootActivity?.addLaunch(success = {
                 allow = true
                 var hostList :MutableList<String>?=null
-                if (kind == "ERROR"){
-                    PointEvent.posePoint(PointEventKey.webpage_download_show, Bundle().apply {
-                        putString(PointValueKey.type,"no_have")
-                    })
-                }else{
-                    PointEvent.posePoint(PointEventKey.webpage_download_show, Bundle().apply {
-                        putString(PointValueKey.type,"have")
-                    })
-                }
+
                 var url = ""
                 withContext(Dispatchers.Main){
                     if (fragmentWebReference.get()?.allowShowTips() == true){
@@ -202,6 +196,15 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                             AppLogs.dLog("shouldInterceptRequest","js 无视频大小 url:${url}")
                             return@forEach
                         }
+                        var hostList = extractDomain(url)
+                        if (WebScan.isXhaMaster(hostList)){
+                            AppLogs.dLog("shouldInterceptRequest","过滤调广告 url:${it.url}")
+                            if (it.format == "m3u8" && (it.size ?: 0) <= 10*1024*1024){
+                                AppLogs.dLog("shouldInterceptRequest","js 无视频大小 url:${url}")
+                                return@forEach
+                            }
+                        }
+
                         hostList?.apply {
                             if (WebScan.isContinueMp4Host(this) && it.format == "mp4"){
                                 AppLogs.dLog("shouldInterceptRequest","js 过滤mp4")
@@ -455,6 +458,8 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
         }
     }
 
+    var receiveTitle :String? = ""
+
     protected var webChromeClient : WebChromeClient = object : WebChromeClient() {
         override fun onProgressChanged(view:WebView,  newProgress:Int) {
             super.onProgressChanged(view, newProgress)
@@ -463,6 +468,11 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
 
         override fun getDefaultVideoPoster(): Bitmap? {
             return Bitmap.createBitmap(10, 10, Bitmap.Config.RGB_565)
+        }
+
+        override fun onReceivedTitle(view: WebView?, title: String?) {
+            super.onReceivedTitle(view, title)
+            receiveTitle = title
         }
     }
 
@@ -504,36 +514,38 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
                 webUrl = getUrl()
             }
             rootActivity.addLaunch(success = {
-                    if (nonVideoExtensions.any { requestUrl.contains(it, true) }.not()){
-                        AppLogs.dLog("shouldInterceptRequest","原生过滤非视频格式后 url:${requestUrl}")
-                        if(WebScan.loadResourceList.contains(requestUrl).not() && locationLoadResourceList.contains(requestUrl).not()){
-                            locationLoadResourceList.add(requestUrl)
-                            var realUrl = ""
-                            var cookieManager = CookieManager.getInstance()
-                            var cookie = cookieManager.getCookie(requestUrl)?:""
-                            withContext(Dispatchers.Main){
-                                if (cookie.isNullOrEmpty()){
-                                    cookie = cookieManager.getCookie(getRealParseUrl())?:""
-                                }
-                                realUrl = getRealParseUrl()
+                if (nonVideoExtensions.any { requestUrl.contains(it, true) }.not()){
+                    AppLogs.dLog("shouldInterceptRequest","原生过滤非视频格式后 url:${requestUrl}")
+                    if(WebScan.loadResourceList.contains(requestUrl).not() && locationLoadResourceList.contains(requestUrl).not()){
+                        locationLoadResourceList.add(requestUrl)
+                        var realUrl = ""
+                        var cookieManager = CookieManager.getInstance()
+                        var cookie = cookieManager.getCookie(requestUrl)?:""
+                        withContext(Dispatchers.Main){
+                            if (cookie.isNullOrEmpty()){
+                                cookie = cookieManager.getCookie(getRealParseUrl())?:""
                             }
-                            var hostList = extractDomain(webUrl)
-                            if (WebScan.isXhaMaster(hostList)){
+                            realUrl = getRealParseUrl()
+                        }
+                        var hostList = extractDomain(webUrl)
+                        if (WebScan.isXhaMaster(hostList)){
+                            runCatching {
                                 var sourceUrl = WebScan.getQueryParam(requestUrl,"sourceURL")?:""
                                 if (sourceUrl.contains("m3u8")){
                                     requestUrl = sourceUrl
                                 }
                             }
-                            AppLogs.dLog(
-                                "shouldInterceptRequest",
-                                "mWebViewClient shouldInterceptRequest:${requestUrl} cookie:${cookie}"
-                            )
-                            WebScan.getResourceInfo(requestUrl,cookie,realUrl,hostList)
-                        }else{
-                            AppLogs.dLog("shouldInterceptRequest","原生重复回调 url:${requestUrl}")
                         }
+                        AppLogs.dLog(
+                            "shouldInterceptRequest",
+                            "mWebViewClient shouldInterceptRequest:${requestUrl} cookie:${cookie}"
+                        )
+                        WebScan.getResourceInfo(requestUrl,cookie,realUrl,hostList)
+                    }else{
+                        AppLogs.dLog("shouldInterceptRequest","原生重复回调 url:${requestUrl}")
                     }
-                }, failBack = {})
+                }
+            }, failBack = {})
 
 //            request?.url?.apply {
 //                if (WebScan.isTikTok(this.toString())){
@@ -574,12 +586,13 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             WebScan.loadResourceList.clear()
             locationLoadResourceList.clear()
             CacheManager.videoDownloadTempList = mutableListOf()
-
+            PointEvent.posePoint(PointEventKey.webpage_show)
+            allowPointResult = true
             AppLogs.dLog(
                 fragmentTAG,
                 "mUrl:" + url + " onPageStarted  target:" + getUrl()
             )
-            if (jumpData?.jumpUrl == getString(R.string.video_local_title)){
+            if (jumpData?.jumpUrl == rootActivity.getString(R.string.video_local_title)){
                 loadWebOnPageStared(jumpData?.jumpUrl?:"")
             }else{
                 loadWebOnPageStared(url)
@@ -589,7 +602,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
             rootActivity.addLaunch(success = {
                 WebScan.getImg(realUrl)
             }, failBack = {})
-            if (jumpData?.jumpUrl == getString(R.string.video_local_title)){
+            if (jumpData?.jumpUrl == rootActivity.getString(R.string.video_local_title)){
                 addGuide()
             }
 //            if (url == getUrl()) {
@@ -642,7 +655,7 @@ abstract class BaseWebFragment<V :ViewBinding> :BaseFragment<V>(){
         uiData.videoResultId = "${VideoDownloadUtils.computeMD5(url)}"
         var videoDownloadData = VideoDownloadData().createDefault(
             videoId = "${VideoDownloadUtils.computeMD5(url)}",
-            fileName = getString(R.string.video_local_title),
+            fileName = rootActivity.getString(R.string.video_local_title),
             url = url,
             imageUrl = url,
             paramsMap = HashMap<String,Any>(),

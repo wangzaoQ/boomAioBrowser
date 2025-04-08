@@ -309,6 +309,10 @@ object PointEventKey {
     //资源视频download点击
     const val download_tab_dl = "download_tab_dl"
 
+    const val webpage_show = "webpage_show"
+    const val all_noti_theory_t = "all_noti_theory_t"
+
+
 }
 
 

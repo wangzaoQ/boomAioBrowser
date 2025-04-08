@@ -56,6 +56,7 @@ object NFManager {
     val videoNFMap = LinkedHashMap<String,Int>()
     val videoTimeMap = HashMap<String,Long>()
 
+    @Volatile
     var nfForeground:Notification?=null
     var defaultNewsList:MutableList<NewsData>?=null
 
@@ -99,7 +100,6 @@ object NFManager {
             AppLogs.dLog(NFManager.TAG,"NF refuse: $refuseContent")
             return false
         }
-        return true
     }
 
     fun requestNotifyPermission(weakReference: WeakReference<BaseActivity<*>>,onSuccess: () -> Unit = {}, onFail: () -> Unit = {}) {
@@ -149,22 +149,22 @@ object NFManager {
                 var data = getBeanByGson(nfData,VideoDownloadData::class.java)
                 // 0 进度中点击 1 失败点击 2成功点击  3 成功点击观看视频
                 when (nfTo) {
-                     0-> {
-                         PointEvent.posePoint(PointEventKey.download_push_conduct, Bundle().apply {
-                             putString(PointValueKey.ponit_action, PointValue.click)
-                             putString(PointValueKey.video_url, data?.url?:"")
-                         })
-                     }
-                    1->{
-                        PointEvent.posePoint(PointEventKey.download_push_fail, Bundle().apply {
-                            putString(PointValueKey.ponit_action, PointValue.click)
+                    0-> {
+                        PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
                             putString(PointValueKey.video_url, data?.url?:"")
+                            putString(PointValueKey.push_type, PointEventKey.download_push_conduct)
+                        })
+                    }
+                    1->{
+                        PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
+                            putString(PointValueKey.video_url, data?.url?:"")
+                            putString(PointValueKey.push_type, PointEventKey.download_push_fail)
                         })
                     }
                     2,3->{
-                        PointEvent.posePoint(PointEventKey.download_push_success, Bundle().apply {
-                            putString(PointValueKey.ponit_action, PointValue.click)
+                        PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
                             putString(PointValueKey.video_url, data?.url?:"")
+                            putString(PointValueKey.push_type, PointEventKey.download_push_success)
                         })
                         runCatching {
                             manager.cancel(data?.nfId?:0)
@@ -204,8 +204,9 @@ object NFManager {
                 from = "news_push"
                 PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
                     putString(PointValueKey.push_type, enumName)
+                    putString(PointValueKey.news_id, data?.itackl?:"")
                     if (enumName == NFEnum.NF_DEFAULT.menuName && data!=null){
-                        putString(PointValueKey.source_from, data!!.nfSource)
+                        putString(PointValueKey.source_from, data?.nfSource?:"")
                     }
                 })
                 var id = NFEnum.NF_NEWS.position
@@ -238,9 +239,12 @@ object NFManager {
                 }
             }
             NFEnum.NF_NEWS_FCM.menuName->{
+                var data = getBeanByGson(nfData,NewsData::class.java)
+
                 from = "push"
                 PointEvent.posePoint(PointEventKey.all_noti_c, Bundle().apply {
                     putString(PointValueKey.push_type, enumName)
+                    putString(PointValueKey.news_id, data?.itackl?:"")
                 })
                 getBeanByGson(nfData,NewsData::class.java)?.apply {
                     runCatching {

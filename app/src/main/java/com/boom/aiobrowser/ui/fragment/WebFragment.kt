@@ -58,7 +58,6 @@ import java.lang.ref.WeakReference
 class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 
 
-
     override fun getInsertParent(): ViewGroup {
         return fBinding.fl
     }
@@ -66,7 +65,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
     override fun loadWebOnPageStared(url: String) {
         allowNeedCommon = false
         addLast(url)
-        if (url != getString(R.string.video_local_title)){
+        if (url != rootActivity.getString(R.string.video_local_title)){
             var list = CacheManager.pageList
             var index = -1
             var hostList = extractDomain(url)
@@ -118,6 +117,9 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
         }
         EasyFloat.dismiss(tag = "webPop", true)
         addDownload()
+//        fBinding.root.postDelayed({
+//            savePreview()
+//        },1000)
     }
 
     private fun addLast(url: String) {
@@ -159,6 +161,12 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
         }
 
         APP.videoScanLiveData.observe(this) {
+            if (allowPointResult){
+                allowPointResult = false
+                PointEvent.posePoint(PointEventKey.webpage_download_show, Bundle().apply {
+                    putString(PointValueKey.from_type,"web")
+                })
+            }
             if (jumpData?.autoDownload == true) {
                 var videoDownloadTempList = CacheManager.videoDownloadTempList
                 if (videoDownloadTempList.isNotEmpty()){
@@ -183,6 +191,11 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
                                                 WeakReference((context as BaseActivity<*>)),
                                                 onSuccess = {
                                                     NFShow.showDownloadNF(data, true)
+                                                    PointEvent.posePoint(PointEventKey.all_noti_t,Bundle().apply {
+                                                        putString(PointValueKey.video_url, data?.url?:"")
+                                                        putString(PointValueKey.push_type, PointEventKey.download_push_conduct)
+
+                                                    })
                                                 },
                                                 onFail = {})
                                         }
@@ -366,7 +379,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 
     private fun refresh() {
         if (mAgentWeb != null) {
-            if (jumpData?.jumpUrl == getString(R.string.video_local_title)){
+            if (jumpData?.jumpUrl == rootActivity.getString(R.string.video_local_title)){
                 mAgentWeb!!.webCreator.webView.loadDataWithBaseURL(null, HTML_LOCAL, "text/html", "utf-8", null);
             }else{
                 mAgentWeb!!.urlLoader.reload() // 刷新
@@ -380,15 +393,18 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 //        if (allowShowTips()){
 //            showTipsPop()
 //        }
-        if (jumpData?.jumpUrl != getString(R.string.video_local_title)){
+        if (jumpData?.jumpUrl != rootActivity.getString(R.string.video_local_title)){
             fBinding.flTop.binding.tvToolbarSearch.text = "${jumpData?.jumpTitle} ${getSearchTitle()}"
+        }else{
+//           var title =  mAgentWeb?.webCreator?.webView?.title?:""
+            var title =  receiveTitle
+            fBinding.flTop.binding.tvToolbarSearch.text = if (title.isNullOrEmpty()) getRealParseUrl() else title
         }
         fBinding.refreshLayout.isRefreshing = false
 //        var key = mAgentWeb?.webCreator?.webView?.url?:""
         addDownload()
+//        savePreview()
     }
-
-
 
     fun getSearchTitle(): String {
         var search = when (CacheManager.engineType) {
@@ -436,11 +452,22 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 
     var dragBiding: BrowserDragLayoutBinding? = null
 
+    companion object{
+        fun newInstance(json: String):WebFragment {
+            val args = Bundle()
+            args.putString(ParamsConfig.JSON_PARAMS,json)
+            val fragment = WebFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
     /**
      * 进入
      */
 
     override fun setShowView() {
+        fBinding.flTop.setFromType("search")
         dragBiding = BrowserDragLayoutBinding.inflate(layoutInflater, null, false)
         updateData(
             getBeanByGson(
@@ -462,7 +489,7 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
 
     private fun addDownload() {
         if (allowShowTips().not() && isAdded) {
-            if (EasyFloat.isShow()){
+            if (EasyFloat.isShow("download")){
                 updateDownloadButtonStatus(true, 0)
                 return
             }
@@ -612,10 +639,11 @@ class WebFragment : BaseWebFragment<BrowserFragmentWebBinding>() {
     override fun onResume() {
         super.onResume()
         updateDownloadButtonStatus(false, 1)
+        updateTabCount()
     }
 
     override fun getUrl(): String {
-        if (jumpData?.jumpUrl == getString(R.string.video_local_title)){
+        if (jumpData?.jumpUrl == rootActivity.getString(R.string.video_local_title)){
             return ""
         }
         return jumpData?.jumpUrl ?: ""

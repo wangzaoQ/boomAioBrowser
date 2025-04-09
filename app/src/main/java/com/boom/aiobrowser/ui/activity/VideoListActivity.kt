@@ -278,13 +278,25 @@ class VideoListActivity : BaseActivity<NewsActivityVideoListBinding>() {
         /**
          * enumName 有值则是从通知进入
          */
-        fun startVideoListActivity(activity: BaseActivity<*>,index:Int,list: MutableList<NewsData>?,enumName:String,fromType:String){
-            activity.jumpActivity<VideoListActivity>(Bundle().apply {
-                putString("data", toJson(list))
-                putInt("index", index)
-                putString("enumName", enumName)
-                putString(PointValueKey.from_type, fromType)
-            })
+        fun startVideoListActivity(activity: BaseActivity<*>,index:Int,list: MutableList<NewsData>?,enumName:String,fromType:String,tag:String = ""){
+            if (tag.isNullOrEmpty()){
+                activity.jumpActivity<VideoListActivity>(Bundle().apply {
+                    putString("data", toJson(list))
+                    putInt("index", index)
+                    putString("enumName", enumName)
+                    putString(PointValueKey.from_type, fromType)
+                })
+            }else{
+                var manager = AioADShowManager(activity, ADEnum.INT_AD, tag = "视频列表"){
+                    activity.jumpActivity<VideoListActivity>(Bundle().apply {
+                        putString("data", toJson(list))
+                        putInt("index", index)
+                        putString("enumName", enumName)
+                        putString(PointValueKey.from_type, fromType)
+                    })
+                }
+                manager.showScreenAD(AD_POINT.aobws_videoclick_int)
+            }
         }
     }
 

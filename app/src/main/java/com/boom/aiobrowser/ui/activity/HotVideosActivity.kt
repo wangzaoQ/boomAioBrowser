@@ -78,7 +78,8 @@ class HotVideosActivity:BaseActivity<BrowserActivityHotVideosBinding>() {
                     position,
                     videoAdapter.mutableItems,
                     "",
-                    "hot_video"
+                    "hot_video",
+                    "热门视频"
                 )
             }
             addOnDebouncedChildClick(R.id.llDownload) { adapter, view, position ->

@@ -142,10 +142,12 @@ object AioADDataManager {
     }
 
 
-    fun preloadAD(enum: ADEnum, tag: String = "") {
-        if (enum == ADEnum.DEFAULT_AD && isBUser.not()){
-            AppLogs.dLog(TAG, "图片类广告 只允许买量用户加载")
-            return
+    fun preloadAD(enum: ADEnum, tag: String = "",preloadScreenNative:Boolean = false) {
+        if (preloadScreenNative.not()){
+            if (enum == ADEnum.DEFAULT_AD && isBUser.not()){
+                AppLogs.dLog(TAG, "图片类广告 只允许买量用户加载")
+                return
+            }
         }
         AppLogs.dLog(TAG, "预加载位置:${tag} 加载类型:${enum.adName}")
         if (adFilter1()) return

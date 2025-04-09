@@ -146,7 +146,8 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
                     position-1,
                     videoList,
                     "",
-                    "daily_video"
+                    "daily_video",
+                    "每日视频"
                 )
             }
             addOnDebouncedChildClick(R.id.llDownload) { adapter, view, position ->

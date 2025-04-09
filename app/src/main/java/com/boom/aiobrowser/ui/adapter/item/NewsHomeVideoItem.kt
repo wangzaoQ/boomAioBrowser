@@ -90,7 +90,8 @@ internal class NewsHomeVideoItem(parent: ViewGroup) : BaseViewHolder<NewsItemHom
                         position,
                         item.videoList ?: mutableListOf(),
                         "",
-                        "home"
+                        "home",
+                        "新闻视频"
                     )
                 }
                 clRoot.setTag(R.id.clRoot, item.videoList)

@@ -380,4 +380,6 @@
     <string name="app_web_guide1">1. Temukan judul video</string>
     <string name="app_web_guide2">2. Tonton video</string>
     <string name="app_web_guide3">3. Klik tombol untuk mengunduh video</string>
+    <string name="net_error">Permintaan gagal, silakan coba lagi</string>
+
 </resources>

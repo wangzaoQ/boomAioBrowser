@@ -379,4 +379,6 @@
     <string name="app_web_guide1">1. Tìm tiêu đề video</string>
     <string name="app_web_guide2">2. Xem video</string>
     <string name="app_web_guide3">3. Nhấn nút để tải video</string>
+    <string name="net_error">Yêu cầu không thành công, vui lòng thử lại</string>
+
 </resources>

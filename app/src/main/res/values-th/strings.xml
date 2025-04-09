@@ -380,4 +380,6 @@
     <string name="app_web_guide1">1. ค้นหาชื่อวิดีโอ</string>
     <string name="app_web_guide2">2. ดูวิดีโอ</string>
     <string name="app_web_guide3">3. คลิกปุ่มเพื่อดาวน์โหลดวิดีโอ</string>
+    <string name="net_error">การร้องขอล้มเหลว กรุณาลองอีกครั้ง</string>
+
 </resources>

@@ -379,4 +379,7 @@
     <string name="app_web_guide1">1. Trouver les titres des vidéos</string>
     <string name="app_web_guide2">2. Regarder la vidéo</string>
     <string name="app_web_guide3">3. Cliquez sur le bouton pour télécharger la vidéo</string>
+
+    <string name="net_error">La demande a échoué, veuillez réessayer</string>
+
 </resources>

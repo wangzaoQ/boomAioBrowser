@@ -378,4 +378,6 @@
     <string name="app_web_guide1">1. ビデオタイトルを探す</string>
     <string name="app_web_guide2">2. ビデオを視聴する</string>
     <string name="app_web_guide3">3. ボタンをクリックしてビデオをダウンロードする</string>
+    <string name="net_error">リクエストに失敗しました。もう一度お試しください。</string>
+
 </resources>

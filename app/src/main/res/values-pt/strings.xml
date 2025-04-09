@@ -383,4 +383,6 @@
     <string name="app_web_guide1">1. Encontre os títulos dos vídeos</string>
     <string name="app_web_guide2">2. Assista ao vídeo</string>
     <string name="app_web_guide3">3. Clique no botão para baixar o vídeo</string>
+    <string name="net_error">A solicitação falhou, tente novamente</string>
+
 </resources>

@@ -378,4 +378,6 @@
     <string name="app_web_guide1">1. العثور على عناوين الفيديو</string>
     <string name="app_web_guide2">2. مشاهدة الفيديو</string>
     <string name="app_web_guide3">3. اضغط على الزر لتحميل الفيديو</string>
+    <string name="net_error">فشل الطلب، يرجى المحاولة مرة أخرى</string>
+
 </resources>

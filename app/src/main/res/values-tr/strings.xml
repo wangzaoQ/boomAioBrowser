@@ -379,4 +379,6 @@
     <string name="app_web_guide1">1. Video başlıklarını bulun</string>
     <string name="app_web_guide2">2. Videoyu izleyin</string>
     <string name="app_web_guide3">3. Videoyu indirmek için düğmeye tıklayın</string>
+    <string name="net_error">İstek başarısız oldu, lütfen tekrar deneyin</string>
+
 </resources>

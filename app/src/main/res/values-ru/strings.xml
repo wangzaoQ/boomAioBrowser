@@ -379,4 +379,6 @@
     <string name="app_web_guide1">1. Найдите названия видео</string>
     <string name="app_web_guide2">2. Посмотрите видео</string>
     <string name="app_web_guide3">3. Нажмите кнопку для загрузки видео</string>
+    <string name="net_error">Запрос не выполнен, попробуйте еще раз</string>
+
 </resources>

@@ -158,6 +158,7 @@ class APP: Application(), ViewModelStoreOwner {
         initFB()
         initAdjust()
         initAF()
+        CloakManager().getCloak()
         CoroutineScope(Dispatchers.IO).launch{
             //1. mmkv
             runCatching {
@@ -349,8 +350,10 @@ class APP: Application(), ViewModelStoreOwner {
     }
 
     fun getWebConfig() {
-        CloakManager().getCloak()
-        appModel.getCampaign()
+        if (CacheManager.isFirstStart.not()){
+            CloakManager().getCloak()
+        }
+//        appModel.getCampaign()
         appModel.getWebConfig()
         appModel.getTrendsNews()
         appModel.getTopics()

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
@@ -16,6 +17,7 @@ import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.JumpData
+import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.databinding.BrowserFragmentDownloadManageBinding
@@ -30,12 +32,14 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
+import com.boom.aiobrowser.tools.video.VideoPreloadManager
 import com.boom.aiobrowser.tools.web.PManager.getVideoSegmentSize
 import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.HotVideosActivity
 import com.boom.aiobrowser.ui.activity.SearchActivity
 import com.boom.aiobrowser.ui.activity.VideoListActivity
 import com.boom.aiobrowser.ui.adapter.NewsMainAdapter
+import com.boom.aiobrowser.ui.pop.DisclaimerPop
 import com.boom.aiobrowser.ui.pop.DownLoadPop
 import com.boom.aiobrowser.ui.pop.DownloadVideoGuidePop
 import com.boom.base.adapter4.QuickAdapterHelper
@@ -45,6 +49,7 @@ import com.boom.base.adapter4.util.addOnDebouncedChildClick
 import com.boom.base.adapter4.util.setOnDebouncedItemClick
 import com.boom.downloader.utils.VideoDownloadUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 
@@ -110,6 +115,15 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
             }
         }
         viewModel.value.newsDownloadVideoLiveData.observe(this) {
+            rootActivity.addLaunch(success = {
+                it.forEach {
+                    if (it.vbreas.isNullOrEmpty().not()){
+                        VideoPreloadManager.serialList(1, mutableListOf<NewsData>().apply {
+                            add(it)
+                        })
+                    }
+                }
+            }, failBack = {})
             if (page == 1) {
                 videoAdapter.submitList(it)
             }else{
@@ -120,50 +134,39 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
             fBinding.refreshLayout.finishRefresh()
             fBinding.refreshLayout.finishLoadMore()
         }
+        viewModel.value.failLiveData.observe(this){
+            fBinding.refreshLayout.finishRefresh()
+            fBinding.refreshLayout.finishLoadMore()
+            ToastUtils.showShort(rootActivity.getString(R.string.net_error))
+        }
         fBinding.refreshLayout.setOnRefreshListener {
             page = 1
             loadData()
         }
         videoAdapter.apply {
             setOnDebouncedItemClick{adapter, view, position ->
-                if (position>videoAdapter.items.size-1)return@setOnDebouncedItemClick
+                if (position == 0 || position>videoAdapter.items.size-1)return@setOnDebouncedItemClick
+                var videoList = mutableListOf<NewsData>()
+                for (i in 1 until videoAdapter.mutableItems.size){
+                    videoList.add(videoAdapter.mutableItems.get(i))
+                }
                 VideoListActivity.startVideoListActivity(
                     adapter.context as BaseActivity<*>,
-                    position,
-                    videoAdapter.mutableItems,
+                    position-1,
+                    videoList,
                     "",
                     "daily_video"
                 )
             }
             addOnDebouncedChildClick(R.id.llDownload) { adapter, view, position ->
-                rootActivity.addLaunch(success = {
-                    var list = mutableListOf<VideoUIData>()
-                    CacheManager.videoDownloadSingleTempList = list
-                    var newsData = videoAdapter.mutableItems.get(position)
-                    PointEvent.posePoint(PointEventKey.download_tab_dl,Bundle().apply {
-                        putString(PointValueKey.from_type,"daily_video")
-                        putString(PointValueKey.news_id,newsData.itackl)
-                    })
-                    var uiData = VideoUIData()
-                    uiData.thumbnail = newsData.iassum
-                    uiData.videoResultId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}"
-                    var videoDownloadData = VideoDownloadData().createDefault(
-                        videoId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}",
-                        fileName = newsData.tconsi?:"",
-                        url = newsData.vbreas?:"",
-                        imageUrl = newsData.iassum?:"",
-                        paramsMap = HashMap<String,Any>(),
-                        size = getVideoSegmentSize(newsData.vbreas?:"",HashMap()),
-                        videoType = "mp4",
-                        resolution = ""
-                    )
-                    uiData.formatsList.add(videoDownloadData)
-                    list.add(uiData)
-                    CacheManager.videoDownloadSingleTempList = list
-                    withContext(Dispatchers.Main){
-                        DownLoadPop(rootActivity,2).createPop("download_tab"){  }
+                if (CacheManager.isDisclaimerFirst) {
+                    CacheManager.isDisclaimerFirst = false
+                    DisclaimerPop(rootActivity).createPop {
+                        clickDownload(position)
                     }
-                }, failBack = {})
+                } else {
+                    clickDownload(position)
+                }
             }
         }
         fBinding.llDownload.getChildAt(0).setOneClick {
@@ -173,6 +176,44 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
             PointEvent.posePoint(PointEventKey.download_manager)
             rootActivity.jumpActivity<DownloadActivity>()
         }
+    }
+
+    private fun clickDownload(position: Int) {
+        rootActivity.showPop()
+        var currentTime = System.currentTimeMillis()
+        rootActivity.addLaunch(success = {
+            var list = mutableListOf<VideoUIData>()
+            CacheManager.videoDownloadSingleTempList = list
+            var newsData = videoAdapter.mutableItems.get(position)
+            PointEvent.posePoint(PointEventKey.download_tab_dl, Bundle().apply {
+                putString(PointValueKey.from_type, "daily_video")
+                putString(PointValueKey.news_id, newsData.itackl)
+            })
+            var uiData = VideoUIData()
+            uiData.thumbnail = newsData.iassum
+            uiData.videoResultId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}"
+            var videoDownloadData = VideoDownloadData().createDefault(
+                videoId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}",
+                fileName = newsData.tconsi ?: "",
+                url = newsData.vbreas ?: "",
+                imageUrl = newsData.iassum ?: "",
+                paramsMap = HashMap<String, Any>(),
+                size = getVideoSegmentSize(newsData.vbreas ?: "", HashMap()),
+                videoType = "mp4",
+                resolution = ""
+            )
+            uiData.formatsList.add(videoDownloadData)
+            list.add(uiData)
+            CacheManager.videoDownloadSingleTempList = list
+            var middleTime = System.currentTimeMillis() - currentTime
+            if (middleTime < 1000) {
+                delay(1000 - middleTime)
+            }
+            withContext(Dispatchers.Main) {
+                rootActivity.hidePop()
+                DownLoadPop(rootActivity, 2).createPop("download_tab") { }
+            }
+        }, failBack = {})
     }
 
     private fun toWeb(url:String,title:String) {

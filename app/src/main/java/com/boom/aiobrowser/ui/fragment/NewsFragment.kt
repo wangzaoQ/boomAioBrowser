@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
@@ -80,6 +81,7 @@ class NewsFragment: BaseFragment<NewsFragmentBinding>() {
         viewModel.value.failLiveData.observe(this){
             fBinding.newsSmart.finishRefresh()
             fBinding.newsSmart.finishLoadMore()
+            ToastUtils.showShort(rootActivity.getString(R.string.net_error))
         }
         fBinding.newsSmart.setOnRefreshListener{
             page = 1

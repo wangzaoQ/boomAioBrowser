@@ -9,12 +9,15 @@ import com.boom.aiobrowser.ad.ADEnum
 import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.NewsData
+import com.boom.aiobrowser.data.VideoDownloadData
+import com.boom.aiobrowser.data.VideoUIData
 import com.boom.aiobrowser.databinding.NewsFragmentVideoListBinding
 import com.boom.aiobrowser.point.AD_POINT
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.point.PointValueKey
 import com.boom.aiobrowser.tools.AppLogs
+import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.GlideManager
 import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.tools.getListByGson
@@ -23,14 +26,19 @@ import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.tools.video.VideoPreloadManager
 import com.boom.aiobrowser.tools.video.VideoPreloadManager.getCachePath
+import com.boom.aiobrowser.tools.web.PManager.getVideoSegmentSize
+import com.boom.aiobrowser.ui.activity.VideoListActivity
 import com.boom.aiobrowser.ui.view.CustomVideoView
+import com.boom.downloader.utils.VideoDownloadUtils
 import com.boom.downloader.utils.VideoDownloadUtils.computeMD5
+import com.boom.drag.EasyFloat
 import com.boom.video.GSYVideoManager
 import com.boom.video.builder.GSYVideoOptionBuilder
 import com.boom.video.listener.GSYSampleCallBack
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
@@ -63,6 +71,7 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
     var index = 0
     var gsyVideoPlayer: CustomVideoView? = null
     var gsyVideoOptionBuilder: GSYVideoOptionBuilder? = GSYVideoOptionBuilder()
+    var fromType = ""
 
     var bean:NewsData?=null
 
@@ -70,6 +79,7 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
         arguments?.apply {
             list =  getListByGson(getString("data"),NewsData::class.java)
             index = getInt("index")
+            fromType = getString("fromType")?:""
         }
         bean = list?.get(index)
         //防止错位，离开释放
@@ -141,6 +151,8 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
         if (APP.instance.isHideSplash.not())return
         AppLogs.dLog(VideoPreloadManager.TAG,"VideoListFragment playVideo currentIndex:${index}")
         gsyVideoPlayer?.startPlayLogic()
+        showDownloadPop()
+        addDownloadData()
         if(list.isNullOrEmpty())return
         if (index+1>=list!!.size)return
         loadJob?.jobCancel()
@@ -167,10 +179,60 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
         })
     }
 
+    private fun addDownloadData() {
+        if (bean == null || bean!!.vbreas.isNullOrEmpty())return
+        rootActivity.addLaunch(success = {
+            var list = CacheManager.videoPreTempList
+
+            var newsData = bean
+            var index = -1
+            for (i in 0 until list.size) {
+                var data = list.get(i)
+                if (data.videoResultId == VideoDownloadUtils.computeMD5(newsData!!.vbreas)) {
+                    index = i
+                    break
+                }
+            }
+            if (index >= 0) return@addLaunch
+            var uiData = VideoUIData()
+            uiData.thumbnail = newsData!!.iassum
+            uiData.videoResultId = "${VideoDownloadUtils.computeMD5(newsData!!.vbreas)}"
+            var videoDownloadData = VideoDownloadData().createDefault(
+                videoId = "${VideoDownloadUtils.computeMD5(newsData.vbreas)}",
+                fileName = newsData.tconsi ?: "",
+                url = newsData.vbreas ?: "",
+                imageUrl = newsData.iassum ?: "",
+                paramsMap = HashMap<String, Any>(),
+                size = getVideoSegmentSize(newsData.vbreas ?: "", HashMap()),
+                videoType = "mp4",
+                resolution = ""
+            )
+            uiData.formatsList.add(videoDownloadData)
+            list.add(uiData)
+            CacheManager.videoPreTempList = list
+            withContext(Dispatchers.Main) {
+                (rootActivity as VideoListActivity).updateDownloadButtonStatus(0)
+            }
+        }, failBack = {})
+    }
+
+
     private fun stopDownLoad() {
         AppLogs.dLog(VideoPreloadManager.TAG, "stopDownLoad${index}")
         VideoPreloadManager.releaseAll()
 //        cacheHelper.cancel()
+    }
+
+    private fun showDownloadPop() {
+        runCatching {
+            if (EasyFloat.isCreated("download")){
+                if (EasyFloat.isShow("download").not()){
+                    EasyFloat.show("download")
+                }
+            }else{
+                (rootActivity as VideoListActivity).addDownload()
+            }
+        }
     }
 
 
@@ -182,9 +244,10 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
     }
 
     companion object {
-        fun newInstance(data: MutableList<NewsData>, position: Int): VideoListFragment {
+        fun newInstance(data: MutableList<NewsData>, position: Int,fromType:String): VideoListFragment {
             val args = Bundle()
             args.putString("data", toJson(data))
+            args.putString("fromType", fromType)
             args.putInt("index", position)
             val fragment = VideoListFragment()
             fragment.arguments = args

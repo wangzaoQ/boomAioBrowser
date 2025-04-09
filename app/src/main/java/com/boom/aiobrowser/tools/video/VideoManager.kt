@@ -29,6 +29,7 @@ import com.boom.downloader.common.DownloadConstants
 import com.boom.downloader.listener.DownloadListener
 import com.boom.downloader.model.VideoTaskItem
 import com.boom.downloader.utils.VideoStorageUtils
+import com.boom.video.utils.Debuger
 import com.ironsource.sc
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -53,6 +54,12 @@ object VideoManager {
     fun initVideo() {
         PlayerFactory.setPlayManager(Exo2PlayerManager::class.java) //EXO模式
         CacheFactory.setCacheManager(ExoPlayerCacheManager::class.java) //exo缓存模式，支持m3u8，只支持exo
+        if (APP.isDebug){
+            Debuger.enable()
+        }else{
+            Debuger.disable()
+        }
+
         val file = VideoStorageUtils.getVideoCacheDir(APP.instance)
         if (!file.exists()) {
             file.mkdir()
@@ -181,6 +188,10 @@ object VideoManager {
                     removeJob(item,job,"onDownloadError")
                 }
                 addJob(item,job,"onDownloadError")
+                PointEvent.posePoint(PointEventKey.all_noti_t,Bundle().apply {
+                    putString(PointValueKey.video_url, item?.url?:"")
+                    putString(PointValueKey.push_type, PointEventKey.download_push_fail)
+                })
             }
 
             override fun onDownloadSuccess(item: VideoTaskItem?) {
@@ -243,6 +254,10 @@ object VideoManager {
                         add(it)
                     }
                 }
+                PointEvent.posePoint(PointEventKey.all_noti_t,Bundle().apply {
+                    putString(PointValueKey.video_url, item?.url?:"")
+                    putString(PointValueKey.push_type, PointEventKey.download_push_success)
+                })
             }
         })
 

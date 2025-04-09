@@ -31,6 +31,7 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
     @Volatile
     var isBackstage = false
 
+    @Volatile
     var count = 0
 
     // 0 开屏广告 1 插屏广告 2 激励广告
@@ -47,15 +48,17 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
     override fun onActivityStarted(activity: Activity) {
         count++
         if (startTime == 0L){
+            AppLogs.dLog(APP.instance.TAG,"startTime 开始计时:${startTime}")
             startTime = System.currentTimeMillis()
         }
         cancelJob?.cancel()
 
         var allowContinue = false
         runCatching {
-            allowContinue = WakeManager.isScreenOn()&& WakeManager.isDeviceLocked().not()
+            allowContinue = WakeManager.isScreenOn()
         }
         if (allowContinue.not()){
+            AppLogs.dLog(APP.instance.TAG,"onActivityStarted 终止 screen:${WakeManager.isScreenOn()}  devicelock:${WakeManager.isDeviceLocked().not()}")
             return
         }
 
@@ -93,17 +96,22 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
         count--
         AppLogs.dLog(APP.instance.TAG, "onActivityStopped() activity=" + activity + "count:"+count)
         if (0 >= count && APP.instance.isGoOther.not()) {
-            PointEvent.posePoint(PointEventKey.app_stay,Bundle().apply {
-                putInt("stay_times",((System.currentTimeMillis() - startTime)/1000).toInt())
-            })
+            var stayTime = ((System.currentTimeMillis() - startTime)/1000).toInt()
+            if (stayTime>0){
+                AppLogs.dLog(APP.instance.TAG, "停留时间:${stayTime}")
+                PointEvent.posePoint(PointEventKey.app_stay,Bundle().apply {
+                    putInt("stay_times",stayTime)
+                })
+            }
+            startTime = 0L
             AioADDataManager.setADDismissTime()
             cancelJob?.cancel()
             cancelJob = CoroutineScope(Dispatchers.IO).launch{
-                startTime = System.currentTimeMillis()
+                var startTime = System.currentTimeMillis()
                 while (System.currentTimeMillis()-startTime<2000){
                     delay(1000)
                 }
-                APP.instance.isHideSplash = false
+//                APP.instance.isHideSplash = false
                 isBackstage = true
                 runCatching {
                     val temp = mutableListOf<Activity>()
@@ -113,6 +121,7 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
                         }
                     }
                     temp.forEach {
+                        AppLogs.dLog(APP.instance.TAG, "需要结束的activity:${it}")
                         it.finish()
                     }
                 }
@@ -127,6 +136,7 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
     override fun onActivityDestroyed(activity: Activity) {
         stack.remove(activity)
         AppLogs.dLog(APP.instance.TAG, "onActivityDestroyed() activity=" + activity + " stack.size=" + stack.size)
+//        AppLogs.dLog("VideoListFragment", "onActivityDestroyed() activity=" + activity + " stack.size=" + stack.size)
     }
 
     fun isBackGround(): Boolean {

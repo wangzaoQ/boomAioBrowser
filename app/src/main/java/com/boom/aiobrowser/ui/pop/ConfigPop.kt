@@ -13,13 +13,16 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.databinding.BrowserPopConfigBinding
 import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.UIManager
+import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.tools.toJson
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import pop.basepopup.BasePopupWindow
@@ -44,9 +47,10 @@ class ConfigPop(context: Context) : BasePopupWindow(context) {
         showPopupWindow()
     }
 
+    var job :Job?= null
     private fun addPop() {
         allowRefresh = true
-        (context as BaseActivity<*>).addLaunch(success = {
+        job = (context as BaseActivity<*>).addLaunch(success = {
             while (allowRefresh) {
                 delay(500)
                 if (allowRefresh.not())return@addLaunch
@@ -107,6 +111,7 @@ class ConfigPop(context: Context) : BasePopupWindow(context) {
                         }
                         addTest("是否归到下载类型通知:${FirebaseConfig.isDownloadConfig}") {
                         }
+
 //
 //                        addTest("a包具体弹窗逻辑  a包：默认浏览器、教程 不走任何配置直接展示") {
 //
@@ -119,6 +124,12 @@ class ConfigPop(context: Context) : BasePopupWindow(context) {
                 }
             }
         }, failBack = {})
+    }
+
+
+    override fun dismiss() {
+        job.jobCancel()
+        super.dismiss()
     }
 
 
@@ -145,13 +156,13 @@ class ConfigPop(context: Context) : BasePopupWindow(context) {
 
             })
             setOnKeyListener { v, keyCode, event ->
-                    if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
-                        block(this@apply)
-                        addPop()
-                        return@setOnKeyListener true
-                    }
-                    return@setOnKeyListener false
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    block(this@apply)
+                    addPop()
+                    return@setOnKeyListener true
                 }
+                return@setOnKeyListener false
+            }
         })
     }
 }

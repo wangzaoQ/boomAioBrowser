@@ -382,5 +382,6 @@
     <string name="app_web_guide2">2、Watch the video</string>
     <string name="app_web_guide3">3、Click the button to download video</string>
 
+    <string name="net_error">Request failed, please try again</string>
 
 </resources>

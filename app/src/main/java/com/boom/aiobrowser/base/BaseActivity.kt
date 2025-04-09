@@ -17,12 +17,15 @@ import androidx.viewbinding.ViewBinding
 import com.blankj.utilcode.util.KeyboardUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.point.PointValue
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.JumpDataManager
 import com.boom.aiobrowser.tools.JumpDataManager.jumpActivity
 import com.boom.aiobrowser.tools.clearClipboard
 import com.boom.aiobrowser.tools.getClipContent
+import com.boom.aiobrowser.tools.jobCancel
 import com.boom.aiobrowser.ui.activity.MainActivity
 import com.boom.aiobrowser.ui.activity.WebParseActivity
 import com.boom.aiobrowser.ui.pop.LoadingPop
@@ -47,8 +50,9 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
 
     var acTAG =javaClass.simpleName
 
+    @Volatile
     var stayTime = 0L
-    var timeResult: ((Long) -> Unit?)? =null
+    var saveStayTime = false
 
     var life = BaseActivityLife()
 
@@ -64,7 +68,6 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
         super.onResume()
         APP.instance.isGoOther = false
         status = true
-        stayTime = System.currentTimeMillis()
         if (APP.instance.isHideSplash.not())return
         job?.cancel()
         job = addLaunch(success = {
@@ -78,16 +81,16 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
                 if (copy.isNullOrEmpty().not() && APP.instance.copyText != copy){
                     APP.instance.copyText = copy
                     if (APP.instance.lifecycleApp.stack.size>0){
-                       var topActivity =  APP.instance.lifecycleApp.stack.get(APP.instance.lifecycleApp.stack.size-1)
+                        var topActivity =  APP.instance.lifecycleApp.stack.get(APP.instance.lifecycleApp.stack.size-1)
                         AppLogs.dLog(acTAG,"is MainActivity:${topActivity is MainActivity}")
                         if (topActivity is MainActivity){
                             withContext(Dispatchers.Main){
-                                ProcessingTextPop(this@BaseActivity).createPop(copy?:"", PointValue.clipboard){
-                                    var index = copy.indexOf("http")
-                                    if (index>=0){
-                                        copy = copy.substring(index,copy.length)
+                                var index = copy.indexOf("http")
+                                if (index>=0){
+                                    copy = copy.substring(index,copy.length)
+                                    ProcessingTextPop(this@BaseActivity).createPop(copy?:"", PointValue.clipboard){
+                                        APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(copy, title = "","复制链接",true))
                                     }
-                                    APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(copy, title = "","复制链接",true))
                                 }
                             }
                         }
@@ -95,16 +98,14 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
                 }
             }
         }, failBack = {})
+        addTime()
     }
 
     abstract fun getBinding(inflater: LayoutInflater): V
 
     override fun onPause() {
         status = false
-        if (stayTime == 0L)return
-        var time = (System.currentTimeMillis()-stayTime)/1000
-        timeResult?.invoke(time)
-        stayTime = 0
+        timeJob?.jobCancel()
         super.onPause()
     }
 
@@ -139,8 +140,27 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
         setShowView()
         setListener()
         setDataListener()
+        if ((this is MainActivity).not()){
+            acBinding.root.postDelayed({
+                AioADDataManager.preloadAD(ADEnum.INT_AD,"activity onCreate 预加载插屏")
+            },0)
+        }
     }
 
+    private fun addTime() {
+        if (saveStayTime){
+            timeJob?.jobCancel()
+            timeJob = addLaunch(success = {
+                while (true){
+                    stayTime+=1
+                    AppLogs.dLog("Point_Net","计时:${stayTime}")
+                    delay(1000)
+                }
+            }, failBack = {})
+        }
+    }
+
+    var timeJob:Job?=null
 
     abstract fun setListener()
     open fun setDataListener(){}
@@ -248,6 +268,9 @@ abstract class BaseActivity<V : ViewBinding> :AppCompatActivity() {
             }.onFailure {
                 withContext(Dispatchers.Main){
                     failBack(it.stackTraceToString())
+                    if (APP.isDebug){
+                        AppLogs.dLog("failBack","${acTAG} error:${it.stackTraceToString()}")
+                    }
                 }
             }
         }

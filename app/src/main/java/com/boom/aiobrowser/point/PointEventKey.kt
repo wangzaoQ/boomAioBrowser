@@ -311,6 +311,7 @@ object PointEventKey {
 
     const val webpage_show = "webpage_show"
     const val all_noti_theory_t = "all_noti_theory_t"
+    const val video_stay_time = "video_stay_time"
 
 
 }
@@ -347,6 +348,7 @@ object PointValueKey{
     const val adjust_user = "adjust_user"
     const val load_time = "load_time"
     const val network = "network"
+    const val stay_time = "stay_time"
 
 
 }

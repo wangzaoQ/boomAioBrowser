@@ -1,10 +1,13 @@
 package com.boom.aiobrowser.nf
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.boom.aiobrowser.APP
@@ -14,6 +17,7 @@ import com.boom.aiobrowser.data.AioNFData
 import com.boom.aiobrowser.data.NFEnum
 import com.boom.aiobrowser.data.NewsData
 import com.boom.aiobrowser.data.VideoDownloadData
+import com.boom.aiobrowser.nf.NFShow.getForegroundNF
 import com.boom.aiobrowser.other.ShortManager
 import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
@@ -26,6 +30,7 @@ import com.boom.aiobrowser.tools.getBeanByGson
 import com.boom.aiobrowser.other.ParamsConfig
 import com.boom.aiobrowser.other.isAndroid12
 import com.boom.aiobrowser.other.isAndroid14
+import com.boom.aiobrowser.tools.UIManager
 import com.boom.aiobrowser.tools.allowShowNF
 import com.boom.aiobrowser.tools.getListByGson
 import com.boom.aiobrowser.tools.jobCancel
@@ -274,29 +279,6 @@ object NFManager {
         }
     }
 
-    fun startForeground(tag: String) {
-        AppLogs.dLog(NFManager.TAG,"前台服务 触发 ${tag}-${Build.VERSION.SDK_INT}")
-        if (nfAllow().not())return
-        if (isAndroid12() && APP.instance.lifecycleApp.isBackGround()){
-            AppLogs.dLog(NFManager.TAG,"大于12 不允许后台展示前台服务${Build.VERSION.SDK_INT}")
-            return
-        }
-        if (isAndroid14()){
-//            if (XXPermissions.isGranted(APP.instance, Permissions.FOREGROUND_SERVICE_DATA_SYNC, Permission.ACCESS_COARSE_LOCATION).not())return
-        }
-        AppLogs.dLog(NFManager.TAG,"前台服务 允许展示 ${tag}-${Build.VERSION.SDK_INT}")
-        runCatching {
-            if (APP.instance.showForeground.not()){
-                ContextCompat.startForegroundService(APP.instance,
-                    Intent(APP.instance, NFService::class.java)
-                )
-            }else{
-                AppLogs.dLog(NFManager.TAG,"前台服务 正在展示中不需要重复启动 ${tag}-${Build.VERSION.SDK_INT}")
-            }
-        }.onFailure {
-            AppLogs.eLog(NFManager.TAG,it.stackTraceToString())
-        }
-    }
 
     /**
      *     {
@@ -358,7 +340,6 @@ object NFManager {
         timerJob.jobCancel()
         timerJob = CoroutineScope(Dispatchers.IO).launch{
             appDataReset()
-            startForeground("APP")
             delay(10*1000)
             while (true) {
                 if (allowShowNF()){
@@ -369,7 +350,50 @@ object NFManager {
                 appDataReset()
             }
         }
+        startForeground("APP")
     }
+
+    @SuppressLint("MissingPermission")
+    fun startForeground(tag: String) {
+        AppLogs.dLog(NFManager.TAG,"前台服务 触发 ${tag}-${Build.VERSION.SDK_INT}")
+        if (nfAllow().not())return
+        if (isAndroid12() && APP.instance.lifecycleApp.isBackGround()){
+            return
+        }
+        if (isAndroid14()){
+//            if (XXPermissions.isGranted(APP.instance, Permissions.FOREGROUND_SERVICE_DATA_SYNC, Permission.ACCESS_COARSE_LOCATION).not())return
+        }
+//        if (RomUtils.isOneplus() && CacheManager.showForeground <=1){
+        if (UIManager.isBuyUser().not()){
+            if (CacheManager.showForeground <= 1){
+                AppLogs.dLog(NFManager.TAG,"前台服务 第一次不启动")
+                return
+            }
+        }
+
+//        AppLogs.dLog(NFManager.TAG,"前台服务 允许展示 ${tag}-${Build.VERSION.SDK_INT}")
+        runCatching {
+            if (APP.instance.showForeground.not()){
+                Handler(Looper.getMainLooper()).postDelayed({
+                    var nf = getForegroundNF()
+                    if (nf!=null){
+                        if (isAndroid12() && APP.instance.lifecycleApp.isBackGround()){
+                            AppLogs.dLog(NFManager.TAG,"大于12 不允许后台展示前台服务${Build.VERSION.SDK_INT}")
+                        }else{
+                            ContextCompat.startForegroundService(APP.instance,
+                                Intent(APP.instance, NFService::class.java)
+                            )
+                        }
+                    }
+                },1000)
+            }else{
+                AppLogs.dLog(NFManager.TAG,"前台服务 正在展示中不需要重复启动 ${tag}-${Build.VERSION.SDK_INT}")
+            }
+        }.onFailure {
+            AppLogs.eLog(NFManager.TAG,it.stackTraceToString())
+        }
+    }
+
 
     private suspend fun showNFByCount() {
         var count = showCount%4

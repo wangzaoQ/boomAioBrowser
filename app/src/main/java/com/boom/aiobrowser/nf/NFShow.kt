@@ -195,8 +195,6 @@ object NFShow {
     fun showForegroundNF(){
         if (nfAllow().not())return
         runCatching {
-            getForegroundNF()
-            NFManager.manager.notify(NFEnum.NF_SEARCH_VIDEO.position,NFManager.nfForeground!!)
             NFManager.startForeground("showForegroundNF")
         }.onFailure {
             AppLogs.eLog(NFManager.TAG,it.stackTraceToString())
@@ -313,6 +311,7 @@ object NFShow {
     }
 
     fun getForegroundNF(): Notification? {
+        if (NFManager.nfForeground !=null)return NFManager.nfForeground
         val smallRemote = NFViews.getForegroundRemoteView(NFEnum.NF_SEARCH_VIDEO)
         val largeRemote = NFViews.getForegroundRemoteView(NFEnum.NF_SEARCH_VIDEO, true)
         var bulider = createBuilder(NFEnum.NF_SEARCH_VIDEO,smallRemote,largeRemote)

@@ -312,7 +312,8 @@ object PointEventKey {
     const val webpage_show = "webpage_show"
     const val all_noti_theory_t = "all_noti_theory_t"
     const val video_stay_time = "video_stay_time"
-
+    //下载页
+    const val download_tab = "download_tab"
 
 }
 

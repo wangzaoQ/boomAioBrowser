@@ -54,16 +54,6 @@ class TaskAddPop (context: Context,var backToDownload:Boolean = false) : BasePop
 
     fun createPop(downloadVideoIdList:MutableList<String>){
         defaultBinding?.apply {
-            if (AioADDataManager.adFilter1().not()) {
-                PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
-                    putString(PointValueKey.ad_pos_id, AD_POINT.aobws_task_add)
-                })
-                val data = AioADDataManager.getCacheAD(ADEnum.BANNER_AD_NEWS_DETAILS)
-                data?.apply {
-                    AioADShowManager(context as BaseActivity<*>, ADEnum.BANNER_AD_NEWS_DETAILS,"添加任务过渡弹窗 原生/banner"){
-                    }.showNativeAD(defaultBinding!!.flRoot,AD_POINT.aobws_task_add)
-                }
-            }
             llRoot.setOnClickListener {
                 if (isComplete){
                     PointEvent.posePoint(PointEventKey.download_complete_view)

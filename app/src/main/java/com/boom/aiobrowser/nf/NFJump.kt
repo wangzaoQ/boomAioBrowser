@@ -51,11 +51,15 @@ object NFJump {
                 intent.putExtra(ParamsConfig.NF_DATA, toJson(data))
             }
         }else{
-            intent.putExtra(ParamsConfig.NF_DATA, toJson(newsList))
+            var tempList = mutableListOf<NewsData>()
+            if (data!=null){
+                tempList.add(0,data as NewsData)
+            }
+            tempList.addAll(newsList)
+            intent.putExtra(ParamsConfig.NF_DATA, toJson(tempList))
         }
         return PendingIntent.getActivity(APP.instance, getCode(), intent, getFlags())
     }
-
 
     fun getCode() = (1001..99998).random(Random(System.currentTimeMillis()))
 

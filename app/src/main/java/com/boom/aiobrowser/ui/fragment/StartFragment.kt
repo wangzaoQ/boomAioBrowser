@@ -268,14 +268,16 @@ class StartFragment :BaseFragment<BrowserFragmentStartBinding>() {
 
     override fun onPause() {
         super.onPause()
-        if (isAdded&&isVisible)
-        cancelPb()
+        if (isAdded&&isVisible){
+            cancelPb()
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        if (isAdded&&isVisible)
-        toLoading()
+        if (isAdded&&isVisible){
+            toLoading()
+        }
     }
 
     override fun getBinding(

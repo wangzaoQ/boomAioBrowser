@@ -87,7 +87,7 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
     }
 
     override fun startLoadData() {
-
+        PointEvent.posePoint(PointEventKey.download_tab)
     }
 
     override fun setListener() {

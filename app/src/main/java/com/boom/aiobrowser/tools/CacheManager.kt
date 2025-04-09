@@ -102,6 +102,7 @@ object CacheManager {
     const val KV_AD_001_VALUE = "KV_AD_001_VALUE"
     const val KV_AD_DAY_VALUE = "KV_AD_DAY_VALUE"
     const val KV_FIRST_VIDEO_GUIDE = "KV_FIRST_VIDEO_GUIDE"
+    const val KV_FIRST_SHOW_FOREGROUND = "KV_FIRST_SHOW_FOREGROUND_COUNT"
 
 
     var videoDownloadTempList :MutableList<VideoUIData>
@@ -888,6 +889,14 @@ object CacheManager {
         }
         set(value) {
             mmkv.encode(KV_AD_DAY_VALUE, value)
+        }
+
+    var showForeground: Int
+        get() {
+            return mmkv.decodeInt(KV_FIRST_SHOW_FOREGROUND, 0)
+        }
+        set(value) {
+            mmkv.encode(KV_FIRST_SHOW_FOREGROUND, value)
         }
 
 }

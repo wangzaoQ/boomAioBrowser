@@ -28,15 +28,13 @@ class NFService : Service() {
     }
 
     private fun showNF() {
-        if (NFManager.nfForeground ==null){
-            NFShow.getForegroundNF()
-        }
+        var nf = NFShow.getForegroundNF()
         if (isAndroid14()){
             startForeground(NFEnum.NF_SEARCH_VIDEO.position,
-                NFManager.nfForeground!!, FOREGROUND_SERVICE_TYPE_DATA_SYNC
+                nf!!, FOREGROUND_SERVICE_TYPE_DATA_SYNC
             )
         }else{
-            startForeground(NFEnum.NF_SEARCH_VIDEO.position, NFManager.nfForeground!!)
+            startForeground(NFEnum.NF_SEARCH_VIDEO.position, nf!!)
         }
     }
 

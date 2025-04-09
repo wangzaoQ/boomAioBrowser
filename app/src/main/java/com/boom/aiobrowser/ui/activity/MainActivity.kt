@@ -26,6 +26,7 @@ import com.boom.aiobrowser.data.VideoDownloadData
 import com.boom.aiobrowser.databinding.BrowserActivityMainBinding
 import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.nf.NFManager
+import com.boom.aiobrowser.nf.NFShow
 import com.boom.aiobrowser.other.JumpConfig
 import com.boom.aiobrowser.other.LoginConfig.SIGN_LOGIN
 import com.boom.aiobrowser.other.LoginConfig.SIGN_LOGIN_ONE_TAP
@@ -340,23 +341,20 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             updateUI(intent)
             fManager.addFragmentTag(supportFragmentManager,this,R.id.fragmentStart,"StartFragment")
         }
-        showForeground()
     }
 
     var foregroundJob:Job?=null
 
     private fun showForeground() {
-        if (isAndroid12()){
-            foregroundJob.jobCancel()
-            foregroundJob = addLaunch(success = {
-                while (APP.instance.lifecycleApp.isBackGround()){
-                    delay(1000)
-                }
-                runCatching {
-                    NFManager.startForeground("mainActivity")
-                }
-            }, failBack = {})
-        }
+        foregroundJob.jobCancel()
+        foregroundJob = addLaunch(success = {
+            while (this@MainActivity.getActivityStatus().not()){
+                delay(1000)
+            }
+            runCatching {
+                NFShow.showForegroundNF()
+            }
+        }, failBack = {})
     }
 
     fun hideStart(isNormal: Boolean) {
@@ -364,33 +362,33 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
         var allowShowPop = true
         // 0 默认  1 browser 2 news
         var jumpType = 0
-        if (UIManager.isBuyUser()){
-            if (CacheManager.campaignId.isNullOrEmpty().not()){
-                var campaignId = CacheManager.campaignId
-                if (FirebaseConfig.browserJumpList.contains(campaignId)){
-                    //browser
-                    jumpType = 1
-                }else if (FirebaseConfig.newsJumpList.contains(campaignId)){
-                    //news
-                    jumpType = 2
-                }
-            }
-            if (jumpType == 0){
-                when (FirebaseConfig.defaultUserData?.other?:"") {
-                    "news"-> {
-                        jumpType = 4
-                    }
-                    else -> {
-                        jumpType = 3
-                    }
-                }
-            }
-        }else{
-            if (CacheManager.isFirstStart){
-                CacheManager.isAUser = true
-                CacheManager.AUserTime = System.currentTimeMillis()
-            }
-        }
+//        if (UIManager.isBuyUser()){
+//            if (CacheManager.campaignId.isNullOrEmpty().not()){
+//                var campaignId = CacheManager.campaignId
+//                if (FirebaseConfig.browserJumpList.contains(campaignId)){
+//                    //browser
+//                    jumpType = 1
+//                }else if (FirebaseConfig.newsJumpList.contains(campaignId)){
+//                    //news
+//                    jumpType = 2
+//                }
+//            }
+//            if (jumpType == 0){
+//                when (FirebaseConfig.defaultUserData?.other?:"") {
+//                    "news"-> {
+//                        jumpType = 4
+//                    }
+//                    else -> {
+//                        jumpType = 3
+//                    }
+//                }
+//            }
+//        }else{
+//            if (CacheManager.isFirstStart){
+//                CacheManager.isAUser = true
+//                CacheManager.AUserTime = System.currentTimeMillis()
+//            }
+//        }
         CacheManager.isFirstStart = false
         if (enumName.isNullOrEmpty().not()){
             when (enumName) {
@@ -556,6 +554,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             showDownloadGuide(showPopCount, allowShowPop,jumpType)
         }
         APP.jumpResumeData.postValue(if (allowShowPop.not()) 1 else 0)
+        showForeground()
     }
 
     private fun showDownloadGuide(showPopCount: Int, allowShowPop: Boolean,jumpType:Int) {

@@ -159,6 +159,7 @@ class APP: Application(), ViewModelStoreOwner {
         initAdjust()
         initAF()
         CloakManager().getCloak()
+        CacheManager.showForeground+=1
         CoroutineScope(Dispatchers.IO).launch{
             //1. mmkv
             runCatching {

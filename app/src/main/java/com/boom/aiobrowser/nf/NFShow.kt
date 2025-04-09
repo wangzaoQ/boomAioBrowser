@@ -111,15 +111,7 @@ object NFShow {
                 showNewsNF(data, enum,sourceType,newsList)
             }
             CacheManager.saveNFNewsList(enum.menuName, newsList ?: mutableListOf())
-            newsList?.apply {
-                if (size>0){
-                    var videoList = mutableListOf<NewsData>()
-                    for (i in 0 until size){
-                        videoList.add(get(i))
-                        VideoPreloadManager.serialList(1,videoList)
-                    }
-                }
-            }
+            VideoPreloadManager.serialList(1,newsList)
 
             if (APP.isDebug){
                 AppLogs.dLog(NFManager.TAG, "name:${enum.menuName} 移除第一条后 新闻总size=${CacheManager.getNFNewsList(enum.menuName).size}")

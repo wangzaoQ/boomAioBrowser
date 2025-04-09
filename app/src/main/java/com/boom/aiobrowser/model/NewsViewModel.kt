@@ -64,7 +64,7 @@ class NewsViewModel : BaseDataModel() {
                     })
                 }
                 newsDownloadVideoLiveData.postValue(list)
-            }, failBack = {})
+            }, failBack = {},1)
         }
     }
 
@@ -161,7 +161,7 @@ class NewsViewModel : BaseDataModel() {
             newsTopicListLiveData.postValue(HashMap<Int, MutableList<NewsData>>().apply {
                 put(dataType,list?: mutableListOf())
             })
-        }, failBack = {})
+        }, failBack = {},1)
     }
 
     fun getNewsVideoList(enumName :String,data: NewsData?=null,dataList: MutableList<NewsData>?=null){
@@ -234,6 +234,7 @@ class NewsViewModel : BaseDataModel() {
                     add(list.get(i))
                 })
             }
+            AppLogs.dLog(VideoPreloadManager.TAG, "请求缓存逻辑结束")
         }, failBack = {
             var cacheList = CacheManager.videoList
             if (cacheList.isNotEmpty()){
@@ -574,7 +575,7 @@ class NewsViewModel : BaseDataModel() {
                 })
             }
             newsHotVideoLiveData.postValue(list)
-        }, failBack = {})
+        }, failBack = {},1)
     }
 
 }

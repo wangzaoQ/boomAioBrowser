@@ -18,148 +18,108 @@ import java.math.BigDecimal
 
 object VideoPreloadManager {
 
-    var releaseAll = false
-
-    @Volatile
-    var cacheMap :HashMap<String, CacheHelper> = HashMap()
-
-    fun releaseAll() {
-        releaseAll = true
-        AppLogs.dLog(TAG, "全部取消")
-        cacheMap.keys.forEach {
-            runCatching {
-                cacheMap.get(it)!!.cancel()
-            }
-        }
-        cacheMap.clear()
-    }
-
-    fun release(url:String){
-        AppLogs.dLog(TAG, "单个取消前 size:${cacheMap.size}")
-        runCatching {
-            cacheMap.get(url)?.cancel()
-            cacheMap.remove(url)
-        }
-        AppLogs.dLog(TAG, "单个取消后 size:${cacheMap.size}")
-    }
-
-
 
     //串行
     @androidx.media3.common.util.UnstableApi
-    fun serialList(page:Int,videoList: MutableList<NewsData>?) {
-        releaseAll = false
-        CoroutineScope(Dispatchers.IO).launch{
-            runCatching {
-                saveVideo2(page,videoList)
+    fun serialList(page: Int, videoList: MutableList<NewsData>?) {
+        videoList?.forEach {
+            if (it.vbreas.isNullOrEmpty().not()){
+                CoroutineScope(Dispatchers.IO).launch {
+                    runCatching {
+                        saveVideo2(page, it)
+                    }
+                }
             }
         }
     }
 
 
     @androidx.media3.common.util.UnstableApi
-    private fun saveVideo2(page:Int,videoList: MutableList<NewsData>?) {
-        videoList?.apply {
-            var videoData: NewsData? = this.removeFirstOrNull() ?: return
-            var file = File(getCachePath(computeMD5(videoData?.vbreas?:"")))
-            AppLogs.dLog(TAG,"saveVideo2 缓存的地址:${file.absolutePath} url:${videoData!!.vbreas?:""}")
-            var start = 0L
-            runCatching {
-                var cacheHelper = CacheHelper()
-                cacheMap.put(videoData!!.vbreas?:"",cacheHelper)
-                AppLogs.dLog(TAG, "start_cache:${videoData!!.itackl}")
-                cacheHelper.preCacheVideo(APP.instance,
-                    Uri.parse(videoData!!.vbreas),
-                    file,
-                    false,
-                    null,
-                    null,
-                    C.LENGTH_UNSET.toLong(),
-                    object : CacheWriter.ProgressListener {
-                        override fun onProgress(
-                            requestLength: Long,
-                            bytesCached: Long,
-                            newBytesCached: Long
-                        ) {
-                            if (requestLength == -1L) return
-                            if (cacheMap.isNullOrEmpty() || releaseAll){
-                                runCatching {
-                                    AppLogs.dLog(TAG, "saveVideo2${videoData!!.vbreas} 非正常取消")
-                                    cacheHelper.cancel()
-                                }
-                                return
-                            }
-                            if(videoData.vsound == 0 && start == 0L){
-                                start = System.currentTimeMillis()
-                            }
-                            if (videoData.vsound == 0){
-                                if ((System.currentTimeMillis()-start)>3000){
-//                                    AppLogs.dLog(
-//                                        TAG,
-//                                        "url:${videoData.vbreas} requestLength " + requestLength + " bytesCached " + bytesCached + " newBytesCached  " + newBytesCached
-//                                    )
-                                    release(videoData!!.vbreas?:"")
-                                    saveVideo2(page,this@apply)
-                                    AppLogs.dLog(TAG, "saveVideo2${videoData!!.vbreas} 缓存成功_ 无时间")
-                                }
-                            }else{
-                                var videoTime = videoData.vsound?:0
-                                if (videoTime<20){
-                                    videoTime = 3
-                                }else if (videoTime<60){
-                                    videoTime = 5
-                                }else{
-                                    videoTime = 8
-                                }
-                                var end= BigDecimal(requestLength).divide(
-                                    BigDecimal(videoData.vsound?:0),
-                                    10,
-                                    BigDecimal.ROUND_HALF_UP
-                                ).toLong() * videoTime
+    private fun saveVideo2(page: Int, data: NewsData?) {
+        var videoData: NewsData? = data
+        var file = File(getCachePath(computeMD5(videoData?.vbreas ?: "")))
+        AppLogs.dLog(
+            TAG,
+            "saveVideo2 缓存的地址:${file.absolutePath} url:${videoData!!.vbreas ?: ""}"
+        )
+        var start = 0L
+        runCatching {
+            var cacheHelper = CacheHelper()
+            AppLogs.dLog(TAG, "start_cache:${videoData!!.itackl}")
+            var usedTime = System.currentTimeMillis()
+            cacheHelper.preCacheVideo(APP.instance,
+                Uri.parse(videoData!!.vbreas),
+                file,
+                false,
+                null,
+                null,
+                C.LENGTH_UNSET.toLong(),
+                object : CacheWriter.ProgressListener {
+                    override fun onProgress(
+                        requestLength: Long,
+                        bytesCached: Long,
+                        newBytesCached: Long
+                    ) {
+                        if (requestLength == -1L) return
+                        if (videoData.vsound == 0 && start == 0L) {
+                            start = System.currentTimeMillis()
+                        }
+                        if (videoData.vsound == 0) {
+                            if ((System.currentTimeMillis() - start) > 3000) {
+                                cacheHelper.cancel()
                                 AppLogs.dLog(
                                     TAG,
-                                    "url:${videoData.vbreas} requestLength " + requestLength + " bytesCached " + bytesCached + " newBytesCached  " + newBytesCached+" end "+end
+                                    "saveVideo2${videoData!!.vbreas} 缓存成功_ 无时间 总耗时:${System.currentTimeMillis()-usedTime} 下载了 ${bytesCached} 总大小:${requestLength}"
                                 )
-                                if (bytesCached > end && end > 0) {
-                                    release(videoData!!.vbreas?:"")
-                                    AppLogs.dLog(TAG, "saveVideo2 缓存成功  有时间 :${videoData!!.vbreas} ")
-                                    saveVideo2(page,this@apply)
-                                }
+                            }
+                        } else {
+                            var videoTime = videoData.vsound ?: 0
+                            if (videoTime<20){
+                                videoTime = 3
+                            }else if (videoTime<60){
+                                videoTime = 5
+                            }else{
+                                videoTime = 10
+                            }
+                            var end = BigDecimal(requestLength).divide(
+                                BigDecimal(videoData.vsound ?: 0),
+                                10,
+                                BigDecimal.ROUND_HALF_UP
+                            ).toLong() * videoTime
+                            if (bytesCached >= end && end > 0) {
+                                cacheHelper.cancel()
+                                AppLogs.dLog(
+                                    TAG,
+                                    "saveVideo2${videoData!!.vbreas} 缓存成功_ 有时间 总耗时:${System.currentTimeMillis()-usedTime} 下载了 ${bytesCached} 总大小:${requestLength}"
+                                )
                             }
                         }
-
-                    })
-            }.onFailure {
-//                AppLogs.dLog(
-//                    TAG,
-//                    it.stackTraceToString()
-//                )
-//                release(videoData!!.vbreas?:"")
-//                saveVideo2(page,this@apply)
-            }
+                    }
+                })
+        }.onFailure {
         }
     }
 
 
-
-    fun getCachePath(name:String): String? {
+    fun getCachePath(name: String): String? {
         var cachePath = ""
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
-            || !Environment.isExternalStorageRemovable()) {
-            cachePath = APP.instance.externalCacheDir?.path ?:""
-            AppLogs.dLog(TAG,"getCachePath 1")
+            || !Environment.isExternalStorageRemovable()
+        ) {
+            cachePath = APP.instance.externalCacheDir?.path ?: ""
+            AppLogs.dLog(TAG, "getCachePath 1")
         } else {
             cachePath = APP.instance.cacheDir.path
-            AppLogs.dLog(TAG,"getCachePath 2")
+            AppLogs.dLog(TAG, "getCachePath 2")
         }
 //        cachePath = FileUtils.getAppPath(cachePath,name)
-        cachePath = FileUtils.getAppPath(cachePath,"videoCache")
+        cachePath = FileUtils.getAppPath(cachePath, "videoCache")
 
         val file = File(cachePath)
         if (!file.exists()) {
             file.mkdirs()
         }
-        AppLogs.dLog(TAG,"getCachePath:${file.absolutePath}")
+        AppLogs.dLog(TAG, "getCachePath:${file.absolutePath}")
         return file.absolutePath
     }
 

@@ -61,8 +61,18 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     }
 
 
+    var isLoadData = false
+
     override fun startLoadData() {
 
+    }
+
+    fun loadNewsData(){
+        if (APP.instance.isHideSplash.not())return
+        addDefault()
+        viewModel.value.getNewsData(newsAdapter.mutableItems,NetParams.MAIN, page = page)
+        viewModel.value.getNewsVideoList("")
+        isLoadData = true
     }
 
     var absVerticalOffset = 0
@@ -295,6 +305,9 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         super.onResume()
         AppLogs.dLog(fragmentTAG,"onResume")
         jump()
+        if (isLoadData.not()){
+            loadNewsData()
+        }
         fBinding.root.postDelayed({
             updateTopUI()
         },500)
@@ -432,7 +445,6 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                     }
                     manager.showScreenAD(AD_POINT.aobws_newsclick_int)
                 }
-                addDefault()
                 addOnScrollListener(object : RecyclerView.OnScrollListener(){
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         super.onScrollStateChanged(recyclerView, newState)
@@ -517,8 +529,8 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
         }else{
             fBinding.topSearch.binding.ivPrivate.visibility = View.VISIBLE
         }
-        viewModel.value.getNewsData(newsAdapter.mutableItems,NetParams.MAIN, page = page)
-        viewModel.value.getNewsVideoList("")
+//        viewModel.value.getNewsData(newsAdapter.mutableItems,NetParams.MAIN, page = page)
+//        viewModel.value.getNewsVideoList("")
         fBinding.root.postDelayed({
             fBinding.topSearch.visibility = View.GONE
         },0)

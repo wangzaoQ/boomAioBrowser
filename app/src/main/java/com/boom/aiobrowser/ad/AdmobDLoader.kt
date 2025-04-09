@@ -130,7 +130,9 @@ class AdmobDLoader(
                     }.withAdListener(object : AdListener() {
                         override fun onAdImpression() {
 //                            AioADDataManager.preloadAD(adEnum)
-                            AioADDataManager.preloadAD(adEnum,"admob showNativeAD onAdImpression")
+                            if(adEnum!=ADEnum.NATIVE_AD){
+                                AioADDataManager.preloadAD(adEnum,"admob showNativeAD onAdImpression")
+                            }
                         }
 
                         override fun onAdClicked() {

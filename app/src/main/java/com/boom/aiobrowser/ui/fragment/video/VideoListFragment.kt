@@ -217,11 +217,6 @@ class VideoListFragment:  BaseFragment<NewsFragmentVideoListBinding>() {
     }
 
 
-    private fun stopDownLoad() {
-        AppLogs.dLog(VideoPreloadManager.TAG, "stopDownLoad${index}")
-        VideoPreloadManager.releaseAll()
-//        cacheHelper.cancel()
-    }
 
     private fun showDownloadPop() {
         runCatching {

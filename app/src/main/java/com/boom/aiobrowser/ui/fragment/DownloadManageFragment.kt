@@ -115,15 +115,6 @@ class DownloadManageFragment : BaseFragment<BrowserFragmentDownloadManageBinding
             }
         }
         viewModel.value.newsDownloadVideoLiveData.observe(this) {
-            rootActivity.addLaunch(success = {
-                it.forEach {
-                    if (it.vbreas.isNullOrEmpty().not()){
-                        VideoPreloadManager.serialList(1, mutableListOf<NewsData>().apply {
-                            add(it)
-                        })
-                    }
-                }
-            }, failBack = {})
             if (page == 1) {
                 videoAdapter.submitList(it)
             }else{

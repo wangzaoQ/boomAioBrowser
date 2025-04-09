@@ -14,6 +14,7 @@ import com.boom.aiobrowser.point.PointEvent
 import com.boom.aiobrowser.point.PointEventKey
 import com.boom.aiobrowser.tools.AppLogs
 import com.boom.aiobrowser.tools.WakeManager
+import com.boom.aiobrowser.ui.NativeScreenActivity
 import com.boom.aiobrowser.ui.activity.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -69,7 +70,7 @@ class BrowserLifeCycle : Application.ActivityLifecycleCallbacks {
             if (AioADDataManager.adAllowShowScreen() || AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)!=null){
                 val temp = mutableListOf<Activity>()
                 stack.forEach {
-                    if ((it is BaseActivity<*>).not()) {
+                    if ((it is BaseActivity<*>).not() || it is NativeScreenActivity) {
                         temp.add(it)
                     }
                 }

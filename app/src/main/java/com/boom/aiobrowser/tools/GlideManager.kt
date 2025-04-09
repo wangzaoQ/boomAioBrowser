@@ -44,28 +44,34 @@ object GlideManager {
             callFail?.invoke()
             return
         }
-
         GlideApp.with(mContext)
             .load(url)
             .override(width,height)
+            .centerCrop()
             .into(object : CustomTarget<Drawable?>() {
-                override fun onResourceReady(resource: Drawable, transition: com.bumptech.glide.request.transition.Transition<in Drawable?>?) {
+                override fun onResourceReady(
+                    resource: Drawable,
+                    transition: com.bumptech.glide.request.transition.Transition<in Drawable?>?
+                ) {
                     runCatching {
                         bitmapCall(resource.toBitmap(width, height, Bitmap.Config.RGB_565))
                     }.onFailure {
-                        AppLogs.eLog("GlideManager","通知图片获取失败")
+                        AppLogs.eLog("GlideManager", "通知图片获取失败")
                         callFail?.invoke()
                     }
-                }
-                override fun onLoadCleared(placeholder: Drawable?) {
-
                 }
 
                 override fun onLoadFailed(errorDrawable: Drawable?) {
                     super.onLoadFailed(errorDrawable)
+                    AppLogs.eLog("GlideManager", "通知图片获取失败")
                     callFail?.invoke()
                 }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+
+                }
             })
+
     }
 
 }

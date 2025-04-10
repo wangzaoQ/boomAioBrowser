@@ -39,6 +39,7 @@ object NetParams {
     var DOWNLOAD_EDITOR_PUSH = "DOWNLOAD_EDITOR_PUSH"
     var DOWNLOAD_FOR_YOU_PUSH = "DOWNLOAD_FOR_YOU_PUSH"
     var DOWNLOAD_UNLOCK_PUSH = "DOWNLOAD_UNLOCK_PUSH"
+    var DOWNLOAD_MANAGE_LIST = "DOWNLOAD_MANAGE_LIST"
     var DOWNLOAD_NEW_USER_PUSH = "DOWNLOAD_NEW_USER_PUSH"
 
 
@@ -140,6 +141,9 @@ object NetParams {
             }
             DOWNLOAD_UNLOCK_PUSH->{
                 isPush = true
+                map.put("opop","1802")
+            }
+            DOWNLOAD_MANAGE_LIST->{
                 map.put("opop","1802")
             }
             HOT_VIDEOS->{

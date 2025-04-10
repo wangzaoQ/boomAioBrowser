@@ -41,8 +41,8 @@ class NewsViewModel : BaseDataModel() {
         if (newsList.isNullOrEmpty() || refresh){
             loadData(loadBack = {
                 var list = NetRequest.request(HashMap<String, Any>().apply {
-                    put("sessionKey", NetParams.DOWNLOAD_UNLOCK_PUSH)
-                }) { NetController.getNewsList(NetParams.getParamsMap(NetParams.DOWNLOAD_UNLOCK_PUSH)) }.data
+                    put("sessionKey", NetParams.DOWNLOAD_MANAGE_LIST)
+                }) { NetController.getNewsList(NetParams.getParamsMap(NetParams.DOWNLOAD_MANAGE_LIST)) }.data
                     ?: mutableListOf()
                 list = detailHistoryVideo(dataList?: mutableListOf(),list)
                 if (list.isNullOrEmpty()){

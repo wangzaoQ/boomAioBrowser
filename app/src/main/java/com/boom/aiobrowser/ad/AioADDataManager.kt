@@ -16,6 +16,7 @@ import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.CacheManager.adLastTime
 import com.boom.aiobrowser.tools.CacheManager.isBUser
 import com.boom.aiobrowser.tools.TimeManager
+import com.boom.aiobrowser.tools.UIManager.isBuyUser
 import com.boom.aiobrowser.tools.appDataReset
 import com.google.android.gms.ads.MobileAds
 
@@ -102,6 +103,9 @@ object AioADDataManager {
     }
 
     fun getCacheAD(enum: ADEnum): ADResultData? {
+        if (isBuyUser().not() && enum == ADEnum.DEFAULT_AD){
+            return null
+        }
         val adPreloadBean = adCache[enum]
         if (adPreloadBean?.adRequestData == null || adPreloadBean?.adAny == null) {
             adCache.remove(enum)

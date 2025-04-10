@@ -24,38 +24,38 @@ internal class ADItem(parent: ViewGroup) : BaseViewHolder<BrowserItemHomeAdBindi
 ) {
 
     fun bind(item: NewsData, fragment: BaseFragment<*>?, position:Int, adapter: BaseQuickAdapter<*, *>) {
-        viewBinding?.apply {
-            var adPosId = AD_POINT.aobws_news_one
-            var adEnum = ADEnum.NATIVE_AD
-            if (item.adTag == ADEnum.BANNER_AD_NEWS_DETAILS.adName) {
-                adPosId = ADEnum.BANNER_AD_NEWS_DETAILS.adName
-                adEnum = ADEnum.BANNER_AD_NEWS_DETAILS
-                line.setBackgroundColor(
-                    ContextCompat.getColor(
-                        adapter.context,
-                        R.color.white
-                    )
-                )
-            } else {
-                line.setBackgroundColor(
-                    ContextCompat.getColor(
-                        adapter.context,
-                        R.color.color_black_F7F7F9
-                    )
-                )
-            }
-            if (AioADDataManager.adFilter1().not()) {
-                PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
-                    putString(PointValueKey.ad_pos_id, adPosId)
-                })
-            }
-            AioADShowManager(
-                if (fragment == null) (adapter.context as BaseActivity<*>) else fragment!!.rootActivity,
-                adEnum,
-                "原生"
-            ) {
-
-            }.showNativeAD(flRoot, adPosId)
-        }
+//        viewBinding?.apply {
+//            var adPosId = AD_POINT.aobws_news_one
+//            var adEnum = ADEnum.NATIVE_AD
+//            if (item.adTag == ADEnum.BANNER_AD_NEWS_DETAILS.adName) {
+//                adPosId = ADEnum.BANNER_AD_NEWS_DETAILS.adName
+//                adEnum = ADEnum.BANNER_AD_NEWS_DETAILS
+//                line.setBackgroundColor(
+//                    ContextCompat.getColor(
+//                        adapter.context,
+//                        R.color.white
+//                    )
+//                )
+//            } else {
+//                line.setBackgroundColor(
+//                    ContextCompat.getColor(
+//                        adapter.context,
+//                        R.color.color_black_F7F7F9
+//                    )
+//                )
+//            }
+//            if (AioADDataManager.adFilter1().not()) {
+//                PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
+//                    putString(PointValueKey.ad_pos_id, adPosId)
+//                })
+//            }
+//            AioADShowManager(
+//                if (fragment == null) (adapter.context as BaseActivity<*>) else fragment!!.rootActivity,
+//                adEnum,
+//                "原生"
+//            ) {
+//
+//            }.showNativeAD(flRoot, adPosId)
+//        }
     }
 }

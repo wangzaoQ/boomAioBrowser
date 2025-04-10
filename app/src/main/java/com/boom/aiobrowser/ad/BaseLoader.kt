@@ -50,9 +50,9 @@ abstract class BaseLoader(
         })
     }
 
-    fun nativePoint(startTime: Long) {
+    fun nativePoint(startTime: Long,enum:ADEnum) {
         PointEvent.posePoint(PointEventKey.aobws_ad_load, Bundle().apply {
-            putString(PointValueKey.ad_pos_id,ADEnum.NATIVE_AD.adName)
+            putString(PointValueKey.ad_pos_id,enum.adName)
             putString(PointValueKey.ad_key,requestBean.ktygzdzn)
             putLong(PointValueKey.ad_time, (System.currentTimeMillis() - startTime) / 1000)
         })

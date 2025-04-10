@@ -466,30 +466,30 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
                             //不是惯性滑动
                             lastPosition = (fBinding.rv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                             if (lastPosition == -1)return
-                            if (nativeADAlive.not() && AioADDataManager.getCacheAD(ADEnum.NATIVE_AD)!=null){
-                                if (APP.instance.firstInsertHomeAD && AioADDataManager.adFilter1().not()){
-                                    APP.instance.firstInsertHomeAD = false
-                                    nativeADAlive = true
-                                    if (lastPosition<=newsAdapter.items.size){
-                                        newsAdapter.mutableItems.add(lastPosition, NewsData().apply {
-                                            dataType = NewsData.TYPE_AD
-                                        })
-                                        AppLogs.dLog(fragmentTAG,"列表滑动插入广告位置 1:${lastPosition}")
-                                        val size = newsAdapter.items.size
-                                        for (i in lastPosition until size){
-                                            val mod = i%size
-                                            if (((mod == nativeInterval+lastPosition || mod == nativeInterval +lastPosition+3))){
-                                                newsAdapter.mutableItems.add(i+1,NewsData().apply {
-                                                    dataType = NewsData.TYPE_AD
-                                                })
-                                                AppLogs.dLog(fragmentTAG,"列表滑动插入广告位置 2:${i}")
-                                            }
-                                        }
-                                        newsAdapter.notifyItemInserted(lastPosition)
-                                        newsAdapter.notifyItemRangeChanged(lastPosition, newsAdapter.mutableItems.size-lastPosition)
-                                    }
-                                }
-                            }
+//                            if (nativeADAlive.not() && AioADDataManager.getCacheAD(ADEnum.NATIVE_AD)!=null){
+//                                if (APP.instance.firstInsertHomeAD && AioADDataManager.adFilter1().not()){
+//                                    APP.instance.firstInsertHomeAD = false
+//                                    nativeADAlive = true
+//                                    if (lastPosition<=newsAdapter.items.size){
+//                                        newsAdapter.mutableItems.add(lastPosition, NewsData().apply {
+//                                            dataType = NewsData.TYPE_AD
+//                                        })
+//                                        AppLogs.dLog(fragmentTAG,"列表滑动插入广告位置 1:${lastPosition}")
+//                                        val size = newsAdapter.items.size
+//                                        for (i in lastPosition until size){
+//                                            val mod = i%size
+//                                            if (((mod == nativeInterval+lastPosition || mod == nativeInterval +lastPosition+3))){
+//                                                newsAdapter.mutableItems.add(i+1,NewsData().apply {
+//                                                    dataType = NewsData.TYPE_AD
+//                                                })
+//                                                AppLogs.dLog(fragmentTAG,"列表滑动插入广告位置 2:${i}")
+//                                            }
+//                                        }
+//                                        newsAdapter.notifyItemInserted(lastPosition)
+//                                        newsAdapter.notifyItemRangeChanged(lastPosition, newsAdapter.mutableItems.size-lastPosition)
+//                                    }
+//                                }
+//                            }
                             hideShareImage()
                             var firstPosition = (fBinding.rv.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
                             if (firstPosition>0 && topSearch.visibility == View.GONE){
@@ -564,21 +564,21 @@ class MainFragment : BaseFragment<BrowserFragmentMainBinding>()  {
     }
 
     fun addADData(newsBeans: List<NewsData>?):List<NewsData> {
-        var list = ArrayList<NewsData>()
-        if (AioADDataManager.getCacheAD(ADEnum.NATIVE_AD)!=null && AioADDataManager.adFilter1().not()){
-            nativeADAlive = true
-            newsBeans?.forEachIndexed { index, newsBean ->
-                val listADInterval = listOf(nativeInterval, 3)
-                val interval = index.mod(listADInterval.sum())
-                if (((index != 0 && interval == 0) || interval == nativeInterval || interval == nativeInterval + 3)){
-                    list.add(NewsData().apply {
-                        dataType = NewsData.TYPE_AD
-                    })
-                }
-                list.add(newsBean)
-            }
-            return list
-        }
+//        var list = ArrayList<NewsData>()
+//        if (AioADDataManager.getCacheAD(ADEnum.NATIVE_AD)!=null && AioADDataManager.adFilter1().not()){
+//            nativeADAlive = true
+//            newsBeans?.forEachIndexed { index, newsBean ->
+//                val listADInterval = listOf(nativeInterval, 3)
+//                val interval = index.mod(listADInterval.sum())
+//                if (((index != 0 && interval == 0) || interval == nativeInterval || interval == nativeInterval + 3)){
+//                    list.add(NewsData().apply {
+//                        dataType = NewsData.TYPE_AD
+//                    })
+//                }
+//                list.add(newsBean)
+//            }
+//            return list
+//        }
         return newsBeans?:ArrayList()
     }
 

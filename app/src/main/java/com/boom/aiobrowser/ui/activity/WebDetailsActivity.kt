@@ -161,8 +161,8 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
     var allowShowRate = false
 
     override fun setShowView() {
-        AioADDataManager.preloadAD(ADEnum.BANNER_AD_NEWS_DETAILS_TOP,"新闻详情页展示时")
-        AioADDataManager.preloadAD(ADEnum.BANNER_AD_NEWS_DETAILS,"新闻详情页展示时")
+//        AioADDataManager.preloadAD(ADEnum.BANNER_AD_NEWS_DETAILS_TOP,"新闻详情页展示时")
+//        AioADDataManager.preloadAD(ADEnum.BANNER_AD_NEWS_DETAILS,"新闻详情页展示时")
 
         newData = getBeanByGson(
             intent.getStringExtra(ParamsConfig.JSON_PARAMS),
@@ -180,21 +180,21 @@ class WebDetailsActivity : BaseActivity<BrowserActivityWebDetailsBinding>() {
         if (readCount == 2 || readCount == 5 || readCount == 10 || readCount == 20){
             allowShowRate = true
         }
-        addLaunch(success = {
-            while (getActivityStatus().not()){
-                delay(1000)
-            }
-            withContext(Dispatchers.Main){
-                if (AioADDataManager.adFilter1().not()) {
-                    PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
-                        putString(PointValueKey.ad_pos_id, ADEnum.BANNER_AD_NEWS_DETAILS_TOP.adName)
-                    })
-                }
-                AioADShowManager(this@WebDetailsActivity,ADEnum.BANNER_AD_NEWS_DETAILS_TOP,"详情页原生/banner"){
-
-                }.showNativeAD(acBinding.flRoot,ADEnum.BANNER_AD_NEWS_DETAILS_TOP.adName)
-            }
-        }, failBack = {})
+//        addLaunch(success = {
+//            while (getActivityStatus().not()){
+//                delay(1000)
+//            }
+//            withContext(Dispatchers.Main){
+//                if (AioADDataManager.adFilter1().not()) {
+//                    PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
+//                        putString(PointValueKey.ad_pos_id, ADEnum.BANNER_AD_NEWS_DETAILS_TOP.adName)
+//                    })
+//                }
+//                AioADShowManager(this@WebDetailsActivity,ADEnum.BANNER_AD_NEWS_DETAILS_TOP,"详情页原生/banner"){
+//
+//                }.showNativeAD(acBinding.flRoot,ADEnum.BANNER_AD_NEWS_DETAILS_TOP.adName)
+//            }
+//        }, failBack = {})
 
     }
 

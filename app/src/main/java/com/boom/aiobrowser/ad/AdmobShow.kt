@@ -110,16 +110,18 @@ class AdmobShow(activity: BaseActivity<*>, adEnum: ADEnum, tag: String,result: (
             if (pointTag == AD_POINT.aobws_task_add){
                 val binding: BrowserAdNative2Binding = BrowserAdNative2Binding.inflate(activity.layoutInflater)
                 nativeAdView = binding.root
-            }else if (pointTag == ADEnum.BANNER_AD_NEWS_DETAILS.adName){
-                //新闻正文
-                val binding: BrowserAdNativeBinding = BrowserAdNativeBinding.inflate(activity.layoutInflater)
-                nativeAdView = binding.root
-            }else if (pointTag == AD_POINT.aobws_play_bnat){
+            }
+//            else if (pointTag == ADEnum.BANNER_AD_NEWS_DETAILS.adName){
+//                //新闻正文
+//                val binding: BrowserAdNativeBinding = BrowserAdNativeBinding.inflate(activity.layoutInflater)
+//                nativeAdView = binding.root
+//            }
+            else if (pointTag == AD_POINT.aobws_play_bnat){
                 // 播放视频
                 val binding: BrowserAdNative3Binding = BrowserAdNative3Binding.inflate(activity.layoutInflater)
                 nativeAdView = binding.root
             }else{
-                // 新闻列表
+                // 新闻列表/download 底部下载
                 val binding: BrowserAdNative4Binding = BrowserAdNative4Binding.inflate(activity.layoutInflater)
                 nativeAdView = binding.root
             }

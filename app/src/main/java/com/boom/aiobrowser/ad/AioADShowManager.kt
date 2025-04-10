@@ -95,9 +95,9 @@ class AioADShowManager(
     ) {
         val data = AioADDataManager.getCacheAD(adEnum)
         var status = activity?.getActivityStatus()?.not()?:true
-        if (adEnum == ADEnum.NATIVE_AD || adEnum == ADEnum.BANNER_AD_NEWS_DETAILS_TOP){
-            status = false
-        }
+//        if (adEnum == ADEnum.NATIVE_AD || adEnum == ADEnum.BANNER_AD_NEWS_DETAILS_TOP){
+//            status = false
+//        }
         if (activity == null || data == null) {
             adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag)
             return

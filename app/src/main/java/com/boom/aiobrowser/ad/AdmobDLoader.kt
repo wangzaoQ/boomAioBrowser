@@ -126,11 +126,12 @@ class AdmobDLoader(
                                 adShowType = 2
                             }
                         })
-                        nativePoint(startTime)
+                        nativePoint(startTime, adEnum)
                     }.withAdListener(object : AdListener() {
                         override fun onAdImpression() {
 //                            AioADDataManager.preloadAD(adEnum)
-                            if(adEnum!=ADEnum.NATIVE_AD){
+                            if(adEnum!=ADEnum.DEFAULT_AD){
+                                AioADDataManager.adCache.remove(adEnum)
                                 AioADDataManager.preloadAD(adEnum,"admob showNativeAD onAdImpression")
                             }
                         }
@@ -153,12 +154,12 @@ class AdmobDLoader(
         var startTime = System.currentTimeMillis()
         CoroutineScope(Dispatchers.IO).launch{
             val adView = AdView(APP.instance)
-
-            if (adEnum == ADEnum.NATIVE_AD || adEnum == ADEnum.BANNER_AD_NEWS_DETAILS){
-                adView.setAdSize(AdSize.MEDIUM_RECTANGLE)
-            }else{
-                adView.setAdSize(AdSize.BANNER)
-            }
+            adView.setAdSize(AdSize.BANNER)
+//            if (adEnum == ADEnum.NATIVE_AD || adEnum == ADEnum.BANNER_AD_NEWS_DETAILS){
+//                adView.setAdSize(AdSize.MEDIUM_RECTANGLE)
+//            }else{
+//                adView.setAdSize(AdSize.BANNER)
+//            }
 //                val adSize = AdSize.getCurrentOrientationInlineAdaptiveBannerAdSize(NewsAPP.singleApp.appLifecycle.stack.get(NewsAPP.singleApp.appLifecycle.stack.size-1), 320)
 //                adView.setAdSize(adSize)
             adView.adUnitId = requestBean.ktygzdzn

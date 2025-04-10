@@ -6,7 +6,6 @@ import com.applovin.sdk.AppLovinSdkInitializationConfiguration
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.ad.ADEnum.INT_AD
 import com.boom.aiobrowser.ad.ADEnum.LAUNCH_AD
-import com.boom.aiobrowser.ad.ADEnum.NATIVE_AD
 import com.boom.aiobrowser.data.ADResultData
 import com.boom.aiobrowser.data.AioADData
 import com.boom.aiobrowser.data.AioRequestData
@@ -83,15 +82,15 @@ object AioADDataManager {
                 INT_AD ->{
                     it.adRequestList = bean.aobws_main_one ?: mutableListOf()
                 }
-                NATIVE_AD ->{
-                    it.adRequestList = bean.aobws_detail_bnat ?: mutableListOf()
-                }
+//                NATIVE_AD ->{
+//                    it.adRequestList = bean.aobws_detail_bnat ?: mutableListOf()
+//                }
                 ADEnum.BANNER_AD_NEWS_DETAILS_TOP ->{
                     it.adRequestList = bean.aobws_ban_newtp ?: mutableListOf()
                 }
-                ADEnum.BANNER_AD_NEWS_DETAILS ->{
-                    it.adRequestList = bean.aobws_ban_newin ?: mutableListOf()
-                }
+//                ADEnum.BANNER_AD_NEWS_DETAILS ->{
+//                    it.adRequestList = bean.aobws_ban_newin ?: mutableListOf()
+//                }
                 ADEnum.DEFAULT_AD ->{
                     it.adRequestList = bean.aobws_refer_nat?: mutableListOf()
                 }
@@ -155,9 +154,7 @@ object AioADDataManager {
         }
         AppLogs.dLog(TAG, "预加载位置:${tag} 加载类型:${enum.adName}")
         if (adFilter1()) return
-        if (enum != NATIVE_AD){
-            if (getCacheAD(enum) !=null)return
-        }
+        if (getCacheAD(enum) !=null)return
         loadAD(enum)
     }
 

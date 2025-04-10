@@ -135,7 +135,7 @@ class MaxDLoader(
                             PointEvent.adPoint(it,p1,requestBean,adEnum)
                         }
                     }
-                    nativePoint(startTime)
+                    nativePoint(startTime,adEnum)
                 }
 
                 override fun onNativeAdLoadFailed(p0: String, p1: MaxError){

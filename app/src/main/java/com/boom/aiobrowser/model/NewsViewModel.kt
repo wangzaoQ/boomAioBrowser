@@ -453,12 +453,12 @@ class NewsViewModel : BaseDataModel() {
 //                                    }
                                 }
                             })
-                            if (newsList.size == 5 && AioADDataManager.getCacheAD(ADEnum.BANNER_AD_NEWS_DETAILS)!=null){
-                                newsList.add(NewsData().apply {
-                                    dataType = NewsData.TYPE_AD
-                                    adTag = ADEnum.BANNER_AD_NEWS_DETAILS.adName
-                                })
-                            }
+//                            if (newsList.size == 5 && AioADDataManager.getCacheAD(ADEnum.BANNER_AD_NEWS_DETAILS)!=null){
+//                                newsList.add(NewsData().apply {
+//                                    dataType = NewsData.TYPE_AD
+//                                    adTag = ADEnum.BANNER_AD_NEWS_DETAILS.adName
+//                                })
+//                            }
                         }
                     }
                 }

@@ -18,6 +18,7 @@ import androidx.viewpager.widget.ViewPager
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.ad.ADEnum
+import com.boom.aiobrowser.ad.AioADDataManager
 import com.boom.aiobrowser.ad.AioADShowManager
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.NFEnum
@@ -485,7 +486,7 @@ class MainActivity : BaseActivity<BrowserActivityMainBinding>() {
             }
             APP.jumpLiveData.postValue(JumpDataManager.addTabToOtherWeb(APP.instance.shareText,title="","分享网页",true))
         }
-
+        AioADDataManager.preloadAD(ADEnum.REWARD_AD,"首页展示时")
         if (isNormal.not()){
             finish()
             return

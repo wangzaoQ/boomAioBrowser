@@ -27,7 +27,7 @@ abstract class BaseShow(var activity: BaseActivity<*>, var adEnum: ADEnum,var  t
 
     fun adDismissFullScreen(adEnum: ADEnum, tag: String) {
         AppLogs.dLog(AioADDataManager.TAG, "tag:${tag} 位置:${adEnum.adName}")
-        if (adEnum == ADEnum.LAUNCH_AD) {
+        if (adEnum == ADEnum.LAUNCH_AD || adEnum == ADEnum.REWARD_AD) {
             loadComplete(type = AioADDataManager.AD_SHOW_TYPE_SUCCESS, tag)
         }
         setADDismissTime()

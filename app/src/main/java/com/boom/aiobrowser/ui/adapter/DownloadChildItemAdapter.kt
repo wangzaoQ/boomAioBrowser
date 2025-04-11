@@ -29,6 +29,27 @@ class DownloadChildItemAdapter(): BaseQuickAdapter<VideoDownloadData, DownloadCh
         if (data == null)return
         holder.viewBinding.apply{
             tvText.text = data.resolution
+            var allowShowAD = false
+            if (data.resolution.isNullOrEmpty()){
+                if (mutableItems.isNotEmpty()){
+                    if (position == 1){
+                        allowShowAD = true
+                    }
+                }
+            }else{
+                if (mutableItems.isNotEmpty()){
+                    if (position == 0){
+                        allowShowAD = true
+                    }
+                }
+            }
+            if (allowShowAD){
+                data.allowShowAD = true
+            }else{
+                data.allowShowAD = false
+            }
+            ivADTips.visibility = if (allowShowAD) View.VISIBLE else View.GONE
+
             if (data.downloadType == VideoDownloadData.DOWNLOAD_SUCCESS){
                 ivSelected.setImageResource(R.mipmap.ic_video_download_success)
             }else{

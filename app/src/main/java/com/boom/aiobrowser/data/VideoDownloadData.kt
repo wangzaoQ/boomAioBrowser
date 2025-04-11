@@ -44,6 +44,8 @@ class VideoDownloadData {
 
     var resolution:String?=""
 
+    var allowShowAD = false
+
 
     fun createDefault(
         videoId: String,

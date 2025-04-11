@@ -21,7 +21,7 @@ android {
         //af
 //        applicationId "com.test.boom"
         //remoteconfig
-        applicationId "com.test.rc"
+        applicationId "com.test.rc2"
         minSdk 24
         targetSdk 34
         versionCode 1

@@ -18,6 +18,8 @@ import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.nativead.NativeAdOptions
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -187,6 +189,41 @@ class AdmobDLoader(
             }
             withContext(Dispatchers.Main){
                 adView.loadAd(AdRequest.Builder().build())
+            }
+        }
+    }
+
+    override fun rewarded() {
+        var startTime = System.currentTimeMillis()
+
+        CoroutineScope(Dispatchers.IO).launch(){
+            var adRequest = AdRequest.Builder().build()
+            withContext(Dispatchers.Main){
+                RewardedAd.load(APP.instance,requestBean.ktygzdzn ?: "", adRequest, object : RewardedAdLoadCallback() {
+                    override fun onAdFailedToLoad(adError: LoadAdError) {
+                        loadFailed(adError.message, failedCallBack)
+                    }
+
+                    override fun onAdLoaded(ad: RewardedAd) {
+                        successCallBack(ADResultData().apply {
+                            adRequestData = requestBean
+                            adAny = ad
+                            adType = requestBean.pxdtzgho
+                            adRequestTime = (System.currentTimeMillis() - startTime) / 1000
+                        })
+                        if (APP.isDebug){
+//                                PointEvent.adPoint(AdValue.zza(1*100000,"",1*100000),appOpenAd,requestBean,adEnum)
+                        }
+                        PointEvent.posePoint(PointEventKey.aobws_ad_load, Bundle().apply {
+                            putString(PointValueKey.ad_pos_id,adEnum.adName)
+                            putString(PointValueKey.ad_key,requestBean.ktygzdzn)
+                            putLong(PointValueKey.ad_time, (System.currentTimeMillis() - startTime) / 1000)
+                        })
+                        ad.setOnPaidEventListener {
+                            PointEvent.adPoint(it,ad,requestBean,adEnum)
+                        }
+                    }
+                })
             }
         }
     }

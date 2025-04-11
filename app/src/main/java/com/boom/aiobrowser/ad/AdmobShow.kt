@@ -23,6 +23,7 @@ import com.boom.aiobrowser.tools.AppLogs
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.OnUserEarnedRewardListener
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.nativead.MediaView
@@ -83,6 +84,14 @@ class AdmobShow(activity: BaseActivity<*>, adEnum: ADEnum, tag: String,result: (
                     }
                     show(activity!!)
                 }
+            }
+            AioADDataManager.AD_TYPE_RV -> (adResultData.adAny as RewardedAd).run {
+                fullScreenContentCallback = callback
+                show(activity!!, OnUserEarnedRewardListener { rewardItem ->
+                    // Handle the reward.
+                    val rewardAmount = rewardItem.amount
+                    val rewardType = rewardItem.type
+                })
             }
         }
         activity.life.destoryList.add{

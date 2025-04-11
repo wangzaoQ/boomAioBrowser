@@ -17,6 +17,16 @@
         android:layout_height="47dp"
         android:orientation="horizontal"
         >
+        
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivADTips"
+            android:layout_width="25dp"
+            android:layout_height="13dp"
+            app:srcCompat="@mipmap/ic_ad_tips"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:visibility="gone"
+            ></androidx.appcompat.widget.AppCompatImageView>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvText"
@@ -29,7 +39,8 @@
             android:layout_centerVertical="true"
             style="@style/app_text_bold"
             android:textColor="@color/black"
-            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/ivADTips"
+            android:layout_marginStart="10dp"
             tools:text="1080" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvAD"

@@ -34,6 +34,7 @@ object AioADDataManager {
     const val AD_TYPE_INT = "int"
     const val AD_TYPE_NATIVE = "nat"
     const val AD_TYPE_BANNER = "ban"
+    const val AD_TYPE_RV = "rewarded"
 
     const val AD_SHOW_TYPE_SUCCESS = "AD_SHOW_TYPE_SUCCESS"
     const val AD_SHOW_TYPE_FAILED = "AD_SHOW_TYPE_FAILED"
@@ -93,6 +94,9 @@ object AioADDataManager {
 //                }
                 ADEnum.DEFAULT_AD ->{
                     it.adRequestList = bean.aobws_refer_nat?: mutableListOf()
+                }
+                ADEnum.REWARD_AD->{
+                    it.adRequestList = bean.aobws_local_reward?: mutableListOf()
                 }
 
                 else -> {}

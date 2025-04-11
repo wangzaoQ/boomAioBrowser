@@ -33,6 +33,7 @@ abstract class BaseLoader(
             AioADDataManager.AD_TYPE_INT -> intAD()
             AioADDataManager.AD_TYPE_NATIVE -> nativeAD()
             AioADDataManager.AD_TYPE_BANNER -> banner()
+            AioADDataManager.AD_TYPE_RV -> rewarded()
         }
     }
 
@@ -41,6 +42,7 @@ abstract class BaseLoader(
     abstract fun intAD()
     abstract fun nativeAD()
     abstract fun banner()
+    abstract fun rewarded()
 
     fun bannerPoint(startTime: Long) {
         PointEvent.posePoint(PointEventKey.aobws_ad_load, Bundle().apply {

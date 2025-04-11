@@ -344,8 +344,27 @@ class DownLoadPop(context: Context,var fromType:Int,var backToDownload:Boolean =
                     DownloadActivity.startActivity(context as BaseActivity<*>,"webpage_download_pop",backToDownload)
                     dismiss()
                 }else{
-                    showDownloadAD {
-                        download(callBack)
+                    var showReward = false
+                    for (i in 0 until downloadAdapter.items.size){
+                        var data = downloadAdapter.items.get(i)
+                        data.formatsList.forEach {
+                            if (it.allowShowAD && it.videoChecked && it.downloadType!=VideoDownloadData.DOWNLOAD_SUCCESS){
+                                showReward = true
+                            }
+                        }
+                        if (showReward){
+                            break
+                        }
+                    }
+                    if (showReward){
+                        var manager = AioADShowManager(context as BaseActivity<*>,ADEnum.REWARD_AD, tag = "视频下载激励") {
+                            download(callBack)
+                        }
+                        manager.showScreenAD(AD_POINT.aobws_video_rewarded)
+                    }else{
+                        showDownloadAD {
+                            download(callBack)
+                        }
                     }
                 }
                 tips2?.dismiss()
@@ -504,7 +523,7 @@ class DownLoadPop(context: Context,var fromType:Int,var backToDownload:Boolean =
     }
 
     fun showDownloadAD(result: () -> Unit) {
-        var manager = AioADShowManager(context as BaseActivity<*>, ADEnum.INT_AD, tag = "插屏") {
+        var manager = AioADShowManager(context as BaseActivity<*>, ADEnum.INT_AD, tag = "视频下载") {
             result.invoke()
         }
         manager.showScreenAD(AD_POINT.aobws_download_int)

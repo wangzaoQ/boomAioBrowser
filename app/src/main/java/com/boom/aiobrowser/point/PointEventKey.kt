@@ -383,4 +383,5 @@ object AD_POINT{
     const val aobws_downclick_int = "aobws_downclick_int"
     const val aobws_videoclick_int = "aobws_downclick_int"
     const val aobws_downguide_int = "aobws_downguide_int"
+    const val aobws_video_rewarded = "aobws_video_rewarded"
 }

@@ -383,5 +383,6 @@
     <string name="app_web_guide3">3、Click the button to download video</string>
 
     <string name="net_error">Request failed, please try again</string>
+    <string name="app_contact_us">Contact Us</string>
 
 </resources>

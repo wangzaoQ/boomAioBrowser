@@ -1,22 +1,21 @@
 package com.boom.aiobrowser.ui.fragment
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.base.BaseFragment
 import com.boom.aiobrowser.data.UserData
 import com.boom.aiobrowser.databinding.NewsFragmentMeBinding
-import com.boom.aiobrowser.firebase.FirebaseConfig
 import com.boom.aiobrowser.model.APPUserViewModel
 import com.boom.aiobrowser.other.LoginConfig.SIGN_LOGIN
 import com.boom.aiobrowser.other.LoginConfig.SIGN_LOGIN_ONE_TAP
@@ -28,9 +27,6 @@ import com.boom.aiobrowser.tools.BrowserManager
 import com.boom.aiobrowser.tools.CacheManager
 import com.boom.aiobrowser.tools.GlideManager
 import com.boom.aiobrowser.tools.JumpDataManager
-import com.boom.aiobrowser.tools.SubscribeManager
-import com.boom.aiobrowser.tools.UIManager
-import com.boom.aiobrowser.tools.toJson
 import com.boom.aiobrowser.ui.activity.AboutActivity
 import com.boom.aiobrowser.ui.activity.DownloadActivity
 import com.boom.aiobrowser.ui.activity.HistoryActivity
@@ -52,7 +48,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GetTokenResult
 import com.google.firebase.auth.GoogleAuthProvider
 import pop.basepopup.BasePopupWindow.OnDismissListener
-import java.lang.ref.WeakReference
+
 
 class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
 
@@ -92,6 +88,18 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
         fBinding?.apply {
             llLogin.setOneClick {
                 ivUser.performClick()
+            }
+            llContactUs.setOneClick {
+                val intent = Intent(Intent.ACTION_SEND)
+                intent.setType("message/rfc822")
+                intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("sobanaliali99@gmail.com"))
+                intent.putExtra(Intent.EXTRA_SUBJECT, "")
+                intent.putExtra(Intent.EXTRA_TEXT, "")
+                try {
+                    startActivity(Intent.createChooser(intent, ""))
+                } catch (ex: ActivityNotFoundException) {
+                    Toast.makeText(context, "未安装邮件客户端", Toast.LENGTH_SHORT).show()
+                }
             }
             ivUser.setOneClick {
                 var user = CacheManager.getUser()

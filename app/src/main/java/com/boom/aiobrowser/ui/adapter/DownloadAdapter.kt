@@ -125,10 +125,11 @@ class DownloadAdapter(): BaseQuickAdapter<VideoUIData, DownloadAdapter.VH>() {
                             if (downloadType == VideoDownloadData.DOWNLOAD_SUCCESS) {
                                 VideoPreActivity.startVideoPreActivity((context as BaseActivity<*>),data)
                             } else{
+                                var currentVideoChecked = item.formatsList.get(position).videoChecked
                                 item.formatsList.forEach {
                                     it.videoChecked = false
                                 }
-                                videoChecked = true
+                                item.formatsList.get(position).videoChecked = currentVideoChecked.not()
                                 childAdapter.notifyDataSetChanged()
                                 downLoadPop?.updateBottomSize()
                             }

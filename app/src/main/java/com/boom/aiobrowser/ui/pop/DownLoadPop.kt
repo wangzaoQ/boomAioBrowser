@@ -338,24 +338,27 @@ class DownLoadPop(context: Context,var fromType:Int,var backToDownload:Boolean =
                 downloadAdapter.notifyDataSetChanged()
             }
             btnDownloadAll.setOnClickListener {
-                PointEvent.posePoint(PointEventKey.download_click)
                 CacheManager.dayDownloadCount += 1
                 if (btnDownloadAll.text.toString() == context.getString(R.string.app_open)){
+                    PointEvent.posePoint(PointEventKey.download_click)
                     DownloadActivity.startActivity(context as BaseActivity<*>,"webpage_download_pop",backToDownload)
                     dismiss()
                 }else{
                     var showReward = false
+                    var allowDownload = false
                     for (i in 0 until downloadAdapter.items.size){
                         var data = downloadAdapter.items.get(i)
                         data.formatsList.forEach {
                             if (it.allowShowAD && it.videoChecked && it.downloadType!=VideoDownloadData.DOWNLOAD_SUCCESS){
                                 showReward = true
                             }
-                        }
-                        if (showReward){
-                            break
+                            if (it.videoChecked){
+                                allowDownload = true
+                            }
                         }
                     }
+                    if (allowDownload.not())return@setOnClickListener
+                    PointEvent.posePoint(PointEventKey.download_click)
                     if (showReward){
                         RewardedPop(context,callBack={
                             if (it == 1){
@@ -413,7 +416,6 @@ class DownLoadPop(context: Context,var fromType:Int,var backToDownload:Boolean =
         }
         updateData(true)
         setOutSideDismiss(true)
-        setBackground(R.color.color_70_black)
         showPopupWindow()
         PointEvent.posePoint(PointEventKey.webpage_download_pop, Bundle().apply {
             putString(PointValueKey.from_type,popFrom)

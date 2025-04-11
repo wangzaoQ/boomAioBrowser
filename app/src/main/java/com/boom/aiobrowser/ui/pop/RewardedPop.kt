@@ -30,6 +30,7 @@ class RewardedPop(context: Context,var callBack: (type:Int) -> Unit) : BasePopup
                 dismiss()
             }
         }
+        setBackground(R.color.color_70_black)
         showPopupWindow()
     }
 

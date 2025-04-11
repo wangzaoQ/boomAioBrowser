@@ -380,4 +380,7 @@
     <string name="app_web_guide3">3. ボタンをクリックしてビデオをダウンロードする</string>
     <string name="net_error">リクエストに失敗しました。もう一度お試しください。</string>
 
+    <string name="app_contact_us">お問い合わせ</string>
+    <string name="app_rewarded_tips">この動画をダウンロードするには、リワード広告を視聴してください</string>
+    <string name="app_try_again">もう一度お試しください</string>
 </resources>

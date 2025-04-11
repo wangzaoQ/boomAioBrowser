@@ -381,5 +381,7 @@
     <string name="app_web_guide2">2. ดูวิดีโอ</string>
     <string name="app_web_guide3">3. คลิกปุ่มเพื่อดาวน์โหลดวิดีโอ</string>
     <string name="net_error">การร้องขอล้มเหลว กรุณาลองอีกครั้ง</string>
-
+    <string name="app_contact_us">ติดต่อเรา</string>
+    <string name="app_rewarded_tips">ดูโฆษณาที่มีรางวัลเพื่อดาวน์โหลดวิดีโอนี้</string>
+    <string name="app_try_again">ลองอีกครั้ง</string>
 </resources>

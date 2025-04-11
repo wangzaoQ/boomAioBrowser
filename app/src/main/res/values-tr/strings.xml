@@ -381,4 +381,7 @@
     <string name="app_web_guide3">3. Videoyu indirmek için düğmeye tıklayın</string>
     <string name="net_error">İstek başarısız oldu, lütfen tekrar deneyin</string>
 
+    <string name="app_contact_us">Bizimle İletişime Geçin</string>
+    <string name="app_rewarded_tips">Bu videoyu indirmek için Ödüllü bir reklam izleyin</string>
+    <string name="app_try_again">tekrar deneyin</string>
 </resources>

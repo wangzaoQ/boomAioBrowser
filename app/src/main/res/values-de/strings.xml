@@ -382,4 +382,7 @@
     <string name="app_web_guide3">3. Klicke auf den Button, um das Video herunterzuladen</string>
     <string name="net_error">Anfrage fehlgeschlagen, bitte versuchen Sie es erneut</string>
 
+    <string name="app_contact_us">Kontakt</string>
+    <string name="app_rewarded_tips">Sieh dir eine belohnte Anzeige an, um dieses Video herunterzuladen</string>
+    <string name="app_try_again">Erneut versuchen</string>
 </resources>

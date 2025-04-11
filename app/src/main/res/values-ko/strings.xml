@@ -378,5 +378,7 @@
     <string name="app_web_guide2">2. 비디오 시청하기</string>
     <string name="app_web_guide3">3. 버튼을 클릭하여 비디오 다운로드</string>
     <string name="net_error">요청이 실패했습니다. 다시 시도하세요.</string>
-
+    <string name="app_contact_us">문의하기</string>
+    <string name="app_rewarded_tips">이 동영상을 다운로드하려면 보상형 광고를 시청하세요</string>
+    <string name="app_try_again">다시 시도하세요</string>
 </resources>

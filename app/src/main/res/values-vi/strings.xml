@@ -381,4 +381,7 @@
     <string name="app_web_guide3">3. Nhấn nút để tải video</string>
     <string name="net_error">Yêu cầu không thành công, vui lòng thử lại</string>
 
+    <string name="app_contact_us">Liên hệ với chúng tôi</string>
+    <string name="app_rewarded_tips">Xem quảng cáo có thưởng để tải xuống video này</string>
+    <string name="app_try_again">thử lại</string>
 </resources>

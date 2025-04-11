@@ -2,6 +2,7 @@ package com.boom.aiobrowser.ui.fragment
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import com.blankj.utilcode.util.ToastUtils
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
 import com.boom.aiobrowser.base.BaseActivity
@@ -90,15 +92,28 @@ class MeFragment : BaseFragment<NewsFragmentMeBinding>() {
                 ivUser.performClick()
             }
             llContactUs.setOneClick {
-                val intent = Intent(Intent.ACTION_SEND)
-                intent.setType("message/rfc822")
-                intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("sobanaliali99@gmail.com"))
-                intent.putExtra(Intent.EXTRA_SUBJECT, "")
-                intent.putExtra(Intent.EXTRA_TEXT, "")
-                try {
-                    startActivity(Intent.createChooser(intent, ""))
-                } catch (ex: ActivityNotFoundException) {
-                    Toast.makeText(context, "未安装邮件客户端", Toast.LENGTH_SHORT).show()
+//                val intent = Intent(Intent.ACTION_SEND)
+//                intent.setType("message/rfc822")
+//                intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("sobanaliali99@gmail.com"))
+//                intent.putExtra(Intent.EXTRA_SUBJECT, "")
+//                intent.putExtra(Intent.EXTRA_TEXT, "")
+//                try {
+//                    startActivity(Intent.createChooser(intent, ""))
+//                } catch (ex: ActivityNotFoundException) {
+//                    Toast.makeText(context, "未安装邮件客户端", Toast.LENGTH_SHORT).show()
+//                }
+                runCatching {
+                    val intent = Intent(Intent.ACTION_SENDTO)
+                    intent.setData(Uri.parse("mailto:")) // only email apps should handle this
+                    intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("sobanaliali99@gmail.com"))
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "")
+                    if (intent.resolveActivity(rootActivity.getPackageManager()) != null) {
+                        startActivity(intent)
+                    }else{
+                        ToastUtils.showShort(rootActivity.getString(R.string.app_try_again))
+                    }
+                }.onFailure {
+                    ToastUtils.showShort(rootActivity.getString(R.string.app_try_again))
                 }
             }
             ivUser.setOneClick {

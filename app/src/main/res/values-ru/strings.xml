@@ -381,4 +381,7 @@
     <string name="app_web_guide3">3. Нажмите кнопку для загрузки видео</string>
     <string name="net_error">Запрос не выполнен, попробуйте еще раз</string>
 
+    <string name="app_contact_us">Свяжитесь с нами</string>
+    <string name="app_rewarded_tips">Посмотрите рекламу с вознаграждением, чтобы загрузить это видео</string>
+    <string name="app_try_again">попробуйте еще раз</string>
 </resources>

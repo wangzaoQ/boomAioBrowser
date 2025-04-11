@@ -382,4 +382,7 @@
     <string name="app_web_guide3">3. Klik tombol untuk mengunduh video</string>
     <string name="net_error">Permintaan gagal, silakan coba lagi</string>
 
+    <string name="app_contact_us">Hubungi Kami</string>
+    <string name="app_rewarded_tips">Tonton iklan Rewarded untuk mengunduh video ini</string>
+    <string name="app_try_again">coba lagi</string>
 </resources>

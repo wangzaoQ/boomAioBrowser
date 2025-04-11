@@ -12,6 +12,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.get
 import com.boom.aiobrowser.APP
 import com.boom.aiobrowser.R
+import com.boom.aiobrowser.ad.ADEnum.REWARD_AD
+import com.boom.aiobrowser.ad.AioADDataManager.getCacheAD
 import com.boom.aiobrowser.ad.AioADDataManager.platformMax
 import com.boom.aiobrowser.base.BaseActivity
 import com.boom.aiobrowser.data.ADResultData
@@ -53,39 +55,63 @@ class AioADShowManager(
             adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "activity 状态异常")
             return
         }
-        if (AioADDataManager.adAllowShowScreen() || AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)!=null){
+
+        if (adEnum == ADEnum.REWARD_AD){
             //有展示机会
             PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
                 putString(PointValueKey.ad_pos_id,pointTag)
             })
-        }
-        if (AioADDataManager.adAllowShowScreen() && adResultData!=null){
-            adShow?.showScreenAd(adResultData!!,pointTag)
-            AioADDataManager.adCache.remove(adEnum)
         }else{
-            if (allowShowDefaultAD){
-                var defaultAD = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
-                if (defaultAD!=null) {
-                    if (defaultAD.adShowType == 2){
-                        //native
-                        if (APP.instance.lifecycleApp.stack.size>0 && APP.instance.lifecycleApp.stack.get(APP.instance.lifecycleApp.stack.size-1) is BaseActivity<*>){
-                            var currentTopActivity = (APP.instance.lifecycleApp.stack.get(APP.instance.lifecycleApp.stack.size-1) as BaseActivity<*>)
-                            adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_SUCCESS, tag = "图片池广告加载完毕")
-                            currentTopActivity.startActivity(Intent(currentTopActivity,NativeScreenActivity::class.java))
-                        }else{
-                            adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "没有有效activity")
-                        }
-                    }else{
-                        //走通用的逻辑
-                        adShow?.showScreenAd(defaultAD,pointTag)
-                        AioADDataManager.adCache.remove(ADEnum.DEFAULT_AD)
+            if (AioADDataManager.adAllowShowScreen() || AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)!=null){
+                //有展示机会
+                PointEvent.posePoint(PointEventKey.aobws_ad_chance, Bundle().apply {
+                    putString(PointValueKey.ad_pos_id,pointTag)
+                })
+            }
+        }
+
+        if (adEnum == REWARD_AD){
+            var rewardAd = getCacheAD(REWARD_AD)
+            if (rewardAd == null){
+                adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "无缓存 或不在冷却范围内 ")
+            }else{
+                realShowScreenAD(rewardAd,pointTag,adEnum.adName)
+            }
+        }else{
+            if (AioADDataManager.adAllowShowScreen() && adResultData!=null){
+                realShowScreenAD(adResultData,pointTag,adEnum.adName)
+            }else{
+                if (allowShowDefaultAD){
+                    var defaultAD = AioADDataManager.getCacheAD(ADEnum.DEFAULT_AD)
+                    if (defaultAD!=null) {
+                        realShowScreenAD(defaultAD,pointTag,ADEnum.DEFAULT_AD.adName)
+                    } else {
+                        adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "无缓存 或不在冷却范围内 ")
                     }
-                } else {
+                }else{
                     adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "无缓存 或不在冷却范围内 ")
                 }
-            }else{
-                adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "无缓存 或不在冷却范围内 ")
             }
+        }
+    }
+
+    private fun realShowScreenAD(adResultData:ADResultData,pointTag: String,enumName:String) {
+        if (adResultData.adShowType == 2){
+            //native
+            if (APP.instance.lifecycleApp.stack.size>0 && APP.instance.lifecycleApp.stack.get(APP.instance.lifecycleApp.stack.size-1) is BaseActivity<*>){
+                var currentTopActivity = (APP.instance.lifecycleApp.stack.get(APP.instance.lifecycleApp.stack.size-1) as BaseActivity<*>)
+                adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_SUCCESS, tag = "图片池广告加载完毕")
+                currentTopActivity.startActivity(Intent(currentTopActivity,NativeScreenActivity::class.java).apply {
+                    putExtra("pointTag",pointTag)
+                    putExtra("enum_name",enumName)
+                })
+            }else{
+                adShow?.loadComplete(type = AioADDataManager.AD_SHOW_TYPE_FAILED, tag = "没有有效activity")
+            }
+        }else{
+            //走通用的逻辑
+            adShow?.showScreenAd(adResultData,pointTag)
+            AioADDataManager.adCache.remove(adEnum)
         }
     }
 

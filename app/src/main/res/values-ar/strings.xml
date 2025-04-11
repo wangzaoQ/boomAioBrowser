@@ -380,4 +380,8 @@
     <string name="app_web_guide3">3. اضغط على الزر لتحميل الفيديو</string>
     <string name="net_error">فشل الطلب، يرجى المحاولة مرة أخرى</string>
 
+    <string name="app_contact_us">تواصل معنا</string>
+    <string name="app_rewarded_tips">شاهد إعلانًا بمكافأة لتنزيل هذا الفيديو</string>
+    <string name="app_try_again">حاول مرة أخرى</string>
+
 </resources>

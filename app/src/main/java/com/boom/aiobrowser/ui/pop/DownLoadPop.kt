@@ -357,10 +357,14 @@ class DownLoadPop(context: Context,var fromType:Int,var backToDownload:Boolean =
                         }
                     }
                     if (showReward){
-                        var manager = AioADShowManager(context as BaseActivity<*>,ADEnum.REWARD_AD, tag = "视频下载激励") {
-                            download(callBack)
-                        }
-                        manager.showScreenAD(AD_POINT.aobws_video_rewarded)
+                        RewardedPop(context,callBack={
+                            if (it == 1){
+                                var manager = AioADShowManager(context as BaseActivity<*>,ADEnum.REWARD_AD, tag = "视频下载激励") {
+                                    download(callBack)
+                                }
+                                manager.showScreenAD(AD_POINT.aobws_video_rewarded)
+                            }
+                        }).createPop()
                     }else{
                         showDownloadAD {
                             download(callBack)

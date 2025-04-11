@@ -380,4 +380,8 @@
     <string name="app_web_guide3">3. Clicca il bottone per scaricare il video</string>
     <string name="net_error">Richiesta fallita, riprova</string>
 
+    <string name="app_contact_us">Contattaci</string>
+    <string name="app_rewarded_tips">Guarda un annuncio Rewarded per scaricare questo video</string>
+    <string name="app_try_again">Riprova</string>
+
 </resources>

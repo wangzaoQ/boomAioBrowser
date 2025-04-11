@@ -381,5 +381,7 @@
     <string name="app_web_guide3">3. Cliquez sur le bouton pour télécharger la vidéo</string>
 
     <string name="net_error">La demande a échoué, veuillez réessayer</string>
-
+    <string name="app_contact_us">Nous contacter</string>
+    <string name="app_rewarded_tips">Regardez une publicité récompensée pour télécharger cette vidéo</string>
+    <string name="app_try_again">Réessayer</string>
 </resources>

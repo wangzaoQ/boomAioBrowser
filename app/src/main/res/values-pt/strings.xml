@@ -384,5 +384,7 @@
     <string name="app_web_guide2">2. Assista ao vídeo</string>
     <string name="app_web_guide3">3. Clique no botão para baixar o vídeo</string>
     <string name="net_error">A solicitação falhou, tente novamente</string>
-
+    <string name="app_contact_us">Fale Conosco</string>
+    <string name="app_rewarded_tips">Assista a um anúncio recompensado para baixar este vídeo</string>
+    <string name="app_try_again">tente novamente</string>
 </resources>

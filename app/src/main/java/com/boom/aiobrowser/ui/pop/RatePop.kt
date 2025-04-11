@@ -114,9 +114,13 @@ class RatePop(context: Context) : BasePopupWindow(context) {
             AppLogs.dLog(ShortManager.TAG,"showGoogleStar:${task.isSuccessful}")
             if (task.isSuccessful) {
                 val reviewInfo = task.result
-                val flow = manager.launchReviewFlow(context as BaseActivity<*>, reviewInfo)
-                flow.addOnCompleteListener { _ ->
+                if (context == null){
                     dismiss()
+                }else{
+                    val flow = manager.launchReviewFlow(context as BaseActivity<*>, reviewInfo)
+                    flow.addOnCompleteListener { _ ->
+                        dismiss()
+                    }
                 }
             } else {// 如果应用内拉评分弹框失败，就去商店
                 runCatching {
